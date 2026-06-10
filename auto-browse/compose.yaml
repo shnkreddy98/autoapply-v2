@@ -1,0 +1,10 @@
+services:
+  playwright:
+    image: mcr.microsoft.com/playwright/mcp
+    entrypoint: node
+    command: /app/cli.js --headless --browser chromium --no-sandbox --port 8931 --host 0.0.0.0
+    init: true
+    pull_policy: always
+    ports:
+      - "8931:8931"
+
