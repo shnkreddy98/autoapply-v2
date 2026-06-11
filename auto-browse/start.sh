@@ -9,29 +9,26 @@ echo "==> Setting up workspace environment..."
 if ! command -v docker &> /dev/null; then
     echo "==> Installing Docker..."
     curl -fsSL https://get.docker.com | sh
-    dockerd &
+fi
+
+if ! pgrep -x "dockerd" > /dev/null; then
+    echo "==> Starting Docker daemon..."
+    dockerd > /tmp/dockerd.log 2>&1 &
     sleep 3
 else
-    echo "==> Docker already installed: $(docker --version)"
+    echo "==> Docker daemon already running"
 fi
+
+echo "==> Docker: $(docker --version)"
 
 # ── uv ──────────────────────────────────────────────────────────────────────
-if [ ! -f "/workspace/.uv/bin/uv" ]; then
-    echo "==> Installing uv to /workspace..."
-    curl -LsSf https://astral.sh/uv/install.sh | UV_INSTALL_DIR=/workspace/.uv/bin sh
-else
-    echo "==> uv already installed: $(/workspace/.uv/bin/uv --version)"
-fi
+curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # ── Ollama ───────────────────────────────────────────────────────────────────
-if [ ! -f "/workspace/.ollama/bin/ollama" ]; then
-    echo "==> Installing Ollama to /workspace..."
-    mkdir -p /workspace/.ollama/bin
-    curl -L https://ollama.com/download/ollama-linux-amd64 -o /workspace/.ollama/bin/ollama
-    chmod +x /workspace/.ollama/bin/ollama
-else
-    echo "==> Ollama already installed: $(/workspace/.ollama/bin/ollama --version)"
-fi
+apt-get update && apt-get upgrade -y
+apt-get install zstd -y
+curl -fsSL https://ollama.com/install.sh | sh
+
 
 # ── Start Ollama server ───────────────────────────────────────────────────────
 if ! pgrep -x "ollama" > /dev/null; then
