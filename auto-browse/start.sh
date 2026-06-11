@@ -9,8 +9,8 @@ echo "==> Setting up workspace environment..."
 if ! command -v docker &> /dev/null; then
     echo "==> Installing Docker..."
     curl -fsSL https://get.docker.com | sh
-    systemctl start docker
-    systemctl enable docker
+    dockerd &
+    sleep 3
 else
     echo "==> Docker already installed: $(docker --version)"
 fi
@@ -48,5 +48,5 @@ fi
 echo ""
 echo "==> Done."
 echo "    Docker:  $(docker --version)"
-echo "    uv:      $(uv --version)"
+echo "    uv:      $(/workspace/.uv/bin/uv --version)"
 echo "    Ollama:  $(/workspace/.ollama/bin/ollama --version)"
