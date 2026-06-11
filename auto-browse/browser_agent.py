@@ -1,7 +1,10 @@
 import asyncio
+import re
 
+import yaml
 from mcp import ClientSession
 from mcp.client.streamable_http import streamable_http_client
+from mcp.types import TextContent
 from ollama import AsyncClient
 
 SYSTEM_PROMPT = """You are an autonomous web browser agent. When given a task:
@@ -12,6 +15,11 @@ SYSTEM_PROMPT = """You are an autonomous web browser agent. When given a task:
 - Only produce a plain-text final response when the task is done — summarize what was accomplished
 
 Be methodical and persistent. Never stop mid-task. If something fails, try an alternative approach."""
+
+
+def read(path: str):
+    with open(path, "r") as f:
+        return f.read()
 
 
 def mcp_tool_to_ollama(tool) -> dict:
@@ -46,8 +54,8 @@ async def agent_loop(
         message = response.message
 
         print(f"\n--- iteration {i + 1} ---")
-        if message.thinking:
-            print(f"thinking: {message.thinking[:400]}...")
+        # if message.thinking:
+        # print(f"thinking: {message.thinking}")
         # print(f"content: {message.content}")
 
         if not message.tool_calls:
@@ -66,19 +74,24 @@ async def agent_loop(
             args = tool_call.function.arguments or {}
             print(f"calling tool: {name}({args})")
             result = await session.call_tool(name, args)
-            text = "\n".join(
-                c.text if hasattr(c, "text") else str(c) for c in result.content
-            )
 
-            if ".playwright-mcp/" in text:
-                snap = await session.call_tool("browser_snapshot", {})
-                snap_text = "\n".join(
-                    c.text if hasattr(c, "text") else str(c) for c in snap.content
-                )
-                text = text + "\n\n### Current page accessibility tree:\n" + snap_text
+            text_result = str(result.content)
+            for content in result.content:
+                if isinstance(content, TextContent):
+                    text_result = content.text
 
-            # print(f"tool result [{name}]: {text[:300]}")  # truncate for PRINT only
-            messages.append({"role": "tool", "content": text})  # full text to model ✅
+            snapshot_pattern = re.compile(r"\[Snapshot\]\(([^)]+\.yml)\)")
+            snapshot_paths = snapshot_pattern.findall(text_result)
+
+            content = "No snapshot found"
+            if snapshot_paths:
+                content = read(f"data/{snapshot_paths[0]}")
+            else:
+                print(f"ERR: {content}")
+
+            print(f"Tool call result: {text_result}")
+
+            messages.append({"role": "tool", "content": content})
 
         print(messages)
 
