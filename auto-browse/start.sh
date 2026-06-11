@@ -5,20 +5,6 @@ set -e
 
 echo "==> Setting up workspace environment..."
 
-# ── Docker ──────────────────────────────────────────────────────────────────
-if ! command -v docker &> /dev/null; then
-    echo "==> Installing Docker..."
-    curl -fsSL https://get.docker.com | sh
-fi
-
-if ! pgrep -x "dockerd" > /dev/null; then
-    echo "==> Starting Docker daemon..."
-    dockerd > /tmp/dockerd.log 2>&1 &
-    sleep 3
-else
-    echo "==> Docker daemon already running"
-fi
-
 # ── uv ──────────────────────────────────────────────────────────────────────
 if ! command -v uv &> /dev/null; then
     echo "==> Installing uv..."
@@ -47,8 +33,18 @@ else
     echo "==> Ollama server already running"
 fi
 
+# ── Playwright MCP ───────────────────────────────────────────────────────────
+if ! pgrep -f "playwright/mcp" > /dev/null; then
+    echo "==> Starting Playwright MCP server..."
+    cd /workspace/autoapply-v2/auto-browse
+    nohup npx @playwright/mcp --headless --browser chromium --no-sandbox --port 8931 --host 0.0.0.0 > /tmp/playwright-mcp.log 2>&1 &
+    sleep 2
+    echo "==> Playwright MCP started (log: /tmp/playwright-mcp.log)"
+else
+    echo "==> Playwright MCP already running"
+fi
+
 echo ""
 echo "==> Done."
-echo "    Docker: $(docker --version)"
 echo "    uv:     $(uv --version)"
 echo "    Ollama: $(ollama --version)"
