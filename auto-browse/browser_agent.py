@@ -54,9 +54,9 @@ async def agent_loop(
         message = response.message
 
         print(f"\n--- iteration {i + 1} ---")
-        # if message.thinking:
-        # print(f"thinking: {message.thinking}")
-        # print(f"content: {message.content}")
+        if message.thinking:
+            print(f"thinking: {message.thinking}")
+        print(f"content: {message.content}")
 
         if not message.tool_calls:
             return message.content
@@ -89,11 +89,14 @@ async def agent_loop(
             else:
                 print(f"ERR: {content}")
 
-            print(f"Tool call result: {text_result}")
+            # print(f"Tool call result: {text_result}")
 
             messages.append({"role": "tool", "content": content})
+        messages.append(
+            {"role": "user", "content": f"REMINDER ORIGINAL TASK: {original_task}"}
+        )
 
-        print(messages)
+        # print(messages)
 
 
 async def main():
