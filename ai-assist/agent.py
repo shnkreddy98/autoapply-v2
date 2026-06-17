@@ -1,13 +1,13 @@
 import asyncio
-import logging
 import json
-import httpx
+import logging
+from typing import Any, Callable, Dict, List, Optional, Type
 
-from typing import Dict, List, Any, Callable, Optional, Type
+import httpx
 from pydantic import BaseModel
 
-from .env import MODEL, OPENROUTER_API_KEY, LLM_BASE_URL
-from .logging import get_logger
+from custom_logging import get_logger
+from env import LLM_BASE_URL, MODEL, OPENROUTER_API_KEY
 
 get_logger()
 logger = logging.getLogger(__name__)
@@ -97,16 +97,20 @@ class Agent:
                             f"retrying ({attempt + 1}/{max_retries})..."
                         )
                     else:
-                        logger.error(f"API error {response.status_code}: {response.text}")
+                        logger.error(
+                            f"API error {response.status_code}: {response.text}"
+                        )
                         return None
             except (httpx.ReadError, httpx.ConnectError, httpx.ReadTimeout) as e:
-                logger.warning(f"Network error {type(e).__name__}, retrying ({attempt + 1}/{max_retries})...")
+                logger.warning(
+                    f"Network error {type(e).__name__}, retrying ({attempt + 1}/{max_retries})..."
+                )
             except Exception as e:
                 logger.error(f"Unexpected error: {e}")
                 return None
 
             if attempt < max_retries - 1:
-                await asyncio.sleep(initial_delay * (2 ** attempt))
+                await asyncio.sleep(initial_delay * (2**attempt))
 
         logger.error("All retry attempts failed")
         return None
@@ -116,14 +120,19 @@ class Agent:
 
     async def execute_tool(self, tool_name: str, arguments: dict) -> Any:
         if tool_name not in self.tool_functions:
-            return {"error": f"Tool '{tool_name}' not found", "available_tools": list(self.tool_functions.keys())}
+            return {
+                "error": f"Tool '{tool_name}' not found",
+                "available_tools": list(self.tool_functions.keys()),
+            }
 
         if tool_name in self.tool_schemas:
             try:
                 validated_args = self.tool_schemas[tool_name](**arguments)
             except Exception as e:
                 logger.warning(f"Validation failed for {tool_name}: {e}")
-                return {"error": f"Validation error for '{tool_name}': {e}\n\nCheck the tool schema and retry with correct argument names and types."}
+                return {
+                    "error": f"Validation error for '{tool_name}': {e}\n\nCheck the tool schema and retry with correct argument names and types."
+                }
         else:
             validated_args = arguments
 
@@ -131,7 +140,11 @@ class Agent:
             return await self.tool_functions[tool_name](validated_args)
         except Exception as e:
             logger.error(f"Error executing {tool_name}: {e}", exc_info=True)
-            return {"error": f"Tool execution failed: {e}", "tool": tool_name, "type": type(e).__name__}
+            return {
+                "error": f"Tool execution failed: {e}",
+                "tool": tool_name,
+                "type": type(e).__name__,
+            }
 
     def _summarize_result(self, content: str, max_chars: int = 200) -> str:
         content = content.strip()
@@ -143,7 +156,9 @@ class Agent:
 
         last_assistant_idx = None
         for i in range(len(self.messages) - 1, 0, -1):
-            if self.messages[i].get("role") == "assistant" and self.messages[i].get("tool_calls"):
+            if self.messages[i].get("role") == "assistant" and self.messages[i].get(
+                "tool_calls"
+            ):
                 last_assistant_idx = i
                 break
 
@@ -212,7 +227,9 @@ class Agent:
 
             response = await self._call_llm_with_retry(payload)
             if not response:
-                self.messages.append({"role": "user", "content": "Please continue with the next step."})
+                self.messages.append(
+                    {"role": "user", "content": "Please continue with the next step."}
+                )
                 continue
 
             result = response.json()
@@ -222,7 +239,9 @@ class Agent:
             self.result.usage = result.get("usage", {})
 
             if not output and not tool_calls:
-                self.messages.append({"role": "user", "content": "Please continue with the next step."})
+                self.messages.append(
+                    {"role": "user", "content": "Please continue with the next step."}
+                )
                 continue
 
             self.messages.append(message)
@@ -233,7 +252,10 @@ class Agent:
                         self.result.output = self._parse_structured_output(output)
                     except Exception as e:
                         logger.error(f"Failed to parse structured output: {e}")
-                        if output and ('"type": "function"' in output or ('"name":' in output and '"parameters":' in output)):
+                        if output and (
+                            '"type": "function"' in output
+                            or ('"name":' in output and '"parameters":' in output)
+                        ):
                             reprompt = "You returned a tool call in your text response instead of the required JSON. Output ONLY the JSON object matching the required schema."
                         else:
                             reprompt = f"Your response could not be parsed. Error: {e}\nOutput ONLY the JSON object matching the required schema."
@@ -253,19 +275,39 @@ class Agent:
                 tool_args_raw = tool_call["function"]["arguments"]
 
                 try:
-                    tool_args = json.loads(tool_args_raw) if isinstance(tool_args_raw, str) and tool_args_raw.strip() else (tool_args_raw or {})
+                    tool_args = (
+                        json.loads(tool_args_raw)
+                        if isinstance(tool_args_raw, str) and tool_args_raw.strip()
+                        else (tool_args_raw or {})
+                    )
                 except json.JSONDecodeError as e:
-                    self.messages.append({"role": "tool", "tool_call_id": tool_id, "content": json.dumps({"error": f"Invalid JSON: {e}"})})
+                    self.messages.append(
+                        {
+                            "role": "tool",
+                            "tool_call_id": tool_id,
+                            "content": json.dumps({"error": f"Invalid JSON: {e}"}),
+                        }
+                    )
                     continue
 
                 tool_result = await self.execute_tool(tool_name, tool_args)
 
                 if isinstance(tool_result, dict) and "screenshot_base64" in tool_result:
-                    tool_result = {k: v for k, v in tool_result.items() if k != "screenshot_base64"}
+                    tool_result = {
+                        k: v for k, v in tool_result.items() if k != "screenshot_base64"
+                    }
 
-                content = json.dumps(tool_result) if isinstance(tool_result, dict) else str(tool_result)
-                self.messages.append({"role": "tool", "tool_call_id": tool_id, "content": content})
-                iteration_step_parts.append(f"{tool_name} → {self._summarize_result(content)}")
+                content = (
+                    json.dumps(tool_result)
+                    if isinstance(tool_result, dict)
+                    else str(tool_result)
+                )
+                self.messages.append(
+                    {"role": "tool", "tool_call_id": tool_id, "content": content}
+                )
+                iteration_step_parts.append(
+                    f"{tool_name} → {self._summarize_result(content)}"
+                )
 
             if iteration_step_parts:
                 self.workflow_log.append(" | ".join(iteration_step_parts))
@@ -279,7 +321,9 @@ class Agent:
             for msg in reversed(self.messages):
                 if msg.get("role") == "assistant" and msg.get("content"):
                     try:
-                        self.result.output = self._parse_structured_output(msg["content"])
+                        self.result.output = self._parse_structured_output(
+                            msg["content"]
+                        )
                         self.result.success = True
                         self.result.error = None
                         return self.result

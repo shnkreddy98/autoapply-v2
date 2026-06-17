@@ -1,16 +1,17 @@
 import logging
 
-from .env import MODEL
-from .agent import Agent
-from .tools import DocumentTools, ReplaceArgs
-from .models import Resume, TailoredResume
-from .prompts import SYSTEM_PROMPT_TAILOR, SYSTEM_PROMPT_PARSE
+from agent import Agent
+from env import MODEL
+from models import Resume, TailoredResume
+from prompts import SYSTEM_PROMPT_PARSE, SYSTEM_PROMPT_TAILOR
+from tools import DocumentTools, ReplaceArgs
 
 logger = logging.getLogger(__name__)
 
 
 def _replace_tool_schema() -> dict:
     from pydantic import BaseModel
+
     schema = ReplaceArgs.model_json_schema()
     schema.pop("title", None)
     for prop in schema.get("properties", {}).values():
