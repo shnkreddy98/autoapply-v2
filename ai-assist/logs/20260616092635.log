@@ -1,0 +1,54 @@
+2026-06-16 09:26:36,756 [asyncio] DEBUG Using selector: EpollSelector
+2026-06-16 09:26:36,799 [agent] INFO Iteration 1/10
+2026-06-16 09:26:37,133 [httpcore.connection] DEBUG connect_tcp.started host='openrouter.ai' port=443 local_address=None timeout=120.0 socket_options=None
+2026-06-16 09:26:37,177 [httpcore.connection] DEBUG connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x7f1f164b8830>
+2026-06-16 09:26:37,177 [httpcore.connection] DEBUG start_tls.started ssl_context=<ssl.SSLContext object at 0x7f1f1653c8c0> server_hostname='openrouter.ai' timeout=120.0
+2026-06-16 09:26:37,210 [httpcore.connection] DEBUG start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x7f1f164d9a90>
+2026-06-16 09:26:37,211 [httpcore.http11] DEBUG send_request_headers.started request=<Request [b'POST']>
+2026-06-16 09:26:37,211 [httpcore.http11] DEBUG send_request_headers.complete
+2026-06-16 09:26:37,211 [httpcore.http11] DEBUG send_request_body.started request=<Request [b'POST']>
+2026-06-16 09:26:37,212 [httpcore.http11] DEBUG send_request_body.complete
+2026-06-16 09:26:37,212 [httpcore.http11] DEBUG receive_response_headers.started request=<Request [b'POST']>
+2026-06-16 09:26:38,566 [httpcore.http11] DEBUG receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Tue, 16 Jun 2026 16:26:38 GMT'), (b'Content-Type', b'application/json'), (b'Transfer-Encoding', b'chunked'), (b'Connection', b'keep-alive'), (b'Access-Control-Allow-Origin', b'*'), (b'X-Generation-Id', b'gen-1781627197-m1AKhB2GDdd0en8HWM6s'), (b'access-control-expose-headers', b'X-Generation-Id,cf-ray'), (b'Permissions-Policy', b'payment=(self "https://checkout.stripe.com" "https://connect-js.stripe.com" "https://js.stripe.com" "https://*.js.stripe.com" "https://hooks.stripe.com")'), (b'Referrer-Policy', b'no-referrer, strict-origin-when-cross-origin'), (b'X-Content-Type-Options', b'nosniff'), (b'Content-Encoding', b'gzip'), (b'Server', b'cloudflare'), (b'CF-RAY', b'a0cb2d5ea814cf2f-SJC')])
+2026-06-16 09:26:38,568 [httpcore.http11] DEBUG receive_response_body.started request=<Request [b'POST']>
+2026-06-16 09:26:44,192 [httpcore.http11] DEBUG receive_response_body.complete
+2026-06-16 09:26:44,192 [httpcore.http11] DEBUG response_closed.started
+2026-06-16 09:26:44,192 [httpcore.http11] DEBUG response_closed.complete
+2026-06-16 09:26:44,193 [httpcore.connection] DEBUG close.started
+2026-06-16 09:26:44,193 [httpcore.connection] DEBUG close.complete
+2026-06-16 09:26:44,211 [tools] DEBUG Saved data/shashank_reddy.docx
+2026-06-16 09:26:44,211 [agent] INFO Iteration 2/10
+2026-06-16 09:26:44,224 [httpcore.connection] DEBUG connect_tcp.started host='openrouter.ai' port=443 local_address=None timeout=120.0 socket_options=None
+2026-06-16 09:26:44,243 [httpcore.connection] DEBUG connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x7f1f161ec410>
+2026-06-16 09:26:44,243 [httpcore.connection] DEBUG start_tls.started ssl_context=<ssl.SSLContext object at 0x7f1f1653d130> server_hostname='openrouter.ai' timeout=120.0
+2026-06-16 09:26:44,277 [httpcore.connection] DEBUG start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x7f1f164fa9e0>
+2026-06-16 09:26:44,277 [httpcore.http11] DEBUG send_request_headers.started request=<Request [b'POST']>
+2026-06-16 09:26:44,278 [httpcore.http11] DEBUG send_request_headers.complete
+2026-06-16 09:26:44,278 [httpcore.http11] DEBUG send_request_body.started request=<Request [b'POST']>
+2026-06-16 09:26:44,278 [httpcore.http11] DEBUG send_request_body.complete
+2026-06-16 09:26:44,278 [httpcore.http11] DEBUG receive_response_headers.started request=<Request [b'POST']>
+2026-06-16 09:26:45,321 [httpcore.http11] DEBUG receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Tue, 16 Jun 2026 16:26:45 GMT'), (b'Content-Type', b'application/json'), (b'Transfer-Encoding', b'chunked'), (b'Connection', b'keep-alive'), (b'Access-Control-Allow-Origin', b'*'), (b'X-Generation-Id', b'gen-1781627204-pg5ys26tlrqKF0lwvIYm'), (b'access-control-expose-headers', b'X-Generation-Id,cf-ray'), (b'Permissions-Policy', b'payment=(self "https://checkout.stripe.com" "https://connect-js.stripe.com" "https://js.stripe.com" "https://*.js.stripe.com" "https://hooks.stripe.com")'), (b'Referrer-Policy', b'no-referrer, strict-origin-when-cross-origin'), (b'X-Content-Type-Options', b'nosniff'), (b'Content-Encoding', b'gzip'), (b'Server', b'cloudflare'), (b'CF-RAY', b'a0cb2d8ada956ad3-SJC')])
+2026-06-16 09:26:45,322 [httpcore.http11] DEBUG receive_response_body.started request=<Request [b'POST']>
+2026-06-16 09:26:46,428 [httpcore.http11] DEBUG receive_response_body.complete
+2026-06-16 09:26:46,428 [httpcore.http11] DEBUG response_closed.started
+2026-06-16 09:26:46,429 [httpcore.http11] DEBUG response_closed.complete
+2026-06-16 09:26:46,430 [httpcore.connection] DEBUG close.started
+2026-06-16 09:26:46,430 [httpcore.connection] DEBUG close.complete
+2026-06-16 09:26:46,448 [tools] DEBUG Saved data/shashank_reddy.docx
+2026-06-16 09:26:46,449 [agent] INFO Iteration 3/10
+2026-06-16 09:26:46,459 [httpcore.connection] DEBUG connect_tcp.started host='openrouter.ai' port=443 local_address=None timeout=120.0 socket_options=None
+2026-06-16 09:26:46,480 [httpcore.connection] DEBUG connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x7f1f164f96e0>
+2026-06-16 09:26:46,480 [httpcore.connection] DEBUG start_tls.started ssl_context=<ssl.SSLContext object at 0x7f1f163eac30> server_hostname='openrouter.ai' timeout=120.0
+2026-06-16 09:26:46,514 [httpcore.connection] DEBUG start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x7f1f16231910>
+2026-06-16 09:26:46,514 [httpcore.http11] DEBUG send_request_headers.started request=<Request [b'POST']>
+2026-06-16 09:26:46,515 [httpcore.http11] DEBUG send_request_headers.complete
+2026-06-16 09:26:46,515 [httpcore.http11] DEBUG send_request_body.started request=<Request [b'POST']>
+2026-06-16 09:26:46,515 [httpcore.http11] DEBUG send_request_body.complete
+2026-06-16 09:26:46,515 [httpcore.http11] DEBUG receive_response_headers.started request=<Request [b'POST']>
+2026-06-16 09:26:48,135 [httpcore.http11] DEBUG receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Tue, 16 Jun 2026 16:26:47 GMT'), (b'Content-Type', b'application/json'), (b'Transfer-Encoding', b'chunked'), (b'Connection', b'keep-alive'), (b'Access-Control-Allow-Origin', b'*'), (b'X-Generation-Id', b'gen-1781627206-YLswOObukApmOPQnUvGs'), (b'access-control-expose-headers', b'X-Generation-Id,cf-ray'), (b'Permissions-Policy', b'payment=(self "https://checkout.stripe.com" "https://connect-js.stripe.com" "https://js.stripe.com" "https://*.js.stripe.com" "https://hooks.stripe.com")'), (b'Referrer-Policy', b'no-referrer, strict-origin-when-cross-origin'), (b'X-Content-Type-Options', b'nosniff'), (b'Content-Encoding', b'gzip'), (b'Server', b'cloudflare'), (b'CF-RAY', b'a0cb2d98dcd058ac-SJC')])
+2026-06-16 09:26:48,135 [httpcore.http11] DEBUG receive_response_body.started request=<Request [b'POST']>
+2026-06-16 09:26:52,903 [httpcore.http11] DEBUG receive_response_body.complete
+2026-06-16 09:26:52,904 [httpcore.http11] DEBUG response_closed.started
+2026-06-16 09:26:52,904 [httpcore.http11] DEBUG response_closed.complete
+2026-06-16 09:26:52,905 [httpcore.connection] DEBUG close.started
+2026-06-16 09:26:52,905 [httpcore.connection] DEBUG close.complete
