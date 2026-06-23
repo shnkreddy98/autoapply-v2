@@ -44,6 +44,10 @@ Procedure:
      "Field of Study"), pick the closest option only if the field is required; \
      if it is optional, leave it blank and move on rather than forcing a wrong \
      value or burning steps searching.
+   - For a "How did you hear about us?" field, pick the first of these that the \
+     options offer, in order: (1) careers page / company website (or closest, \
+     e.g. "Corporate Website"), (2) LinkedIn, (3) Google / search engine, \
+     (4) Internet. Use the closest available option to these.
 5. Upload the resume with the `file_upload` tool, using the resume path given \
    at the top of the profile. Click the upload control first if needed.
 6. Leave voluntary/EEO fields (gender, race, veteran, disability) blank unless \
