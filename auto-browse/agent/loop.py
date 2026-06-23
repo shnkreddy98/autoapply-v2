@@ -27,19 +27,34 @@ using the APPLICANT PROFILE provided below.
 Procedure:
 1. Navigate to the job URL. Find the application form — follow "Apply" / "Apply \
    now" links if the form is not on the first page.
-2. Fill EVERY required field using the APPLICANT PROFILE. Match form fields to \
-   profile values by their label (name, email, phone, address, work \
-   authorization, salary, start date, etc.).
-3. Upload the resume with the `file_upload` tool, using the resume path given \
+2. If the portal requires signing in or creating an account before applying, \
+   use the Login Credentials in the APPLICANT PROFILE: first try to SIGN IN \
+   with that email and password; if sign-in fails or no account exists, CREATE \
+   an account with the same email and password, complete any email/verification \
+   step you can, then continue applying.
+3. ALWAYS prefer an "autofill" / "Autofill with Resume" / "Apply with resume" / \
+   parse-resume option when the portal offers one — choose it over manual entry, \
+   upload the resume to autofill, then review and correct the prefilled fields \
+   against the APPLICANT PROFILE. Only fill manually if no autofill option exists.
+4. Fill every REQUIRED field using the APPLICANT PROFILE. Required fields are \
+   marked with an asterisk (*) or "Required". Do NOT waste steps on optional \
+   (non-asterisk) fields — skip them. Match fields to profile values by label \
+   (name, email, phone, address, work authorization, salary, start date, etc.).
+   - For dropdowns/comboboxes without an exact matching option (e.g. Education \
+     "Field of Study"), pick the closest option only if the field is required; \
+     if it is optional, leave it blank and move on rather than forcing a wrong \
+     value or burning steps searching.
+5. Upload the resume with the `file_upload` tool, using the resume path given \
    at the top of the profile. Click the upload control first if needed.
-4. Leave voluntary/EEO fields (gender, race, veteran, disability) blank unless \
+6. Leave voluntary/EEO fields (gender, race, veteran, disability) blank unless \
    they are required to proceed.
-5. Tick declaration / acknowledgement checkboxes per the profile (all "Yes").
-6. STOP BEFORE SUBMITTING. Do NOT click the final Submit / Apply / Send button. \
+7. Tick declaration / acknowledgement checkboxes per the profile (all "Yes").
+8. STOP BEFORE SUBMITTING. Do NOT click the final Submit / Apply / Send button. \
    Once every field is filled and the resume uploaded, take a screenshot, then \
    return a plain-text summary listing each field you filled and anything you \
    could not complete, and tell the user to review in the browser and submit \
-   manually.
+   manually. (Signing in or creating an account is allowed and expected; only \
+   the final application submit is off-limits.)
 
 Browsing tips:
 - `snapshot(goal=...)` returns a small pruned tree to find WHERE things are; \
@@ -56,7 +71,9 @@ PROXY_MCP_URL = os.getenv("PROXY_MCP_URL", "http://localhost:8932/mcp")
 DEFAULT_MODEL = os.getenv("OPENROUTER_MODEL", "google/gemini-3-flash-preview")
 
 HERE = Path(__file__).resolve().parent.parent
-PROFILE_PATH = Path(os.getenv("PROFILE_PATH", HERE / "data" / "profile" / "profile.txt"))
+PROFILE_PATH = Path(
+    os.getenv("PROFILE_PATH", HERE / "data" / "profile" / "profile.txt")
+)
 USAGE_PATH = Path(os.getenv("USAGE_PATH", HERE / "data" / "usage.txt"))
 
 # Context management (Tier 1): keep only the last N tool-result snapshots full;
@@ -81,8 +98,13 @@ def load_profile() -> str:
 
 
 def _new_usage() -> dict[str, Any]:
-    return {"requests": 0, "prompt_tokens": 0, "completion_tokens": 0,
-            "total_tokens": 0, "cost": 0.0}
+    return {
+        "requests": 0,
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "total_tokens": 0,
+        "cost": 0.0,
+    }
 
 
 def _accumulate_usage(totals: dict[str, Any], usage: Any) -> None:
@@ -237,7 +259,7 @@ async def _complete_with_retry(
             err = (getattr(response, "model_extra", None) or {}).get("error")
             last_err = f"empty response (no choices); error={err}"
 
-        wait = min(2 ** attempt, 30)
+        wait = min(2**attempt, 30)
         debug("llm_retry", {"attempt": attempt + 1, "error": last_err, "wait_s": wait})
         await asyncio.sleep(wait)
 
@@ -251,7 +273,7 @@ async def agent_loop(
     session: ClientSession,
     client: AsyncOpenAI,
     usage_totals: dict[str, Any],
-    max_iterations: int = 50,
+    max_iterations: int = 250,
 ) -> str:
     tools_result = await session.list_tools()
     openrouter_tools = [mcp_tool_to_openai(tool) for tool in tools_result.tools]
@@ -259,7 +281,10 @@ async def agent_loop(
     # Running progress ledger — a single system message refreshed each turn so the
     # model retains what it has done without carrying every old page snapshot.
     ledger: list[str] = []
-    ledger_msg = {"role": "system", "content": "PROGRESS LEDGER (actions so far):\n(none yet)"}
+    ledger_msg = {
+        "role": "system",
+        "content": "PROGRESS LEDGER (actions so far):\n(none yet)",
+    }
     messages.insert(2, ledger_msg)
     action_n = 0
 
