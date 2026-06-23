@@ -1,8 +1,10 @@
 import asyncio
 import json
+import logging
 import os
 import random
 import sys
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -20,7 +22,18 @@ from openai import (
     RateLimitError,
 )
 
+from agent.observability import (
+    LOGGER_NAME,
+    Trace,
+    append_usage,
+    new_run_id,
+    setup_logging,
+    write_form_record,
+)
+
 load_dotenv()
+
+log = logging.getLogger(LOGGER_NAME)
 
 SYSTEM_PROMPT = """You are an autonomous job-application agent driving a real \
 browser. You are given a JOB URL. Apply for that job on the applicant's behalf \
@@ -55,12 +68,18 @@ Procedure:
 6. Leave voluntary/EEO fields (gender, race, veteran, disability) blank unless \
    they are required to proceed.
 7. Tick declaration / acknowledgement checkboxes per the profile (all "Yes").
-8. STOP BEFORE SUBMITTING. Do NOT click the final Submit / Apply / Send button. \
-   Once every field is filled and the resume uploaded, take a screenshot, then \
-   return a plain-text summary listing each field you filled and anything you \
-   could not complete, and tell the user to review in the browser and submit \
-   manually. (Signing in or creating an account is allowed and expected; only \
-   the final application submit is off-limits.)
+8. Work through EVERY page/step of the application, clicking "Next"/"Continue" \
+   to advance. Each Next validates that page and will NOT proceed while a \
+   required field is missing — fix anything it flags. Fill all required fields \
+   on every page until you reach the final Review/Submit step (this walks the \
+   whole form and surfaces fields that only appear on later pages).
+9. LAST STEP — VALIDATE, then hand off. On the Review step, confirm every \
+   required field across all sections is filled and there are no validation \
+   errors (fix any that remain). Do NOT click the final Submit / Apply / Send \
+   button — leave that for the user. Take a screenshot, then return a plain-text \
+   summary: each field you filled, anything you could not complete, and a clear \
+   statement that the form is validated and ready for the user to review and \
+   submit.
 
 Browsing tips:
 - `snapshot(goal=...)` returns a small pruned tree to find WHERE things are; \
@@ -73,8 +92,11 @@ Thinking: before each tool call, state your plan in ONE short sentence as your \
 message content (e.g. "Fill the email field, then click Next") — then make the \
 call. Keep it to one line; do not write long explanations.
 
-Be methodical and persistent. Never submit. If a field's value is missing from \
-the profile, leave it blank and note it in your final summary."""
+Be methodical and persistent. Never click the final application Submit — walk \
+every page to validate, then hand off to the user. (Signing in or creating an \
+account is allowed and expected; only the final application submit is off-limits.) \
+If a field's value is missing from the profile, leave it blank (unless required) \
+and note it in your final summary."""
 
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
 PROXY_MCP_URL = os.getenv("PROXY_MCP_URL", "http://localhost:8932/mcp")
@@ -84,7 +106,6 @@ HERE = Path(__file__).resolve().parent.parent
 PROFILE_PATH = Path(
     os.getenv("PROFILE_PATH", HERE / "data" / "profile" / "profile.txt")
 )
-USAGE_PATH = Path(os.getenv("USAGE_PATH", HERE / "data" / "usage.txt"))
 
 # Context management (Tier 1): keep only the last N tool-result snapshots full;
 # older ones are stubbed since refs are only valid on the latest tree and the
@@ -167,32 +188,69 @@ def _accumulate_usage(totals: dict[str, Any], usage: Any) -> None:
     totals["cost"] += cost or 0.0
 
 
-def write_usage(totals: dict[str, Any], model: str, job_url: str) -> None:
-    """Overwrite the usage report for the most recent run."""
-    report = (
-        "auto-browse run usage\n"
-        f"Time (UTC):        {datetime.now(timezone.utc):%Y-%m-%d %H:%M:%S}\n"
-        f"Model:             {model}\n"
-        f"Job URL:           {job_url}\n"
-        f"LLM requests:      {totals['requests']}\n"
-        f"Prompt tokens:     {totals['prompt_tokens']:,}\n"
-        f"Completion tokens: {totals['completion_tokens']:,}\n"
-        f"Total tokens:      {totals['total_tokens']:,}\n"
-        f"Cost (USD):        ${totals['cost']:.6f}\n"
+def _record_usage(
+    totals: dict[str, Any], run_id: str, model: str, job_url: str,
+    iterations: int, success: bool, error: str | None, duration_s: float,
+) -> dict[str, Any]:
+    """Build + append-and-print one run's usage record (data/usage.jsonl)."""
+    record = {
+        "run_id": run_id,
+        "time_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "model": model,
+        "job_url": job_url,
+        "requests": totals["requests"],
+        "prompt_tokens": totals["prompt_tokens"],
+        "completion_tokens": totals["completion_tokens"],
+        "total_tokens": totals["total_tokens"],
+        "cost_usd": round(totals["cost"], 6),
+        "iterations": iterations,
+        "success": success,
+        "error": error,
+        "duration_s": round(duration_s, 2),
+    }
+    append_usage(record)
+    log.info(
+        "run usage: requests=%d total_tokens=%s cost=$%.6f iters=%d success=%s "
+        "duration=%.1fs",
+        record["requests"], f"{record['total_tokens']:,}", record["cost_usd"],
+        iterations, success, duration_s,
     )
-    USAGE_PATH.parent.mkdir(parents=True, exist_ok=True)
-    USAGE_PATH.write_text(report, encoding="utf-8")
-    print("\n" + report + f"(saved to {USAGE_PATH})")
+    return record
+
+
+def _filled_fields(tool_name: str, args: dict[str, Any]) -> list[dict[str, Any]]:
+    """Normalize a value-bearing tool call into form-field entries (for the
+    per-run form record). Returns [] for non-form tools."""
+    if tool_name == "type":
+        return [{"tool": "type", "label": args.get("element"),
+                 "ref": args.get("target"), "value": args.get("text")}]
+    if tool_name == "select_option":
+        vals = args.get("values") or []
+        return [{"tool": "select_option", "label": args.get("element"),
+                 "ref": args.get("target"), "value": ", ".join(map(str, vals))}]
+    if tool_name == "file_upload":
+        paths = args.get("paths") or []
+        return [{"tool": "file_upload", "label": "resume/file",
+                 "value": ", ".join(map(str, paths))}]
+    if tool_name == "fill_form":
+        out = []
+        for f in args.get("fields") or []:
+            out.append({"tool": "fill_form",
+                        "label": f.get("element") or f.get("name"),
+                        "ref": f.get("target"), "type": f.get("type"),
+                        "value": f.get("value")})
+        return out
+    return []
 
 
 def debug(label: str, value: Any = None) -> None:
-    """Print a DEBUG-prefixed line; JSON-format dicts/lists."""
+    """Operational app-log line (routed to the agent logger + data/logs/app.log)."""
     if value is None:
-        print(f"DEBUG {label}")
+        log.info("%s", label)
         return
     if isinstance(value, (dict, list)):
-        value = json.dumps(value, indent=2, ensure_ascii=False, default=str)
-    print(f"DEBUG {label}: {value}")
+        value = json.dumps(value, ensure_ascii=False, default=str)
+    log.info("%s: %s", label, _brief(value, 300))
 
 
 def mcp_tool_to_openai(tool: Any) -> dict[str, Any]:
@@ -283,7 +341,11 @@ def _trim_history(messages: list[dict[str, Any]], keep: int) -> None:
 
 
 async def _complete_with_retry(
-    client: AsyncOpenAI, request: dict[str, Any], max_retries: int = LLM_MAX_RETRIES
+    client: AsyncOpenAI,
+    request: dict[str, Any],
+    max_retries: int = LLM_MAX_RETRIES,
+    trace: Trace | None = None,
+    iteration: int | None = None,
 ) -> Any:
     """Call chat.completions with exponential backoff for transient API errors,
     rate limits (incl. upstream 429s OpenRouter surfaces as another status), and
@@ -309,8 +371,13 @@ async def _complete_with_retry(
             err = (getattr(response, "model_extra", None) or {}).get("error")
             last_err = f"empty response (no choices); error={err}"
 
-        wait = min(2**attempt, 30)
-        debug("llm_retry", {"attempt": attempt + 1, "error": last_err, "wait_s": wait})
+        wait = _backoff_seconds(attempt, retry_after)
+        log.warning(
+            "llm retry attempt=%d error=%s wait_s=%.1f", attempt + 1, last_err, wait
+        )
+        if trace is not None:
+            trace.event("retry", iteration=iteration, attempt=attempt + 1,
+                        error=last_err, wait_s=round(wait, 1))
         await asyncio.sleep(wait)
 
     raise RuntimeError(f"LLM call failed after {max_retries} attempts: {last_err}")
@@ -323,10 +390,22 @@ async def agent_loop(
     session: ClientSession,
     client: AsyncOpenAI,
     usage_totals: dict[str, Any],
+    trace: Trace | None = None,
+    filled_fields: list[dict[str, Any]] | None = None,
     max_iterations: int = 250,
 ) -> str:
     tools_result = await session.list_tools()
     openrouter_tools = [mcp_tool_to_openai(tool) for tool in tools_result.tools]
+
+    if trace is not None:
+        trace.event(
+            "run_start",
+            model=model,
+            task=original_task,
+            tools=[t.name for t in tools_result.tools],
+            system_prompt=messages[0]["content"] if messages else "",
+            profile_chars=len(messages[1]["content"]) if len(messages) > 1 else 0,
+        )
 
     # Running progress ledger — a single system message refreshed each turn so the
     # model retains what it has done without carrying every old page snapshot.
@@ -352,14 +431,36 @@ async def agent_loop(
             "extra_body": {"usage": {"include": True}},
         }
 
-        response = await _complete_with_retry(client, request)
+        response = await _complete_with_retry(
+            client, request, trace=trace, iteration=iteration
+        )
         message = response.choices[0].message
-        _accumulate_usage(usage_totals, getattr(response, "usage", None))
+        usage = getattr(response, "usage", None)
+        _accumulate_usage(usage_totals, usage)
 
         debug("iteration", iteration)
         # Lightweight "thinking": the model's one-line plan rides in plain content
         # (no API reasoning / thought signatures — keeps it portable + cheap).
         debug("thought", message.content or "(none)")
+
+        tool_calls = [
+            {"id": tc.id, "name": tc.function.name, "arguments": tc.function.arguments}
+            for tc in (message.tool_calls or [])
+        ]
+        if trace is not None:
+            trace.event(
+                "llm_turn",
+                iteration=iteration,
+                assistant_content=message.content or "",
+                tool_calls=tool_calls,
+                usage={
+                    "prompt": getattr(usage, "prompt_tokens", None),
+                    "completion": getattr(usage, "completion_tokens", None),
+                    "total": getattr(usage, "total_tokens", None),
+                    "cost": getattr(usage, "cost", None),
+                },
+                finished=not message.tool_calls,
+            )
 
         if not message.tool_calls:
             return message.content or ""
@@ -376,6 +477,7 @@ async def agent_loop(
         for tool_call in message.tool_calls:
             tool_name = tool_call.function.name
             arguments: dict[str, Any] = {}
+            ok = True
             try:
                 arguments = parse_tool_arguments(tool_call.function.arguments)
                 debug("tool_call", {"name": tool_name, "arguments": arguments})
@@ -383,10 +485,11 @@ async def agent_loop(
                 tool_content = result_text(result)
                 debug("tool_call_result", {"name": tool_name, "result": tool_content})
             except Exception as exc:
+                ok = False
                 tool_content = (
                     f"Tool call {tool_name!r} failed: {type(exc).__name__}: {exc}"
                 )
-                debug("tool_call_error", {"name": tool_name, "error": tool_content})
+                log.error("tool %s failed: %s", tool_name, tool_content)
 
             messages.append(
                 {
@@ -397,6 +500,19 @@ async def agent_loop(
             )
             action_n += 1
             ledger.append(_ledger_line(action_n, tool_name, arguments, tool_content))
+            if trace is not None:
+                trace.event(
+                    "tool_result",
+                    iteration=iteration,
+                    tool_call_id=tool_call.id,
+                    name=tool_name,
+                    arguments=arguments,
+                    result=tool_content,
+                    ok=ok,
+                )
+            if ok and filled_fields is not None:
+                for entry in _filled_fields(tool_name, arguments):
+                    filled_fields.append({"iteration": iteration, **entry})
 
         # Bound context: stub old page snapshots.
         _trim_history(messages, HISTORY_KEEP_SNAPSHOTS)
@@ -405,6 +521,11 @@ async def agent_loop(
 
 
 async def main(job_url: str, model: str) -> None:
+    run_id = new_run_id()
+    setup_logging(run_id)
+    trace = Trace(run_id)
+    log.info("run start: model=%s job_url=%s", model, job_url)
+
     profile = load_profile()
     task = (
         f"Apply for this job: {job_url}\n\n"
@@ -414,6 +535,11 @@ async def main(job_url: str, model: str) -> None:
 
     client = create_openrouter_client()
     usage = _new_usage()
+    filled_fields: list[dict[str, Any]] = []
+    start = time.monotonic()
+    success = False
+    error: str | None = None
+    result = ""
     try:
         async with streamable_http_client(PROXY_MCP_URL) as (read, write, _):
             async with ClientSession(read, write) as session:
@@ -423,10 +549,41 @@ async def main(job_url: str, model: str) -> None:
                     {"role": "system", "content": f"APPLICANT PROFILE:\n\n{profile}"},
                     {"role": "user", "content": task},
                 ]
-                result = await agent_loop(model, task, messages, session, client, usage)
+                result = await agent_loop(
+                    model, task, messages, session, client, usage,
+                    trace=trace, filled_fields=filled_fields,
+                )
+                success = True
+                log.info("final: %s", result)
                 print(f"final: {result}")
+    except Exception as exc:
+        error = f"{type(exc).__name__}: {exc}"
+        log.exception("run failed")
+        raise
     finally:
-        write_usage(usage, model, job_url)
+        duration = time.monotonic() - start
+        _record_usage(usage, run_id, model, job_url, usage["requests"],
+                      success, error, duration)
+        trace.event(
+            "run_end",
+            iterations=usage["requests"],
+            success=success,
+            final_text=result,
+            error=error,
+            usage_totals=usage,
+            duration_s=round(duration, 2),
+        )
+        form_path = write_form_record(run_id, {
+            "run_id": run_id,
+            "time_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+            "model": model,
+            "job_url": job_url,
+            "success": success,
+            "error": error,
+            "fields": filled_fields,
+            "final_summary": result,
+        })
+        log.info("trace=%s form=%s", trace.path, form_path)
         await client.close()
 
 
