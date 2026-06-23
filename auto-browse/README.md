@@ -92,6 +92,20 @@ status (e.g. a 400 "Provider returned error" wrapping a 429). A `Retry-After`
 header is honoured when present; genuine client errors (auth, bad request) are
 not retried.
 
+## Observability
+
+Each `uv run python -m agent.loop` gets a `run_id` and writes three streams under
+`data/` (gitignored). See `agent/observability.py`.
+
+| Artifact | What |
+|----------|------|
+| `data/logs/app.log` | Operational log, human-readable, **appended** across runs (also printed to console). Each line tagged with the `run_id`. |
+| `data/traces/<run_id>.jsonl` | The LLM-conversation **trace**, one JSON event per line (`run_start`, `llm_turn`, `tool_result`, `retry`, `run_end`) — feed it to a trace/observability app. One file per run. |
+| `data/usage.jsonl` | One JSON record **appended per run** (tokens, cost, iterations, success, duration), so all past runs stay visible. Written in a `finally` block, so crashed/interrupted runs are recorded too. |
+| `data/forms/<run_id>.json` | A clean per-run record of **every form field the agent filled** (tool, label, ref, value — from `type`/`fill_form`/`select_option`/`file_upload`) plus the final summary. Go back and see exactly what was entered on a past application. |
+
+Env knobs: `LOG_DIR`, `TRACE_DIR`, `FORMS_DIR`, `USAGE_PATH`, `LOG_LEVEL`.
+
 ## Notes
 
 - The proxy exposes only navigation-relevant tools and **hides** `evaluate` and
