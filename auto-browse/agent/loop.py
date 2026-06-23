@@ -48,6 +48,10 @@ Browsing tips:
 - If a snapshot is empty or a ref errors "not found", call `wait_for` then \
   `snapshot` again — never reuse a ref from an older snapshot.
 
+Thinking: before each tool call, state your plan in ONE short sentence as your \
+message content (e.g. "Fill the email field, then click Next") — then make the \
+call. Keep it to one line; do not write long explanations.
+
 Be methodical and persistent. Never submit. If a field's value is missing from \
 the profile, leave it blank and note it in your final summary."""
 
@@ -204,8 +208,7 @@ def _ledger_line(n: int, tool_name: str, args: dict[str, Any], outcome: str) -> 
 
 
 def _trim_history(messages: list[dict[str, Any]], keep: int) -> None:
-    """Bound context: stub all but the last `keep` tool-result snapshots, and
-    strip bulky reasoning blobs from all but the most recent assistant message.
+    """Bound context: stub all but the last `keep` tool-result snapshots.
     Message order and tool_call/tool pairing are preserved (OpenAI requires it).
     """
     tool_idxs = [i for i, m in enumerate(messages) if m.get("role") == "tool"]
@@ -213,11 +216,6 @@ def _trim_history(messages: list[dict[str, Any]], keep: int) -> None:
         content = messages[i].get("content", "")
         if content != _STUB and len(content) > 300:
             messages[i]["content"] = _STUB
-
-    assistant_idxs = [i for i, m in enumerate(messages) if m.get("role") == "assistant"]
-    for i in assistant_idxs[:-1]:
-        messages[i].pop("reasoning_details", None)
-        messages[i].pop("reasoning", None)
 
 
 async def _complete_with_retry(
@@ -276,17 +274,15 @@ async def agent_loop(
             # ask OpenRouter to include token usage + cost in the response
             "extra_body": {"usage": {"include": True}},
         }
-        if effort := os.getenv("OPENROUTER_REASONING_EFFORT"):
-            request["extra_body"]["reasoning"] = {"effort": effort}
 
         response = await _complete_with_retry(client, request)
         message = response.choices[0].message
         _accumulate_usage(usage_totals, getattr(response, "usage", None))
 
         debug("iteration", iteration)
-        reasoning = getattr(message, "reasoning", None)
-        reasoning_details = getattr(message, "reasoning_details", None)
-        debug("reasoning", reasoning or "No reasoning returned by model")
+        # Lightweight "thinking": the model's one-line plan rides in plain content
+        # (no API reasoning / thought signatures — keeps it portable + cheap).
+        debug("thought", message.content or "(none)")
 
         if not message.tool_calls:
             return message.content or ""
@@ -298,10 +294,6 @@ async def agent_loop(
                 tc.model_dump(exclude_none=True) for tc in message.tool_calls
             ],
         }
-        if reasoning_details:
-            assistant_message["reasoning_details"] = reasoning_details
-        if reasoning:
-            assistant_message["reasoning"] = reasoning
         messages.append(assistant_message)
 
         for tool_call in message.tool_calls:
@@ -329,7 +321,7 @@ async def agent_loop(
             action_n += 1
             ledger.append(_ledger_line(action_n, tool_name, arguments, tool_content))
 
-        # Bound context: stub old snapshots, strip stale reasoning blobs.
+        # Bound context: stub old page snapshots.
         _trim_history(messages, HISTORY_KEEP_SNAPSHOTS)
 
     raise RuntimeError(f"Agent did not finish after {max_iterations} iterations.")
