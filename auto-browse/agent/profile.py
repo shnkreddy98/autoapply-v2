@@ -33,6 +33,11 @@ DB = {
 }
 EMAIL = os.getenv("APPLICANT_EMAIL", "jane.doe@example.com")
 
+# Login credentials the agent uses for portals that require an account.
+# Sourced from env for now; will move to the DB later.
+LOGIN_EMAIL = os.getenv("APPLICANT_LOGIN_EMAIL", EMAIL)
+LOGIN_PASSWORD = os.getenv("APPLICANT_LOGIN_PASSWORD", "")
+
 # Where the autoapply repo keeps resume files, and which variant to upload.
 AUTOAPPLY_DATA = Path(os.getenv("AUTOAPPLY_DATA", "../../autoapply/data")).expanduser()
 RESUME_VARIANT = os.getenv("RESUME_VARIANT", "aws")  # "" base, or aws/gcp/azu
@@ -75,6 +80,11 @@ def _render(user: dict, d: dict, r: dict) -> str:
     add(f"# Resume to upload (path inside browser): {RESUME_CONTAINER_PATH}")
     add("# Use these values to fill application form fields. Leave blank any")
     add("# field marked (not provided). Voluntary/EEO fields may be left blank.")
+    add("")
+
+    add("## Login Credentials (for portals that require an account)")
+    add(f"Login Email: {LOGIN_EMAIL}")
+    add(f"Login Password: {LOGIN_PASSWORD or '(not set — sign-in/account creation unavailable)'}")
     add("")
 
     add("## Personal Information")
