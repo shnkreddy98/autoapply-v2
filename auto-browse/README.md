@@ -61,12 +61,17 @@ snapshots are dead weight that inflate tokens/cost and tempt stale-ref reuse.
 **Tier 1 (implemented, `agent/loop.py`):**
 - *Sliding window* — only the last `HISTORY_KEEP_SNAPSHOTS` (default 2) tool
   results are kept full; older ones are replaced with a stub. Message order and
-  every `tool_call`→`tool` pairing are preserved (OpenAI requires it); reasoning
-  blobs are stripped from all but the most recent assistant message.
+  every `tool_call`→`tool` pairing are preserved (OpenAI requires it).
 - *Progress ledger* — a single system message, refreshed each turn, holds one
   compact line per action (`N. tool(args) -> outcome`) so nothing important is
   lost when snapshots are dropped.
 - The redundant per-iteration "REMINDER — ORIGINAL TASK" message was removed.
+
+The agent runs **without API reasoning / extended thinking** — model-hosted
+"thought signatures" are vendor-specific, brittle across provider failover, and
+won't exist on the cheap local LLM this targets. Instead the model states a
+one-line plan in its normal message content before each tool call (lightweight,
+portable, debuggable).
 
 Net: prompt tokens stay roughly flat per turn regardless of how many form pages
 the application has.
