@@ -1,12 +1,28 @@
 services:
+  # Headed Playwright MCP, watchable over noVNC at http://localhost:6080/vnc.html
   playwright:
-    image: mcr.microsoft.com/playwright/mcp
-    entrypoint: node
-    command: /app/cli.js --headless --browser chromium --no-sandbox --port 8931 --host 0.0.0.0
+    build: ./browser
     init: true
-    pull_policy: always
     ports:
-      - "8931:8931"
+      - "8931:8931"   # Playwright MCP (HTTP)
+      - "6080:6080"   # noVNC web viewer
     volumes:
       - ./data/.playwright-mcp:/home/node/.playwright-mcp
+      # resume PDF staged by `agent.profile`, uploaded during applications
+      - ./data/resume:/resume:ro
 
+  # Pruning proxy MCP — the only browser surface the agent connects to.
+  proxy:
+    build:
+      context: .
+      dockerfile: proxy/Dockerfile
+    depends_on:
+      - playwright
+    environment:
+      PLAYWRIGHT_MCP_URL: http://playwright:8931/mcp
+      SNAPSHOT_DIR: /data
+    volumes:
+      # read the snapshot .yml files Playwright MCP writes (shared, read-only)
+      - ./data:/data:ro
+    ports:
+      - "8932:8932"
