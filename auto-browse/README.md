@@ -84,9 +84,13 @@ replies, Tier 2 rebuilds the whole window coherently rather than deleting
 messages mid-history. This is the principled endpoint; revisit if Tier 1 runs
 still drift.
 
-The LLM call is wrapped with retry/backoff (`LLM_MAX_RETRIES`, `LLM_TIMEOUT`)
-that handles timeouts, connection/rate-limit/5xx errors, and empty responses
-(`choices=None`, an OpenRouter provider-error body) instead of crashing.
+The LLM call is wrapped with exponential backoff + full jitter
+(`LLM_MAX_RETRIES`, `LLM_BACKOFF_BASE`, `LLM_BACKOFF_CAP`, `LLM_TIMEOUT`) that
+handles timeouts, connection/5xx errors, empty responses (`choices=None`), and
+rate limits — including upstream 429s that OpenRouter surfaces under a different
+status (e.g. a 400 "Provider returned error" wrapping a 429). A `Retry-After`
+header is honoured when present; genuine client errors (auth, bad request) are
+not retried.
 
 ## Notes
 

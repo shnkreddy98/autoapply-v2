@@ -1,6 +1,7 @@
 import asyncio
 import json
 import os
+import random
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -12,6 +13,7 @@ from mcp.client.streamable_http import streamable_http_client
 from mcp.types import TextContent
 from openai import (
     APIConnectionError,
+    APIStatusError,
     APITimeoutError,
     AsyncOpenAI,
     InternalServerError,
@@ -91,9 +93,45 @@ HISTORY_KEEP_SNAPSHOTS = int(os.getenv("HISTORY_KEEP_SNAPSHOTS", "2"))
 _STUB = "[older page snapshot dropped to save context — see PROGRESS LEDGER]"
 
 # LLM call resilience.
-LLM_MAX_RETRIES = int(os.getenv("LLM_MAX_RETRIES", "4"))
+LLM_MAX_RETRIES = int(os.getenv("LLM_MAX_RETRIES", "6"))
 LLM_TIMEOUT = float(os.getenv("LLM_TIMEOUT", "120"))
+LLM_BACKOFF_BASE = float(os.getenv("LLM_BACKOFF_BASE", "2"))   # seconds
+LLM_BACKOFF_CAP = float(os.getenv("LLM_BACKOFF_CAP", "60"))    # seconds
 _RETRYABLE = (APITimeoutError, APIConnectionError, RateLimitError, InternalServerError)
+# Markers for a rate-limit that OpenRouter surfaces as a non-429 status (e.g. a
+# 400 "Provider returned error" wrapping an upstream 429 / quota exhaustion).
+_RATE_LIMIT_MARKERS = (
+    "rate-limit", "rate limit", "ratelimit", "temporarily rate-limited",
+    "provider returned error", "resource_exhausted", "quota", "429",
+)
+
+
+def _is_rate_limited(exc: APIStatusError) -> bool:
+    """True if an API status error is (or wraps) an upstream rate-limit / quota
+    error, even when the HTTP status is not 429."""
+    if getattr(exc, "status_code", None) == 429:
+        return True
+    text = str(exc).lower()
+    return any(m in text for m in _RATE_LIMIT_MARKERS)
+
+
+def _retry_after(exc: Any) -> float | None:
+    """Honour a Retry-After header (seconds) if the provider sent one."""
+    resp = getattr(exc, "response", None)
+    val = resp.headers.get("retry-after") if resp is not None else None
+    try:
+        return float(val) if val is not None else None
+    except (TypeError, ValueError):
+        return None
+
+
+def _backoff_seconds(attempt: int, retry_after: float | None) -> float:
+    """Exponential backoff with full jitter, capped; respects Retry-After."""
+    base = min(LLM_BACKOFF_BASE * (2 ** attempt), LLM_BACKOFF_CAP)
+    wait = random.uniform(0, base)  # full jitter
+    if retry_after is not None:
+        wait = max(wait, retry_after)
+    return min(wait, LLM_BACKOFF_CAP)
 
 
 def load_profile() -> str:
@@ -247,14 +285,24 @@ def _trim_history(messages: list[dict[str, Any]], keep: int) -> None:
 async def _complete_with_retry(
     client: AsyncOpenAI, request: dict[str, Any], max_retries: int = LLM_MAX_RETRIES
 ) -> Any:
-    """Call chat.completions with retry/backoff for transient API errors and for
-    error/empty bodies where `choices` is None (an OpenRouter provider error)."""
+    """Call chat.completions with exponential backoff for transient API errors,
+    rate limits (incl. upstream 429s OpenRouter surfaces as another status), and
+    error/empty bodies where `choices` is None."""
     last_err: str = "unknown error"
     for attempt in range(max_retries):
+        retry_after: float | None = None
         try:
             response = await client.chat.completions.create(**request)
-        except _RETRYABLE as exc:
+        except _RETRYABLE as exc:  # timeouts, conn, 429 RateLimitError, 5xx
             last_err = f"{type(exc).__name__}: {exc}"
+            retry_after = _retry_after(exc)
+        except APIStatusError as exc:
+            # Only retry status errors that are (or wrap) a rate limit; re-raise
+            # genuine client errors (auth, bad request, etc.).
+            if not _is_rate_limited(exc):
+                raise
+            last_err = f"rate-limited ({type(exc).__name__}): {exc}"
+            retry_after = _retry_after(exc)
         else:
             if getattr(response, "choices", None):
                 return response
