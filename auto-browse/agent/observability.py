@@ -19,6 +19,7 @@ HERE = Path(__file__).resolve().parent.parent
 DATA = HERE / "data"
 LOG_DIR = Path(os.getenv("LOG_DIR", DATA / "logs"))
 TRACE_DIR = Path(os.getenv("TRACE_DIR", DATA / "traces"))
+FORMS_DIR = Path(os.getenv("FORMS_DIR", DATA / "forms"))
 USAGE_PATH = Path(os.getenv("USAGE_PATH", DATA / "usage.jsonl"))
 
 LOGGER_NAME = "auto_browse.agent"
@@ -93,3 +94,13 @@ def append_usage(record: dict[str, Any]) -> None:
     USAGE_PATH.parent.mkdir(parents=True, exist_ok=True)
     with USAGE_PATH.open("a", encoding="utf-8") as f:
         f.write(json.dumps(record, ensure_ascii=False, default=str) + "\n")
+
+
+def write_form_record(run_id: str, record: dict[str, Any]) -> Path:
+    """Write a clean per-run record of every form field the agent filled
+    (data/forms/<run_id>.json) so a past application can be reviewed."""
+    FORMS_DIR.mkdir(parents=True, exist_ok=True)
+    path = FORMS_DIR / f"{run_id}.json"
+    path.write_text(json.dumps(record, ensure_ascii=False, indent=2, default=str),
+                    encoding="utf-8")
+    return path
