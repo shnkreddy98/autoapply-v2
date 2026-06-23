@@ -1,12 +1,33 @@
 [project]
 name = "auto-browse"
 version = "0.1.0"
-description = "Add your description here"
+description = "Cheap LLM driving a browser through a deterministic accessibility-tree pruning proxy."
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "mcp[cli]>=1.27.2",
-    "ollama>=0.6.2",
     "openai>=2.41.1",
-    "pyyaml>=6.0.3",
+    "python-dotenv>=1.0.0",
+    "uvicorn>=0.30.0",
+    "starlette>=0.40.0",
+    "psycopg[binary]>=3.3.4",
+]
+
+[project.scripts]
+playwright-proxy = "proxy.server:main"
+profile-export = "agent.profile:main"
+
+[tool.uv]
+package = true
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["proxy", "agent"]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.0",
 ]
