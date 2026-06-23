@@ -108,6 +108,13 @@ Env knobs: `LOG_DIR`, `TRACE_DIR`, `FORMS_DIR`, `USAGE_PATH`, `LOG_LEVEL`.
 
 ## Notes
 
+- **Completion is judged from evidence, not the model stopping.** When the model
+  emits no tool call, the loop checks what was actually filled (resume uploaded =
+  hard requirement; name/phone/address = supporting, may be autofilled). If
+  evidence is missing it hints the model and makes it continue (up to
+  `MAX_FINISH_HINTS` times); the run's `success` reflects that evidence. Tool
+  results that fail as plain text (`Session terminated`, `### Error`) are counted
+  as failures, not progress.
 - The proxy exposes only navigation-relevant tools and **hides** `evaluate` and
   `run_code_unsafe` (the biggest wrong-tool / safety risks for small models).
 - Pass a `goal` (on `snapshot`) or `next_goal` (on action tools) to get a pruned
