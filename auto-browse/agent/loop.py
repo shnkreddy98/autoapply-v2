@@ -28,6 +28,7 @@ from agent.observability import (
     append_usage,
     new_run_id,
     setup_logging,
+    write_form_record,
 )
 
 load_dotenv()
@@ -67,12 +68,18 @@ Procedure:
 6. Leave voluntary/EEO fields (gender, race, veteran, disability) blank unless \
    they are required to proceed.
 7. Tick declaration / acknowledgement checkboxes per the profile (all "Yes").
-8. STOP BEFORE SUBMITTING. Do NOT click the final Submit / Apply / Send button. \
-   Once every field is filled and the resume uploaded, take a screenshot, then \
-   return a plain-text summary listing each field you filled and anything you \
-   could not complete, and tell the user to review in the browser and submit \
-   manually. (Signing in or creating an account is allowed and expected; only \
-   the final application submit is off-limits.)
+8. Work through EVERY page/step of the application, clicking "Next"/"Continue" \
+   to advance. Each Next validates that page and will NOT proceed while a \
+   required field is missing — fix anything it flags. Fill all required fields \
+   on every page until you reach the final Review/Submit step (this walks the \
+   whole form and surfaces fields that only appear on later pages).
+9. LAST STEP — VALIDATE, then hand off. On the Review step, confirm every \
+   required field across all sections is filled and there are no validation \
+   errors (fix any that remain). Do NOT click the final Submit / Apply / Send \
+   button — leave that for the user. Take a screenshot, then return a plain-text \
+   summary: each field you filled, anything you could not complete, and a clear \
+   statement that the form is validated and ready for the user to review and \
+   submit.
 
 Browsing tips:
 - `snapshot(goal=...)` returns a small pruned tree to find WHERE things are; \
@@ -85,8 +92,11 @@ Thinking: before each tool call, state your plan in ONE short sentence as your \
 message content (e.g. "Fill the email field, then click Next") — then make the \
 call. Keep it to one line; do not write long explanations.
 
-Be methodical and persistent. Never submit. If a field's value is missing from \
-the profile, leave it blank and note it in your final summary."""
+Be methodical and persistent. Never click the final application Submit — walk \
+every page to validate, then hand off to the user. (Signing in or creating an \
+account is allowed and expected; only the final application submit is off-limits.) \
+If a field's value is missing from the profile, leave it blank (unless required) \
+and note it in your final summary."""
 
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
 PROXY_MCP_URL = os.getenv("PROXY_MCP_URL", "http://localhost:8932/mcp")
@@ -206,6 +216,31 @@ def _record_usage(
         iterations, success, duration_s,
     )
     return record
+
+
+def _filled_fields(tool_name: str, args: dict[str, Any]) -> list[dict[str, Any]]:
+    """Normalize a value-bearing tool call into form-field entries (for the
+    per-run form record). Returns [] for non-form tools."""
+    if tool_name == "type":
+        return [{"tool": "type", "label": args.get("element"),
+                 "ref": args.get("target"), "value": args.get("text")}]
+    if tool_name == "select_option":
+        vals = args.get("values") or []
+        return [{"tool": "select_option", "label": args.get("element"),
+                 "ref": args.get("target"), "value": ", ".join(map(str, vals))}]
+    if tool_name == "file_upload":
+        paths = args.get("paths") or []
+        return [{"tool": "file_upload", "label": "resume/file",
+                 "value": ", ".join(map(str, paths))}]
+    if tool_name == "fill_form":
+        out = []
+        for f in args.get("fields") or []:
+            out.append({"tool": "fill_form",
+                        "label": f.get("element") or f.get("name"),
+                        "ref": f.get("target"), "type": f.get("type"),
+                        "value": f.get("value")})
+        return out
+    return []
 
 
 def debug(label: str, value: Any = None) -> None:
@@ -356,6 +391,7 @@ async def agent_loop(
     client: AsyncOpenAI,
     usage_totals: dict[str, Any],
     trace: Trace | None = None,
+    filled_fields: list[dict[str, Any]] | None = None,
     max_iterations: int = 250,
 ) -> str:
     tools_result = await session.list_tools()
@@ -474,6 +510,9 @@ async def agent_loop(
                     result=tool_content,
                     ok=ok,
                 )
+            if ok and filled_fields is not None:
+                for entry in _filled_fields(tool_name, arguments):
+                    filled_fields.append({"iteration": iteration, **entry})
 
         # Bound context: stub old page snapshots.
         _trim_history(messages, HISTORY_KEEP_SNAPSHOTS)
@@ -496,6 +535,7 @@ async def main(job_url: str, model: str) -> None:
 
     client = create_openrouter_client()
     usage = _new_usage()
+    filled_fields: list[dict[str, Any]] = []
     start = time.monotonic()
     success = False
     error: str | None = None
@@ -510,7 +550,8 @@ async def main(job_url: str, model: str) -> None:
                     {"role": "user", "content": task},
                 ]
                 result = await agent_loop(
-                    model, task, messages, session, client, usage, trace=trace
+                    model, task, messages, session, client, usage,
+                    trace=trace, filled_fields=filled_fields,
                 )
                 success = True
                 log.info("final: %s", result)
@@ -532,7 +573,17 @@ async def main(job_url: str, model: str) -> None:
             usage_totals=usage,
             duration_s=round(duration, 2),
         )
-        log.info("trace written: %s", trace.path)
+        form_path = write_form_record(run_id, {
+            "run_id": run_id,
+            "time_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+            "model": model,
+            "job_url": job_url,
+            "success": success,
+            "error": error,
+            "fields": filled_fields,
+            "final_summary": result,
+        })
+        log.info("trace=%s form=%s", trace.path, form_path)
         await client.close()
 
 
