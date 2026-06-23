@@ -1,3 +1,5 @@
+import re
+
 from .keyword_extractor import extract
 from .tree_parser import LANDMARK_ROLES, TreeNode, collect_all, parse
 
@@ -5,6 +7,25 @@ INTERACTIVE_ROLES: frozenset[str] = frozenset({
     "button", "link", "textbox", "searchbox", "combobox",
     "checkbox", "radio", "menuitem", "option", "switch", "tab", "slider",
 })
+
+# Primary form-action buttons. These are always surfaced (they live in the form's
+# action bar, not the page footer) so the model never has to fish around the
+# footer to find "Save and Continue" / "Next" / "Submit".
+_ACTION_BUTTON_RE = re.compile(
+    r"\b(save|continue|next|submit|review|apply|finish|proceed|back)\b", re.I
+)
+# Page footer landmark — demoted so its social/legal links don't dominate.
+_FOOTER_LANDMARK = "contentinfo"
+
+
+def _action_buttons(nodes: list[TreeNode]) -> set[TreeNode]:
+    return {
+        n for n in nodes
+        if n.role == "button"
+        and n.landmark != _FOOTER_LANDMARK
+        and n.name
+        and _ACTION_BUTTON_RE.search(n.name)
+    }
 
 
 def prune(raw_tree: str, goal: str, min_results: int = 3) -> str:
@@ -18,16 +39,21 @@ def prune(raw_tree: str, goal: str, min_results: int = 3) -> str:
     keywords, _ = extract(goal)
 
     pass1 = _keyword_match(non_meta, keywords)
+    actions = _action_buttons(non_meta)
 
     if not pass1:
-        return _landmarks_only(all_nodes, keywords)
-
-    if len(pass1) < min_results:
+        # No keyword match: surface just the form action buttons if present,
+        # else fall back to landmarks only (don't flood with all interactives).
+        if not actions:
+            return _landmarks_only(all_nodes, keywords)
+        pass2: set[TreeNode] = set()
+    elif len(pass1) < min_results:
         pass2 = _interactive_fallback(non_meta, pass1)
     else:
         pass2 = set()
 
-    kept = pass1 | pass2
+    # Always include the form's action buttons (Save/Continue/Next/Submit/...).
+    kept = pass1 | pass2 | actions
 
     ancestors = _ancestor_chains(kept)
     url_children = {
@@ -103,7 +129,11 @@ def _interactive_fallback(nodes: list[TreeNode], pass1: set[TreeNode]) -> set[Tr
         candidates = [n for n in nodes if n.landmark == target_landmark]
     else:
         candidates = nodes
-    return {n for n in candidates if n.role in INTERACTIVE_ROLES}
+    # Demote the page footer: its social/legal links shouldn't flood the result.
+    return {
+        n for n in candidates
+        if n.role in INTERACTIVE_ROLES and n.landmark != _FOOTER_LANDMARK
+    }
 
 
 def _ancestor_chains(kept: set[TreeNode]) -> set[TreeNode]:

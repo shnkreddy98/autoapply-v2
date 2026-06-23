@@ -119,3 +119,34 @@ def test_landmark_tagging():
     assert searchbox is not None
     # searchbox is inside the search landmark
     assert searchbox.landmark == "search"
+
+
+_FORM_TREE = """- generic [ref=e1]:
+  - main [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e4]: Email*
+      - textbox "Email" [ref=e5]
+    - button "Save and Continue" [ref=e9]
+  - contentinfo [ref=e20]:
+    - link "Facebook" [ref=e21]
+    - button "Back to top" [ref=e23]"""
+
+
+def test_action_button_always_surfaced():
+    # Goal does not mention the button; it must still appear.
+    out = prune(_FORM_TREE, "fill the email field")
+    assert "e9" in out  # Save and Continue button
+    assert "e5" in out  # the matched email field
+
+
+def test_footer_demoted():
+    out = prune(_FORM_TREE, "fill the email field")
+    assert "e21" not in out  # footer social link excluded
+    assert "e23" not in out  # footer "Back to top" button excluded (contentinfo)
+
+
+def test_action_button_surfaced_on_zero_keyword_match():
+    # Nonsense goal: still surface the action button instead of landmarks-only.
+    out = prune(_FORM_TREE, "xyzzy gibberish")
+    assert "e9" in out
+    assert "landmarks_only" not in out

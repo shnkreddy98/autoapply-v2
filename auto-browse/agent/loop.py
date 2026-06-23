@@ -88,6 +88,26 @@ Browsing tips:
 - If a snapshot is empty or a ref errors "not found", call `wait_for` then \
   `snapshot` again — never reuse a ref from an older snapshot.
 
+ATS form tips (Workday / Greenhouse / iCIMS — read carefully, these fail often):
+- DROPDOWNS are a button that opens a listbox, NOT a `<select>`. To pick a \
+  value: `click` the button, then `click` the option. Do NOT use \
+  `select_option` or `fill_form` with type "combobox" on them — that errors with \
+  "Element is not a <select>".
+- FILE UPLOAD needs the chooser open first: `click` the "Attach"/"Select \
+  files"/"Upload" control, THEN call `file_upload`. Calling `file_upload` with no \
+  open chooser fails ("requires modal state").
+- After ANY click that changes the page, refs are stale — take a fresh \
+  `snapshot` before the next action. Reusing an old ref errors "ref not found".
+- ACTION BUTTONS ("Save and Continue" / "Next" / "Submit" / "Review") live in an \
+  action bar at the bottom of the FORM — this is NOT the page footer (which has \
+  social/legal links). To find one, call `snapshot(goal='save and continue \
+  button')`; do NOT `expand_region` the footer / contentinfo region looking for it.
+- MULTI-STEP forms: click "Next"/"Continue"/"Review" to advance through EVERY \
+  step. You are NOT on the final/Review page until you have actually clicked \
+  through to it AND a fresh `snapshot` shows it (e.g. a Review/Submit step with a \
+  Submit button). NEVER claim you reached Review or finished a page you have not \
+  navigated to and confirmed by snapshot.
+
 Thinking: before each tool call, state your plan in ONE short sentence as your \
 message content (e.g. "Fill the email field, then click Next") — then make the \
 call. Keep it to one line; do not write long explanations.
@@ -112,6 +132,16 @@ PROFILE_PATH = Path(
 # profile is the durable source of truth. See README "Context management".
 HISTORY_KEEP_SNAPSHOTS = int(os.getenv("HISTORY_KEEP_SNAPSHOTS", "2"))
 _STUB = "[older page snapshot dropped to save context — see PROGRESS LEDGER]"
+
+# Completion is judged from evidence, not from the model deciding to stop. If the
+# model emits no tool call but evidence is missing, it is hinted and made to
+# continue — up to MAX_FINISH_HINTS times, then allowed to finish anyway.
+MAX_FINISH_HINTS = int(os.getenv("MAX_FINISH_HINTS", "2"))
+# Identity-field label keywords that count as "core fields filled" evidence.
+_IDENTITY_KEYS = ("name", "email", "phone", "address", "city", "zip", "postal")
+# A tool result containing one of these is a failure even though it came back as
+# normal text (so it must not count as evidence).
+_TOOL_FAILURE_MARKERS = ("session terminated", "### error")
 
 # LLM call resilience.
 LLM_MAX_RETRIES = int(os.getenv("LLM_MAX_RETRIES", "6"))
@@ -241,6 +271,36 @@ def _filled_fields(tool_name: str, args: dict[str, Any]) -> list[dict[str, Any]]
                         "value": f.get("value")})
         return out
     return []
+
+
+def _tool_failed(text: str) -> bool:
+    """True if a tool result is a failure delivered as normal text (e.g. the
+    upstream session died, or an MCP '### Error' block)."""
+    low = text.lower()
+    return any(m in low for m in _TOOL_FAILURE_MARKERS)
+
+
+def _completion_evidence(filled_fields: list[dict[str, Any]]) -> tuple[bool, list[str]]:
+    """Decide whether the application is actually complete from what was filled.
+
+    Hard requirement: the resume/CV was uploaded (a successful file_upload).
+    Supporting (not required — portals often autofill these from the resume):
+    core identity fields (name/email/phone/address). Returns (complete, missing).
+    """
+    tools = {f.get("tool") for f in filled_fields}
+    labels = " ".join((f.get("label") or "").lower() for f in filled_fields)
+    resume_uploaded = "file_upload" in tools
+    identity_filled = any(k in labels for k in _IDENTITY_KEYS)
+
+    missing: list[str] = []
+    if not resume_uploaded:
+        missing.append("resume/CV not uploaded yet — use the file_upload tool")
+    if not identity_filled:
+        missing.append(
+            "core fields (name/email/phone/address) not filled (ok only if the "
+            "form autofilled them)"
+        )
+    return resume_uploaded, missing
 
 
 def debug(label: str, value: Any = None) -> None:
@@ -416,6 +476,7 @@ async def agent_loop(
     }
     messages.insert(2, ledger_msg)
     action_n = 0
+    finish_attempts = 0
 
     for iteration in range(1, max_iterations + 1):
         ledger_msg["content"] = "PROGRESS LEDGER (actions so far):\n" + (
@@ -463,7 +524,39 @@ async def agent_loop(
             )
 
         if not message.tool_calls:
-            return message.content or ""
+            # The model wants to stop. Only accept that as "done" if evidence
+            # supports it; otherwise hint and make it keep going.
+            if filled_fields is None:
+                return message.content or ""
+            complete, missing = _completion_evidence(filled_fields)
+            if complete or finish_attempts >= MAX_FINISH_HINTS:
+                if not complete:
+                    log.warning(
+                        "finishing without full evidence after %d hint(s): %s",
+                        finish_attempts, "; ".join(missing),
+                    )
+                return message.content or ""
+
+            finish_attempts += 1
+            log.warning(
+                "model tried to finish without evidence (hint %d/%d): %s",
+                finish_attempts, MAX_FINISH_HINTS, "; ".join(missing),
+            )
+            if trace is not None:
+                trace.event("finish_blocked", iteration=iteration,
+                            attempt=finish_attempts, missing=missing)
+            # keep history valid: record the model's (content-only) turn, then nudge
+            messages.append({"role": "assistant", "content": message.content or ""})
+            messages.append({"role": "user", "content": (
+                "You are NOT finished — do not write a summary or claim completion. "
+                "Evidence check failed: " + "; ".join(missing) + ". "
+                "Take the next concrete action now: if the resume is not uploaded, "
+                "click the resume Attach/Upload control, then call file_upload with "
+                "the resume path from the profile; then fill any remaining required "
+                "(*) fields. Continue until the resume is uploaded and required "
+                "fields are filled, then reach the final review/submit step."
+            )})
+            continue
 
         assistant_message: dict[str, Any] = {
             "role": "assistant",
@@ -484,6 +577,10 @@ async def agent_loop(
                 result = await session.call_tool(tool_name, arguments)
                 tool_content = result_text(result)
                 debug("tool_call_result", {"name": tool_name, "result": tool_content})
+                if _tool_failed(tool_content):
+                    ok = False  # failure delivered as normal text (e.g. session died)
+                    log.warning("tool %s reported failure: %s",
+                                tool_name, _brief(tool_content, 120))
             except Exception as exc:
                 ok = False
                 tool_content = (
@@ -553,7 +650,12 @@ async def main(job_url: str, model: str) -> None:
                     model, task, messages, session, client, usage,
                     trace=trace, filled_fields=filled_fields,
                 )
-                success = True
+                # success reflects EVIDENCE (resume uploaded), not just that the
+                # model stopped talking.
+                success, missing = _completion_evidence(filled_fields)
+                if not success:
+                    log.warning("run ended without completion evidence: %s",
+                                "; ".join(missing))
                 log.info("final: %s", result)
                 print(f"final: {result}")
     except Exception as exc:
