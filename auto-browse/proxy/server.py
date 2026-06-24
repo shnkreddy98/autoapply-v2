@@ -81,7 +81,9 @@ def _build_server() -> Server:
 
         # Reject hidden/unknown tools — never forwarded upstream.
         if name not in TOOL_SPECS:
-            return [TextContent(type="text", text=f"Error: tool '{name}' is not available.")]
+            return [
+                TextContent(type="text", text=f"Error: tool '{name}' is not available.")
+            ]
 
         spec = TOOL_SPECS[name]
 
@@ -95,6 +97,9 @@ def _build_server() -> Server:
             args.pop(param, None)
 
         upstream_name = spec["upstream"]
+        # Merge any fixed upstream args the wrapper pins (e.g. action="select"
+        # for the tab wrappers) — done after goal/next_goal are stripped.
+        args.update(spec.get("inject_args", {}))
 
         # Decide whether this action likely triggers a navigation/re-render, in
         # which case we should settle before snapshotting (see _prune_snapshot).
@@ -143,10 +148,18 @@ async def _prune_snapshot(raw_text: str, goal: str | None, force_settle: bool) -
     empty signal so the model knows to wait rather than reuse stale refs.
     """
     link_line, tree_text = _load_tree(raw_text)
+    appended = False
     if tree_text is None:
-        return raw_text
-
-    if force_settle or _node_count(tree_text) <= MIN_MEANINGFUL_NODES:
+        # Some results carry no tree of their own (e.g. browser_tabs returns just
+        # the tab list). When the action changed the active page, fetch a fresh
+        # snapshot of the now-current tab and append it; otherwise pass through.
+        if not force_settle:
+            return raw_text
+        tree_text = await _wait_and_snapshot()
+        if tree_text is None:
+            return raw_text
+        appended = True
+    elif force_settle or _node_count(tree_text) <= MIN_MEANINGFUL_NODES:
         settled = await _wait_and_snapshot()
         if settled is not None and _node_count(settled) > _node_count(tree_text):
             tree_text = settled
@@ -161,7 +174,10 @@ async def _prune_snapshot(raw_text: str, goal: str | None, force_settle: bool) -
         body = tree_text
 
     # Splice the body into the original result (replacing the file-link line),
-    # or return it directly when the tree was inline.
+    # append it when the original carried no tree of its own (tab tools), or
+    # return it directly when the tree was inline.
+    if appended:
+        return f"{raw_text}\n\n### Snapshot\n{body}"
     if link_line:
         return raw_text.replace(link_line, body)
     return body
@@ -176,6 +192,10 @@ def _navigates(upstream_name: str, args: dict) -> bool:
         return True
     if upstream_name == "browser_press_key":
         return str(args.get("key", "")).lower() in ("enter", "return")
+    # Switching/opening/closing a tab changes the active page; settle + snapshot
+    # the now-current tab so the agent gets its fresh (pruned) tree.
+    if upstream_name == "browser_tabs":
+        return args.get("action") in ("select", "new", "close")
     return False
 
 
