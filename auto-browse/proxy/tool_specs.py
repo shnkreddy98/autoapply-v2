@@ -326,6 +326,50 @@ TOOL_SPECS: dict[str, dict] = {
             "additionalProperties": False,
         },
     },
+    "select_tab": {
+        "upstream": "browser_tabs",
+        "inject_args": {"action": "select"},
+        "description": (
+            "Switch to a different browser tab by its index, taken from the"
+            " '### Open tabs' list in recent tool results (e.g. tab 1)."
+            " Use this when an 'Apply'/action opened the application form in a NEW"
+            " tab — switch to that tab instead of re-clicking the same button"
+            " (re-clicking just opens more duplicate tabs)."
+            " Returns a PRUNED snapshot of the tab you switched to." + _PRUNED_SUFFIX
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "index": {
+                    "type": "number",
+                    "description": "Index of the tab to switch to, from the 'Open tabs' list.",
+                },
+                **_NEXT_GOAL_PROP,
+            },
+            "required": ["index"],
+            "additionalProperties": False,
+        },
+    },
+    "close_tab": {
+        "upstream": "browser_tabs",
+        "inject_args": {"action": "close"},
+        "description": (
+            "Close a browser tab by its index (from the '### Open tabs' list);"
+            " omit the index to close the current tab. Use it to clean up duplicate"
+            " or dead tabs. Returns a PRUNED snapshot of the now-current tab." + _PRUNED_SUFFIX
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "index": {
+                    "type": "number",
+                    "description": "Index of the tab to close. If omitted, the current tab is closed.",
+                },
+                **_NEXT_GOAL_PROP,
+            },
+            "additionalProperties": False,
+        },
+    },
     "expand_region": {
         "upstream": None,  # proxy-only, not forwarded
         "description": (
