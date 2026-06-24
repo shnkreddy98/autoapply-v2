@@ -139,8 +139,19 @@ Env knobs: `LOG_DIR`, `TRACE_DIR`, `FORMS_DIR`, `USAGE_PATH`, `LOG_LEVEL`.
   to).
 - The proxy exposes only navigation-relevant tools and **hides** `evaluate` and
   `run_code_unsafe` (the biggest wrong-tool / safety risks for small models).
-- Pass a `goal` (on `snapshot`) or `next_goal` (on action tools) to get a pruned
-  tree; omit it to get the full tree. Refs are only valid from the latest tree.
+- **Always-surfaced nodes.** Every pruned tree includes, regardless of the step
+  goal: entry actions (sign-in / create-account / apply-with-resume / autofill /
+  upload-resume), form-action buttons (Save/Continue/Next/Submit), validation
+  errors (incl. `img "Error"` icons), required (`*`) fields, and the option/radio
+  children of any kept dropdown/radio group. These never share keywords with the
+  goal but are exactly what makes a form advance — pruning used to drop them.
+- **Structured overview on page-load.** A navigation/settle with no goal (e.g. the
+  first `navigate`) returns a bounded *overview* — landmarks + every field/button/
+  link + the always-surfaced sets, across all sections of a multi-step form — not
+  the raw full tree. An **explicit** `snapshot()` with no goal still returns the
+  full tree (the agent's escape hatch).
+- Pass a `goal` (on `snapshot`) or `next_goal` (on action tools) to focus the
+  pruned tree on a step. Refs are only valid from the latest tree.
 - VNC has no password — local/dev use only.
 
 

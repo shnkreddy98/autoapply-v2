@@ -59,9 +59,20 @@ def test_quoted_value_not_used_as_keyword():
 # --- Test 4: zero-match fallback ---
 
 
+_BARE_TREE = """- generic [ref=e1]:
+  - banner [ref=e2]:
+    - heading "Welcome" [level=1] [ref=e3]
+  - main [ref=e4]:
+    - paragraph [ref=e5]: Some descriptive text on the page.
+  - contentinfo [ref=e6]:
+    - link "Privacy" [ref=e7]"""
+
+
 def test_zero_match_returns_landmarks_only():
-    raw = _load_fixture()
-    result = prune(raw, "xyzzy nonsense gibberish foobarqux")
+    # No keyword match AND nothing to always-surface (no entry/action/error/
+    # required nodes) -> landmarks-only fallback. (The Wikipedia fixture now
+    # surfaces its Create account / Log in entry links, so use a bare tree.)
+    result = prune(_BARE_TREE, "xyzzy nonsense gibberish foobarqux")
     assert "landmarks_only" in result
     assert "[pruned:" in result
 
@@ -158,3 +169,76 @@ def test_action_button_surfaced_on_zero_keyword_match():
     out = prune(_FORM_TREE, "xyzzy gibberish")
     assert "e9" in out
     assert "landmarks_only" not in out
+
+
+# --- always-surface: errors, required, options, entry actions ---
+
+_QUESTIONS_TREE = """- generic [ref=e1]:
+  - main [ref=e2]:
+    - region "Questions" [ref=e3]:
+      - combobox "*How did you hear about this opportunity?" [ref=e4]:
+        - option "LinkedIn"
+        - option "Company Website"
+        - option "Indeed"
+        - generic [ref=e8]:
+          - img "Error" [ref=e9]
+      - group "*Are you at least 18 years of age?" [ref=e10]:
+        - radio "Yes" [ref=e11]
+        - radio "No" [ref=e12]
+        - img "Error" [ref=e13]
+    - button "Save and Continue" [ref=e20]
+  - contentinfo [ref=e30]:
+    - link "Terms" [ref=e31]"""
+
+
+def test_error_icons_surfaced_regardless_of_goal():
+    # Goal mentions nothing about errors, yet the img "Error" nodes must appear.
+    out = prune(_QUESTIONS_TREE, "save and continue")
+    assert "e9" in out and "e13" in out
+    assert 'img "Error"' in out
+
+
+def test_required_questions_surfaced_regardless_of_goal():
+    out = prune(_QUESTIONS_TREE, "save and continue")
+    assert "e4" in out  # *How did you hear combobox
+    assert "e10" in out  # *Are you 18 group
+
+
+def test_choice_options_included_for_kept_container():
+    out = prune(_QUESTIONS_TREE, "how did you hear")
+    # the combobox options and the Yes/No radios are revealed
+    assert "LinkedIn" in out and "Company Website" in out
+    assert "Yes" in out and "No" in out
+
+
+_ENTRY_TREE = """- generic [ref=e1]:
+  - main [ref=e2]:
+    - heading "Senior Data Engineer" [level=1] [ref=e3]
+    - paragraph [ref=e4]: A long job description goes here.
+    - button "Apply with Resume" [ref=e5]
+    - button "Sign In" [ref=e6]
+  - contentinfo [ref=e30]:
+    - link "Privacy" [ref=e31]"""
+
+
+def test_entry_actions_surfaced_regardless_of_goal():
+    out = prune(_ENTRY_TREE, "xyzzy gibberish")
+    assert "e5" in out and "e6" in out  # Apply with Resume + Sign In
+    assert "landmarks_only" not in out
+
+
+def test_overview_returns_fields_and_omits_footer():
+    from proxy.pruner import overview
+
+    out = overview(_QUESTIONS_TREE)
+    assert "overview" in out
+    assert "e4" in out and "e10" in out and "e20" in out  # fields + action button
+    assert "e31" not in out  # footer link demoted
+
+
+def test_overview_landing_drops_description_noise():
+    from proxy.pruner import overview
+
+    out = overview(_ENTRY_TREE)
+    assert "e5" in out and "e6" in out  # entry actions present
+    assert "job description" not in out.lower()  # paragraph text not surfaced

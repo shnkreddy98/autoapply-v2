@@ -208,6 +208,9 @@ _VALIDATION_ERROR_MARKERS = (
     "cannot be blank",
     "must be completed",
     "fix the error",
+    # ATS portals render field errors as an icon node, not text. The pruner now
+    # always surfaces these (proxy/pruner.py _always_keep), so the gate can see them.
+    'img "error"',
 )
 
 # Terminal page states the agent must NOT try to apply through — exit gracefully
