@@ -167,7 +167,11 @@ Env knobs: `LOG_DIR`, `TRACE_DIR`, `FORMS_DIR`, `USAGE_PATH`, `LOG_LEVEL`.
 
 
 ## Bugs
+- paycomonline, created account properly but missed the phone number field why? and then after clicking continue and failing 3 times because phone number is required field yet agent never knows this error exists. it worked the second time around iteration 25, why did it work this time? trace: /home/reddymption/repos/autoapply-v2/auto-browse/data/traces/20260624T052553Z-62c0e6.jsonl
+- Agent missed couple required metrics and click submit and got errors, now it refilled the missing fields and now it cannot seem to end it because it stuck in a loop seeing the older errors. trace: /home/reddymption/repos/autoapply-v2/auto-browse/data/traces/20260624T053432Z-cc6025.jsonl
+- also stopped early, there are still required fields which are empty? did it validate? trace: /home/reddymption/repos/autoapply-v2/auto-browse/data/traces/20260624T054213Z-147715.jsonl
 
 ## Improvements
+- IMPORTANT: Need to add references to the profile data
 - If the site says you have already applied for this position, gracefully exit instead of trying to find the same role and trying to apply. example conversation for this url: `https://topgolf.wd501.myworkdayjobs.com/en-US/TopgolfCareers/job/TG---HQ---Dallas-Office/Data-Engineer-II_JR2023-19177?source=LinkedIn`
 - Application level: record all conversations and based on the domain/company build automate scripts that can offload from AI agents in form filling based on previous form filling conversation. 
