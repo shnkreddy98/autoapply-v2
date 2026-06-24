@@ -1,14 +1,21 @@
 import re
 from dataclasses import dataclass, field
 
-REF_RE = re.compile(r'\[ref=([^\]]+)\]')
+REF_RE = re.compile(r"\[ref=([^\]]+)\]")
 NAME_RE = re.compile(r'"([^"]*)"')
-_ROLE_WORD = re.compile(r'^[a-zA-Z][a-zA-Z0-9_\-]*')
+_ROLE_WORD = re.compile(r"^[a-zA-Z][a-zA-Z0-9_\-]*")
 
-LANDMARK_ROLES: frozenset[str] = frozenset({
-    "banner", "navigation", "main", "contentinfo",
-    "search", "form", "complementary",
-})
+LANDMARK_ROLES: frozenset[str] = frozenset(
+    {
+        "banner",
+        "navigation",
+        "main",
+        "contentinfo",
+        "search",
+        "form",
+        "complementary",
+    }
+)
 
 
 @dataclass(eq=False)

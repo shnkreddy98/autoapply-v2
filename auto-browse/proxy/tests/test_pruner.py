@@ -5,7 +5,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from proxy.pruner import prune
-from proxy.tree_parser import parse, collect_all
+from proxy.tree_parser import collect_all, parse
 
 FIXTURE = Path(__file__).parent / "fixtures" / "wikipedia_snapshot.txt"
 
@@ -15,10 +15,11 @@ def _load_fixture() -> str:
 
 
 def _refs_in(text: str) -> set[str]:
-    return set(re.findall(r'\[ref=([^\]]+)\]', text))
+    return set(re.findall(r"\[ref=([^\]]+)\]", text))
 
 
 # --- Test 1: fixture-based search ---
+
 
 def test_search_button_refs_present():
     raw = _load_fixture()
@@ -30,11 +31,12 @@ def test_search_button_refs_present():
 def test_search_button_line_count():
     raw = _load_fixture()
     result = prune(raw, "click the search button")
-    lines = [l for l in result.splitlines() if l.strip()]
+    lines = [line for line in result.splitlines() if line.strip()]
     assert len(lines) < 30, f"Expected < 30 lines, got {len(lines)}"
 
 
 # --- Test 2: synonym / literal match ---
+
 
 def test_donate_link_found():
     raw = _load_fixture()
@@ -43,6 +45,7 @@ def test_donate_link_found():
 
 
 # --- Test 3: quoted value excluded from keyword matching ---
+
 
 def test_quoted_value_not_used_as_keyword():
     raw = _load_fixture()
@@ -55,6 +58,7 @@ def test_quoted_value_not_used_as_keyword():
 
 # --- Test 4: zero-match fallback ---
 
+
 def test_zero_match_returns_landmarks_only():
     raw = _load_fixture()
     result = prune(raw, "xyzzy nonsense gibberish foobarqux")
@@ -63,6 +67,7 @@ def test_zero_match_returns_landmarks_only():
 
 
 # --- Test 5: ref integrity ---
+
 
 def test_ref_integrity():
     raw = _load_fixture()
@@ -74,6 +79,7 @@ def test_ref_integrity():
 
 
 # --- Test 6: ancestor context ---
+
 
 def test_ancestor_context_for_deep_match():
     raw = _load_fixture()
@@ -87,6 +93,7 @@ def test_ancestor_context_for_deep_match():
 
 # --- Additional: pruned header present ---
 
+
 def test_pruned_header_present():
     raw = _load_fixture()
     result = prune(raw, "click the search button")
@@ -94,6 +101,7 @@ def test_pruned_header_present():
 
 
 # --- Parser sanity ---
+
 
 def test_parse_wikipedia():
     raw = _load_fixture()

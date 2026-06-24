@@ -159,10 +159,20 @@ _TOOL_FAILURE_MARKERS = ("session terminated", "### error")
 # tools (snapshot/expand_region/wait_for/screenshot) are exempt — repeated reads
 # are legitimate re-orientation, not a stuck loop. See README "Bugs".
 REPEAT_LIMIT = int(os.getenv("REPEAT_LIMIT", "3"))
-_GUARDED_TOOLS = frozenset({
-    "click", "type", "select_option", "fill_form", "file_upload",
-    "press_key", "hover", "navigate", "select_tab", "close_tab",
-})
+_GUARDED_TOOLS = frozenset(
+    {
+        "click",
+        "type",
+        "select_option",
+        "fill_form",
+        "file_upload",
+        "press_key",
+        "hover",
+        "navigate",
+        "select_tab",
+        "close_tab",
+    }
+)
 _REPEAT_GUARD_MSG = (
     f"LOOP DETECTED: you called {{names}} with the SAME target/args {REPEAT_LIMIT} "
     "times with no progress. STOP repeating that call. Take a fresh `snapshot` to "
@@ -859,7 +869,9 @@ async def agent_loop(
                 else:
                     result = await session.call_tool(tool_name, arguments)
                     tool_content = result_text(result)
-                    debug("tool_call_result", {"name": tool_name, "result": tool_content})
+                    debug(
+                        "tool_call_result", {"name": tool_name, "result": tool_content}
+                    )
                     if _tool_failed(tool_content):
                         ok = False  # failure delivered as normal text (e.g. session died)
                         log.warning(

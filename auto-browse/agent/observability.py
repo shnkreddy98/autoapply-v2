@@ -51,8 +51,9 @@ def setup_logging(run_id: str) -> logging.Logger:
     log.handlers.clear()
     log.propagate = False
 
-    fmt = logging.Formatter("%(asctime)s %(levelname)s [%(run_id)s] %(message)s",
-                            datefmt="%H:%M:%S")
+    fmt = logging.Formatter(
+        "%(asctime)s %(levelname)s [%(run_id)s] %(message)s", datefmt="%H:%M:%S"
+    )
     run_filter = _RunIdFilter(run_id)
 
     console = logging.StreamHandler()
@@ -83,8 +84,13 @@ class Trace:
 
     def event(self, type: str, **fields: Any) -> None:
         self._seq += 1
-        record = {"run_id": self.run_id, "seq": self._seq, "ts": _utc_now(),
-                  "type": type, **fields}
+        record = {
+            "run_id": self.run_id,
+            "seq": self._seq,
+            "ts": _utc_now(),
+            "type": type,
+            **fields,
+        }
         with self.path.open("a", encoding="utf-8") as f:
             f.write(json.dumps(record, ensure_ascii=False, default=str) + "\n")
 
@@ -101,6 +107,7 @@ def write_form_record(run_id: str, record: dict[str, Any]) -> Path:
     (data/forms/<run_id>.json) so a past application can be reviewed."""
     FORMS_DIR.mkdir(parents=True, exist_ok=True)
     path = FORMS_DIR / f"{run_id}.json"
-    path.write_text(json.dumps(record, ensure_ascii=False, indent=2, default=str),
-                    encoding="utf-8")
+    path.write_text(
+        json.dumps(record, ensure_ascii=False, indent=2, default=str), encoding="utf-8"
+    )
     return path
