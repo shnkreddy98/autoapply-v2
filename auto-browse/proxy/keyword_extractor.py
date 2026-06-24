@@ -2,12 +2,43 @@ import re
 
 from .synonym_map import SYNONYM_MAP
 
-STOPWORDS = frozenset({
-    "click", "type", "enter", "press", "select", "choose", "go",
-    "navigate", "find", "locate", "into", "the", "a", "an", "on",
-    "to", "for", "with", "then", "and", "please", "button", "link",
-    "in", "of", "is", "it", "that", "this", "at", "by", "or", "be",
-})
+STOPWORDS = frozenset(
+    {
+        "click",
+        "type",
+        "enter",
+        "press",
+        "select",
+        "choose",
+        "go",
+        "navigate",
+        "find",
+        "locate",
+        "into",
+        "the",
+        "a",
+        "an",
+        "on",
+        "to",
+        "for",
+        "with",
+        "then",
+        "and",
+        "please",
+        "button",
+        "link",
+        "in",
+        "of",
+        "is",
+        "it",
+        "that",
+        "this",
+        "at",
+        "by",
+        "or",
+        "be",
+    }
+)
 
 _QUOTED = re.compile(r"""['"]([^'"]+)['"]""")
 _WORD = re.compile(r"[a-zA-Z][a-zA-Z0-9]*")

@@ -2,12 +2,13 @@
 Tests for proxy tool list curation and tool_specs correctness.
 No upstream connection needed.
 """
+
 import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-from proxy.tool_allowlist import EXPOSED, HIDDEN, PROXY_ONLY
+from proxy.tool_allowlist import EXPOSED, HIDDEN
 from proxy.tool_specs import TOOL_SPECS
 
 
@@ -20,9 +21,13 @@ def test_dangerous_tools_not_in_specs():
 
 def test_all_exposed_tools_in_specs():
     # Each exposed upstream tool should have a wrapper in TOOL_SPECS
-    spec_upstreams = {spec["upstream"] for spec in TOOL_SPECS.values() if spec["upstream"]}
+    spec_upstreams = {
+        spec["upstream"] for spec in TOOL_SPECS.values() if spec["upstream"]
+    }
     for tool in EXPOSED:
-        assert tool in spec_upstreams, f"{tool} is exposed but has no wrapper in TOOL_SPECS"
+        assert tool in spec_upstreams, (
+            f"{tool} is exposed but has no wrapper in TOOL_SPECS"
+        )
 
 
 def test_expand_region_is_proxy_only():
@@ -39,6 +44,7 @@ def test_every_spec_has_required_fields():
 
 def test_tree_returning_tools_have_next_goal():
     from proxy.tool_allowlist import TREE_RETURNING
+
     for name, spec in TOOL_SPECS.items():
         upstream = spec.get("upstream")
         if upstream in TREE_RETURNING:
@@ -57,6 +63,7 @@ def test_snapshot_has_goal_not_next_goal():
 def test_hidden_tool_direct_call_rejected():
     """Simulate the proxy rejecting a hidden tool call."""
     from proxy.tool_specs import TOOL_SPECS
+
     hidden_tool = "browser_run_code_unsafe"
     assert hidden_tool not in TOOL_SPECS
 
@@ -71,8 +78,10 @@ def test_expand_region_schema():
 
 # --- settle / empty-tree handling (#1, #2) ---
 
+
 def test_navigates_detects_navigation_actions():
     from proxy.server import _navigates
+
     assert _navigates("browser_navigate", {})
     assert _navigates("browser_navigate_back", {})
     assert _navigates("browser_type", {"submit": True})
@@ -86,13 +95,14 @@ def test_navigates_detects_navigation_actions():
 
 def test_node_count_ignores_url_and_text_nodes():
     from proxy.server import _node_count
+
     assert _node_count("") == 0
     assert _node_count("- generic [ref=e1]") == 1
     tree = (
-        '- generic [ref=e1]:\n'
+        "- generic [ref=e1]:\n"
         '  - link "Home" [ref=e2]:\n'
-        '    - /url: https://x\n'
-        '  - text: hello'
+        "    - /url: https://x\n"
+        "  - text: hello"
     )
     # generic + link = 2 real nodes; /url and text excluded
     assert _node_count(tree) == 2
@@ -100,4 +110,5 @@ def test_node_count_ignores_url_and_text_nodes():
 
 def test_empty_tree_message_constant():
     from proxy.server import _EMPTY_TREE_MSG
+
     assert "wait_for" in _EMPTY_TREE_MSG

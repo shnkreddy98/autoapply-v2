@@ -81,7 +81,9 @@ def _build_server() -> Server:
 
         # Reject hidden/unknown tools — never forwarded upstream.
         if name not in TOOL_SPECS:
-            return [TextContent(type="text", text=f"Error: tool '{name}' is not available.")]
+            return [
+                TextContent(type="text", text=f"Error: tool '{name}' is not available.")
+            ]
 
         spec = TOOL_SPECS[name]
 

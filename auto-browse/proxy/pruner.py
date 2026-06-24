@@ -3,10 +3,22 @@ import re
 from .keyword_extractor import extract
 from .tree_parser import LANDMARK_ROLES, TreeNode, collect_all, parse
 
-INTERACTIVE_ROLES: frozenset[str] = frozenset({
-    "button", "link", "textbox", "searchbox", "combobox",
-    "checkbox", "radio", "menuitem", "option", "switch", "tab", "slider",
-})
+INTERACTIVE_ROLES: frozenset[str] = frozenset(
+    {
+        "button",
+        "link",
+        "textbox",
+        "searchbox",
+        "combobox",
+        "checkbox",
+        "radio",
+        "menuitem",
+        "option",
+        "switch",
+        "tab",
+        "slider",
+    }
+)
 
 # Primary form-action buttons. These are always surfaced (they live in the form's
 # action bar, not the page footer) so the model never has to fish around the
@@ -20,7 +32,8 @@ _FOOTER_LANDMARK = "contentinfo"
 
 def _action_buttons(nodes: list[TreeNode]) -> set[TreeNode]:
     return {
-        n for n in nodes
+        n
+        for n in nodes
         if n.role == "button"
         and n.landmark != _FOOTER_LANDMARK
         and n.name
@@ -56,12 +69,7 @@ def prune(raw_tree: str, goal: str, min_results: int = 3) -> str:
     kept = pass1 | pass2 | actions
 
     ancestors = _ancestor_chains(kept)
-    url_children = {
-        child
-        for node in kept
-        for child in node.children
-        if child.is_url
-    }
+    url_children = {child for node in kept for child in node.children if child.is_url}
 
     return _reconstruct(kept, ancestors, url_children, keywords, len(non_meta), "none")
 
@@ -131,7 +139,8 @@ def _interactive_fallback(nodes: list[TreeNode], pass1: set[TreeNode]) -> set[Tr
         candidates = nodes
     # Demote the page footer: its social/legal links shouldn't flood the result.
     return {
-        n for n in candidates
+        n
+        for n in candidates
         if n.role in INTERACTIVE_ROLES and n.landmark != _FOOTER_LANDMARK
     }
 
