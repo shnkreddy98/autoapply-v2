@@ -87,6 +87,11 @@ Browsing tips:
 - Pass `next_goal` on actions to keep the returned snapshot focused.
 - If a snapshot is empty or a ref errors "not found", call `wait_for` then \
   `snapshot` again — never reuse a ref from an older snapshot.
+- NEW TABS: if a result's "### Open tabs" list shows a new tab (index > 0) — \
+  e.g. the "Apply" button opened the form in a new tab — call `select_tab` with \
+  that index to switch to it, then continue there. Do NOT re-click the same \
+  button hoping the form appears; that only spawns more duplicate tabs. Use \
+  `close_tab` to clean up stray duplicates if they pile up.
 
 ATS form tips (Workday / Greenhouse / iCIMS — read carefully, these fail often):
 - DROPDOWNS are a button that opens a listbox, NOT a `<select>`. To pick a \
@@ -146,14 +151,20 @@ _TOOL_FAILURE_MARKERS = ("session terminated", "### error")
 # LLM call resilience.
 LLM_MAX_RETRIES = int(os.getenv("LLM_MAX_RETRIES", "6"))
 LLM_TIMEOUT = float(os.getenv("LLM_TIMEOUT", "120"))
-LLM_BACKOFF_BASE = float(os.getenv("LLM_BACKOFF_BASE", "2"))   # seconds
-LLM_BACKOFF_CAP = float(os.getenv("LLM_BACKOFF_CAP", "60"))    # seconds
+LLM_BACKOFF_BASE = float(os.getenv("LLM_BACKOFF_BASE", "2"))  # seconds
+LLM_BACKOFF_CAP = float(os.getenv("LLM_BACKOFF_CAP", "60"))  # seconds
 _RETRYABLE = (APITimeoutError, APIConnectionError, RateLimitError, InternalServerError)
 # Markers for a rate-limit that OpenRouter surfaces as a non-429 status (e.g. a
 # 400 "Provider returned error" wrapping an upstream 429 / quota exhaustion).
 _RATE_LIMIT_MARKERS = (
-    "rate-limit", "rate limit", "ratelimit", "temporarily rate-limited",
-    "provider returned error", "resource_exhausted", "quota", "429",
+    "rate-limit",
+    "rate limit",
+    "ratelimit",
+    "temporarily rate-limited",
+    "provider returned error",
+    "resource_exhausted",
+    "quota",
+    "429",
 )
 
 
@@ -178,7 +189,7 @@ def _retry_after(exc: Any) -> float | None:
 
 def _backoff_seconds(attempt: int, retry_after: float | None) -> float:
     """Exponential backoff with full jitter, capped; respects Retry-After."""
-    base = min(LLM_BACKOFF_BASE * (2 ** attempt), LLM_BACKOFF_CAP)
+    base = min(LLM_BACKOFF_BASE * (2**attempt), LLM_BACKOFF_CAP)
     wait = random.uniform(0, base)  # full jitter
     if retry_after is not None:
         wait = max(wait, retry_after)
@@ -219,8 +230,14 @@ def _accumulate_usage(totals: dict[str, Any], usage: Any) -> None:
 
 
 def _record_usage(
-    totals: dict[str, Any], run_id: str, model: str, job_url: str,
-    iterations: int, success: bool, error: str | None, duration_s: float,
+    totals: dict[str, Any],
+    run_id: str,
+    model: str,
+    job_url: str,
+    iterations: int,
+    success: bool,
+    error: str | None,
+    duration_s: float,
 ) -> dict[str, Any]:
     """Build + append-and-print one run's usage record (data/usage.jsonl)."""
     record = {
@@ -242,8 +259,12 @@ def _record_usage(
     log.info(
         "run usage: requests=%d total_tokens=%s cost=$%.6f iters=%d success=%s "
         "duration=%.1fs",
-        record["requests"], f"{record['total_tokens']:,}", record["cost_usd"],
-        iterations, success, duration_s,
+        record["requests"],
+        f"{record['total_tokens']:,}",
+        record["cost_usd"],
+        iterations,
+        success,
+        duration_s,
     )
     return record
 
@@ -252,23 +273,45 @@ def _filled_fields(tool_name: str, args: dict[str, Any]) -> list[dict[str, Any]]
     """Normalize a value-bearing tool call into form-field entries (for the
     per-run form record). Returns [] for non-form tools."""
     if tool_name == "type":
-        return [{"tool": "type", "label": args.get("element"),
-                 "ref": args.get("target"), "value": args.get("text")}]
+        return [
+            {
+                "tool": "type",
+                "label": args.get("element"),
+                "ref": args.get("target"),
+                "value": args.get("text"),
+            }
+        ]
     if tool_name == "select_option":
         vals = args.get("values") or []
-        return [{"tool": "select_option", "label": args.get("element"),
-                 "ref": args.get("target"), "value": ", ".join(map(str, vals))}]
+        return [
+            {
+                "tool": "select_option",
+                "label": args.get("element"),
+                "ref": args.get("target"),
+                "value": ", ".join(map(str, vals)),
+            }
+        ]
     if tool_name == "file_upload":
         paths = args.get("paths") or []
-        return [{"tool": "file_upload", "label": "resume/file",
-                 "value": ", ".join(map(str, paths))}]
+        return [
+            {
+                "tool": "file_upload",
+                "label": "resume/file",
+                "value": ", ".join(map(str, paths)),
+            }
+        ]
     if tool_name == "fill_form":
         out = []
         for f in args.get("fields") or []:
-            out.append({"tool": "fill_form",
-                        "label": f.get("element") or f.get("name"),
-                        "ref": f.get("target"), "type": f.get("type"),
-                        "value": f.get("value")})
+            out.append(
+                {
+                    "tool": "fill_form",
+                    "label": f.get("element") or f.get("name"),
+                    "ref": f.get("target"),
+                    "type": f.get("type"),
+                    "value": f.get("value"),
+                }
+            )
         return out
     return []
 
@@ -436,8 +479,13 @@ async def _complete_with_retry(
             "llm retry attempt=%d error=%s wait_s=%.1f", attempt + 1, last_err, wait
         )
         if trace is not None:
-            trace.event("retry", iteration=iteration, attempt=attempt + 1,
-                        error=last_err, wait_s=round(wait, 1))
+            trace.event(
+                "retry",
+                iteration=iteration,
+                attempt=attempt + 1,
+                error=last_err,
+                wait_s=round(wait, 1),
+            )
         await asyncio.sleep(wait)
 
     raise RuntimeError(f"LLM call failed after {max_retries} attempts: {last_err}")
@@ -533,29 +581,41 @@ async def agent_loop(
                 if not complete:
                     log.warning(
                         "finishing without full evidence after %d hint(s): %s",
-                        finish_attempts, "; ".join(missing),
+                        finish_attempts,
+                        "; ".join(missing),
                     )
                 return message.content or ""
 
             finish_attempts += 1
             log.warning(
                 "model tried to finish without evidence (hint %d/%d): %s",
-                finish_attempts, MAX_FINISH_HINTS, "; ".join(missing),
+                finish_attempts,
+                MAX_FINISH_HINTS,
+                "; ".join(missing),
             )
             if trace is not None:
-                trace.event("finish_blocked", iteration=iteration,
-                            attempt=finish_attempts, missing=missing)
+                trace.event(
+                    "finish_blocked",
+                    iteration=iteration,
+                    attempt=finish_attempts,
+                    missing=missing,
+                )
             # keep history valid: record the model's (content-only) turn, then nudge
             messages.append({"role": "assistant", "content": message.content or ""})
-            messages.append({"role": "user", "content": (
-                "You are NOT finished — do not write a summary or claim completion. "
-                "Evidence check failed: " + "; ".join(missing) + ". "
-                "Take the next concrete action now: if the resume is not uploaded, "
-                "click the resume Attach/Upload control, then call file_upload with "
-                "the resume path from the profile; then fill any remaining required "
-                "(*) fields. Continue until the resume is uploaded and required "
-                "fields are filled, then reach the final review/submit step."
-            )})
+            messages.append(
+                {
+                    "role": "user",
+                    "content": (
+                        "You are NOT finished — do not write a summary or claim completion. "
+                        "Evidence check failed: " + "; ".join(missing) + ". "
+                        "Take the next concrete action now: if the resume is not uploaded, "
+                        "click the resume Attach/Upload control, then call file_upload with "
+                        "the resume path from the profile; then fill any remaining required "
+                        "(*) fields. Continue until the resume is uploaded and required "
+                        "fields are filled, then reach the final review/submit step."
+                    ),
+                }
+            )
             continue
 
         assistant_message: dict[str, Any] = {
@@ -579,8 +639,11 @@ async def agent_loop(
                 debug("tool_call_result", {"name": tool_name, "result": tool_content})
                 if _tool_failed(tool_content):
                     ok = False  # failure delivered as normal text (e.g. session died)
-                    log.warning("tool %s reported failure: %s",
-                                tool_name, _brief(tool_content, 120))
+                    log.warning(
+                        "tool %s reported failure: %s",
+                        tool_name,
+                        _brief(tool_content, 120),
+                    )
             except Exception as exc:
                 ok = False
                 tool_content = (
@@ -647,15 +710,22 @@ async def main(job_url: str, model: str) -> None:
                     {"role": "user", "content": task},
                 ]
                 result = await agent_loop(
-                    model, task, messages, session, client, usage,
-                    trace=trace, filled_fields=filled_fields,
+                    model,
+                    task,
+                    messages,
+                    session,
+                    client,
+                    usage,
+                    trace=trace,
+                    filled_fields=filled_fields,
                 )
                 # success reflects EVIDENCE (resume uploaded), not just that the
                 # model stopped talking.
                 success, missing = _completion_evidence(filled_fields)
                 if not success:
-                    log.warning("run ended without completion evidence: %s",
-                                "; ".join(missing))
+                    log.warning(
+                        "run ended without completion evidence: %s", "; ".join(missing)
+                    )
                 log.info("final: %s", result)
                 print(f"final: {result}")
     except Exception as exc:
@@ -664,8 +734,9 @@ async def main(job_url: str, model: str) -> None:
         raise
     finally:
         duration = time.monotonic() - start
-        _record_usage(usage, run_id, model, job_url, usage["requests"],
-                      success, error, duration)
+        _record_usage(
+            usage, run_id, model, job_url, usage["requests"], success, error, duration
+        )
         trace.event(
             "run_end",
             iterations=usage["requests"],
@@ -675,21 +746,34 @@ async def main(job_url: str, model: str) -> None:
             usage_totals=usage,
             duration_s=round(duration, 2),
         )
-        form_path = write_form_record(run_id, {
-            "run_id": run_id,
-            "time_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-            "model": model,
-            "job_url": job_url,
-            "success": success,
-            "error": error,
-            "fields": filled_fields,
-            "final_summary": result,
-        })
+        form_path = write_form_record(
+            run_id,
+            {
+                "run_id": run_id,
+                "time_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+                "model": model,
+                "job_url": job_url,
+                "success": success,
+                "error": error,
+                "fields": filled_fields,
+                "final_summary": result,
+            },
+        )
         log.info("trace=%s form=%s", trace.path, form_path)
         await client.close()
 
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        raise SystemExit('Usage: uv run python -m agent.loop "<job_url>"')
-    asyncio.run(main(job_url=sys.argv[1], model=DEFAULT_MODEL))
+        raise SystemExit(
+            'Usage: uv run python -m agent.loop "<url_index>" starting with 1'
+        )
+
+    with open("urls.txt", "r") as f:
+        urls = f.readlines()
+    url_index = int(sys.argv[1]) - 1
+
+    # job_url=sys.argv[1]
+    job_url = urls[url_index]
+
+    asyncio.run(main(job_url=job_url, model=DEFAULT_MODEL))

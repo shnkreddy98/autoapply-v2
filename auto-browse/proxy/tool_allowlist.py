@@ -12,6 +12,7 @@ EXPOSED: frozenset[str] = frozenset({
     "browser_handle_dialog",
     "browser_take_screenshot",
     "browser_file_upload",
+    "browser_tabs",
 })
 
 HIDDEN: frozenset[str] = frozenset({
@@ -42,4 +43,5 @@ TREE_RETURNING: frozenset[str] = frozenset({
     "browser_hover",
     "browser_wait_for",
     "browser_file_upload",
+    "browser_tabs",
 })
