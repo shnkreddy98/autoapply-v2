@@ -92,6 +92,10 @@ Browsing tips:
   that index to switch to it, then continue there. Do NOT re-click the same \
   button hoping the form appears; that only spawns more duplicate tabs. Use \
   `close_tab` to clean up stray duplicates if they pile up.
+- ALREADY APPLIED / CLOSED: if the page says you have already applied for this \
+  job, or the posting is closed / no longer accepting applications, STOP \
+  immediately and return a one-line summary stating that status. Do NOT search \
+  for the role again or try to re-apply.
 
 ATS form tips (Workday / Greenhouse / iCIMS — read carefully, these fail often):
 - DROPDOWNS are a button that opens a listbox, NOT a `<select>`. To pick a \
@@ -166,6 +170,57 @@ _REPEAT_GUARD_MSG = (
     "with `select_tab` if the action opened a new tab, or move on to the next "
     "required field. Do NOT issue that same call again."
 )
+
+# Evidence gate: a run is only "complete" when the resume is uploaded AND the
+# agent reached a review/submit step AND the latest page shows no validation
+# error. These markers are matched (case-insensitive) against the latest page
+# observation. Tightened after a run that uploaded the resume LAST — overwriting
+# manually-filled fields — and "finished" without ever validating. See README.
+_REVIEW_MARKERS = (
+    "submit application",
+    "submit your application",
+    "review your application",
+    "review and submit",
+    "ready to submit",
+    "ready to review",
+    'button "submit',
+    "submit and",
+)
+_VALIDATION_ERROR_MARKERS = (
+    "this field is required",
+    "field is required",
+    "is required",
+    "are required",
+    "required field",
+    "please complete",
+    "please enter",
+    "please select",
+    "cannot be blank",
+    "must be completed",
+    "fix the error",
+)
+
+# Terminal page states the agent must NOT try to apply through — exit gracefully
+# instead of looping back to search/re-apply. Maps a status to the page phrases
+# that signal it. See README "Bugs"/"Improvements".
+_TERMINAL_MARKERS: dict[str, tuple[str, ...]] = {
+    "already_applied": (
+        "you've already applied",
+        "you have already applied",
+        "already applied for this",
+        "already applied to this",
+        "you already applied",
+        "already submitted an application",
+    ),
+    "closed": (
+        "no longer accepting applic",
+        "this position has been filled",
+        "this job is no longer",
+        "this posting is closed",
+        "applications are closed",
+        "this requisition is closed",
+    ),
+}
 
 # LLM call resilience.
 LLM_MAX_RETRIES = int(os.getenv("LLM_MAX_RETRIES", "6"))
@@ -257,6 +312,7 @@ def _record_usage(
     success: bool,
     error: str | None,
     duration_s: float,
+    terminal_status: str | None = None,
 ) -> dict[str, Any]:
     """Build + append-and-print one run's usage record (data/usage.jsonl)."""
     record = {
@@ -271,6 +327,7 @@ def _record_usage(
         "cost_usd": round(totals["cost"], 6),
         "iterations": iterations,
         "success": success,
+        "terminal_status": terminal_status,
         "error": error,
         "duration_s": round(duration_s, 2),
     }
@@ -369,17 +426,41 @@ def _action_signature(tool_name: str, args: dict[str, Any]) -> str | None:
     return tool_name
 
 
-def _completion_evidence(filled_fields: list[dict[str, Any]]) -> tuple[bool, list[str]]:
-    """Decide whether the application is actually complete from what was filled.
+def _terminal_status(text: str) -> str | None:
+    """Return a terminal status ('already_applied' / 'closed') if the page text
+    signals the application cannot/should not proceed; otherwise None."""
+    low = text.lower()
+    for status, markers in _TERMINAL_MARKERS.items():
+        if any(m in low for m in markers):
+            return status
+    return None
 
-    Hard requirement: the resume/CV was uploaded (a successful file_upload).
-    Supporting (not required — portals often autofill these from the resume):
-    core identity fields (name/email/phone/address). Returns (complete, missing).
+
+def _completion_evidence(
+    filled_fields: list[dict[str, Any]], last_observation: str = ""
+) -> tuple[bool, list[str]]:
+    """Decide whether the application is actually complete.
+
+    Requirements (all must hold):
+    - resume/CV uploaded (a successful file_upload) — the hard requirement;
+    - reached a review/submit step (the latest page shows a Submit/Review
+      control or wording), so the form was actually walked to the end;
+    - no validation error visible on the latest page.
+
+    Supporting only (not required — portals often autofill these from the
+    resume): core identity fields. `last_observation` is the latest page text;
+    when empty the review/validation checks are skipped (legacy callers).
+    Returns (complete, missing-reasons).
     """
     tools = {f.get("tool") for f in filled_fields}
     labels = " ".join((f.get("label") or "").lower() for f in filled_fields)
     resume_uploaded = "file_upload" in tools
     identity_filled = any(k in labels for k in _IDENTITY_KEYS)
+
+    obs = last_observation.lower()
+    has_obs = bool(obs.strip())
+    reached_review = (not has_obs) or any(m in obs for m in _REVIEW_MARKERS)
+    no_validation_error = not any(m in obs for m in _VALIDATION_ERROR_MARKERS)
 
     missing: list[str] = []
     if not resume_uploaded:
@@ -389,7 +470,19 @@ def _completion_evidence(filled_fields: list[dict[str, Any]]) -> tuple[bool, lis
             "core fields (name/email/phone/address) not filled (ok only if the "
             "form autofilled them)"
         )
-    return resume_uploaded, missing
+    if has_obs and not reached_review:
+        missing.append(
+            "not at the review/submit step yet — click Next/Continue through "
+            "every page until the final Review/Submit step appears"
+        )
+    if not no_validation_error:
+        missing.append(
+            "the page still shows validation errors — fix the flagged required "
+            "fields before finishing"
+        )
+
+    complete = resume_uploaded and reached_review and no_validation_error
+    return complete, missing
 
 
 def debug(label: str, value: Any = None) -> None:
@@ -546,6 +639,7 @@ async def agent_loop(
     usage_totals: dict[str, Any],
     trace: Trace | None = None,
     filled_fields: list[dict[str, Any]] | None = None,
+    run_state: dict[str, Any] | None = None,
     max_iterations: int = 250,
 ) -> str:
     tools_result = await session.list_tools()
@@ -572,6 +666,10 @@ async def agent_loop(
     action_n = 0
     finish_attempts = 0
     repeat_counts: dict[str, int] = {}
+    last_observation = ""  # latest successful page text — feeds the evidence gate
+    if run_state is not None:
+        run_state.setdefault("terminal_status", None)
+        run_state.setdefault("last_observation", "")
 
     for iteration in range(1, max_iterations + 1):
         ledger_msg["content"] = "PROGRESS LEDGER (actions so far):\n" + (
@@ -623,7 +721,7 @@ async def agent_loop(
             # supports it; otherwise hint and make it keep going.
             if filled_fields is None:
                 return message.content or ""
-            complete, missing = _completion_evidence(filled_fields)
+            complete, missing = _completion_evidence(filled_fields, last_observation)
             if complete or finish_attempts >= MAX_FINISH_HINTS:
                 if not complete:
                     log.warning(
@@ -631,6 +729,9 @@ async def agent_loop(
                         finish_attempts,
                         "; ".join(missing),
                     )
+                if run_state is not None:
+                    run_state["success"] = complete
+                    run_state["missing"] = missing
                 return message.content or ""
 
             finish_attempts += 1
@@ -722,6 +823,30 @@ async def agent_loop(
                 for entry in _filled_fields(tool_name, arguments):
                     filled_fields.append({"iteration": iteration, **entry})
 
+            # Track the latest page text (feeds the evidence gate) and bail out
+            # gracefully on a terminal page state instead of looping to re-apply.
+            if ok and tool_content:
+                last_observation = tool_content
+                if run_state is not None:
+                    run_state["last_observation"] = tool_content
+                status = _terminal_status(tool_content)
+                if status is not None:
+                    log.warning("terminal page state '%s' — exiting gracefully", status)
+                    if run_state is not None:
+                        run_state["terminal_status"] = status
+                    if trace is not None:
+                        trace.event(
+                            "terminal_state", iteration=iteration, status=status
+                        )
+                    note = {
+                        "already_applied": "You have already applied for this job.",
+                        "closed": "This posting is no longer accepting applications.",
+                    }.get(status, status)
+                    return (
+                        f"Stopped: {note} No application was submitted; nothing "
+                        "further to do for this posting."
+                    )
+
             # Repeated-action guard: same action+target called REPEAT_LIMIT times.
             sig = _action_signature(tool_name, arguments)
             if sig is not None:
@@ -774,7 +899,9 @@ async def main(job_url: str, model: str) -> None:
     start = time.monotonic()
     success = False
     error: str | None = None
+    terminal_status: str | None = None
     result = ""
+    run_state: dict[str, Any] = {}
     try:
         async with streamable_http_client(PROXY_MCP_URL) as (read, write, _):
             async with ClientSession(read, write) as session:
@@ -793,14 +920,25 @@ async def main(job_url: str, model: str) -> None:
                     usage,
                     trace=trace,
                     filled_fields=filled_fields,
+                    run_state=run_state,
                 )
-                # success reflects EVIDENCE (resume uploaded), not just that the
-                # model stopped talking.
-                success, missing = _completion_evidence(filled_fields)
-                if not success:
-                    log.warning(
-                        "run ended without completion evidence: %s", "; ".join(missing)
+                terminal_status = run_state.get("terminal_status")
+                if terminal_status:
+                    # Graceful no-op (already applied / closed): not an error, but
+                    # not a completed application either.
+                    success = False
+                    log.info("terminal state: %s", terminal_status)
+                else:
+                    # success reflects EVIDENCE (resume uploaded + reached review
+                    # + no validation error), not just that the model stopped.
+                    success, missing = _completion_evidence(
+                        filled_fields, run_state.get("last_observation", "")
                     )
+                    if not success:
+                        log.warning(
+                            "run ended without completion evidence: %s",
+                            "; ".join(missing),
+                        )
                 log.info("final: %s", result)
                 print(f"final: {result}")
     except Exception as exc:
@@ -810,12 +948,21 @@ async def main(job_url: str, model: str) -> None:
     finally:
         duration = time.monotonic() - start
         _record_usage(
-            usage, run_id, model, job_url, usage["requests"], success, error, duration
+            usage,
+            run_id,
+            model,
+            job_url,
+            usage["requests"],
+            success,
+            error,
+            duration,
+            terminal_status,
         )
         trace.event(
             "run_end",
             iterations=usage["requests"],
             success=success,
+            terminal_status=terminal_status,
             final_text=result,
             error=error,
             usage_totals=usage,
@@ -829,6 +976,7 @@ async def main(job_url: str, model: str) -> None:
                 "model": model,
                 "job_url": job_url,
                 "success": success,
+                "terminal_status": terminal_status,
                 "error": error,
                 "fields": filled_fields,
                 "final_summary": result,
