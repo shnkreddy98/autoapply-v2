@@ -23,7 +23,7 @@ from starlette.applications import Starlette
 from starlette.routing import Mount
 
 from . import snapshot_cache
-from .pruner import expand_region, prune
+from .pruner import expand_region, overview, prune
 from .tool_allowlist import STRIP_PARAMS, TREE_RETURNING
 from .tool_specs import TOOL_SPECS
 from .tree_parser import collect_all, parse
@@ -170,7 +170,13 @@ async def _prune_snapshot(raw_text: str, goal: str | None, force_settle: bool) -
         body = _EMPTY_TREE_MSG
     elif goal:
         body = prune(tree_text, goal)
+    elif force_settle:
+        # Page just loaded with no goal (e.g. navigate): a blind step goal can't
+        # describe a page not yet seen, so return the structured overview instead
+        # of the raw full tree.
+        body = overview(tree_text)
     else:
+        # Explicit goalless snapshot() — the agent deliberately wants everything.
         body = tree_text
 
     # Splice the body into the original result (replacing the file-link line),
