@@ -150,6 +150,15 @@ Env knobs: `LOG_DIR`, `TRACE_DIR`, `FORMS_DIR`, `USAGE_PATH`, `LOG_LEVEL`.
   link + the always-surfaced sets, across all sections of a multi-step form — not
   the raw full tree. An **explicit** `snapshot()` with no goal still returns the
   full tree (the agent's escape hatch).
+- **REQUIRED CHECK footer.** Every form result ends with a deterministic line
+  (`proxy/required_check.py`) listing any required (`*`) field still empty — read
+  from the tree itself (text value / non-placeholder `[selected]` option / child
+  radio/checkbox `[checked]`). This catches a fill that silently no-ops (e.g.
+  `fill_form` on a radio). The evidence gate refuses `applied_ready` while the
+  footer reports anything empty. Pages with no `*` fields emit nothing.
+- **Radio/checkbox answers** must be a `click` on the specific option ref —
+  `fill_form` with type `radio`/`checkbox` does not reliably check them (it emits
+  `setChecked(<value>)`, a no-op), leaving the field empty.
 - Pass a `goal` (on `snapshot`) or `next_goal` (on action tools) to focus the
   pruned tree on a step. Refs are only valid from the latest tree.
 - VNC has no password — local/dev use only.
@@ -158,8 +167,6 @@ Env knobs: `LOG_DIR`, `TRACE_DIR`, `FORMS_DIR`, `USAGE_PATH`, `LOG_LEVEL`.
 
 
 ## Bugs
-- If a apply button opens a new window, agent gets stuck keeps on opening the same window, conversation found at: `https://apply.jobappnetwork.com/clients/18760/posting/11054618/en?utm_source=linkedin.com`
-- filled the form first, even when there was upload resume button, and upload resume happened last which refilled all the form with some empty fields, and then checked out without validating. check here: `https://recruiting2.ultipro.com/UNI1027UDRT/JobBoard/6ccb8fd4-4950-43e4-9978-4bcc85c6f5e1/OpportunityDetail?opportunityId=6954d5bf-51f1-48c6-8a65-294549d8d73b&source=LinkedIn`
 
 ## Improvements
 - If the site says you have already applied for this position, gracefully exit instead of trying to find the same role and trying to apply. example conversation for this url: `https://topgolf.wd501.myworkdayjobs.com/en-US/TopgolfCareers/job/TG---HQ---Dallas-Office/Data-Engineer-II_JR2023-19177?source=LinkedIn`
