@@ -148,6 +148,25 @@ _IDENTITY_KEYS = ("name", "email", "phone", "address", "city", "zip", "postal")
 # normal text (so it must not count as evidence).
 _TOOL_FAILURE_MARKERS = ("session terminated", "### error")
 
+# Repeated-action guard: if the model calls the same action with the same target
+# this many times in a run, it is stuck in a loop (e.g. re-clicking "Apply" that
+# opened a new tab, or re-clicking a dropdown that never opens). When the limit
+# is hit it gets nudged to change approach and the counter resets. Read-only
+# tools (snapshot/expand_region/wait_for/screenshot) are exempt — repeated reads
+# are legitimate re-orientation, not a stuck loop. See README "Bugs".
+REPEAT_LIMIT = int(os.getenv("REPEAT_LIMIT", "3"))
+_GUARDED_TOOLS = frozenset({
+    "click", "type", "select_option", "fill_form", "file_upload",
+    "press_key", "hover", "navigate", "select_tab", "close_tab",
+})
+_REPEAT_GUARD_MSG = (
+    f"LOOP DETECTED: you called {{names}} with the SAME target/args {REPEAT_LIMIT} "
+    "times with no progress. STOP repeating that call. Take a fresh `snapshot` to "
+    "get current refs, then CHANGE approach: pick a DIFFERENT element, switch tabs "
+    "with `select_tab` if the action opened a new tab, or move on to the next "
+    "required field. Do NOT issue that same call again."
+)
+
 # LLM call resilience.
 LLM_MAX_RETRIES = int(os.getenv("LLM_MAX_RETRIES", "6"))
 LLM_TIMEOUT = float(os.getenv("LLM_TIMEOUT", "120"))
@@ -321,6 +340,33 @@ def _tool_failed(text: str) -> bool:
     upstream session died, or an MCP '### Error' block)."""
     low = text.lower()
     return any(m in low for m in _TOOL_FAILURE_MARKERS)
+
+
+def _action_signature(tool_name: str, args: dict[str, Any]) -> str | None:
+    """Stable signature of a state-changing action for the repeated-action guard.
+
+    Returns None for read-only/idle tools (those are exempt). Keyed on the tool
+    plus its salient target so the same ref clicked again maps to the same
+    signature; after a fresh snapshot refs change, so a genuinely new action gets
+    a new signature and the counter naturally resets.
+    """
+    if tool_name not in _GUARDED_TOOLS:
+        return None
+    if tool_name == "fill_form":
+        ids = ",".join(
+            sorted(
+                str(f.get("target") or f.get("name") or "")
+                for f in (args.get("fields") or [])
+            )
+        )
+        return f"fill_form:{ids}"
+    for key in ("target", "url", "key", "paths"):
+        val = args.get(key)
+        if val:
+            if isinstance(val, list):
+                val = ",".join(map(str, val))
+            return f"{tool_name}:{val}"
+    return tool_name
 
 
 def _completion_evidence(filled_fields: list[dict[str, Any]]) -> tuple[bool, list[str]]:
@@ -525,6 +571,7 @@ async def agent_loop(
     messages.insert(2, ledger_msg)
     action_n = 0
     finish_attempts = 0
+    repeat_counts: dict[str, int] = {}
 
     for iteration in range(1, max_iterations + 1):
         ledger_msg["content"] = "PROGRESS LEDGER (actions so far):\n" + (
@@ -627,6 +674,7 @@ async def agent_loop(
         }
         messages.append(assistant_message)
 
+        looped_tools: list[str] = []
         for tool_call in message.tool_calls:
             tool_name = tool_call.function.name
             arguments: dict[str, Any] = {}
@@ -673,6 +721,33 @@ async def agent_loop(
             if ok and filled_fields is not None:
                 for entry in _filled_fields(tool_name, arguments):
                     filled_fields.append({"iteration": iteration, **entry})
+
+            # Repeated-action guard: same action+target called REPEAT_LIMIT times.
+            sig = _action_signature(tool_name, arguments)
+            if sig is not None:
+                repeat_counts[sig] = repeat_counts.get(sig, 0) + 1
+                if repeat_counts[sig] >= REPEAT_LIMIT:
+                    looped_tools.append(tool_name)
+                    repeat_counts[sig] = 0  # reset; re-fire only if it loops again
+                    log.warning(
+                        "repeat guard: %s called %d× with same target (%s)",
+                        tool_name,
+                        REPEAT_LIMIT,
+                        sig,
+                    )
+                    if trace is not None:
+                        trace.event(
+                            "repeat_guard",
+                            iteration=iteration,
+                            signature=sig,
+                            count=REPEAT_LIMIT,
+                        )
+
+        if looped_tools:
+            names = ", ".join(sorted(set(looped_tools)))
+            messages.append(
+                {"role": "user", "content": _REPEAT_GUARD_MSG.format(names=names)}
+            )
 
         # Bound context: stub old page snapshots.
         _trim_history(messages, HISTORY_KEEP_SNAPSHOTS)
