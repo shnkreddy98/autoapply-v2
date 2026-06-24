@@ -102,6 +102,15 @@ ATS form tips (Workday / Greenhouse / iCIMS — read carefully, these fail often
   value: `click` the button, then `click` the option. Do NOT use \
   `select_option` or `fill_form` with type "combobox" on them — that errors with \
   "Element is not a <select>".
+- RADIO / CHECKBOX questions (Yes/No, "I decline to say", disability/veteran): \
+  `click` the specific option's ref directly (e.g. click the "Yes" radio ref). Do \
+  NOT use `fill_form` with type "radio"/"checkbox" — it does not reliably check \
+  them (it leaves the answer empty), and the field will still read as unfilled.
+- REQUIRED CHECK: every form result ends with a "REQUIRED CHECK" line listing any \
+  required (*) fields still EMPTY, with their refs. After filling, READ it: if it \
+  lists fields, they did NOT get set — fix each one (click the radio/checkbox ref, \
+  pick a dropdown option, type the text) before clicking Save/Submit or finishing. \
+  Only finish once it says "all required field(s) filled".
 - FILE UPLOAD needs the chooser open first: `click` the "Attach"/"Select \
   files"/"Upload" control, THEN call `file_upload`. Calling `file_upload` with no \
   open chooser fails ("requires modal state").
@@ -196,12 +205,12 @@ _REVIEW_MARKERS = (
     'button "submit',
     "submit and",
 )
+# Real error-message phrases only. The loose "is required" / "required field"
+# variants were removed: they collide with static helper text ("* indicates a
+# required field") and with the REQUIRED CHECK footer wording. Required-field
+# emptiness is now covered authoritatively by _REQUIRED_EMPTY_MARKER below.
 _VALIDATION_ERROR_MARKERS = (
     "this field is required",
-    "field is required",
-    "is required",
-    "are required",
-    "required field",
     "please complete",
     "please enter",
     "please select",
@@ -212,6 +221,9 @@ _VALIDATION_ERROR_MARKERS = (
     # always surfaces these (proxy/pruner.py _always_keep), so the gate can see them.
     'img "error"',
 )
+# Substring of the proxy's "REQUIRED CHECK" footer that means a required (*) field
+# is still empty (see proxy/required_check.py INCOMPLETE_MARKER).
+_REQUIRED_EMPTY_MARKER = "required field(s) still empty"
 
 # Terminal page states the agent must NOT try to apply through — exit gracefully
 # instead of looping back to search/re-apply. Maps a status to the page phrases
@@ -528,6 +540,10 @@ def _completion_evidence(
     has_obs = bool(obs.strip())
     reached_review = (not has_obs) or any(m in obs for m in _REVIEW_MARKERS)
     no_validation_error = not any(m in obs for m in _VALIDATION_ERROR_MARKERS)
+    # The proxy appends a deterministic "REQUIRED CHECK" footer to form results;
+    # this marker means a required (*) field is still empty (e.g. an unchecked
+    # radio a fill_form silently failed to set).
+    requireds_complete = _REQUIRED_EMPTY_MARKER not in obs
 
     missing: list[str] = []
     if not resume_uploaded:
@@ -547,8 +563,18 @@ def _completion_evidence(
             "the page still shows validation errors — fix the flagged required "
             "fields before finishing"
         )
+    if not requireds_complete:
+        missing.append(
+            "required (*) fields are still empty per the REQUIRED CHECK — fill "
+            "every listed field (click radio/checkbox refs directly) before finishing"
+        )
 
-    complete = resume_uploaded and reached_review and no_validation_error
+    complete = (
+        resume_uploaded
+        and reached_review
+        and no_validation_error
+        and requireds_complete
+    )
     return complete, missing
 
 
