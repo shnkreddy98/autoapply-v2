@@ -120,10 +120,20 @@ Env knobs: `LOG_DIR`, `TRACE_DIR`, `FORMS_DIR`, `USAGE_PATH`, `LOG_LEVEL`.
   target `REPEAT_LIMIT` (default 3) times, the loop nudges it to change approach
   (re-clicking an "Apply" that opened a new tab, or a dropdown that never opens).
   Read-only tools (`snapshot`/`expand_region`/`wait_for`) are exempt.
+- **Upload-first (hard).** When a page offers an autofill / upload-resume option
+  and the resume is not uploaded yet, manual value-entry (`type`/`fill_form`/
+  `select_option`) is **blocked** — the agent must upload the resume first and let
+  it autofill, then review. (Uploading last re-renders the form and overwrites
+  manual entries.) Sign-in pages show no such affordance, so login fills aren't
+  blocked. Toggle with `ENFORCE_UPLOAD_FIRST=0`.
+- **Structured outcome.** Every run records a single `outcome` —
+  `applied_ready` (validated, ready for the user to submit), `already_applied`,
+  `closed`, or `blocked` (ran out / stopped without evidence / errored) — in
+  `usage.jsonl` and the form record (`success` is just `outcome == applied_ready`).
 - **Terminal page states.** If a page says the applicant has already applied, or
   the posting is closed / no longer accepting applications, the loop exits
-  gracefully (records `terminal_status` in `usage.jsonl` + the form record)
-  instead of looping back to search and re-apply.
+  gracefully (`outcome` = `already_applied`/`closed`) instead of looping back to
+  search and re-apply.
 - **Tabs.** `select_tab` / `close_tab` let the agent follow an "Apply" that opens
   the form in a new tab (the proxy returns a pruned snapshot of the tab switched
   to).
