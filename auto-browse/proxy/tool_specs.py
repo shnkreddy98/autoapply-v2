@@ -19,9 +19,7 @@ _NEXT_GOAL_PROP = {
 TOOL_SPECS: dict[str, dict] = {
     "navigate": {
         "upstream": "browser_navigate",
-        "description": (
-            "Navigate to a URL." + _PRUNED_SUFFIX
-        ),
+        "description": ("Navigate to a URL." + _PRUNED_SUFFIX),
         "inputSchema": {
             "type": "object",
             "properties": {
@@ -78,7 +76,8 @@ TOOL_SPECS: dict[str, dict] = {
     "click": {
         "upstream": "browser_click",
         "description": (
-            "Click an element by its ref from the most recent pruned snapshot." + _PRUNED_SUFFIX
+            "Click an element by its ref from the most recent pruned snapshot."
+            + _PRUNED_SUFFIX
         ),
         "inputSchema": {
             "type": "object",
@@ -122,7 +121,10 @@ TOOL_SPECS: dict[str, dict] = {
                     "type": "string",
                     "description": "Exact ref from the most recent pruned snapshot.",
                 },
-                "text": {"type": "string", "description": "Text to type into the element."},
+                "text": {
+                    "type": "string",
+                    "description": "Text to type into the element.",
+                },
                 "submit": {
                     "type": "boolean",
                     "description": "Whether to submit entered text (press Enter after).",
@@ -139,9 +141,7 @@ TOOL_SPECS: dict[str, dict] = {
     },
     "fill_form": {
         "upstream": "browser_fill_form",
-        "description": (
-            "Fill multiple form fields at once." + _PRUNED_SUFFIX
-        ),
+        "description": ("Fill multiple form fields at once." + _PRUNED_SUFFIX),
         "inputSchema": {
             "type": "object",
             "properties": {
@@ -155,7 +155,13 @@ TOOL_SPECS: dict[str, dict] = {
                             "name": {"type": "string"},
                             "type": {
                                 "type": "string",
-                                "enum": ["textbox", "checkbox", "radio", "combobox", "slider"],
+                                "enum": [
+                                    "textbox",
+                                    "checkbox",
+                                    "radio",
+                                    "combobox",
+                                    "slider",
+                                ],
                             },
                             "value": {"type": "string"},
                         },
@@ -172,9 +178,7 @@ TOOL_SPECS: dict[str, dict] = {
     },
     "select_option": {
         "upstream": "browser_select_option",
-        "description": (
-            "Select an option in a dropdown by its ref." + _PRUNED_SUFFIX
-        ),
+        "description": ("Select an option in a dropdown by its ref." + _PRUNED_SUFFIX),
         "inputSchema": {
             "type": "object",
             "properties": {
@@ -196,9 +200,7 @@ TOOL_SPECS: dict[str, dict] = {
     },
     "press_key": {
         "upstream": "browser_press_key",
-        "description": (
-            "Press a key on the keyboard." + _PRUNED_SUFFIX
-        ),
+        "description": ("Press a key on the keyboard." + _PRUNED_SUFFIX),
         "inputSchema": {
             "type": "object",
             "properties": {
@@ -214,9 +216,7 @@ TOOL_SPECS: dict[str, dict] = {
     },
     "hover": {
         "upstream": "browser_hover",
-        "description": (
-            "Hover over an element by its ref." + _PRUNED_SUFFIX
-        ),
+        "description": ("Hover over an element by its ref." + _PRUNED_SUFFIX),
         "inputSchema": {
             "type": "object",
             "properties": {
@@ -234,14 +234,18 @@ TOOL_SPECS: dict[str, dict] = {
     "wait_for": {
         "upstream": "browser_wait_for",
         "description": (
-            "Wait for text to appear or disappear, or for a specified time." + _PRUNED_SUFFIX
+            "Wait for text to appear or disappear, or for a specified time."
+            + _PRUNED_SUFFIX
         ),
         "inputSchema": {
             "type": "object",
             "properties": {
                 "time": {"type": "number", "description": "Seconds to wait."},
                 "text": {"type": "string", "description": "Text to wait for."},
-                "textGone": {"type": "string", "description": "Text to wait for to disappear."},
+                "textGone": {
+                    "type": "string",
+                    "description": "Text to wait for to disappear.",
+                },
                 **_NEXT_GOAL_PROP,
             },
             "additionalProperties": False,
@@ -253,7 +257,10 @@ TOOL_SPECS: dict[str, dict] = {
         "inputSchema": {
             "type": "object",
             "properties": {
-                "accept": {"type": "boolean", "description": "Whether to accept the dialog."},
+                "accept": {
+                    "type": "boolean",
+                    "description": "Whether to accept the dialog.",
+                },
                 "promptText": {
                     "type": "string",
                     "description": "Text for prompt dialogs.",
@@ -323,6 +330,51 @@ TOOL_SPECS: dict[str, dict] = {
                 **_NEXT_GOAL_PROP,
             },
             "required": ["paths"],
+            "additionalProperties": False,
+        },
+    },
+    "select_tab": {
+        "upstream": "browser_tabs",
+        "inject_args": {"action": "select"},
+        "description": (
+            "Switch to a different browser tab by its index, taken from the"
+            " '### Open tabs' list in recent tool results (e.g. tab 1)."
+            " Use this when an 'Apply'/action opened the application form in a NEW"
+            " tab — switch to that tab instead of re-clicking the same button"
+            " (re-clicking just opens more duplicate tabs)."
+            " Returns a PRUNED snapshot of the tab you switched to." + _PRUNED_SUFFIX
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "index": {
+                    "type": "number",
+                    "description": "Index of the tab to switch to, from the 'Open tabs' list.",
+                },
+                **_NEXT_GOAL_PROP,
+            },
+            "required": ["index"],
+            "additionalProperties": False,
+        },
+    },
+    "close_tab": {
+        "upstream": "browser_tabs",
+        "inject_args": {"action": "close"},
+        "description": (
+            "Close a browser tab by its index (from the '### Open tabs' list);"
+            " omit the index to close the current tab. Use it to clean up duplicate"
+            " or dead tabs. Returns a PRUNED snapshot of the now-current tab."
+            + _PRUNED_SUFFIX
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "index": {
+                    "type": "number",
+                    "description": "Index of the tab to close. If omitted, the current tab is closed.",
+                },
+                **_NEXT_GOAL_PROP,
+            },
             "additionalProperties": False,
         },
     },

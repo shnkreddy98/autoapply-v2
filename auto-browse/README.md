@@ -109,14 +109,47 @@ Env knobs: `LOG_DIR`, `TRACE_DIR`, `FORMS_DIR`, `USAGE_PATH`, `LOG_LEVEL`.
 ## Notes
 
 - **Completion is judged from evidence, not the model stopping.** When the model
-  emits no tool call, the loop checks what was actually filled (resume uploaded =
-  hard requirement; name/phone/address = supporting, may be autofilled). If
-  evidence is missing it hints the model and makes it continue (up to
-  `MAX_FINISH_HINTS` times); the run's `success` reflects that evidence. Tool
-  results that fail as plain text (`Session terminated`, `### Error`) are counted
-  as failures, not progress.
+  emits no tool call, the loop checks evidence before accepting "done": the
+  resume was uploaded **and** the latest page reached a review/submit step **and**
+  no validation error is showing (name/phone/address are supporting only, may be
+  autofilled). If evidence is missing it hints the model and makes it continue
+  (up to `MAX_FINISH_HINTS` times); the run's `success` reflects that evidence.
+  Tool results that fail as plain text (`Session terminated`, `### Error`) are
+  counted as failures, not progress.
+- **Repeated-action guard.** If the model calls the same action with the same
+  target `REPEAT_LIMIT` (default 3) times, the loop nudges it to change approach
+  (re-clicking an "Apply" that opened a new tab, or a dropdown that never opens).
+  Read-only tools (`snapshot`/`expand_region`/`wait_for`) are exempt.
+- **Upload-first (hard).** When a page offers an autofill / upload-resume option
+  and the resume is not uploaded yet, manual value-entry (`type`/`fill_form`/
+  `select_option`) is **blocked** — the agent must upload the resume first and let
+  it autofill, then review. (Uploading last re-renders the form and overwrites
+  manual entries.) Sign-in pages show no such affordance, so login fills aren't
+  blocked. Toggle with `ENFORCE_UPLOAD_FIRST=0`.
+- **Structured outcome.** Every run records a single `outcome` —
+  `applied_ready` (validated, ready for the user to submit), `already_applied`,
+  `closed`, or `blocked` (ran out / stopped without evidence / errored) — in
+  `usage.jsonl` and the form record (`success` is just `outcome == applied_ready`).
+- **Terminal page states.** If a page says the applicant has already applied, or
+  the posting is closed / no longer accepting applications, the loop exits
+  gracefully (`outcome` = `already_applied`/`closed`) instead of looping back to
+  search and re-apply.
+- **Tabs.** `select_tab` / `close_tab` let the agent follow an "Apply" that opens
+  the form in a new tab (the proxy returns a pruned snapshot of the tab switched
+  to).
 - The proxy exposes only navigation-relevant tools and **hides** `evaluate` and
   `run_code_unsafe` (the biggest wrong-tool / safety risks for small models).
 - Pass a `goal` (on `snapshot`) or `next_goal` (on action tools) to get a pruned
   tree; omit it to get the full tree. Refs are only valid from the latest tree.
 - VNC has no password — local/dev use only.
+
+
+
+
+## Bugs
+- If a apply button opens a new window, agent gets stuck keeps on opening the same window, conversation found at: `https://apply.jobappnetwork.com/clients/18760/posting/11054618/en?utm_source=linkedin.com`
+- filled the form first, even when there was upload resume button, and upload resume happened last which refilled all the form with some empty fields, and then checked out without validating. check here: `https://recruiting2.ultipro.com/UNI1027UDRT/JobBoard/6ccb8fd4-4950-43e4-9978-4bcc85c6f5e1/OpportunityDetail?opportunityId=6954d5bf-51f1-48c6-8a65-294549d8d73b&source=LinkedIn`
+
+## Improvements
+- If the site says you have already applied for this position, gracefully exit instead of trying to find the same role and trying to apply. example conversation for this url: `https://topgolf.wd501.myworkdayjobs.com/en-US/TopgolfCareers/job/TG---HQ---Dallas-Office/Data-Engineer-II_JR2023-19177?source=LinkedIn`
+- Application level: record all conversations and based on the domain/company build automate scripts that can offload from AI agents in form filling based on previous form filling conversation. 

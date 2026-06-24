@@ -7,3 +7,6 @@ __pycache__/
 *.pyc
 .pytest_cache/
 runs/
+
+future_tests.md
+urls.txt
