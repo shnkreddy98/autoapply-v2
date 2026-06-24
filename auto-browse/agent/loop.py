@@ -222,6 +222,35 @@ _TERMINAL_MARKERS: dict[str, tuple[str, ...]] = {
     ),
 }
 
+# Upload-first enforcement: when the page offers an autofill / upload-resume
+# affordance and the resume is NOT uploaded yet, manual value-entry is hard-
+# blocked so the agent uploads first and lets the resume autofill the form.
+# Uploading LAST (after manual entry) re-renders/overwrites the fields with the
+# parsed-resume values — the ultipro bug. Login pages don't show these markers,
+# so sign-in fills are not blocked. Toggle with ENFORCE_UPLOAD_FIRST=0.
+ENFORCE_UPLOAD_FIRST = os.getenv("ENFORCE_UPLOAD_FIRST", "1").lower() not in (
+    "0",
+    "false",
+    "no",
+)
+_AUTOFILL_MARKERS = (
+    "autofill with resume",
+    "apply with resume",
+    "upload resume",
+    "upload your resume",
+    "parse resume",
+    "import from resume",
+    "autofill",
+)
+_VALUE_FILL_TOOLS = frozenset({"type", "fill_form", "select_option"})
+_UPLOAD_FIRST_MSG = (
+    "Blocked: this page offers an autofill / upload-resume option and the resume "
+    "is not uploaded yet. Upload the resume FIRST so it autofills these fields — "
+    "click the 'Autofill with Resume' / 'Upload Resume' control, then call "
+    "`file_upload` with the resume path from the profile, THEN review and correct "
+    "the prefilled values. Do not type fields manually before uploading."
+)
+
 # LLM call resilience.
 LLM_MAX_RETRIES = int(os.getenv("LLM_MAX_RETRIES", "6"))
 LLM_TIMEOUT = float(os.getenv("LLM_TIMEOUT", "120"))
@@ -312,7 +341,7 @@ def _record_usage(
     success: bool,
     error: str | None,
     duration_s: float,
-    terminal_status: str | None = None,
+    outcome: str = "blocked",
 ) -> dict[str, Any]:
     """Build + append-and-print one run's usage record (data/usage.jsonl)."""
     record = {
@@ -327,7 +356,7 @@ def _record_usage(
         "cost_usd": round(totals["cost"], 6),
         "iterations": iterations,
         "success": success,
-        "terminal_status": terminal_status,
+        "outcome": outcome,
         "error": error,
         "duration_s": round(duration_s, 2),
     }
@@ -434,6 +463,31 @@ def _terminal_status(text: str) -> str | None:
         if any(m in low for m in markers):
             return status
     return None
+
+
+def _resume_uploaded(filled_fields: list[dict[str, Any]] | None) -> bool:
+    """True once a successful file_upload has been recorded."""
+    return bool(filled_fields) and any(
+        f.get("tool") == "file_upload" for f in filled_fields
+    )
+
+
+def _autofill_available(observation: str) -> bool:
+    """True if the latest page shows an autofill / upload-resume affordance."""
+    low = observation.lower()
+    return any(m in low for m in _AUTOFILL_MARKERS)
+
+
+def _outcome(success: bool, terminal_status: str | None) -> str:
+    """Single structured run outcome for the usage/form record.
+
+    applied_ready  — form validated and ready for the user to submit
+    already_applied / closed — terminal page state, graceful no-op
+    blocked        — ran out of iterations / stopped without evidence / errored
+    """
+    if terminal_status in ("already_applied", "closed"):
+        return terminal_status
+    return "applied_ready" if success else "blocked"
 
 
 def _completion_evidence(
@@ -780,19 +834,39 @@ async def agent_loop(
             tool_name = tool_call.function.name
             arguments: dict[str, Any] = {}
             ok = True
+            blocked = False
             try:
                 arguments = parse_tool_arguments(tool_call.function.arguments)
                 debug("tool_call", {"name": tool_name, "arguments": arguments})
-                result = await session.call_tool(tool_name, arguments)
-                tool_content = result_text(result)
-                debug("tool_call_result", {"name": tool_name, "result": tool_content})
-                if _tool_failed(tool_content):
-                    ok = False  # failure delivered as normal text (e.g. session died)
+                if (
+                    ENFORCE_UPLOAD_FIRST
+                    and tool_name in _VALUE_FILL_TOOLS
+                    and filled_fields is not None
+                    and not _resume_uploaded(filled_fields)
+                    and _autofill_available(last_observation)
+                ):
+                    # Upload-first: refuse manual entry while an autofill/upload-
+                    # resume option is available and the resume isn't uploaded.
+                    blocked = True
+                    tool_content = _UPLOAD_FIRST_MSG
                     log.warning(
-                        "tool %s reported failure: %s",
-                        tool_name,
-                        _brief(tool_content, 120),
+                        "upload-first: blocked %s before resume upload", tool_name
                     )
+                    if trace is not None:
+                        trace.event(
+                            "upload_first_block", iteration=iteration, tool=tool_name
+                        )
+                else:
+                    result = await session.call_tool(tool_name, arguments)
+                    tool_content = result_text(result)
+                    debug("tool_call_result", {"name": tool_name, "result": tool_content})
+                    if _tool_failed(tool_content):
+                        ok = False  # failure delivered as normal text (e.g. session died)
+                        log.warning(
+                            "tool %s reported failure: %s",
+                            tool_name,
+                            _brief(tool_content, 120),
+                        )
             except Exception as exc:
                 ok = False
                 tool_content = (
@@ -819,13 +893,13 @@ async def agent_loop(
                     result=tool_content,
                     ok=ok,
                 )
-            if ok and filled_fields is not None:
+            if ok and not blocked and filled_fields is not None:
                 for entry in _filled_fields(tool_name, arguments):
                     filled_fields.append({"iteration": iteration, **entry})
 
             # Track the latest page text (feeds the evidence gate) and bail out
             # gracefully on a terminal page state instead of looping to re-apply.
-            if ok and tool_content:
+            if ok and not blocked and tool_content:
                 last_observation = tool_content
                 if run_state is not None:
                     run_state["last_observation"] = tool_content
@@ -947,6 +1021,7 @@ async def main(job_url: str, model: str) -> None:
         raise
     finally:
         duration = time.monotonic() - start
+        outcome = _outcome(success, terminal_status)
         _record_usage(
             usage,
             run_id,
@@ -956,13 +1031,13 @@ async def main(job_url: str, model: str) -> None:
             success,
             error,
             duration,
-            terminal_status,
+            outcome,
         )
         trace.event(
             "run_end",
             iterations=usage["requests"],
             success=success,
-            terminal_status=terminal_status,
+            outcome=outcome,
             final_text=result,
             error=error,
             usage_totals=usage,
@@ -976,7 +1051,7 @@ async def main(job_url: str, model: str) -> None:
                 "model": model,
                 "job_url": job_url,
                 "success": success,
-                "terminal_status": terminal_status,
+                "outcome": outcome,
                 "error": error,
                 "fields": filled_fields,
                 "final_summary": result,
