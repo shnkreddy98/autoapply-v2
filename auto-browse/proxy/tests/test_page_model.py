@@ -132,6 +132,61 @@ def test_oracle_required_field_errors_split_from_info():
     assert "successfully imported" not in joined.lower()
 
 
+def test_nested_label_resolution_and_standalone_radio():
+    # Live Lever/TRI tree: labels live in a sibling generic's child, not as a
+    # bare text sibling. Regression for fields that came back unlabeled.
+    m = _model("lever_nested_labels.txt")
+    why = _find(m, "one thing TRI is working on")
+    assert why is not None, "the 'why TRI' textbox must resolve its nested label"
+    assert why.required and why.empty  # required + still empty -> agent must fill
+    elig = _find(m, "eligible to work in the United States")
+    assert elig is not None and elig.type == "radio"
+    assert elig.value == "Yes"  # selected option reflected
+    # a single-option acknowledgment radio still inherits the required ✱ question
+    # in its preceding sibling (not its own option text) so the agent fills it
+    crit = _find(m, "Selection criteria should be part")
+    assert crit is not None and crit.type == "radio" and crit.required
+    assert crit.value == "I have read and understand the selection criteria."
+    assert crit.options[0][1] == "I have read and understand the selection criteria."
+
+
+def test_oracle_agree_checkbox_adopts_label_ref():
+    # The real <input> is a 0×0 hidden node Playwright gives no ref; the agent has
+    # nothing to click and skips it. The field must adopt the wrapping clickable
+    # label's ref and surface as required (the ✱ is a sibling marker, not in the
+    # checkbox's own name).
+    m = _model("oracle_agree_checkbox.txt")
+    agree = _find(m, "I agree with the terms and conditions")
+    assert agree is not None and agree.type == "checkbox"
+    assert agree.ref == "e292"  # adopted from the [cursor=pointer] label sibling
+    assert agree.required and agree.empty
+
+
+def test_workday_multiselect_folds_pills_into_one_filled_field():
+    # Workday renders a multiselect as a search textbox + a permanent
+    # `listbox "items selected"` pill tray. Naively that yields a bogus empty text
+    # field AND an empty "items selected" dropdown, so an already-filled field looks
+    # empty and the agent retries forever. The widget must fold into ONE dropdown
+    # field carrying its real selected value.
+    m = _model("workday_multiselect.txt")
+    cpc = _find(m, "Country Phone Code")
+    assert cpc is not None and cpc.type == "dropdown-aria"
+    assert cpc.required
+    assert cpc.value == "United States of America (+1)"
+    assert not cpc.empty  # prefilled -> no retry loop
+    assert cpc.ref == "e268"  # the search control, distinctly named (not "items selected")
+
+    # an EMPTY multiselect still folds to a dropdown so the agent uses select_options
+    hear = _find(m, "How Did You Hear About Us")
+    assert hear is not None and hear.type == "dropdown-aria"
+    assert hear.required and hear.empty
+
+    # no bogus fields leak through
+    assert _find(m, "items selected") is None
+    labels = [f.label for f in m.fields]
+    assert sum("Country Phone Code" in lbl for lbl in labels) == 1  # not duplicated
+
+
 def test_clean_pages_have_no_false_errors():
     for fixture in ("greenhouse_form.txt", "lever_form.txt", "taleo_form.txt",
                     "ultipro_form.txt", "signin.txt", "confirmation.txt"):

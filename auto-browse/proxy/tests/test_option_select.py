@@ -46,6 +46,34 @@ def test_collect_options_empty_tree():
     assert collect_options("not a tree") == []
 
 
+_PILLS_AND_MENU = (
+    "- generic [ref=e1]:\n"
+    '  - listbox "items selected" [ref=e271]:\n'
+    '    - option "United States of America (+1), press delete to clear value." [ref=e272]\n'
+    '  - listbox "Options Expanded" [ref=e640]:\n'
+    '    - option "Afghanistan (+93)" [ref=e662]\n'
+    '    - option "United States of America (+1)" [ref=e813]\n'
+)
+
+
+def test_collect_options_excludes_selected_pills():
+    # A Workday selected-values tray (listbox "items selected") holds "…press delete
+    # to clear value." pills — state, not choices. They must never be offered as
+    # options (else a closed widget looks open and values match the pill).
+    pills_only = (
+        "- generic [ref=e1]:\n"
+        '  - listbox "items selected" [ref=e271]:\n'
+        '    - option "United States of America (+1), press delete to clear value." [ref=e272]\n'
+    )
+    assert collect_options(pills_only) == []
+
+    # With a real menu open alongside the tray, only the menu's options surface.
+    opts = collect_options(_PILLS_AND_MENU)
+    labels = [o.label for o in opts]
+    assert labels == ["Afghanistan (+93)", "United States of America (+1)"]
+    assert best_match("United States of America (+1)", opts).ref == "e813"  # not the pill
+
+
 def test_best_match_exact():
     opts = collect_options(OPENED)
     m = best_match("Computer Science", opts)
