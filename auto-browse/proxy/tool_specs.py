@@ -176,9 +176,56 @@ TOOL_SPECS: dict[str, dict] = {
             "additionalProperties": False,
         },
     },
+    "select_options": {
+        "upstream": None,  # proxy-orchestrated: runs several upstream calls itself
+        "orchestrated": True,
+        "description": (
+            "Pick one or more options from a dropdown / combobox / listbox /"
+            " multiselect in a SINGLE call. Pass the combobox's ref as `target` and"
+            " the human-readable option label(s) you want (from the profile) as"
+            " `values`. The proxy opens the dropdown, matches each value to the"
+            " closest visible option, and clicks it — for a multiselect it repeats"
+            " for EVERY value, so pass them all at once (e.g. values=['Python',"
+            " 'SQL', 'Spark']). Use this for ALL ARIA dropdowns/listboxes/"
+            " multiselects instead of clicking the control then clicking an option"
+            " separately. It does NOT work for radio/checkbox questions — click"
+            " those refs directly. Returns a pruned snapshot plus a summary line of"
+            " which values matched and which did not (with the options that were"
+            " available, so you can retry an unmatched one with an exact label)."
+            + _PRUNED_SUFFIX
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "element": {
+                    "type": "string",
+                    "description": "Human-readable description of the dropdown (for logging).",
+                },
+                "target": {
+                    "type": "string",
+                    "description": "Exact ref of the combobox/dropdown from the most recent pruned snapshot.",
+                },
+                "values": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": (
+                        "Human-readable option label(s) to select, taken from the"
+                        " applicant profile. Pass every value for a multiselect."
+                    ),
+                },
+                **_NEXT_GOAL_PROP,
+            },
+            "required": ["target", "values"],
+            "additionalProperties": False,
+        },
+    },
     "select_option": {
         "upstream": "browser_select_option",
-        "description": ("Select an option in a dropdown by its ref." + _PRUNED_SUFFIX),
+        "description": (
+            "Select an option in a NATIVE <select> dropdown by its ref. Most ATS"
+            " dropdowns are NOT native <select> — use `select_options` for those."
+            + _PRUNED_SUFFIX
+        ),
         "inputSchema": {
             "type": "object",
             "properties": {

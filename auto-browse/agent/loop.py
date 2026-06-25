@@ -98,10 +98,19 @@ Browsing tips:
   for the role again or try to re-apply.
 
 ATS form tips (Workday / Greenhouse / iCIMS — read carefully, these fail often):
-- DROPDOWNS are a button that opens a listbox, NOT a `<select>`. To pick a \
-  value: `click` the button, then `click` the option. Do NOT use \
-  `select_option` or `fill_form` with type "combobox" on them — that errors with \
-  "Element is not a <select>".
+- DROPDOWNS / COMBOBOXES / MULTISELECTS: use `select_options(target=<combobox \
+  ref>, values=[<labels from the profile>])` — it opens the control and clicks the \
+  matching option(s) for you in ONE call. For a multiselect pass EVERY value at \
+  once, e.g. `values=["Python", "SQL", "Spark"]`; do not pick them one at a time. \
+  It returns a summary of which values matched — retry any "no match" with an \
+  exact label from the options it lists. Do NOT `click` the dropdown then `click` \
+  an option separately, and do NOT use `select_option`/`fill_form` type "combobox" \
+  on these (ATS dropdowns are not native `<select>`). `select_options` is for \
+  dropdowns only — radio/checkbox questions are still a direct `click`, below.
+- SKILLS / TAGS multiselects: NEVER add skills unless the field is required (its \
+  label has a `*` or the REQUIRED CHECK flags it). These fields are optional noise \
+  on most forms — leave them empty. Only when required, add the few skills from the \
+  profile that the role asks for; do not pad the list.
 - RADIO / CHECKBOX questions (Yes/No, "I decline to say", disability/veteran): \
   `click` the specific option's ref directly (e.g. click the "Yes" radio ref). Do \
   NOT use `fill_form` with type "radio"/"checkbox" — it does not reliably check \
@@ -173,6 +182,7 @@ _GUARDED_TOOLS = frozenset(
         "click",
         "type",
         "select_option",
+        "select_options",
         "fill_form",
         "file_upload",
         "press_key",
@@ -251,8 +261,10 @@ _TERMINAL_MARKERS: dict[str, tuple[str, ...]] = {
 # affordance and the resume is NOT uploaded yet, manual value-entry is hard-
 # blocked so the agent uploads first and lets the resume autofill the form.
 # Uploading LAST (after manual entry) re-renders/overwrites the fields with the
-# parsed-resume values — the ultipro bug. Login pages don't show these markers,
-# so sign-in fills are not blocked. Toggle with ENFORCE_UPLOAD_FIRST=0.
+# parsed-resume values — the ultipro bug. The check ignores the Page URL line and
+# never blocks credential (password) fills, so sign-in / create-account pages —
+# including Workday's, served under an `…/autofillWithResume` URL — are not
+# blocked. Toggle with ENFORCE_UPLOAD_FIRST=0.
 ENFORCE_UPLOAD_FIRST = os.getenv("ENFORCE_UPLOAD_FIRST", "1").lower() not in (
     "0",
     "false",
@@ -267,7 +279,7 @@ _AUTOFILL_MARKERS = (
     "import from resume",
     "autofill",
 )
-_VALUE_FILL_TOOLS = frozenset({"type", "fill_form", "select_option"})
+_VALUE_FILL_TOOLS = frozenset({"type", "fill_form", "select_option", "select_options"})
 _UPLOAD_FIRST_MSG = (
     "Blocked: this page offers an autofill / upload-resume option and the resume "
     "is not uploaded yet. Upload the resume FIRST so it autofills these fields — "
@@ -411,11 +423,11 @@ def _filled_fields(tool_name: str, args: dict[str, Any]) -> list[dict[str, Any]]
                 "value": args.get("text"),
             }
         ]
-    if tool_name == "select_option":
+    if tool_name in ("select_option", "select_options"):
         vals = args.get("values") or []
         return [
             {
-                "tool": "select_option",
+                "tool": tool_name,
                 "label": args.get("element"),
                 "ref": args.get("target"),
                 "value": ", ".join(map(str, vals)),
@@ -471,6 +483,9 @@ def _action_signature(tool_name: str, args: dict[str, Any]) -> str | None:
             )
         )
         return f"fill_form:{ids}"
+    if tool_name == "select_options":
+        vals = ",".join(sorted(map(str, args.get("values") or [])))
+        return f"select_options:{args.get('target')}:{vals}"
     for key in ("target", "url", "key", "paths"):
         val = args.get(key)
         if val:
@@ -498,9 +513,43 @@ def _resume_uploaded(filled_fields: list[dict[str, Any]] | None) -> bool:
 
 
 def _autofill_available(observation: str) -> bool:
-    """True if the latest page shows an autofill / upload-resume affordance."""
-    low = observation.lower()
+    """True if the latest page shows an autofill / upload-resume affordance.
+
+    The marker check runs against visible page text only — the `Page URL:` line is
+    dropped first. Workday serves its Sign In / Create Account wall under a
+    `…/apply/autofillWithResume` URL, so matching the URL slug would misfire the
+    upload-first guard on the login page (where you cannot upload yet).
+    """
+    low = "\n".join(
+        line
+        for line in observation.lower().splitlines()
+        if not line.lstrip().startswith(("- page url:", "page url:"))
+    )
     return any(m in low for m in _AUTOFILL_MARKERS)
+
+
+def _is_credential_fill(tool_name: str, arguments: dict[str, Any]) -> bool:
+    """True if this fill targets sign-in / create-account credential fields.
+
+    A password field is the reliable signal (both sign-in and create-account show
+    one). The upload-first guard must never block these — authenticating is a
+    prerequisite to reaching the resume-upload step on portals like Workday.
+    """
+    if tool_name == "fill_form":
+        fields = arguments.get("fields") or []
+    elif tool_name == "type":
+        fields = [arguments]
+    else:
+        return False
+    for f in fields:
+        if not isinstance(f, dict):
+            continue
+        if f.get("type") == "password":
+            return True
+        ident = f"{f.get('name', '')} {f.get('element', '')}".lower()
+        if "password" in ident or "passcode" in ident:
+            return True
+    return False
 
 
 def _outcome(success: bool, terminal_status: str | None) -> str:
@@ -883,6 +932,7 @@ async def agent_loop(
                     and filled_fields is not None
                     and not _resume_uploaded(filled_fields)
                     and _autofill_available(last_observation)
+                    and not _is_credential_fill(tool_name, arguments)
                 ):
                     # Upload-first: refuse manual entry while an autofill/upload-
                     # resume option is available and the resume isn't uploaded.
@@ -1021,8 +1071,12 @@ async def main(job_url: str, model: str) -> None:
         async with streamable_http_client(PROXY_MCP_URL) as (read, write, _):
             async with ClientSession(read, write) as session:
                 await session.initialize()
+                today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
                 messages: list[dict[str, Any]] = [
-                    {"role": "system", "content": SYSTEM_PROMPT},
+                    {
+                        "role": "system",
+                        "content": f"{SYSTEM_PROMPT}\n\nToday's date is {today}.",
+                    },
                     {"role": "system", "content": f"APPLICANT PROFILE:\n\n{profile}"},
                     {"role": "user", "content": task},
                 ]
