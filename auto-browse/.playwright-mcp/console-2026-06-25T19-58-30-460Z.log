@@ -1,0 +1,27 @@
+[    1964ms] [WARNING] BASE_URL_ATTR "data-base-url" not found @ https://static.oracle.com/cdn/fa/oj-hcm-ce/2604.18.261410337/js/main-minimal.js:1
+[    2001ms] [INFO] No translation for key: apply-flow.communication-channel.sms-button-label (en) @ https://static.oracle.com/cdn/fa/oj-hcm-ce/2604.18.261410337/js/main-minimal.js:1
+[    2001ms] [INFO] No translation for key: apply-flow.communication-channel.whatsapp-button-label (en) @ https://static.oracle.com/cdn/fa/oj-hcm-ce/2604.18.261410337/js/main-minimal.js:1
+[    2329ms] [WARNING] Unknown global setting - ORA_IRC_CE_GJS_ENABLED @ https://static.oracle.com/cdn/fa/oj-hcm-ce/2604.18.261410337/js/main-minimal.js:1
+[    2330ms] [WARNING] Unknown global setting - ORA_IRC_USER_TRACKING_ENABLE @ https://static.oracle.com/cdn/fa/oj-hcm-ce/2604.18.261410337/js/main-minimal.js:1
+[    2330ms] [WARNING] Unknown global setting - ORA_IRC_NUMBER_OF_JOBS_TO_BE_LOADED_ON_MAP @ https://static.oracle.com/cdn/fa/oj-hcm-ce/2604.18.261410337/js/main-minimal.js:1
+[    2330ms] [WARNING] Unknown global setting - ORA_IRC_FALLBACK_TO_SPRING @ https://static.oracle.com/cdn/fa/oj-hcm-ce/2604.18.261410337/js/main-minimal.js:1
+[    2330ms] [WARNING] Unknown global setting - IRC_CE_USE_MODERN_TEMPLATE @ https://static.oracle.com/cdn/fa/oj-hcm-ce/2604.18.261410337/js/main-minimal.js:1
+[    2330ms] [WARNING] Unknown global setting - ORA_IRC_EXWKR_CWKEXT_CITIZENSHIP_UPDATE_RECRUITER @ https://static.oracle.com/cdn/fa/oj-hcm-ce/2604.18.261410337/js/main-minimal.js:1
+[    2330ms] [WARNING] Unknown global setting - IRC_CE_AGENT_STARTER_MESSAGE @ https://static.oracle.com/cdn/fa/oj-hcm-ce/2604.18.261410337/js/main-minimal.js:1
+[    2330ms] [WARNING] Unknown global setting - IRC_CE_CAREER_COACH_AGENT_CODE @ https://static.oracle.com/cdn/fa/oj-hcm-ce/2604.18.261410337/js/main-minimal.js:1
+[    2330ms] [WARNING] Unknown global setting - IRC_CE_ENHANCE_MODE_ENABLED @ https://static.oracle.com/cdn/fa/oj-hcm-ce/2604.18.261410337/js/main-minimal.js:1
+[    2481ms] [INFO] No translation for key: admin.ai-assistant-editor.header-background-color-label (en) @ https://static.oracle.com/cdn/fa/oj-hcm-ce/2604.18.261410337/js/main-minimal.js:1
+[    2494ms] [INFO] No translation for key: Skip to main content. (en) @ https://static.oracle.com/cdn/fa/oj-hcm-ce/2604.18.261410337/js/main-minimal.js:1
+[   16772ms] [INFO] No translation for key: Skip to main content. (en) @ https://static.oracle.com/cdn/fa/oj-hcm-ce/2604.18.261410337/js/main-minimal.js:1
+[   17261ms] [INFO] No translation for key: false (en) @ https://static.oracle.com/cdn/fa/oj-hcm-ce/2604.18.261410337/js/main-minimal.js:1
+[   17263ms] [INFO] No translation for key: false (en) @ https://static.oracle.com/cdn/fa/oj-hcm-ce/2604.18.261410337/js/main-minimal.js:1
+[   17264ms] [INFO] No translation for key: false (en) @ https://static.oracle.com/cdn/fa/oj-hcm-ce/2604.18.261410337/js/main-minimal.js:1
+[   22824ms] [ERROR] undefined @ https://static.oracle.com/cdn/fa/oj-hcm-ce/2604.18.261410337/js/main-minimal.js:1
+[  166363ms] [INFO] No translation for key: true (en) @ https://static.oracle.com/cdn/fa/oj-hcm-ce/2604.18.261410337/js/main-minimal.js:1
+[  541779ms] [INFO] No translation for key: false (en) @ https://static.oracle.com/cdn/fa/oj-hcm-ce/2604.18.261410337/js/main-minimal.js:1
+[  541779ms] [ERROR] Access code does not exist @ https://static.oracle.com/cdn/fa/oj-hcm-ce/2604.18.261410337/js/main-minimal.js:1
+[  541790ms] [INFO] No translation for key: Skip to main content. (en) @ https://static.oracle.com/cdn/fa/oj-hcm-ce/2604.18.261410337/js/main-minimal.js:1
+[  541810ms] Uncaught (in promise) TypeError: this.bots.sendMessage is not a function
+    at action (https://static.oracle.com/cdn/fa/oj-hcm-ce/2604.18.261410337/js/main-minimal.js:1:5166699)
+[  543964ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://fa-ewjt-saasfaprod1.fa.ocs.oraclecloud.com/hcmRestApi/resources/latest/recruitingCEUserTrackings:0
+[  543965ms] Object

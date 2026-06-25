@@ -1,0 +1,6 @@
+- generic [active] [ref=e1]:
+  - complementary [ref=e2]:
+    - heading "Traces" [level=1] [ref=e3]
+    - textbox "filter by task / name…" [ref=e4]
+  - main [ref=e6]:
+    - generic [ref=e7]: Select a trace from the left.

@@ -27,6 +27,14 @@ _LISTBOX_ROLES: frozenset[str] = frozenset({"listbox", "menu", "tree"})
 # button is wrong).
 _SEARCH_ROLES: frozenset[str] = frozenset({"textbox", "searchbox"})
 
+# Workday renders each ALREADY-SELECTED value as a `listbox "items selected"` holding
+# `option "X, press delete to clear value."` pills. These are state, not choices — a
+# permanent tray that stays in the DOM whether the dropdown is open or closed. Both
+# the tray (by name) and the pill nodes (by this marker) must be excluded from the
+# selectable-option pool, else a closed widget looks "open" and values match pills.
+_PILL_RE = re.compile(r"press delete to clear value", re.I)
+_PILL_TRAY_RE = re.compile(r"items selected", re.I)
+
 # Fuzzy ratio below which we refuse to pick (report back rather than guess wrong).
 MATCH_THRESHOLD = 0.6
 
@@ -51,7 +59,12 @@ def _option_nodes(root: TreeNode) -> list[TreeNode]:
     """Option-role nodes (with a ref + name) under `root`, scoped to the opened
     listbox/menu when one exists, else the whole tree."""
     nodes = collect_all(root)
-    containers = [n for n in nodes if n.role in _LISTBOX_ROLES]
+    # Exclude the selected-pills tray from the scope — it is not an opened menu.
+    containers = [
+        n
+        for n in nodes
+        if n.role in _LISTBOX_ROLES and not _PILL_TRAY_RE.search(n.name or "")
+    ]
     scope: list[TreeNode] = []
     for c in containers:
         scope.extend(collect_all(c))
@@ -60,6 +73,8 @@ def _option_nodes(root: TreeNode) -> list[TreeNode]:
     out: list[TreeNode] = []
     for n in pool:
         if n.role in _OPTION_ROLES and n.ref and n.name and n.ref not in seen:
+            if _PILL_RE.search(n.name):  # an already-selected pill, not a choice
+                continue
             seen.add(n.ref)
             out.append(n)
     return out

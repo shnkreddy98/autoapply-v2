@@ -121,6 +121,16 @@ def _build_server() -> Server:
         # which case we should settle before snapshotting (see _render_snapshot).
         force_settle = _navigates(upstream_name, args)
 
+        # Oracle/Taleo "I agree" controls are a 0×0 hidden <input> wrapped in a
+        # <label> that also holds a "terms and conditions" link. A normal click
+        # lands on the link (opens a dialog) and never toggles, trapping the agent
+        # in a loop. When the click target is such a label, toggle the underlying
+        # input directly instead of forwarding the click.
+        if upstream_name == "browser_click" and _is_hidden_toggle_label(
+            args.get("target", "")
+        ):
+            return [TextContent(type="text", text=await _toggle_hidden_input(args))]
+
         raw_result = await _call_upstream(upstream_name, args)
         raw_text = _extract_text(raw_result)
 
@@ -137,6 +147,72 @@ def _handle_proxy_tool(name: str, args: dict) -> list[TextContent]:
         result = expand_region(args.get("ref", ""), args.get("goal", ""))
         return [TextContent(type="text", text=result)]
     return [TextContent(type="text", text=f"Error: unknown proxy tool '{name}'.")]
+
+
+# Climb to the wrapping <label>, toggle the hidden checkbox/radio inside it (or the
+# one it points at via `for=`), and report the resulting state. Clicking the input
+# directly bypasses the overlaid "terms and conditions" link that traps a click.
+_TOGGLE_JS = """(el) => {
+  const lab = el.closest('label') || el.parentElement;
+  let inp = lab && lab.querySelector('input[type=checkbox],input[type=radio]');
+  if (!inp && lab && lab.htmlFor) inp = document.getElementById(lab.htmlFor);
+  if (!inp) {
+    const row = el.parentElement;
+    inp = row && row.querySelector('input[type=checkbox],input[type=radio]');
+  }
+  if (inp) { inp.click(); return inp.checked ? 'checked' : 'unchecked'; }
+  el.click();
+  return 'fallback-click';
+}"""
+
+
+def _is_hidden_toggle_label(ref: str) -> bool:
+    """True if `ref` is a clickable label fronting a checkbox/radio that Playwright
+    omitted from the snapshot (a 0×0 hidden input) AND wraps a link — the Oracle
+    "I agree with the terms and conditions" trap. See _TOGGLE_JS / page_model."""
+    if not ref:
+        return False
+    root = parse(snapshot_cache.get())
+    if root is None:
+        return False
+    node = next((n for n in collect_all(root) if n.ref == ref), None)
+    if node is None or "[cursor=pointer]" not in node.raw_line:
+        return False
+    p = node.parent
+    if p is None:
+        return False
+    has_hidden_toggle = any(
+        c is not node and c.role in ("checkbox", "radio") and c.ref is None
+        for c in p.children
+    )
+    has_link = any(d.role == "link" for d in collect_all(node))
+    return has_hidden_toggle and has_link
+
+
+async def _toggle_hidden_input(args: dict) -> str:
+    """Toggle the hidden checkbox/radio behind a label ref, then return a fresh
+    page model so the agent sees the new checked state."""
+    try:
+        await _call_upstream(
+            "browser_evaluate",
+            {
+                "target": args["target"],
+                "element": args.get("element", "agree checkbox"),
+                "function": _TOGGLE_JS,
+            },
+        )
+    except Exception as exc:  # fall back to a plain click rather than dead-end
+        logger.warning("hidden-toggle failed (%s); forwarding plain click", exc)
+        raw = _extract_text(await _call_upstream("browser_click", args))
+        return await _render_snapshot(raw, force_settle=False)
+
+    tree = await _wait_and_snapshot()
+    if tree is None:
+        return "Toggled the agree checkbox."
+    snapshot_cache.set(tree)
+    if _node_count(tree) <= MIN_MEANINGFUL_NODES:
+        return _EMPTY_TREE_MSG
+    return render_page_model(extract_page_model(tree))
 
 
 # Hard ceiling on values processed in one select_options call (pathological input
@@ -209,17 +285,22 @@ async def _select_options(args: dict) -> str:
 
 
 async def _ensure_dropdown_open(reopen_ref: str | None, label: str | None) -> str | None:
-    """Return a tree with the dropdown's options visible. If options are already
-    showing (a multiselect listbox that stays open), reuse the cached tree; else
-    click the control — by `reopen_ref` on the first value, or re-found by `label`
-    after refs went stale — and settle+snapshot."""
-    cached = snapshot_cache.get()
-    if cached and collect_options(cached):
-        return cached
+    """Return a tree with the dropdown's options visible.
 
+    On the first value (`reopen_ref` set) ALWAYS click that control to open the
+    intended dropdown — never short-circuit on "some options are visible", because a
+    Workday widget leaves a `listbox "items selected"` pill tray in the DOM and
+    another field's menu may be open, both of which would match the wrong options
+    (see option_select._option_nodes). For subsequent multiselect values there is no
+    `reopen_ref`; reuse the cached tree if a real (non-pill) menu is already open,
+    else re-find the control by `label`."""
+    cached = snapshot_cache.get()
     ref = reopen_ref
-    if ref is None and label and cached:
-        ref = find_ref_by_label(cached, label)
+    if ref is None:
+        if cached and collect_options(cached):
+            return cached  # multiselect menu still open from the previous pick
+        if label and cached:
+            ref = find_ref_by_label(cached, label)
     if ref is None:
         return cached  # cannot open; match against whatever is currently shown
 

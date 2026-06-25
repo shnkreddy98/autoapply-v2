@@ -1,0 +1,18 @@
+[    1774ms] [WARNING] BASE_URL_ATTR "data-base-url" not found @ https://static.oracle.com/cdn/fa/oj-hcm-ce/2604.18.261410337/js/main-minimal.js:1
+[    1780ms] [INFO] No translation for key: apply-flow.communication-channel.sms-button-label (en) @ https://static.oracle.com/cdn/fa/oj-hcm-ce/2604.18.261410337/js/main-minimal.js:1
+[    1780ms] [INFO] No translation for key: apply-flow.communication-channel.whatsapp-button-label (en) @ https://static.oracle.com/cdn/fa/oj-hcm-ce/2604.18.261410337/js/main-minimal.js:1
+[    1796ms] [WARNING] Unknown global setting - ORA_IRC_CE_GJS_ENABLED @ https://static.oracle.com/cdn/fa/oj-hcm-ce/2604.18.261410337/js/main-minimal.js:1
+[    1796ms] [WARNING] Unknown global setting - ORA_IRC_USER_TRACKING_ENABLE @ https://static.oracle.com/cdn/fa/oj-hcm-ce/2604.18.261410337/js/main-minimal.js:1
+[    1796ms] [WARNING] Unknown global setting - ORA_IRC_NUMBER_OF_JOBS_TO_BE_LOADED_ON_MAP @ https://static.oracle.com/cdn/fa/oj-hcm-ce/2604.18.261410337/js/main-minimal.js:1
+[    1796ms] [WARNING] Unknown global setting - ORA_IRC_FALLBACK_TO_SPRING @ https://static.oracle.com/cdn/fa/oj-hcm-ce/2604.18.261410337/js/main-minimal.js:1
+[    1796ms] [WARNING] Unknown global setting - IRC_CE_USE_MODERN_TEMPLATE @ https://static.oracle.com/cdn/fa/oj-hcm-ce/2604.18.261410337/js/main-minimal.js:1
+[    1796ms] [WARNING] Unknown global setting - ORA_IRC_EXWKR_CWKEXT_CITIZENSHIP_UPDATE_RECRUITER @ https://static.oracle.com/cdn/fa/oj-hcm-ce/2604.18.261410337/js/main-minimal.js:1
+[    1796ms] [WARNING] Unknown global setting - IRC_CE_AGENT_STARTER_MESSAGE @ https://static.oracle.com/cdn/fa/oj-hcm-ce/2604.18.261410337/js/main-minimal.js:1
+[    1796ms] [WARNING] Unknown global setting - IRC_CE_CAREER_COACH_AGENT_CODE @ https://static.oracle.com/cdn/fa/oj-hcm-ce/2604.18.261410337/js/main-minimal.js:1
+[    1796ms] [WARNING] Unknown global setting - IRC_CE_ENHANCE_MODE_ENABLED @ https://static.oracle.com/cdn/fa/oj-hcm-ce/2604.18.261410337/js/main-minimal.js:1
+[    1864ms] [INFO] No translation for key: admin.ai-assistant-editor.header-background-color-label (en) @ https://static.oracle.com/cdn/fa/oj-hcm-ce/2604.18.261410337/js/main-minimal.js:1
+[    2287ms] [INFO] No translation for key: Skip to main content. (en) @ https://static.oracle.com/cdn/fa/oj-hcm-ce/2604.18.261410337/js/main-minimal.js:1
+[    2585ms] [INFO] No translation for key: false (en) @ https://static.oracle.com/cdn/fa/oj-hcm-ce/2604.18.261410337/js/main-minimal.js:1
+[    2588ms] [INFO] No translation for key: false (en) @ https://static.oracle.com/cdn/fa/oj-hcm-ce/2604.18.261410337/js/main-minimal.js:1
+[    2589ms] [INFO] No translation for key: false (en) @ https://static.oracle.com/cdn/fa/oj-hcm-ce/2604.18.261410337/js/main-minimal.js:1
+[   11797ms] [ERROR] undefined @ https://static.oracle.com/cdn/fa/oj-hcm-ce/2604.18.261410337/js/main-minimal.js:1

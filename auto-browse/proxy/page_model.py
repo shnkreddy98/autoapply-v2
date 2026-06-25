@@ -31,6 +31,12 @@ RAW_CAP = 400  # max raw lines when falling back on an unclassifiable page
 _TEXT_ROLES = frozenset({"textbox", "searchbox"})
 _REQ_RE = re.compile(r"[*✱]|\brequired\b", re.IGNORECASE)
 _SELECT_ONE_RE = re.compile(r"select one|select\.\.\.|choose one|please select", re.IGNORECASE)
+# Workday multiselect: chosen values render as `option "X, press delete to clear
+# value."` pills inside a permanent `listbox "items selected"` tray. The tray is the
+# field's *value*, not a separate dropdown — see _multiselect_tray_fields.
+_PILL_RE = re.compile(r",?\s*press delete to clear value\.?\s*$", re.IGNORECASE)
+_PILL_TRAY_RE = re.compile(r"items selected", re.IGNORECASE)
+_ITEMS_SELECTED_PREFIX_RE = re.compile(r"^\d+\s+items?\s+selected,\s*", re.IGNORECASE)
 
 # --- action button classification ---------------------------------------------
 
@@ -187,11 +193,30 @@ def _text_of(n: TreeNode) -> str:
     return ""
 
 
-def _preceding_label(node: TreeNode, max_up: int = 2) -> str:
-    """Nearest preceding text/heading sibling, walking up to `max_up` levels.
+def _subtree_text(n: TreeNode, cap: int = 160) -> str:
+    """All visible text under `n` (node names, `text:` nodes, inline values like a
+    required `✱`), in document order, collapsed and capped. Used to read a label
+    that lives nested inside a preceding sibling container, not as a bare sibling."""
+    parts: list[str] = []
+    for d in collect_all(n):
+        t = _text_of(d) or _value_and_state(d.raw_line)[0]
+        if t:
+            parts.append(t)
+    full = re.sub(r"\s+", " ", " ".join(parts)).strip()
+    out = full[:cap]
+    # The required ✱ is a trailing sibling node; on a long legal question it falls
+    # past the cap. Re-attach it so the label stays detectable as required.
+    if len(full) > cap and _REQ_RE.search(full) and not _REQ_RE.search(out):
+        out = out.rstrip() + " ✱"
+    return out
 
-    Lever/Greenhouse put a choice group's question in a `text:` node BEFORE the
-    container rather than naming the container itself.
+
+def _preceding_label(node: TreeNode, max_up: int = 2) -> str:
+    """Label text from the nearest preceding sibling, walking up to `max_up` levels.
+
+    Lever/Greenhouse/Workday put a field or choice group's question in a `text:`
+    node — often nested inside a sibling container — BEFORE the field rather than
+    naming the field itself. We read the full text of that preceding sibling.
     """
     cur = node
     for _ in range(max_up + 1):
@@ -203,7 +228,7 @@ def _preceding_label(node: TreeNode, max_up: int = 2) -> str:
         except ValueError:
             idx = len(p.children)
         for j in range(idx - 1, -1, -1):
-            t = _text_of(p.children[j])
+            t = _subtree_text(p.children[j])
             if t and len(t) > 1:
                 return t
         cur = p
@@ -241,6 +266,99 @@ def _choice_container(n: TreeNode) -> TreeNode | None:
     return None
 
 
+def _adopt_click_ref(n: TreeNode) -> str | None:
+    """A clickable ref for a checkbox/radio that Playwright gave no ref of its own.
+
+    Oracle/Taleo render an "I agree" control as a 0×0 hidden <input> wrapped in a
+    `<label>`; the input is omitted from the snapshot's `[ref=…]` set, but the
+    visible label renders as a sibling `[cursor=pointer]` node that DOES carry a
+    ref. Adopt that label ref so the agent has something to click (the proxy
+    redirects such clicks to toggle the underlying input — see server.py)."""
+    p = n.parent
+    if p is None:
+        return None
+    for sib in p.children:
+        if sib is not n and sib.ref and "[cursor=pointer]" in sib.raw_line:
+            return sib.ref
+    if p.ref and "[cursor=pointer]" in p.raw_line:
+        return p.ref
+    return None
+
+
+def _is_pill_tray(n: TreeNode) -> bool:
+    """True if `n` is a Workday selected-values tray: a `listbox "items selected"`.
+    When populated its option children are "…, press delete to clear value." pills;
+    when empty it has no options (still a tray, an unfilled multiselect)."""
+    if n.role != "listbox" or not _PILL_TRAY_RE.search(n.name or ""):
+        return False
+    opts = [c for c in n.children if c.role == "option"]
+    return all(_PILL_RE.search(o.name or "") for o in opts)  # all([]) -> empty tray ok
+
+
+def _pill_value(opt: TreeNode) -> str:
+    """The selected value text of one pill option — its child paragraph if present
+    (cleanest), else the option name with the pill suffix stripped."""
+    for d in collect_all(opt):
+        if d is not opt and d.role == "paragraph" and (d.name or _text_of(d)):
+            return _clean_label(d.name or _text_of(d))
+    return _clean_label(_PILL_RE.sub("", opt.name or ""))
+
+
+def _multiselect_tray_fields(
+    nodes: list[TreeNode], consumed: set[int]
+) -> list[tuple[int, "Field"]]:
+    """One dropdown Field per Workday multiselect widget, read from its pill tray.
+
+    The widget is a `[cursor=pointer]` wrapper holding a search `textbox` (the click
+    target) plus a `listbox "items selected"` tray of selected-value pills. Without
+    this, the textbox renders as an empty `text` field and the tray as a bogus empty
+    `items selected` dropdown — so a field that is ALREADY filled looks empty and the
+    agent retries forever. We fold both into one filled dropdown field and consume
+    them so pass 2 skips both."""
+    out: list[tuple[int, Field]] = []
+    for tray in nodes:
+        if not _is_pill_tray(tray):
+            continue
+        wrapper = tray.parent
+        if wrapper is None:
+            continue
+        # the click target: the search textbox/button beside the tray
+        control = next(
+            (
+                d
+                for d in collect_all(wrapper)
+                if d is not tray and d.role in ("textbox", "searchbox", "button") and d.ref
+            ),
+            None,
+        )
+        value = ", ".join(
+            _pill_value(o) for o in tray.children if o.role == "option"
+        )
+        preceding = _preceding_label(wrapper)
+        label = _clean_label(
+            (control.name if control and control.name else "") or preceding
+        )
+        if _required(preceding) and not _required(label):
+            label = label + " *" if label else preceding
+        ref = control.ref if control else tray.ref
+        consumed.add(id(tray))
+        if control is not None:
+            consumed.add(id(control))
+        out.append(
+            (
+                tray.line_index,
+                Field(
+                    ref=ref,
+                    label=label or "(question)",
+                    type="dropdown-aria",
+                    required=_required(label),
+                    value=value,
+                ),
+            )
+        )
+    return out
+
+
 # --- field extraction ----------------------------------------------------------
 
 
@@ -266,13 +384,21 @@ def _extract_fields(nodes: list[TreeNode]) -> list[Field]:
         radios = [m for m in members if m.role == "radio"]
         checks = [m for m in members if m.role == "checkbox"]
         labels = {_member_label(m) for m in checks}
+        container = keynode[k]
         if len(radios) >= 2:
             use = radios
         elif len(checks) >= 2 and len(labels) == len(checks):
             use = checks  # distinct labels => single-select set (Yes/No)
+        elif len(members) == 1 and container is not None and _required(
+            _label_for(container)
+        ):
+            # Single-option acknowledgment inside a real choice container (Lever's
+            # "I have read and understand…" radio under a required ✱ question). The
+            # lone control names itself, so pass 2 would miss the required question
+            # in the preceding sibling — group it here to inherit that label.
+            use = members
         else:
             continue  # leave singles / identical-label checkboxes for pass 2
-        container = keynode[k]
         for m in use:
             consumed.add(id(m))
         label = _label_for(container) if container is not None else _member_label(use[0])
@@ -297,6 +423,10 @@ def _extract_fields(nodes: list[TreeNode]) -> list[Field]:
             )
         )
 
+    # Pass 1b: Workday multiselect widgets (search box + selected-pills tray) — one
+    # filled dropdown field each; consumes the box + tray so pass 2 skips both.
+    indexed.extend(_multiselect_tray_fields(nodes, consumed))
+
     # Pass 2: individual inputs.
     for n in nodes:
         if id(n) in consumed:
@@ -305,8 +435,20 @@ def _extract_fields(nodes: list[TreeNode]) -> list[Field]:
         if ftype is None:
             continue
         val, checked, _ = _value_and_state(n.raw_line)
-        if ftype == "checkbox":
+        ref = n.ref
+        label = _label_for(n)
+        required = _required(label)
+        if ftype in ("checkbox", "radio"):
+            # a standalone checkbox/radio (not part of a multi-option group)
             val = "checked" if checked else ""
+            if ref is None:
+                ref = _adopt_click_ref(n)
+                # the required ✱ is a sibling marker on the wrapping label, not in
+                # the control's own name — scan the parent row's nodes for it.
+                if not required and n.parent is not None:
+                    required = any(
+                        _REQ_RE.search(d.raw_line) for d in collect_all(n.parent)
+                    )
         opts: list[tuple[str | None, str]] = []
         if ftype == "select-native":
             for o in _option_children(n):
@@ -314,15 +456,14 @@ def _extract_fields(nodes: list[TreeNode]) -> list[Field]:
                 _, _, osel = _value_and_state(o.raw_line)
                 if osel:
                     val = _clean_label(o.name or "")
-        label = _label_for(n)
         indexed.append(
             (
                 n.line_index,
                 Field(
-                    ref=n.ref,
+                    ref=ref,
                     label=label,
                     type=ftype,
-                    required=_required(label),
+                    required=required,
                     value="" if _SELECT_ONE_RE.search(val) else val,
                     options=opts,
                 ),

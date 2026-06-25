@@ -1,0 +1,49 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e3]: .
+    - generic [ref=e4]: ..
+    - generic [ref=e5]: .
+  - generic [ref=e7]:
+    - link "Skip to main content." [ref=e252] [cursor=pointer]:
+      - /url: "#main"
+    - generic:
+      - alert
+    - generic [ref=e254]:
+      - banner [ref=e256]:
+        - generic [ref=e258]:
+          - link "Back to Job Details" [ref=e259] [cursor=pointer]:
+            - generic [ref=e260]: 
+          - generic [ref=e262]:
+            - generic [ref=e263]: Data Engineer
+            - generic [ref=e264]: ...
+      - main "Job application form" [ref=e266]:
+        - heading "Job application form" [level=1] [ref=e267]
+        - generic [ref=e269]:
+          - heading "Authentication screen. You don't need to have an account" [level=1] [ref=e271]:
+            - generic: Authentication screen.
+            - text: You don't need to have an account
+          - generic [ref=e272]:
+            - paragraph [ref=e273]: Get started right away by simply using your email. Your profile will be created and kept up to date automatically as you enter details for each of your job applications.
+            - generic [ref=e275]:
+              - generic [ref=e276]:
+                - generic "Email Address" [ref=e278]:
+                  - generic [ref=e279]: Email Address
+                  - generic [ref=e280]: "*"
+                - textbox "Email Address" [ref=e282]
+              - generic:
+                - generic [ref=e284]: honeypot
+                - textbox [ref=e286]
+              - generic [ref=e287]: This is how we'll communicate with you.
+              - generic [ref=e289]:
+                - checkbox "I agree with the terms and conditions"
+                - generic [ref=e292] [cursor=pointer]:
+                  - generic [ref=e294]:
+                    - text: I agree with the
+                    - link "terms and conditions" [ref=e295]:
+                      - /url: "#"
+                  - generic [ref=e296]: "*"
+          - generic [ref=e297]:
+            - button "Cancel" [ref=e298] [cursor=pointer]:
+              - generic [ref=e300]: Cancel
+            - button "Next" [ref=e301] [cursor=pointer]:
+              - generic [ref=e302]: Next

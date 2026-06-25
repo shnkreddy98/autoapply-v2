@@ -97,6 +97,20 @@ def test_navigates_detects_navigation_actions():
     assert not _navigates("browser_click", {})
 
 
+def test_hidden_toggle_label_detection():
+    # Oracle "I agree" control: a 0×0 hidden checkbox (no ref) + a clickable label
+    # that wraps the terms-and-conditions link. Clicks on that label must be
+    # redirected to toggle the input; other clickable nodes must not.
+    from proxy.server import _is_hidden_toggle_label
+
+    fixture = Path(__file__).parent / "fixtures" / "oracle_agree_checkbox.txt"
+    snapshot_cache.set(fixture.read_text())
+    assert _is_hidden_toggle_label("e292")  # agree label wrapping hidden checkbox
+    assert not _is_hidden_toggle_label("e301")  # plain Next button
+    assert not _is_hidden_toggle_label("e282")  # email textbox
+    assert not _is_hidden_toggle_label("")  # no target
+
+
 def test_node_count_ignores_url_and_text_nodes():
     from proxy.server import _node_count
 
