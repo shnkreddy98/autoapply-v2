@@ -1,0 +1,13 @@
+- document:
+  - main:
+    - heading "Thank you for applying." [level=1]
+    - paragraph: Your application has been received. If there is a fit, someone will be getting back to you.
+    - link "View more jobs at Nimble Robotics":
+      - /url: https://job-boards.greenhouse.io/nimblerobotics
+    - link "Back to job post":
+      - /url: https://job-boards.greenhouse.io/nimblerobotics/jobs/4295420009
+  - contentinfo:
+    - paragraph: Powered by
+    - link "Greenhouse logo":
+      - /url: https://www.greenhouse.com
+      - img "Greenhouse logo"
