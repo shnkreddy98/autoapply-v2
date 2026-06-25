@@ -1,9 +1,11 @@
-"""Pruning proxy MCP server.
+"""Page-model proxy MCP server.
 
 Sits in front of Microsoft's Playwright MCP. Exposes a curated, re-described
 tool list (see tool_specs.py / tool_allowlist.py), forwards calls to the
-upstream Playwright MCP over a single persistent session, and prunes every
-returned accessibility tree down to the nodes relevant to the step goal.
+upstream Playwright MCP over a single persistent session, and replaces every
+returned accessibility tree with a deterministic, typed PAGE MODEL
+(proxy/page_model.py): page type, every form field (type/required/value/error),
+the action buttons, and any validation errors.
 """
 
 import logging
@@ -30,8 +32,9 @@ from .option_select import (
     find_searchbox,
     label_of_ref,
 )
-from .pruner import expand_region, overview, prune
-from .required_check import format_required_check
+from .page_model import extract as extract_page_model
+from .page_model import render as render_page_model
+from .pruner import expand_region
 from .tool_allowlist import STRIP_PARAMS, TREE_RETURNING
 from .tool_specs import TOOL_SPECS
 from .tree_parser import collect_all, parse
@@ -104,25 +107,25 @@ def _build_server() -> Server:
         if spec["upstream"] is None:
             return _handle_proxy_tool(name, args)
 
-        # Pull the pruning goal out before forwarding; strip proxy-only params.
-        goal = args.pop("next_goal", None) or args.pop("goal", None)
+        # Strip any goal/next_goal the agent may still send — selection is now
+        # structural, not goal-based — plus other proxy-only params.
         for param in STRIP_PARAMS:
             args.pop(param, None)
 
         upstream_name = spec["upstream"]
         # Merge any fixed upstream args the wrapper pins (e.g. action="select"
-        # for the tab wrappers) — done after goal/next_goal are stripped.
+        # for the tab wrappers).
         args.update(spec.get("inject_args", {}))
 
         # Decide whether this action likely triggers a navigation/re-render, in
-        # which case we should settle before snapshotting (see _prune_snapshot).
+        # which case we should settle before snapshotting (see _render_snapshot).
         force_settle = _navigates(upstream_name, args)
 
         raw_result = await _call_upstream(upstream_name, args)
         raw_text = _extract_text(raw_result)
 
         if upstream_name in TREE_RETURNING:
-            raw_text = await _prune_snapshot(raw_text, goal, force_settle)
+            raw_text = await _render_snapshot(raw_text, force_settle)
 
         return [TextContent(type="text", text=raw_text)]
 
@@ -150,7 +153,6 @@ async def _select_options(args: dict) -> str:
     """
     target = args.get("target")
     values = [str(v) for v in (args.get("values") or []) if str(v).strip()]
-    goal = args.get("next_goal") or args.get("goal")
     element = args.get("element") or "dropdown"
     if not target or not values:
         return "Error: select_options requires 'target' (combobox ref) and non-empty 'values'."
@@ -201,7 +203,7 @@ async def _select_options(args: dict) -> str:
             snapshot_cache.set(settled)
 
     final_tree = snapshot_cache.get()
-    body = _render_select_body(final_tree, goal)
+    body = _render_select_body(final_tree)
     summary = _select_summary(matched, unmatched)
     return f"{summary}\n\n{body}" if body else summary
 
@@ -233,14 +235,11 @@ async def _ensure_dropdown_open(reopen_ref: str | None, label: str | None) -> st
     return cached
 
 
-def _render_select_body(tree_text: str | None, goal: str | None) -> str:
-    """Pruned snapshot of the post-select tree, same shape as _prune_snapshot:
-    prune to goal (or a bounded overview), plus the REQUIRED CHECK footer."""
+def _render_select_body(tree_text: str | None) -> str:
+    """Page model of the post-select tree (same renderer as _render_snapshot)."""
     if not tree_text or _node_count(tree_text) <= MIN_MEANINGFUL_NODES:
         return _EMPTY_TREE_MSG
-    body = prune(tree_text, goal) if goal else overview(tree_text)
-    footer = format_required_check(tree_text)
-    return f"{body}\n\n{footer}" if footer else body
+    return render_page_model(extract_page_model(tree_text))
 
 
 def _select_summary(
@@ -269,9 +268,10 @@ def _extract_text(result: CallToolResult) -> str:
     return "\n".join(parts) if parts else str(result.content)
 
 
-async def _prune_snapshot(raw_text: str, goal: str | None, force_settle: bool) -> str:
+async def _render_snapshot(raw_text: str, force_settle: bool) -> str:
     """Find the accessibility tree in an upstream result, settle it if needed,
-    cache it, and replace it with the pruned version (or leave full if no goal).
+    cache it, and replace it with the deterministic PAGE MODEL (proxy/page_model.py)
+    — a typed view of every form field/action/error. No goal, no keyword pruning.
 
     Playwright MCP returns the snapshot either inline or, more commonly, as a
     `[Snapshot](.playwright-mcp/page-*.yml)` link to a file. The data dir is
@@ -303,31 +303,14 @@ async def _prune_snapshot(raw_text: str, goal: str | None, force_settle: bool) -
 
     if _node_count(tree_text) <= MIN_MEANINGFUL_NODES:
         body = _EMPTY_TREE_MSG
-    elif goal:
-        body = prune(tree_text, goal)
-    elif force_settle:
-        # Page just loaded with no goal (e.g. navigate): a blind step goal can't
-        # describe a page not yet seen, so return the structured overview instead
-        # of the raw full tree.
-        body = overview(tree_text)
     else:
-        # Explicit goalless snapshot() — the agent deliberately wants everything.
-        body = tree_text
-
-    # Append a deterministic required-field status so the agent (and the evidence
-    # gate) sees instantly which required (*) fields are still empty — e.g. a
-    # fill_form on a radio that silently no-ops. Self-suppresses when the page has
-    # no required fields. Computed from the full tree, so it spans all sections.
-    if body != _EMPTY_TREE_MSG:
-        footer = format_required_check(tree_text)
-        if footer:
-            body = f"{body}\n\n{footer}"
+        body = render_page_model(extract_page_model(tree_text))
 
     # Splice the body into the original result (replacing the file-link line),
     # append it when the original carried no tree of its own (tab tools), or
     # return it directly when the tree was inline.
     if appended:
-        return f"{raw_text}\n\n### Snapshot\n{body}"
+        return f"{raw_text}\n\n### Page\n{body}"
     if link_line:
         return raw_text.replace(link_line, body)
     return body

@@ -81,59 +81,54 @@ Procedure:
    statement that the form is validated and ready for the user to review and \
    submit.
 
-Browsing tips:
-- `snapshot(goal=...)` returns a small pruned tree to find WHERE things are; \
-  `expand_region(ref)` reads the FULL content of a region (labels, values).
-- Pass `next_goal` on actions to keep the returned snapshot focused.
-- If a snapshot is empty or a ref errors "not found", call `wait_for` then \
-  `snapshot` again — never reuse a ref from an older snapshot.
-- NEW TABS: if a result's "### Open tabs" list shows a new tab (index > 0) — \
-  e.g. the "Apply" button opened the form in a new tab — call `select_tab` with \
-  that index to switch to it, then continue there. Do NOT re-click the same \
-  button hoping the form appears; that only spawns more duplicate tabs. Use \
-  `close_tab` to clean up stray duplicates if they pile up.
-- ALREADY APPLIED / CLOSED: if the page says you have already applied for this \
-  job, or the posting is closed / no longer accepting applications, STOP \
-  immediately and return a one-line summary stating that status. Do NOT search \
-  for the role again or try to re-apply.
+How the page is given to you — THE PAGE MODEL:
+- Every tool result is a PAGE MODEL (not raw HTML), shaped like:
+    PAGE: <type> (step X of Y)   ← job_posting / signin_signup / form / confirmation / loading
+    ERRORS: ...                  ← validation errors to fix (shown only when present)
+    FIELDS:
+      [e12] "First Name" *req text = "Shashank"
+      [e15] "Degree" *req dropdown(use select_options) = (empty)  ⚠ required, empty
+      [e20] "Sponsorship?" *req radio(click option ref) Yes[e21] No[e22] = (unset)
+    ACTIONS: [e30]"Save and Continue"  [e31]"Back"
+  You ALWAYS get the WHOLE page — there is no goal/keyword search. Act on it directly.
+- Fill each field BY ITS DECLARED TYPE (shown after the label):
+    text / textarea  → `type(target=ref, text=...)`
+    dropdown         → `select_options(target=ref, values=[label, ...])`  (ARIA dropdown)
+    select           → `select_option(target=ref, values=[label])`        (native <select>)
+    radio / checkbox → `click(target=<the chosen option's ref>)`
+    file             → click the upload/attach ACTION, then `file_upload`
+- A field is DONE when it shows `= <value>` and has no ⚠. Fill every `*req` field; \
+  optional (non-*req) fields you may skip. `⚠` marks a required field still empty \
+  or one with an error — those are your worklist.
+- ERRORS: if the model lists ERRORS, FIX each before advancing or finishing. A \
+  required dropdown still showing "(empty)" was not set — use `select_options`.
+- `expand_region(ref)` reads a field/region's FULL raw content (long option lists, \
+  descriptions) when the one-line summary isn't enough.
+- If PAGE is `loading` or the result says "[empty ...]", call `wait_for` then \
+  `snapshot`. After any action the refs change — act on the NEW page model each \
+  turn; NEVER reuse a ref from an older one.
+- NEW TABS: if a result's "### Open tabs" list shows a new tab (index > 0) — e.g. \
+  "Apply" opened the form in a new tab — call `select_tab` to switch to it. Do NOT \
+  re-click the same button (it only spawns duplicates); `close_tab` clears strays.
+- ALREADY APPLIED / CLOSED: if the page says you already applied, or the posting \
+  is closed, STOP and return a one-line summary of that status. Do not re-apply.
 
-ATS form tips (Workday / Greenhouse / iCIMS — read carefully, these fail often):
-- DROPDOWNS / COMBOBOXES / MULTISELECTS: use `select_options(target=<combobox \
-  ref>, values=[<labels from the profile>])` — it opens the control and clicks the \
-  matching option(s) for you in ONE call. For a multiselect pass EVERY value at \
-  once, e.g. `values=["Python", "SQL", "Spark"]`; do not pick them one at a time. \
-  It returns a summary of which values matched — retry any "no match" with an \
-  exact label from the options it lists. Do NOT `click` the dropdown then `click` \
-  an option separately, and do NOT use `select_option`/`fill_form` type "combobox" \
-  on these (ATS dropdowns are not native `<select>`). `select_options` is for \
-  dropdowns only — radio/checkbox questions are still a direct `click`, below.
-- SKILLS / TAGS multiselects: NEVER add skills unless the field is required (its \
-  label has a `*` or the REQUIRED CHECK flags it). These fields are optional noise \
-  on most forms — leave them empty. Only when required, add the few skills from the \
-  profile that the role asks for; do not pad the list.
-- RADIO / CHECKBOX questions (Yes/No, "I decline to say", disability/veteran): \
-  `click` the specific option's ref directly (e.g. click the "Yes" radio ref). Do \
-  NOT use `fill_form` with type "radio"/"checkbox" — it does not reliably check \
-  them (it leaves the answer empty), and the field will still read as unfilled.
-- REQUIRED CHECK: every form result ends with a "REQUIRED CHECK" line listing any \
-  required (*) fields still EMPTY, with their refs. After filling, READ it: if it \
-  lists fields, they did NOT get set — fix each one (click the radio/checkbox ref, \
-  pick a dropdown option, type the text) before clicking Save/Submit or finishing. \
-  Only finish once it says "all required field(s) filled".
-- FILE UPLOAD needs the chooser open first: `click` the "Attach"/"Select \
-  files"/"Upload" control, THEN call `file_upload`. Calling `file_upload` with no \
-  open chooser fails ("requires modal state").
-- After ANY click that changes the page, refs are stale — take a fresh \
-  `snapshot` before the next action. Reusing an old ref errors "ref not found".
-- ACTION BUTTONS ("Save and Continue" / "Next" / "Submit" / "Review") live in an \
-  action bar at the bottom of the FORM — this is NOT the page footer (which has \
-  social/legal links). To find one, call `snapshot(goal='save and continue \
-  button')`; do NOT `expand_region` the footer / contentinfo region looking for it.
-- MULTI-STEP forms: click "Next"/"Continue"/"Review" to advance through EVERY \
-  step. You are NOT on the final/Review page until you have actually clicked \
-  through to it AND a fresh `snapshot` shows it (e.g. a Review/Submit step with a \
-  Submit button). NEVER claim you reached Review or finished a page you have not \
-  navigated to and confirmed by snapshot.
+ATS form tips (Workday / Greenhouse / iCIMS / Lever / Taleo — these fail often):
+- DROPDOWN (type `dropdown`): `select_options(target=ref, values=[labels])` opens \
+  and picks in ONE call; for a multiselect pass EVERY value at once. Retry a "no \
+  match" with an exact label it lists. Never type into a dropdown or click it open \
+  then click an option separately.
+- NATIVE SELECT (type `select`): `select_option(target=ref, values=[label])`.
+- RADIO / CHECKBOX: `click` the chosen option's ref directly. Do NOT use `fill_form` \
+  for these — it leaves them unset and the field stays empty.
+- SKILLS / TAGS: never add skills unless the field is `*req`.
+- FILE UPLOAD: click the Attach / Upload ACTION FIRST, then `file_upload` (it fails \
+  with no open chooser).
+- ACTION BUTTONS to advance ("Save and Continue" / "Next" / "Submit" / "Review") \
+  appear under ACTIONS — click them by ref. Each one validates the page; if it \
+  raises ERRORS, fix them and try again.
+- MULTI-STEP forms: advance through EVERY step until PAGE shows the Review/Submit \
+  step. You are NOT done until the page model actually shows you reached it.
 
 Thinking: before each tool call, state your plan in ONE short sentence as your \
 message content (e.g. "Fill the email field, then click Next") — then make the \
@@ -212,28 +207,23 @@ _REVIEW_MARKERS = (
     "review and submit",
     "ready to submit",
     "ready to review",
-    'button "submit',
     "submit and",
+    # the page model classifies a finished application as a confirmation page
+    "page: confirmation",
 )
-# Real error-message phrases only. The loose "is required" / "required field"
-# variants were removed: they collide with static helper text ("* indicates a
-# required field") and with the REQUIRED CHECK footer wording. Required-field
-# emptiness is now covered authoritatively by _REQUIRED_EMPTY_MARKER below.
+# The page model surfaces every validation error under an "ERRORS:" header
+# (proxy/page_model.py). Its presence is the authoritative "page has errors"
+# signal; the explicit phrases are kept as a belt-and-braces fallback.
 _VALIDATION_ERROR_MARKERS = (
+    "errors:",
     "this field is required",
-    "please complete",
-    "please enter",
-    "please select",
+    "must have a value",
     "cannot be blank",
-    "must be completed",
     "fix the error",
-    # ATS portals render field errors as an icon node, not text. The pruner now
-    # always surfaces these (proxy/pruner.py _always_keep), so the gate can see them.
-    'img "error"',
 )
-# Substring of the proxy's "REQUIRED CHECK" footer that means a required (*) field
-# is still empty (see proxy/required_check.py INCOMPLETE_MARKER).
-_REQUIRED_EMPTY_MARKER = "required field(s) still empty"
+# The page model flags a required field still empty as "⚠ required, empty"
+# (proxy/page_model.py render()).
+_REQUIRED_EMPTY_MARKER = "required, empty"
 
 # Terminal page states the agent must NOT try to apply through — exit gracefully
 # instead of looping back to search/re-apply. Maps a status to the page phrases
@@ -589,9 +579,8 @@ def _completion_evidence(
     has_obs = bool(obs.strip())
     reached_review = (not has_obs) or any(m in obs for m in _REVIEW_MARKERS)
     no_validation_error = not any(m in obs for m in _VALIDATION_ERROR_MARKERS)
-    # The proxy appends a deterministic "REQUIRED CHECK" footer to form results;
-    # this marker means a required (*) field is still empty (e.g. an unchecked
-    # radio a fill_form silently failed to set).
+    # The page model flags any required field still empty with "⚠ required, empty";
+    # its absence means every required (*) field on the page has a value.
     requireds_complete = _REQUIRED_EMPTY_MARKER not in obs
 
     missing: list[str] = []
@@ -614,8 +603,8 @@ def _completion_evidence(
         )
     if not requireds_complete:
         missing.append(
-            "required (*) fields are still empty per the REQUIRED CHECK — fill "
-            "every listed field (click radio/checkbox refs directly) before finishing"
+            "required (*) fields are still empty (⚠ in the page model) — fill "
+            "every flagged field (click radio/checkbox refs directly) before finishing"
         )
 
     complete = (
@@ -705,8 +694,6 @@ def _ledger_line(n: int, tool_name: str, args: dict[str, Any], outcome: str) -> 
         salient.append(f'text="{_brief(args["text"])}"')
     if isinstance(args.get("fields"), list):
         salient.append(f"fields={len(args['fields'])}")
-    if args.get("next_goal"):
-        salient.append(f"next_goal={_brief(args['next_goal'], 50)}")
     arg_str = ", ".join(salient)
 
     first = next((ln for ln in outcome.splitlines() if ln.strip()), "")

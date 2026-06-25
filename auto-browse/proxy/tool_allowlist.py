@@ -28,9 +28,6 @@ HIDDEN: frozenset[str] = frozenset(
     }
 )
 
-# Tools implemented by the proxy itself, not forwarded upstream
-PROXY_ONLY: frozenset[str] = frozenset({"expand_region"})
-
 # Params stripped from args before forwarding upstream
 STRIP_PARAMS: frozenset[str] = frozenset({"goal", "next_goal"})
 

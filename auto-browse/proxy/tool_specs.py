@@ -1,20 +1,17 @@
 _PRUNED_SUFFIX = (
-    " Returns a PRUNED accessibility snapshot filtered to `next_goal`."
-    " Refs are preserved exactly and are only valid from this latest returned tree"
-    " — discard refs from older snapshots."
-    " If the element you need is missing, call `expand_region` on the nearest landmark"
-    " or call `snapshot` again with a more specific `goal`."
+    " Returns the PAGE MODEL: the page type, every form field (ref, type,"
+    " required, current value, options), the action buttons, and any validation"
+    " ERRORS. Field types tell you how to fill each one — text→type,"
+    " dropdown→select_options, select→select_option, radio/checkbox→click the"
+    " option ref, file→open chooser then file_upload. Refs are valid only from"
+    " this latest result — discard older refs. Use `expand_region` on a ref to"
+    " read a region's full raw content (long option lists, descriptions)."
 )
 
-_NEXT_GOAL_PROP = {
-    "next_goal": {
-        "type": "string",
-        "description": (
-            "What you intend to find or do next. Used to prune the returned"
-            " page snapshot to relevant nodes. If omitted, the full unpruned tree is returned."
-        ),
-    }
-}
+# Selection is now structural (page_model), not goal-based, so tools no longer
+# take a goal. Kept as an empty mapping so the `**_NEXT_GOAL_PROP` spreads below
+# remain valid no-ops without touching every schema.
+_NEXT_GOAL_PROP: dict = {}
 
 TOOL_SPECS: dict[str, dict] = {
     "navigate": {
@@ -44,39 +41,18 @@ TOOL_SPECS: dict[str, dict] = {
     "snapshot": {
         "upstream": "browser_snapshot",
         "description": (
-            "Capture accessibility snapshot of the current page."
-            " Returns a PRUNED accessibility snapshot filtered to `goal`."
-            " Refs are preserved exactly and are only valid from this latest returned tree"
-            " — discard refs from older snapshots."
-            " If the element you need is missing, call `expand_region` on the nearest landmark."
+            "Re-read the current page." + _PRUNED_SUFFIX
         ),
         "inputSchema": {
             "type": "object",
-            "properties": {
-                "goal": {
-                    "type": "string",
-                    "description": (
-                        "What element or action you are looking for. Used to prune"
-                        " the returned tree to relevant nodes."
-                        " If omitted, the full unpruned tree is returned."
-                    ),
-                },
-                "target": {
-                    "type": "string",
-                    "description": "Exact target element reference or selector to scope the snapshot.",
-                },
-                "depth": {
-                    "type": "number",
-                    "description": "Limit the depth of the snapshot tree.",
-                },
-            },
+            "properties": {},
             "additionalProperties": False,
         },
     },
     "click": {
         "upstream": "browser_click",
         "description": (
-            "Click an element by its ref from the most recent pruned snapshot."
+            "Click an element (button/radio/checkbox/link) by its ref."
             + _PRUNED_SUFFIX
         ),
         "inputSchema": {
@@ -88,7 +64,7 @@ TOOL_SPECS: dict[str, dict] = {
                 },
                 "target": {
                     "type": "string",
-                    "description": "Exact ref from the most recent pruned snapshot, e.g. 'e25'.",
+                    "description": "Exact ref from the most recent page model, e.g. 'e25'.",
                 },
                 "doubleClick": {
                     "type": "boolean",
@@ -119,7 +95,7 @@ TOOL_SPECS: dict[str, dict] = {
                 },
                 "target": {
                     "type": "string",
-                    "description": "Exact ref from the most recent pruned snapshot.",
+                    "description": "Exact ref from the most recent page model.",
                 },
                 "text": {
                     "type": "string",
@@ -189,7 +165,7 @@ TOOL_SPECS: dict[str, dict] = {
             " 'SQL', 'Spark']). Use this for ALL ARIA dropdowns/listboxes/"
             " multiselects instead of clicking the control then clicking an option"
             " separately. It does NOT work for radio/checkbox questions — click"
-            " those refs directly. Returns a pruned snapshot plus a summary line of"
+            " those refs directly. Returns the page model plus a summary line of"
             " which values matched and which did not (with the options that were"
             " available, so you can retry an unmatched one with an exact label)."
             + _PRUNED_SUFFIX
@@ -203,7 +179,7 @@ TOOL_SPECS: dict[str, dict] = {
                 },
                 "target": {
                     "type": "string",
-                    "description": "Exact ref of the combobox/dropdown from the most recent pruned snapshot.",
+                    "description": "Exact ref of the combobox/dropdown from the most recent page model.",
                 },
                 "values": {
                     "type": "array",
@@ -232,7 +208,7 @@ TOOL_SPECS: dict[str, dict] = {
                 "element": {"type": "string"},
                 "target": {
                     "type": "string",
-                    "description": "Exact ref from the most recent pruned snapshot.",
+                    "description": "Exact ref from the most recent page model.",
                 },
                 "values": {
                     "type": "array",
@@ -270,7 +246,7 @@ TOOL_SPECS: dict[str, dict] = {
                 "element": {"type": "string"},
                 "target": {
                     "type": "string",
-                    "description": "Exact ref from the most recent pruned snapshot.",
+                    "description": "Exact ref from the most recent page model.",
                 },
                 **_NEXT_GOAL_PROP,
             },
@@ -389,7 +365,7 @@ TOOL_SPECS: dict[str, dict] = {
             " Use this when an 'Apply'/action opened the application form in a NEW"
             " tab — switch to that tab instead of re-clicking the same button"
             " (re-clicking just opens more duplicate tabs)."
-            " Returns a PRUNED snapshot of the tab you switched to." + _PRUNED_SUFFIX
+            "" + _PRUNED_SUFFIX
         ),
         "inputSchema": {
             "type": "object",
@@ -410,7 +386,7 @@ TOOL_SPECS: dict[str, dict] = {
         "description": (
             "Close a browser tab by its index (from the '### Open tabs' list);"
             " omit the index to close the current tab. Use it to clean up duplicate"
-            " or dead tabs. Returns a PRUNED snapshot of the now-current tab."
+            " or dead tabs."
             + _PRUNED_SUFFIX
         ),
         "inputSchema": {
@@ -430,11 +406,10 @@ TOOL_SPECS: dict[str, dict] = {
         "description": (
             "Read the FULL content of a region by its ref. Returns every node"
             " inside that ref verbatim — including the text/value leaves (dates,"
-            " times, prices, status, labels) that a pruned snapshot omits."
-            " This is the READ tool: use a pruned `snapshot` to locate the region"
-            " you want, then call `expand_region` on its ref to read everything"
-            " inside it. Also use it when `snapshot` returned landmarks_only."
-            " No keyword filtering is applied — expansion is total."
+            " times, prices, status, long option lists) that the page model"
+            " summarizes. This is the READ tool: take a field/region ref from the"
+            " page model, then call `expand_region` on it to read everything"
+            " inside. Expansion is total — no filtering."
             " Makes zero upstream browser calls (operates on the cached tree)."
         ),
         "inputSchema": {

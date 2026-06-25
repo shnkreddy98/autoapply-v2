@@ -15,6 +15,7 @@ DB connection and resume choice are env-configurable (see constants below).
 
 import json
 import os
+import re
 import shutil
 from pathlib import Path
 
@@ -97,6 +98,38 @@ def _fetch() -> tuple[dict, dict, dict]:
     return user, data, resume
 
 
+def _split_name(full_name: str | None) -> tuple[str, str]:
+    """Split a full name into (first, last). The DB only stores `full_name`, but
+    forms usually want separate fields. Convention: the LAST whitespace token is
+    the last name; everything before it is the first name (so a middle name stays
+    with the first name, e.g. "Shashank Shashishekhar Reddy" ->
+    ("Shashank Shashishekhar", "Reddy")). Single-token names go to first."""
+    parts = (full_name or "").split()
+    if not parts:
+        return "", ""
+    if len(parts) == 1:
+        return parts[0], ""
+    return " ".join(parts[:-1]), parts[-1]
+
+
+def _linkedin_url(raw: str | None) -> str:
+    """Normalize a LinkedIn URL to the canonical https://www.linkedin.com/in/<h>
+    form. Workday (and others) reject `linkedin.com/in/...` without `www.` as an
+    "Invalid LinkedIn URL", so add scheme + www if missing."""
+    s = (raw or "").strip()
+    if not s:
+        return ""
+    s = re.sub(r"^https?://", "", s, flags=re.IGNORECASE)
+    if s.lower().startswith("linkedin.com"):
+        s = "www." + s
+    elif not s.lower().startswith("www.linkedin.com"):
+        # a bare handle like "in/shnkreddy" or "shnkreddy"
+        s = "www.linkedin.com/" + s.lstrip("/")
+        if "/in/" not in s.lower():
+            s = s.replace("www.linkedin.com/", "www.linkedin.com/in/", 1)
+    return "https://" + s
+
+
 def _render(user: dict, d: dict, r: dict) -> str:
     L: list[str] = []
     add = L.append
@@ -117,6 +150,9 @@ def _render(user: dict, d: dict, r: dict) -> str:
 
     add("## Personal Information")
     add(f"Full Name: {d.get('full_name')}")
+    first, last = _split_name(d.get("full_name"))
+    add(f"First Name: {first}")
+    add(f"Last Name: {last}")
     add(f"Email: {EMAIL}")
     add(f"Phone: {d.get('phone_number')}")
     add(f"Date of Birth: {_yn(d.get('date_of_birth'))}")
@@ -125,7 +161,7 @@ def _render(user: dict, d: dict, r: dict) -> str:
     add(f"State: {d.get('state')}")
     add(f"ZIP Code: {d.get('zip_code')}")
     add(f"18 or older: {_yn(d.get('age_18_or_older'))}")
-    add(f"LinkedIn: {user.get('linkedin')}")
+    add(f"LinkedIn: {_linkedin_url(user.get('linkedin'))}")
     add(f"GitHub: {user.get('github')}")
     add(f"Location: {user.get('location')}")
     add("")
