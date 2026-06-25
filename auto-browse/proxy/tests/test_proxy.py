@@ -46,21 +46,21 @@ def test_every_spec_has_required_fields():
         assert "upstream" in spec, f"{name} missing upstream"
 
 
-def test_tree_returning_tools_have_next_goal():
+def test_tree_returning_tools_have_no_goal():
+    """Selection is structural (page_model) now — no tool takes a goal."""
     from proxy.tool_allowlist import TREE_RETURNING
 
     for name, spec in TOOL_SPECS.items():
-        upstream = spec.get("upstream")
-        if upstream in TREE_RETURNING:
+        if spec.get("upstream") in TREE_RETURNING:
             props = spec["inputSchema"].get("properties", {})
-            assert "next_goal" in props or "goal" in props, (
-                f"{name} returns a tree but has no next_goal/goal param"
+            assert "next_goal" not in props and "goal" not in props, (
+                f"{name} should not carry a goal/next_goal param"
             )
 
 
-def test_snapshot_has_goal_not_next_goal():
+def test_snapshot_has_no_goal_params():
     props = TOOL_SPECS["snapshot"]["inputSchema"]["properties"]
-    assert "goal" in props
+    assert "goal" not in props
     assert "next_goal" not in props
 
 
