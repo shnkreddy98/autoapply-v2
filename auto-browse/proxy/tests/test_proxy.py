@@ -3,11 +3,15 @@ Tests for proxy tool list curation and tool_specs correctness.
 No upstream connection needed.
 """
 
+import asyncio
 import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
+import mcp.types as types
+
+from proxy import server, snapshot_cache
 from proxy.tool_allowlist import EXPOSED, HIDDEN
 from proxy.tool_specs import TOOL_SPECS
 
@@ -112,3 +116,82 @@ def test_empty_tree_message_constant():
     from proxy.server import _EMPTY_TREE_MSG
 
     assert "wait_for" in _EMPTY_TREE_MSG
+
+
+# --- select_options orchestrator (composite dropdown picker) ---
+
+_CLOSED = '- combobox "Field of Study" [ref=e10]\n'
+_OPENED = (
+    "- generic [ref=e1]:\n"
+    '  - combobox "Field of Study" [ref=e10]\n'
+    "  - listbox [ref=e20]:\n"
+    '    - option "Computer Science" [ref=e21]\n'
+    '    - option "Computer Engineering" [ref=e22]\n'
+)
+_FILLED = (
+    "- form [ref=e2]:\n"
+    '  - combobox "Field of Study" [ref=e10]: Computer Science\n'
+    '  - button "Continue" [ref=e30]\n'
+)
+
+
+class _Result:
+    def __init__(self, text: str):
+        self.content = [types.TextContent(type="text", text=text)]
+
+
+class _FakeSession:
+    """Scripted upstream: hands out queued snapshots for browser_snapshot, 'ok'
+    for everything else, and records every call."""
+
+    def __init__(self, snapshots: list[str]):
+        self._snaps = list(snapshots)
+        self.calls: list[tuple[str, dict]] = []
+
+    async def call_tool(self, name: str, arguments: dict):
+        self.calls.append((name, arguments))
+        if name == "browser_snapshot":
+            return _Result(self._snaps.pop(0) if self._snaps else "")
+        return _Result("ok")
+
+
+def _run_select(monkeypatch, snapshots, args):
+    snapshot_cache.set(_CLOSED)
+    fake = _FakeSession(snapshots)
+    monkeypatch.setattr(server.upstream, "session", fake)
+    out = asyncio.run(server._select_options(args))
+    return out, fake
+
+
+def test_select_options_matches_and_clicks_option(monkeypatch):
+    out, fake = _run_select(
+        monkeypatch,
+        [_OPENED, _FILLED],
+        {"target": "e10", "values": ["Computer Science"], "next_goal": "field of study"},
+    )
+    assert "matched: Computer Science" in out
+    # opened the dropdown (clicked target) then clicked the resolved option ref
+    assert ("browser_click", {"target": "e10", "element": "Field of Study"}) in fake.calls
+    assert (
+        "browser_click",
+        {"target": "e21", "element": "Computer Science"},
+    ) in fake.calls
+
+
+def test_select_options_no_match_reports_options_and_skips_click(monkeypatch):
+    out, fake = _run_select(
+        monkeypatch,
+        [_OPENED],
+        {"target": "e10", "values": ["Astrophysics"], "next_goal": "field of study"},
+    )
+    assert "no match" in out.lower()
+    assert "Computer Science" in out  # available options surfaced for retry
+    option_clicks = [c for c in fake.calls if c == ("browser_click", {"target": "e21", "element": "Computer Science"})]
+    assert option_clicks == []  # never guessed an option
+
+
+def test_select_options_requires_target_and_values():
+    out = asyncio.run(server._select_options({"values": ["x"]}))
+    assert out.startswith("Error")
+    out2 = asyncio.run(server._select_options({"target": "e10", "values": []}))
+    assert out2.startswith("Error")

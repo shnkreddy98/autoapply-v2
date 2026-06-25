@@ -23,6 +23,13 @@ from starlette.applications import Starlette
 from starlette.routing import Mount
 
 from . import snapshot_cache
+from .option_select import (
+    best_match,
+    collect_options,
+    find_ref_by_label,
+    find_searchbox,
+    label_of_ref,
+)
 from .pruner import expand_region, overview, prune
 from .required_check import format_required_check
 from .tool_allowlist import STRIP_PARAMS, TREE_RETURNING
@@ -88,6 +95,11 @@ def _build_server() -> Server:
 
         spec = TOOL_SPECS[name]
 
+        # Orchestrated tools (e.g. select_options) drive several upstream calls
+        # themselves in one agent turn — handled before the generic forward path.
+        if spec.get("orchestrated"):
+            return [TextContent(type="text", text=await _select_options(args))]
+
         # Proxy-only tools (e.g. expand_region) — no upstream call.
         if spec["upstream"] is None:
             return _handle_proxy_tool(name, args)
@@ -122,6 +134,128 @@ def _handle_proxy_tool(name: str, args: dict) -> list[TextContent]:
         result = expand_region(args.get("ref", ""), args.get("goal", ""))
         return [TextContent(type="text", text=result)]
     return [TextContent(type="text", text=f"Error: unknown proxy tool '{name}'.")]
+
+
+# Hard ceiling on values processed in one select_options call (pathological input
+# guard); each value runs a bounded handful of upstream calls.
+_MAX_SELECT_VALUES = 25
+
+
+async def _select_options(args: dict) -> str:
+    """Composite dropdown picker: open an ARIA combobox/listbox once, then for each
+    requested human-readable label match it to a rendered option and click it —
+    re-opening (or re-filtering a type-ahead) per value for multiselects. All the
+    browser steps run here, server-side, so the agent spends ONE turn instead of
+    click-open + snapshot + click-option per value. See proxy/option_select.py.
+    """
+    target = args.get("target")
+    values = [str(v) for v in (args.get("values") or []) if str(v).strip()]
+    goal = args.get("next_goal") or args.get("goal")
+    element = args.get("element") or "dropdown"
+    if not target or not values:
+        return "Error: select_options requires 'target' (combobox ref) and non-empty 'values'."
+    values = values[:_MAX_SELECT_VALUES]
+
+    # Label of the dropdown from the snapshot the agent saw, so we can re-find it
+    # after a pick re-renders the tree and its ref goes stale (multiselect).
+    pre_tree = snapshot_cache.get()
+    dropdown_label = label_of_ref(pre_tree, target) if pre_tree else None
+
+    matched: list[str] = []
+    unmatched: list[tuple[str, list[str]]] = []
+
+    for i, value in enumerate(values):
+        reopen_ref = target if i == 0 else None
+        tree = await _ensure_dropdown_open(reopen_ref, dropdown_label or element)
+        if not tree:
+            unmatched.append((value, []))
+            continue
+
+        # Type-ahead combobox: type the value to filter, then re-read options.
+        sb = find_searchbox(tree)
+        if sb is not None:
+            try:
+                await _call_upstream("browser_type", {"target": sb, "text": value})
+                settled = await _wait_and_snapshot()
+                if settled:
+                    snapshot_cache.set(settled)
+                    tree = settled
+            except Exception as exc:  # type-ahead is best-effort
+                logger.warning("select_options type-ahead failed: %s", exc)
+
+        options = collect_options(tree)
+        opt = best_match(value, options)
+        if opt is None:
+            unmatched.append((value, [o.label for o in options][:12]))
+            continue
+
+        try:
+            await _call_upstream("browser_click", {"target": opt.ref, "element": opt.label})
+        except Exception as exc:
+            logger.warning("select_options click failed for %r: %s", opt.label, exc)
+            unmatched.append((value, []))
+            continue
+        matched.append(value)
+        settled = await _wait_and_snapshot()
+        if settled:
+            snapshot_cache.set(settled)
+
+    final_tree = snapshot_cache.get()
+    body = _render_select_body(final_tree, goal)
+    summary = _select_summary(matched, unmatched)
+    return f"{summary}\n\n{body}" if body else summary
+
+
+async def _ensure_dropdown_open(reopen_ref: str | None, label: str | None) -> str | None:
+    """Return a tree with the dropdown's options visible. If options are already
+    showing (a multiselect listbox that stays open), reuse the cached tree; else
+    click the control — by `reopen_ref` on the first value, or re-found by `label`
+    after refs went stale — and settle+snapshot."""
+    cached = snapshot_cache.get()
+    if cached and collect_options(cached):
+        return cached
+
+    ref = reopen_ref
+    if ref is None and label and cached:
+        ref = find_ref_by_label(cached, label)
+    if ref is None:
+        return cached  # cannot open; match against whatever is currently shown
+
+    try:
+        await _call_upstream("browser_click", {"target": ref, "element": label or "dropdown"})
+    except Exception as exc:
+        logger.warning("select_options open failed (ref=%s): %s", ref, exc)
+        return cached
+    tree = await _wait_and_snapshot()
+    if tree:
+        snapshot_cache.set(tree)
+        return tree
+    return cached
+
+
+def _render_select_body(tree_text: str | None, goal: str | None) -> str:
+    """Pruned snapshot of the post-select tree, same shape as _prune_snapshot:
+    prune to goal (or a bounded overview), plus the REQUIRED CHECK footer."""
+    if not tree_text or _node_count(tree_text) <= MIN_MEANINGFUL_NODES:
+        return _EMPTY_TREE_MSG
+    body = prune(tree_text, goal) if goal else overview(tree_text)
+    footer = format_required_check(tree_text)
+    return f"{body}\n\n{footer}" if footer else body
+
+
+def _select_summary(
+    matched: list[str], unmatched: list[tuple[str, list[str]]]
+) -> str:
+    """One-line outcome the agent reads to know what stuck and what to retry."""
+    parts: list[str] = []
+    if matched:
+        parts.append("matched: " + ", ".join(matched))
+    for value, options in unmatched:
+        if options:
+            parts.append(f'no match for "{value}" — options: ' + ", ".join(options))
+        else:
+            parts.append(f'no match for "{value}"')
+    return "### select_options\n" + (" | ".join(parts) if parts else "no values processed")
 
 
 async def _call_upstream(tool_name: str, arguments: dict) -> CallToolResult:

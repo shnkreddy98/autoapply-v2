@@ -156,6 +156,20 @@ Env knobs: `LOG_DIR`, `TRACE_DIR`, `FORMS_DIR`, `USAGE_PATH`, `LOG_LEVEL`.
   radio/checkbox `[checked]`). This catches a fill that silently no-ops (e.g.
   `fill_form` on a radio). The evidence gate refuses `applied_ready` while the
   footer reports anything empty. Pages with no `*` fields emit nothing.
+- **Composite dropdown picker.** ARIA comboboxes render their options only after
+  opening, so picking a value used to cost the agent ~3 turns (`click`-open →
+  `snapshot` → `click`-option), and a multiselect was done one value at a time
+  (~10 turns). `select_options(target, values=[...])` (`proxy/option_select.py` +
+  `_select_options` in `proxy/server.py`) does the whole dance **server-side in one
+  agent turn**: it opens the control, deterministically matches each requested
+  human-readable label to a rendered option (exact → substring → fuzzy, no LLM),
+  clicks it, re-opens/re-filters per value for multiselects and type-aheads, and
+  returns a pruned snapshot plus a `matched / no match` summary (unmatched values
+  list the available options so the agent can retry with an exact label — it never
+  silently picks the wrong option). The N internal browser calls cost zero LLM
+  tokens — this is the main lever against per-application iteration count/cost. It
+  is for ARIA dropdowns/listboxes/multiselects only; native `<select>` still uses
+  `select_option`, and radio/checkbox answers are still a direct `click` (below).
 - **Radio/checkbox answers** must be a `click` on the specific option ref —
   `fill_form` with type `radio`/`checkbox` does not reliably check them (it emits
   `setChecked(<value>)`, a no-op), leaving the field empty.
@@ -167,11 +181,8 @@ Env knobs: `LOG_DIR`, `TRACE_DIR`, `FORMS_DIR`, `USAGE_PATH`, `LOG_LEVEL`.
 
 
 ## Bugs
-- paycomonline, created account properly but missed the phone number field why? and then after clicking continue and failing 3 times because phone number is required field yet agent never knows this error exists. it worked the second time around iteration 25, why did it work this time? trace: /home/reddymption/repos/autoapply-v2/auto-browse/data/traces/20260624T052553Z-62c0e6.jsonl
-- Agent missed couple required metrics and click submit and got errors, now it refilled the missing fields and now it cannot seem to end it because it stuck in a loop seeing the older errors. trace: /home/reddymption/repos/autoapply-v2/auto-browse/data/traces/20260624T053432Z-cc6025.jsonl
-- also stopped early, there are still required fields which are empty? did it validate? trace: /home/reddymption/repos/autoapply-v2/auto-browse/data/traces/20260624T054213Z-147715.jsonl
 
 ## Improvements
-- IMPORTANT: Need to add references to the profile data
+- IMPORTANT: References are currently hardcoded in `agent/profile.py` (`REFERENCES`). Once a references table is added to the database, sourcing them from there is the first thing to work on.
 - If the site says you have already applied for this position, gracefully exit instead of trying to find the same role and trying to apply. example conversation for this url: `https://topgolf.wd501.myworkdayjobs.com/en-US/TopgolfCareers/job/TG---HQ---Dallas-Office/Data-Engineer-II_JR2023-19177?source=LinkedIn`
 - Application level: record all conversations and based on the domain/company build automate scripts that can offload from AI agents in form filling based on previous form filling conversation. 

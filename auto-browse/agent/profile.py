@@ -43,6 +43,29 @@ AUTOAPPLY_DATA = Path(os.getenv("AUTOAPPLY_DATA", "../../autoapply/data")).expan
 RESUME_VARIANT = os.getenv("RESUME_VARIANT", "aws")  # "" base, or aws/gcp/azu
 RESUME_FILE = os.getenv("RESUME_FILE", "jane_doe.pdf")
 
+# Professional references the agent can supply when an application asks for them.
+# Static for now; will move to the DB later (see LOGIN_* above).
+REFERENCES = [
+    {
+        "name": "Julian Gilyadov",
+        "email": "julian@airfold.co",
+        "relationship": "CEO of Airfold",
+        "known": "1 year",
+    },
+    {
+        "name": "Constantine P",
+        "email": "constantine@airfold.co",
+        "relationship": "CTO of Airfold",
+        "known": "1 year",
+    },
+    {
+        "name": "Saavn Beli",
+        "email": "saavnsd@gmail.com",
+        "relationship": "Data Engineer at Pittsburgh Pirates",
+        "known": "over 10 years",
+    },
+]
+
 HERE = Path(__file__).resolve().parent.parent
 PROFILE_TXT = HERE / "data" / "profile" / "profile.txt"
 RESUME_OUT = HERE / "data" / "resume" / RESUME_FILE
@@ -154,6 +177,14 @@ def _render(user: dict, d: dict, r: dict) -> str:
     add("## Signature")
     add(f"Electronic Signature: {d.get('electronic_signature')}")
     add(f"Signature Date: {_yn(d.get('signature_date'))}")
+    add("")
+
+    add("## References")
+    for ref in REFERENCES:
+        add(
+            f"- {ref['name']} <{ref['email']}> — {ref['relationship']}, "
+            f"known {ref['known']}"
+        )
     add("")
 
     # --- resume context ---
