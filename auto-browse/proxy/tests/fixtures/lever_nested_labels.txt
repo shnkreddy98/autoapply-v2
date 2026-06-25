@@ -1,0 +1,206 @@
+- generic [ref=e1]:
+  - dialog "cookieconsent" [ref=e2]:
+    - generic [ref=e4]:
+      - generic [ref=e5]: 🍪
+      - heading "Privacy Notice" [level=4] [ref=e6]
+      - paragraph [ref=e7]: This website uses cookies to improve your web experience. By using the site, you agree to the use of cookies.
+      - button "Dismiss" [ref=e9] [cursor=pointer]
+  - link "Toyota Research Institute logo" [ref=e12] [cursor=pointer]:
+    - /url: https://jobs.lever.co/tri
+    - img "Toyota Research Institute logo" [ref=e13]
+  - generic [ref=e15]:
+    - generic [ref=e17]:
+      - heading "Senior Data Engineer" [level=2] [ref=e18]
+      - generic [ref=e19]:
+        - generic [ref=e20]: Los Altos, CA
+        - generic [ref=e21]: Automated Driving Advanced Development – Automated Driving Advanced Development /
+        - generic [ref=e22]: Full-time /
+        - generic [ref=e23]: Hybrid
+    - generic [ref=e25]:
+      - generic [ref=e26]:
+        - heading "Submit your application" [level=4] [ref=e27]
+        - list [ref=e28]:
+          - listitem [ref=e29]:
+            - generic [ref=e30]:
+              - generic [ref=e31]:
+                - text: Resume/CV
+                - generic [ref=e32]: ✱
+              - generic [ref=e33]:
+                - link "shashank_reddy.pdf Resume/CV ✱ Success!" [ref=e218] [cursor=pointer]:
+                  - /url: "#"
+                  - img [ref=e35]
+                  - generic [ref=e219]: shashank_reddy.pdf
+                  - button "Resume/CV ✱ shashank_reddy.pdf Success!" [ref=e220]
+                - generic [ref=e221]:
+                  - img [ref=e223]
+                  - generic [ref=e225]: Success!
+          - listitem [ref=e39]:
+            - generic [ref=e40]:
+              - generic [ref=e41]:
+                - text: Full name
+                - generic [ref=e42]: ✱
+              - textbox "Full name ✱" [ref=e44]: Shashank Shashishekhar Reddy
+          - listitem [ref=e45]:
+            - generic [ref=e46]:
+              - generic [ref=e47]:
+                - text: Email
+                - generic [ref=e48]: ✱
+              - textbox "Email ✱" [ref=e50]: shnkreddy98@gmail.com
+          - listitem [ref=e51]:
+            - generic [ref=e52]:
+              - generic [ref=e53]: Phone
+              - textbox "Phone" [ref=e55]: "5108927191"
+          - listitem [ref=e56]:
+            - generic [ref=e57]:
+              - generic [ref=e58]: Current location
+              - textbox "Current location" [ref=e60]: San Jose, CA
+          - listitem [ref=e61]:
+            - generic [ref=e62]:
+              - generic [ref=e63]: Current company
+              - textbox "Current company" [ref=e65]: AirFold
+      - generic [ref=e66]:
+        - heading "Links" [level=4] [ref=e67]
+        - list [ref=e68]:
+          - listitem [ref=e69]:
+            - generic [ref=e70]:
+              - generic [ref=e71]:
+                - text: LinkedIn URL
+                - generic [ref=e72]: ✱
+              - textbox "LinkedIn URL ✱" [ref=e74]: https://linkedin.com/in/shnkreddy
+          - listitem [ref=e75]:
+            - generic [ref=e76]:
+              - generic [ref=e77]: Twitter URL
+              - textbox "Twitter URL" [ref=e79]
+          - listitem [ref=e80]:
+            - generic [ref=e81]:
+              - generic [ref=e82]: GitHub URL
+              - textbox "GitHub URL" [ref=e84]: https://github.com/shnkreddy98
+          - listitem [ref=e85]:
+            - generic [ref=e86]:
+              - generic [ref=e87]: Portfolio URL
+              - textbox "Portfolio URL" [ref=e89]
+          - listitem [ref=e90]:
+            - generic [ref=e91]:
+              - generic [ref=e92]: Other website
+              - textbox "Other website" [ref=e94]
+      - generic [ref=e95]:
+        - heading "Interest in TRI" [level=4] [ref=e96]
+        - list [ref=e97]:
+          - listitem [ref=e98]:
+            - generic [ref=e99]:
+              - generic [ref=e101]:
+                - text: In 1-3 sentences, tell us about one thing TRI is working on that you find exciting?
+                - generic [ref=e102]: ✱
+              - textbox [ref=e104]
+      - generic [ref=e105]:
+        - heading "Work Eligibility" [level=4] [ref=e106]
+        - list [ref=e107]:
+          - listitem [ref=e108]:
+            - generic [ref=e109]:
+              - generic [ref=e111]:
+                - text: Are you eligible to work in the United States?
+                - generic [ref=e112]: ✱
+              - list [ref=e114]:
+                - listitem [ref=e115]:
+                  - generic [ref=e116] [cursor=pointer]:
+                    - radio "Yes" [checked] [ref=e117]
+                    - generic [ref=e118]: "Yes"
+                - listitem [ref=e119]:
+                  - generic [ref=e120] [cursor=pointer]:
+                    - radio "No" [ref=e121]
+                    - generic [ref=e122]: "No"
+          - listitem [ref=e123]:
+            - generic [ref=e124]:
+              - generic [ref=e126]:
+                - text: Are you a U.S. citizen, a lawful permanent resident of the United States (“green card holder”), an asylee, a refugee, or temporary resident under the 1986 legalization program?
+                - generic [ref=e127]: ✱
+              - list [ref=e129]:
+                - listitem [ref=e130]:
+                  - generic [ref=e131] [cursor=pointer]:
+                    - radio "Yes" [checked] [ref=e132]
+                    - generic [ref=e133]: "Yes"
+                - listitem [ref=e134]:
+                  - generic [ref=e135] [cursor=pointer]:
+                    - radio "No" [ref=e136]
+                    - generic [ref=e137]: "No"
+          - listitem [ref=e138]:
+            - generic [ref=e139]:
+              - generic [ref=e141]:
+                - text: Are you a national, citizen, or permanent resident of Cuba, Iran, North Korea, Sudan, Syria, or Crimea (region of Ukraine)?
+                - generic [ref=e142]: ✱
+              - list [ref=e144]:
+                - listitem [ref=e145]:
+                  - generic [ref=e146] [cursor=pointer]:
+                    - radio "Yes" [checked] [ref=e147]
+                    - generic [ref=e148]: "Yes"
+                - listitem [ref=e149]:
+                  - generic [ref=e150] [cursor=pointer]:
+                    - radio "No" [ref=e151]
+                    - generic [ref=e152]: "No"
+          - listitem [ref=e153]:
+            - generic [ref=e154]:
+              - generic [ref=e156]:
+                - text: Selection criteria should be part of the application process and be provided in writing to all candidates on a consistent basis. TRI is committed to compliance with U.S. and other applicable export control laws. Under U.S. export control laws, the release or disclosure of U.S.-origin controlled technology to foreign nationals is deemed to be an export or re-export to the foreign nationals’ home countries. This “deemed export” rule does not apply to technology transfers between and among U.S. citizens, persons lawfully admitted for U.S. permanent residence, persons granted U.S. asylum or refugee status, or temporary residents under the 1986 legalization program. Your answers will be used by the company solely to ensure compliance with U.S. export control laws.
+                - generic [ref=e157]: ✱
+              - list [ref=e159]:
+                - listitem [ref=e160]:
+                  - generic [ref=e161] [cursor=pointer]:
+                    - radio "I have read and understand the selection criteria." [checked] [ref=e162]
+                    - generic [ref=e163]: I have read and understand the selection criteria.
+      - generic [ref=e164]:
+        - separator [ref=e165]
+        - heading "U.S. Equal Employment Opportunity information (Completion is voluntary and will not subject you to adverse treatment)" [level=4] [ref=e166]
+        - paragraph [ref=e167]: Our company values diversity. To ensure that we comply with reporting requirements and to learn more about how we can increase diversity in our candidate pool, we invite you to voluntarily provide demographic information in a confidential survey at the end of this application. Providing this information is optional. It will not be accessible or used in the hiring process, and has no effect on your opportunity for employment.
+        - generic [ref=e169]:
+          - generic [ref=e170]: Gender
+          - combobox "Gender" [ref=e173]:
+            - option "Select ..." [selected]
+            - option "Male"
+            - option "Female"
+            - option "Decline to self-identify"
+        - generic [ref=e175]:
+          - generic [ref=e176]:
+            - text: Race
+            - link "Click to see details about each option." [ref=e177] [cursor=pointer]:
+              - /url: javascript:void(0)
+              - img [ref=e178]
+          - combobox "Race Click to see details about each option." [ref=e184]:
+            - option "Select ..." [selected]
+            - option "Hispanic or Latino"
+            - option "White (Not Hispanic or Latino)"
+            - option "Black or African American (Not Hispanic or Latino)"
+            - option "Native Hawaiian or Other Pacific Islander (Not Hispanic or Latino)"
+            - option "Asian (Not Hispanic or Latino)"
+            - option "American Indian or Alaska Native (Not Hispanic or Latino)"
+            - option "Two or More Races (Not Hispanic or Latino)"
+            - option "Decline to self-identify"
+      - generic [ref=e185]:
+        - separator [ref=e186]
+        - heading "Requesting Voluntary Self Identification Information" [level=4] [ref=e187]
+        - paragraph [ref=e188]: "At TRI, we are developing technologies that will benefit all of humankind. That’s why we are working every day to make our workforce as diverse as possible: the more variety our team has in our experience, interest, and backgrounds, the more likely we are to create truly great technologies. We also believe that our society as a whole benefits when we reach out to include a greater number of previously under-represented employees. To help us deliver on these promises, we invite you to voluntarily provide your gender identity, race/ethnicity, and sexual orientation. This information will never be used in making any hiring or employment decisions. We will use this data to track our progress towards achieving the diversity we seek at TRI."
+        - list [ref=e189]:
+          - listitem [ref=e190]:
+            - generic [ref=e192]: Do you consider yourself a member of the Lesbian, Gay, Bisexual and/or Transgender, Queer and Questioning (LGBTQ) community?
+            - list [ref=e194]:
+              - listitem [ref=e195]:
+                - generic [ref=e196] [cursor=pointer]:
+                  - radio "Yes" [ref=e197]
+                  - generic [ref=e198]: "Yes"
+              - listitem [ref=e199]:
+                - generic [ref=e200] [cursor=pointer]:
+                  - radio "No" [ref=e201]
+                  - generic [ref=e202]: "No"
+              - listitem [ref=e203]:
+                - generic [ref=e204] [cursor=pointer]:
+                  - radio "Prefer not to say" [ref=e205]
+                  - generic [ref=e206]: Prefer not to say
+      - button "Submit application" [active] [ref=e208] [cursor=pointer]
+  - generic [ref=e210]:
+    - paragraph [ref=e211]:
+      - link "Toyota Research Institute Home Page" [ref=e212] [cursor=pointer]:
+        - /url: http://www.tri.global
+    - paragraph [ref=e214]: We may use artificial intelligence (AI) tools to support parts of the hiring process, such as reviewing applications, analyzing resumes, or assessing responses and identifying potential inconsistencies or verification signals in application materials based on available information. These tools assist our recruitment team but do not replace human judgment. Final hiring decisions are ultimately made by humans. If you would like more information about how your data is processed, please contact us.
+    - link "Jobs powered by Lever logo" [ref=e215] [cursor=pointer]:
+      - /url: https://www.lever.co/job-seeker-support/
+      - generic [ref=e216]: Jobs powered by
+      - img "Lever logo" [ref=e217]

@@ -1,0 +1,302 @@
+- generic [ref=e1]:
+  - dialog "Terms and Conditions" [ref=e304]:
+    - generic [active] [ref=e309]:
+      - button "Close" [ref=e311] [cursor=pointer]: 
+      - heading "Terms and Conditions" [level=1] [ref=e313]
+      - generic [ref=e315]:
+        - paragraph
+        - paragraph
+        - paragraph [ref=e316]: ExlService Holdings, Inc. and Affiliates
+        - paragraph [ref=e317]
+        - paragraph [ref=e318]: Applicant Privacy Policy
+        - paragraph [ref=e319]
+        - paragraph [ref=e320]: ExlService Holdings, Inc. and its affiliates and subsidiaries (“Company,” “we,” or “us”) are committed to protecting the privacy and security of your personal information. This privacy policy describes how we collect, use, and disclose personal information prior to, during, and after your application for employment with us (collectively, your “application”). It applies to all current and former applicants and contractors (collectively “applicants”) who are residents of the United States or European Union or South Africa or Philippines or India.
+        - paragraph [ref=e321]
+        - paragraph [ref=e322]: This privacy policy does not form part of any contract of employment or other contract to provide services. If you are offered and subsequently accept an offer of employment by the Company, we may collect and use personal information about you for additional purposes, as outlined in any employee privacy policy we may provide at the time.
+        - paragraph [ref=e323]
+        - paragraph [ref=e324]: It is important that you read and retain this policy, together with any other privacy notice we may provide on specific occasions when we are collecting or processing personal information about you, so that you are aware of how and why we are using such information.
+        - paragraph [ref=e325]
+        - paragraph [ref=e326]:
+          - generic [ref=e327]: California Consumer Privacy Act (“CCPA”)
+        - paragraph [ref=e328]
+        - paragraph [ref=e329]: "The California Consumer Privacy Act (“CCPA”) provides California residents, referred to in the law as “consumers,” with the right to receive certain disclosures regarding the collection, use and sharing of personal information. The CCPA defines “personal information” as “information that identifies, relates to, describes, is capable of being associated with, or could reasonably be linked, directly or indirectly, with a particular” California resident. It does not include data from which identifying elements have been removed and that cannot be associated with you (“deidentified information”). Certain information we collect may be exempt from the CCPA because it is considered publicly available information (because it is lawfully made available from federal, state, or local government records) or covered by a federal privacy law, such as the Gramm–Leach–Bliley Act, the Health Insurance Portability and Accountability Act, or the Fair Credit Reporting Act. The following is a description of practices regarding information collected and describes:"
+        - paragraph [ref=e330]
+        - paragraph [ref=e331]: • the information we collect;
+        - paragraph [ref=e332]
+        - paragraph [ref=e333]: • the sources of that information;
+        - paragraph [ref=e334]
+        - paragraph [ref=e335]: • the purposes for which we collect information;
+        - paragraph [ref=e336]
+        - paragraph [ref=e337]: • and whether we disclose that information to external parties.
+        - paragraph [ref=e338]
+        - paragraph [ref=e339]:
+          - generic [ref=e340]: The General Data Protection Regulation (“GDPR”)
+        - paragraph [ref=e341]
+        - paragraph [ref=e342]: The GDPR is a response to the rapid technological changes since the Data Protection Directive (95/46/EC) was implemented into national law. The GDPR is designed to harmonize data protection law across the EU, and transform the way in which personal data is collected, shared and used globally. Most processing of personal data is subject to the GDPR since there is a connection with EU personal data.
+        - paragraph [ref=e343]
+        - paragraph [ref=e344]:
+          - generic [ref=e345]: Protection of Personal Information Act 4 of 2013 (“POPIA”)
+        - paragraph [ref=e346]: We undertake to make every effort to comply with the requirements of the POPIA by taking appropriate technical and organisational measures to prevent unlawful access to, processing of, and loss or damage to personal information in our possession.
+        - paragraph [ref=e347]: We have implemented measures to identify all reasonably foreseeable internal and external risks to establish and maintain appropriate data quality, security, and processing standards.
+        - paragraph [ref=e348]: Candidate information submitted by you is done so on the understanding that you will comply with your own POPIA obligations regarding safety and security thereof and that you will not further process the information without third party consents.
+        - paragraph [ref=e349]
+        - paragraph [ref=e350]:
+          - generic [ref=e351]: Information We Collect About You
+        - paragraph [ref=e352]: We collect personal information about applicants and contractors through the application and recruitment process, directly from candidates, employment agencies, and screening services or other background-check providers. We may collect additional information from third parties including former employers, credit reference agencies, or other sources that supply employment verification services. We also collect personal information about you during the course of your application process with us. This can be in the form of information you provide directly to us, information we gather from outside parties, or information that we collect automatically about you.
+        - paragraph [ref=e353]
+        - paragraph [ref=e354]: "Specifically, we collect the following information:"
+        - paragraph [ref=e355]
+        - paragraph [ref=e356]:
+          - text: •
+          - generic [ref=e357]: Personal Identifiers
+          - text: ":"
+        - paragraph [ref=e358]
+        - paragraph [ref=e359]: o We collect your personal contact and job-related details such as name, title, and contact information (phone numbers, email address, current and former addresses).
+        - paragraph [ref=e360]
+        - paragraph [ref=e361]: o You provide us with information for background checks.
+        - paragraph [ref=e362]
+        - paragraph [ref=e363]: o We may collect sensitive information such as your date of birth, gender, driver’s license number, nationality/visa status, or passport number to verify your employment eligibility and to provide travel arrangements for you.
+        - paragraph [ref=e364]
+        - paragraph [ref=e365]: o We collect and maintain information about your racial or ethnic origin or sexual orientation if you choose to provide it during the application or onboarding process. We use this information only to support our efforts to attract and maintain a diverse workforce, including reporting required by federal law.
+        - paragraph [ref=e366]
+        - paragraph [ref=e367]:
+          - text: •
+          - generic [ref=e368]: "Health and Biometric Information:"
+        - paragraph [ref=e369]
+        - paragraph [ref=e370]: o We collect some information related to biological screenings or testing for controlled substances.
+        - paragraph [ref=e371]
+        - paragraph [ref=e372]:
+          - text: •
+          - generic [ref=e373]: Protected Classifications
+          - text: ":"
+        - paragraph [ref=e374]
+        - paragraph [ref=e375]: "As listed above under Personal Identifiers:"
+        - paragraph [ref=e376]
+        - paragraph [ref=e377]: o We collect your date of birth and gender in order to verify your identity.
+        - paragraph [ref=e378]
+        - paragraph [ref=e379]: o We collect and maintain information about your racial and ethnic origin or sexual orientation if you choose to provide it during the application or onboarding process. We use this information only to support our efforts to attract and maintain a diverse workforce, including reporting required by federal law.
+        - paragraph [ref=e380]
+        - paragraph [ref=e381]:
+          - text: •
+          - generic [ref=e382]: Commercial Information
+          - text: ":"
+        - paragraph [ref=e383]
+        - paragraph [ref=e384]: o We do not collect commercial information.
+        - paragraph [ref=e385]
+        - paragraph [ref=e386]:
+          - text: •
+          - generic [ref=e387]: Biometric Information
+          - text: ":"
+        - paragraph [ref=e388]
+        - paragraph [ref=e389]: o We do not collect information about your physiological, biological, or behavioral characteristics.
+        - paragraph [ref=e390]
+        - paragraph [ref=e391]:
+          - text: •
+          - generic [ref=e392]: Internet or Other Electronic Network Activity Information
+          - text: ":"
+        - paragraph [ref=e393]
+        - paragraph [ref=e394]: o We may use closed circuit cameras to create video records in certain of our offices, which may capture your image from time to time. We, or others acting on our behalf, also may store photographs of you for security purposes and collect records of your use of any access badges issued to you.
+        - paragraph [ref=e395]
+        - paragraph [ref=e396]:
+          - text: •
+          - generic [ref=e397]: Audio, electronic, visual, thermal, olfactory, or similar information
+          - text: ":"
+        - paragraph [ref=e398]
+        - paragraph [ref=e399]: o We may store photographs of you for identity verification, and we may record you on building security cameras.
+        - paragraph [ref=e400]
+        - paragraph [ref=e401]: o We do not collect any of your thermal, olfactory or similar information.
+        - paragraph [ref=e402]
+        - paragraph [ref=e403]:
+          - text: •
+          - generic [ref=e404]: Professional or employment-related information
+          - text: ":"
+        - paragraph [ref=e405]
+        - paragraph [ref=e406]: o We collect information about your professional and employment-related background through the recruitment and employment application processes (including copies of right to work documentation, references and other information included in a CV or cover letter or as part of your application to work at the company). Background checks may include a criminal record check. Additional checks, such as a driving record or credit report, may be conducted on applicants for particular job categories if appropriate and job related.
+        - paragraph [ref=e407]
+        - paragraph [ref=e408]: o Your file also includes information you provided during the application process, such as your work history, start and separation date, and training records and professional memberships.
+        - paragraph [ref=e409]
+        - paragraph [ref=e410]:
+          - text: •
+          - generic [ref=e411]: Education information
+          - text: ":"
+        - paragraph [ref=e412]
+        - paragraph [ref=e413]: o Your file includes information you provided during the application process about the educational institutions you have attended or your level of education.
+        - paragraph [ref=e414]
+        - paragraph [ref=e415]: o We also collect and maintain information about your professional licenses, certifications you receive, or additional education or training.
+        - paragraph [ref=e416]
+        - paragraph [ref=e417]:
+          - text: •
+          - generic [ref=e418]: Inferences drawn to create a profile
+          - text: ":"
+        - paragraph [ref=e419]
+        - paragraph [ref=e420]: o We do not create profiles about you reflecting your preferences or characteristics.
+        - paragraph [ref=e421]
+        - paragraph [ref=e422]:
+          - generic [ref=e423]: How We Use Personal Information About You
+        - paragraph [ref=e424]
+        - paragraph [ref=e425]: "We will only use your personal information as permitted by law. Situations in which we use your personal information include:"
+        - paragraph [ref=e426]
+        - paragraph [ref=e427]:
+          - text: •
+          - generic [ref=e428]: Decisions related to your application
+          - generic [ref=e429]: ", including setting your job duties and assessing our staffing needs; assessing your qualifications for roles within the company; determining salary and compensation; and ascertaining your fitness for work."
+        - paragraph [ref=e430]
+        - paragraph [ref=e431]:
+          - text: •
+          - generic [ref=e432]: Business Purposes
+          - generic [ref=e433]: ", including conducting data analytics studies to review and better understand applicant hiring and response rates."
+        - paragraph [ref=e434]
+        - paragraph [ref=e435]:
+          - text: •
+          - generic [ref=e436]: Security measures and complying with health and safety obligations
+          - generic [ref=e437]: ", including ensuring the physical safety of our facilities, resources, employees, and other people from threats; preventing fraud and to secure our systems, data, resources, and facilities from unauthorized access or exploitation; monitoring compliance with our IT policies; ensuring network and information security, including preventing unauthorized access to our computer and electronic communications systems, and preventing malicious software distribution; and investigating theft and other illegal activities."
+        - paragraph [ref=e438]
+        - paragraph [ref=e439]:
+          - text: •
+          - generic [ref=e440]: Compliance with legal obligations
+          - generic [ref=e441]: ", including verifying that you are legally permitted to work in the country(ies) where you are applying to work and complying generally with our statutory obligations."
+        - paragraph [ref=e442]
+        - paragraph [ref=e443]: We may use any and all of the information collected for any of the purposes described in this Notice.
+        - paragraph [ref=e444]
+        - paragraph [ref=e445]:
+          - generic [ref=e446]: Disclosure of Your Personal Information
+        - paragraph [ref=e447]
+        - paragraph [ref=e448]: "We may disclose personal information that we collect or you provide as described in this privacy notice:"
+        - paragraph [ref=e449]
+        - paragraph [ref=e450]: • To the Company and its affiliates and subsidiaries.
+        - paragraph [ref=e451]
+        - paragraph [ref=e452]: "• With service providers, which are companies we use to transmit, collect, process, or store information for us, and which we require to treat the information we share with them as confidential. Service providers may use information we share with them only for the purposes for which we disclose it to them. The categories of service providers that we share information with and the services they provide are:"
+        - paragraph [ref=e453]
+        - paragraph [ref=e454]:
+          - text: o
+          - generic [ref=e455]: Auditing and accounting firms
+          - generic [ref=e456]: ", such as firms that assist us in the creation of our financial records."
+        - paragraph [ref=e457]
+        - paragraph [ref=e458]:
+          - text: o
+          - generic [ref=e459]: Professional services consultants
+          - generic [ref=e460]: ", such as firms that perform analytics, assist with improving our business, provide legal services, immigration advice, or supply project-based resources and assistance."
+        - paragraph [ref=e461]
+        - paragraph [ref=e462]:
+          - text: o
+          - generic [ref=e463]: Recruitment vendors
+          - generic [ref=e464]: that assist with the application process, including assessing candidate qualifications and providing the platform through which candidates submit their candidacy.
+        - paragraph [ref=e465]
+        - paragraph [ref=e466]:
+          - text: o
+          - generic [ref=e467]: Analytics services,
+          - generic [ref=e468]: including entities that analyze traffic to and on our website, and assist with identifying and communicating with potential customers.
+        - paragraph [ref=e469]
+        - paragraph [ref=e470]:
+          - text: o
+          - generic [ref=e471]: Security vendors
+          - generic [ref=e472]: ", such as entities that assist with security incident verification and response, service notifications, and fraud prevention."
+        - paragraph [ref=e473]
+        - paragraph [ref=e474]:
+          - text: o
+          - generic [ref=e475]: IT vendors,
+          - generic [ref=e476]: such as entities that assist with website design, hosting and maintenance; data and software storage; and network operation.
+        - paragraph [ref=e477]
+        - paragraph [ref=e478]: • To external parties when required by law or to protect the Company or other persons.
+        - paragraph [ref=e479]
+        - paragraph [ref=e480]: • In the event of a merger or some other corporate event that modifies the structure and organization of Company.
+        - paragraph [ref=e481]
+        - paragraph [ref=e482]: The CCPA defines “selling” personal information as disclosing it to an external party for monetary or other benefit. We do not sell your personal information to any third parties.
+        - paragraph [ref=e483]
+        - paragraph [ref=e484]:
+          - generic [ref=e485]: Right to Access and Request Deletion of Information
+        - paragraph [ref=e486]
+        - paragraph [ref=e487]: Under the CCPA, we are not obliged at this time to comply with requests from former or current employees or contractors who request access to or deletion of information that was collected and used solely in the context of their role as a former or current employee, job applicant, or contractor.
+        - paragraph [ref=e488]
+        - paragraph [ref=e489]: Under the GDPR, we are obliged to comply with subject access requests from former or current employees or contractors, unless we fall within an exemption.
+        - paragraph [ref=e490]
+        - paragraph [ref=e491]: "Under the POPIA, a data subject, having provided adequate proof of identify, has the right to:"
+        - paragraph [ref=e492]
+        - paragraph [ref=e493]:
+          - generic [ref=e495]: a)
+          - text: Request EXL to confirm, free of charge, whether or not we hold personal information about the data subject; and
+        - paragraph [ref=e496]:
+          - generic [ref=e498]: b)
+          - text: "Request from EXL the record or a description of the personal information about the candidate held by us, including information about the identity of all third parties, or categories of third parties, who have, or have had, access to the information:"
+        - paragraph [ref=e499]:
+          - generic [ref=e501]: a.
+          - text: Within a reasonable time;
+        - paragraph [ref=e502]:
+          - generic [ref=e504]: b.
+          - text: At a prescribed fee, if any;
+        - paragraph [ref=e505]:
+          - generic [ref=e507]: c.
+          - text: In a reasonable manner and format; and
+        - paragraph [ref=e508]:
+          - generic [ref=e510]: d.
+          - generic [ref=e511]: In a form that is generally understandable.
+        - paragraph [ref=e512]
+        - paragraph [ref=e513]:
+          - generic [ref=e514]: Data Security
+        - paragraph [ref=e515]
+        - paragraph [ref=e516]: We have implemented measures designed to secure your personal information from accidental loss and from unauthorized access, use, alteration and disclosure. We use physical, administrative, and technical safeguards to secure personal information.
+        - paragraph [ref=e517]
+        - paragraph [ref=e518]: The storage and processing of information via internet-connected computers can never be completely secure. Although we use industry standard measures to protect your personal information, we cannot guarantee the security of your personal information stored or processed by us.
+        - paragraph [ref=e519]
+        - paragraph [ref=e520]:
+          - generic [ref=e521]: Transferring Your Personal Information Abroad
+        - paragraph [ref=e522]
+        - paragraph [ref=e523]: Your personal information may be stored and processed in the United States, India, the European Union, the United Kingdom, South Africa and/or the Philippines. The Company and its affiliates and service providers may also transfer information or provide online access to persons located abroad to information that we collect about you, including personal information, across borders and from your country or jurisdiction to other countries or jurisdictions around the world. These jurisdictions may not have the same data protection laws as your jurisdiction. Wherever your personal information is transferred, stored or processed by us, we will take industry steps to safeguard the privacy of your personal information.
+        - paragraph [ref=e524]
+        - paragraph [ref=e525]:
+          - generic [ref=e526]: Changes to this Privacy Policy
+        - paragraph [ref=e527]
+        - paragraph [ref=e528]: We reserve the right to update this privacy policy at any time. We also may notify you in other ways from time to time about the collection, use, and disclosure of your personal information.
+        - paragraph [ref=e529]
+        - paragraph [ref=e530]:
+          - text: If you have any questions about this privacy policy, please contact the General Counsel’s Office at generalcounsel@exlservice.com or the EXL’s Human Resources representative in your location at
+          - generic [ref=e532] [cursor=pointer]: "#HR-ERP@exlservice.com"
+          - text: .
+        - paragraph [ref=e533]: "EFFECTIVE DATE: Friday, April 24, 2024"
+        - paragraph [ref=e534]
+      - button "Agree" [ref=e537] [cursor=pointer]:
+        - generic [ref=e538]: Agree
+  - generic [ref=e2]:
+    - generic [ref=e3]: .
+    - generic [ref=e4]: ..
+    - generic [ref=e5]: .
+  - generic [ref=e7]:
+    - link [ref=e540] [cursor=pointer]:
+      - /url: "#main"
+      - text: Skip to main content.
+    - alert
+    - generic [ref=e254]:
+      - banner [ref=e256]:
+        - generic [ref=e258]:
+          - link [ref=e541] [cursor=pointer]:
+            - generic [ref=e260]: 
+          - generic [ref=e262]:
+            - generic [ref=e263]: Data Engineer
+            - generic [ref=e264]: ...
+      - main [ref=e542]:
+        - heading [level=1] [ref=e543]: Job application form
+        - generic [ref=e269]:
+          - heading [level=1] [ref=e544]: You don't need to have an account
+          - generic [ref=e272]:
+            - paragraph [ref=e273]: Get started right away by simply using your email. Your profile will be created and kept up to date automatically as you enter details for each of your job applications.
+            - generic [ref=e275]:
+              - generic [ref=e276]:
+                - generic [ref=e545]:
+                  - generic [ref=e279]: Email Address
+                  - generic [ref=e280]: "*"
+                - textbox [ref=e546]
+              - generic [ref=e284]: honeypot
+              - textbox [ref=e286]
+              - generic [ref=e287]: This is how we'll communicate with you.
+              - generic [ref=e292] [cursor=pointer]:
+                - generic [ref=e294]:
+                  - text: I agree with the
+                  - link [ref=e547]:
+                    - /url: "#"
+                    - text: terms and conditions
+                - generic [ref=e296]: "*"
+          - generic [ref=e297]:
+            - button [ref=e548] [cursor=pointer]:
+              - generic [ref=e300]: Cancel
+            - button [ref=e549] [cursor=pointer]:
+              - generic [ref=e302]: Next

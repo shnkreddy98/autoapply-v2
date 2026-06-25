@@ -1,9 +1,11 @@
-"""Pruning proxy MCP server.
+"""Page-model proxy MCP server.
 
 Sits in front of Microsoft's Playwright MCP. Exposes a curated, re-described
 tool list (see tool_specs.py / tool_allowlist.py), forwards calls to the
-upstream Playwright MCP over a single persistent session, and prunes every
-returned accessibility tree down to the nodes relevant to the step goal.
+upstream Playwright MCP over a single persistent session, and replaces every
+returned accessibility tree with a deterministic, typed PAGE MODEL
+(proxy/page_model.py): page type, every form field (type/required/value/error),
+the action buttons, and any validation errors.
 """
 
 import logging
@@ -23,7 +25,16 @@ from starlette.applications import Starlette
 from starlette.routing import Mount
 
 from . import snapshot_cache
-from .pruner import expand_region, prune
+from .option_select import (
+    best_match,
+    collect_options,
+    find_ref_by_label,
+    find_searchbox,
+    label_of_ref,
+)
+from .page_model import extract as extract_page_model
+from .page_model import render as render_page_model
+from .pruner import expand_region
 from .tool_allowlist import STRIP_PARAMS, TREE_RETURNING
 from .tool_specs import TOOL_SPECS
 from .tree_parser import collect_all, parse
@@ -87,29 +98,44 @@ def _build_server() -> Server:
 
         spec = TOOL_SPECS[name]
 
+        # Orchestrated tools (e.g. select_options) drive several upstream calls
+        # themselves in one agent turn — handled before the generic forward path.
+        if spec.get("orchestrated"):
+            return [TextContent(type="text", text=await _select_options(args))]
+
         # Proxy-only tools (e.g. expand_region) — no upstream call.
         if spec["upstream"] is None:
             return _handle_proxy_tool(name, args)
 
-        # Pull the pruning goal out before forwarding; strip proxy-only params.
-        goal = args.pop("next_goal", None) or args.pop("goal", None)
+        # Strip any goal/next_goal the agent may still send — selection is now
+        # structural, not goal-based — plus other proxy-only params.
         for param in STRIP_PARAMS:
             args.pop(param, None)
 
         upstream_name = spec["upstream"]
         # Merge any fixed upstream args the wrapper pins (e.g. action="select"
-        # for the tab wrappers) — done after goal/next_goal are stripped.
+        # for the tab wrappers).
         args.update(spec.get("inject_args", {}))
 
         # Decide whether this action likely triggers a navigation/re-render, in
-        # which case we should settle before snapshotting (see _prune_snapshot).
+        # which case we should settle before snapshotting (see _render_snapshot).
         force_settle = _navigates(upstream_name, args)
+
+        # Oracle/Taleo "I agree" controls are a 0×0 hidden <input> wrapped in a
+        # <label> that also holds a "terms and conditions" link. A normal click
+        # lands on the link (opens a dialog) and never toggles, trapping the agent
+        # in a loop. When the click target is such a label, toggle the underlying
+        # input directly instead of forwarding the click.
+        if upstream_name == "browser_click" and _is_hidden_toggle_label(
+            args.get("target", "")
+        ):
+            return [TextContent(type="text", text=await _toggle_hidden_input(args))]
 
         raw_result = await _call_upstream(upstream_name, args)
         raw_text = _extract_text(raw_result)
 
         if upstream_name in TREE_RETURNING:
-            raw_text = await _prune_snapshot(raw_text, goal, force_settle)
+            raw_text = await _render_snapshot(raw_text, force_settle)
 
         return [TextContent(type="text", text=raw_text)]
 
@@ -123,6 +149,195 @@ def _handle_proxy_tool(name: str, args: dict) -> list[TextContent]:
     return [TextContent(type="text", text=f"Error: unknown proxy tool '{name}'.")]
 
 
+# Climb to the wrapping <label>, toggle the hidden checkbox/radio inside it (or the
+# one it points at via `for=`), and report the resulting state. Clicking the input
+# directly bypasses the overlaid "terms and conditions" link that traps a click.
+_TOGGLE_JS = """(el) => {
+  const lab = el.closest('label') || el.parentElement;
+  let inp = lab && lab.querySelector('input[type=checkbox],input[type=radio]');
+  if (!inp && lab && lab.htmlFor) inp = document.getElementById(lab.htmlFor);
+  if (!inp) {
+    const row = el.parentElement;
+    inp = row && row.querySelector('input[type=checkbox],input[type=radio]');
+  }
+  if (inp) { inp.click(); return inp.checked ? 'checked' : 'unchecked'; }
+  el.click();
+  return 'fallback-click';
+}"""
+
+
+def _is_hidden_toggle_label(ref: str) -> bool:
+    """True if `ref` is a clickable label fronting a checkbox/radio that Playwright
+    omitted from the snapshot (a 0×0 hidden input) AND wraps a link — the Oracle
+    "I agree with the terms and conditions" trap. See _TOGGLE_JS / page_model."""
+    if not ref:
+        return False
+    root = parse(snapshot_cache.get())
+    if root is None:
+        return False
+    node = next((n for n in collect_all(root) if n.ref == ref), None)
+    if node is None or "[cursor=pointer]" not in node.raw_line:
+        return False
+    p = node.parent
+    if p is None:
+        return False
+    has_hidden_toggle = any(
+        c is not node and c.role in ("checkbox", "radio") and c.ref is None
+        for c in p.children
+    )
+    has_link = any(d.role == "link" for d in collect_all(node))
+    return has_hidden_toggle and has_link
+
+
+async def _toggle_hidden_input(args: dict) -> str:
+    """Toggle the hidden checkbox/radio behind a label ref, then return a fresh
+    page model so the agent sees the new checked state."""
+    try:
+        await _call_upstream(
+            "browser_evaluate",
+            {
+                "target": args["target"],
+                "element": args.get("element", "agree checkbox"),
+                "function": _TOGGLE_JS,
+            },
+        )
+    except Exception as exc:  # fall back to a plain click rather than dead-end
+        logger.warning("hidden-toggle failed (%s); forwarding plain click", exc)
+        raw = _extract_text(await _call_upstream("browser_click", args))
+        return await _render_snapshot(raw, force_settle=False)
+
+    tree = await _wait_and_snapshot()
+    if tree is None:
+        return "Toggled the agree checkbox."
+    snapshot_cache.set(tree)
+    if _node_count(tree) <= MIN_MEANINGFUL_NODES:
+        return _EMPTY_TREE_MSG
+    return render_page_model(extract_page_model(tree))
+
+
+# Hard ceiling on values processed in one select_options call (pathological input
+# guard); each value runs a bounded handful of upstream calls.
+_MAX_SELECT_VALUES = 25
+
+
+async def _select_options(args: dict) -> str:
+    """Composite dropdown picker: open an ARIA combobox/listbox once, then for each
+    requested human-readable label match it to a rendered option and click it —
+    re-opening (or re-filtering a type-ahead) per value for multiselects. All the
+    browser steps run here, server-side, so the agent spends ONE turn instead of
+    click-open + snapshot + click-option per value. See proxy/option_select.py.
+    """
+    target = args.get("target")
+    values = [str(v) for v in (args.get("values") or []) if str(v).strip()]
+    element = args.get("element") or "dropdown"
+    if not target or not values:
+        return "Error: select_options requires 'target' (combobox ref) and non-empty 'values'."
+    values = values[:_MAX_SELECT_VALUES]
+
+    # Label of the dropdown from the snapshot the agent saw, so we can re-find it
+    # after a pick re-renders the tree and its ref goes stale (multiselect).
+    pre_tree = snapshot_cache.get()
+    dropdown_label = label_of_ref(pre_tree, target) if pre_tree else None
+
+    matched: list[str] = []
+    unmatched: list[tuple[str, list[str]]] = []
+
+    for i, value in enumerate(values):
+        reopen_ref = target if i == 0 else None
+        tree = await _ensure_dropdown_open(reopen_ref, dropdown_label or element)
+        if not tree:
+            unmatched.append((value, []))
+            continue
+
+        # Type-ahead combobox: type the value to filter, then re-read options.
+        sb = find_searchbox(tree)
+        if sb is not None:
+            try:
+                await _call_upstream("browser_type", {"target": sb, "text": value})
+                settled = await _wait_and_snapshot()
+                if settled:
+                    snapshot_cache.set(settled)
+                    tree = settled
+            except Exception as exc:  # type-ahead is best-effort
+                logger.warning("select_options type-ahead failed: %s", exc)
+
+        options = collect_options(tree)
+        opt = best_match(value, options)
+        if opt is None:
+            unmatched.append((value, [o.label for o in options][:12]))
+            continue
+
+        try:
+            await _call_upstream("browser_click", {"target": opt.ref, "element": opt.label})
+        except Exception as exc:
+            logger.warning("select_options click failed for %r: %s", opt.label, exc)
+            unmatched.append((value, []))
+            continue
+        matched.append(value)
+        settled = await _wait_and_snapshot()
+        if settled:
+            snapshot_cache.set(settled)
+
+    final_tree = snapshot_cache.get()
+    body = _render_select_body(final_tree)
+    summary = _select_summary(matched, unmatched)
+    return f"{summary}\n\n{body}" if body else summary
+
+
+async def _ensure_dropdown_open(reopen_ref: str | None, label: str | None) -> str | None:
+    """Return a tree with the dropdown's options visible.
+
+    On the first value (`reopen_ref` set) ALWAYS click that control to open the
+    intended dropdown — never short-circuit on "some options are visible", because a
+    Workday widget leaves a `listbox "items selected"` pill tray in the DOM and
+    another field's menu may be open, both of which would match the wrong options
+    (see option_select._option_nodes). For subsequent multiselect values there is no
+    `reopen_ref`; reuse the cached tree if a real (non-pill) menu is already open,
+    else re-find the control by `label`."""
+    cached = snapshot_cache.get()
+    ref = reopen_ref
+    if ref is None:
+        if cached and collect_options(cached):
+            return cached  # multiselect menu still open from the previous pick
+        if label and cached:
+            ref = find_ref_by_label(cached, label)
+    if ref is None:
+        return cached  # cannot open; match against whatever is currently shown
+
+    try:
+        await _call_upstream("browser_click", {"target": ref, "element": label or "dropdown"})
+    except Exception as exc:
+        logger.warning("select_options open failed (ref=%s): %s", ref, exc)
+        return cached
+    tree = await _wait_and_snapshot()
+    if tree:
+        snapshot_cache.set(tree)
+        return tree
+    return cached
+
+
+def _render_select_body(tree_text: str | None) -> str:
+    """Page model of the post-select tree (same renderer as _render_snapshot)."""
+    if not tree_text or _node_count(tree_text) <= MIN_MEANINGFUL_NODES:
+        return _EMPTY_TREE_MSG
+    return render_page_model(extract_page_model(tree_text))
+
+
+def _select_summary(
+    matched: list[str], unmatched: list[tuple[str, list[str]]]
+) -> str:
+    """One-line outcome the agent reads to know what stuck and what to retry."""
+    parts: list[str] = []
+    if matched:
+        parts.append("matched: " + ", ".join(matched))
+    for value, options in unmatched:
+        if options:
+            parts.append(f'no match for "{value}" — options: ' + ", ".join(options))
+        else:
+            parts.append(f'no match for "{value}"')
+    return "### select_options\n" + (" | ".join(parts) if parts else "no values processed")
+
+
 async def _call_upstream(tool_name: str, arguments: dict) -> CallToolResult:
     if upstream.session is None:
         raise RuntimeError("Upstream Playwright MCP session is not connected.")
@@ -134,9 +349,10 @@ def _extract_text(result: CallToolResult) -> str:
     return "\n".join(parts) if parts else str(result.content)
 
 
-async def _prune_snapshot(raw_text: str, goal: str | None, force_settle: bool) -> str:
+async def _render_snapshot(raw_text: str, force_settle: bool) -> str:
     """Find the accessibility tree in an upstream result, settle it if needed,
-    cache it, and replace it with the pruned version (or leave full if no goal).
+    cache it, and replace it with the deterministic PAGE MODEL (proxy/page_model.py)
+    — a typed view of every form field/action/error. No goal, no keyword pruning.
 
     Playwright MCP returns the snapshot either inline or, more commonly, as a
     `[Snapshot](.playwright-mcp/page-*.yml)` link to a file. The data dir is
@@ -168,16 +384,14 @@ async def _prune_snapshot(raw_text: str, goal: str | None, force_settle: bool) -
 
     if _node_count(tree_text) <= MIN_MEANINGFUL_NODES:
         body = _EMPTY_TREE_MSG
-    elif goal:
-        body = prune(tree_text, goal)
     else:
-        body = tree_text
+        body = render_page_model(extract_page_model(tree_text))
 
     # Splice the body into the original result (replacing the file-link line),
     # append it when the original carried no tree of its own (tab tools), or
     # return it directly when the tree was inline.
     if appended:
-        return f"{raw_text}\n\n### Snapshot\n{body}"
+        return f"{raw_text}\n\n### Page\n{body}"
     if link_line:
         return raw_text.replace(link_line, body)
     return body
