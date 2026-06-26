@@ -38,6 +38,12 @@ PORT = int(os.getenv("PROXY_PORT", "8932"))
 SNAPSHOT_DIR = Path(os.getenv("SNAPSHOT_DIR", "data"))
 _SNAPSHOT_LINK_RE = re.compile(r"(?:- )?\[Snapshot\]\(([^)]+\.ya?ml)\)")
 
+# After any tool call that returns a snapshot, the upstream captures it the instant
+# the action resolves — often before a JS/SPA page has finished rendering (Oracle
+# Cloud / Workday return an unrendered shell). We wait this long, then re-snapshot,
+# and hand the agent the settled tree instead. Set SETTLE_SECONDS=0 to disable.
+SETTLE_SECONDS = float(os.getenv("SETTLE_SECONDS", "2"))
+
 
 class _Upstream:
     """Holds the single persistent client session to the Playwright MCP, shared
@@ -188,10 +194,42 @@ def _build_server() -> Server:
     @server.call_tool()
     async def call_tool(name: str, arguments: dict | None) -> list[types.TextContent]:
         result = await _require_session().call_tool(name, dict(arguments or {}))
-        text = _inline_snapshot(_extract_text(result))
-        return [TextContent(type="text", text=text)]
+        text = _extract_text(result)
+        # If this call produced a snapshot, settle the page then re-snapshot and swap
+        # in the settled tree (the upstream one may be a pre-render shell). Otherwise
+        # just inline whatever snapshot the result already carries (or pass through).
+        link = _SNAPSHOT_LINK_RE.search(text)
+        if link and SETTLE_SECONDS > 0:
+            settled = await _settle_snapshot_tree()
+            if settled is not None:
+                return [TextContent(type="text", text=text.replace(link.group(0), settled))]
+        return [TextContent(type="text", text=_inline_snapshot(text))]
 
     return server
+
+
+async def _settle_snapshot_tree() -> str | None:
+    """Wait SETTLE_SECONDS for the page to render, take a fresh snapshot, and return
+    its full accessibility tree text. Returns None if the upstream calls fail (the
+    caller then falls back to the un-settled snapshot). Calls upstream directly, so
+    it does not recurse through `call_tool`."""
+    session = _require_session()
+    try:
+        await session.call_tool("browser_wait_for", {"time": SETTLE_SECONDS})
+        result = await session.call_tool("browser_snapshot", {})
+    except Exception as exc:  # settling is best-effort, never fatal
+        logger.warning("settle failed: %s", exc)
+        return None
+    text = _extract_text(result)
+    m = _SNAPSHOT_LINK_RE.search(text)
+    if not m:
+        return text  # already an inline tree
+    path = SNAPSHOT_DIR / m.group(1)
+    try:
+        return path.read_text(encoding="utf-8")
+    except OSError as exc:
+        logger.warning("could not read settled snapshot %s: %s", path, exc)
+        return None
 
 
 def _require_session() -> ClientSession:
