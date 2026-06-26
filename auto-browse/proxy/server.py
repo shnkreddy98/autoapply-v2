@@ -111,6 +111,15 @@ _ARG_DESCRIPTIONS: dict[str, str] = {
         "Value to fill. For a checkbox use `true`/`false`; for a combobox use the "
         'option text. Example: `value="shnkreddy98@gmail.com"`.'
     ),
+    "action": (
+        "Tab operation: `list` (show open tabs), `select` (switch to a tab by "
+        "index), `close` (close a tab by index, or the current one if omitted), "
+        '`new` (open a tab). Example: `action="select"`.'
+    ),
+    "index": (
+        "Zero-based tab index from the '### Open tabs' list in a recent result. "
+        'Example: `index=1`.'
+    ),
 }
 
 # A worked one-shot appended to each tool's own description.
@@ -144,6 +153,14 @@ _TOOL_EXAMPLES: dict[str, str] = {
     ),
     "browser_file_upload": (
         'Example call — {"paths": ["/resume/shashank_reddy.pdf"]}.'
+    ),
+    "browser_tabs": (
+        "Use this to manage browser tabs. When a click on 'Apply'/a link opens the "
+        "form in a NEW tab, SWITCH to that tab instead of re-clicking the button "
+        "(re-clicking just spawns more duplicate tabs). A result lists open tabs "
+        "under '### Open tabs'. Example call — switch to the second tab: "
+        '{"action": "select", "index": 1}. List tabs: {"action": "list"}. '
+        'Close a dead/duplicate tab: {"action": "close", "index": 2}.'
     ),
 }
 

@@ -135,6 +135,9 @@ DEFAULT_MODEL = os.getenv("OPENROUTER_MODEL", "google/gemini-3-flash-preview")
 
 HERE = Path(__file__).resolve().parent.parent
 PROFILE_PATH = Path(os.getenv("PROFILE_PATH", HERE / "data" / "profile" / "profile.txt"))
+ATS_INSTRUCTIONS_PATH = Path(
+    os.getenv("ATS_INSTRUCTIONS_PATH", HERE / "data" / "ats_instructions.md")
+)
 
 MAX_ITERATIONS = int(os.getenv("MAX_ITERATIONS", "250"))
 
@@ -185,6 +188,14 @@ def load_profile() -> str:
             f"Profile not found at {PROFILE_PATH}. Run `uv run python -m agent.profile` first."
         )
     return PROFILE_PATH.read_text(encoding="utf-8")
+
+
+def load_ats_instructions() -> str | None:
+    """ATS/domain-specific rules. Optional — return None if the file is absent."""
+    if not ATS_INSTRUCTIONS_PATH.is_file():
+        return None
+    text = ATS_INSTRUCTIONS_PATH.read_text(encoding="utf-8").strip()
+    return text or None
 
 
 def _new_usage() -> dict[str, Any]:
@@ -504,6 +515,7 @@ async def main(job_url: str, model: str) -> None:
     log.info("run start: model=%s job_url=%s", model, job_url)
 
     profile = load_profile()
+    ats_instructions = load_ats_instructions()
     task = (
         f"Apply for this job: {job_url}\n\n"
         "Fill the application using the applicant profile, upload the resume, "
@@ -523,8 +535,19 @@ async def main(job_url: str, model: str) -> None:
                 messages: list[dict[str, Any]] = [
                     {"role": "system", "content": f"{SYSTEM_PROMPT}\n\nToday's date is {today}."},
                     {"role": "system", "content": f"APPLICANT PROFILE:\n\n{profile}"},
-                    {"role": "user", "content": task},
                 ]
+                if ats_instructions:
+                    messages.append(
+                        {
+                            "role": "system",
+                            "content": (
+                                "ATS / DOMAIN-SPECIFIC INSTRUCTIONS — match the current "
+                                "page's host to a section and follow its rules; these "
+                                f"override generic guidance:\n\n{ats_instructions}"
+                            ),
+                        }
+                    )
+                messages.append({"role": "user", "content": task})
                 result = await agent_loop(
                     model, task, messages, session, client, usage, trace=trace
                 )

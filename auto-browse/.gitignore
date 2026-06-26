@@ -10,6 +10,7 @@ runs/
 
 future_tests.md
 urls.txt
+.playwright-mcp
 
 # recorder corpus + its persistent browser profile (real PII, local only)
 tools/recorder/recordings/
