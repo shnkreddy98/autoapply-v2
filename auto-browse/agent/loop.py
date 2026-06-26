@@ -43,7 +43,35 @@ load_dotenv()
 
 log = logging.getLogger(LOGGER_NAME)
 
-SYSTEM_PROMPT = """You are a browser agent applying for a job on the applicant's \
+# Human-in-the-loop handoff scenarios: when the page shows one of these, the agent
+# must stop and hand control to the human operator instead of attempting it itself.
+# Add new triggers here — the list is injected into the system prompt below, so new
+# scenarios need no other code changes.
+HIL_SCENARIOS: list[str] = [
+    "A verification / one-time passcode (OTP) is requested (SMS or authenticator app).",
+    "You are asked to confirm via a link or code sent to the applicant's email.",
+    "A bot-detection / CAPTCHA / 'are you human' challenge or puzzle appears.",
+]
+
+# Name of the virtual tool the agent calls to hand off to the human. Handled in the
+# agent loop (not forwarded to the browser MCP) — see _human_handoff.
+HUMAN_TOOL_NAME = "request_human_help"
+
+
+def _handoff_block(scenarios: list[str]) -> str:
+    bullets = "\n".join(f"  - {s}" for s in scenarios)
+    return (
+        "HUMAN HANDOFF — some steps must be done by the human, not you. If the page "
+        "shows ANY of the following, do NOT attempt it yourself: call "
+        f"`{HUMAN_TOOL_NAME}` with a short `reason` and clear `instructions` telling "
+        "the human what to do on screen, then resume once it returns the human's "
+        "response (take a fresh `browser_snapshot` first, since the page changed):\n"
+        f"{bullets}"
+    )
+
+
+SYSTEM_PROMPT = (
+    """You are a browser agent applying for a job on the applicant's \
 behalf, using the APPLICANT PROFILE below and the browser tools provided.
 
 - Call `browser_snapshot` to see the page as an accessibility tree; act on elements
@@ -60,6 +88,46 @@ behalf, using the APPLICANT PROFILE below and the browser tools provided.
 - Work through every page/step. Do NOT click the final Submit — stop before it and
   return a short plain-text summary of what you filled and anything you couldn't.
 - State your next step in one short sentence before each tool call."""
+    + "\n\n"
+    + _handoff_block(HIL_SCENARIOS)
+)
+
+# Virtual tool exposed to the model alongside the browser MCP tools. Calling it
+# pauses the run and hands control to the human (see _human_handoff).
+HUMAN_TOOL: dict[str, Any] = {
+    "type": "function",
+    "function": {
+        "name": HUMAN_TOOL_NAME,
+        "description": (
+            "Hand control to the human operator for a step you must NOT do yourself "
+            "(verification code, email confirmation, CAPTCHA/bot check). The run "
+            "pauses; the human acts on the browser screen and types a response (e.g. "
+            "'continue' or a verification code), which is returned to you so you can "
+            "resume from the current page."
+        ),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "reason": {
+                    "type": "string",
+                    "description": (
+                        "Which handoff scenario triggered this. "
+                        'Example: reason="verification code required".'
+                    ),
+                },
+                "instructions": {
+                    "type": "string",
+                    "description": (
+                        "What the human should do on screen before the run continues. "
+                        'Example: instructions="Enter the 6-digit code from the '
+                        'applicant\'s email, then type continue".'
+                    ),
+                },
+            },
+            "required": ["reason", "instructions"],
+        },
+    },
+}
 
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
 PROXY_MCP_URL = os.getenv("PROXY_MCP_URL", "http://localhost:8932/mcp")
@@ -273,6 +341,54 @@ async def _complete_with_retry(
     raise RuntimeError(f"LLM call failed after {max_retries} attempts: {last_err}")
 
 
+async def _human_handoff(
+    arguments: dict[str, Any], trace: Trace | None, iteration: int
+) -> str:
+    """Pause the run and hand control to the human operator.
+
+    The human can act two ways, in either combination: (1) change the page directly
+    in the browser over VNC, and/or (2) type a meaningful response here (a
+    verification code, an instruction, or just 'continue'). Their typed response is
+    injected back into the conversation as this tool's result; whatever they changed
+    on screen is picked up by the next `browser_snapshot`.
+    """
+    reason = str(arguments.get("reason") or "human action required")
+    instructions = str(
+        arguments.get("instructions") or "Complete the step on screen, then type 'continue'."
+    )
+    bar = "=" * 64
+    banner = (
+        f"\n{bar}\n"
+        f"  HUMAN HANDOFF NEEDED — {reason}\n"
+        f"  On the browser screen (VNC): {instructions}\n"
+        "  When done, type a response (a code, an instruction, or 'continue')\n"
+        "  and press Enter to resume.\n"
+        f"{bar}\n> "
+    )
+    if trace is not None:
+        trace.event(
+            "human_handoff_request",
+            iteration=iteration,
+            reason=reason,
+            instructions=instructions,
+        )
+    try:
+        response = (await asyncio.to_thread(input, banner)).strip()
+    except EOFError:  # non-interactive run — nothing to wait on
+        response = ""
+    log.info("human handoff (%s) -> %r", reason, response)
+    if trace is not None:
+        trace.event("human_handoff_response", iteration=iteration, response=response)
+    if not response:
+        response = "continue"
+    return (
+        f"HUMAN RESPONSE: {response}\n"
+        "The human has finished the requested step (and may have changed the page "
+        "directly). Take a fresh `browser_snapshot` to see the current page, then "
+        "continue the application."
+    )
+
+
 async def agent_loop(
     model: str,
     original_task: str,
@@ -284,14 +400,16 @@ async def agent_loop(
     max_iterations: int = MAX_ITERATIONS,
 ) -> str:
     tools_result = await session.list_tools()
+    # Browser MCP tools + the virtual human-handoff tool (handled in-loop).
     openrouter_tools = [mcp_tool_to_openai(tool) for tool in tools_result.tools]
+    openrouter_tools.append(HUMAN_TOOL)
 
     if trace is not None:
         trace.event(
             "run_start",
             model=model,
             task=original_task,
-            tools=[t.name for t in tools_result.tools],
+            tools=[t.name for t in tools_result.tools] + [HUMAN_TOOL_NAME],
             system_prompt=messages[0]["content"] if messages else "",
             profile_chars=len(messages[1]["content"]) if len(messages) > 1 else 0,
         )
@@ -350,9 +468,13 @@ async def agent_loop(
             try:
                 arguments = parse_tool_arguments(tool_call.function.arguments)
                 debug("tool_call", {"name": tool_name, "arguments": arguments})
-                result = await session.call_tool(tool_name, arguments)
-                tool_content = result_text(result)
-                debug("tool_call_result", {"name": tool_name, "result": tool_content})
+                if tool_name == HUMAN_TOOL_NAME:
+                    # Virtual tool: pause for the human instead of calling the MCP.
+                    tool_content = await _human_handoff(arguments, trace, iteration)
+                else:
+                    result = await session.call_tool(tool_name, arguments)
+                    tool_content = result_text(result)
+                    debug("tool_call_result", {"name": tool_name, "result": tool_content})
             except Exception as exc:
                 ok = False
                 tool_content = f"Tool call {tool_name!r} failed: {type(exc).__name__}: {exc}"
