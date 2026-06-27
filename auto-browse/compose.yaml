@@ -11,7 +11,7 @@ services:
       # resume PDF staged by `agent.profile`, uploaded during applications
       - ./data/resume:/resume:ro
 
-  # Page-model proxy MCP — the only browser surface the agent connects to.
+  # Text-extracting proxy MCP — the only browser surface the agent connects to.
   proxy:
     build:
       context: .

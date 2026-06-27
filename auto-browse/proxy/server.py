@@ -409,8 +409,12 @@ def _build_server() -> Server:
             return [TextContent(type="text", text=f"Tool {name!r} is not available.")]
         result = await _require_session().call_tool(name, dict(arguments or {}))
         text = _extract_text(result)
-        # If this call produced an ARIA snapshot, reply with just its visible text.
-        # No snapshot in the result -> pass the tool's own output through untouched.
+        # browser_snapshot returns the ARIA tree INLINE (no snapshot link), so reduce
+        # that text to visible text directly — otherwise the raw ARIA leaks through.
+        if name == "browser_snapshot":
+            return [TextContent(type="text", text=_visible_text(text))]
+        # Other interaction tools attach a snapshot link; if present, reply with just
+        # its visible text. No snapshot in the result -> pass the output through.
         tree = await _snapshot_tree(text)
         if tree is None:
             return [TextContent(type="text", text=text)]
