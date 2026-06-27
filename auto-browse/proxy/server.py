@@ -1,12 +1,14 @@
-"""Transparent proxy MCP server.
+"""Text-extracting proxy MCP server.
 
-Sits in front of Microsoft's Playwright MCP and forwards everything through
-unchanged: it exposes the upstream tool list verbatim and relays each call over a
-single persistent session (so browser state survives across calls). The ONE thing
-it does to the result is inline the accessibility snapshot — Playwright MCP writes
-the tree to a `.yml` file and returns a `[Snapshot](path)` link, which an LLM can't
-open, so we substitute the link with the full file contents. No pruning, no page
-model, no curation — the agent sees the whole snapshot.
+Sits in front of Microsoft's Playwright MCP, exposes the upstream tool list
+verbatim, and relays each call over a single persistent session (so browser state
+survives across calls). For any call that produces an accessibility snapshot,
+Playwright MCP writes the ARIA tree to a `.yml` file and returns a
+`[Snapshot](path)` link; we read that tree and reply with ONLY its visible text —
+accessible names, `text:` nodes, and inline values — dropping roles, refs, URLs,
+and structure. Tool results that carry no snapshot pass through unchanged.
+
+`_visible_text` is the single seam for the text<->ARIA mapping; evolve it there.
 """
 
 import copy
@@ -75,9 +77,7 @@ _ARG_DESCRIPTIONS: dict[str, str] = {
         "Short human-readable name of the element, used only for logging/permission "
         '(not for matching). Example: `element="Apply Now button"`.'
     ),
-    "text": (
-        'Text to type into the element. Example: `text="shnkreddy98@gmail.com"`.'
-    ),
+    "text": ('Text to type into the element. Example: `text="shnkreddy98@gmail.com"`.'),
     "values": (
         "Array of option LABEL(s) to select, exactly as shown in the dropdown. "
         'Example: `values=["United States of America (+1)"]`.'
@@ -89,9 +89,7 @@ _ARG_DESCRIPTIONS: dict[str, str] = {
         "Absolute URL to navigate to. "
         'Example: `url="https://jobs.lever.co/acme/123/apply"`.'
     ),
-    "submit": (
-        "Whether to press Enter after typing the text. Example: `submit=true`."
-    ),
+    "submit": ("Whether to press Enter after typing the text. Example: `submit=true`."),
     "slowly": (
         "Whether to type one character at a time (triggers per-key handlers). "
         "Example: `slowly=false`."
@@ -100,9 +98,7 @@ _ARG_DESCRIPTIONS: dict[str, str] = {
         "Array of absolute file path(s) to upload. "
         'Example: `paths=["/resume/shashank_reddy.pdf"]`.'
     ),
-    "name": (
-        'Human-readable field name. Example: `name="Email Address"`.'
-    ),
+    "name": ('Human-readable field name. Example: `name="Email Address"`.'),
     "type": (
         "Field type: one of textbox, checkbox, radio, combobox, slider. "
         'Example: `type="textbox"`.'
@@ -118,7 +114,7 @@ _ARG_DESCRIPTIONS: dict[str, str] = {
     ),
     "index": (
         "Zero-based tab index from the '### Open tabs' list in a recent result. "
-        'Example: `index=1`.'
+        "Example: `index=1`."
     ),
 }
 
@@ -167,6 +163,29 @@ _TOOL_EXAMPLES: dict[str, str] = {
 # Tools whose schemas we rewrite (snapshot-returning interaction tools).
 _AUGMENT_TOOLS: frozenset[str] = frozenset(_TOOL_EXAMPLES)
 
+# Upstream Playwright tools we expose to the agent. Everything else (screenshot,
+# resize, network/console-request, drag/drop, close, run_code_unsafe, snapshot) is
+# hidden — browser_evaluate covers arbitrary-JS needs and browser_wait_for returns
+# a fresh snapshot, so the hidden tools have backstops. `fetch_aria` (proxy-only) is
+# added separately. The proxy still calls hidden tools internally (snapshot/wait_for
+# for settling + fetch_aria) via the upstream session, bypassing this allowlist.
+KEEP_TOOLS: frozenset[str] = frozenset({
+    "browser_navigate",
+    "browser_navigate_back",
+    "browser_click",
+    "browser_type",
+    "browser_fill_form",
+    "browser_select_option",
+    "browser_press_key",
+    "browser_file_upload",
+    "browser_handle_dialog",
+    "browser_console_messages",
+    "browser_evaluate",
+    "browser_hover",
+    "browser_tabs",
+    "browser_wait_for",
+})
+
 
 def _patch_descriptions(node: Any) -> None:
     """Recursively rewrite argument descriptions in a JSON-Schema dict in place,
@@ -198,31 +217,150 @@ def _augment_tool(tool: types.Tool) -> types.Tool:
     return types.Tool(name=tool.name, description=description, inputSchema=schema)
 
 
+# --- proxy-only fetch_aria tool ------------------------------------------------
+# The agent normally sees only the visible TEXT of the page. `fetch_aria` lets it
+# pull the raw ARIA back for a specific key — every line that contains the key,
+# with surrounding context — so it can recover an element's `[ref=...]` / structure.
+FETCH_ARIA_NAME = "fetch_aria"
+FETCH_ARIA_CONTEXT = 3  # default lines of context kept on each side of a match
+
+_FETCH_ARIA_TOOL = types.Tool(
+    name=FETCH_ARIA_NAME,
+    description=(
+        "Search the CURRENT page's full ARIA snapshot for a text key and return "
+        "every matching line of the raw ARIA YAML with `context` lines on each side "
+        "(so you see the element and its `[ref=...]`). Use it to recover the "
+        "ref/structure for something you saw in the visible-text output — e.g. search "
+        "a button label to get its ref. Use a larger `context` for deeply nested "
+        "elements (forms, tables); a smaller one to keep the result tight. "
+        "Non-contiguous matches are separated by a `--` line."
+    ),
+    inputSchema={
+        "type": "object",
+        "properties": {
+            "key": {
+                "type": "string",
+                "description": (
+                    "Case-insensitive text to find in the ARIA snapshot. "
+                    'Example: key="Apply Now".'
+                ),
+            },
+            "context": {
+                "type": "integer",
+                "minimum": 0,
+                "description": (
+                    "Lines of surrounding context to include on each side of every "
+                    f"match. Defaults to {FETCH_ARIA_CONTEXT}. Example: context=5."
+                ),
+            },
+        },
+        "required": ["key"],
+        "additionalProperties": False,
+    },
+)
+
+
+async def _fetch_aria(arguments: dict) -> list[types.TextContent]:
+    """Handle a `fetch_aria` call: snapshot the current page, grep its ARIA tree for
+    the key, and return the matching lines with context."""
+    key = str(arguments.get("key", "")).strip()
+    if not key:
+        return [TextContent(type="text", text="fetch_aria: 'key' is required.")]
+    try:
+        context = int(arguments.get("context", FETCH_ARIA_CONTEXT))
+    except (TypeError, ValueError):
+        context = FETCH_ARIA_CONTEXT
+    context = max(0, context)
+    tree = await _snapshot_tree_now()
+    if tree is None:
+        return [
+            TextContent(
+                type="text", text="fetch_aria: could not read the current snapshot."
+            )
+        ]
+    matches = _grep_tree(tree, key, context)
+    if not matches:
+        return [
+            TextContent(
+                type="text",
+                text=f"fetch_aria: no occurrences of {key!r} in the current snapshot.",
+            )
+        ]
+    return [TextContent(type="text", text=matches)]
+
+
+async def _snapshot_tree_now() -> str | None:
+    """Take a fresh snapshot of the current page and return its full ARIA tree."""
+    try:
+        result = await _require_session().call_tool("browser_snapshot", {})
+    except Exception as exc:
+        logger.warning("fetch_aria snapshot failed: %s", exc)
+        return None
+    text = _extract_text(result)
+    m = _SNAPSHOT_LINK_RE.search(text)
+    return _read_tree(m.group(1)) if m else text
+
+
+def _grep_tree(tree: str, key: str, context: int) -> str:
+    """Return a YAML list with one element per occurrence of `key` (case-insensitive)
+    in `tree`. Each element is a literal block scalar holding the matched line plus
+    `context` lines after the occurrence of `key`, so the original ARIA indentation is preserved and
+    every occurrence stays a separate, parseable item."""
+    lines = tree.splitlines()
+    needle = key.lower()
+    out: list[str] = []
+    for i, line in enumerate(lines):
+        if needle not in line.lower():
+            continue
+        lo = i
+        hi = min(len(lines), i + context + 1)
+        out.extend(f"  {block_line.lstrip(' ')}" for block_line in lines[lo:hi])
+    return "\n".join(out)
+
+
 def _build_server() -> Server:
     server = Server("playwright-transparent-proxy")
 
     @server.list_tools()
     async def list_tools() -> list[types.Tool]:
         # Expose the upstream Playwright MCP tools, with clarified argument
-        # descriptions + examples on the snapshot-returning interaction tools.
+        # descriptions + examples on the snapshot-returning interaction tools, plus
+        # the proxy-only `fetch_aria` search tool.
         result = await _require_session().list_tools()
-        return [_augment_tool(t) for t in result.tools]
+        kept = [_augment_tool(t) for t in result.tools if t.name in KEEP_TOOLS]
+        return kept + [_FETCH_ARIA_TOOL]
 
     @server.call_tool()
     async def call_tool(name: str, arguments: dict | None) -> list[types.TextContent]:
+        if name == FETCH_ARIA_NAME:
+            return await _fetch_aria(dict(arguments or {}))
+        if name not in KEEP_TOOLS:
+            return [TextContent(type="text", text=f"Tool {name!r} is not available.")]
         result = await _require_session().call_tool(name, dict(arguments or {}))
         text = _extract_text(result)
-        # If this call produced a snapshot, settle the page then re-snapshot and swap
-        # in the settled tree (the upstream one may be a pre-render shell). Otherwise
-        # just inline whatever snapshot the result already carries (or pass through).
-        link = _SNAPSHOT_LINK_RE.search(text)
-        if link and SETTLE_SECONDS > 0:
-            settled = await _settle_snapshot_tree()
-            if settled is not None:
-                return [TextContent(type="text", text=text.replace(link.group(0), settled))]
-        return [TextContent(type="text", text=_inline_snapshot(text))]
+        # If this call produced an ARIA snapshot, reply with just its visible text.
+        # No snapshot in the result -> pass the tool's own output through untouched.
+        tree = await _snapshot_tree(text)
+        if tree is None:
+            return [TextContent(type="text", text=text)]
+        return [TextContent(type="text", text=_visible_text(tree))]
 
     return server
+
+
+async def _snapshot_tree(text: str) -> str | None:
+    """Return the full ARIA tree for a result that links to a snapshot, or None if
+    the result has no snapshot. When SETTLE_SECONDS > 0 we wait for the page to
+    finish rendering and re-snapshot (the upstream tree can be a pre-render shell);
+    otherwise we read the tree the call already produced."""
+    link = _SNAPSHOT_LINK_RE.search(text)
+    if not link:
+        return None
+    if SETTLE_SECONDS > 0:
+        settled = await _settle_snapshot_tree()
+        if settled is not None:
+            return settled
+    return _read_tree(link.group(1))
 
 
 async def _settle_snapshot_tree() -> str | None:
@@ -241,12 +379,7 @@ async def _settle_snapshot_tree() -> str | None:
     m = _SNAPSHOT_LINK_RE.search(text)
     if not m:
         return text  # already an inline tree
-    path = SNAPSHOT_DIR / m.group(1)
-    try:
-        return path.read_text(encoding="utf-8")
-    except OSError as exc:
-        logger.warning("could not read settled snapshot %s: %s", path, exc)
-        return None
+    return _read_tree(m.group(1))
 
 
 def _require_session() -> ClientSession:
@@ -260,20 +393,52 @@ def _extract_text(result: CallToolResult) -> str:
     return "\n".join(parts) if parts else str(result.content)
 
 
-def _inline_snapshot(text: str) -> str:
-    """Replace a `[Snapshot](file.yml)` link with the file's full contents so the
-    agent sees the whole accessibility tree. Pass the text through unchanged if
-    there is no link or the file can't be read."""
-    m = _SNAPSHOT_LINK_RE.search(text)
-    if not m:
-        return text
-    path = SNAPSHOT_DIR / m.group(1)
+def _read_tree(rel_path: str) -> str | None:
+    """Read a Playwright snapshot `.yml` file (path relative to SNAPSHOT_DIR) and
+    return its full ARIA tree text, or None if it can't be read."""
+    path = SNAPSHOT_DIR / rel_path
     try:
-        tree = path.read_text(encoding="utf-8")
+        return path.read_text(encoding="utf-8")
     except OSError as exc:
         logger.warning("could not read snapshot %s: %s", path, exc)
-        return text
-    return text.replace(m.group(0), tree)
+        return None
+
+
+# --- ARIA tree -> visible text -------------------------------------------------
+# THE seam for the text<->ARIA mapping. A Playwright ARIA snapshot is a YAML tree
+# of `- <role> "<name>" [ref=..]:` nodes plus `- text: ...` / `- <role> [..]: value`
+# leaves and `- /url: ...` property lines. We keep the human-visible strings (the
+# quoted accessible names and inline values) and drop roles, refs, urls, brackets,
+# and pure structure. Evolve the rules here as the inspector reveals new shapes.
+
+# Quoted accessible name: `role [..] "Name" [..]:` -> Name
+_NAME_RE = re.compile(r'^[\w-]+(?:\s*\[[^\]]*\])*\s*"((?:[^"\\]|\\.)*)"')
+# Inline value: `role [..]: value` / `text: value` / `paragraph: value` -> value
+_VALUE_RE = re.compile(r"^[\w-]+(?:\s*\[[^\]]*\])*\s*:\s*(.+)$")
+
+
+def _visible_text(snapshot: str) -> str:
+    """Extract human-visible text from a Playwright ARIA snapshot, one item per
+    line in document order, dropping consecutive duplicates."""
+    out: list[str] = []
+    for raw in snapshot.splitlines():
+        line = raw.strip()
+        if not line.startswith("- "):
+            continue
+        line = line[2:].strip()
+        if line.startswith("/"):  # /url: and other property nodes — not visible
+            continue
+        if m := _NAME_RE.match(line):
+            value = m.group(1).strip()
+        elif m := _VALUE_RE.match(line):
+            value = m.group(1).strip().strip('"')
+            if value.startswith("/"):
+                continue
+        else:
+            continue
+        if value and (not out or out[-1] != value):
+            out.append(value)
+    return "\n".join(out)
 
 
 def main() -> None:

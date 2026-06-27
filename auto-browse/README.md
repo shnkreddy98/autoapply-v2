@@ -217,3 +217,6 @@ Env knobs: `LOG_DIR`, `TRACE_DIR`, `FORMS_DIR`, `USAGE_PATH`, `LOG_LEVEL`.
 - IMPORTANT: References are currently hardcoded in `agent/profile.py` (`REFERENCES`). Once a references table is added to the database, sourcing them from there is the first thing to work on.
 - If the site says you have already applied for this position, gracefully exit instead of trying to find the same role and trying to apply. example conversation for this url: `https://topgolf.wd501.myworkdayjobs.com/en-US/TopgolfCareers/job/TG---HQ---Dallas-Office/Data-Engineer-II_JR2023-19177?source=LinkedIn`
 - Application level: record all conversations and based on the domain/company build automate scripts that can offload from AI agents in form filling based on previous form filling conversation. 
+
+
+
