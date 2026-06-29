@@ -212,6 +212,28 @@ KEEP_TOOLS: frozenset[str] = frozenset({
     "browser_snapshot",
 })
 
+# Interaction tools whose result means the page may have navigated/re-rendered, so
+# every ref the model captured from an earlier fetch_aria/snapshot is now stale. We
+# prepend a hint telling it to re-fetch before acting (browser_snapshot/fetch_aria
+# are excluded — they already hand the model a fresh view to read refs from).
+_REF_INVALIDATING_TOOLS: frozenset[str] = frozenset({
+    "browser_navigate",
+    "browser_navigate_back",
+    "browser_click",
+    "browser_type",
+    "browser_fill_form",
+    "browser_select_option",
+    "browser_press_key",
+    "browser_file_upload",
+    "browser_handle_dialog",
+})
+
+_STALE_REF_HINT = (
+    "⚠ The page changed — every ref from an earlier snapshot or fetch_aria is now "
+    "STALE. Call fetch_aria again to get fresh refs before your next click/type; do "
+    "NOT reuse a ref you saw before this action.\n\n"
+)
+
 
 def _patch_descriptions(node: Any) -> None:
     """Recursively rewrite argument descriptions in a JSON-Schema dict in place,
@@ -418,7 +440,10 @@ def _build_server() -> Server:
         tree = await _snapshot_tree(text)
         if tree is None:
             return [TextContent(type="text", text=text)]
-        return [TextContent(type="text", text=_visible_text(tree))]
+        body = _visible_text(tree)
+        if name in _REF_INVALIDATING_TOOLS:
+            body = _STALE_REF_HINT + body
+        return [TextContent(type="text", text=body)]
 
     return server
 
@@ -490,6 +515,9 @@ def _read_tree(rel_path: str) -> str | None:
 _NAME_RE = re.compile(r'^[\w-]+(?:\s*\[[^\]]*\])*\s*"((?:[^"\\]|\\.)*)"')
 # Inline value: `role [..]: value` / `text: value` / `paragraph: value` -> value
 _VALUE_RE = re.compile(r"^[\w-]+(?:\s*\[[^\]]*\])*\s*:\s*(.+)$")
+# Playwright page-state console summary, e.g. "3 errors, 1 warnings" — pure noise the
+# model misreads as a tool failure. Drop it (it rides in via the `Console:` line).
+_CONSOLE_NOISE_RE = re.compile(r"^\d+ errors?, \d+ warnings?$")
 
 
 def _visible_text(snapshot: str) -> str:
@@ -511,7 +539,7 @@ def _visible_text(snapshot: str) -> str:
                 continue
         else:
             continue
-        if value and (not out or out[-1] != value):
+        if value and not _CONSOLE_NOISE_RE.match(value) and (not out or out[-1] != value):
             out.append(value)
     return "\n".join(out)
 
