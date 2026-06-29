@@ -25,6 +25,7 @@ from mcp.client.streamable_http import streamable_http_client
 from mcp.types import TextContent
 from openai import (
     APIConnectionError,
+    APIError,
     APIStatusError,
     APITimeoutError,
     AsyncOpenAI,
@@ -67,7 +68,14 @@ def _handoff_block(scenarios: list[str]) -> str:
         f"`{HUMAN_TOOL_NAME}` with a short `reason` and clear `instructions` telling "
         "the human what to do on screen, then resume once it returns the human's "
         "response (take a fresh `browser_snapshot` first, since the page changed):\n"
-        f"{bullets}"
+        f"{bullets}\n"
+        "EXCEPTION for a CAPTCHA / bot-detection challenge: before handing off, FIRST "
+        "look around for an accessibility option or an alternative challenge you CAN "
+        "solve yourself — e.g. an 'audio', 'accessibility', or 'try a different "
+        "challenge'/refresh control, or a simple text/logic question. Switch to and "
+        "solve that if one exists. Only call "
+        f"`{HUMAN_TOOL_NAME}` if no solvable alternative is available (e.g. it requires "
+        "selecting images or solving a visual puzzle)."
     )
 
 
@@ -370,6 +378,11 @@ async def _complete_with_retry(
                 raise
             last_err = f"rate-limited ({type(exc).__name__}): {exc}"
             retry_after = _retry_after(exc)
+        except (json.JSONDecodeError, APIError) as exc:
+            # OpenRouter sometimes returns a non-JSON / malformed body (HTML gateway
+            # error, empty or truncated response) — the SDK's response.json() then
+            # raises JSONDecodeError. Treat it as transient and retry, don't crash.
+            last_err = f"bad response body: {type(exc).__name__}: {exc}"
         else:
             if getattr(response, "choices", None):
                 return response
