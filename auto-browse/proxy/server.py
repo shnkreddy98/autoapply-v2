@@ -1,18 +1,24 @@
-"""Page-model proxy MCP server.
+"""Text-extracting proxy MCP server.
 
-Sits in front of Microsoft's Playwright MCP. Exposes a curated, re-described
-tool list (see tool_specs.py / tool_allowlist.py), forwards calls to the
-upstream Playwright MCP over a single persistent session, and replaces every
-returned accessibility tree with a deterministic, typed PAGE MODEL
-(proxy/page_model.py): page type, every form field (type/required/value/error),
-the action buttons, and any validation errors.
+Sits in front of Microsoft's Playwright MCP, exposes the upstream tool list
+verbatim, and relays each call over a single persistent session (so browser state
+survives across calls). For any call that produces an accessibility snapshot,
+Playwright MCP writes the ARIA tree to a `.yml` file and returns a
+`[Snapshot](path)` link; we read that tree and reply with ONLY its visible text —
+accessible names, `text:` nodes, and inline values — dropping roles, refs, URLs,
+and structure. Tool results that carry no snapshot pass through unchanged.
+
+`_visible_text` is the single seam for the text<->ARIA mapping; evolve it there.
 """
 
+import copy
+import json
 import logging
 import os
 import re
 from contextlib import AsyncExitStack, asynccontextmanager
 from pathlib import Path
+from typing import Any
 
 import mcp.types as types
 import uvicorn
@@ -24,47 +30,27 @@ from mcp.types import CallToolResult, TextContent
 from starlette.applications import Starlette
 from starlette.routing import Mount
 
-from . import snapshot_cache
-from .option_select import (
-    best_match,
-    collect_options,
-    find_ref_by_label,
-    find_searchbox,
-    label_of_ref,
-)
-from .page_model import extract as extract_page_model
-from .page_model import render as render_page_model
-from .pruner import expand_region
-from .tool_allowlist import STRIP_PARAMS, TREE_RETURNING
-from .tool_specs import TOOL_SPECS
-from .tree_parser import collect_all, parse
-
 logger = logging.getLogger(__name__)
 
 UPSTREAM_URL = os.getenv("PLAYWRIGHT_MCP_URL", "http://localhost:8931/mcp")
 HOST = os.getenv("PROXY_HOST", "0.0.0.0")
 PORT = int(os.getenv("PROXY_PORT", "8932"))
 
-# Dir that contains the shared `.playwright-mcp/` output dir, so snapshot files
-# referenced by the upstream result can be read here. In compose this is /data.
+# Dir that holds the shared `.playwright-mcp/` output dir, so the snapshot files the
+# upstream result links to can be read here and inlined. In compose this is /data.
 SNAPSHOT_DIR = Path(os.getenv("SNAPSHOT_DIR", "data"))
 _SNAPSHOT_LINK_RE = re.compile(r"(?:- )?\[Snapshot\]\(([^)]+\.ya?ml)\)")
 
-# Settle handling: JS/SPA pages often haven't rendered when an action's own
-# snapshot is captured, yielding a near-empty tree. After a navigation (or a
-# submit that triggers one) we wait, then take a fresh snapshot to prune that.
-SETTLE_SECONDS = float(os.getenv("SETTLE_SECONDS", "1.5"))
-# A tree with <= this many real (non-url/text) nodes is treated as "not loaded".
-MIN_MEANINGFUL_NODES = int(os.getenv("MIN_MEANINGFUL_NODES", "2"))
-_EMPTY_TREE_MSG = "[empty: page not loaded — call wait_for, then snapshot again]"
+# After any tool call that returns a snapshot, the upstream captures it the instant
+# the action resolves — often before a JS/SPA page has finished rendering (Oracle
+# Cloud / Workday return an unrendered shell). We wait this long, then re-snapshot,
+# and hand the agent the settled tree instead. Set SETTLE_SECONDS=0 to disable.
+SETTLE_SECONDS = float(os.getenv("SETTLE_SECONDS", "2"))
 
 
 class _Upstream:
-    """Holds the single persistent client session to the Playwright MCP.
-
-    One session is shared across all forwarded tool calls so every
-    navigate/click acts on the same browser tab.
-    """
+    """Holds the single persistent client session to the Playwright MCP, shared
+    across all forwarded calls so every navigate/click acts on the same tab."""
 
     session: ClientSession | None = None
 
@@ -72,276 +58,434 @@ class _Upstream:
 upstream = _Upstream()
 
 
+# --- tool-schema clarification -------------------------------------------------
+# The upstream Playwright MCP describes `target` as "Exact target element reference
+# from the page snapshot, OR a unique element selector". Models read the "selector"
+# half and send e.g. `button[ref="e76"]`, which fails to match because `ref` is a
+# snapshot handle, not a DOM attribute. We rewrite each argument of the snapshot-
+# returning interaction tools with one unambiguous description + a worked example,
+# keyed by argument name (applied at the top level and inside nested field specs).
+
+_ARG_DESCRIPTIONS: dict[str, str] = {
+    "target": (
+        "Element ref copied VERBATIM from the snapshot — the bare token inside "
+        '`[ref=...]`. Example: for `- button "Apply Now" [ref=e76]` pass '
+        '`target="e76"`. Pass the ref token ONLY: never wrap it in a CSS or text '
+        'selector such as `button[ref=e76]`, `#e76`, or `button:has-text("Apply")`, '
+        "and never invent a selector — anything but the literal ref fails to match."
+    ),
+    "element": (
+        "Short human-readable name of the element, used only for logging/permission "
+        '(not for matching). Example: `element="Apply Now button"`.'
+    ),
+    "text": ('Text to type into the element. Example: `text="shnkreddy98@gmail.com"`.'),
+    "values": (
+        "Array of option LABEL(s) to select, exactly as shown in the dropdown. "
+        'Example: `values=["United States of America (+1)"]`.'
+    ),
+    "key": (
+        'Key name or single character to press. Example: `key="Enter"` or `key="a"`.'
+    ),
+    "url": (
+        "Absolute URL to navigate to. "
+        'Example: `url="https://jobs.lever.co/acme/123/apply"`.'
+    ),
+    "submit": ("Whether to press Enter after typing the text. Example: `submit=true`."),
+    "slowly": (
+        "Whether to type one character at a time (triggers per-key handlers). "
+        "Example: `slowly=false`."
+    ),
+    "paths": (
+        "Array of absolute file path(s) to upload. "
+        'Example: `paths=["/resume/shashank_reddy.pdf"]`.'
+    ),
+    "name": ('Human-readable field name. Example: `name="Email Address"`.'),
+    "type": (
+        "Field type: one of textbox, checkbox, radio, combobox, slider. "
+        'Example: `type="textbox"`.'
+    ),
+    "value": (
+        "Value to fill. For a checkbox use `true`/`false`; for a combobox use the "
+        'option text. Example: `value="shnkreddy98@gmail.com"`.'
+    ),
+    "action": (
+        "Tab operation: `list` (show open tabs), `select` (switch to a tab by "
+        "index), `close` (close a tab by index, or the current one if omitted), "
+        '`new` (open a tab). Example: `action="select"`.'
+    ),
+    "index": (
+        "Zero-based tab index from the '### Open tabs' list in a recent result. "
+        "Example: `index=1`."
+    ),
+}
+
+# A worked one-shot appended to each tool's own description.
+_TOOL_EXAMPLES: dict[str, str] = {
+    "browser_click": (
+        'Example call — to click `- button "Apply Now" [ref=e76] [cursor=pointer]`: '
+        '{"element": "Apply Now button", "target": "e76"}.'
+    ),
+    "browser_type": (
+        'Example call — to fill `- textbox "Email" [ref=e282]`: '
+        '{"element": "Email field", "target": "e282", "text": "shnkreddy98@gmail.com"}.'
+    ),
+    "browser_fill_form": (
+        'Example call — fill two fields: {"fields": ['
+        '{"name": "Email", "type": "textbox", "target": "e282", '
+        '"value": "shnkreddy98@gmail.com"}, '
+        '{"name": "Agree", "type": "checkbox", "target": "e301", "value": "true"}]}.'
+    ),
+    "browser_select_option": (
+        'Example call — pick an option in `- combobox "Country" [ref=e173]`: '
+        '{"element": "Country dropdown", "target": "e173", '
+        '"values": ["United States"]}.'
+    ),
+    "browser_hover": (
+        'Example call — hover `- link "Menu" [ref=e44]`: '
+        '{"element": "Menu link", "target": "e44"}.'
+    ),
+    "browser_press_key": 'Example call — {"key": "Enter"}.',
+    "browser_navigate": (
+        'Example call — {"url": "https://jobs.lever.co/acme/123/apply"}.'
+    ),
+    "browser_file_upload": (
+        'Example call — {"paths": ["/resume/shashank_reddy.pdf"]}.'
+    ),
+    "browser_tabs": (
+        "Use this to manage browser tabs. When a click on 'Apply'/a link opens the "
+        "form in a NEW tab, SWITCH to that tab instead of re-clicking the button "
+        "(re-clicking just spawns more duplicate tabs). A result lists open tabs "
+        "under '### Open tabs'. Example call — switch to the second tab: "
+        '{"action": "select", "index": 1}. List tabs: {"action": "list"}. '
+        'Close a dead/duplicate tab: {"action": "close", "index": 2}.'
+    ),
+}
+
+# Full replacements for a tool's top-level description (the upstream text is dropped,
+# not appended to). Use when the upstream description no longer matches what the proxy
+# actually returns — e.g. browser_snapshot returns visible text here, not raw ARIA.
+_TOOL_DESCRIPTIONS: dict[str, str] = {
+    "browser_snapshot": (
+        "Return the CURRENT page's full visible TEXT — the rendered, human-visible "
+        "content of every element on the page, freshly re-read. Use it to re-read the "
+        "whole page after an action, or when you need the complete page text again. It "
+        "does NOT return element refs or the ARIA tree — use `fetch_aria` to recover an "
+        "element's `[ref=...]`. Takes no arguments."
+    ),
+}
+
+# Tools whose entire arg schema we drop (expose them as no-arg). browser_snapshot
+# upstream takes boxes/depth/filename/target, but the proxy always returns the whole
+# page's visible text, so those args are dead weight / foot-guns (e.g. `filename`
+# would dump raw markdown to a file and bypass the text reduction).
+_NO_ARG_TOOLS: frozenset[str] = frozenset({"browser_snapshot"})
+
+# Tools whose schemas we rewrite (snapshot-returning interaction tools) or whose
+# top-level description we override.
+_AUGMENT_TOOLS: frozenset[str] = (
+    frozenset(_TOOL_EXAMPLES) | frozenset(_TOOL_DESCRIPTIONS) | _NO_ARG_TOOLS
+)
+
+# Upstream Playwright tools we expose to the agent. Everything else (screenshot,
+# resize, network/console-request, drag/drop, close, run_code_unsafe) is hidden —
+# browser_evaluate covers arbitrary-JS needs and browser_wait_for returns a fresh
+# snapshot, so the hidden tools have backstops. `fetch_aria` (proxy-only) is added
+# separately. The proxy still calls hidden tools internally (wait_for for settling +
+# fetch_aria) via the upstream session, bypassing this allowlist. `browser_snapshot`
+# is exposed too, but like every snapshot-returning call its result is reduced to the
+# page's visible TEXT — raw ARIA still comes only from `fetch_aria`.
+KEEP_TOOLS: frozenset[str] = frozenset({
+    "browser_navigate",
+    "browser_navigate_back",
+    "browser_click",
+    "browser_type",
+    "browser_fill_form",
+    "browser_select_option",
+    "browser_press_key",
+    "browser_file_upload",
+    "browser_handle_dialog",
+    "browser_console_messages",
+    "browser_evaluate",
+    "browser_hover",
+    "browser_tabs",
+    "browser_wait_for",
+    "browser_snapshot",
+})
+
+# Interaction tools whose result means the page may have navigated/re-rendered, so
+# every ref the model captured from an earlier fetch_aria/snapshot is now stale. We
+# prepend a hint telling it to re-fetch before acting (browser_snapshot/fetch_aria
+# are excluded — they already hand the model a fresh view to read refs from).
+_REF_INVALIDATING_TOOLS: frozenset[str] = frozenset({
+    "browser_navigate",
+    "browser_navigate_back",
+    "browser_click",
+    "browser_type",
+    "browser_fill_form",
+    "browser_select_option",
+    "browser_press_key",
+    "browser_file_upload",
+    "browser_handle_dialog",
+})
+
+_STALE_REF_HINT = (
+    "⚠ The page changed — every ref from an earlier snapshot or fetch_aria is now "
+    "STALE. Call fetch_aria again to get fresh refs before your next click/type; do "
+    "NOT reuse a ref you saw before this action.\n\n"
+)
+
+
+def _patch_descriptions(node: Any) -> None:
+    """Recursively rewrite argument descriptions in a JSON-Schema dict in place,
+    matching by argument name (covers top-level params and nested `fields` items)."""
+    if isinstance(node, dict):
+        props = node.get("properties")
+        if isinstance(props, dict):
+            for arg, spec in props.items():
+                if isinstance(spec, dict) and arg in _ARG_DESCRIPTIONS:
+                    spec["description"] = _ARG_DESCRIPTIONS[arg]
+        for value in node.values():
+            _patch_descriptions(value)
+    elif isinstance(node, list):
+        for value in node:
+            _patch_descriptions(value)
+
+
+def _augment_tool(tool: types.Tool) -> types.Tool:
+    """Return a copy of `tool` with clarified arg descriptions + a worked example
+    appended, or the tool unchanged if it is not in the augment set."""
+    if tool.name not in _AUGMENT_TOOLS:
+        return tool
+    if tool.name in _NO_ARG_TOOLS:
+        schema = {"type": "object", "properties": {}, "additionalProperties": False}
+    else:
+        schema = copy.deepcopy(tool.inputSchema or {"type": "object", "properties": {}})
+    _patch_descriptions(schema)
+    # Override the whole description when set, else keep + append to the upstream one.
+    description = (_TOOL_DESCRIPTIONS.get(tool.name) or tool.description or "").rstrip()
+    example = _TOOL_EXAMPLES.get(tool.name)
+    if example:
+        description = f"{description}\n\n{example}" if description else example
+    return types.Tool(name=tool.name, description=description, inputSchema=schema)
+
+
+# --- proxy-only fetch_aria tool ------------------------------------------------
+# The agent normally sees only the visible TEXT of the page. `fetch_aria` lets it
+# pull the raw ARIA back for a specific key — every line that contains the key,
+# with surrounding context — so it can recover an element's `[ref=...]` / structure.
+FETCH_ARIA_NAME = "fetch_aria"
+FETCH_ARIA_CONTEXT = 3  # default lines of context kept after each match
+
+_FETCH_ARIA_TOOL = types.Tool(
+    name=FETCH_ARIA_NAME,
+    description=(
+        "Search the CURRENT page's full ARIA snapshot for one or more text keys and "
+        "return, for each key, every matching line of the raw ARIA YAML with `context` "
+        "lines after the match (so you see the element and its `[ref=...]`). Use it to "
+        "recover the ref/structure for something you saw in the visible-text output — "
+        "e.g. search a button label to get its ref. Pass several keys at once to fetch "
+        "multiple fields in a single call. The result is a YAML map: one entry per key "
+        "(in the order requested), the value being a literal block of the matched ARIA "
+        "lines (or `(no match)`). Use a larger `context` for deeply nested elements "
+        "(forms, tables); a smaller one to keep the result tight. Non-contiguous "
+        "matches for the same key are separated by a `--` line."
+    ),
+    inputSchema={
+        "type": "object",
+        "properties": {
+            "keys": {
+                "type": "array",
+                "items": {"type": "string"},
+                "minItems": 1,
+                "description": (
+                    "Case-insensitive texts to find in the ARIA snapshot. One result "
+                    'block is returned per key. Example: keys=["Name", "Country", '
+                    '"Apply Now"].'
+                ),
+            },
+            "context": {
+                "type": "integer",
+                "minimum": 0,
+                "description": (
+                    "Lines of context to include after each match (same value applied "
+                    f"to every key). Defaults to {FETCH_ARIA_CONTEXT}. Example: "
+                    "context=5."
+                ),
+            },
+        },
+        "required": ["keys"],
+        "additionalProperties": False,
+    },
+)
+
+
+async def _fetch_aria(arguments: dict) -> list[types.TextContent]:
+    """Handle a `fetch_aria` call: snapshot the current page once, then grep its ARIA
+    tree for each requested key, returning a YAML map of key -> matched lines."""
+    raw_keys = arguments.get("keys")
+    if not isinstance(raw_keys, list):
+        return [TextContent(type="text", text="fetch_aria: 'keys' must be an array.")]
+    keys = [str(k).strip() for k in raw_keys if str(k).strip()]
+    if not keys:
+        return [
+            TextContent(type="text", text="fetch_aria: 'keys' must be a non-empty array.")
+        ]
+    try:
+        context = int(arguments.get("context", FETCH_ARIA_CONTEXT))
+    except (TypeError, ValueError):
+        context = FETCH_ARIA_CONTEXT
+    context = max(0, context)
+    tree = await _snapshot_tree_now()
+    if tree is None:
+        return [
+            TextContent(
+                type="text", text="fetch_aria: could not read the current snapshot."
+            )
+        ]
+    return [TextContent(type="text", text=_build_aria_map(tree, keys, context))]
+
+
+async def _snapshot_tree_now() -> str | None:
+    """Take a fresh snapshot of the current page and return its full ARIA tree."""
+    try:
+        result = await _require_session().call_tool("browser_snapshot", {})
+    except Exception as exc:
+        logger.warning("fetch_aria snapshot failed: %s", exc)
+        return None
+    text = _extract_text(result)
+    m = _SNAPSHOT_LINK_RE.search(text)
+    return _read_tree(m.group(1)) if m else text
+
+
+def _grep_tree(tree: str, key: str, context: int) -> list[str]:
+    """Return the ARIA lines matching `key` (case-insensitive) in `tree`. For each
+    occurrence the matched line plus `context` lines after it are kept, with the
+    original indentation preserved. Non-contiguous occurrences are separated by a
+    `"--"` sentinel line. Returns an empty list when `key` is not found."""
+    lines = tree.splitlines()
+    needle = key.lower()
+    out: list[str] = []
+    prev_hi: int | None = None
+    for i, line in enumerate(lines):
+        if needle not in line.lower():
+            continue
+        lo = i
+        hi = min(len(lines), i + context + 1)
+        if prev_hi is not None:
+            if lo > prev_hi:
+                out.append("--")  # gap between occurrences
+            else:
+                lo = prev_hi  # contiguous/overlapping -> don't repeat lines
+        out.extend(lines[lo:hi])
+        prev_hi = hi
+    return out
+
+
+def _build_aria_map(tree: str, keys: list[str], context: int) -> str:
+    """Build a YAML map (one entry per key, in request order) from the ARIA `tree`.
+    Each value is a literal block scalar of the matched lines (relative indentation
+    preserved), or `(no match)` when the key is absent."""
+    out: list[str] = []
+    for key in keys:
+        key_yaml = json.dumps(key)  # safely quote arbitrary keys for YAML
+        matched = _grep_tree(tree, key, context)
+        if not matched:
+            out.append(f"{key_yaml}: (no match)")
+            continue
+        # Dedent to the shallowest matched line, then indent the whole block by 2 so
+        # it is a valid YAML literal block scalar regardless of original nesting.
+        indents = [
+            len(line) - len(line.lstrip(" "))
+            for line in matched
+            if line != "--" and line.strip()
+        ]
+        base = min(indents) if indents else 0
+        out.append(f"{key_yaml}: |-")
+        for line in matched:
+            if line == "--":
+                out.append("  --")
+            elif not line.strip():
+                out.append("")
+            else:
+                out.append("  " + line[base:])
+    return "\n".join(out) + "\n"
+
+
 def _build_server() -> Server:
-    server = Server("playwright-pruning-proxy")
+    server = Server("playwright-transparent-proxy")
 
     @server.list_tools()
     async def list_tools() -> list[types.Tool]:
-        return [
-            types.Tool(
-                name=name,
-                description=spec["description"],
-                inputSchema=spec["inputSchema"],
-            )
-            for name, spec in TOOL_SPECS.items()
-        ]
+        # Expose the upstream Playwright MCP tools, with clarified argument
+        # descriptions + examples on the snapshot-returning interaction tools, plus
+        # the proxy-only `fetch_aria` search tool.
+        result = await _require_session().list_tools()
+        kept = [_augment_tool(t) for t in result.tools if t.name in KEEP_TOOLS]
+        return kept + [_FETCH_ARIA_TOOL]
 
     @server.call_tool()
     async def call_tool(name: str, arguments: dict | None) -> list[types.TextContent]:
-        args = dict(arguments or {})
-
-        # Reject hidden/unknown tools — never forwarded upstream.
-        if name not in TOOL_SPECS:
-            return [
-                TextContent(type="text", text=f"Error: tool '{name}' is not available.")
-            ]
-
-        spec = TOOL_SPECS[name]
-
-        # Orchestrated tools (e.g. select_options) drive several upstream calls
-        # themselves in one agent turn — handled before the generic forward path.
-        if spec.get("orchestrated"):
-            return [TextContent(type="text", text=await _select_options(args))]
-
-        # Proxy-only tools (e.g. expand_region) — no upstream call.
-        if spec["upstream"] is None:
-            return _handle_proxy_tool(name, args)
-
-        # Strip any goal/next_goal the agent may still send — selection is now
-        # structural, not goal-based — plus other proxy-only params.
-        for param in STRIP_PARAMS:
-            args.pop(param, None)
-
-        upstream_name = spec["upstream"]
-        # Merge any fixed upstream args the wrapper pins (e.g. action="select"
-        # for the tab wrappers).
-        args.update(spec.get("inject_args", {}))
-
-        # Decide whether this action likely triggers a navigation/re-render, in
-        # which case we should settle before snapshotting (see _render_snapshot).
-        force_settle = _navigates(upstream_name, args)
-
-        # Oracle/Taleo "I agree" controls are a 0×0 hidden <input> wrapped in a
-        # <label> that also holds a "terms and conditions" link. A normal click
-        # lands on the link (opens a dialog) and never toggles, trapping the agent
-        # in a loop. When the click target is such a label, toggle the underlying
-        # input directly instead of forwarding the click.
-        if upstream_name == "browser_click" and _is_hidden_toggle_label(
-            args.get("target", "")
-        ):
-            return [TextContent(type="text", text=await _toggle_hidden_input(args))]
-
-        raw_result = await _call_upstream(upstream_name, args)
-        raw_text = _extract_text(raw_result)
-
-        if upstream_name in TREE_RETURNING:
-            raw_text = await _render_snapshot(raw_text, force_settle)
-
-        return [TextContent(type="text", text=raw_text)]
+        if name == FETCH_ARIA_NAME:
+            return await _fetch_aria(dict(arguments or {}))
+        if name not in KEEP_TOOLS:
+            return [TextContent(type="text", text=f"Tool {name!r} is not available.")]
+        result = await _require_session().call_tool(name, dict(arguments or {}))
+        text = _extract_text(result)
+        # browser_snapshot returns the ARIA tree INLINE (no snapshot link), so reduce
+        # that text to visible text directly — otherwise the raw ARIA leaks through.
+        if name == "browser_snapshot":
+            return [TextContent(type="text", text=_visible_text(text))]
+        # Other interaction tools attach a snapshot link; if present, reply with just
+        # its visible text. No snapshot in the result -> pass the output through.
+        tree = await _snapshot_tree(text)
+        if tree is None:
+            return [TextContent(type="text", text=text)]
+        body = _visible_text(tree)
+        if name in _REF_INVALIDATING_TOOLS:
+            body = _STALE_REF_HINT + body
+        return [TextContent(type="text", text=body)]
 
     return server
 
 
-def _handle_proxy_tool(name: str, args: dict) -> list[TextContent]:
-    if name == "expand_region":
-        result = expand_region(args.get("ref", ""), args.get("goal", ""))
-        return [TextContent(type="text", text=result)]
-    return [TextContent(type="text", text=f"Error: unknown proxy tool '{name}'.")]
+async def _snapshot_tree(text: str) -> str | None:
+    """Return the full ARIA tree for a result that links to a snapshot, or None if
+    the result has no snapshot. When SETTLE_SECONDS > 0 we wait for the page to
+    finish rendering and re-snapshot (the upstream tree can be a pre-render shell);
+    otherwise we read the tree the call already produced."""
+    link = _SNAPSHOT_LINK_RE.search(text)
+    if not link:
+        return None
+    if SETTLE_SECONDS > 0:
+        settled = await _settle_snapshot_tree()
+        if settled is not None:
+            return settled
+    return _read_tree(link.group(1))
 
 
-# Climb to the wrapping <label>, toggle the hidden checkbox/radio inside it (or the
-# one it points at via `for=`), and report the resulting state. Clicking the input
-# directly bypasses the overlaid "terms and conditions" link that traps a click.
-_TOGGLE_JS = """(el) => {
-  const lab = el.closest('label') || el.parentElement;
-  let inp = lab && lab.querySelector('input[type=checkbox],input[type=radio]');
-  if (!inp && lab && lab.htmlFor) inp = document.getElementById(lab.htmlFor);
-  if (!inp) {
-    const row = el.parentElement;
-    inp = row && row.querySelector('input[type=checkbox],input[type=radio]');
-  }
-  if (inp) { inp.click(); return inp.checked ? 'checked' : 'unchecked'; }
-  el.click();
-  return 'fallback-click';
-}"""
-
-
-def _is_hidden_toggle_label(ref: str) -> bool:
-    """True if `ref` is a clickable label fronting a checkbox/radio that Playwright
-    omitted from the snapshot (a 0×0 hidden input) AND wraps a link — the Oracle
-    "I agree with the terms and conditions" trap. See _TOGGLE_JS / page_model."""
-    if not ref:
-        return False
-    root = parse(snapshot_cache.get())
-    if root is None:
-        return False
-    node = next((n for n in collect_all(root) if n.ref == ref), None)
-    if node is None or "[cursor=pointer]" not in node.raw_line:
-        return False
-    p = node.parent
-    if p is None:
-        return False
-    has_hidden_toggle = any(
-        c is not node and c.role in ("checkbox", "radio") and c.ref is None
-        for c in p.children
-    )
-    has_link = any(d.role == "link" for d in collect_all(node))
-    return has_hidden_toggle and has_link
-
-
-async def _toggle_hidden_input(args: dict) -> str:
-    """Toggle the hidden checkbox/radio behind a label ref, then return a fresh
-    page model so the agent sees the new checked state."""
+async def _settle_snapshot_tree() -> str | None:
+    """Wait SETTLE_SECONDS for the page to render, take a fresh snapshot, and return
+    its full accessibility tree text. Returns None if the upstream calls fail (the
+    caller then falls back to the un-settled snapshot). Calls upstream directly, so
+    it does not recurse through `call_tool`."""
+    session = _require_session()
     try:
-        await _call_upstream(
-            "browser_evaluate",
-            {
-                "target": args["target"],
-                "element": args.get("element", "agree checkbox"),
-                "function": _TOGGLE_JS,
-            },
-        )
-    except Exception as exc:  # fall back to a plain click rather than dead-end
-        logger.warning("hidden-toggle failed (%s); forwarding plain click", exc)
-        raw = _extract_text(await _call_upstream("browser_click", args))
-        return await _render_snapshot(raw, force_settle=False)
-
-    tree = await _wait_and_snapshot()
-    if tree is None:
-        return "Toggled the agree checkbox."
-    snapshot_cache.set(tree)
-    if _node_count(tree) <= MIN_MEANINGFUL_NODES:
-        return _EMPTY_TREE_MSG
-    return render_page_model(extract_page_model(tree))
+        await session.call_tool("browser_wait_for", {"time": SETTLE_SECONDS})
+        result = await session.call_tool("browser_snapshot", {})
+    except Exception as exc:  # settling is best-effort, never fatal
+        logger.warning("settle failed: %s", exc)
+        return None
+    text = _extract_text(result)
+    m = _SNAPSHOT_LINK_RE.search(text)
+    if not m:
+        return text  # already an inline tree
+    return _read_tree(m.group(1))
 
 
-# Hard ceiling on values processed in one select_options call (pathological input
-# guard); each value runs a bounded handful of upstream calls.
-_MAX_SELECT_VALUES = 25
-
-
-async def _select_options(args: dict) -> str:
-    """Composite dropdown picker: open an ARIA combobox/listbox once, then for each
-    requested human-readable label match it to a rendered option and click it —
-    re-opening (or re-filtering a type-ahead) per value for multiselects. All the
-    browser steps run here, server-side, so the agent spends ONE turn instead of
-    click-open + snapshot + click-option per value. See proxy/option_select.py.
-    """
-    target = args.get("target")
-    values = [str(v) for v in (args.get("values") or []) if str(v).strip()]
-    element = args.get("element") or "dropdown"
-    if not target or not values:
-        return "Error: select_options requires 'target' (combobox ref) and non-empty 'values'."
-    values = values[:_MAX_SELECT_VALUES]
-
-    # Label of the dropdown from the snapshot the agent saw, so we can re-find it
-    # after a pick re-renders the tree and its ref goes stale (multiselect).
-    pre_tree = snapshot_cache.get()
-    dropdown_label = label_of_ref(pre_tree, target) if pre_tree else None
-
-    matched: list[str] = []
-    unmatched: list[tuple[str, list[str]]] = []
-
-    for i, value in enumerate(values):
-        reopen_ref = target if i == 0 else None
-        tree = await _ensure_dropdown_open(reopen_ref, dropdown_label or element)
-        if not tree:
-            unmatched.append((value, []))
-            continue
-
-        # Type-ahead combobox: type the value to filter, then re-read options.
-        sb = find_searchbox(tree)
-        if sb is not None:
-            try:
-                await _call_upstream("browser_type", {"target": sb, "text": value})
-                settled = await _wait_and_snapshot()
-                if settled:
-                    snapshot_cache.set(settled)
-                    tree = settled
-            except Exception as exc:  # type-ahead is best-effort
-                logger.warning("select_options type-ahead failed: %s", exc)
-
-        options = collect_options(tree)
-        opt = best_match(value, options)
-        if opt is None:
-            unmatched.append((value, [o.label for o in options][:12]))
-            continue
-
-        try:
-            await _call_upstream("browser_click", {"target": opt.ref, "element": opt.label})
-        except Exception as exc:
-            logger.warning("select_options click failed for %r: %s", opt.label, exc)
-            unmatched.append((value, []))
-            continue
-        matched.append(value)
-        settled = await _wait_and_snapshot()
-        if settled:
-            snapshot_cache.set(settled)
-
-    final_tree = snapshot_cache.get()
-    body = _render_select_body(final_tree)
-    summary = _select_summary(matched, unmatched)
-    return f"{summary}\n\n{body}" if body else summary
-
-
-async def _ensure_dropdown_open(reopen_ref: str | None, label: str | None) -> str | None:
-    """Return a tree with the dropdown's options visible.
-
-    On the first value (`reopen_ref` set) ALWAYS click that control to open the
-    intended dropdown — never short-circuit on "some options are visible", because a
-    Workday widget leaves a `listbox "items selected"` pill tray in the DOM and
-    another field's menu may be open, both of which would match the wrong options
-    (see option_select._option_nodes). For subsequent multiselect values there is no
-    `reopen_ref`; reuse the cached tree if a real (non-pill) menu is already open,
-    else re-find the control by `label`."""
-    cached = snapshot_cache.get()
-    ref = reopen_ref
-    if ref is None:
-        if cached and collect_options(cached):
-            return cached  # multiselect menu still open from the previous pick
-        if label and cached:
-            ref = find_ref_by_label(cached, label)
-    if ref is None:
-        return cached  # cannot open; match against whatever is currently shown
-
-    try:
-        await _call_upstream("browser_click", {"target": ref, "element": label or "dropdown"})
-    except Exception as exc:
-        logger.warning("select_options open failed (ref=%s): %s", ref, exc)
-        return cached
-    tree = await _wait_and_snapshot()
-    if tree:
-        snapshot_cache.set(tree)
-        return tree
-    return cached
-
-
-def _render_select_body(tree_text: str | None) -> str:
-    """Page model of the post-select tree (same renderer as _render_snapshot)."""
-    if not tree_text or _node_count(tree_text) <= MIN_MEANINGFUL_NODES:
-        return _EMPTY_TREE_MSG
-    return render_page_model(extract_page_model(tree_text))
-
-
-def _select_summary(
-    matched: list[str], unmatched: list[tuple[str, list[str]]]
-) -> str:
-    """One-line outcome the agent reads to know what stuck and what to retry."""
-    parts: list[str] = []
-    if matched:
-        parts.append("matched: " + ", ".join(matched))
-    for value, options in unmatched:
-        if options:
-            parts.append(f'no match for "{value}" — options: ' + ", ".join(options))
-        else:
-            parts.append(f'no match for "{value}"')
-    return "### select_options\n" + (" | ".join(parts) if parts else "no values processed")
-
-
-async def _call_upstream(tool_name: str, arguments: dict) -> CallToolResult:
+def _require_session() -> ClientSession:
     if upstream.session is None:
         raise RuntimeError("Upstream Playwright MCP session is not connected.")
-    return await upstream.session.call_tool(tool_name, arguments)
+    return upstream.session
 
 
 def _extract_text(result: CallToolResult) -> str:
@@ -349,108 +493,55 @@ def _extract_text(result: CallToolResult) -> str:
     return "\n".join(parts) if parts else str(result.content)
 
 
-async def _render_snapshot(raw_text: str, force_settle: bool) -> str:
-    """Find the accessibility tree in an upstream result, settle it if needed,
-    cache it, and replace it with the deterministic PAGE MODEL (proxy/page_model.py)
-    — a typed view of every form field/action/error. No goal, no keyword pruning.
-
-    Playwright MCP returns the snapshot either inline or, more commonly, as a
-    `[Snapshot](.playwright-mcp/page-*.yml)` link to a file. The data dir is
-    shared into this container (SNAPSHOT_DIR) so the file can be read here.
-
-    Settle (#1/#2): if this action navigated, or the captured tree looks
-    unrendered (<= MIN_MEANINGFUL_NODES), wait then re-snapshot and use the
-    larger result. If the tree is still empty afterwards, return an explicit
-    empty signal so the model knows to wait rather than reuse stale refs.
-    """
-    link_line, tree_text = _load_tree(raw_text)
-    appended = False
-    if tree_text is None:
-        # Some results carry no tree of their own (e.g. browser_tabs returns just
-        # the tab list). When the action changed the active page, fetch a fresh
-        # snapshot of the now-current tab and append it; otherwise pass through.
-        if not force_settle:
-            return raw_text
-        tree_text = await _wait_and_snapshot()
-        if tree_text is None:
-            return raw_text
-        appended = True
-    elif force_settle or _node_count(tree_text) <= MIN_MEANINGFUL_NODES:
-        settled = await _wait_and_snapshot()
-        if settled is not None and _node_count(settled) > _node_count(tree_text):
-            tree_text = settled
-
-    snapshot_cache.set(tree_text)
-
-    if _node_count(tree_text) <= MIN_MEANINGFUL_NODES:
-        body = _EMPTY_TREE_MSG
-    else:
-        body = render_page_model(extract_page_model(tree_text))
-
-    # Splice the body into the original result (replacing the file-link line),
-    # append it when the original carried no tree of its own (tab tools), or
-    # return it directly when the tree was inline.
-    if appended:
-        return f"{raw_text}\n\n### Page\n{body}"
-    if link_line:
-        return raw_text.replace(link_line, body)
-    return body
-
-
-def _navigates(upstream_name: str, args: dict) -> bool:
-    """True if the action likely triggers a navigation or full re-render, so the
-    resulting page should be settled before snapshotting."""
-    if upstream_name in ("browser_navigate", "browser_navigate_back"):
-        return True
-    if upstream_name == "browser_type" and args.get("submit"):
-        return True
-    if upstream_name == "browser_press_key":
-        return str(args.get("key", "")).lower() in ("enter", "return")
-    # Switching/opening/closing a tab changes the active page; settle + snapshot
-    # the now-current tab so the agent gets its fresh (pruned) tree.
-    if upstream_name == "browser_tabs":
-        return args.get("action") in ("select", "new", "close")
-    return False
-
-
-async def _wait_and_snapshot() -> str | None:
-    """Wait for the page to settle, then take a fresh snapshot. Returns the tree
-    text, or None if the extra upstream calls fail."""
+def _read_tree(rel_path: str) -> str | None:
+    """Read a Playwright snapshot `.yml` file (path relative to SNAPSHOT_DIR) and
+    return its full ARIA tree text, or None if it can't be read."""
+    path = SNAPSHOT_DIR / rel_path
     try:
-        await _call_upstream("browser_wait_for", {"time": SETTLE_SECONDS})
-        result = await _call_upstream("browser_snapshot", {})
-        _, tree_text = _load_tree(_extract_text(result))
-        return tree_text
-    except Exception as exc:  # settling is best-effort, never fatal
-        logger.warning("settle failed: %s", exc)
+        return path.read_text(encoding="utf-8")
+    except OSError as exc:
+        logger.warning("could not read snapshot %s: %s", path, exc)
         return None
 
 
-def _node_count(tree_text: str) -> int:
-    """Number of real (non-url/non-text) nodes in a snapshot tree."""
-    root = parse(tree_text)
-    if root is None:
-        return 0
-    return sum(1 for n in collect_all(root) if not n.is_url and not n.is_text)
+# --- ARIA tree -> visible text -------------------------------------------------
+# THE seam for the text<->ARIA mapping. A Playwright ARIA snapshot is a YAML tree
+# of `- <role> "<name>" [ref=..]:` nodes plus `- text: ...` / `- <role> [..]: value`
+# leaves and `- /url: ...` property lines. We keep the human-visible strings (the
+# quoted accessible names and inline values) and drop roles, refs, urls, brackets,
+# and pure structure. Evolve the rules here as the inspector reveals new shapes.
+
+# Quoted accessible name: `role [..] "Name" [..]:` -> Name
+_NAME_RE = re.compile(r'^[\w-]+(?:\s*\[[^\]]*\])*\s*"((?:[^"\\]|\\.)*)"')
+# Inline value: `role [..]: value` / `text: value` / `paragraph: value` -> value
+_VALUE_RE = re.compile(r"^[\w-]+(?:\s*\[[^\]]*\])*\s*:\s*(.+)$")
+# Playwright page-state console summary, e.g. "3 errors, 1 warnings" — pure noise the
+# model misreads as a tool failure. Drop it (it rides in via the `Console:` line).
+_CONSOLE_NOISE_RE = re.compile(r"^\d+ errors?, \d+ warnings?$")
 
 
-def _load_tree(text: str) -> tuple[str | None, str | None]:
-    """Return (link_line, tree_text). link_line is the matched `[Snapshot](...)`
-    line when the tree came from a file (None for an inline tree)."""
-    m = _SNAPSHOT_LINK_RE.search(text)
-    if m:
-        path = SNAPSHOT_DIR / m.group(1)
-        if path.is_file():
-            return m.group(0), path.read_text(encoding="utf-8")
-        return None, None
-
-    # Fallback: inline tree (first `- role ... [ref=...]` line onward).
-    lines = text.splitlines()
-    for i, line in enumerate(lines):
-        stripped = line.lstrip()
-        if stripped.startswith("- ") and "[ref=" in stripped:
-            return None, "\n".join(lines[i:])
-    return None, None
+def _visible_text(snapshot: str) -> str:
+    """Extract human-visible text from a Playwright ARIA snapshot, one item per
+    line in document order, dropping consecutive duplicates."""
+    out: list[str] = []
+    for raw in snapshot.splitlines():
+        line = raw.strip()
+        if not line.startswith("- "):
+            continue
+        line = line[2:].strip()
+        if line.startswith("/"):  # /url: and other property nodes — not visible
+            continue
+        if m := _NAME_RE.match(line):
+            value = m.group(1).strip()
+        elif m := _VALUE_RE.match(line):
+            value = m.group(1).strip().strip('"')
+            if value.startswith("/"):
+                continue
+        else:
+            continue
+        if value and not _CONSOLE_NOISE_RE.match(value) and (not out or out[-1] != value):
+            out.append(value)
+    return "\n".join(out)
 
 
 def main() -> None:
@@ -478,7 +569,7 @@ def main() -> None:
             logger.info("Connected to upstream Playwright MCP: %s", UPSTREAM_URL)
 
             async with session_manager.run():
-                logger.info("Pruning proxy listening on %s:%s", HOST, PORT)
+                logger.info("Transparent proxy listening on %s:%s", HOST, PORT)
                 try:
                     yield
                 finally:
