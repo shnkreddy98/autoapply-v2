@@ -133,7 +133,7 @@ MUST DOs:
 - Pass a ref as the `target` argument EXACTLY as shown, with no decoration. For the line `- button "Apply Now" [ref=e76] [cursor=pointer]`, click with: browser_click({"element": "Apply Now button", "target": "e76"}). Never wrap the ref in a selector (NOT `button[ref=e76]`, NOT `#e76`) and never invent a CSS/text selector — only the bare ref token (`e76`) matches.
 - Navigate to the job URL, follow Apply links, fill the application from the profile, and upload the resume (path is at the top of the profile).
 - Prefer autofill from the uploaded RESUME when the page offers it. Sign-in / account-based autofill is allowed where the portal requires it (per-ATS rules may forbid it).
-- Sign in or create an account if the portal requires it before applying.
+- If the portal requires an account: ALWAYS try to SIGN IN FIRST, using the Login Email and Login Password from the profile (use that same given password for every site). Only if sign-in fails because no account exists (e.g. "account not found", "no user", "incorrect email") should you then CREATE an account, reusing the same email and given password. Never create an account before trying to sign in.
 - Work through every page/step. Do NOT click the final Submit — stop before it and return a short plain-text summary of what you filled and anything you couldn't.
 - State your next step in one short sentence before each tool call."""
     + "\n\n"
@@ -634,9 +634,17 @@ async def main(user_id: str, job_url: str, model: str) -> None:
 
 
 if __name__ == "__main__":
-    # Usage: uv run python -m agent.loop <user_id> <job_url>
+    # Usage: uv run python -m agent.loop <user_id> <idx>
+    # <idx> is a 0-based index into urls.txt (one URL per line; blanks ignored).
+    # idx 0 == the first line, so editor line N == idx N-1.
     if len(sys.argv) < 3:
-        raise SystemExit("Usage: uv run python -m agent.loop <user_id> <job_url>")
+        raise SystemExit("Usage: uv run python -m agent.loop <user_id> <idx>")
     user_id = sys.argv[1]
-    job_url = sys.argv[2]
+    idx = int(sys.argv[2])
+    # Read relative to this file, not the CWD, so it works from anywhere.
+    urls = [ln.strip() for ln in (HERE / "urls.txt").read_text().splitlines() if ln.strip()]
+    if not 0 <= idx < len(urls):
+        raise SystemExit(f"idx {idx} out of range (0..{len(urls) - 1}); urls.txt has {len(urls)} URLs")
+    job_url = urls[idx]
+    print(f"[{idx}] {job_url}")
     asyncio.run(main(user_id=user_id, job_url=job_url, model=DEFAULT_MODEL))
