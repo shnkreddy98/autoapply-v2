@@ -66,6 +66,44 @@ def _list_traces(trace_dir: Path) -> list[dict]:
     return out
 
 
+def _tailor_status() -> dict:
+    """Live tailor-queue + worker status from Postgres. Returns {"error": ...} on any
+    DB problem so the dashboard degrades gracefully instead of 500-ing."""
+    try:
+        from common import db
+    except Exception as exc:  # common not installed / importable
+        return {"error": f"common not importable: {exc}"}
+
+    def _iso(v):
+        return v.isoformat() if hasattr(v, "isoformat") else v
+
+    try:
+        with db.connect() as conn, conn.cursor() as cur:
+            cur.execute("SELECT status, count(*) AS n FROM tailored_resumes GROUP BY status")
+            tailor_counts = {r["status"]: r["n"] for r in cur.fetchall()}
+            cur.execute("SELECT status, count(*) AS n FROM jobs GROUP BY status")
+            job_counts = {r["status"]: r["n"] for r in cur.fetchall()}
+            cur.execute(
+                """SELECT t.status, t.resume_score, t.new_resume_score, t.claimed_by,
+                          t.claimed_at, t.updated_at, t.error, j.url, j.title
+                   FROM tailored_resumes t JOIN jobs j ON j.job_id = t.job_id
+                   ORDER BY t.updated_at DESC LIMIT 100"""
+            )
+            rows = [dict(r) for r in cur.fetchall()]
+    except Exception as exc:
+        return {"error": str(exc)}
+
+    for r in rows:
+        r["claimed_at"] = _iso(r.get("claimed_at"))
+        r["updated_at"] = _iso(r.get("updated_at"))
+    return {
+        "tailor_counts": tailor_counts,
+        "job_counts": job_counts,
+        "active": [r for r in rows if r["status"] == "tailoring"],
+        "rows": rows,
+    }
+
+
 def _make_handler(trace_dir: Path):
     class Handler(BaseHTTPRequestHandler):
         def log_message(self, *_args):  # quiet
@@ -86,6 +124,10 @@ def _make_handler(trace_dir: Path):
             route = parsed.path
             if route == "/":
                 self._send(INDEX_HTML.encode(), "text/html; charset=utf-8")
+            elif route == "/tailor":
+                self._send(TAILOR_HTML.encode(), "text/html; charset=utf-8")
+            elif route == "/api/tailor":
+                self._json(_tailor_status())
             elif route == "/api/traces":
                 self._json(_list_traces(trace_dir))
             elif route == "/api/trace":
@@ -433,6 +475,113 @@ function renderTrace(events) {
 
 $("#filter").addEventListener("input", renderList);
 loadList();
+</script>
+</body>
+</html>
+"""
+
+
+TAILOR_HTML = r"""<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tailor Dashboard</title>
+<style>
+  :root { --bg:#0f1116; --panel:#171a21; --border:#262b36; --text:#e6ebf2;
+          --muted:#8b95a7; --ok:#3fb950; --warn:#d29922; --bad:#f85149; --accent:#58a6ff; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--text);
+         font:14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  header { padding:16px 22px; border-bottom:1px solid var(--border);
+           display:flex; align-items:baseline; gap:14px; position:sticky; top:0;
+           background:var(--panel); z-index:5; }
+  header h1 { font-size:17px; margin:0; }
+  header .meta { color:var(--muted); font-size:12.5px; }
+  main { padding:18px 22px; max-width:1100px; }
+  .cards { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:8px; }
+  .card { background:var(--panel); border:1px solid var(--border); border-radius:10px;
+          padding:10px 14px; min-width:96px; }
+  .card .n { font-size:22px; font-weight:700; }
+  .card .l { color:var(--muted); font-size:12px; text-transform:capitalize; }
+  .card.ready .n { color:var(--ok); } .card.failed .n { color:var(--bad); }
+  .card.tailoring .n, .card.pending .n { color:var(--warn); }
+  h2 { font-size:13px; text-transform:uppercase; letter-spacing:.04em;
+       color:var(--muted); margin:22px 0 8px; }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  th, td { text-align:left; padding:7px 10px; border-bottom:1px solid var(--border);
+           vertical-align:top; }
+  th { color:var(--muted); font-weight:600; }
+  td.url { max-width:420px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  td.url a { color:var(--accent); text-decoration:none; }
+  .pill { display:inline-block; padding:1px 8px; border-radius:999px; font-size:11.5px;
+          border:1px solid var(--border); }
+  .pill.ready { color:var(--ok); border-color:#21452b; }
+  .pill.failed { color:var(--bad); border-color:#5c2725; }
+  .pill.tailoring, .pill.pending { color:var(--warn); border-color:#5c4a1e; }
+  .score b { color:var(--ok); } .delta { color:var(--muted); }
+  .err { color:var(--bad); font-size:12px; }
+  .empty { color:var(--muted); padding:8px 0; }
+  .dot { display:inline-block; width:8px; height:8px; border-radius:50%;
+         background:var(--ok); margin-right:6px; animation:pulse 1.4s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+</style>
+</head>
+<body>
+<header>
+  <h1>Tailor Dashboard</h1>
+  <span class="meta"><span class="dot"></span><span id="updated">connecting…</span></span>
+</header>
+<main>
+  <h2>Tailor queue</h2>
+  <div class="cards" id="tailor-cards"></div>
+  <h2>JD capture</h2>
+  <div class="cards" id="job-cards"></div>
+  <h2>Active workers</h2>
+  <div id="active"></div>
+  <h2>Recent</h2>
+  <table id="rows"><thead><tr>
+    <th>Status</th><th>Score</th><th>Worker</th><th>Updated</th><th>Job</th>
+  </tr></thead><tbody></tbody></table>
+</main>
+<script>
+const ORDER = ["pending","tailoring","ready","failed"];
+function fmt(ts){ if(!ts) return "—"; const d=new Date(ts);
+  return isNaN(d)? ts : d.toLocaleTimeString(); }
+function cards(el, counts){
+  const keys = Object.keys(counts||{}).sort((a,b)=>ORDER.indexOf(a)-ORDER.indexOf(b));
+  el.innerHTML = keys.length ? keys.map(k =>
+    `<div class="card ${k}"><div class="n">${counts[k]}</div><div class="l">${k}</div></div>`
+  ).join("") : '<div class="empty">none</div>';
+}
+function scoreCell(r){
+  if(r.new_resume_score==null) return "—";
+  const base = r.resume_score==null ? "" : `<span class="delta">${r.resume_score}→</span>`;
+  return `<span class="score">${base}<b>${r.new_resume_score}</b></span>`;
+}
+async function tick(){
+  try{
+    const d = await (await fetch("/api/tailor")).json();
+    if(d.error){ document.getElementById("updated").textContent = "DB error: "+d.error; return; }
+    cards(document.getElementById("tailor-cards"), d.tailor_counts);
+    cards(document.getElementById("job-cards"), d.job_counts);
+    const act = document.getElementById("active");
+    act.innerHTML = (d.active&&d.active.length) ? d.active.map(r =>
+      `<div class="card tailoring"><div class="l">${r.claimed_by||"?"} · since ${fmt(r.claimed_at)}</div>`
+      +`<div class="url" style="max-width:520px">${r.title||r.url||""}</div></div>`
+    ).join("") : '<div class="empty">idle — no row being tailored</div>';
+    const tb = document.querySelector("#rows tbody");
+    tb.innerHTML = (d.rows||[]).map(r => {
+      const u = r.url ? `<a href="${r.url}" target="_blank" rel="noopener">${r.title||r.url}</a>` : "—";
+      const err = r.error ? `<div class="err">${r.error}</div>` : "";
+      return `<tr><td><span class="pill ${r.status}">${r.status}</span></td>`
+        +`<td>${scoreCell(r)}</td><td>${r.claimed_by||"—"}</td>`
+        +`<td>${fmt(r.updated_at)}</td><td class="url">${u}${err}</td></tr>`;
+    }).join("");
+    document.getElementById("updated").textContent = "updated "+new Date().toLocaleTimeString();
+  }catch(e){ document.getElementById("updated").textContent = "fetch failed: "+e; }
+}
+tick(); setInterval(tick, 2500);
 </script>
 </body>
 </html>
