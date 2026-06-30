@@ -33,6 +33,40 @@ PROXY_MCP_URL = os.getenv("PROXY_MCP_URL", "http://localhost:8932/mcp")
 # must not stall the whole queue — on timeout the job is marked failed and we move on.
 NAV_TIMEOUT_SECONDS = float(os.getenv("NAV_TIMEOUT_SECONDS", "60"))
 
+# Reject a capture that's clearly not a job description, so we never store a loading
+# shell / pure form page and then tailor against junk (which silently scores 0).
+MIN_JD_CHARS = int(os.getenv("MIN_JD_CHARS", "500"))
+# A real JD almost always uses some of these; a loading screen / nav chrome uses none.
+_JD_SIGNAL_WORDS = (
+    "responsibilit", "requirement", "qualif", "experience", "skills",
+    "you'll", "you will", "what you", "the role", "we are looking", "about the",
+)
+# Substrings that mark an un-rendered SPA shell.
+_LOADING_MARKERS = ("loading... please wait", "please wait", "just a moment")
+
+
+def _clean_jd(text: str) -> str:
+    """Drop the proxy's leading stale-ref interaction hint (prepended on every
+    navigate) — it's guidance for an interacting agent, not JD content."""
+    s = text.lstrip()
+    if s.startswith("⚠"):
+        _, sep, rest = s.partition("\n\n")
+        if sep:
+            s = rest
+    return s.strip()
+
+
+def _reject_reason(text: str) -> str | None:
+    """Return why `text` is not a usable JD, or None if it passes the quality gate."""
+    low = text.lower()
+    if any(m in low for m in _LOADING_MARKERS) and len(text) < 1500:
+        return "page still loading (SPA shell)"
+    if len(text) < MIN_JD_CHARS:
+        return f"too short ({len(text)} < {MIN_JD_CHARS} chars)"
+    if not any(w in low for w in _JD_SIGNAL_WORDS):
+        return "no job-description content detected"
+    return None
+
 
 def _enqueue_for_active_users(conn: psycopg.Connection, job_id: str) -> int:
     """Queue a tailoring job (user×job) for every active user, attaching their
@@ -59,11 +93,15 @@ async def capture_once(
     job_id = job["job_id"]
     try:
         try:
-            jd_text = await asyncio.wait_for(navigate(job["url"]), NAV_TIMEOUT_SECONDS)
+            raw = await asyncio.wait_for(navigate(job["url"]), NAV_TIMEOUT_SECONDS)
         except asyncio.TimeoutError:
             raise TimeoutError(f"navigation exceeded {NAV_TIMEOUT_SECONDS:.0f}s")
-        if not jd_text or not jd_text.strip():
+        jd_text = _clean_jd(raw or "")
+        if not jd_text:
             raise ValueError("empty JD text from navigation")
+        reason = _reject_reason(jd_text)
+        if reason:
+            raise ValueError(f"not a usable JD: {reason}")
         key = keys.jd_key(job_id)
         storage.put_bytes(key, jd_text.encode("utf-8"), "text/markdown")
         queue.mark(
