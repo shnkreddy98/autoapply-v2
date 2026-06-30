@@ -14,8 +14,9 @@ services:
   # Text-extracting proxy MCP — the only browser surface the agent connects to.
   proxy:
     build:
-      context: .
-      dockerfile: proxy/Dockerfile
+      # repo-root context so the local `common` package (../common in uv.lock) is reachable
+      context: ..
+      dockerfile: auto-browse/proxy/Dockerfile
     depends_on:
       - playwright
     environment:

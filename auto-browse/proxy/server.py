@@ -11,12 +11,13 @@ and structure. Tool results that carry no snapshot pass through unchanged.
 `_visible_text` is the single seam for the text<->ARIA mapping; evolve it there.
 """
 
+import asyncio
 import copy
 import json
 import logging
 import os
 import re
-from contextlib import AsyncExitStack, asynccontextmanager
+from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Any
 
@@ -50,12 +51,29 @@ SETTLE_SECONDS = float(os.getenv("SETTLE_SECONDS", "2"))
 
 class _Upstream:
     """Holds the single persistent client session to the Playwright MCP, shared
-    across all forwarded calls so every navigate/click acts on the same tab."""
+    across all forwarded calls so every navigate/click acts on the same tab.
+
+    The session can die (upstream restart, idle timeout). All open/close of that
+    session happens in ONE long-lived manager task (`_upstream_manager`) — never in
+    a request handler — because `streamable_http_client` binds anyio cancel scopes
+    to the task that opened them. Request handlers only *signal* a reconnect via
+    `reconnect_request` and wait on `ready`."""
 
     session: ClientSession | None = None
+    ready: asyncio.Event = asyncio.Event()  # set while `session` is usable
+    reconnect_request: asyncio.Event = asyncio.Event()  # set to ask the manager to cycle
+    stop: asyncio.Event = asyncio.Event()  # set on shutdown
+    lock: asyncio.Lock = asyncio.Lock()  # serialize reconnect triggers
 
 
 upstream = _Upstream()
+
+# How long a request waits for a (re)connected session before giving up.
+READY_TIMEOUT_SECONDS = float(os.getenv("UPSTREAM_READY_TIMEOUT", "30"))
+
+# Markers in an upstream tool RESULT (no exception raised) that mean the session
+# died and must be re-established before the call can succeed.
+_DEAD_SESSION_MARKERS = ("session terminated", "session not found", "session closed")
 
 
 # --- tool-schema clarification -------------------------------------------------
@@ -348,7 +366,7 @@ async def _fetch_aria(arguments: dict) -> list[types.TextContent]:
 async def _snapshot_tree_now() -> str | None:
     """Take a fresh snapshot of the current page and return its full ARIA tree."""
     try:
-        result = await _require_session().call_tool("browser_snapshot", {})
+        result = await _upstream_call("browser_snapshot", {})
     except Exception as exc:
         logger.warning("fetch_aria snapshot failed: %s", exc)
         return None
@@ -419,6 +437,7 @@ def _build_server() -> Server:
         # Expose the upstream Playwright MCP tools, with clarified argument
         # descriptions + examples on the snapshot-returning interaction tools, plus
         # the proxy-only `fetch_aria` search tool.
+        await _ensure_session()
         result = await _require_session().list_tools()
         kept = [_augment_tool(t) for t in result.tools if t.name in KEEP_TOOLS]
         return kept + [_FETCH_ARIA_TOOL]
@@ -429,7 +448,7 @@ def _build_server() -> Server:
             return await _fetch_aria(dict(arguments or {}))
         if name not in KEEP_TOOLS:
             return [TextContent(type="text", text=f"Tool {name!r} is not available.")]
-        result = await _require_session().call_tool(name, dict(arguments or {}))
+        result = await _upstream_call(name, dict(arguments or {}))
         text = _extract_text(result)
         # browser_snapshot returns the ARIA tree INLINE (no snapshot link), so reduce
         # that text to visible text directly — otherwise the raw ARIA leaks through.
@@ -468,10 +487,9 @@ async def _settle_snapshot_tree() -> str | None:
     its full accessibility tree text. Returns None if the upstream calls fail (the
     caller then falls back to the un-settled snapshot). Calls upstream directly, so
     it does not recurse through `call_tool`."""
-    session = _require_session()
     try:
-        await session.call_tool("browser_wait_for", {"time": SETTLE_SECONDS})
-        result = await session.call_tool("browser_snapshot", {})
+        await _upstream_call("browser_wait_for", {"time": SETTLE_SECONDS})
+        result = await _upstream_call("browser_snapshot", {})
     except Exception as exc:  # settling is best-effort, never fatal
         logger.warning("settle failed: %s", exc)
         return None
@@ -480,6 +498,76 @@ async def _settle_snapshot_tree() -> str | None:
     if not m:
         return text  # already an inline tree
     return _read_tree(m.group(1))
+
+
+async def _upstream_manager() -> None:
+    """Own the upstream session for the proxy's lifetime. Opens it, holds it until a
+    reconnect is requested (or shutdown), then cycles. ALL session open/close lives
+    here so anyio cancel scopes are entered and exited in the same task."""
+    while not upstream.stop.is_set():
+        try:
+            async with streamable_http_client(UPSTREAM_URL) as (read, write, _):
+                async with ClientSession(read, write) as session:
+                    await session.initialize()
+                    upstream.session = session
+                    upstream.reconnect_request.clear()
+                    upstream.ready.set()
+                    logger.info("Connected to upstream Playwright MCP: %s", UPSTREAM_URL)
+                    await _wait_first(upstream.reconnect_request, upstream.stop)
+        except Exception as exc:  # connect/init failed or session blew up
+            logger.warning("upstream session error: %s", exc)
+        finally:
+            upstream.ready.clear()
+            upstream.session = None
+        if not upstream.stop.is_set():
+            await asyncio.sleep(0.5)  # brief backoff before re-dialing
+    logger.info("upstream manager stopped")
+
+
+async def _wait_first(*events: asyncio.Event) -> None:
+    """Return as soon as any of the given events is set."""
+    waiters = [asyncio.ensure_future(e.wait()) for e in events]
+    try:
+        await asyncio.wait(waiters, return_when=asyncio.FIRST_COMPLETED)
+    finally:
+        for w in waiters:
+            w.cancel()
+
+
+async def _ensure_session() -> ClientSession:
+    """Wait for a live upstream session (the manager establishes it)."""
+    await asyncio.wait_for(upstream.ready.wait(), timeout=READY_TIMEOUT_SECONDS)
+    return upstream.session
+
+
+async def _request_reconnect() -> ClientSession:
+    """Signal the manager to cycle the session, then wait for the fresh one."""
+    async with upstream.lock:
+        if upstream.ready.is_set():  # first caller to notice the death triggers it
+            upstream.ready.clear()
+            upstream.reconnect_request.set()
+    await asyncio.wait_for(upstream.ready.wait(), timeout=READY_TIMEOUT_SECONDS)
+    return upstream.session
+
+
+def _is_dead_session(result: CallToolResult) -> bool:
+    text = _extract_text(result).strip().lower()
+    return any(m in text for m in _DEAD_SESSION_MARKERS)
+
+
+async def _upstream_call(name: str, arguments: dict) -> CallToolResult:
+    """Call an upstream tool, reconnecting once if the session is missing or has
+    died (either a raised transport error or a dead-session result body)."""
+    session = await _ensure_session()
+    try:
+        result = await session.call_tool(name, arguments)
+    except Exception as exc:
+        logger.warning("upstream %s raised (%s); reconnecting", name, exc)
+        return await (await _request_reconnect()).call_tool(name, arguments)
+    if _is_dead_session(result):
+        logger.warning("upstream %s returned dead session; reconnecting", name)
+        return await (await _request_reconnect()).call_tool(name, arguments)
+    return result
 
 
 def _require_session() -> ClientSession:
@@ -557,23 +645,22 @@ def main() -> None:
 
     @asynccontextmanager
     async def lifespan(_app):
-        # Open ONE persistent session to the upstream Playwright MCP and keep it
-        # for the whole proxy lifetime so browser state survives across calls.
-        async with AsyncExitStack() as stack:
-            read, write, _ = await stack.enter_async_context(
-                streamable_http_client(UPSTREAM_URL)
-            )
-            session = await stack.enter_async_context(ClientSession(read, write))
-            await session.initialize()
-            upstream.session = session
-            logger.info("Connected to upstream Playwright MCP: %s", UPSTREAM_URL)
-
+        # A single manager task owns the upstream Playwright MCP session for the whole
+        # proxy lifetime so browser state survives across calls; if it dies mid-run,
+        # `_upstream_call` signals the manager to re-establish it.
+        upstream.stop.clear()
+        manager = asyncio.create_task(_upstream_manager())
+        try:
+            await asyncio.wait_for(upstream.ready.wait(), timeout=READY_TIMEOUT_SECONDS)
+        except asyncio.TimeoutError:
+            logger.error("upstream did not connect within %ss", READY_TIMEOUT_SECONDS)
+        try:
             async with session_manager.run():
                 logger.info("Transparent proxy listening on %s:%s", HOST, PORT)
-                try:
-                    yield
-                finally:
-                    upstream.session = None
+                yield
+        finally:
+            upstream.stop.set()
+            await manager
 
     app = Starlette(
         lifespan=lifespan,

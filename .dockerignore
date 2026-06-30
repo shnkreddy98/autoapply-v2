@@ -1,0 +1,9 @@
+# Trim the repo-root build context (proxy builds from here).
+**/.venv
+**/__pycache__
+**/*.pyc
+.git
+**/.pytest_cache
+auto-browse/data
+**/node_modules
+**/.env

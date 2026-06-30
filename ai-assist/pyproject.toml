@@ -11,4 +11,20 @@ dependencies = [
     "pypdf>=4.0.0",
     "pyyaml>=6.0",
     "python-dotenv>=1.0.0",
+    "common",
 ]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.24.0",
+]
+
+[tool.uv.sources]
+common = { path = "../common", editable = true }
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "--import-mode=importlib"

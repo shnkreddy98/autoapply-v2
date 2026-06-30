@@ -91,3 +91,8 @@ if __name__ == "__main__":
     print(f"\nTotal results: {len(all_results)}")
     for r in all_results:
         print(r.get("url"), "-", r.get("title"))
+
+    from enqueue import enqueue_jobs
+
+    job_ids = enqueue_jobs(all_results)
+    print(f"\nEnqueued {len(set(job_ids))} unique jobs (jd_pending).")
