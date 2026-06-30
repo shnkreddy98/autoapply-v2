@@ -1,77 +1,25 @@
-"""Export the applicant's profile from the autoapply Postgres DB into a single
-human-readable text file the browser agent can use to fill job applications,
-and stage the resume PDF where the Playwright container can upload it.
+"""Render an applicant's Postgres profile into the text block the browser agent
+uses to fill job applications.
 
-Run once before the agent:
-
-    uv run python -m agent.profile
-
-Outputs:
-    data/profile/profile.txt        # the LLM context (form fields + resume)
-    data/resume/<file>.pdf          # mounted into the playwright container
-
-DB connection and resume choice are env-configurable (see constants below).
+No files, no staging: `build_profile(conn, user_id, resume_path)` fetches the
+profile bundle from Postgres (via `common.repo.fetch_profile`) and renders it
+in-memory. The resume's in-container path is supplied by the caller (the apply
+consumer stages the actual file per run).
 """
 
-import json
-import os
+from __future__ import annotations
+
 import re
-import shutil
-from pathlib import Path
+from typing import Any
 
 import psycopg
-from dotenv import load_dotenv
 
-load_dotenv()
+from common.repo import ProfileData, fetch_profile
 
-# --- config -----------------------------------------------------------------
-DB = {
-    "host": os.getenv("DB_HOST", "localhost"),
-    "port": os.getenv("DB_PORT", "25432"),
-    "dbname": os.getenv("DB_NAME", "jobs-db"),
-    "user": os.getenv("DB_USER", "admin"),
-    "password": os.getenv("DB_PASSWORD", "password"),
-}
-EMAIL = os.getenv("APPLICANT_EMAIL", "jane.doe@example.com")
 
-# Login credentials the agent uses for portals that require an account.
-# Sourced from env for now; will move to the DB later.
-LOGIN_EMAIL = os.getenv("APPLICANT_LOGIN_EMAIL", EMAIL)
-LOGIN_PASSWORD = os.getenv("APPLICANT_LOGIN_PASSWORD", "")
-
-# Where the autoapply repo keeps resume files, and which variant to upload.
-AUTOAPPLY_DATA = Path(os.getenv("AUTOAPPLY_DATA", "../../autoapply/data")).expanduser()
-RESUME_VARIANT = os.getenv("RESUME_VARIANT", "aws")  # "" base, or aws/gcp/azu
-RESUME_FILE = os.getenv("RESUME_FILE", "jane_doe.pdf")
-
-# Professional references the agent can supply when an application asks for them.
-# Static for now; will move to the DB later (see LOGIN_* above).
-REFERENCES = [
-    {
-        "name": "Julian Gilyadov",
-        "email": "julian@airfold.co",
-        "relationship": "CEO of Airfold",
-        "known": "1 year",
-    },
-    {
-        "name": "Constantine P",
-        "email": "constantine@airfold.co",
-        "relationship": "CTO of Airfold",
-        "known": "1 year",
-    },
-    {
-        "name": "Saavn Beli",
-        "email": "saavnsd@gmail.com",
-        "relationship": "Data Engineer at Pittsburgh Pirates",
-        "known": "over 10 years",
-    },
-]
-
-HERE = Path(__file__).resolve().parent.parent
-PROFILE_TXT = HERE / "data" / "profile" / "profile.txt"
-RESUME_OUT = HERE / "data" / "resume" / RESUME_FILE
-# Path the resume is mounted at INSIDE the playwright container (see compose).
-RESUME_CONTAINER_PATH = f"/resume/{RESUME_FILE}"
+def build_profile(conn: psycopg.Connection, user_id: str, resume_path: str) -> str:
+    """Fetch + render a user's full profile in one call."""
+    return render_profile(fetch_profile(conn, user_id), resume_path)
 
 
 def _yn(value: object) -> str:
@@ -80,30 +28,10 @@ def _yn(value: object) -> str:
     return "(not provided)" if value in (None, "") else str(value)
 
 
-def _fetch() -> tuple[dict, dict, dict]:
-    with (
-        psycopg.connect(**DB, row_factory=psycopg.rows.dict_row) as conn,
-        conn.cursor() as cur,
-    ):
-        cur.execute("SELECT * FROM users WHERE email = %s", (EMAIL,))
-        user = cur.fetchone() or {}
-        cur.execute("SELECT * FROM user_data WHERE email = %s", (EMAIL,))
-        data = cur.fetchone() or {}
-        cur.execute(
-            "SELECT * FROM resumes WHERE user_email = %s ORDER BY id LIMIT 1", (EMAIL,)
-        )
-        resume = cur.fetchone() or {}
-    if not data:
-        raise SystemExit(f"No user_data row for {EMAIL}. Check the DB.")
-    return user, data, resume
-
-
 def _split_name(full_name: str | None) -> tuple[str, str]:
-    """Split a full name into (first, last). The DB only stores `full_name`, but
-    forms usually want separate fields. Convention: the LAST whitespace token is
-    the last name; everything before it is the first name (so a middle name stays
-    with the first name, e.g. "Jane Quinn Doe" ->
-    ("Jane Quinn", "Doe")). Single-token names go to first."""
+    """Split a full name into (first, last): the LAST whitespace token is the last
+    name, everything before it the first (a middle name stays with first). Single
+    token -> first only."""
     parts = (full_name or "").split()
     if not parts:
         return "", ""
@@ -113,9 +41,8 @@ def _split_name(full_name: str | None) -> tuple[str, str]:
 
 
 def _linkedin_url(raw: str | None) -> str:
-    """Normalize a LinkedIn URL to the canonical https://www.linkedin.com/in/<h>
-    form. Workday (and others) reject `linkedin.com/in/...` without `www.` as an
-    "Invalid LinkedIn URL", so add scheme + www if missing."""
+    """Normalize a LinkedIn URL to https://www.linkedin.com/in/<handle>. Workday and
+    others reject `linkedin.com/in/...` without `www.`."""
     s = (raw or "").strip()
     if not s:
         return ""
@@ -123,47 +50,56 @@ def _linkedin_url(raw: str | None) -> str:
     if s.lower().startswith("linkedin.com"):
         s = "www." + s
     elif not s.lower().startswith("www.linkedin.com"):
-        # a bare handle like "in/shnkreddy" or "shnkreddy"
         s = "www.linkedin.com/" + s.lstrip("/")
         if "/in/" not in s.lower():
             s = s.replace("www.linkedin.com/", "www.linkedin.com/in/", 1)
     return "https://" + s
 
 
-def _render(user: dict, d: dict, r: dict) -> str:
+def _date_span(frm: Any, to: Any) -> str:
+    f = frm if frm not in (None, "") else ""
+    t = to if to not in (None, "") else "Present"
+    return f"{f} – {t}"
+
+
+def render_profile(p: ProfileData, resume_path: str) -> str:
+    """Render a ProfileData bundle into the agent's APPLICATION PROFILE text."""
+    u, d = p.user, p.profile
+    email = u.get("email", "")
+    login = p.login or {}
     L: list[str] = []
     add = L.append
 
     add("# APPLICATION PROFILE")
-    add(f"# Applicant: {d.get('full_name')} <{EMAIL}>")
-    add(f"# Resume to upload (path inside browser): {RESUME_CONTAINER_PATH}")
+    add(f"# Applicant: {u.get('full_name')} <{email}>")
+    add(f"# Resume to upload (path inside browser): {resume_path}")
     add("# Use these values to fill application form fields. Leave blank any")
     add("# field marked (not provided). Voluntary/EEO fields may be left blank.")
     add("")
 
     add("## Login Credentials (for portals that require an account)")
-    add(f"Login Email: {LOGIN_EMAIL}")
+    add(f"Login Email: {login.get('login_email') or email}")
     add(
-        f"Login Password: {LOGIN_PASSWORD or '(not set — sign-in/account creation unavailable)'}"
+        f"Login Password: {login.get('login_password') or '(not set — sign-in/account creation unavailable)'}"
     )
     add("")
 
     add("## Personal Information")
-    add(f"Full Name: {d.get('full_name')}")
-    first, last = _split_name(d.get("full_name"))
+    add(f"Full Name: {u.get('full_name')}")
+    first, last = _split_name(u.get("full_name"))
     add(f"First Name: {first}")
     add(f"Last Name: {last}")
-    add(f"Email: {EMAIL}")
-    add(f"Phone: {d.get('phone_number')}")
+    add(f"Email: {email}")
+    add(f"Phone: {u.get('phone')}")
     add(f"Date of Birth: {_yn(d.get('date_of_birth'))}")
     add(f"Street Address: {d.get('street_address')}")
     add(f"City: {d.get('city')}")
     add(f"State: {d.get('state')}")
     add(f"ZIP Code: {d.get('zip_code')}")
     add(f"18 or older: {_yn(d.get('age_18_or_older'))}")
-    add(f"LinkedIn: {_linkedin_url(user.get('linkedin'))}")
-    add(f"GitHub: {user.get('github')}")
-    add(f"Location: {user.get('location')}")
+    add(f"LinkedIn: {_linkedin_url(u.get('linkedin'))}")
+    add(f"GitHub: {u.get('github')}")
+    add(f"Location: {u.get('location')}")
     add("")
 
     add("## Work Authorization")
@@ -201,13 +137,9 @@ def _render(user: dict, d: dict, r: dict) -> str:
     add(f"Authorize background/reference checks: {_yn(d.get('cert_background_check'))}")
     add(f"Authorize drug testing (if applicable): {_yn(d.get('cert_drug_testing'))}")
     add(f"Understand at-will employment: {_yn(d.get('cert_at_will'))}")
-    add(
-        f"Read and understand the job description: {_yn(d.get('cert_job_description'))}"
-    )
+    add(f"Read and understand the job description: {_yn(d.get('cert_job_description'))}")
     add(f"Acknowledge receipt of privacy notice: {_yn(d.get('cert_privacy_notice'))}")
-    add(
-        f"Consent to data processing for this application: {_yn(d.get('cert_data_processing'))}"
-    )
+    add(f"Consent to data processing for this application: {_yn(d.get('cert_data_processing'))}")
     add("")
 
     add("## Signature")
@@ -216,76 +148,45 @@ def _render(user: dict, d: dict, r: dict) -> str:
     add("")
 
     add("## References")
-    for ref in REFERENCES:
+    for ref in p.references:
         add(
-            f"- {ref['name']} <{ref['email']}> — {ref['relationship']}, "
-            f"known {ref['known']}"
+            f"- {ref.get('name')} <{ref.get('email')}> — {ref.get('relationship')}, "
+            f"known {ref.get('known_duration')}"
         )
+    if not p.references:
+        add("(none provided)")
     add("")
 
-    # --- resume context ---
+    # --- resume content ---
     add("## Resume — Summary")
-    add(r.get("summary") or "(none)")
+    add(u.get("summary") or "(none)")
     add("")
 
     add("## Resume — Work Experience")
-    for job in _as_list(r.get("job_experience")):
+    for job in p.work_experiences:
         title = job.get("job_title", "")
         company = job.get("company_name", "")
         loc = job.get("location", "")
-        span = f"{job.get('from_', '')} – {job.get('to_', '')}"
+        span = _date_span(job.get("from_date"), job.get("to_date"))
         add(f"- {title}, {company} ({loc}) [{span}]")
-        for bullet in job.get("experience", []) or []:
+        for bullet in job.get("bullets") or []:
             add(f"    • {bullet}")
     add("")
 
     add("## Resume — Education")
-    for edu in _as_list(r.get("education")):
-        parts = [str(v) for v in edu.values() if v]
-        add(f"- {' | '.join(parts)}")
+    for edu in p.education:
+        span = _date_span(edu.get("from_date"), edu.get("to_date"))
+        bits = [edu.get("degree"), edu.get("major"), edu.get("school"), span]
+        add(f"- {' | '.join(str(b) for b in bits if b)}")
     add("")
 
     add("## Resume — Skills")
-    skills = _as_list(r.get("skills"))
-    flat = []
-    for s in skills:
-        flat.append(", ".join(map(str, s.values())) if isinstance(s, dict) else str(s))
-    add(", ".join(flat) if flat else "(none)")
+    groups = []
+    for s in p.skill_groups:
+        skills = ", ".join(s.get("skills") or [])
+        cat = s.get("category")
+        groups.append(f"{cat}: {skills}" if cat else skills)
+    add("\n".join(groups) if groups else "(none)")
     add("")
 
     return "\n".join(L)
-
-
-def _as_list(value: object) -> list:
-    if value is None:
-        return []
-    if isinstance(value, str):
-        try:
-            value = json.loads(value)
-        except json.JSONDecodeError:
-            return []
-    return value if isinstance(value, list) else []
-
-
-def _stage_resume() -> None:
-    src = AUTOAPPLY_DATA / "resumes"
-    src = src / RESUME_VARIANT / RESUME_FILE if RESUME_VARIANT else src / RESUME_FILE
-    if not src.is_file():
-        raise SystemExit(f"Resume not found: {src}")
-    RESUME_OUT.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copy2(src, RESUME_OUT)
-    print(
-        f"Staged resume: {src} -> {RESUME_OUT}  (browser path {RESUME_CONTAINER_PATH})"
-    )
-
-
-def main() -> None:
-    user, data, resume = _fetch()
-    PROFILE_TXT.parent.mkdir(parents=True, exist_ok=True)
-    PROFILE_TXT.write_text(_render(user, data, resume), encoding="utf-8")
-    print(f"Wrote profile: {PROFILE_TXT}")
-    _stage_resume()
-
-
-if __name__ == "__main__":
-    main()

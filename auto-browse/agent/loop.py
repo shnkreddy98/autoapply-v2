@@ -20,6 +20,11 @@ from pathlib import Path
 from typing import Any
 
 from dotenv import load_dotenv
+
+from agent.apply import resolve_resume
+from agent.profile import build_profile
+from common import db, repo
+from common import storage as storagemod
 from mcp import ClientSession
 from mcp.client.streamable_http import streamable_http_client
 from mcp.types import TextContent
@@ -177,7 +182,6 @@ PROXY_MCP_URL = os.getenv("PROXY_MCP_URL", "http://localhost:8932/mcp")
 DEFAULT_MODEL = os.getenv("OPENROUTER_MODEL", "google/gemini-3-flash-preview")
 
 HERE = Path(__file__).resolve().parent.parent
-PROFILE_PATH = Path(os.getenv("PROFILE_PATH", HERE / "data" / "profile" / "profile.txt"))
 ATS_INSTRUCTIONS_PATH = Path(
     os.getenv("ATS_INSTRUCTIONS_PATH", HERE / "data" / "ats_instructions.md")
 )
@@ -223,14 +227,6 @@ def _backoff_seconds(attempt: int, retry_after: float | None) -> float:
     if retry_after is not None:
         wait = max(wait, retry_after)
     return min(wait, LLM_BACKOFF_CAP)
-
-
-def load_profile() -> str:
-    if not PROFILE_PATH.is_file():
-        raise SystemExit(
-            f"Profile not found at {PROFILE_PATH}. Run `uv run python -m agent.profile` first."
-        )
-    return PROFILE_PATH.read_text(encoding="utf-8")
 
 
 def load_ats_instructions() -> str | None:
@@ -556,13 +552,28 @@ async def agent_loop(
     raise RuntimeError(f"Agent did not finish after {max_iterations} iterations.")
 
 
-async def main(job_url: str, model: str) -> None:
+# Resume is staged here on the host, then uploaded by the browser. This dir is bind-
+# mounted into the playwright container as RESUME_CONTAINER_ROOT (compose.yaml:
+# ./data/resume -> /resume), so the defaults must stay in sync with that mount.
+SCRATCH_ROOT = os.getenv("SCRATCH_ROOT", str(HERE / "data" / "resume"))
+# path root the resume is reachable at INSIDE the playwright container (mount of SCRATCH_ROOT)
+RESUME_CONTAINER_ROOT = os.getenv("RESUME_CONTAINER_ROOT", "/resume")
+
+
+async def main(user_id: str, job_url: str, model: str) -> None:
     run_id = new_run_id()
     setup_logging(run_id)
     trace = Trace(run_id)
-    log.info("run start: model=%s job_url=%s", model, job_url)
+    log.info("run start: model=%s user=%s job_url=%s", model, user_id, job_url)
 
-    profile = load_profile()
+    storage = storagemod.from_env()
+    host_resume = f"{SCRATCH_ROOT}/{run_id}/resume.pdf"
+    container_resume = f"{RESUME_CONTAINER_ROOT}/{run_id}/resume.pdf"
+    with db.connect() as conn:
+        job_id = repo.get_or_create_job(conn, job_url, source="manual")
+        _, source = await resolve_resume(conn, storage, user_id, job_id, host_resume)
+        log.info("resume resolved (%s) -> %s", source, host_resume)
+        profile = build_profile(conn, user_id, container_resume)
     ats_instructions = load_ats_instructions()
     task = (
         f"Apply for this job: {job_url}\n\n"
@@ -623,10 +634,9 @@ async def main(job_url: str, model: str) -> None:
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        raise SystemExit('Usage: uv run python -m agent.loop "<url_index>" starting with 1')
-
-    with open("urls.txt", "r") as f:
-        urls = f.readlines()
-    job_url = urls[int(sys.argv[1]) - 1]
-    asyncio.run(main(job_url=job_url, model=DEFAULT_MODEL))
+    # Usage: uv run python -m agent.loop <user_id> <job_url>
+    if len(sys.argv) < 3:
+        raise SystemExit("Usage: uv run python -m agent.loop <user_id> <job_url>")
+    user_id = sys.argv[1]
+    job_url = sys.argv[2]
+    asyncio.run(main(user_id=user_id, job_url=job_url, model=DEFAULT_MODEL))
