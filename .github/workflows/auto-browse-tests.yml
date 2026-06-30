@@ -1,32 +1,89 @@
-name: auto-browse tests
+name: autoapply-v2 tests
 
 on:
   pull_request:
     paths:
+      - "common/**"
       - "auto-browse/**"
+      - "ai-assist/**"
+      - "search/**"
+      - "db/**"
       - ".github/workflows/auto-browse-tests.yml"
   push:
     branches: [main]
     paths:
+      - "common/**"
       - "auto-browse/**"
+      - "ai-assist/**"
+      - "search/**"
+      - "db/**"
       - ".github/workflows/auto-browse-tests.yml"
 
 jobs:
-  pytest:
+  tests:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: auto-browse
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: admin
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: jobs-db
+        ports:
+          - 25432:5432
+        options: >-
+          --health-cmd "pg_isready -U admin -d jobs-db"
+          --health-interval 3s --health-timeout 3s --health-retries 20
+      minio:
+        image: bitnami/minio:latest
+        env:
+          MINIO_ROOT_USER: minioadmin
+          MINIO_ROOT_PASSWORD: minioadmin
+          MINIO_DEFAULT_BUCKETS: autoapply
+        ports:
+          - 9100:9000
+          - 9101:9001
+        options: >-
+          --health-cmd "mc ready local || curl -f http://localhost:9000/minio/health/live"
+          --health-interval 3s --health-timeout 3s --health-retries 30
+
+    env:
+      DB_HOST: localhost
+      DB_PORT: "25432"
+      DB_NAME: jobs-db
+      DB_USER: admin
+      DB_PASSWORD: password
+      S3_ENDPOINT: http://localhost:9100
+      S3_BUCKET: autoapply
+      MINIO_ACCESS_KEY: minioadmin
+      MINIO_SECRET_KEY: minioadmin
+
     steps:
       - uses: actions/checkout@v4
 
       - name: Install uv
         uses: astral-sh/setup-uv@v6
         with:
-          python-version: "3.11"
+          python-version: "3.12"
 
-      - name: Sync dependencies
-        run: uv sync --dev
+      - name: Apply schema
+        run: |
+          sudo apt-get update && sudo apt-get install -y postgresql-client
+          psql "postgresql://admin:password@localhost:25432/jobs-db" -f db/init.sql
 
-      - name: Run tests
-        run: uv run pytest proxy/tests -q
+      - name: common tests
+        working-directory: common
+        run: uv run --dev pytest -q
+
+      - name: search tests
+        working-directory: search
+        run: uv run --dev pytest -q
+
+      - name: ai-assist tests
+        working-directory: ai-assist
+        run: uv run --dev pytest -q
+
+      - name: auto-browse tests
+        working-directory: auto-browse
+        run: uv run --dev pytest -q

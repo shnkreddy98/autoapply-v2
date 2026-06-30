@@ -11,14 +11,17 @@ dependencies = [
     "uvicorn>=0.30.0",
     "starlette>=0.40.0",
     "psycopg[binary]>=3.3.4",
+    "common",
 ]
 
 [project.scripts]
 playwright-proxy = "proxy.server:main"
-profile-export = "agent.profile:main"
 
 [tool.uv]
 package = true
+
+[tool.uv.sources]
+common = { path = "../common", editable = true }
 
 [build-system]
 requires = ["hatchling"]
@@ -31,4 +34,8 @@ packages = ["proxy", "agent"]
 dev = [
     "playwright>=1.60.0",
     "pytest>=9.1.0",
+    "pytest-asyncio>=0.24.0",
 ]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"

@@ -1,0 +1,84 @@
+"""Integration tests against live Postgres + MinIO (root compose)."""
+
+import uuid
+
+from common import db as dbmod
+from common import queue, repo
+
+
+def test_s3_roundtrip(s3):
+    key = f"jobs/{uuid.uuid4()}/jd.md"
+    s3.put_bytes(key, b"# Job\nsome jd text", "text/markdown")
+    assert s3.exists(key)
+    assert s3.get_bytes(key) == b"# Job\nsome jd text"
+
+
+def test_get_or_create_job_dedup(db):
+    a = repo.get_or_create_job(db, "https://www.example.com/jobs/1/", "Eng")
+    b = repo.get_or_create_job(db, "http://example.com/jobs/1?ref=x", "Eng (dup)")
+    assert a == b  # normalized URL dedupes to one row
+    with db.cursor() as cur:
+        cur.execute("SELECT count(*) AS c FROM jobs")
+        assert cur.fetchone()["c"] == 1
+
+
+def test_enqueue_tailoring_unique(db, seed_user):
+    user_id, asset_id = seed_user
+    job_id = repo.get_or_create_job(db, "https://example.com/jobs/9")
+    t1 = repo.enqueue_tailoring(db, user_id, job_id, asset_id)
+    t2 = repo.enqueue_tailoring(db, user_id, job_id, asset_id)
+    assert t1 == t2  # UNIQUE(user_id, job_id)
+    row = repo.lookup_tailored(db, user_id, job_id)
+    assert row["status"] == "pending"
+
+
+def test_claim_pending_skip_locked(db):
+    # two pending jobs; two concurrent connections must claim DIFFERENT rows
+    repo.get_or_create_job(db, "https://example.com/jobs/a")
+    repo.get_or_create_job(db, "https://example.com/jobs/b")
+
+    c1, c2 = dbmod.connect(), dbmod.connect()
+    try:
+        r1 = queue.claim_pending(c1, "jobs", worker_id="w1")
+        r2 = queue.claim_pending(c2, "jobs", worker_id="w2")
+        assert r1 is not None and r2 is not None
+        assert r1["job_id"] != r2["job_id"]
+        # both flipped out of jd_pending
+        with db.cursor() as cur:
+            cur.execute("SELECT count(*) AS c FROM jobs WHERE status = 'jd_pending'")
+            assert cur.fetchone()["c"] == 0
+        assert queue.claim_pending(c1, "jobs") is None  # queue drained
+    finally:
+        c1.close()
+        c2.close()
+
+
+def test_mark_terminal(db):
+    job_id = repo.get_or_create_job(db, "https://example.com/jobs/mark")
+    queue.claim_pending(db, "jobs")
+    queue.mark(db, "jobs", job_id, "jd_ready", jd_s3_key=f"jobs/{job_id}/jd.md")
+    with db.cursor() as cur:
+        cur.execute("SELECT status, jd_s3_key FROM jobs WHERE job_id = %s", (job_id,))
+        row = cur.fetchone()
+    assert row["status"] == "jd_ready"
+    assert row["jd_s3_key"] == f"jobs/{job_id}/jd.md"
+
+
+def test_fetch_profile(db, seed_user):
+    user_id, _ = seed_user
+    with db.cursor() as cur:
+        cur.execute(
+            "INSERT INTO application_profiles (user_id, city, work_eligible_us) VALUES (%s, %s, %s)",
+            (user_id, "Omaha", True),
+        )
+        cur.execute(
+            "INSERT INTO work_experiences (user_id, job_title, company_name, bullets) "
+            "VALUES (%s, %s, %s, %s)",
+            (user_id, "Data Engineer", "Airfold", ["built pipelines", "owned dbt"]),
+        )
+    db.commit()
+    p = repo.fetch_profile(db, user_id)
+    assert p.user["full_name"] == "Test User"
+    assert p.profile["city"] == "Omaha"
+    assert len(p.work_experiences) == 1
+    assert p.work_experiences[0]["bullets"] == ["built pipelines", "owned dbt"]

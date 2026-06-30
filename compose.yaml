@@ -1,0 +1,59 @@
+# Root-owned shared infra for autoapply-v2: Postgres + MinIO (local S3).
+# All three services (search, auto-browse, ai-assist) coordinate through these.
+#
+#   docker compose up -d        # bring up postgres + minio + bucket
+#
+# Per-service composes (e.g. auto-browse/compose.yaml: playwright + proxy) are overlays.
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${DB_USER:-admin}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-password}
+      POSTGRES_DB: ${DB_NAME:-jobs-db}
+    ports:
+      - "${DB_PORT:-15432}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      # schema applied on first boot (empty data dir only)
+      - ./db/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-admin} -d ${DB_NAME:-jobs-db}"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ACCESS_KEY:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY:-minioadmin}
+    ports:
+      - "${MINIO_PORT:-9100}:9000"      # S3 API (host 9000 is taken locally)
+      - "${MINIO_CONSOLE_PORT:-9101}:9001"  # web console
+    volumes:
+      - miniodata:/data
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  # one-shot: create the bucket, then exit
+  minio-init:
+    image: minio/mc:latest
+    depends_on:
+      minio:
+        condition: service_healthy
+    entrypoint: >
+      /bin/sh -c "
+      mc alias set local http://minio:9000 ${MINIO_ACCESS_KEY:-minioadmin} ${MINIO_SECRET_KEY:-minioadmin} &&
+      mc mb --ignore-existing local/${S3_BUCKET:-autoapply} &&
+      echo 'bucket ready: ${S3_BUCKET:-autoapply}'
+      "
+
+volumes:
+  pgdata:
+  miniodata:
