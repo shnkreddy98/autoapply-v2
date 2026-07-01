@@ -64,6 +64,10 @@ class _Upstream:
     reconnect_request: asyncio.Event = asyncio.Event()  # set to ask the manager to cycle
     stop: asyncio.Event = asyncio.Event()  # set on shutdown
     lock: asyncio.Lock = asyncio.Lock()  # serialize reconnect triggers
+    # Read-before-write gate: refs the agent has read via fetch_aria since the last
+    # page mutation. A ref-using action is only allowed if its target ref is in here.
+    # Populated by fetch_aria; cleared on every mutation and on reconnect.
+    fresh_refs: set[str] = set()
 
 
 upstream = _Upstream()
@@ -248,9 +252,55 @@ _REF_INVALIDATING_TOOLS: frozenset[str] = frozenset({
 
 _STALE_REF_HINT = (
     "⚠ The page changed — every ref from an earlier snapshot or fetch_aria is now "
-    "STALE. Call fetch_aria again to get fresh refs before your next click/type; do "
-    "NOT reuse a ref you saw before this action.\n\n"
+    "STALE. You MUST call fetch_aria for the CURRENT page to get fresh refs before "
+    "your next click/type; a click/type on a ref you did not just fetch_aria is "
+    "REJECTED and not performed. Do NOT reuse a ref you saw before this action.\n\n"
 )
+
+# Ref-taking action tools gated by the read-before-write invariant: each must be
+# preceded by a fetch_aria that surfaced the target ref since the last mutation.
+_REF_GATED_TOOLS: frozenset[str] = frozenset({
+    "browser_click",
+    "browser_type",
+    "browser_fill_form",
+    "browser_select_option",
+    "browser_press_key",
+    "browser_file_upload",
+    "browser_hover",
+    "browser_drag",
+    "browser_drop",
+})
+
+_ARIA_REF_RE = re.compile(r"\[ref=(e\d+)\]")       # refs as they appear in ARIA
+_TARGET_REF_RE = re.compile(r"(?:ref=|#)(e\d+)")   # refs as the agent passes them
+
+
+def _refs_in_aria(text: str) -> set[str]:
+    """Refs surfaced to the agent in a fetch_aria result (`... [ref=e12] ...`)."""
+    return set(_ARIA_REF_RE.findall(text))
+
+
+def _target_refs(arguments: dict) -> set[str]:
+    """Refs the agent is trying to act on, pulled from selector args like
+    `button[ref=e76]` or `#e76`. Text/CSS selectors carrying no ref yield nothing."""
+    return set(_TARGET_REF_RE.findall(json.dumps(arguments, default=str)))
+
+
+def _ref_gate(name: str, arguments: dict, fresh: set[str]) -> str | None:
+    """Read-before-write check. Returns a corrective message if the call targets a
+    ref that was not read via fetch_aria since the last mutation, else None (allow).
+    Non-gated tools and ref-less selectors always pass."""
+    if name not in _REF_GATED_TOOLS:
+        return None
+    targets = _target_refs(arguments)
+    stale = targets - fresh
+    if not stale:
+        return None
+    return (
+        f"⚠ Blocked: ref(s) {', '.join(sorted(stale))} were not read from the current "
+        "page. Read-before-write: call fetch_aria for the element(s) you want on the "
+        "CURRENT page, then retry with the fresh ref. (The action was NOT performed.)"
+    )
 
 
 def _patch_descriptions(node: Any) -> None:
@@ -360,7 +410,11 @@ async def _fetch_aria(arguments: dict) -> list[types.TextContent]:
                 type="text", text="fetch_aria: could not read the current snapshot."
             )
         ]
-    return [TextContent(type="text", text=_build_aria_map(tree, keys, context))]
+    aria_map = _build_aria_map(tree, keys, context)
+    # Record every ref the agent just read — these become the refs it may act on
+    # until the next mutation clears them (read-before-write gate).
+    upstream.fresh_refs |= _refs_in_aria(aria_map)
+    return [TextContent(type="text", text=aria_map)]
 
 
 async def _snapshot_tree_now() -> str | None:
@@ -448,8 +502,17 @@ def _build_server() -> Server:
             return await _fetch_aria(dict(arguments or {}))
         if name not in KEEP_TOOLS:
             return [TextContent(type="text", text=f"Tool {name!r} is not available.")]
-        result = await _upstream_call(name, dict(arguments or {}))
+        args = dict(arguments or {})
+        # Read-before-write: reject a ref-using action whose target was not read via
+        # fetch_aria since the last mutation — do NOT forward it to the browser.
+        gate = _ref_gate(name, args, upstream.fresh_refs)
+        if gate is not None:
+            logger.info("ref gate blocked %s: %s", name, sorted(_target_refs(args) - upstream.fresh_refs))
+            return [TextContent(type="text", text=gate)]
+        result = await _upstream_call(name, args)
         text = _extract_text(result)
+        if name in _REF_INVALIDATING_TOOLS:
+            upstream.fresh_refs.clear()  # page mutated -> every read ref is now stale
         # browser_snapshot returns the ARIA tree INLINE (no snapshot link), so reduce
         # that text to visible text directly — otherwise the raw ARIA leaks through.
         if name == "browser_snapshot":
@@ -510,6 +573,7 @@ async def _upstream_manager() -> None:
                 async with ClientSession(read, write) as session:
                     await session.initialize()
                     upstream.session = session
+                    upstream.fresh_refs.clear()  # new session/page -> no read refs
                     upstream.reconnect_request.clear()
                     upstream.ready.set()
                     logger.info("Connected to upstream Playwright MCP: %s", UPSTREAM_URL)
