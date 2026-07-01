@@ -29,7 +29,7 @@ agent (host) ──MCP──▶ proxy :8932 ──MCP──▶ playwright :8931 
 cp .env.example .env          # add OPENROUTER_API_KEY (and a model)
 
 # 1. Export the applicant profile from the autoapply Postgres DB and stage the
-#    resume PDF (writes data/profile/profile.txt and data/resume/<file>.pdf).
+#    resume PDF (stages the resume PDF under output/resume/<file>.pdf).
 uv run python -m agent.profile
 
 # 2. Start the browser stack (playwright + noVNC + proxy; mounts the resume).
@@ -108,8 +108,8 @@ Agent env: `OPENROUTER_API_KEY`, `OPENROUTER_MODEL` (default
 ## Profile & resume
 
 `agent/profile.py` pulls the applicant from the autoapply Postgres DB, renders the
-form-fill context to `data/profile/profile.txt`, and stages the chosen resume PDF to
-`data/resume/<file>.pdf` (mounted into the playwright container at `/resume`, which
+form-fill context in-memory, and stages the chosen resume PDF to
+`output/resume/<file>.pdf` (mounted into the playwright container at `/resume`, which
 the agent uploads during the application).
 
 Env: `DB_HOST` / `DB_PORT` / `DB_NAME` / `DB_USER` / `DB_PASSWORD`,
@@ -121,7 +121,7 @@ Env: `DB_HOST` / `DB_PORT` / `DB_NAME` / `DB_USER` / `DB_PASSWORD`,
 
 ## ATS / domain-specific rules
 
-If `data/ats_instructions.md` is present it is appended as a system message and
+If `input/ats_instructions.md` is present it is appended as a system message and
 overrides generic guidance. Rules are grouped by ATS host (Greenhouse, Workday, …) —
 e.g. Greenhouse: never use sign-in autofill (no credentials), resume autofill is
 fine; Workday: never type into comboboxes, expand and click the option (options load
@@ -130,13 +130,13 @@ at the page bottom).
 ## Observability
 
 Each `uv run python -m agent.loop` gets a `run_id` and writes three streams under
-`data/` (gitignored). See `agent/observability.py`.
+`output/` (gitignored). See `agent/observability.py`.
 
 | Artifact | What |
 |----------|------|
-| `data/logs/app.log` | Operational log, human-readable, **appended** across runs (also printed to console). Each line tagged with the `run_id`. |
-| `data/traces/<run_id>.jsonl` | The LLM-conversation **trace**, one JSON event per line — feed it to a trace/observability app. One file per run. |
-| `data/usage.jsonl` | One JSON record **appended per run** (tokens, cost, duration, outcome), so all past runs stay visible. Written in a `finally` block, so crashed/interrupted runs are recorded too. |
+| `output/logs/app.log` | Operational log, human-readable, **appended** across runs (also printed to console). Each line tagged with the `run_id`. |
+| `output/traces/<run_id>.jsonl` | The LLM-conversation **trace**, one JSON event per line — feed it to a trace/observability app. One file per run. |
+| `output/usage.jsonl` | One JSON record **appended per run** (tokens, cost, duration, outcome), so all past runs stay visible. Written in a `finally` block, so crashed/interrupted runs are recorded too. |
 
 Env knobs: `LOG_DIR`, `TRACE_DIR`, `FORMS_DIR`, `USAGE_PATH`.
 

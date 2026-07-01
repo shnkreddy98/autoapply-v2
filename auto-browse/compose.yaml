@@ -7,9 +7,9 @@ services:
       - "8931:8931"   # Playwright MCP (HTTP)
       - "6080:6080"   # noVNC web viewer
     volumes:
-      - ./data/.playwright-mcp:/home/node/.playwright-mcp
-      # resume PDF staged by `agent.profile`, uploaded during applications
-      - ./data/resume:/resume:ro
+      - ./output/.playwright-mcp:/home/node/.playwright-mcp
+      # resume PDF staged by the apply flow, uploaded during applications
+      - ./output/resume:/resume:ro
 
   # Text-extracting proxy MCP — the only browser surface the agent connects to.
   proxy:
@@ -24,6 +24,6 @@ services:
       SNAPSHOT_DIR: /data
     volumes:
       # read the snapshot .yml files Playwright MCP writes (shared, read-only)
-      - ./data:/data:ro
+      - ./output:/data:ro
     ports:
       - "8932:8932"

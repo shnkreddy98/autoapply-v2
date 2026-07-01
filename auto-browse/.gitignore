@@ -1,5 +1,5 @@
 .ssh/
-data/
+output/
 *.env
 !.env.example
 .venv
@@ -9,7 +9,7 @@ __pycache__/
 runs/
 
 future_tests.md
-urls.txt
+input/urls.txt
 .playwright-mcp
 
 # recorder corpus + its persistent browser profile (real PII, local only)

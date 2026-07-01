@@ -1,10 +1,10 @@
 """Observability for the agent: application logging, a JSONL conversation trace
 for a separate trace app, and append-only per-run usage records.
 
-Three artifacts, all under data/ (gitignored):
-  data/logs/app.log          operational log, human-readable, appended
-  data/traces/<run_id>.jsonl  one JSON event per line, the LLM-conversation trace
-  data/usage.jsonl           one JSON object per run, appended (all runs visible)
+Three artifacts, all under output/ (gitignored):
+  output/logs/app.log          operational log, human-readable, appended
+  output/traces/<run_id>.jsonl  one JSON event per line, the LLM-conversation trace
+  output/usage.jsonl           one JSON object per run, appended (all runs visible)
 """
 
 import json
@@ -16,11 +16,11 @@ from typing import Any
 from uuid import uuid4
 
 HERE = Path(__file__).resolve().parent.parent
-DATA = HERE / "data"
-LOG_DIR = Path(os.getenv("LOG_DIR", DATA / "logs"))
-TRACE_DIR = Path(os.getenv("TRACE_DIR", DATA / "traces"))
-FORMS_DIR = Path(os.getenv("FORMS_DIR", DATA / "forms"))
-USAGE_PATH = Path(os.getenv("USAGE_PATH", DATA / "usage.jsonl"))
+OUTPUT = HERE / "output"
+LOG_DIR = Path(os.getenv("LOG_DIR", OUTPUT / "logs"))
+TRACE_DIR = Path(os.getenv("TRACE_DIR", OUTPUT / "traces"))
+FORMS_DIR = Path(os.getenv("FORMS_DIR", OUTPUT / "forms"))
+USAGE_PATH = Path(os.getenv("USAGE_PATH", OUTPUT / "usage.jsonl"))
 
 LOGGER_NAME = "auto_browse.agent"
 
@@ -44,7 +44,7 @@ class _RunIdFilter(logging.Filter):
 
 
 def setup_logging(run_id: str) -> logging.Logger:
-    """Configure the agent logger: readable console + appended data/logs/app.log."""
+    """Configure the agent logger: readable console + appended output/logs/app.log."""
     LOG_DIR.mkdir(parents=True, exist_ok=True)
     log = logging.getLogger(LOGGER_NAME)
     log.setLevel(os.getenv("LOG_LEVEL", "INFO").upper())
@@ -96,7 +96,7 @@ class Trace:
 
 
 def append_usage(record: dict[str, Any]) -> None:
-    """Append one run's usage record to data/usage.jsonl (all runs accumulate)."""
+    """Append one run's usage record to output/usage.jsonl (all runs accumulate)."""
     USAGE_PATH.parent.mkdir(parents=True, exist_ok=True)
     with USAGE_PATH.open("a", encoding="utf-8") as f:
         f.write(json.dumps(record, ensure_ascii=False, default=str) + "\n")
@@ -104,7 +104,7 @@ def append_usage(record: dict[str, Any]) -> None:
 
 def write_form_record(run_id: str, record: dict[str, Any]) -> Path:
     """Write a clean per-run record of every form field the agent filled
-    (data/forms/<run_id>.json) so a past application can be reviewed."""
+    (output/forms/<run_id>.json) so a past application can be reviewed."""
     FORMS_DIR.mkdir(parents=True, exist_ok=True)
     path = FORMS_DIR / f"{run_id}.json"
     path.write_text(
