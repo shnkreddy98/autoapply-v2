@@ -188,6 +188,12 @@ ATS_INSTRUCTIONS_PATH = Path(
 
 MAX_ITERATIONS = int(os.getenv("MAX_ITERATIONS", "250"))
 
+# Hard cost ceiling per application run. Once accrued LLM spend reaches this, the
+# loop aborts before issuing another (billable) call — a wedged/looping run can't
+# quietly rack up dollars. Cost is only known after each call returns, so the guard
+# trips right after the call that crosses the line.
+MAX_COST_USD = float(os.getenv("MAX_COST_USD", "1.0"))
+
 # LLM call resilience.
 LLM_MAX_RETRIES = int(os.getenv("LLM_MAX_RETRIES", "6"))
 LLM_TIMEOUT = float(os.getenv("LLM_TIMEOUT", "120"))
@@ -482,6 +488,12 @@ async def agent_loop(
         message = response.choices[0].message
         usage = getattr(response, "usage", None)
         _accumulate_usage(usage_totals, usage)
+
+        if usage_totals["cost"] >= MAX_COST_USD:
+            raise RuntimeError(
+                f"cost guard: run spent ${usage_totals['cost']:.4f} "
+                f">= ${MAX_COST_USD:.2f} cap — aborting before next call"
+            )
 
         debug("iteration", iteration)
         debug("thought", message.content or "(none)")
