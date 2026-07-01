@@ -33,14 +33,28 @@ async def test_full_pipeline(db, s3, tmp_path):
     db.commit()
     base_key = f"users/{user_id}/resumes/base/default.docx"
     s3.put_bytes(base_key, b"PK\x03\x04 base docx")
-    repo.insert_resume_asset(db, user_id, "base", base_key, variant="default")
+    repo.insert_resume_asset(db, user_id, "base", base_key, variant="docx")
 
     # ---- stage 1: search discovers a job ----
     job_id = repo.get_or_create_job(db, "https://boards.greenhouse.io/acme/jobs/42", "DE", "search")
 
     # ---- stage 2: JD-capture (stub navigator) ----
     async def navigate(url):
-        return "# Data Engineer\nWe need dbt, Airflow, and Spark."
+        # long enough to clear jd_capture's quality gate; keeps the dbt signal the
+        # fake tailor asserts on downstream.
+        return (
+            "# Data Engineer\n\n"
+            "About the role: we are looking for a data engineer to own our platform.\n\n"
+            "Responsibilities:\n"
+            "- Build and maintain ETL/ELT pipelines with dbt, Airflow, and Spark.\n"
+            "- Model warehouse data for analytics and machine learning.\n"
+            "- Own data quality, testing, and documentation across the whole stack.\n\n"
+            "Requirements:\n"
+            "- 5+ years of data engineering experience.\n"
+            "- Strong SQL and Python skills; hands-on dbt and cloud warehouse experience.\n"
+            "- Familiarity with orchestration, CI/CD, and infrastructure-as-code.\n\n"
+            "What you'll get: a collaborative team and room to grow.\n"
+        )
 
     await jd_capture.capture_once(db, navigate, s3)
     with db.cursor() as cur:
