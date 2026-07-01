@@ -36,7 +36,10 @@ jobs:
           --health-cmd "pg_isready -U admin -d jobs-db"
           --health-interval 3s --health-timeout 3s --health-retries 20
       minio:
-        image: bitnami/minio:latest
+        # Bitnami moved its public catalog to the archived `bitnamilegacy` repo in
+        # Aug 2025; `bitnami/minio:latest` no longer resolves. Pinned to a concrete
+        # archived tag (not a moving `latest`) so the pull stays reproducible.
+        image: bitnamilegacy/minio:2025.7.23
         env:
           MINIO_ROOT_USER: minioadmin
           MINIO_ROOT_PASSWORD: minioadmin
