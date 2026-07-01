@@ -1,4 +1,4 @@
-"""Local web viewer for agent run traces (data/traces/*.jsonl).
+"""Local web viewer for agent run traces (output/traces/*.jsonl).
 
 Pick a trace from the sidebar; the main pane stacks each iteration top-to-bottom:
 the model's reasoning, every tool call with its full arguments, and — paired right
@@ -8,7 +8,7 @@ monospace box so you can read exactly what the agent saw.
 Zero dependencies (stdlib http.server). Run:
 
     python tools/trace_viewer.py            # serves http://127.0.0.1:8000
-    python tools/trace_viewer.py --port 9000 --dir data/traces
+    python tools/trace_viewer.py --port 9000 --dir output/traces
 
 Then open the printed URL.
 """
@@ -22,7 +22,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
-TRACE_DIR = Path("data/traces")
+TRACE_DIR = Path("output/traces")
 
 
 def _read_events(path: Path) -> list[dict]:
@@ -633,7 +633,7 @@ def main() -> None:
     ap = argparse.ArgumentParser(description="Local web viewer for agent run traces.")
     ap.add_argument("--port", type=int, default=8000)
     ap.add_argument("--host", default="127.0.0.1")
-    ap.add_argument("--dir", default=str(TRACE_DIR), help="trace directory (default data/traces)")
+    ap.add_argument("--dir", default=str(TRACE_DIR), help="trace directory (default output/traces)")
     ap.add_argument("--no-open", action="store_true", help="don't auto-open the browser")
     args = ap.parse_args()
 

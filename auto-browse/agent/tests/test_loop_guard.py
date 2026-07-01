@@ -124,6 +124,18 @@ async def test_current_page_text_degrades_on_error():
 
 
 # --------------------------------------------------------------------------- #
+# ats instructions loader + Greenhouse typeahead guidance (Fix 3)
+# --------------------------------------------------------------------------- #
+
+def test_ats_instructions_load_and_typeahead_rule():
+    text = loop.load_ats_instructions()
+    assert text is not None
+    # the Greenhouse typeahead rule must be present and use the keyboard-commit path
+    assert "Typeahead" in text
+    assert "ArrowDown" in text and "Enter" in text
+
+
+# --------------------------------------------------------------------------- #
 # integration: agent_loop completion guard
 # --------------------------------------------------------------------------- #
 

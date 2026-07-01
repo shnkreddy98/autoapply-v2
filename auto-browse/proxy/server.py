@@ -39,7 +39,7 @@ PORT = int(os.getenv("PROXY_PORT", "8932"))
 
 # Dir that holds the shared `.playwright-mcp/` output dir, so the snapshot files the
 # upstream result links to can be read here and inlined. In compose this is /data.
-SNAPSHOT_DIR = Path(os.getenv("SNAPSHOT_DIR", "data"))
+SNAPSHOT_DIR = Path(os.getenv("SNAPSHOT_DIR", "output"))
 _SNAPSHOT_LINK_RE = re.compile(r"(?:- )?\[Snapshot\]\(([^)]+\.ya?ml)\)")
 
 # After any tool call that returns a snapshot, the upstream captures it the instant

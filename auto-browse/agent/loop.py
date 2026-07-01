@@ -183,7 +183,7 @@ DEFAULT_MODEL = os.getenv("OPENROUTER_MODEL", "google/gemini-3-flash-preview")
 
 HERE = Path(__file__).resolve().parent.parent
 ATS_INSTRUCTIONS_PATH = Path(
-    os.getenv("ATS_INSTRUCTIONS_PATH", HERE / "data" / "ats_instructions.md")
+    os.getenv("ATS_INSTRUCTIONS_PATH", HERE / "input" / "ats_instructions.md")
 )
 
 MAX_ITERATIONS = int(os.getenv("MAX_ITERATIONS", "250"))
@@ -636,8 +636,8 @@ async def agent_loop(
 
 # Resume is staged here on the host, then uploaded by the browser. This dir is bind-
 # mounted into the playwright container as RESUME_CONTAINER_ROOT (compose.yaml:
-# ./data/resume -> /resume), so the defaults must stay in sync with that mount.
-SCRATCH_ROOT = os.getenv("SCRATCH_ROOT", str(HERE / "data" / "resume"))
+# ./output/resume -> /resume), so the defaults must stay in sync with that mount.
+SCRATCH_ROOT = os.getenv("SCRATCH_ROOT", str(HERE / "output" / "resume"))
 # path root the resume is reachable at INSIDE the playwright container (mount of SCRATCH_ROOT)
 RESUME_CONTAINER_ROOT = os.getenv("RESUME_CONTAINER_ROOT", "/resume")
 
@@ -724,7 +724,7 @@ if __name__ == "__main__":
     user_id = sys.argv[1]
     idx = int(sys.argv[2])
     # Read relative to this file, not the CWD, so it works from anywhere.
-    urls = [ln.strip() for ln in (HERE / "urls.txt").read_text().splitlines() if ln.strip()]
+    urls = [ln.strip() for ln in (HERE / "input" / "urls.txt").read_text().splitlines() if ln.strip()]
     if not 0 <= idx < len(urls):
         raise SystemExit(f"idx {idx} out of range (0..{len(urls) - 1}); urls.txt has {len(urls)} URLs")
     job_url = urls[idx]
