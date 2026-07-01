@@ -56,9 +56,11 @@ async def resolve_resume(
     if key:
         return _download(storage, key, dest), "tailored"
 
-    base = repo.get_base_asset(conn, user_id)
+    # Tailoring edits the DOCX; the apply upload needs a real PDF. They are stored as
+    # separate base variants ('docx' for the tailoring source, 'pdf' for upload).
+    base_docx = repo.get_base_asset(conn, user_id, variant="docx")
     if tailored is None:  # never queued for this user×job -> trigger on-demand
-        repo.enqueue_tailoring(conn, user_id, job_id, base["id"] if base else None)
+        repo.enqueue_tailoring(conn, user_id, job_id, base_docx["id"] if base_docx else None)
 
     polls = max(1, math.ceil(wait_timeout / poll_interval))
     for _ in range(polls):
@@ -70,9 +72,10 @@ async def resolve_resume(
         if tailored and tailored["status"] == "failed":
             break
 
-    if base is None:
-        base = repo.get_base_asset(conn, user_id)
-    if base is None:
-        raise RuntimeError(f"no resume available for user {user_id}")
-    log.info("tailored resume not ready for job=%s; using base resume", job_id)
-    return _download(storage, base["s3_key"], dest), "base"
+    # Fallback: upload the ready-made base PDF — never the docx (that would attach a
+    # DOCX mislabeled as .pdf).
+    base_pdf = repo.get_base_asset(conn, user_id, variant="pdf")
+    if base_pdf is None:
+        raise RuntimeError(f"no base PDF resume for user {user_id}")
+    log.info("tailored resume not ready for job=%s; using base PDF", job_id)
+    return _download(storage, base_pdf["s3_key"], dest), "base"

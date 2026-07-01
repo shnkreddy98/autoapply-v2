@@ -4,9 +4,17 @@ set -e
 
 export DISPLAY=:99
 
+# A restarted (not recreated) container keeps /tmp, so a previous run's lock can
+# linger and make Xvfb abort with "Server is already active for display 99".
+# Clear the stale lock + socket before starting.
+rm -f /tmp/.X99-lock /tmp/.X11-unix/X99
+
 # Virtual framebuffer the headed browser renders into.
 Xvfb :99 -screen 0 1280x900x24 -ac &
-sleep 1
+
+# Wait for the display socket before x11vnc/browser attach (a fixed sleep races
+# Xvfb startup and x11vnc then dies with "XOpenDisplay failed").
+for _ in $(seq 1 50); do [ -S /tmp/.X11-unix/X99 ] && break; sleep 0.1; done
 
 # Minimal window manager so the browser window has a frame.
 fluxbox >/dev/null 2>&1 &

@@ -73,7 +73,7 @@ def _enqueue_for_active_users(conn: psycopg.Connection, job_id: str) -> int:
     current base resume asset if they have one."""
     n = 0
     for uid in repo.active_user_ids(conn):
-        base = repo.get_base_asset(conn, uid)
+        base = repo.get_base_asset(conn, uid, variant="docx")  # tailoring edits the docx
         repo.enqueue_tailoring(conn, uid, job_id, base["id"] if base else None)
         n += 1
     return n

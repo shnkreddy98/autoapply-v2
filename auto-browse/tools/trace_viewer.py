@@ -1,4 +1,4 @@
-"""Local web viewer for agent run traces (data/traces/*.jsonl).
+"""Local web viewer for agent run traces (output/traces/*.jsonl).
 
 Pick a trace from the sidebar; the main pane stacks each iteration top-to-bottom:
 the model's reasoning, every tool call with its full arguments, and — paired right
@@ -8,7 +8,7 @@ monospace box so you can read exactly what the agent saw.
 Zero dependencies (stdlib http.server). Run:
 
     python tools/trace_viewer.py            # serves http://127.0.0.1:8000
-    python tools/trace_viewer.py --port 9000 --dir data/traces
+    python tools/trace_viewer.py --port 9000 --dir output/traces
 
 Then open the printed URL.
 """
@@ -22,7 +22,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
-TRACE_DIR = Path("data/traces")
+TRACE_DIR = Path("output/traces")
 
 
 def _read_events(path: Path) -> list[dict]:
@@ -85,7 +85,8 @@ def _tailor_status() -> dict:
             job_counts = {r["status"]: r["n"] for r in cur.fetchall()}
             cur.execute(
                 """SELECT t.status, t.resume_score, t.new_resume_score, t.claimed_by,
-                          t.claimed_at, t.updated_at, t.error, j.url, j.title
+                          t.claimed_at, t.updated_at, t.error, t.tailored_asset_id,
+                          j.url, j.title
                    FROM tailored_resumes t JOIN jobs j ON j.job_id = t.job_id
                    ORDER BY t.updated_at DESC LIMIT 100"""
             )
@@ -96,12 +97,33 @@ def _tailor_status() -> dict:
     for r in rows:
         r["claimed_at"] = _iso(r.get("claimed_at"))
         r["updated_at"] = _iso(r.get("updated_at"))
+        aid = r.get("tailored_asset_id")
+        r["tailored_asset_id"] = str(aid) if aid else None  # uuid -> json-safe str
     return {
         "tailor_counts": tailor_counts,
         "job_counts": job_counts,
         "active": [r for r in rows if r["status"] == "tailoring"],
         "rows": rows,
     }
+
+
+def _resume_pdf(asset_id: str) -> tuple[bytes, str] | None:
+    """Fetch a resume asset's bytes from object storage by asset id. Returns
+    (bytes, filename) or None if the asset / its object is missing."""
+    try:
+        from common import db, repo
+        from common import storage as storagemod
+    except Exception:
+        return None
+    try:
+        with db.connect() as conn:
+            asset = repo.get_resume_asset(conn, asset_id)
+        if not asset or not asset.get("s3_key"):
+            return None
+        data = storagemod.from_env().get_bytes(asset["s3_key"])
+    except Exception:
+        return None
+    return data, (Path(asset["s3_key"]).name or "resume.pdf")
 
 
 def _make_handler(trace_dir: Path):
@@ -128,6 +150,23 @@ def _make_handler(trace_dir: Path):
                 self._send(TAILOR_HTML.encode(), "text/html; charset=utf-8")
             elif route == "/api/tailor":
                 self._json(_tailor_status())
+            elif route == "/resume":
+                qs = parse_qs(parsed.query)
+                aid = (qs.get("id") or [""])[0]
+                if not aid:
+                    self._send(b"missing id", "text/plain", 400)
+                    return
+                got = _resume_pdf(aid)
+                if got is None:
+                    self._send(b"resume not found", "text/plain", 404)
+                    return
+                data, fname = got
+                self.send_response(200)
+                self.send_header("Content-Type", "application/pdf")
+                self.send_header("Content-Disposition", f'inline; filename="{fname}"')
+                self.send_header("Content-Length", str(len(data)))
+                self.end_headers()
+                self.wfile.write(data)
             elif route == "/api/traces":
                 self._json(_list_traces(trace_dir))
             elif route == "/api/trace":
@@ -541,7 +580,7 @@ TAILOR_HTML = r"""<!DOCTYPE html>
   <div id="active"></div>
   <h2>Recent</h2>
   <table id="rows"><thead><tr>
-    <th>Status</th><th>Score</th><th>Worker</th><th>Updated</th><th>Job</th>
+    <th>Status</th><th>Score</th><th>Worker</th><th>Updated</th><th>PDF</th><th>Job</th>
   </tr></thead><tbody></tbody></table>
 </main>
 <script>
@@ -574,9 +613,11 @@ async function tick(){
     tb.innerHTML = (d.rows||[]).map(r => {
       const u = r.url ? `<a href="${r.url}" target="_blank" rel="noopener">${r.title||r.url}</a>` : "—";
       const err = r.error ? `<div class="err">${r.error}</div>` : "";
+      const pdf = r.tailored_asset_id
+        ? `<a href="/resume?id=${r.tailored_asset_id}" target="_blank" rel="noopener">PDF</a>` : "—";
       return `<tr><td><span class="pill ${r.status}">${r.status}</span></td>`
         +`<td>${scoreCell(r)}</td><td>${r.claimed_by||"—"}</td>`
-        +`<td>${fmt(r.updated_at)}</td><td class="url">${u}${err}</td></tr>`;
+        +`<td>${fmt(r.updated_at)}</td><td>${pdf}</td><td class="url">${u}${err}</td></tr>`;
     }).join("");
     document.getElementById("updated").textContent = "updated "+new Date().toLocaleTimeString();
   }catch(e){ document.getElementById("updated").textContent = "fetch failed: "+e; }
@@ -592,7 +633,7 @@ def main() -> None:
     ap = argparse.ArgumentParser(description="Local web viewer for agent run traces.")
     ap.add_argument("--port", type=int, default=8000)
     ap.add_argument("--host", default="127.0.0.1")
-    ap.add_argument("--dir", default=str(TRACE_DIR), help="trace directory (default data/traces)")
+    ap.add_argument("--dir", default=str(TRACE_DIR), help="trace directory (default output/traces)")
     ap.add_argument("--no-open", action="store_true", help="don't auto-open the browser")
     args = ap.parse_args()
 

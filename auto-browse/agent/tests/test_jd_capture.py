@@ -5,6 +5,22 @@ import pytest
 from agent import jd_capture
 from common import keys, repo
 
+# A JD that clears jd_capture's quality gate (>= MIN_JD_CHARS with signal words).
+_VALID_JD = (
+    "# Senior Data Engineer\n\n"
+    "About the role: we are looking for a data engineer to design and own our "
+    "data platform end to end.\n\n"
+    "Responsibilities:\n"
+    "- Build and maintain scalable ETL/ELT pipelines with dbt, Airflow, and Spark.\n"
+    "- Model data in the warehouse for analytics and machine learning.\n"
+    "- Partner with analysts and stakeholders to ship reliable datasets.\n\n"
+    "Requirements:\n"
+    "- 5+ years of experience in data engineering or a closely related field.\n"
+    "- Strong SQL and Python skills; hands-on experience with dbt and cloud warehouses.\n"
+    "- Familiarity with orchestration, CI/CD, and infrastructure-as-code.\n\n"
+    "What you'll get: a collaborative team, competitive pay, and room to grow.\n"
+)
+
 
 class FakeStorage:
     def __init__(self):
@@ -38,7 +54,7 @@ def _seed_job_and_user(db, url="https://example.com/jobs/1"):
         user_id = cur.fetchone()["user_id"]
     db.commit()
     repo.insert_resume_asset(db, user_id, "base", f"users/{user_id}/resumes/base/default.docx",
-                             variant="default")
+                             variant="docx")
     return job_id, user_id
 
 
@@ -48,7 +64,7 @@ async def test_capture_success_enqueues_tailoring(db):
     store = FakeStorage()
 
     async def navigate(url):
-        return "# Job\nWe need a data engineer with dbt."
+        return _VALID_JD
 
     handled = await jd_capture.capture_once(db, navigate, store)
     assert handled == job_id
@@ -58,7 +74,7 @@ async def test_capture_success_enqueues_tailoring(db):
         row = cur.fetchone()
     assert row["status"] == "jd_ready"
     assert row["jd_s3_key"] == keys.jd_key(job_id)
-    assert store.objs[keys.jd_key(job_id)] == b"# Job\nWe need a data engineer with dbt."
+    assert store.objs[keys.jd_key(job_id)] == jd_capture._clean_jd(_VALID_JD).encode("utf-8")
 
     # tailoring enqueued for the active user, linked to their base asset
     t = repo.lookup_tailored(db, user_id, job_id)
@@ -116,7 +132,7 @@ async def test_run_once_drains_backlog(db):
     store = FakeStorage()
 
     async def navigate(url):
-        return f"JD for {url}"
+        return _VALID_JD
 
     await jd_capture.run(navigate, store, db, once=True)
     with db.cursor() as cur:
