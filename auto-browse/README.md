@@ -144,3 +144,7 @@ Env knobs: `LOG_DIR`, `TRACE_DIR`, `FORMS_DIR`, `USAGE_PATH`.
 
 No automated suite yet (the old page-model fixtures were removed in the rewrite).
 Planned coverage is sketched in `future_tests.md`.
+
+## Bugs
+- `The page changed` nudge isn't enough, agent sometimes clicks on randon refs
+- Greenhouse country code flaky, i one shotted this specifically
