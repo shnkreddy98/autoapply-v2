@@ -133,7 +133,7 @@ MUST DOs:
 - Pass a ref as the `target` argument EXACTLY as shown, with no decoration. For the line `- button "Apply Now" [ref=e76] [cursor=pointer]`, click with: browser_click({"element": "Apply Now button", "target": "e76"}). Never wrap the ref in a selector (NOT `button[ref=e76]`, NOT `#e76`) and never invent a CSS/text selector — only the bare ref token (`e76`) matches.
 - Navigate to the job URL, follow Apply links, fill the application from the profile, and upload the resume (path is at the top of the profile).
 - Prefer autofill from the uploaded RESUME when the page offers it. Sign-in / account-based autofill is allowed where the portal requires it (per-ATS rules may forbid it).
-- Sign in or create an account if the portal requires it before applying.
+- If the portal requires an account: ALWAYS try to SIGN IN FIRST, using the Login Email and Login Password from the profile (use that same given password for every site). Only if sign-in fails because no account exists (e.g. "account not found", "no user", "incorrect email") should you then CREATE an account, reusing the same email and given password. Never create an account before trying to sign in.
 - Work through every page/step. Do NOT click the final Submit — stop before it and return a short plain-text summary of what you filled and anything you couldn't.
 - State your next step in one short sentence before each tool call."""
     + "\n\n"
@@ -183,10 +183,28 @@ DEFAULT_MODEL = os.getenv("OPENROUTER_MODEL", "google/gemini-3-flash-preview")
 
 HERE = Path(__file__).resolve().parent.parent
 ATS_INSTRUCTIONS_PATH = Path(
-    os.getenv("ATS_INSTRUCTIONS_PATH", HERE / "data" / "ats_instructions.md")
+    os.getenv("ATS_INSTRUCTIONS_PATH", HERE / "input" / "ats_instructions.md")
 )
 
 MAX_ITERATIONS = int(os.getenv("MAX_ITERATIONS", "250"))
+
+# Hard cost ceiling per application run. Once accrued LLM spend reaches this, the
+# loop aborts before issuing another (billable) call — a wedged/looping run can't
+# quietly rack up dollars. Cost is only known after each call returns, so the guard
+# trips right after the call that crosses the line.
+MAX_COST_USD = float(os.getenv("MAX_COST_USD", "1.0"))
+
+# Hard cap on tokens the model may emit per call. Bounds the blast radius of a
+# wedged generation (a degenerate run once spat 203 KB of a single repeated token).
+# 4096 leaves headroom for large `browser_fill_form` arg lists so real tool calls
+# are not truncated mid-emission.
+MAX_COMPLETION_TOKENS = int(os.getenv("MAX_COMPLETION_TOKENS", "4096"))
+
+# A no-tool-call turn that is truncated (finish_reason=length) or degenerate is not
+# a real "done" — likely the accumulated history wedged the model. Rebuild a fresh
+# minimal context (system prompt + profile + current page) and retry, up to N times
+# before failing the run.
+MAX_CONTEXT_RESETS = int(os.getenv("MAX_CONTEXT_RESETS", "2"))
 
 # LLM call resilience.
 LLM_MAX_RETRIES = int(os.getenv("LLM_MAX_RETRIES", "6"))
@@ -252,6 +270,13 @@ def _accumulate_usage(totals: dict[str, Any], usage: Any) -> None:
     if cost is None and getattr(usage, "model_extra", None):
         cost = usage.model_extra.get("cost")
     totals["cost"] += cost or 0.0
+
+
+def _looks_degenerate(text: str) -> bool:
+    """A completion is degenerate if it's long but built from almost no distinct
+    characters — a repeated-token loop (e.g. `aminase` × 29000, 203 KB, ~7 uniques).
+    A normal short final message can't trip either threshold."""
+    return len(text) > 8000 and len(set(text)) < 40
 
 
 def _record_usage(
@@ -444,6 +469,15 @@ async def _human_handoff(
     )
 
 
+async def _current_page_text(session: ClientSession) -> str:
+    """Fresh visible-text snapshot of the page, used to reseed a reset context.
+    Degrades to a note rather than crashing recovery if the snapshot fails."""
+    try:
+        return result_text(await session.call_tool("browser_snapshot", {}))
+    except Exception as exc:
+        return f"(snapshot unavailable: {type(exc).__name__})"
+
+
 async def agent_loop(
     model: str,
     original_task: str,
@@ -469,12 +503,19 @@ async def agent_loop(
             profile_chars=len(messages[1]["content"]) if len(messages) > 1 else 0,
         )
 
+    # Seed context (system prompt(s) + profile + ATS + user task) as it stands before
+    # any assistant/tool turns — restored verbatim on a degenerate-turn context reset.
+    # Shallow copy is safe: the message dicts are never mutated in place.
+    base_messages = list(messages)
+    context_resets = 0
+
     for iteration in range(1, max_iterations + 1):
         request: dict[str, Any] = {
             "model": model,
             "messages": messages,
             "tools": openrouter_tools,
             "tool_choice": "auto",
+            "max_tokens": MAX_COMPLETION_TOKENS,
             "extra_body": {"usage": {"include": True}},
         }
 
@@ -482,6 +523,12 @@ async def agent_loop(
         message = response.choices[0].message
         usage = getattr(response, "usage", None)
         _accumulate_usage(usage_totals, usage)
+
+        if usage_totals["cost"] >= MAX_COST_USD:
+            raise RuntimeError(
+                f"cost guard: run spent ${usage_totals['cost']:.4f} "
+                f">= ${MAX_COST_USD:.2f} cap — aborting before next call"
+            )
 
         debug("iteration", iteration)
         debug("thought", message.content or "(none)")
@@ -506,7 +553,42 @@ async def agent_loop(
             )
 
         if not message.tool_calls:
-            return message.content or ""
+            finish = response.choices[0].finish_reason
+            content = message.content or ""
+            if finish != "length" and not _looks_degenerate(content):
+                return content  # genuine, clean completion — the agent is done
+            # Truncated or degenerate: the accumulated history likely wedged the
+            # model. Reset to a fresh minimal context and retry before giving up.
+            if context_resets < MAX_CONTEXT_RESETS:
+                context_resets += 1
+                page = await _current_page_text(session)
+                messages[:] = base_messages + [
+                    {
+                        "role": "user",
+                        "content": (
+                            "[Recovering from a stalled turn — context was reset.]\n"
+                            f"CURRENT PAGE:\n{page}\n\n"
+                            "Continue the application from here."
+                        ),
+                    }
+                ]
+                log.warning(
+                    "degenerate turn (finish=%s len=%d) — context reset %d/%d",
+                    finish, len(content), context_resets, MAX_CONTEXT_RESETS,
+                )
+                if trace is not None:
+                    trace.event(
+                        "context_reset",
+                        iteration=iteration,
+                        finish_reason=finish,
+                        content_len=len(content),
+                        attempt=context_resets,
+                    )
+                continue
+            raise RuntimeError(
+                f"degenerate/truncated completion after {MAX_CONTEXT_RESETS} context "
+                f"resets (finish={finish}, len={len(content)}, uniq={len(set(content))})"
+            )
 
         messages.append(
             {
@@ -554,8 +636,8 @@ async def agent_loop(
 
 # Resume is staged here on the host, then uploaded by the browser. This dir is bind-
 # mounted into the playwright container as RESUME_CONTAINER_ROOT (compose.yaml:
-# ./data/resume -> /resume), so the defaults must stay in sync with that mount.
-SCRATCH_ROOT = os.getenv("SCRATCH_ROOT", str(HERE / "data" / "resume"))
+# ./output/resume -> /resume), so the defaults must stay in sync with that mount.
+SCRATCH_ROOT = os.getenv("SCRATCH_ROOT", str(HERE / "output" / "resume"))
 # path root the resume is reachable at INSIDE the playwright container (mount of SCRATCH_ROOT)
 RESUME_CONTAINER_ROOT = os.getenv("RESUME_CONTAINER_ROOT", "/resume")
 
@@ -634,9 +716,17 @@ async def main(user_id: str, job_url: str, model: str) -> None:
 
 
 if __name__ == "__main__":
-    # Usage: uv run python -m agent.loop <user_id> <job_url>
+    # Usage: uv run python -m agent.loop <user_id> <idx>
+    # <idx> is a 0-based index into urls.txt (one URL per line; blanks ignored).
+    # idx 0 == the first line, so editor line N == idx N-1.
     if len(sys.argv) < 3:
-        raise SystemExit("Usage: uv run python -m agent.loop <user_id> <job_url>")
+        raise SystemExit("Usage: uv run python -m agent.loop <user_id> <idx>")
     user_id = sys.argv[1]
-    job_url = sys.argv[2]
+    idx = int(sys.argv[2])
+    # Read relative to this file, not the CWD, so it works from anywhere.
+    urls = [ln.strip() for ln in (HERE / "input" / "urls.txt").read_text().splitlines() if ln.strip()]
+    if not 0 <= idx < len(urls):
+        raise SystemExit(f"idx {idx} out of range (0..{len(urls) - 1}); urls.txt has {len(urls)} URLs")
+    job_url = urls[idx]
+    print(f"[{idx}] {job_url}")
     asyncio.run(main(user_id=user_id, job_url=job_url, model=DEFAULT_MODEL))

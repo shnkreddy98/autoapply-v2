@@ -39,9 +39,15 @@ def _user(db, email="a@e.co"):
 
 
 def _base(db, store, uid):
-    key = f"users/{uid}/resumes/base/default.docx"
-    store.objs[key] = b"BASE"
-    return repo.insert_resume_asset(db, uid, "base", key, variant="default")
+    # Base resume is stored as two variants: 'docx' (tailoring source) and 'pdf'
+    # (the ready-to-upload fallback resolve_resume returns on a tailored miss).
+    docx_key = f"users/{uid}/resumes/base/default.docx"
+    pdf_key = f"users/{uid}/resumes/base/default.pdf"
+    store.objs[docx_key] = b"BASEDOCX"
+    store.objs[pdf_key] = b"BASE"
+    repo.insert_resume_asset(db, uid, "base", docx_key, variant="docx")
+    return repo.insert_resume_asset(db, uid, "base", pdf_key, variant="pdf",
+                                    content_type="application/pdf")
 
 
 def _ready_tailored(db, store, uid, job_id):
@@ -113,6 +119,6 @@ async def test_no_resume_raises(db, tmp_path):
     store = FakeStorage()
     uid = _user(db)  # no base, no tailored
     job_id = repo.get_or_create_job(db, "https://example.com/jobs/4")
-    with pytest.raises(RuntimeError, match="no resume"):
+    with pytest.raises(RuntimeError, match="no base PDF resume"):
         await resolve_resume(db, store, uid, job_id, str(tmp_path / "r.pdf"),
                              wait_timeout=2, poll_interval=2, sleep=_noop_sleep)
