@@ -8,9 +8,10 @@ os.environ.setdefault("S3_ENDPOINT", "http://localhost:9100")
 os.environ.setdefault("S3_BUCKET", "autoapply")
 
 _TABLES = [
-    "applications", "tailored_resumes", "resume_assets", "jobs", "gmail_tokens",
-    "professional_references", "skill_groups", "education", "work_experiences",
-    "application_profiles", "portal_credentials", "users",
+    "audit_log", "sessions", "applications", "tailored_resumes", "resume_assets",
+    "user_jobs", "jobs", "gmail_tokens", "professional_references", "skill_groups",
+    "education", "work_experiences", "application_profiles", "portal_credentials",
+    "users",
 ]
 
 

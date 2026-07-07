@@ -101,7 +101,8 @@ def test_resolve_job_ambiguous_prefix(db):
 
 
 def test_add_jobs_fresh_and_duplicate(db):
-    r1 = cli.add_jobs(db, ["https://ex.dev/j/1"])[0]
+    uid = _mk_user(db)
+    r1 = cli.add_jobs(db, uid, ["https://ex.dev/j/1"])[0]
     assert r1["duplicate"] is False
     with db.cursor() as cur:
         cur.execute("SELECT source, status FROM jobs WHERE job_id = %s", (r1["job_id"],))
@@ -109,9 +110,20 @@ def test_add_jobs_fresh_and_duplicate(db):
     assert row["source"] == "manual"
     assert row["status"] == "jd_pending"
 
-    r2 = cli.add_jobs(db, ["http://www.ex.dev/j/1/"])[0]  # normalized dup
+    r2 = cli.add_jobs(db, uid, ["http://www.ex.dev/j/1/"])[0]  # normalized dup
     assert r2["duplicate"] is True
     assert r2["job_id"] == r1["job_id"]
+    # ownership linked exactly once
+    assert repo.job_owner_ids(db, r1["job_id"]) == [uid]
+
+
+def test_jobs_list_scoped_to_owner(db):
+    uid = _mk_user(db)
+    other = _mk_user(db, "other@test.dev")
+    mine = cli.add_jobs(db, uid, ["https://ex.dev/j/mine"])[0]["job_id"]
+    cli.add_jobs(db, other, ["https://ex.dev/j/theirs"])
+    rows = cli.list_jobs(db, uid, None)
+    assert [r["job_id"] for r in rows] == [mine]
 
 
 def test_parse_url_lines():
@@ -123,8 +135,8 @@ def test_parse_url_lines():
 # tailor: backfill + summary
 
 
-def _mk_ready_job(db, url="https://ex.dev/j/1") -> str:
-    job_id = repo.get_or_create_job(db, url, source="manual")
+def _mk_ready_job(db, user_id, url="https://ex.dev/j/1") -> str:
+    job_id = repo.add_job_for_user(db, user_id, url, source="manual")
     with db.cursor() as cur:
         cur.execute("UPDATE jobs SET status = 'jd_ready' WHERE job_id = %s", (job_id,))
     db.commit()
@@ -133,7 +145,7 @@ def _mk_ready_job(db, url="https://ex.dev/j/1") -> str:
 
 def test_backfill_tailoring(db):
     uid = _mk_user(db)
-    job_id = _mk_ready_job(db)
+    job_id = _mk_ready_job(db, uid)
     base_id = repo.insert_resume_asset(db, uid, "base", "k/base.docx", variant="docx")
 
     assert cli.backfill_tailoring(db, uid) == 1
@@ -146,15 +158,22 @@ def test_backfill_tailoring(db):
 
 def test_backfill_skips_non_ready_jobs(db):
     uid = _mk_user(db)
-    repo.get_or_create_job(db, "https://ex.dev/j/1", source="manual")  # jd_pending
+    repo.add_job_for_user(db, uid, "https://ex.dev/j/1", source="manual")  # jd_pending
+    assert cli.backfill_tailoring(db, uid) == 0
+
+
+def test_backfill_skips_unowned_jobs(db):
+    uid = _mk_user(db)
+    other = _mk_user(db, "other@test.dev")
+    _mk_ready_job(db, other, "https://ex.dev/j/theirs")
     assert cli.backfill_tailoring(db, uid) == 0
 
 
 def test_tailoring_summary(db):
     uid = _mk_user(db)
     other = _mk_user(db, "other@test.dev")
-    j1 = _mk_ready_job(db, "https://ex.dev/j/1")
-    j2 = _mk_ready_job(db, "https://ex.dev/j/2")
+    j1 = _mk_ready_job(db, uid, "https://ex.dev/j/1")
+    j2 = _mk_ready_job(db, uid, "https://ex.dev/j/2")
     t1 = repo.enqueue_tailoring(db, uid, j1)
     repo.enqueue_tailoring(db, uid, j2)
     repo.enqueue_tailoring(db, other, j1)  # must not appear in uid's summary

@@ -27,11 +27,17 @@ def _admin_dsn() -> str:
     )
 
 
+# Newest table in init.sql — bump when the schema grows so stale test DBs rebuild.
+_SCHEMA_SENTINEL = "public.user_jobs"
+
+
 def ensure_test_db() -> None:
     """Create the test DB (if missing) and load the schema (if not yet loaded).
 
-    Idempotent: safe to call before every test. `init.sql` is applied only when the
-    `users` table is absent, since it uses bare CREATE TABLE (not IF NOT EXISTS)."""
+    Idempotent: safe to call before every test. `init.sql` uses bare CREATE TABLE
+    (not IF NOT EXISTS), so it only ever runs against an empty schema: a fresh DB,
+    or — when the sentinel table is missing (schema drift) — after dropping and
+    recreating `public`. The test DB is throwaway by contract, so that's safe."""
     name = os.environ["DB_NAME"]  # conftest has already pointed this at the test DB
     with psycopg.connect(_admin_dsn(), autocommit=True) as admin:
         exists = admin.execute(
@@ -43,7 +49,10 @@ def ensure_test_db() -> None:
     from common import db as dbmod
 
     with dbmod.connect() as conn:
-        loaded = conn.execute("SELECT to_regclass('public.users')").fetchone()["to_regclass"]
-        if not loaded:
+        current = conn.execute(
+            "SELECT to_regclass(%s)", (_SCHEMA_SENTINEL,)
+        ).fetchone()["to_regclass"]
+        if not current:
+            conn.execute("DROP SCHEMA public CASCADE; CREATE SCHEMA public")
             conn.execute(_INIT_SQL.read_text())
             conn.commit()

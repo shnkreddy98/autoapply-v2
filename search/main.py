@@ -92,7 +92,14 @@ if __name__ == "__main__":
     for r in all_results:
         print(r.get("url"), "-", r.get("title"))
 
+    from common import db, repo
     from enqueue import enqueue_jobs
 
-    job_ids = enqueue_jobs(all_results)
+    with db.connect() as conn:
+        actives = repo.active_user_ids(conn)
+    owner = actives[0] if len(actives) == 1 else None
+    if owner is None:
+        print("warning: not exactly one active user — jobs get no owner, so no tailoring fan-out")
+
+    job_ids = enqueue_jobs(all_results, user_id=owner)
     print(f"\nEnqueued {len(set(job_ids))} unique jobs (jd_pending).")

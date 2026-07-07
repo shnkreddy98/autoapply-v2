@@ -68,11 +68,12 @@ def _reject_reason(text: str) -> str | None:
     return None
 
 
-def _enqueue_for_active_users(conn: psycopg.Connection, job_id: str) -> int:
-    """Queue a tailoring job (user×job) for every active user, attaching their
-    current base resume asset if they have one."""
+def _enqueue_for_owners(conn: psycopg.Connection, job_id: str) -> int:
+    """Queue a tailoring job (user×job) for every owner of the job (user_jobs),
+    attaching their current base resume asset if they have one. Owners-only: a
+    job one user added must never fan out to other users' queues."""
     n = 0
-    for uid in repo.active_user_ids(conn):
+    for uid in repo.job_owner_ids(conn, job_id):
         base = repo.get_base_asset(conn, uid, variant="docx")  # tailoring edits the docx
         repo.enqueue_tailoring(conn, uid, job_id, base["id"] if base else None)
         n += 1
@@ -108,7 +109,7 @@ async def capture_once(
             conn, "jobs", job_id, "jd_ready",
             jd_s3_key=key, jd_captured_at=datetime.now(timezone.utc),
         )
-        count = _enqueue_for_active_users(conn, job_id)
+        count = _enqueue_for_owners(conn, job_id)
         log.info("captured JD job=%s bytes=%d enqueued=%d", job_id, len(jd_text), count)
     except Exception as exc:  # one bad job must not kill the worker
         log.warning("JD capture failed job=%s: %s", job_id, exc)
