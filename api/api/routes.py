@@ -80,8 +80,8 @@ class GmailStatus(BaseModel):
 
 
 # application_profiles columns a user may read/write. user_id/updated_at are
-# managed; anything not listed here is rejected by pydantic (extra=forbid).
-class Profile(BaseModel, extra="forbid"):
+# managed and simply not listed (dropped on output, rejected on input).
+class Profile(BaseModel):
     street_address: str | None = None
     city: str | None = None
     state: str | None = None
@@ -114,6 +114,10 @@ class Profile(BaseModel, extra="forbid"):
     cert_data_processing: bool | None = None
     electronic_signature: str | None = None
     signature_date: date | None = None
+
+
+class ProfileIn(Profile, extra="forbid"):
+    """PUT body: unknown/managed fields are rejected, not silently dropped."""
 
 
 class AdminUser(BaseModel):
@@ -155,7 +159,7 @@ def get_profile(user: dict = Depends(get_current_user)):
 
 
 @router.put("/profile", response_model=Profile)
-def put_profile(profile: Profile, user: dict = Depends(get_current_user)):
+def put_profile(profile: ProfileIn, user: dict = Depends(get_current_user)):
     data = profile.model_dump(exclude_unset=True)
     cols = list(data)
     with db.user_conn(user["user_id"]) as conn:

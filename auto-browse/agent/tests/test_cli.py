@@ -85,15 +85,21 @@ def test_resolve_job_unknown(db):
 
 
 def test_resolve_job_ambiguous_prefix(db):
-    # Insert jobs until two share a first hex char (bounded: 17 draws must collide).
-    ids = [
-        str(repo.get_or_create_job(db, f"https://ex.dev/j/{i}", source="manual"))
-        for i in range(17)
-    ]
-    first_chars = [i[0] for i in ids]
-    dup = next(c for c in first_chars if first_chars.count(c) > 1)
+    # Two jobs with ids sharing a 4-char prefix (prefix lookup needs >= 4 chars).
+    for i in (1, 2):
+        with db.cursor() as cur:
+            cur.execute(
+                "INSERT INTO jobs (job_id, url, url_normalized, source) "
+                "VALUES (%s, %s, %s, 'manual')",
+                (
+                    f"abcd{i}{i}{i}{i}-0000-4000-8000-00000000000{i}",
+                    f"https://ex.dev/amb/{i}",
+                    f"https://ex.dev/amb/{i}",
+                ),
+            )
+        db.commit()
     with pytest.raises(SystemExit, match="ambiguous"):
-        cli.resolve_job(db, dup)
+        cli.resolve_job(db, "abcd")
 
 
 # ---------------------------------------------------------------------------

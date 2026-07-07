@@ -88,6 +88,7 @@ def resolve_user(conn, user_flag: str | None) -> str:
 
 def resolve_job(conn, ref: str) -> dict:
     """Resolve a JOB argument (full UUID, unambiguous id prefix, or URL) to a jobs row."""
+    ref = str(ref)  # tolerate uuid.UUID from programmatic callers
     with conn.cursor() as cur:
         try:
             uuid.UUID(ref)

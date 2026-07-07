@@ -106,12 +106,19 @@ def add_job_for_user(
     to the deterministic uuid5 id (identical for all rows created by this code)."""
     norm = url_normalize(url)
     job_id = job_id_for_url(url)
+    # Plain INSERT + savepoint, NOT ON CONFLICT: under RLS, ON CONFLICT adds the
+    # SELECT policy's USING clause as a check on the new row (anti-leak guard),
+    # which always fails here — the ownership link doesn't exist yet.
+    try:
+        with conn.transaction():
+            conn.execute(
+                "INSERT INTO jobs (job_id, url, url_normalized, title, source) "
+                "VALUES (%s, %s, %s, %s, %s)",
+                (job_id, url, norm, title, source),
+            )
+    except psycopg.errors.UniqueViolation:
+        pass  # someone owns it already — link below
     with conn.cursor() as cur:
-        cur.execute(
-            "INSERT INTO jobs (job_id, url, url_normalized, title, source) "
-            "VALUES (%s, %s, %s, %s, %s) ON CONFLICT (url_normalized) DO NOTHING",
-            (job_id, url, norm, title, source),
-        )
         # prefer the stored id — pre-deterministic rows may have a random uuid
         cur.execute("SELECT job_id FROM jobs WHERE url_normalized = %s", (norm,))
         row = cur.fetchone()
