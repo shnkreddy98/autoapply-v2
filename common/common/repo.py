@@ -158,6 +158,41 @@ def lookup_tailored(conn: psycopg.Connection, user_id: str, job_id: str) -> dict
         return cur.fetchone()
 
 
+def save_gmail_token(
+    conn: psycopg.Connection,
+    user_id: str,
+    gmail_address: str | None,
+    refresh_token: str,
+    scopes: list[str] | None = None,
+) -> None:
+    """Upsert a user's Gmail OAuth grant. The refresh token is encrypted at rest
+    (Fernet, key from AUTOAPPLY_ENC_KEY) — a DB dump alone cannot read inboxes."""
+    from common import crypto
+
+    with conn.cursor() as cur:
+        cur.execute(
+            "INSERT INTO gmail_tokens (user_id, gmail_address, refresh_token, scopes) "
+            "VALUES (%s, %s, %s, %s) "
+            "ON CONFLICT (user_id) DO UPDATE SET gmail_address = EXCLUDED.gmail_address, "
+            "refresh_token = EXCLUDED.refresh_token, scopes = EXCLUDED.scopes, "
+            "updated_at = now()",
+            (user_id, gmail_address, crypto.encrypt(refresh_token), scopes or []),
+        )
+    conn.commit()
+
+
+def get_gmail_token(conn: psycopg.Connection, user_id: str) -> dict | None:
+    """Fetch a user's Gmail grant with the refresh token decrypted for use."""
+    from common import crypto
+
+    with conn.cursor() as cur:
+        cur.execute("SELECT * FROM gmail_tokens WHERE user_id = %s", (user_id,))
+        row = cur.fetchone()
+    if row:
+        row["refresh_token"] = crypto.decrypt(row["refresh_token"])
+    return row
+
+
 def start_application(
     conn: psycopg.Connection,
     user_id: str,

@@ -406,6 +406,33 @@ def cmd_resume_show(args) -> int:
 
 
 # ---------------------------------------------------------------------------
+# gmail (2FA email access for the apply agent)
+
+
+def cmd_gmail_connect(args) -> int:
+    from agent import email_otp
+
+    with _connect() as conn:
+        user_id = resolve_user(conn, args.user)
+        address, refresh_token, scopes = email_otp.run_oauth_flow(open_browser=not args.no_open)
+        repo.save_gmail_token(conn, user_id, address, refresh_token, scopes)
+    print(f"gmail connected for user {user_id}: {address or '(address unknown)'}")
+    return 0
+
+
+def cmd_gmail_status(args) -> int:
+    with _connect() as conn:
+        user_id = resolve_user(conn, args.user)
+        tok = repo.get_gmail_token(conn, user_id)
+    if not tok:
+        print("gmail: not connected (run: autoapply gmail connect)")
+        return 1
+    print(f"gmail: connected as {tok['gmail_address'] or '(address unknown)'} "
+          f"(scopes: {', '.join(tok['scopes'])}; updated {tok['updated_at']})")
+    return 0
+
+
+# ---------------------------------------------------------------------------
 # apply
 
 
@@ -486,6 +513,19 @@ def build_parser() -> argparse.ArgumentParser:
     show.add_argument("--out", help="destination path (default output/resume/cli/<job_id>.pdf)")
     show.add_argument("--open", action="store_true", help="open with xdg-open")
     show.set_defaults(func=cmd_resume_show)
+
+    gmail = sub.add_parser("gmail", help="Gmail access for 2FA emails during apply")
+    gmail_sub = gmail.add_subparsers(dest="gmail_command", required=True)
+    connect = gmail_sub.add_parser(
+        "connect",
+        help="grant gmail.readonly via Google OAuth (needs GMAIL_CLIENT_ID/SECRET in .env)",
+    )
+    connect.add_argument("--user", help="user id or email")
+    connect.add_argument("--no-open", action="store_true", help="print the consent URL instead of opening a browser")
+    connect.set_defaults(func=cmd_gmail_connect)
+    gstatus = gmail_sub.add_parser("status", help="show the connected Gmail account")
+    gstatus.add_argument("--user", help="user id or email")
+    gstatus.set_defaults(func=cmd_gmail_status)
 
     apply_p = sub.add_parser("apply", help="run the apply agent for job(s)")
     apply_p.add_argument("jobs", nargs="+", help="job ids, id prefixes, or URLs")

@@ -6,7 +6,7 @@ os.environ.setdefault("DB_HOST", "localhost")
 os.environ.setdefault("DB_PORT", "15432")
 
 _TABLES = [
-    "applications", "tailored_resumes", "resume_assets", "jobs",
+    "applications", "tailored_resumes", "resume_assets", "jobs", "gmail_tokens",
     "professional_references", "skill_groups", "education", "work_experiences",
     "application_profiles", "portal_credentials", "users",
 ]
