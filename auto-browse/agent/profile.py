@@ -28,6 +28,12 @@ def _yn(value: object) -> str:
     return "(not provided)" if value in (None, "") else str(value)
 
 
+def _v(value: object) -> str:
+    """Render a plain value, mapping NULL/empty to the sentinel the header tells the
+    agent to leave blank — so a missing field never gets typed into a form as 'None'."""
+    return "(not provided)" if value in (None, "") else str(value)
+
+
 def _split_name(full_name: str | None) -> tuple[str, str]:
     """Split a full name into (first, last): the LAST whitespace token is the last
     name, everything before it the first (a middle name stays with first). Single
@@ -85,21 +91,21 @@ def render_profile(p: ProfileData, resume_path: str) -> str:
     add("")
 
     add("## Personal Information")
-    add(f"Full Name: {u.get('full_name')}")
+    add(f"Full Name: {_v(u.get('full_name'))}")
     first, last = _split_name(u.get("full_name"))
-    add(f"First Name: {first}")
-    add(f"Last Name: {last}")
+    add(f"First Name: {_v(first)}")
+    add(f"Last Name: {_v(last)}")
     add(f"Email: {email}")
-    add(f"Phone: {u.get('phone')}")
+    add(f"Phone: {_v(u.get('phone'))}")
     add(f"Date of Birth: {_yn(d.get('date_of_birth'))}")
-    add(f"Street Address: {d.get('street_address')}")
-    add(f"City: {d.get('city')}")
-    add(f"State: {d.get('state')}")
-    add(f"ZIP Code: {d.get('zip_code')}")
+    add(f"Street Address: {_v(d.get('street_address'))}")
+    add(f"City: {_v(d.get('city'))}")
+    add(f"State: {_v(d.get('state'))}")
+    add(f"ZIP Code: {_v(d.get('zip_code'))}")
     add(f"18 or older: {_yn(d.get('age_18_or_older'))}")
-    add(f"LinkedIn: {_linkedin_url(u.get('linkedin'))}")
-    add(f"GitHub: {u.get('github')}")
-    add(f"Location: {u.get('location')}")
+    add(f"LinkedIn: {_v(_linkedin_url(u.get('linkedin')))}")
+    add(f"GitHub: {_v(u.get('github'))}")
+    add(f"Location: {_v(u.get('location'))}")
     add("")
 
     add("## Work Authorization")
@@ -109,10 +115,10 @@ def render_profile(p: ProfileData, resume_path: str) -> str:
     add("")
 
     add("## Position Preferences")
-    add(f"Available Start Date: {d.get('available_start_date')}")
-    add(f"Desired Salary: {d.get('desired_salary')}")
-    add(f"Employment Type: {d.get('employment_type')}")
-    add(f"Years of Experience: {d.get('years_of_experience')}")
+    add(f"Available Start Date: {_v(d.get('available_start_date'))}")
+    add(f"Desired Salary: {_v(d.get('desired_salary'))}")
+    add(f"Employment Type: {_v(d.get('employment_type'))}")
+    add(f"Years of Experience: {_v(d.get('years_of_experience'))}")
     add(f"Willing to relocate: {_yn(d.get('willing_relocate'))}")
     add(f"Willing to travel: {_yn(d.get('willing_travel'))}")
     add(f"Travel Percentage: {_yn(d.get('travel_percentage'))}")
@@ -143,7 +149,7 @@ def render_profile(p: ProfileData, resume_path: str) -> str:
     add("")
 
     add("## Signature")
-    add(f"Electronic Signature: {d.get('electronic_signature')}")
+    add(f"Electronic Signature: {_v(d.get('electronic_signature'))}")
     add(f"Signature Date: {_yn(d.get('signature_date'))}")
     add("")
 
