@@ -26,11 +26,17 @@ import sys
 import uuid
 from pathlib import Path
 
+from dotenv import load_dotenv
+
 from common import db, keys, queue, repo
 from common import storage as storagemod
 
 HERE = Path(__file__).resolve().parent.parent  # auto-browse/
 AI_ASSIST_DIR = HERE.parent / "ai-assist"
+
+# Anchor to the package, not cwd — the CLI may be installed globally (uv tool)
+# and invoked from anywhere. Existing shell env always wins (override=False).
+load_dotenv(HERE / ".env")
 
 _JOB_STATUSES = ("jd_pending", "jd_capturing", "jd_ready", "failed")
 
