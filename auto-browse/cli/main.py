@@ -140,8 +140,9 @@ def parse_url_lines(text: str) -> list[str]:
     return urls
 
 
-def add_jobs(conn, urls: list[str]) -> list[dict]:
-    """Insert jobs (source=manual). Marks pre-existing URLs as duplicates."""
+def add_jobs(conn, user_id: str, urls: list[str]) -> list[dict]:
+    """Insert jobs (source=manual) owned by user_id. Marks pre-existing URLs as
+    duplicates (they may belong to other users too — jobs are globally deduped)."""
     out = []
     for url in urls:
         with conn.cursor() as cur:
@@ -150,7 +151,7 @@ def add_jobs(conn, urls: list[str]) -> list[dict]:
                 (queue.url_normalize(url),),
             )
             existing = cur.fetchone()
-        job_id = repo.get_or_create_job(conn, url, source="manual")
+        job_id = repo.add_job_for_user(conn, user_id, url, source="manual")
         out.append(
             {
                 "url": url,
@@ -169,32 +170,22 @@ def cmd_jobs_add(args) -> int:
     if not urls:
         raise SystemExit("no URLs given (pass URLs or --file urls.txt)")
     with _connect() as conn:
-        results = add_jobs(conn, urls)
+        user_id = resolve_user(conn, args.user)
+        results = add_jobs(conn, user_id, urls)
     for r in results:
         dup = f"  (duplicate — already {r['status']})" if r["duplicate"] else ""
         print(f"{_id8(r['job_id'])}  {r['status']:<12} {r['url']}{dup}")
     return 0
 
 
-def list_jobs(conn, status: str | None) -> list[dict]:
-    with conn.cursor() as cur:
-        if status:
-            cur.execute(
-                "SELECT job_id, status, title, url, created_at FROM jobs "
-                "WHERE status = %s ORDER BY created_at DESC",
-                (status,),
-            )
-        else:
-            cur.execute(
-                "SELECT job_id, status, title, url, created_at FROM jobs "
-                "ORDER BY created_at DESC"
-            )
-        return cur.fetchall()
+def list_jobs(conn, user_id: str, status: str | None) -> list[dict]:
+    return repo.list_jobs_for_user(conn, user_id, status)
 
 
 def cmd_jobs_list(args) -> int:
     with _connect() as conn:
-        rows = list_jobs(conn, args.status)
+        user_id = resolve_user(conn, args.user)
+        rows = list_jobs(conn, user_id, args.status)
     if not rows:
         print("no jobs" + (f" with status {args.status}" if args.status else ""))
         return 0
@@ -209,12 +200,14 @@ def cmd_jobs_list(args) -> int:
 
 
 def backfill_tailoring(conn, user_id: str) -> int:
-    """Enqueue tailoring for jd_ready jobs this user has no row for (idempotent)."""
+    """Enqueue tailoring for owned jd_ready jobs this user has no row for (idempotent)."""
     with conn.cursor() as cur:
         cur.execute(
-            "SELECT j.job_id FROM jobs j WHERE j.status = 'jd_ready' AND NOT EXISTS "
+            "SELECT j.job_id FROM jobs j "
+            "JOIN user_jobs uj ON uj.job_id = j.job_id AND uj.user_id = %s "
+            "WHERE j.status = 'jd_ready' AND NOT EXISTS "
             "(SELECT 1 FROM tailored_resumes t WHERE t.job_id = j.job_id AND t.user_id = %s)",
-            (user_id,),
+            (user_id, user_id),
         )
         job_ids = [r["job_id"] for r in cur.fetchall()]
     base = repo.get_base_asset(conn, user_id, variant="docx")  # tailoring edits the docx
@@ -226,7 +219,12 @@ def backfill_tailoring(conn, user_id: str) -> int:
 def tailoring_summary(conn, user_id: str) -> dict:
     """Counts by status plus a per-job join, scoped to one user."""
     with conn.cursor() as cur:
-        cur.execute("SELECT status, count(*) AS n FROM jobs GROUP BY status")
+        cur.execute(
+            "SELECT j.status, count(*) AS n FROM jobs j "
+            "JOIN user_jobs uj ON uj.job_id = j.job_id AND uj.user_id = %s "
+            "GROUP BY j.status",
+            (user_id,),
+        )
         job_counts = {r["status"]: r["n"] for r in cur.fetchall()}
         cur.execute(
             "SELECT status, count(*) AS n FROM tailored_resumes WHERE user_id = %s GROUP BY status",
@@ -446,11 +444,13 @@ def cmd_apply(args) -> int:
         user_id = resolve_user(conn, args.user)
         for ref in args.jobs:
             if "://" in ref:  # URL: create on the fly, like agent.loop does
-                job_id = repo.get_or_create_job(conn, ref, source="manual")
+                job_id = repo.add_job_for_user(conn, user_id, ref, source="manual")
                 url = ref
             else:
                 job = resolve_job(conn, ref)
                 job_id, url = job["job_id"], job["url"]
+                # applying implies ownership — link it (idempotent)
+                repo.add_job_for_user(conn, user_id, url, source="manual")
             tailored = repo.lookup_tailored(conn, user_id, job_id)
             run_id = new_run_id()
             app_id = repo.start_application(
@@ -483,9 +483,11 @@ def build_parser() -> argparse.ArgumentParser:
     add = jobs_sub.add_parser("add", help="add job URLs to the pipeline")
     add.add_argument("urls", nargs="*", help="job posting URLs")
     add.add_argument("--file", help="file with one URL per line (# comments ok)")
+    add.add_argument("--user", help="user id or email (default: the only active user)")
     add.set_defaults(func=cmd_jobs_add)
-    lst = jobs_sub.add_parser("list", help="list jobs")
+    lst = jobs_sub.add_parser("list", help="list your jobs")
     lst.add_argument("--status", choices=_JOB_STATUSES)
+    lst.add_argument("--user", help="user id or email (default: the only active user)")
     lst.set_defaults(func=cmd_jobs_list)
 
     tailor = sub.add_parser(

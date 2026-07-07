@@ -851,7 +851,7 @@ async def main(user_id: str, job_url: str, model: str, run_id: str | None = None
     container_resume = f"{RESUME_CONTAINER_ROOT}/{run_id}/resume.pdf"
     run_start_epoch = int(time.time())
     with db.connect() as conn:
-        job_id = repo.get_or_create_job(conn, job_url, source="manual")
+        job_id = repo.add_job_for_user(conn, user_id, job_url, source="manual")
         _, source = await resolve_resume(conn, storage, user_id, job_id, host_resume)
         log.info("resume resolved (%s) -> %s", source, host_resume)
         profile = build_profile(conn, user_id, container_resume)

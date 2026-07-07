@@ -9,6 +9,8 @@ CREATE EXTENSION IF NOT EXISTS citext;    -- case-insensitive email
 CREATE TABLE users (
     user_id    uuid PRIMARY KEY DEFAULT gen_random_uuid(),
     email      citext UNIQUE NOT NULL,
+    google_sub text UNIQUE,               -- Google Sign-In subject; NULL until first login
+    role       text NOT NULL DEFAULT 'user' CHECK (role IN ('user', 'admin')),
     full_name  text,
     phone      text,
     linkedin   text,
@@ -19,6 +21,29 @@ CREATE TABLE users (
     created_at timestamptz NOT NULL DEFAULT now(),
     updated_at timestamptz NOT NULL DEFAULT now()
 );
+
+-- API sessions. Only sha256(token) is stored — a DB dump cannot mint cookies.
+CREATE TABLE sessions (
+    id         uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id    uuid NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+    token_hash text UNIQUE NOT NULL,
+    created_at timestamptz NOT NULL DEFAULT now(),
+    expires_at timestamptz NOT NULL,
+    revoked_at timestamptz
+);
+CREATE INDEX ix_sessions_user ON sessions(user_id);
+
+-- Append-only trail of who did what (written by the API on mutations).
+CREATE TABLE audit_log (
+    id            bigserial PRIMARY KEY,
+    user_id       uuid REFERENCES users(user_id) ON DELETE SET NULL,
+    action        text NOT NULL,
+    resource_type text,
+    resource_id   text,
+    detail        jsonb,
+    at            timestamptz NOT NULL DEFAULT now()
+);
+CREATE INDEX ix_audit_log_user ON audit_log(user_id, at);
 
 -- Per-user portal login (ATS accounts). Plaintext in v1; KMS/encryption deferred.
 CREATE TABLE portal_credentials (
@@ -143,6 +168,16 @@ CREATE TABLE jobs (
 );
 CREATE INDEX ix_jobs_status ON jobs(status, created_at);
 
+-- Ownership: jobs stay globally deduped; visibility and tailoring are owners-only.
+CREATE TABLE user_jobs (
+    user_id  uuid NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+    job_id   uuid NOT NULL REFERENCES jobs(job_id) ON DELETE CASCADE,
+    source   text NOT NULL DEFAULT 'manual' CHECK (source IN ('search', 'manual')),
+    added_at timestamptz NOT NULL DEFAULT now(),
+    PRIMARY KEY (user_id, job_id)
+);
+CREATE INDEX ix_user_jobs_job ON user_jobs(job_id);
+
 -- ===================== resume files (MinIO artifacts) =====================
 CREATE TABLE resume_assets (
     id           uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -193,3 +228,93 @@ CREATE TABLE applications (
     finished_at        timestamptz
 );
 CREATE INDEX ix_applications_user ON applications(user_id);
+
+-- ===================== roles + row-level security =====================
+-- Two planes of access:
+--   * workers/CLI connect as the container superuser (`admin`) — table owner,
+--     bypasses RLS; behavior unchanged.
+--   * the API connects as `autoapply_api` and, per request, runs
+--       SET LOCAL app.user_id = '<uuid>'
+--     inside a transaction. Every policy below filters on that setting, so even
+--     a SQL bug in the API cannot read another user's rows.
+-- Dev password below; override in prod with: ALTER ROLE autoapply_api PASSWORD '...'.
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'autoapply_api') THEN
+        CREATE ROLE autoapply_api LOGIN PASSWORD 'autoapply_api_dev';
+    END IF;
+END
+$$;
+
+GRANT USAGE ON SCHEMA public TO autoapply_api;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO autoapply_api;
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO autoapply_api;
+
+-- Per-user tables: a row is visible/writable only when its user_id matches the
+-- request's app.user_id (NULLIF guards the unset/'' cases -> policy is false).
+ALTER TABLE users                   ENABLE ROW LEVEL SECURITY;
+ALTER TABLE portal_credentials      ENABLE ROW LEVEL SECURITY;
+ALTER TABLE gmail_tokens            ENABLE ROW LEVEL SECURITY;
+ALTER TABLE application_profiles    ENABLE ROW LEVEL SECURITY;
+ALTER TABLE work_experiences        ENABLE ROW LEVEL SECURITY;
+ALTER TABLE education               ENABLE ROW LEVEL SECURITY;
+ALTER TABLE skill_groups            ENABLE ROW LEVEL SECURITY;
+ALTER TABLE professional_references ENABLE ROW LEVEL SECURITY;
+ALTER TABLE resume_assets           ENABLE ROW LEVEL SECURITY;
+ALTER TABLE tailored_resumes        ENABLE ROW LEVEL SECURITY;
+ALTER TABLE applications            ENABLE ROW LEVEL SECURITY;
+ALTER TABLE user_jobs               ENABLE ROW LEVEL SECURITY;
+ALTER TABLE jobs                    ENABLE ROW LEVEL SECURITY;
+-- RLS enabled with NO policies = deny-all for autoapply_api. Session lookup and
+-- audit writes happen on the API's small admin-role pool instead.
+ALTER TABLE sessions                ENABLE ROW LEVEL SECURITY;
+ALTER TABLE audit_log               ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY self_row ON users
+    USING      (user_id = NULLIF(current_setting('app.user_id', true), '')::uuid)
+    WITH CHECK (user_id = NULLIF(current_setting('app.user_id', true), '')::uuid);
+CREATE POLICY user_isolation ON portal_credentials
+    USING      (user_id = NULLIF(current_setting('app.user_id', true), '')::uuid)
+    WITH CHECK (user_id = NULLIF(current_setting('app.user_id', true), '')::uuid);
+CREATE POLICY user_isolation ON gmail_tokens
+    USING      (user_id = NULLIF(current_setting('app.user_id', true), '')::uuid)
+    WITH CHECK (user_id = NULLIF(current_setting('app.user_id', true), '')::uuid);
+CREATE POLICY user_isolation ON application_profiles
+    USING      (user_id = NULLIF(current_setting('app.user_id', true), '')::uuid)
+    WITH CHECK (user_id = NULLIF(current_setting('app.user_id', true), '')::uuid);
+CREATE POLICY user_isolation ON work_experiences
+    USING      (user_id = NULLIF(current_setting('app.user_id', true), '')::uuid)
+    WITH CHECK (user_id = NULLIF(current_setting('app.user_id', true), '')::uuid);
+CREATE POLICY user_isolation ON education
+    USING      (user_id = NULLIF(current_setting('app.user_id', true), '')::uuid)
+    WITH CHECK (user_id = NULLIF(current_setting('app.user_id', true), '')::uuid);
+CREATE POLICY user_isolation ON skill_groups
+    USING      (user_id = NULLIF(current_setting('app.user_id', true), '')::uuid)
+    WITH CHECK (user_id = NULLIF(current_setting('app.user_id', true), '')::uuid);
+CREATE POLICY user_isolation ON professional_references
+    USING      (user_id = NULLIF(current_setting('app.user_id', true), '')::uuid)
+    WITH CHECK (user_id = NULLIF(current_setting('app.user_id', true), '')::uuid);
+CREATE POLICY user_isolation ON resume_assets
+    USING      (user_id = NULLIF(current_setting('app.user_id', true), '')::uuid)
+    WITH CHECK (user_id = NULLIF(current_setting('app.user_id', true), '')::uuid);
+CREATE POLICY user_isolation ON tailored_resumes
+    USING      (user_id = NULLIF(current_setting('app.user_id', true), '')::uuid)
+    WITH CHECK (user_id = NULLIF(current_setting('app.user_id', true), '')::uuid);
+CREATE POLICY user_isolation ON applications
+    USING      (user_id = NULLIF(current_setting('app.user_id', true), '')::uuid)
+    WITH CHECK (user_id = NULLIF(current_setting('app.user_id', true), '')::uuid);
+CREATE POLICY user_isolation ON user_jobs
+    USING      (user_id = NULLIF(current_setting('app.user_id', true), '')::uuid)
+    WITH CHECK (user_id = NULLIF(current_setting('app.user_id', true), '')::uuid);
+
+-- jobs: globally deduped rows, visible only through ownership. INSERT is open
+-- (add-then-link: ids are deterministic uuid5(url), see common.queue.job_id_for_url,
+-- so the caller never needs to read a row it doesn't yet own). No UPDATE/DELETE
+-- policy -> denied for the API role; only workers mutate job status.
+CREATE POLICY jobs_select_owned ON jobs FOR SELECT
+    USING (EXISTS (
+        SELECT 1 FROM user_jobs uj
+        WHERE uj.job_id = jobs.job_id
+          AND uj.user_id = NULLIF(current_setting('app.user_id', true), '')::uuid
+    ));
+CREATE POLICY jobs_insert_any ON jobs FOR INSERT WITH CHECK (true);

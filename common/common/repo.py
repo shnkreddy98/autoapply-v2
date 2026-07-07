@@ -3,12 +3,16 @@ no business logic (rendering, tailoring, navigation) lives here."""
 
 from __future__ import annotations
 
+import hashlib
+import secrets
 from dataclasses import dataclass, field
+from datetime import datetime, timedelta, timezone
 from typing import Any
 
 import psycopg
+from psycopg.types.json import Jsonb
 
-from common.queue import url_normalize
+from common.queue import job_id_for_url, url_normalize
 
 
 @dataclass
@@ -69,18 +73,86 @@ def get_or_create_job(
     title: str | None = None,
     source: str = "search",
 ) -> str:
-    """Insert a job (dedup on normalized URL) and return its job_id."""
+    """Insert a job (dedup on normalized URL) and return its job_id. New rows get
+    the deterministic uuid5-of-URL id so RLS-bound callers can compute it without
+    reading rows they don't own (see jobs policies in db/init.sql)."""
     norm = url_normalize(url)
     with conn.cursor() as cur:
         cur.execute(
-            "INSERT INTO jobs (url, url_normalized, title, source) VALUES (%s, %s, %s, %s) "
+            "INSERT INTO jobs (job_id, url, url_normalized, title, source) "
+            "VALUES (%s, %s, %s, %s, %s) "
             "ON CONFLICT (url_normalized) DO UPDATE SET updated_at = now() "
             "RETURNING job_id",
-            (url, norm, title, source),
+            (job_id_for_url(url), url, norm, title, source),
         )
         job_id = cur.fetchone()["job_id"]
     conn.commit()
     return job_id
+
+
+def add_job_for_user(
+    conn: psycopg.Connection,
+    user_id: str,
+    url: str,
+    title: str | None = None,
+    source: str = "manual",
+    *,
+    commit: bool = True,
+) -> str:
+    """Insert-or-noop the global job row, then link ownership in user_jobs.
+
+    Works on both access planes: admin connections see the existing row and reuse
+    its id; an RLS-bound connection that cannot see another owner's row falls back
+    to the deterministic uuid5 id (identical for all rows created by this code)."""
+    norm = url_normalize(url)
+    job_id = job_id_for_url(url)
+    with conn.cursor() as cur:
+        cur.execute(
+            "INSERT INTO jobs (job_id, url, url_normalized, title, source) "
+            "VALUES (%s, %s, %s, %s, %s) ON CONFLICT (url_normalized) DO NOTHING",
+            (job_id, url, norm, title, source),
+        )
+        # prefer the stored id — pre-deterministic rows may have a random uuid
+        cur.execute("SELECT job_id FROM jobs WHERE url_normalized = %s", (norm,))
+        row = cur.fetchone()
+        if row:
+            job_id = row["job_id"]
+        cur.execute(
+            "INSERT INTO user_jobs (user_id, job_id, source) VALUES (%s, %s, %s) "
+            "ON CONFLICT (user_id, job_id) DO NOTHING",
+            (user_id, job_id, source),
+        )
+    if commit:  # False when the caller manages the transaction (API user_conn)
+        conn.commit()
+    return job_id
+
+
+def job_owner_ids(conn: psycopg.Connection, job_id: str) -> list[str]:
+    """Users who added this job (tailoring fan-out targets)."""
+    with conn.cursor() as cur:
+        cur.execute(
+            "SELECT user_id FROM user_jobs WHERE job_id = %s ORDER BY added_at",
+            (job_id,),
+        )
+        return [r["user_id"] for r in cur.fetchall()]
+
+
+def list_jobs_for_user(
+    conn: psycopg.Connection, user_id: str, status: str | None = None
+) -> list[dict]:
+    """Jobs owned by a user (via user_jobs), newest first, optionally by status."""
+    q = (
+        "SELECT j.* FROM jobs j JOIN user_jobs uj USING (job_id) "
+        "WHERE uj.user_id = %s"
+    )
+    params: list[Any] = [user_id]
+    if status:
+        q += " AND j.status = %s"
+        params.append(status)
+    q += " ORDER BY j.created_at DESC"
+    with conn.cursor() as cur:
+        cur.execute(q, params)
+        return cur.fetchall()
 
 
 def get_base_asset(
@@ -191,6 +263,103 @@ def get_gmail_token(conn: psycopg.Connection, user_id: str) -> dict | None:
     if row:
         row["refresh_token"] = crypto.decrypt(row["refresh_token"])
     return row
+
+
+# --------------------------- auth (API bootstrap) ---------------------------
+# These run on the API's admin-role pool: session lookup happens before we know
+# the user, so RLS can't scope it. sessions/audit_log are deny-all for the
+# RLS-bound role (see db/init.sql).
+
+SESSION_TTL = timedelta(days=30)
+
+
+def _token_hash(token: str) -> str:
+    return hashlib.sha256(token.encode()).hexdigest()
+
+
+def create_session(conn: psycopg.Connection, user_id: str) -> str:
+    """Mint a session; returns the raw token for the cookie. Only sha256(token)
+    is stored, so the DB alone cannot impersonate anyone."""
+    token = secrets.token_urlsafe(32)
+    expires = datetime.now(timezone.utc) + SESSION_TTL
+    with conn.cursor() as cur:
+        cur.execute(
+            "INSERT INTO sessions (user_id, token_hash, expires_at) VALUES (%s, %s, %s)",
+            (user_id, _token_hash(token), expires),
+        )
+    conn.commit()
+    return token
+
+
+def get_session(conn: psycopg.Connection, token: str) -> dict | None:
+    """The session's user row (plus session id) if the token is live, else None."""
+    with conn.cursor() as cur:
+        cur.execute(
+            "SELECT s.id AS session_id, u.* FROM sessions s "
+            "JOIN users u USING (user_id) "
+            "WHERE s.token_hash = %s AND s.revoked_at IS NULL AND s.expires_at > now()",
+            (_token_hash(token),),
+        )
+        return cur.fetchone()
+
+
+def revoke_session(conn: psycopg.Connection, token: str) -> None:
+    with conn.cursor() as cur:
+        cur.execute(
+            "UPDATE sessions SET revoked_at = now() "
+            "WHERE token_hash = %s AND revoked_at IS NULL",
+            (_token_hash(token),),
+        )
+    conn.commit()
+
+
+def upsert_google_user(
+    conn: psycopg.Connection, google_sub: str, email: str, full_name: str | None = None
+) -> dict:
+    """Find-or-create a user from verified Google id_token claims. Keyed on the
+    stable `sub`; a first login attaches the sub to a pre-seeded row with the
+    same email instead of duplicating the account."""
+    with conn.cursor() as cur:
+        cur.execute("SELECT * FROM users WHERE google_sub = %s", (google_sub,))
+        row = cur.fetchone()
+        if row is None:
+            cur.execute(
+                "INSERT INTO users (email, full_name, google_sub) VALUES (%s, %s, %s) "
+                "ON CONFLICT (email) DO UPDATE SET google_sub = EXCLUDED.google_sub, "
+                "full_name = COALESCE(users.full_name, EXCLUDED.full_name), "
+                "updated_at = now() RETURNING *",
+                (email, full_name, google_sub),
+            )
+            row = cur.fetchone()
+        elif row["email"] != email:  # user changed their Google email
+            cur.execute(
+                "UPDATE users SET email = %s, updated_at = now() "
+                "WHERE user_id = %s RETURNING *",
+                (email, row["user_id"]),
+            )
+            row = cur.fetchone()
+    conn.commit()
+    return row
+
+
+def audit(
+    conn: psycopg.Connection,
+    user_id: str | None,
+    action: str,
+    resource_type: str | None = None,
+    resource_id: str | None = None,
+    detail: dict | None = None,
+) -> None:
+    """Append one audit row (API mutations). Best-effort by design — callers
+    decide whether a failure should abort the request."""
+    with conn.cursor() as cur:
+        cur.execute(
+            "INSERT INTO audit_log (user_id, action, resource_type, resource_id, detail) "
+            "VALUES (%s, %s, %s, %s, %s)",
+            (user_id, action, resource_type, resource_id,
+             Jsonb(detail) if detail is not None else None),
+        )
+    conn.commit()
 
 
 def start_application(

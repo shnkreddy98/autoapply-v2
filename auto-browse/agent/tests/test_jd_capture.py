@@ -44,15 +44,15 @@ class FakeStorage:
         return key in self.objs
 
 
-def _seed_job_and_user(db, url="https://example.com/jobs/1"):
-    job_id = repo.get_or_create_job(db, url, "Eng")
+def _seed_job_and_user(db, url="https://example.com/jobs/1", email="u@example.com"):
     with db.cursor() as cur:
         cur.execute(
             "INSERT INTO users (email, full_name) VALUES (%s, %s) RETURNING user_id",
-            ("u@example.com", "U"),
+            (email, "U"),
         )
         user_id = cur.fetchone()["user_id"]
     db.commit()
+    job_id = repo.add_job_for_user(db, user_id, url, "Eng")
     repo.insert_resume_asset(db, user_id, "base", f"users/{user_id}/resumes/base/default.docx",
                              variant="docx")
     return job_id, user_id
@@ -76,10 +76,31 @@ async def test_capture_success_enqueues_tailoring(db):
     assert row["jd_s3_key"] == keys.jd_key(job_id)
     assert store.objs[keys.jd_key(job_id)] == jd_capture._clean_jd(_VALID_JD).encode("utf-8")
 
-    # tailoring enqueued for the active user, linked to their base asset
+    # tailoring enqueued for the owner, linked to their base asset
     t = repo.lookup_tailored(db, user_id, job_id)
     assert t["status"] == "pending"
     assert t["base_asset_id"] is not None
+
+
+@pytest.mark.asyncio
+async def test_capture_enqueues_owners_only(db):
+    """An active non-owner must NOT get a tailoring row for someone else's job."""
+    job_id, owner = _seed_job_and_user(db)
+    with db.cursor() as cur:
+        cur.execute(
+            "INSERT INTO users (email, full_name) VALUES ('bystander@example.com', 'B') "
+            "RETURNING user_id"
+        )
+        bystander = cur.fetchone()["user_id"]
+    db.commit()
+    store = FakeStorage()
+
+    async def navigate(url):
+        return _VALID_JD
+
+    await jd_capture.capture_once(db, navigate, store)
+    assert repo.lookup_tailored(db, owner, job_id) is not None
+    assert repo.lookup_tailored(db, bystander, job_id) is None
 
 
 @pytest.mark.asyncio
