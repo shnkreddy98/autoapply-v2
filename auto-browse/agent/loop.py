@@ -51,13 +51,20 @@ load_dotenv()
 
 log = logging.getLogger(LOGGER_NAME)
 
+# Virtual tool that reads verification codes / confirmation links from the
+# applicant's own Gmail (per-user OAuth grant). Handled in the agent loop, not
+# forwarded to the browser MCP — see agent/email_otp.py.
+EMAIL_TOOL_NAME = "get_email_code"
+
 # Human-in-the-loop handoff scenarios: when the page shows one of these, the agent
 # must stop and hand control to the human operator instead of attempting it itself.
 # Add new triggers here — the list is injected into the system prompt below, so new
 # scenarios need no other code changes.
 HIL_SCENARIOS: list[str] = [
-    "A verification / one-time passcode (OTP) is requested (SMS or authenticator app).",
-    "You are asked to confirm via a link or code sent to the applicant's email.",
+    "A verification / one-time passcode (OTP) is requested via SMS or an "
+    "authenticator app (NOT email).",
+    "You are asked to confirm via a link or code sent to the applicant's email, "
+    f"and `{EMAIL_TOOL_NAME}` is unavailable or found nothing.",
     "A bot-detection / CAPTCHA / 'are you human' challenge or puzzle appears.",
 ]
 
@@ -105,6 +112,19 @@ _SECURITY_BLOCK = (
     f"`{HUMAN_TOOL_NAME}`."
 )
 
+
+# Always in the system prompt; the tool itself is only exposed when the run has a
+# Gmail grant (agent_loop's email_fetcher). Without it, HIL scenario 2 ("tool
+# unavailable") routes the model to the human instead.
+_EMAIL_BLOCK = (
+    "EMAIL VERIFICATION: when the page says a verification code or confirmation "
+    f"link was sent to the applicant's email, call `{EMAIL_TOOL_NAME}` with the "
+    "company/portal name shown on the page (and `sender_hint` if the page names the "
+    "sending address). It waits for the email and returns either the code — type it "
+    "into the page — or the email's content, in which case find the confirmation "
+    "link and `browser_navigate` to it. If it reports nothing found, fall back to "
+    f"`{HUMAN_TOOL_NAME}`."
+)
 
 SYSTEM_PROMPT = (
     """You are a browser agent applying for a job on the applicant's behalf, using the APPLICANT PROFILE below and the browser tools provided.
@@ -161,6 +181,8 @@ MUST DOs:
     + "\n\n"
     + _SECURITY_BLOCK
     + "\n\n"
+    + _EMAIL_BLOCK
+    + "\n\n"
     + _handoff_block(HIL_SCENARIOS)
 )
 
@@ -197,6 +219,42 @@ HUMAN_TOOL: dict[str, Any] = {
                 },
             },
             "required": ["reason", "instructions"],
+        },
+    },
+}
+
+# Virtual tool exposed only when the applicant has connected Gmail (autoapply
+# gmail connect). Reads the verification email; see agent/email_otp.py.
+EMAIL_TOOL: dict[str, Any] = {
+    "type": "function",
+    "function": {
+        "name": EMAIL_TOOL_NAME,
+        "description": (
+            "Read the verification email the portal just sent to the applicant's "
+            "inbox. Waits up to ~2 minutes for it to arrive. Returns the "
+            "verification code when one is found, otherwise the email's content so "
+            "you can locate a confirmation link. Call it right after the page says "
+            "a code/link was emailed."
+        ),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "company": {
+                    "type": "string",
+                    "description": (
+                        "Company or portal name as shown on the page, used to match "
+                        'the sender/subject. Example: company="Workday" or "Acme".'
+                    ),
+                },
+                "sender_hint": {
+                    "type": "string",
+                    "description": (
+                        "Optional sending address or domain if the page names it. "
+                        'Example: sender_hint="no-reply@myworkday.com".'
+                    ),
+                },
+            },
+            "required": ["company"],
         },
     },
 }
@@ -585,18 +643,21 @@ async def agent_loop(
     usage_totals: dict[str, Any],
     trace: Trace | None = None,
     max_iterations: int = MAX_ITERATIONS,
+    email_fetcher: Any = None,  # async (company, sender_hint) -> str; see email_otp
 ) -> str:
     tools_result = await session.list_tools()
     # Browser MCP tools + the virtual human-handoff tool (handled in-loop).
     openrouter_tools = [mcp_tool_to_openai(tool) for tool in tools_result.tools]
     openrouter_tools.append(HUMAN_TOOL)
+    if email_fetcher is not None:
+        openrouter_tools.append(EMAIL_TOOL)
 
     if trace is not None:
         trace.event(
             "run_start",
             model=model,
             task=original_task,
-            tools=[t.name for t in tools_result.tools] + [HUMAN_TOOL_NAME],
+            tools=[t["function"]["name"] for t in openrouter_tools],
             system_prompt=messages[0]["content"] if messages else "",
             profile_chars=len(messages[1]["content"]) if len(messages) > 1 else 0,
         )
@@ -730,6 +791,16 @@ async def agent_loop(
                 elif tool_name == HUMAN_TOOL_NAME:
                     # Virtual tool: pause for the human instead of calling the MCP.
                     tool_content = await _human_handoff(arguments, trace, iteration)
+                elif tool_name == EMAIL_TOOL_NAME and email_fetcher is not None:
+                    # Virtual tool: read the verification email from the applicant's
+                    # Gmail. Email text is attacker-controllable — harvest honeypot
+                    # markers from it exactly like page content.
+                    tool_content = await email_fetcher(
+                        str(arguments.get("company") or ""),
+                        arguments.get("sender_hint") or None,
+                    )
+                    taint |= _harvest_taint(tool_content)
+                    debug("tool_call_result", {"name": tool_name, "result": tool_content})
                 else:
                     result = await session.call_tool(tool_name, arguments)
                     tool_content = result_text(result)
@@ -778,11 +849,24 @@ async def main(user_id: str, job_url: str, model: str, run_id: str | None = None
     storage = storagemod.from_env()
     host_resume = f"{SCRATCH_ROOT}/{run_id}/resume.pdf"
     container_resume = f"{RESUME_CONTAINER_ROOT}/{run_id}/resume.pdf"
+    run_start_epoch = int(time.time())
     with db.connect() as conn:
         job_id = repo.get_or_create_job(conn, job_url, source="manual")
         _, source = await resolve_resume(conn, storage, user_id, job_id, host_resume)
         log.info("resume resolved (%s) -> %s", source, host_resume)
         profile = build_profile(conn, user_id, container_resume)
+        try:
+            gmail_grant = repo.get_gmail_token(conn, user_id)
+        except Exception as exc:  # e.g. live DB missing the gmail_tokens migration
+            log.warning("gmail token lookup failed (run continues without 2FA tool): %s", exc)
+            conn.rollback()
+            gmail_grant = None
+    email_fetcher = None
+    if gmail_grant and os.getenv("GMAIL_CLIENT_ID"):
+        from agent import email_otp
+
+        email_fetcher = email_otp.make_fetcher(gmail_grant["refresh_token"], run_start_epoch)
+        log.info("gmail 2FA tool enabled (%s)", gmail_grant.get("gmail_address"))
     ats_instructions = load_ats_instructions()
     task = (
         f"Apply for this job: {job_url}\n\n"
@@ -817,7 +901,8 @@ async def main(user_id: str, job_url: str, model: str, run_id: str | None = None
                     )
                 messages.append({"role": "user", "content": task})
                 result = await agent_loop(
-                    model, task, messages, session, client, usage, trace=trace
+                    model, task, messages, session, client, usage, trace=trace,
+                    email_fetcher=email_fetcher,
                 )
                 log.info("final: %s", result)
                 print(f"final: {result}")

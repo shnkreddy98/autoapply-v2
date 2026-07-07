@@ -11,9 +11,11 @@ os.environ.setdefault("S3_BUCKET", "autoapply")
 # Force tests onto a throwaway DB — the `db` fixture TRUNCATEs every table, so it must
 # never point at the real jobs-db. Set unconditionally (not setdefault) for safety.
 os.environ["DB_NAME"] = os.getenv("TEST_DB_NAME", "jobs_test")
+# Valid Fernet key (base64 of 32 bytes) for at-rest encryption in tests.
+os.environ.setdefault("AUTOAPPLY_ENC_KEY", "MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA=")
 
 _TABLES = [
-    "applications", "tailored_resumes", "resume_assets", "jobs",
+    "applications", "tailored_resumes", "resume_assets", "jobs", "gmail_tokens",
     "professional_references", "skill_groups", "education", "work_experiences",
     "application_profiles", "portal_credentials", "users",
 ]

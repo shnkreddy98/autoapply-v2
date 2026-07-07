@@ -27,6 +27,17 @@ CREATE TABLE portal_credentials (
     login_password text
 );
 
+-- Per-user Gmail OAuth grant (gmail.readonly) — lets the apply agent read
+-- verification codes / confirmation links sent to the applicant's inbox.
+-- Plaintext refresh token in v1, same posture as portal_credentials.
+CREATE TABLE gmail_tokens (
+    user_id       uuid PRIMARY KEY REFERENCES users(user_id) ON DELETE CASCADE,
+    gmail_address citext,
+    refresh_token text NOT NULL,
+    scopes        text[] NOT NULL DEFAULT '{}',
+    updated_at    timestamptz NOT NULL DEFAULT now()
+);
+
 -- ===================== application form data (1:1) =====================
 CREATE TABLE application_profiles (
     user_id               uuid PRIMARY KEY REFERENCES users(user_id) ON DELETE CASCADE,
