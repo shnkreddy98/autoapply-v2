@@ -767,8 +767,10 @@ SCRATCH_ROOT = os.getenv("SCRATCH_ROOT", str(HERE / "output" / "resume"))
 RESUME_CONTAINER_ROOT = os.getenv("RESUME_CONTAINER_ROOT", "/resume")
 
 
-async def main(user_id: str, job_url: str, model: str) -> None:
-    run_id = new_run_id()
+async def main(user_id: str, job_url: str, model: str, run_id: str | None = None) -> None:
+    # Caller-supplied run_id lets the CLI link the applications row to this run's
+    # trace/log files even if the run crashes.
+    run_id = run_id or new_run_id()
     setup_logging(run_id)
     trace = Trace(run_id)
     log.info("run start: model=%s user=%s job_url=%s", model, user_id, job_url)

@@ -156,3 +156,41 @@ def lookup_tailored(conn: psycopg.Connection, user_id: str, job_id: str) -> dict
             (user_id, job_id),
         )
         return cur.fetchone()
+
+
+def start_application(
+    conn: psycopg.Connection,
+    user_id: str,
+    job_id: str,
+    *,
+    run_id: str | None = None,
+    tailored_resume_id: str | None = None,
+) -> str:
+    """Record the start of an apply run. Status convention (column is free text):
+    'running' -> 'finished' (agent stopped for human review) | 'failed' (outcome
+    holds the truncated error). started_at defaults to now() in the schema."""
+    with conn.cursor() as cur:
+        cur.execute(
+            "INSERT INTO applications (user_id, job_id, tailored_resume_id, run_id, status) "
+            "VALUES (%s, %s, %s, %s, 'running') RETURNING id",
+            (user_id, job_id, tailored_resume_id, run_id),
+        )
+        app_id = cur.fetchone()["id"]
+    conn.commit()
+    return app_id
+
+
+def finish_application(
+    conn: psycopg.Connection,
+    application_id: str,
+    status: str,
+    outcome: str | None = None,
+) -> None:
+    """Set an application's terminal status ('finished' | 'failed') and finished_at."""
+    with conn.cursor() as cur:
+        cur.execute(
+            "UPDATE applications SET status = %s, outcome = %s, finished_at = now() "
+            "WHERE id = %s",
+            (status, outcome, application_id),
+        )
+    conn.commit()
