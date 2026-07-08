@@ -204,12 +204,15 @@ def _today_start() -> datetime:
 
 
 def _apply_marker(row: dict) -> str:
-    """Human word for the latest apply attempt: applied / handed-off / apply-failed."""
+    """Human word for the latest apply attempt: applied / unconfirmed /
+    handed-off / apply-failed."""
     status, outcome = row.get("apply_status"), row.get("apply_outcome")
     if status is None:
         return ""
     if outcome == "submitted":
         return "applied"
+    if outcome == "unconfirmed":
+        return "unconfirmed"  # autosubmit run gave no clear SUBMITTED verdict
     if status == "failed":
         return "apply-failed"
     if status == "finished":
@@ -579,7 +582,7 @@ def _run_apply_agent(
     else:
         print("  watch + confirm final submit at http://localhost:6080/vnc.html")
     try:
-        asyncio.run(
+        final_text = asyncio.run(
             loop.main(
                 user_id,
                 url,
@@ -593,9 +596,27 @@ def _run_apply_agent(
         repo.finish_application(conn, app_id, "failed", outcome=str(exc)[:500])
         print(f"apply failed for {_id8(job_id)}: {exc}", file=sys.stderr)
         return False
-    outcome = "submitted" if autosubmit else _confirm_submitted()
+    outcome = _autosubmit_outcome(final_text) if autosubmit else _confirm_submitted()
+    if autosubmit:
+        print(f"  agent verdict: {outcome}")
     repo.finish_application(conn, app_id, "finished", outcome=outcome)
     return True
+
+
+# The autosubmit prompt makes the agent end its final reply with `SUBMITTED: yes`
+# (confirmation page seen) or `SUBMITTED: no`. Take the LAST match — earlier text
+# may discuss the format itself.
+_SUBMIT_VERDICT_RE = re.compile(r"SUBMITTED:\s*(yes|no)\b", re.IGNORECASE)
+
+
+def _autosubmit_outcome(final_text: str | None) -> str:
+    """DB outcome from the agent's final message. No parsable verdict means the
+    run ended without a clear confirmation — record it as such, never as
+    submitted (the marker stays out of `applied` and batch mode will retry)."""
+    hits = _SUBMIT_VERDICT_RE.findall(final_text or "")
+    if not hits:
+        return "unconfirmed"
+    return "submitted" if hits[-1].lower() == "yes" else "not submitted"
 
 
 def select_ready_jobs(conn, user_id: str, since: datetime | None) -> list[dict]:

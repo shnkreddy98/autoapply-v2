@@ -250,6 +250,10 @@ def test_apply_marker_mapping():
         == "applied"
     )
     assert (
+        cli._apply_marker({"apply_status": "finished", "apply_outcome": "unconfirmed"})
+        == "unconfirmed"
+    )
+    assert (
         cli._apply_marker({"apply_status": "finished", "apply_outcome": None})
         == "handed-off"
     )
@@ -375,6 +379,20 @@ def test_apply_autosubmit_defaults_off():
     assert args.autosubmit is False
 
 
+def test_autosubmit_outcome_parsing():
+    f = cli._autosubmit_outcome
+    assert f("all done.\nSUBMITTED: yes") == "submitted"
+    assert f("no confirmation appeared.\nSUBMITTED: no") == "not submitted"
+    assert f("submitted: YES") == "submitted"  # case-insensitive
+    # last verdict wins over earlier mentions of the format
+    assert f("I must end with SUBMITTED: yes or no.\n...\nSUBMITTED: no") == (
+        "not submitted"
+    )
+    assert f("finished but forgot the verdict line") == "unconfirmed"
+    assert f("") == "unconfirmed"
+    assert f(None) == "unconfirmed"
+
+
 def test_build_system_prompt_autosubmit():
     from agent.loop import build_system_prompt
 
@@ -383,6 +401,8 @@ def test_build_system_prompt_autosubmit():
     assert "Do NOT click the final Submit" in review
     assert "Do NOT click the final Submit" not in auto
     assert "click the final Submit" in auto
+    assert "SUBMITTED: yes" in auto  # verdict line demanded of autosubmit runs
+    assert "SUBMITTED: yes" not in review
     # shared scaffolding intact in both variants
     for prompt in (review, auto):
         assert "APPLICANT PROFILE" in prompt
@@ -502,6 +522,7 @@ def test_cmd_continue_guards_and_run(db, monkeypatch):
         user_id, url, model, run_id=None, autosubmit=False, continue_run=False
     ):
         seen.update(url=url, autosubmit=autosubmit, continue_run=continue_run)
+        return "filled the rest and clicked submit.\nSUBMITTED: yes"
 
     monkeypatch.setattr(loop_mod, "main", fake_main)
     assert cli.cmd_continue(args) == 0
@@ -510,11 +531,27 @@ def test_cmd_continue_guards_and_run(db, monkeypatch):
         "autosubmit": True,
         "continue_run": True,
     }
-    # a new attempt row was recorded, autosubmit outcome applied
+    # a new attempt row was recorded; outcome came from the SUBMITTED verdict
     apps = repo.list_applications(db, uid, job_id)
     assert len(apps) == 3
     assert apps[0]["status"] == "finished"
     assert apps[0]["outcome"] == "submitted"
+
+    # autosubmit run whose final text lacks the verdict → unconfirmed, retryable
+    with db.cursor() as cur:  # un-submit so the continue guard lets us in again
+        cur.execute(
+            "UPDATE applications SET outcome = 'not submitted' WHERE id = %s",
+            (apps[0]["id"],),
+        )
+    db.commit()
+
+    async def vague_main(*a, **kw):
+        return "clicked submit, page did something"
+
+    monkeypatch.setattr(loop_mod, "main", vague_main)
+    assert cli.cmd_continue(args) == 0
+    apps = repo.list_applications(db, uid, job_id)
+    assert apps[0]["outcome"] == "unconfirmed"
 
 
 def test_parser_rejects_bad_status():

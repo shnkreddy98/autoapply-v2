@@ -190,7 +190,7 @@ _GOAL_REVIEW = "GOAL: fill every field across every step and reach the final rev
 _GOAL_AUTOSUBMIT = "GOAL: fill every field across every step, upload the resume along the way, and click the final Submit to complete the application."
 
 _RULE_REVIEW = "- Work through every page/step. Do NOT click the final Submit — stop before it and return a short plain-text summary of what you filled and anything you couldn't."
-_RULE_AUTOSUBMIT = "- Work through every page/step. At the final review/submit step, check the form is complete, click the final Submit, and wait for the page to confirm the application was received. Return a short plain-text summary of what you filled, whether the confirmation appeared, and anything you couldn't do. If the Submit fails or no confirmation appears, say so explicitly."
+_RULE_AUTOSUBMIT = "- Work through every page/step. At the final review/submit step, check the form is complete, click the final Submit, and wait for the page to confirm the application was received. Return a short plain-text summary of what you filled, whether the confirmation appeared, and anything you couldn't do. If the Submit fails or no confirmation appears, say so explicitly. Your reply MUST end with a final line that is exactly `SUBMITTED: yes` (you saw a confirmation page/message) or `SUBMITTED: no` (you did not) — never claim yes without seeing the confirmation, and put nothing after that line."
 
 _CONTINUE_BLOCK = (
     "\n\nCONTINUING A PREVIOUS RUN: an earlier run already filled part of this "
@@ -941,7 +941,7 @@ async def main(
     run_id: str | None = None,
     autosubmit: bool = False,
     continue_run: bool = False,
-) -> None:
+) -> str:
     # Caller-supplied run_id lets the CLI link the applications row to this run's
     # trace/log files even if the run crashes.
     run_id = run_id or new_run_id()
@@ -1082,6 +1082,8 @@ async def main(
         )
         log.info("trace=%s", trace.path)
         await client.close()
+    # The agent's final text — autosubmit callers parse its SUBMITTED verdict.
+    return result
 
 
 if __name__ == "__main__":
