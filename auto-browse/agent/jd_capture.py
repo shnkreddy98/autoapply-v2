@@ -38,8 +38,17 @@ NAV_TIMEOUT_SECONDS = float(os.getenv("NAV_TIMEOUT_SECONDS", "60"))
 MIN_JD_CHARS = int(os.getenv("MIN_JD_CHARS", "500"))
 # A real JD almost always uses some of these; a loading screen / nav chrome uses none.
 _JD_SIGNAL_WORDS = (
-    "responsibilit", "requirement", "qualif", "experience", "skills",
-    "you'll", "you will", "what you", "the role", "we are looking", "about the",
+    "responsibilit",
+    "requirement",
+    "qualif",
+    "experience",
+    "skills",
+    "you'll",
+    "you will",
+    "what you",
+    "the role",
+    "we are looking",
+    "about the",
 )
 # Substrings that mark an un-rendered SPA shell.
 _LOADING_MARKERS = ("loading... please wait", "please wait", "just a moment")
@@ -74,7 +83,9 @@ def _enqueue_for_owners(conn: psycopg.Connection, job_id: str) -> int:
     job one user added must never fan out to other users' queues."""
     n = 0
     for uid in repo.job_owner_ids(conn, job_id):
-        base = repo.get_base_asset(conn, uid, variant="docx")  # tailoring edits the docx
+        base = repo.get_base_asset(
+            conn, uid, variant="docx"
+        )  # tailoring edits the docx
         repo.enqueue_tailoring(conn, uid, job_id, base["id"] if base else None)
         n += 1
     return n
@@ -106,8 +117,12 @@ async def capture_once(
         key = keys.jd_key(job_id)
         storage.put_bytes(key, jd_text.encode("utf-8"), "text/markdown")
         queue.mark(
-            conn, "jobs", job_id, "jd_ready",
-            jd_s3_key=key, jd_captured_at=datetime.now(timezone.utc),
+            conn,
+            "jobs",
+            job_id,
+            "jd_ready",
+            jd_s3_key=key,
+            jd_captured_at=datetime.now(timezone.utc),
         )
         count = _enqueue_for_owners(conn, job_id)
         log.info("captured JD job=%s bytes=%d enqueued=%d", job_id, len(jd_text), count)
@@ -137,8 +152,8 @@ async def run(
 async def proxy_navigator():
     """Real navigator over the proxy MCP. Needs playwright + proxy running.
 
-        async with proxy_navigator() as navigate:
-            text = await navigate(url)
+    async with proxy_navigator() as navigate:
+        text = await navigate(url)
     """
     from mcp import ClientSession
     from mcp.client.streamable_http import streamable_http_client

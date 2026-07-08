@@ -25,8 +25,7 @@ from pathlib import Path
 
 from pydantic import BaseModel, Field, ValidationError
 
-from common import db, keys, repo
-from common import storage as storagemod
+from common import keys, repo
 
 PARSE_MODEL = os.getenv("OPENROUTER_MODEL", "google/gemini-3-flash-preview")
 
@@ -72,9 +71,18 @@ def docx_to_pdf(docx_path: str) -> str:
     outdir = tempfile.mkdtemp(prefix="autoapply-onboard-")
     try:
         proc = subprocess.run(
-            ["libreoffice", "--headless", "--convert-to", "pdf", "--outdir",
-             outdir, str(Path(docx_path).resolve())],
-            capture_output=True, text=True, timeout=120,
+            [
+                "libreoffice",
+                "--headless",
+                "--convert-to",
+                "pdf",
+                "--outdir",
+                outdir,
+                str(Path(docx_path).resolve()),
+            ],
+            capture_output=True,
+            text=True,
+            timeout=120,
         )
     except FileNotFoundError:
         raise SystemExit(
@@ -169,7 +177,9 @@ def parse_resume_llm(text: str, model: str = PARSE_MODEL, client=None) -> Parsed
     last_err: Exception | None = None
     for _ in range(2):
         reply = (
-            client.chat.completions.create(model=model, messages=messages, temperature=0.1)
+            client.chat.completions.create(
+                model=model, messages=messages, temperature=0.1
+            )
             .choices[0]
             .message.content
         )
@@ -179,7 +189,10 @@ def parse_resume_llm(text: str, model: str = PARSE_MODEL, client=None) -> Parsed
             last_err = err
             messages += [
                 {"role": "assistant", "content": reply},
-                {"role": "user", "content": f"Invalid, fix and return ONLY the JSON:\n{err}"},
+                {
+                    "role": "user",
+                    "content": f"Invalid, fix and return ONLY the JSON:\n{err}",
+                },
             ]
     raise SystemExit(f"resume parse failed after retry: {last_err}")
 
@@ -188,7 +201,9 @@ def parse_resume_llm(text: str, model: str = PARSE_MODEL, client=None) -> Parsed
 # 3. interactive review
 
 
-def _ask(label: str, default: str | None = None, *, ask=input, yes: bool = False) -> str | None:
+def _ask(
+    label: str, default: str | None = None, *, ask=input, yes: bool = False
+) -> str | None:
     """Prompt with an autofilled default; empty answer keeps the default,
     '-' clears it. --yes accepts the default without asking."""
     if yes:
@@ -212,9 +227,16 @@ def _ask_bool(label: str, default: bool, *, ask=input, yes: bool = False) -> boo
     return raw in ("y", "yes", "true", "1")
 
 
-def _ask_date(label: str, default: date | None = None, *, ask=input, yes: bool = False) -> date | None:
+def _ask_date(
+    label: str, default: date | None = None, *, ask=input, yes: bool = False
+) -> date | None:
     while True:
-        raw = _ask(f"{label} (YYYY-MM-DD)", default.isoformat() if default else None, ask=ask, yes=yes)
+        raw = _ask(
+            f"{label} (YYYY-MM-DD)",
+            default.isoformat() if default else None,
+            ask=ask,
+            yes=yes,
+        )
         if raw in (None, ""):
             return None
         if isinstance(raw, date):
@@ -236,7 +258,9 @@ def _guess_city_state(location: str | None) -> tuple[str | None, str | None]:
     return parts[0], None
 
 
-def years_of_experience(work: list[ParsedExperience], today: date | None = None) -> int | None:
+def years_of_experience(
+    work: list[ParsedExperience], today: date | None = None
+) -> int | None:
     starts = [w.from_date for w in work if w.from_date]
     if not starts:
         return None
@@ -252,7 +276,9 @@ class OnboardData:
     profile: dict
 
 
-def interactive_review(parsed: ParsedResume, *, ask=input, yes: bool = False) -> OnboardData:
+def interactive_review(
+    parsed: ParsedResume, *, ask=input, yes: bool = False
+) -> OnboardData:
     c = parsed.contact
     print("\n-- contact (extracted from resume; Enter keeps, '-' clears) --")
     c.full_name = _ask("full name", c.full_name, ask=ask, yes=yes)
@@ -266,13 +292,21 @@ def interactive_review(parsed: ParsedResume, *, ask=input, yes: bool = False) ->
 
     print(f"\n-- resume content --\n  summary: {(parsed.summary or '(none)')[:120]}...")
     for i, w in enumerate(parsed.work_experiences, 1):
-        span = f"{w.from_date or '?'} -> {'present' if w.is_current else w.to_date or '?'}"
-        print(f"  [{i}] {w.job_title} @ {w.company_name} ({span}, {len(w.bullets)} bullets)")
+        span = (
+            f"{w.from_date or '?'} -> {'present' if w.is_current else w.to_date or '?'}"
+        )
+        print(
+            f"  [{i}] {w.job_title} @ {w.company_name} ({span}, {len(w.bullets)} bullets)"
+        )
     for e in parsed.education:
         print(f"      {e.degree} {e.major or ''} — {e.school}")
-    print(f"      skills: {', '.join(g.category for g in parsed.skill_groups) or '(none)'}")
+    print(
+        f"      skills: {', '.join(g.category for g in parsed.skill_groups) or '(none)'}"
+    )
     if not yes and parsed.work_experiences:
-        drop = ask("  drop any experience? (indexes, comma-separated, Enter=keep all): ").strip()
+        drop = ask(
+            "  drop any experience? (indexes, comma-separated, Enter=keep all): "
+        ).strip()
         if drop:
             keep = {int(x) for x in re.findall(r"\d+", drop)}
             parsed.work_experiences = [
@@ -289,22 +323,44 @@ def interactive_review(parsed: ParsedResume, *, ask=input, yes: bool = False) ->
     profile["date_of_birth"] = _ask_date("date of birth", None, ask=ask, yes=yes)
 
     print("\n-- work authorization + logistics --")
-    profile["work_eligible_us"] = _ask_bool("eligible to work in the US?", True, ask=ask, yes=yes)
-    profile["visa_sponsorship"] = _ask_bool("need visa sponsorship (now or future)?", False, ask=ask, yes=yes)
-    profile["security_clearance"] = _ask_bool("hold a security clearance?", False, ask=ask, yes=yes)
+    profile["work_eligible_us"] = _ask_bool(
+        "eligible to work in the US?", True, ask=ask, yes=yes
+    )
+    profile["visa_sponsorship"] = _ask_bool(
+        "need visa sponsorship (now or future)?", False, ask=ask, yes=yes
+    )
+    profile["security_clearance"] = _ask_bool(
+        "hold a security clearance?", False, ask=ask, yes=yes
+    )
     profile["years_of_experience"] = int(
-        _ask("years of experience", str(years_of_experience(parsed.work_experiences) or 0), ask=ask, yes=yes) or 0
+        _ask(
+            "years of experience",
+            str(years_of_experience(parsed.work_experiences) or 0),
+            ask=ask,
+            yes=yes,
+        )
+        or 0
     )
     profile["employment_type"] = _ask("employment type", "Full-time", ask=ask, yes=yes)
-    profile["desired_salary"] = _ask("desired salary (blank = leave to agent)", None, ask=ask, yes=yes)
-    profile["available_start_date"] = _ask_date("available start date", None, ask=ask, yes=yes)
-    profile["willing_relocate"] = _ask_bool("willing to relocate?", True, ask=ask, yes=yes)
+    profile["desired_salary"] = _ask(
+        "desired salary (blank = leave to agent)", None, ask=ask, yes=yes
+    )
+    profile["available_start_date"] = _ask_date(
+        "available start date", None, ask=ask, yes=yes
+    )
+    profile["willing_relocate"] = _ask_bool(
+        "willing to relocate?", True, ask=ask, yes=yes
+    )
     profile["willing_travel"] = _ask_bool("willing to travel?", True, ask=ask, yes=yes)
     profile["travel_percentage"] = (
-        _ask("max travel percentage", "25%", ask=ask, yes=yes) if profile["willing_travel"] else None
+        _ask("max travel percentage", "25%", ask=ask, yes=yes)
+        if profile["willing_travel"]
+        else None
     )
     profile["current_employee"] = False
-    profile["ever_terminated"] = _ask_bool("ever terminated from a job?", False, ask=ask, yes=yes)
+    profile["ever_terminated"] = _ask_bool(
+        "ever terminated from a job?", False, ask=ask, yes=yes
+    )
     if profile["ever_terminated"]:
         profile["termination_explanation"] = _ask("explanation", None, ask=ask, yes=yes)
 
@@ -318,13 +374,26 @@ def interactive_review(parsed: ParsedResume, *, ask=input, yes: bool = False) ->
         profile[field] = _ask(label, "Prefer not to say", ask=ask, yes=yes)
 
     print("\n-- application certifications (the boilerplate checkboxes) --")
-    agree_all = _ask_bool("agree to standard certifications (accuracy, background check, ...)?", True, ask=ask, yes=yes)
+    agree_all = _ask_bool(
+        "agree to standard certifications (accuracy, background check, ...)?",
+        True,
+        ask=ask,
+        yes=yes,
+    )
     for field in (
-        "cert_accuracy", "cert_dismissal", "cert_background_check", "cert_drug_testing",
-        "cert_at_will", "cert_job_description", "cert_privacy_notice", "cert_data_processing",
+        "cert_accuracy",
+        "cert_dismissal",
+        "cert_background_check",
+        "cert_drug_testing",
+        "cert_at_will",
+        "cert_job_description",
+        "cert_privacy_notice",
+        "cert_data_processing",
     ):
         profile[field] = agree_all
-    profile["electronic_signature"] = _ask("electronic signature", c.full_name, ask=ask, yes=yes)
+    profile["electronic_signature"] = _ask(
+        "electronic signature", c.full_name, ask=ask, yes=yes
+    )
     profile["signature_date"] = date.today()
 
     return OnboardData(resume=parsed, profile=profile)
@@ -348,7 +417,15 @@ def save(conn, storage, data: OnboardData, pdf: str | None, docx: str | None) ->
             "phone = EXCLUDED.phone, linkedin = EXCLUDED.linkedin, github = EXCLUDED.github, "
             "location = EXCLUDED.location, summary = EXCLUDED.summary, updated_at = now() "
             "RETURNING user_id",
-            (c.email, c.full_name, c.phone, c.linkedin, c.github, c.location, data.resume.summary),
+            (
+                c.email,
+                c.full_name,
+                c.phone,
+                c.linkedin,
+                c.github,
+                c.location,
+                data.resume.summary,
+            ),
         )
         user_id = str(cur.fetchone()["user_id"])
 
@@ -368,8 +445,17 @@ def save(conn, storage, data: OnboardData, pdf: str | None, docx: str | None) ->
                 "INSERT INTO work_experiences (user_id, job_title, company_name, location, "
                 "from_date, to_date, is_current, bullets, display_order) "
                 "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
-                (user_id, w.job_title, w.company_name, w.location,
-                 w.from_date, w.to_date, w.is_current, w.bullets, i),
+                (
+                    user_id,
+                    w.job_title,
+                    w.company_name,
+                    w.location,
+                    w.from_date,
+                    w.to_date,
+                    w.is_current,
+                    w.bullets,
+                    i,
+                ),
             )
         for i, e in enumerate(data.resume.education):
             cur.execute(
@@ -387,11 +473,17 @@ def save(conn, storage, data: OnboardData, pdf: str | None, docx: str | None) ->
 
     for path, variant in ((pdf, "pdf"), (docx, "docx")):
         if path:
-            key = keys.base_resume_key(user_id, variant=variant, ext=path.rsplit(".", 1)[-1].lower())
+            key = keys.base_resume_key(
+                user_id, variant=variant, ext=path.rsplit(".", 1)[-1].lower()
+            )
             storage.put_file(key, path)
             repo.insert_resume_asset(
-                conn, user_id, "base", key,
-                variant=variant, content_type=mimetypes.guess_type(path)[0],
+                conn,
+                user_id,
+                "base",
+                key,
+                variant=variant,
+                content_type=mimetypes.guess_type(path)[0],
             )
     return user_id
 
@@ -438,11 +530,17 @@ def cmd_profile_show(args) -> int:
     print(f"{u['full_name']}  <{u['email']}>  {u.get('phone') or ''}")
     print(f"  {u.get('location') or ''}  {u.get('linkedin') or ''}")
     prof = p.profile or {}
-    filled = {k: v for k, v in prof.items() if v is not None and k not in ("user_id", "updated_at")}
+    filled = {
+        k: v
+        for k, v in prof.items()
+        if v is not None and k not in ("user_id", "updated_at")
+    }
     print(f"  profile fields set: {len(filled)}")
     for w in p.work_experiences:
         span = "present" if w["is_current"] else (w["to_date"] or "?")
-        print(f"  {w['job_title']} @ {w['company_name']} ({w['from_date']} -> {span}, {len(w['bullets'])} bullets)")
+        print(
+            f"  {w['job_title']} @ {w['company_name']} ({w['from_date']} -> {span}, {len(w['bullets'])} bullets)"
+        )
     for e in p.education:
         print(f"  {e['degree']} {e['major'] or ''} — {e['school']}")
     for g in p.skill_groups:

@@ -143,9 +143,13 @@ def render_profile(p: ProfileData, resume_path: str) -> str:
     add(f"Authorize background/reference checks: {_yn(d.get('cert_background_check'))}")
     add(f"Authorize drug testing (if applicable): {_yn(d.get('cert_drug_testing'))}")
     add(f"Understand at-will employment: {_yn(d.get('cert_at_will'))}")
-    add(f"Read and understand the job description: {_yn(d.get('cert_job_description'))}")
+    add(
+        f"Read and understand the job description: {_yn(d.get('cert_job_description'))}"
+    )
     add(f"Acknowledge receipt of privacy notice: {_yn(d.get('cert_privacy_notice'))}")
-    add(f"Consent to data processing for this application: {_yn(d.get('cert_data_processing'))}")
+    add(
+        f"Consent to data processing for this application: {_yn(d.get('cert_data_processing'))}"
+    )
     add("")
 
     add("## Signature")

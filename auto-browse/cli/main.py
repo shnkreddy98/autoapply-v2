@@ -28,7 +28,7 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-from common import db, keys, queue, repo
+from common import db, queue, repo
 from common import storage as storagemod
 
 HERE = Path(__file__).resolve().parent.parent  # auto-browse/
@@ -85,9 +85,13 @@ def resolve_user(conn, user_flag: str | None) -> str:
     if len(ids) == 1:
         return ids[0]
     if not ids:
-        raise SystemExit("no active users; seed one: uv run python -m tools.seed_user --email ... --pdf ...")
+        raise SystemExit(
+            "no active users; seed one: uv run python -m tools.seed_user --email ... --pdf ..."
+        )
     with conn.cursor() as cur:
-        cur.execute("SELECT user_id, email FROM users WHERE is_active ORDER BY created_at")
+        cur.execute(
+            "SELECT user_id, email FROM users WHERE is_active ORDER BY created_at"
+        )
         listing = "\n".join(f"  {r['user_id']}  {r['email']}" for r in cur.fetchall())
     raise SystemExit(f"multiple active users — pass --user <id|email>:\n{listing}")
 
@@ -109,11 +113,14 @@ def resolve_job(conn, ref: str) -> dict:
 
         if "://" in ref or "." in ref:  # URL-ish
             cur.execute(
-                "SELECT * FROM jobs WHERE url_normalized = %s", (queue.url_normalize(ref),)
+                "SELECT * FROM jobs WHERE url_normalized = %s",
+                (queue.url_normalize(ref),),
             )
             row = cur.fetchone()
             if not row:
-                raise SystemExit(f"no job with url {ref!r} (add it: autoapply jobs add {ref})")
+                raise SystemExit(
+                    f"no job with url {ref!r} (add it: autoapply jobs add {ref})"
+                )
             return row
 
         if re.fullmatch(r"[0-9a-f-]{4,}", ref.lower()):
@@ -217,7 +224,9 @@ def backfill_tailoring(conn, user_id: str) -> int:
             (user_id, user_id),
         )
         job_ids = [r["job_id"] for r in cur.fetchall()]
-    base = repo.get_base_asset(conn, user_id, variant="docx")  # tailoring edits the docx
+    base = repo.get_base_asset(
+        conn, user_id, variant="docx"
+    )  # tailoring edits the docx
     for job_id in job_ids:
         repo.enqueue_tailoring(conn, user_id, job_id, base["id"] if base else None)
     return len(job_ids)
@@ -260,7 +269,10 @@ def _print_summary(s: dict) -> None:
             score = f"  score {r['resume_score']} -> {r['new_resume_score']}"
         err = f"  error: {r['error']}" if r["error"] else ""
         print(f"{_id8(r['job_id'])}  {r['status']:<9} {name}{score}{err}")
-    stuck = (s["job_counts"].get("jd_capturing", 0), s["tailor_counts"].get("tailoring", 0))
+    stuck = (
+        s["job_counts"].get("jd_capturing", 0),
+        s["tailor_counts"].get("tailoring", 0),
+    )
     if any(stuck):
         print(
             f"warning: stuck in-progress rows (jd_capturing={stuck[0]}, tailoring={stuck[1]}) "
@@ -286,7 +298,9 @@ def cmd_tailor(args) -> int:
 
         if args.retry_failed:
             with conn.cursor() as cur:
-                cur.execute("UPDATE jobs SET status = 'jd_pending', error = NULL WHERE status = 'failed'")
+                cur.execute(
+                    "UPDATE jobs SET status = 'jd_pending', error = NULL WHERE status = 'failed'"
+                )
                 n_jobs = cur.rowcount
                 cur.execute(
                     "UPDATE tailored_resumes SET status = 'pending', error = NULL "
@@ -309,7 +323,9 @@ def cmd_tailor(args) -> int:
             async def _drain_capture() -> None:
                 async with jd_capture.proxy_navigator() as navigate:
                     while True:
-                        job_id = await jd_capture.capture_once(conn, navigate, storage, worker_id="cli")
+                        job_id = await jd_capture.capture_once(
+                            conn, navigate, storage, worker_id="cli"
+                        )
                         if job_id is None:
                             return
                         with conn.cursor() as cur:
@@ -318,8 +334,14 @@ def cmd_tailor(args) -> int:
                                 (job_id,),
                             )
                             row = cur.fetchone()
-                        outcome = row["status"] if row["status"] != "failed" else f"failed: {row['error']}"
-                        print(f"capture {_id8(job_id)}  {(row['title'] or row['url'])[:60]}  ->  {outcome}")
+                        outcome = (
+                            row["status"]
+                            if row["status"] != "failed"
+                            else f"failed: {row['error']}"
+                        )
+                        print(
+                            f"capture {_id8(job_id)}  {(row['title'] or row['url'])[:60]}  ->  {outcome}"
+                        )
 
             print(f"capturing JDs for {n_pending} pending job(s)...")
             try:
@@ -340,7 +362,9 @@ def cmd_tailor(args) -> int:
 
         # Phase 3 — drain the tailoring queue.
         with conn.cursor() as cur:
-            cur.execute("SELECT count(*) AS n FROM tailored_resumes WHERE status = 'pending'")
+            cur.execute(
+                "SELECT count(*) AS n FROM tailored_resumes WHERE status = 'pending'"
+            )
             n_queue = cur.fetchone()["n"]
         if n_queue:
             print(f"tailoring {n_queue} resume(s) via ai-assist worker...")
@@ -372,11 +396,17 @@ def cmd_status(args) -> int:
             print(f"job     {job['job_id']}")
             print(f"url     {job['url']}")
             print(f"title   {job['title'] or '-'}")
-            print(f"status  {job['status']}" + (f"  error: {job['error']}" if job["error"] else ""))
+            print(
+                f"status  {job['status']}"
+                + (f"  error: {job['error']}" if job["error"] else "")
+            )
             if not t:
                 print("tailoring: not enqueued (run: autoapply tailor)")
                 return 0
-            print(f"tailoring  {t['status']}" + (f"  error: {t['error']}" if t["error"] else ""))
+            print(
+                f"tailoring  {t['status']}"
+                + (f"  error: {t['error']}" if t["error"] else "")
+            )
             if t["new_resume_score"] is not None:
                 print(f"score      {t['resume_score']} -> {t['new_resume_score']}")
             if t["job_match_summary"]:
@@ -392,7 +422,9 @@ def show_resume(conn, storage, user_id: str, job_id: str, out: str | None) -> st
     if not t or t["status"] != "ready" or not t["tailored_asset_id"]:
         state = t["status"] if t else "not enqueued"
         err = f" ({t['error']})" if t and t.get("error") else ""
-        raise SystemExit(f"no tailored resume for job {_id8(job_id)}: {state}{err} — run: autoapply tailor")
+        raise SystemExit(
+            f"no tailored resume for job {_id8(job_id)}: {state}{err} — run: autoapply tailor"
+        )
     asset = repo.get_resume_asset(conn, t["tailored_asset_id"])
     dest = out or str(HERE / "output" / "resume" / "cli" / f"{job_id}.pdf")
     storage.get_file(asset["s3_key"], dest)
@@ -419,7 +451,9 @@ def cmd_gmail_connect(args) -> int:
 
     with _connect() as conn:
         user_id = resolve_user(conn, args.user)
-        address, refresh_token, scopes = email_otp.run_oauth_flow(open_browser=not args.no_open)
+        address, refresh_token, scopes = email_otp.run_oauth_flow(
+            open_browser=not args.no_open
+        )
         repo.save_gmail_token(conn, user_id, address, refresh_token, scopes)
     print(f"gmail connected for user {user_id}: {address or '(address unknown)'}")
     return 0
@@ -432,8 +466,10 @@ def cmd_gmail_status(args) -> int:
     if not tok:
         print("gmail: not connected (run: autoapply gmail connect)")
         return 1
-    print(f"gmail: connected as {tok['gmail_address'] or '(address unknown)'} "
-          f"(scopes: {', '.join(tok['scopes'])}; updated {tok['updated_at']})")
+    print(
+        f"gmail: connected as {tok['gmail_address'] or '(address unknown)'} "
+        f"(scopes: {', '.join(tok['scopes'])}; updated {tok['updated_at']})"
+    )
     return 0
 
 
@@ -477,7 +513,10 @@ def cmd_apply(args) -> int:
             tailored = repo.lookup_tailored(conn, user_id, job_id)
             run_id = new_run_id()
             app_id = repo.start_application(
-                conn, user_id, job_id, run_id=run_id,
+                conn,
+                user_id,
+                job_id,
+                run_id=run_id,
                 tailored_resume_id=tailored["id"] if tailored else None,
             )
             print(f"applying {_id8(job_id)}  {url}")
@@ -498,7 +537,9 @@ def cmd_apply(args) -> int:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    p = argparse.ArgumentParser(prog="autoapply", description="Job application pipeline CLI")
+    p = argparse.ArgumentParser(
+        prog="autoapply", description="Job application pipeline CLI"
+    )
     sub = p.add_subparsers(dest="command", required=True)
 
     jobs = sub.add_parser("jobs", help="manage job postings")
@@ -521,12 +562,18 @@ def build_parser() -> argparse.ArgumentParser:
         "(needs OPENROUTER_API_KEY + LibreOffice). Note: the worker drains ALL "
         "users' rows; --user only scopes the backfill and summary.",
     )
-    tailor.add_argument("--user", help="user id or email (default: the only active user)")
-    tailor.add_argument("--retry-failed", action="store_true", help="reset failed rows and retry them")
+    tailor.add_argument(
+        "--user", help="user id or email (default: the only active user)"
+    )
+    tailor.add_argument(
+        "--retry-failed", action="store_true", help="reset failed rows and retry them"
+    )
     tailor.set_defaults(func=cmd_tailor)
 
     status = sub.add_parser("status", help="pipeline status + scores")
-    status.add_argument("job", nargs="?", help="job id, id prefix, or URL (full detail)")
+    status.add_argument(
+        "job", nargs="?", help="job id, id prefix, or URL (full detail)"
+    )
     status.add_argument("--user", help="user id or email")
     status.set_defaults(func=cmd_status)
 
@@ -535,7 +582,9 @@ def build_parser() -> argparse.ArgumentParser:
     show = resume_sub.add_parser("show", help="download the tailored resume PDF")
     show.add_argument("job", help="job id, id prefix, or URL")
     show.add_argument("--user", help="user id or email")
-    show.add_argument("--out", help="destination path (default output/resume/cli/<job_id>.pdf)")
+    show.add_argument(
+        "--out", help="destination path (default output/resume/cli/<job_id>.pdf)"
+    )
     show.add_argument("--open", action="store_true", help="open with xdg-open")
     show.set_defaults(func=cmd_resume_show)
 
@@ -548,12 +597,22 @@ def build_parser() -> argparse.ArgumentParser:
         "via LLM (needs OPENROUTER_API_KEY), asks for the rest with autofilled "
         "defaults, then writes the profile and uploads the base resume assets.",
     )
-    pinit.add_argument("--pdf", help="base resume PDF (uploaded for applications; "
-                       "derived from --docx via LibreOffice when omitted)")
-    pinit.add_argument("--docx", help="same resume as DOCX (tailoring source; also preferred for parsing)")
+    pinit.add_argument(
+        "--pdf",
+        help="base resume PDF (uploaded for applications; "
+        "derived from --docx via LibreOffice when omitted)",
+    )
+    pinit.add_argument(
+        "--docx",
+        help="same resume as DOCX (tailoring source; also preferred for parsing)",
+    )
     pinit.add_argument("--email", help="override the email extracted from the resume")
-    pinit.add_argument("--model", help="OpenRouter model for parsing (default: OPENROUTER_MODEL)")
-    pinit.add_argument("--yes", action="store_true", help="accept all defaults, no prompts")
+    pinit.add_argument(
+        "--model", help="OpenRouter model for parsing (default: OPENROUTER_MODEL)"
+    )
+    pinit.add_argument(
+        "--yes", action="store_true", help="accept all defaults, no prompts"
+    )
     pinit.set_defaults(func=_cmd_profile_init)
     pshow = profile_sub.add_parser("show", help="print the stored profile")
     pshow.add_argument("--user", help="user id or email")
@@ -566,7 +625,11 @@ def build_parser() -> argparse.ArgumentParser:
         help="grant gmail.readonly via Google OAuth (needs GMAIL_CLIENT_ID/SECRET in .env)",
     )
     connect.add_argument("--user", help="user id or email")
-    connect.add_argument("--no-open", action="store_true", help="print the consent URL instead of opening a browser")
+    connect.add_argument(
+        "--no-open",
+        action="store_true",
+        help="print the consent URL instead of opening a browser",
+    )
     connect.set_defaults(func=cmd_gmail_connect)
     gstatus = gmail_sub.add_parser("status", help="show the connected Gmail account")
     gstatus.add_argument("--user", help="user id or email")
@@ -575,7 +638,9 @@ def build_parser() -> argparse.ArgumentParser:
     apply_p = sub.add_parser("apply", help="run the apply agent for job(s)")
     apply_p.add_argument("jobs", nargs="+", help="job ids, id prefixes, or URLs")
     apply_p.add_argument("--user", help="user id or email")
-    apply_p.add_argument("--model", help="OpenRouter model (default: OPENROUTER_MODEL env)")
+    apply_p.add_argument(
+        "--model", help="OpenRouter model (default: OPENROUTER_MODEL env)"
+    )
     apply_p.set_defaults(func=cmd_apply)
 
     return p

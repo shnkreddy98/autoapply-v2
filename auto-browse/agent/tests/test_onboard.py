@@ -8,11 +8,8 @@ import pytest
 
 from cli import onboard
 from cli.onboard import (
-    OnboardData,
-    ParsedContact,
     ParsedExperience,
     ParsedResume,
-    ParsedSkillGroup,
     interactive_review,
     parse_resume_llm,
     save,
@@ -69,7 +66,11 @@ def test_extract_text_rejects_unknown_format(tmp_path):
 # LLM parse (fake client)
 
 _GOOD = {
-    "contact": {"full_name": "Jane Doe", "email": "jane@x.dev", "location": "Austin, TX"},
+    "contact": {
+        "full_name": "Jane Doe",
+        "email": "jane@x.dev",
+        "location": "Austin, TX",
+    },
     "summary": "Data engineer.",
     "work_experiences": [
         {
@@ -148,7 +149,10 @@ def _parsed() -> ParsedResume:
 
 def test_years_of_experience():
     assert years_of_experience([], today=date(2026, 1, 1)) is None
-    work = [ParsedExperience(from_date=date(2020, 1, 1)), ParsedExperience(from_date=date(2023, 1, 1))]
+    work = [
+        ParsedExperience(from_date=date(2020, 1, 1)),
+        ParsedExperience(from_date=date(2023, 1, 1)),
+    ]
     assert years_of_experience(work, today=date(2026, 1, 1)) == 6
 
 
@@ -170,17 +174,34 @@ def test_review_prompts_override_and_clear():
     answers = iter(
         [
             "Janet Doe",  # full name overridden
-            "",           # email kept
-            "-",          # phone cleared
-            "", "", "",   # location, linkedin, github kept
-            "1",          # drop experience [1]
-            "", "", "", "", "",       # address block kept/blank
-            "", "y", "",              # eligible(kept) sponsorship(yes) clearance(kept)
-            "10", "", "", "", "", "", "",  # yoe=10, rest defaults
-            "",                       # ever terminated (kept: no)
-            "", "", "", "",           # EEO
-            "",                       # certs agree
-            "",                       # signature
+            "",  # email kept
+            "-",  # phone cleared
+            "",
+            "",
+            "",  # location, linkedin, github kept
+            "1",  # drop experience [1]
+            "",
+            "",
+            "",
+            "",
+            "",  # address block kept/blank
+            "",
+            "y",
+            "",  # eligible(kept) sponsorship(yes) clearance(kept)
+            "10",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",  # yoe=10, rest defaults
+            "",  # ever terminated (kept: no)
+            "",
+            "",
+            "",
+            "",  # EEO
+            "",  # certs agree
+            "",  # signature
         ]
     )
     data = interactive_review(_parsed(), ask=lambda _: next(answers))
@@ -239,7 +260,9 @@ def test_profile_parser_wiring():
 
     args = cli.build_parser().parse_args(["profile", "init", "--pdf", "r.pdf", "--yes"])
     assert callable(args.func)
-    args = cli.build_parser().parse_args(["profile", "init", "--docx", "r.docx"])  # docx-only ok
+    args = cli.build_parser().parse_args(
+        ["profile", "init", "--docx", "r.docx"]
+    )  # docx-only ok
     assert args.pdf is None
     args = cli.build_parser().parse_args(["profile", "show"])
     assert callable(args.func)

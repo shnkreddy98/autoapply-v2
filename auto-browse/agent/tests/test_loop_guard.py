@@ -19,6 +19,7 @@ from agent import loop
 # unit: _looks_degenerate
 # --------------------------------------------------------------------------- #
 
+
 def test_looks_degenerate_repeated_token():
     assert loop._looks_degenerate("aminase" * 30000) is True
 
@@ -46,12 +47,17 @@ def test_looks_degenerate_short_repetitive_under_threshold():
 # fakes
 # --------------------------------------------------------------------------- #
 
+
 def _resp(content: str, finish: str, *, cost: float = 0.0):
     """A minimal OpenAI-shaped chat completion with no tool calls."""
     message = SimpleNamespace(content=content, tool_calls=[])
     choice = SimpleNamespace(message=message, finish_reason=finish)
     usage = SimpleNamespace(
-        prompt_tokens=1, completion_tokens=1, total_tokens=2, cost=cost, model_extra=None
+        prompt_tokens=1,
+        completion_tokens=1,
+        total_tokens=2,
+        cost=cost,
+        model_extra=None,
     )
     return SimpleNamespace(choices=[choice], usage=usage)
 
@@ -84,7 +90,9 @@ class FakeSession:
     async def call_tool(self, name, args):
         if name == "browser_snapshot":
             self.snapshot_calls += 1
-            return SimpleNamespace(content=[TextContent(type="text", text=self.snapshot)])
+            return SimpleNamespace(
+                content=[TextContent(type="text", text=self.snapshot)]
+            )
         raise AssertionError(f"unexpected tool {name!r}")
 
 
@@ -100,7 +108,13 @@ async def _run(scripted, session=None):
     client = FakeClient(scripted)
     session = session or FakeSession()
     result = await loop.agent_loop(
-        "fake-model", "task", _seed_messages(), session, client, loop._new_usage(), trace=None
+        "fake-model",
+        "task",
+        _seed_messages(),
+        session,
+        client,
+        loop._new_usage(),
+        trace=None,
     )
     return result, client, session
 
@@ -108,6 +122,7 @@ async def _run(scripted, session=None):
 # --------------------------------------------------------------------------- #
 # unit: _current_page_text
 # --------------------------------------------------------------------------- #
+
 
 async def test_current_page_text_ok():
     session = FakeSession(snapshot="Country combobox")
@@ -127,6 +142,7 @@ async def test_current_page_text_degrades_on_error():
 # ats instructions loader + Greenhouse typeahead guidance (Fix 3)
 # --------------------------------------------------------------------------- #
 
+
 def test_ats_instructions_load_and_typeahead_rule():
     text = loop.load_ats_instructions()
     assert text is not None
@@ -139,11 +155,14 @@ def test_ats_instructions_load_and_typeahead_rule():
 # integration: agent_loop completion guard
 # --------------------------------------------------------------------------- #
 
+
 async def test_clean_completion_returns():
     result, client, _ = await _run([_resp("All fields filled; stopping.", "stop")])
     assert result == "All fields filled; stopping."
     # bound is always applied to the outgoing request
-    assert client.chat.completions.requests[0]["max_tokens"] == loop.MAX_COMPLETION_TOKENS
+    assert (
+        client.chat.completions.requests[0]["max_tokens"] == loop.MAX_COMPLETION_TOKENS
+    )
 
 
 async def test_degenerate_then_clean_recovers(monkeypatch):
@@ -169,4 +188,6 @@ async def test_persistent_degeneration_raises(monkeypatch):
     session = FakeSession()
     with pytest.raises(RuntimeError, match="degenerate/truncated completion after 2"):
         await _run(scripted, session=session)
-    assert session.snapshot_calls == 2  # two resets, then give up (-> main: success=False)
+    assert (
+        session.snapshot_calls == 2
+    )  # two resets, then give up (-> main: success=False)

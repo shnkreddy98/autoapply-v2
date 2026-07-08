@@ -19,9 +19,9 @@ from proxy.server import (
 def test_keeps_visible_names_and_values():
     tree = (
         '- link "Skip to Content" [ref=e5]:\n'
-        "    - /url: \"\"\n"
+        '    - /url: ""\n'
         '- textbox "Email Address" [ref=e70]\n'
-        '- generic [ref=e10]: First Last\n'
+        "- generic [ref=e10]: First Last\n"
     )
     assert _visible_text(tree).splitlines() == [
         "Skip to Content",
@@ -41,9 +41,7 @@ def test_drops_url_and_structure_nodes():
 
 def test_drops_consecutive_duplicates():
     tree = (
-        '- generic [ref=e1]: Next\n'
-        '- button "Next" [ref=e2]\n'
-        '- generic [ref=e3]: Next\n'
+        '- generic [ref=e1]: Next\n- button "Next" [ref=e2]\n- generic [ref=e3]: Next\n'
     )
     # all three are "Next" in a row -> collapsed to a single line
     assert _visible_text(tree) == "Next"
@@ -70,8 +68,13 @@ def test_console_noise_regex():
 
 def test_stale_ref_hint_covers_navigating_tools():
     # the tools whose result advances/re-renders the page must invalidate refs
-    for tool in ("browser_click", "browser_navigate", "browser_type",
-                 "browser_select_option", "browser_file_upload"):
+    for tool in (
+        "browser_click",
+        "browser_navigate",
+        "browser_type",
+        "browser_select_option",
+        "browser_file_upload",
+    ):
         assert tool in _REF_INVALIDATING_TOOLS
     # read-only / ref-providing tools must NOT carry the hint
     assert "browser_snapshot" not in _REF_INVALIDATING_TOOLS
@@ -85,9 +88,10 @@ def test_stale_ref_hint_text_is_actionable():
 
 # --- read-before-write ref gate --------------------------------------------- #
 
+
 def test_refs_in_aria_extracts_refs():
     aria = (
-        'Country: |-\n'
+        "Country: |-\n"
         '  - combobox "Country" [ref=e137]\n'
         '  - option "United States" [ref=e140]\n'
     )
@@ -99,15 +103,19 @@ def test_refs_in_aria_none_when_ref_less():
 
 
 def test_target_refs_bracket_and_hash_forms():
-    assert _target_refs({"element": "Apply button", "ref": "button[ref=e76]"}) == {"e76"}
+    assert _target_refs({"element": "Apply button", "ref": "button[ref=e76]"}) == {
+        "e76"
+    }
     assert _target_refs({"selector": "#e282"}) == {"e282"}
 
 
 def test_target_refs_fill_form_multiple():
-    args = {"fields": [
-        {"target": "textbox[ref=e10]", "value": "a"},
-        {"target": "#e11", "value": "b"},
-    ]}
+    args = {
+        "fields": [
+            {"target": "textbox[ref=e10]", "value": "a"},
+            {"target": "#e11", "value": "b"},
+        ]
+    }
     assert _target_refs(args) == {"e10", "e11"}
 
 
@@ -131,12 +139,20 @@ def test_ref_gate_ignores_non_gated_tools():
 
 
 def test_ref_gate_allows_ref_less_selector():
-    assert _ref_gate("browser_click", {"selector": 'button:has-text("Apply")'}, set()) is None
+    assert (
+        _ref_gate("browser_click", {"selector": 'button:has-text("Apply")'}, set())
+        is None
+    )
 
 
 def test_ref_gated_tools_membership():
-    for tool in ("browser_click", "browser_type", "browser_fill_form",
-                 "browser_select_option", "browser_file_upload"):
+    for tool in (
+        "browser_click",
+        "browser_type",
+        "browser_fill_form",
+        "browser_select_option",
+        "browser_file_upload",
+    ):
         assert tool in _REF_GATED_TOOLS
     assert "browser_navigate" not in _REF_GATED_TOOLS  # no ref target
     assert "fetch_aria" not in _REF_GATED_TOOLS

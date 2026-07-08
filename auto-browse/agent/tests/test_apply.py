@@ -46,17 +46,20 @@ def _base(db, store, uid):
     store.objs[docx_key] = b"BASEDOCX"
     store.objs[pdf_key] = b"BASE"
     repo.insert_resume_asset(db, uid, "base", docx_key, variant="docx")
-    return repo.insert_resume_asset(db, uid, "base", pdf_key, variant="pdf",
-                                    content_type="application/pdf")
+    return repo.insert_resume_asset(
+        db, uid, "base", pdf_key, variant="pdf", content_type="application/pdf"
+    )
 
 
 def _ready_tailored(db, store, uid, job_id):
     key = keys.tailored_resume_key(uid, job_id, "pdf")
     store.objs[key] = b"TAILORED"
-    asset = repo.insert_resume_asset(db, uid, "tailored", key, job_id=job_id,
-                                     content_type="application/pdf")
+    asset = repo.insert_resume_asset(
+        db, uid, "tailored", key, job_id=job_id, content_type="application/pdf"
+    )
     tid = repo.enqueue_tailoring(db, uid, job_id, None)
     from common import queue
+
     queue.mark(db, "tailored_resumes", tid, "ready", tailored_asset_id=asset)
 
 
@@ -120,5 +123,13 @@ async def test_no_resume_raises(db, tmp_path):
     uid = _user(db)  # no base, no tailored
     job_id = repo.get_or_create_job(db, "https://example.com/jobs/4")
     with pytest.raises(RuntimeError, match="no base PDF resume"):
-        await resolve_resume(db, store, uid, job_id, str(tmp_path / "r.pdf"),
-                             wait_timeout=2, poll_interval=2, sleep=_noop_sleep)
+        await resolve_resume(
+            db,
+            store,
+            uid,
+            job_id,
+            str(tmp_path / "r.pdf"),
+            wait_timeout=2,
+            poll_interval=2,
+            sleep=_noop_sleep,
+        )

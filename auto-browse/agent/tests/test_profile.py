@@ -33,25 +33,42 @@ def _sample() -> ProfileData:
             }
         ],
         education=[
-            {"degree": "MS", "major": "CS", "school": "UNO", "from_date": "2019-08-01", "to_date": "2021-05-01"}
+            {
+                "degree": "MS",
+                "major": "CS",
+                "school": "UNO",
+                "from_date": "2019-08-01",
+                "to_date": "2021-05-01",
+            }
         ],
         skill_groups=[{"category": "Languages", "skills": ["Python", "SQL"]}],
         references=[
-            {"name": "Julian", "email": "j@a.co", "relationship": "CEO", "known_duration": "1 year"}
+            {
+                "name": "Julian",
+                "email": "j@a.co",
+                "relationship": "CEO",
+                "known_duration": "1 year",
+            }
         ],
         login={"login_email": "shnk@example.com", "login_password": "secret"},
     )
 
 
 def test_split_name():
-    assert _split_name("Jane Quinn Doe") == ("Jane Quinn", "Doe")
+    assert _split_name("Jane Quinn Doe") == (
+        "Jane Quinn",
+        "Doe",
+    )
     assert _split_name("Cher") == ("Cher", "")
     assert _split_name("") == ("", "")
 
 
 def test_linkedin_normalize():
     assert _linkedin_url("linkedin.com/in/x") == "https://www.linkedin.com/in/x"
-    assert _linkedin_url("https://www.linkedin.com/in/x") == "https://www.linkedin.com/in/x"
+    assert (
+        _linkedin_url("https://www.linkedin.com/in/x")
+        == "https://www.linkedin.com/in/x"
+    )
     assert _linkedin_url("shnkreddy") == "https://www.linkedin.com/in/janedoe"
     assert _linkedin_url("") == ""
 
@@ -81,6 +98,7 @@ def test_render_empty_sections_safe():
 
 
 # ---------------- integration ----------------
+
 
 def test_build_profile_from_db(db):
     with db.cursor() as cur:

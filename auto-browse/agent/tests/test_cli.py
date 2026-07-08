@@ -111,7 +111,9 @@ def test_add_jobs_fresh_and_duplicate(db):
     r1 = cli.add_jobs(db, uid, ["https://ex.dev/j/1"])[0]
     assert r1["duplicate"] is False
     with db.cursor() as cur:
-        cur.execute("SELECT source, status FROM jobs WHERE job_id = %s", (r1["job_id"],))
+        cur.execute(
+            "SELECT source, status FROM jobs WHERE job_id = %s", (r1["job_id"],)
+        )
         row = cur.fetchone()
     assert row["source"] == "manual"
     assert row["status"] == "jd_pending"
