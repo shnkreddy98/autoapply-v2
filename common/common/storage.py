@@ -47,6 +47,10 @@ class LocalFSStorage:
     def exists(self, key: str) -> bool:
         return self._p(key).is_file()
 
+    def presigned_get(self, key: str, expires: int = 300) -> str:
+        # no URL signing on a local filesystem — hand back the path
+        return str(self._p(key))
+
 
 class S3Storage:
     """boto3 against S3 or MinIO (via endpoint_url)."""
@@ -92,6 +96,15 @@ class S3Storage:
             return True
         except ClientError:
             return False
+
+    def presigned_get(self, key: str, expires: int = 300) -> str:
+        """Short-lived download URL — lets the API hand out files without
+        proxying bytes or exposing bucket credentials."""
+        return self.client.generate_presigned_url(
+            "get_object",
+            Params={"Bucket": self.bucket, "Key": key},
+            ExpiresIn=expires,
+        )
 
 
 def from_env() -> Storage:

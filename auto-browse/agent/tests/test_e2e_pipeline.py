@@ -35,8 +35,10 @@ async def test_full_pipeline(db, s3, tmp_path):
     s3.put_bytes(base_key, b"PK\x03\x04 base docx")
     repo.insert_resume_asset(db, user_id, "base", base_key, variant="docx")
 
-    # ---- stage 1: search discovers a job ----
-    job_id = repo.get_or_create_job(db, "https://boards.greenhouse.io/acme/jobs/42", "DE", "search")
+    # ---- stage 1: search discovers a job (linked to the searching user) ----
+    job_id = repo.add_job_for_user(
+        db, user_id, "https://boards.greenhouse.io/acme/jobs/42", "DE", "search"
+    )
 
     # ---- stage 2: JD-capture (stub navigator) ----
     async def navigate(url):
@@ -62,7 +64,7 @@ async def test_full_pipeline(db, s3, tmp_path):
         assert cur.fetchone()["status"] == "jd_ready"
     assert s3.exists(keys.jd_key(job_id))
     t = repo.lookup_tailored(db, user_id, job_id)
-    assert t["status"] == "pending"  # auto-enqueued for the active user
+    assert t["status"] == "pending"  # auto-enqueued for the owner
 
     # ---- stage 3: tailor worker (fake tailor, real orchestration) ----
     async def fake_tailor(docx_path, jd_text):

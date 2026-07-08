@@ -100,9 +100,7 @@ class Recorder:
     def __init__(self, out_dir: Path):
         self.out_dir = out_dir
         self.out_dir.mkdir(parents=True, exist_ok=True)
-        self.manifest = (self.out_dir / "manifest.jsonl").open(
-            "a", encoding="utf-8"
-        )
+        self.manifest = (self.out_dir / "manifest.jsonl").open("a", encoding="utf-8")
         self._lock = asyncio.Lock()
         self._tab_dirs: dict[int, Path] = {}
         self._tab_seq: dict[int, int] = {}
@@ -186,7 +184,9 @@ async def main() -> int:
     ap = argparse.ArgumentParser(description="Human-driven application recorder")
     ap.add_argument("urls", help="newline-delimited file of job URLs")
     ap.add_argument("--out", default=str(DEFAULT_OUT), help="recordings root dir")
-    ap.add_argument("--profile", default=str(DEFAULT_PROFILE), help="persistent profile dir")
+    ap.add_argument(
+        "--profile", default=str(DEFAULT_PROFILE), help="persistent profile dir"
+    )
     args = ap.parse_args()
 
     urls = [
@@ -202,7 +202,9 @@ async def main() -> int:
     out_dir = Path(args.out) / session
     rec = Recorder(out_dir)
     print(f"Recording session -> {out_dir}")
-    print(f"{len(urls)} tab(s). Apply to each, close the tab when done. Ctrl-C to stop.\n")
+    print(
+        f"{len(urls)} tab(s). Apply to each, close the tab when done. Ctrl-C to stop.\n"
+    )
 
     closed = asyncio.Event()
     live = {"n": 0}
@@ -239,7 +241,9 @@ async def main() -> int:
 
         async def binding(source: dict, payload: dict) -> None:
             try:
-                await rec.capture(source["page"], (payload or {}).get("event", "event"), payload)
+                await rec.capture(
+                    source["page"], (payload or {}).get("event", "event"), payload
+                )
             except Exception:
                 pass
 

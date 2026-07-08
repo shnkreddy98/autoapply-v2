@@ -37,3 +37,19 @@ def test_enqueue_dedups_across_runs(db):
     # same posting, different casing/query/scheme -> no new row
     enqueue_jobs([{"url": "http://example.com/jobs/9?ref=abc", "title": "x dup"}], conn=db)
     assert _count_jobs(db) == 1
+
+
+def test_enqueue_links_owner(db):
+    from common import repo
+
+    with db.cursor() as cur:
+        cur.execute(
+            "INSERT INTO users (email) VALUES ('search@test.dev') RETURNING user_id"
+        )
+        uid = cur.fetchone()["user_id"]
+    db.commit()
+    ids = enqueue_jobs([{"url": "https://example.com/jobs/3", "title": "DE"}], conn=db, user_id=uid)
+    assert repo.job_owner_ids(db, ids[0]) == [uid]
+    with db.cursor() as cur:
+        cur.execute("SELECT source FROM user_jobs WHERE job_id = %s", (ids[0],))
+        assert cur.fetchone()["source"] == "search"
