@@ -24,6 +24,7 @@ import re
 import subprocess
 import sys
 import uuid
+from datetime import datetime
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -192,20 +193,40 @@ def cmd_jobs_add(args) -> int:
     return 0
 
 
-def list_jobs(conn, user_id: str, status: str | None) -> list[dict]:
-    return repo.list_jobs_for_user(conn, user_id, status)
+def _today_start() -> datetime:
+    """Local midnight, tz-aware (job timestamps are UTC; 'today' means the user's day)."""
+    return datetime.now().astimezone().replace(hour=0, minute=0, second=0, microsecond=0)
+
+
+def _apply_marker(row: dict) -> str:
+    """Human word for the latest apply attempt: applied / handed-off / apply-failed."""
+    status, outcome = row.get("apply_status"), row.get("apply_outcome")
+    if status is None:
+        return ""
+    if outcome == "submitted":
+        return "applied"
+    if status == "failed":
+        return "apply-failed"
+    if status == "finished":
+        return "handed-off"  # agent finished; submission unconfirmed
+    return status
+
+
+def list_jobs(conn, user_id: str, status: str | None, since: datetime | None = None) -> list[dict]:
+    return repo.list_jobs_for_user(conn, user_id, status, since=since)
 
 
 def cmd_jobs_list(args) -> int:
     with _connect() as conn:
         user_id = resolve_user(conn, args.user)
-        rows = list_jobs(conn, user_id, args.status)
+        rows = list_jobs(conn, user_id, args.status, _today_start() if args.today else None)
     if not rows:
-        print("no jobs" + (f" with status {args.status}" if args.status else ""))
+        scope = " added today" if args.today else ""
+        print(f"no jobs{scope}" + (f" with status {args.status}" if args.status else ""))
         return 0
     for r in rows:
         title = (r["title"] or "")[:40]
-        print(f"{_id8(r['job_id'])}  {r['status']:<12} {title:<40} {r['url']}")
+        print(f"{_id8(r['job_id'])}  {r['status']:<12} {_apply_marker(r):<12} {title:<40} {r['url']}")
     return 0
 
 
@@ -232,28 +253,39 @@ def backfill_tailoring(conn, user_id: str) -> int:
     return len(job_ids)
 
 
-def tailoring_summary(conn, user_id: str) -> dict:
-    """Counts by status plus a per-job join, scoped to one user."""
+def tailoring_summary(conn, user_id: str, since: datetime | None = None) -> dict:
+    """Counts by status plus a per-job join, scoped to one user; `since` limits
+    everything to jobs the user added on/after it (user_jobs.added_at)."""
+    added = " AND uj.added_at >= %s" if since is not None else ""
+    since_params = (since,) if since is not None else ()
     with conn.cursor() as cur:
         cur.execute(
             "SELECT j.status, count(*) AS n FROM jobs j "
             "JOIN user_jobs uj ON uj.job_id = j.job_id AND uj.user_id = %s "
-            "GROUP BY j.status",
-            (user_id,),
+            f"WHERE true{added} GROUP BY j.status",
+            (user_id, *since_params),
         )
         job_counts = {r["status"]: r["n"] for r in cur.fetchall()}
         cur.execute(
-            "SELECT status, count(*) AS n FROM tailored_resumes WHERE user_id = %s GROUP BY status",
-            (user_id,),
+            "SELECT t.status, count(*) AS n FROM tailored_resumes t "
+            "JOIN user_jobs uj ON uj.job_id = t.job_id AND uj.user_id = t.user_id "
+            f"WHERE t.user_id = %s{added} GROUP BY t.status",
+            (user_id, *since_params),
         )
         tailor_counts = {r["status"]: r["n"] for r in cur.fetchall()}
         cur.execute(
             "SELECT t.job_id, t.status, t.resume_score, t.new_resume_score, "
             "t.job_match_summary, t.error, j.title, j.url, j.status AS job_status, "
-            "j.error AS job_error "
+            "j.error AS job_error, ap.status AS apply_status, ap.outcome AS apply_outcome "
             "FROM tailored_resumes t JOIN jobs j USING (job_id) "
-            "WHERE t.user_id = %s ORDER BY t.created_at DESC",
-            (user_id,),
+            "JOIN user_jobs uj ON uj.job_id = t.job_id AND uj.user_id = t.user_id "
+            "LEFT JOIN LATERAL ("
+            "  SELECT a.status, a.outcome FROM applications a "
+            "  WHERE a.job_id = t.job_id AND a.user_id = t.user_id "
+            "  ORDER BY a.started_at DESC LIMIT 1"
+            ") ap ON true "
+            f"WHERE t.user_id = %s{added} ORDER BY t.created_at DESC",
+            (user_id, *since_params),
         )
         rows = cur.fetchall()
     return {"job_counts": job_counts, "tailor_counts": tailor_counts, "rows": rows}
@@ -268,7 +300,9 @@ def _print_summary(s: dict) -> None:
         if r["new_resume_score"] is not None:
             score = f"  score {r['resume_score']} -> {r['new_resume_score']}"
         err = f"  error: {r['error']}" if r["error"] else ""
-        print(f"{_id8(r['job_id'])}  {r['status']:<9} {name}{score}{err}")
+        mark = _apply_marker(r)
+        applied = f"  [{mark}]" if mark else ""
+        print(f"{_id8(r['job_id'])}  {r['status']:<9} {name}{score}{applied}{err}")
     stuck = (
         s["job_counts"].get("jd_capturing", 0),
         s["tailor_counts"].get("tailoring", 0),
@@ -400,19 +434,26 @@ def cmd_status(args) -> int:
                 f"status  {job['status']}"
                 + (f"  error: {job['error']}" if job["error"] else "")
             )
-            if not t:
+            if t:
+                print(
+                    f"tailoring  {t['status']}"
+                    + (f"  error: {t['error']}" if t["error"] else "")
+                )
+                if t["new_resume_score"] is not None:
+                    print(f"score      {t['resume_score']} -> {t['new_resume_score']}")
+                if t["job_match_summary"]:
+                    print(f"match      {t['job_match_summary']}")
+            else:
                 print("tailoring: not enqueued (run: autoapply tailor)")
-                return 0
-            print(
-                f"tailoring  {t['status']}"
-                + (f"  error: {t['error']}" if t["error"] else "")
-            )
-            if t["new_resume_score"] is not None:
-                print(f"score      {t['resume_score']} -> {t['new_resume_score']}")
-            if t["job_match_summary"]:
-                print(f"match      {t['job_match_summary']}")
+            apps = repo.list_applications(conn, user_id, job["job_id"])
+            if apps:
+                print("applications:")
+                for a in apps:
+                    when = a["started_at"].strftime("%Y-%m-%d %H:%M")
+                    out = f"  {a['outcome']}" if a["outcome"] else ""
+                    print(f"  {when}  {a['status']}{out}  (run {a['run_id'] or '-'})")
             return 0
-        _print_summary(tailoring_summary(conn, user_id))
+        _print_summary(tailoring_summary(conn, user_id, _today_start() if args.today else None))
         return 0
 
 
@@ -528,8 +569,19 @@ def cmd_apply(args) -> int:
                 print(f"apply failed for {_id8(job_id)}: {exc}", file=sys.stderr)
                 failed += 1
             else:
-                repo.finish_application(conn, app_id, "finished")
+                repo.finish_application(conn, app_id, "finished", outcome=_confirm_submitted())
     return 1 if failed else 0
+
+
+def _confirm_submitted(ask=input) -> str | None:
+    """The agent stops before the final submit; the human clicks it in the VNC
+    view. Ask whether they did, so the DB knows more than 'agent finished'.
+    Non-interactive (EOF): record nothing, matching the old behavior."""
+    try:
+        raw = ask("  did you submit the application? [y/N]: ").strip().lower()
+    except EOFError:
+        return None
+    return "submitted" if raw in ("y", "yes") else "not submitted"
 
 
 # ---------------------------------------------------------------------------
@@ -551,6 +603,7 @@ def build_parser() -> argparse.ArgumentParser:
     add.set_defaults(func=cmd_jobs_add)
     lst = jobs_sub.add_parser("list", help="list your jobs")
     lst.add_argument("--status", choices=_JOB_STATUSES)
+    lst.add_argument("--today", action="store_true", help="only jobs added today")
     lst.add_argument("--user", help="user id or email (default: the only active user)")
     lst.set_defaults(func=cmd_jobs_list)
 
@@ -574,6 +627,7 @@ def build_parser() -> argparse.ArgumentParser:
     status.add_argument(
         "job", nargs="?", help="job id, id prefix, or URL (full detail)"
     )
+    status.add_argument("--today", action="store_true", help="only jobs added today")
     status.add_argument("--user", help="user id or email")
     status.set_defaults(func=cmd_status)
 

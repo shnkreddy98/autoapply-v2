@@ -145,18 +145,51 @@ def job_owner_ids(conn: psycopg.Connection, job_id: str) -> list[str]:
 
 
 def list_jobs_for_user(
-    conn: psycopg.Connection, user_id: str, status: str | None = None
+    conn: psycopg.Connection,
+    user_id: str,
+    status: str | None = None,
+    since: datetime | None = None,
 ) -> list[dict]:
-    """Jobs owned by a user (via user_jobs), newest first, optionally by status."""
+    """Jobs owned by a user (via user_jobs), newest first, optionally by status
+    and/or added on/after `since` (user_jobs.added_at — when *this user* added
+    the job; jobs are globally deduped so jobs.created_at may be older).
+    Each row carries the user's latest apply attempt as apply_status/apply_outcome."""
     q = (
-        "SELECT j.* FROM jobs j JOIN user_jobs uj USING (job_id) "
+        "SELECT j.*, ap.status AS apply_status, ap.outcome AS apply_outcome "
+        "FROM jobs j JOIN user_jobs uj USING (job_id) "
+        "LEFT JOIN LATERAL ("
+        "  SELECT a.status, a.outcome FROM applications a "
+        "  WHERE a.job_id = j.job_id AND a.user_id = uj.user_id "
+        "  ORDER BY a.started_at DESC LIMIT 1"
+        ") ap ON true "
         "WHERE uj.user_id = %s"
     )
     params: list[Any] = [user_id]
     if status:
         q += " AND j.status = %s"
         params.append(status)
+    if since is not None:
+        q += " AND uj.added_at >= %s"
+        params.append(since)
     q += " ORDER BY j.created_at DESC"
+    with conn.cursor() as cur:
+        cur.execute(q, params)
+        return cur.fetchall()
+
+
+def list_applications(
+    conn: psycopg.Connection, user_id: str, job_id: str | None = None
+) -> list[dict]:
+    """A user's apply attempts (optionally one job's), newest first, with job url/title."""
+    q = (
+        "SELECT a.*, j.url, j.title FROM applications a JOIN jobs j USING (job_id) "
+        "WHERE a.user_id = %s"
+    )
+    params: list[Any] = [user_id]
+    if job_id:
+        q += " AND a.job_id = %s"
+        params.append(job_id)
+    q += " ORDER BY a.started_at DESC"
     with conn.cursor() as cur:
         cur.execute(q, params)
         return cur.fetchall()

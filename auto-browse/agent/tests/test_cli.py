@@ -201,6 +201,88 @@ def test_tailoring_summary(db):
 
 
 # ---------------------------------------------------------------------------
+# --today filter (user_jobs.added_at)
+
+
+def _backdate_added(db, user_id, job_id, days=3):
+    with db.cursor() as cur:
+        cur.execute(
+            "UPDATE user_jobs SET added_at = now() - make_interval(days => %s) "
+            "WHERE user_id = %s AND job_id = %s",
+            (days, user_id, job_id),
+        )
+    db.commit()
+
+
+def test_list_jobs_since_filters_by_added_at(db):
+    uid = _mk_user(db)
+    old = cli.add_jobs(db, uid, ["https://ex.dev/j/old"])[0]["job_id"]
+    new = cli.add_jobs(db, uid, ["https://ex.dev/j/new"])[0]["job_id"]
+    _backdate_added(db, uid, old)
+
+    rows = cli.list_jobs(db, uid, None, cli._today_start())
+    assert [r["job_id"] for r in rows] == [new]
+    assert len(cli.list_jobs(db, uid, None)) == 2  # no filter: everything
+
+
+def test_tailoring_summary_since(db):
+    uid = _mk_user(db)
+    j_old = _mk_ready_job(db, uid, "https://ex.dev/j/old")
+    j_new = _mk_ready_job(db, uid, "https://ex.dev/j/new")
+    repo.enqueue_tailoring(db, uid, j_old)
+    repo.enqueue_tailoring(db, uid, j_new)
+    _backdate_added(db, uid, j_old)
+
+    s = cli.tailoring_summary(db, uid, since=cli._today_start())
+    assert s["job_counts"] == {"jd_ready": 1}
+    assert s["tailor_counts"] == {"pending": 1}
+    assert [r["job_id"] for r in s["rows"]] == [j_new]
+
+
+# ---------------------------------------------------------------------------
+# apply tracking surfaced
+
+
+def test_apply_marker_mapping():
+    assert cli._apply_marker({}) == ""
+    assert cli._apply_marker({"apply_status": "finished", "apply_outcome": "submitted"}) == "applied"
+    assert cli._apply_marker({"apply_status": "finished", "apply_outcome": None}) == "handed-off"
+    assert cli._apply_marker({"apply_status": "failed", "apply_outcome": "boom"}) == "apply-failed"
+    assert cli._apply_marker({"apply_status": "running", "apply_outcome": None}) == "running"
+
+
+def test_list_jobs_carries_latest_application(db):
+    uid = _mk_user(db)
+    job_id = cli.add_jobs(db, uid, ["https://ex.dev/j/1"])[0]["job_id"]
+    rows = cli.list_jobs(db, uid, None)
+    assert rows[0]["apply_status"] is None  # never applied
+
+    a1 = repo.start_application(db, uid, job_id, run_id="run-1")
+    repo.finish_application(db, a1, "failed", outcome="boom")
+    a2 = repo.start_application(db, uid, job_id, run_id="run-2")
+    repo.finish_application(db, a2, "finished", outcome="submitted")
+
+    row = cli.list_jobs(db, uid, None)[0]
+    assert (row["apply_status"], row["apply_outcome"]) == ("finished", "submitted")
+
+    apps = repo.list_applications(db, uid, job_id)
+    assert [a["run_id"] for a in apps] == ["run-2", "run-1"]  # newest first
+    assert apps[0]["url"] == "https://ex.dev/j/1"
+
+
+def test_confirm_submitted():
+    assert cli._confirm_submitted(ask=lambda _: "y") == "submitted"
+    assert cli._confirm_submitted(ask=lambda _: "YES ") == "submitted"
+    assert cli._confirm_submitted(ask=lambda _: "") == "not submitted"
+    assert cli._confirm_submitted(ask=lambda _: "n") == "not submitted"
+
+    def eof(_):
+        raise EOFError
+
+    assert cli._confirm_submitted(ask=eof) is None
+
+
+# ---------------------------------------------------------------------------
 # applications helpers (common/repo.py)
 
 
@@ -255,9 +337,11 @@ def test_run_tailor_worker_wiring(monkeypatch):
         ["jobs", "add", "--file", "urls.txt"],
         ["jobs", "list"],
         ["jobs", "list", "--status", "jd_ready"],
+        ["jobs", "list", "--today"],
         ["tailor"],
         ["tailor", "--user", "u@x.dev", "--retry-failed"],
         ["status"],
+        ["status", "--today"],
         ["status", "abcd1234"],
         ["resume", "show", "abcd1234", "--out", "/tmp/r.pdf", "--open"],
         ["apply", "abcd1234", "https://ex.dev/j/2", "--model", "m"],
