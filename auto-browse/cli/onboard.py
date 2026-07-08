@@ -14,12 +14,13 @@ All prompts go through an injectable `ask` function so tests can drive them.
 
 from __future__ import annotations
 
+import getpass
 import json
 import os
 import re
 import subprocess
 import tempfile
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import date
 from pathlib import Path
 
@@ -268,16 +269,31 @@ def years_of_experience(
     return max(0, round(days / 365.25))
 
 
+def _ask_password(*, ask_secret=None) -> str | None:
+    """Portal password has no default, so it is asked even under --yes (it's the
+    one onboarding answer that can't be autofilled). Non-interactive sessions
+    (EOF / captured stdin) leave it unset instead of crashing."""
+    fn = ask_secret or getpass.getpass
+    try:
+        raw = fn(
+            "  portal login password (one password reused on every ATS; empty = skip): "
+        ).strip()
+    except (EOFError, OSError):
+        raw = ""
+    return raw or None
+
+
 @dataclass
 class OnboardData:
     """Everything `save` writes: reviewed resume + application answers."""
 
     resume: ParsedResume
     profile: dict
+    login: dict = field(default_factory=dict)
 
 
 def interactive_review(
-    parsed: ParsedResume, *, ask=input, yes: bool = False
+    parsed: ParsedResume, *, ask=input, yes: bool = False, ask_secret=None
 ) -> OnboardData:
     c = parsed.contact
     print("\n-- contact (extracted from resume; Enter keeps, '-' clears) --")
@@ -289,6 +305,17 @@ def interactive_review(
     c.location = _ask("location", c.location, ask=ask, yes=yes)
     c.linkedin = _ask("linkedin", c.linkedin, ask=ask, yes=yes)
     c.github = _ask("github", c.github, ask=ask, yes=yes)
+
+    print("\n-- ATS portal login (the agent signs in / creates portal accounts) --")
+    login: dict = {
+        "login_email": _ask("portal login email", c.email, ask=ask, yes=yes),
+        "login_password": _ask_password(ask_secret=ask_secret),
+    }
+    if not login["login_password"]:
+        print(
+            "    (!) password not set — account-gated portals (Workday, iCIMS, ...) "
+            "will hand off to you; rerun `autoapply profile init` to add one"
+        )
 
     print(f"\n-- resume content --\n  summary: {(parsed.summary or '(none)')[:120]}...")
     for i, w in enumerate(parsed.work_experiences, 1):
@@ -365,13 +392,13 @@ def interactive_review(
         profile["termination_explanation"] = _ask("explanation", None, ask=ask, yes=yes)
 
     print("\n-- EEO (voluntary; Enter keeps 'Prefer not to say') --")
-    for field, label in (
+    for col, label in (
         ("gender", "gender"),
         ("race_ethnicity", "race/ethnicity"),
         ("veteran_status", "veteran status"),
         ("disability_status", "disability status"),
     ):
-        profile[field] = _ask(label, "Prefer not to say", ask=ask, yes=yes)
+        profile[col] = _ask(label, "Prefer not to say", ask=ask, yes=yes)
 
     print("\n-- application certifications (the boilerplate checkboxes) --")
     agree_all = _ask_bool(
@@ -380,7 +407,7 @@ def interactive_review(
         ask=ask,
         yes=yes,
     )
-    for field in (
+    for col in (
         "cert_accuracy",
         "cert_dismissal",
         "cert_background_check",
@@ -390,13 +417,13 @@ def interactive_review(
         "cert_privacy_notice",
         "cert_data_processing",
     ):
-        profile[field] = agree_all
+        profile[col] = agree_all
     profile["electronic_signature"] = _ask(
         "electronic signature", c.full_name, ask=ask, yes=yes
     )
     profile["signature_date"] = date.today()
 
-    return OnboardData(resume=parsed, profile=profile)
+    return OnboardData(resume=parsed, profile=profile, login=login)
 
 
 # ---------------------------------------------------------------------------
@@ -437,6 +464,18 @@ def save(conn, storage, data: OnboardData, pdf: str | None, docx: str | None) ->
             f"ON CONFLICT (user_id) DO UPDATE SET {updates}, updated_at = now()",
             (user_id, *data.profile.values()),
         )
+
+        # Only written when a password was given: re-running init and skipping
+        # the password prompt must not wipe stored credentials.
+        login = data.login or {}
+        if login.get("login_password"):
+            cur.execute(
+                "INSERT INTO portal_credentials (user_id, login_email, login_password) "
+                "VALUES (%s, %s, %s) "
+                "ON CONFLICT (user_id) DO UPDATE SET login_email = EXCLUDED.login_email, "
+                "login_password = EXCLUDED.login_password",
+                (user_id, login.get("login_email") or c.email, login["login_password"]),
+            )
 
         for table in ("work_experiences", "education", "skill_groups"):
             cur.execute(f"DELETE FROM {table} WHERE user_id = %s", (user_id,))  # noqa: S608
@@ -529,6 +568,13 @@ def cmd_profile_show(args) -> int:
     u = p.user
     print(f"{u['full_name']}  <{u['email']}>  {u.get('phone') or ''}")
     print(f"  {u.get('location') or ''}  {u.get('linkedin') or ''}")
+    cred = p.login or {}
+    pw_state = (
+        "password set"
+        if cred.get("login_password")
+        else "password NOT SET — account portals will hand off"
+    )
+    print(f"  portal login: {cred.get('login_email') or u['email']}  ({pw_state})")
     prof = p.profile or {}
     filled = {
         k: v

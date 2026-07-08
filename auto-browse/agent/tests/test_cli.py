@@ -245,10 +245,22 @@ def test_tailoring_summary_since(db):
 
 def test_apply_marker_mapping():
     assert cli._apply_marker({}) == ""
-    assert cli._apply_marker({"apply_status": "finished", "apply_outcome": "submitted"}) == "applied"
-    assert cli._apply_marker({"apply_status": "finished", "apply_outcome": None}) == "handed-off"
-    assert cli._apply_marker({"apply_status": "failed", "apply_outcome": "boom"}) == "apply-failed"
-    assert cli._apply_marker({"apply_status": "running", "apply_outcome": None}) == "running"
+    assert (
+        cli._apply_marker({"apply_status": "finished", "apply_outcome": "submitted"})
+        == "applied"
+    )
+    assert (
+        cli._apply_marker({"apply_status": "finished", "apply_outcome": None})
+        == "handed-off"
+    )
+    assert (
+        cli._apply_marker({"apply_status": "failed", "apply_outcome": "boom"})
+        == "apply-failed"
+    )
+    assert (
+        cli._apply_marker({"apply_status": "running", "apply_outcome": None})
+        == "running"
+    )
 
 
 def test_list_jobs_carries_latest_application(db):
@@ -345,11 +357,164 @@ def test_run_tailor_worker_wiring(monkeypatch):
         ["status", "abcd1234"],
         ["resume", "show", "abcd1234", "--out", "/tmp/r.pdf", "--open"],
         ["apply", "abcd1234", "https://ex.dev/j/2", "--model", "m"],
+        ["apply", "abcd1234", "--autosubmit"],
+        ["apply", "--today", "--autosubmit"],
+        ["apply", "--all"],
+        ["apply", "--all", "--today", "--autosubmit"],
+        ["continue", "abcd1234"],
+        ["continue", "https://ex.dev/j/2", "--autosubmit", "--model", "m"],
     ],
 )
 def test_parser_accepts(argv):
     args = cli.build_parser().parse_args(argv)
     assert callable(args.func)
+
+
+def test_apply_autosubmit_defaults_off():
+    args = cli.build_parser().parse_args(["apply", "abcd1234"])
+    assert args.autosubmit is False
+
+
+def test_build_system_prompt_autosubmit():
+    from agent.loop import build_system_prompt
+
+    review = build_system_prompt()
+    auto = build_system_prompt(autosubmit=True)
+    assert "Do NOT click the final Submit" in review
+    assert "Do NOT click the final Submit" not in auto
+    assert "click the final Submit" in auto
+    # shared scaffolding intact in both variants
+    for prompt in (review, auto):
+        assert "APPLICANT PROFILE" in prompt
+        assert "fetch_aria" in prompt
+
+
+def test_build_system_prompt_continue_and_no_navigate():
+    from agent.loop import build_system_prompt
+
+    fresh = build_system_prompt()
+    cont = build_system_prompt(continue_run=True)
+    assert "CONTINUING A PREVIOUS RUN" in cont
+    assert "CONTINUING A PREVIOUS RUN" not in fresh
+    # navigation is harness-only: the model must never be told it has the tool
+    for prompt in (fresh, cont):
+        assert "browser_navigate" not in prompt
+
+
+def test_is_blank_page():
+    from agent.loop import _is_blank_page
+
+    assert _is_blank_page("")
+    assert _is_blank_page("   \n ")
+    assert _is_blank_page("(snapshot unavailable: ConnectionError)")
+    assert _is_blank_page("about:blank")
+    assert not _is_blank_page("Some Role, Some Company ... Apply")
+
+
+# ---------------------------------------------------------------------------
+# apply --today batch selection
+
+
+def test_select_ready_jobs_filters(db):
+    uid = _mk_user(db)
+    ready = _mk_ready_job(db, uid, "https://ex.dev/j/ready")
+    _mk_ready_job(db, uid, "https://ex.dev/j/old-ready")
+    old = cli.resolve_job(db, "https://ex.dev/j/old-ready")["job_id"]
+    _backdate_added(db, uid, old)
+    repo.add_job_for_user(db, uid, "https://ex.dev/j/pending", source="manual")
+    done = _mk_ready_job(db, uid, "https://ex.dev/j/done")
+    app = repo.start_application(db, uid, done, run_id="run-x")
+    repo.finish_application(db, app, "finished", outcome="submitted")
+    # handed-off (unconfirmed submit) stays in the batch
+    half = _mk_ready_job(db, uid, "https://ex.dev/j/half")
+    app2 = repo.start_application(db, uid, half, run_id="run-y")
+    repo.finish_application(db, app2, "finished", outcome="not submitted")
+
+    picked = cli.select_ready_jobs(db, uid, cli._today_start())
+    assert {r["job_id"] for r in picked} == {ready, half}
+    # no date filter (--all): backdated ready job included too
+    picked_all = cli.select_ready_jobs(db, uid, None)
+    assert {r["job_id"] for r in picked_all} == {ready, half, old}
+
+
+def test_cmd_apply_today_runs_each_ready_job(db, monkeypatch):
+    import contextlib
+    from types import SimpleNamespace
+
+    uid = _mk_user(db)
+    j1 = _mk_ready_job(db, uid, "https://ex.dev/j/1")
+    j2 = _mk_ready_job(db, uid, "https://ex.dev/j/2")
+    monkeypatch.setattr(cli, "_connect", lambda: contextlib.nullcontext(db))
+    ran = []
+    monkeypatch.setattr(
+        cli,
+        "_run_apply_agent",
+        lambda conn, u, job_id, url, model, autosub, continue_run=False: (
+            ran.append(job_id) or True
+        ),
+    )
+    args = SimpleNamespace(
+        jobs=[], all=False, today=True, user=None, model="m", autosubmit=True
+    )
+    assert cli.cmd_apply(args) == 0
+    assert set(ran) == {j1, j2}
+
+    # neither refs nor a batch flag → usage error
+    args = SimpleNamespace(
+        jobs=[], all=False, today=False, user=None, model="m", autosubmit=False
+    )
+    with pytest.raises(SystemExit, match="--all / --today"):
+        cli.cmd_apply(args)
+
+
+# ---------------------------------------------------------------------------
+# continue command
+
+
+def test_cmd_continue_guards_and_run(db, monkeypatch):
+    import contextlib
+    from types import SimpleNamespace
+
+    import agent.loop as loop_mod
+
+    uid = _mk_user(db)
+    job_id = repo.add_job_for_user(db, uid, "https://ex.dev/j/1", source="manual")
+    monkeypatch.setattr(cli, "_connect", lambda: contextlib.nullcontext(db))
+    args = SimpleNamespace(job=str(job_id), user=None, model="m", autosubmit=True)
+
+    with pytest.raises(SystemExit, match="no apply attempt"):
+        cli.cmd_continue(args)
+
+    app_id = repo.start_application(db, uid, job_id, run_id="run-1")
+    with pytest.raises(SystemExit, match="still marked running"):
+        cli.cmd_continue(args)
+
+    repo.finish_application(db, app_id, "finished", outcome="submitted")
+    with pytest.raises(SystemExit, match="already submitted"):
+        cli.cmd_continue(args)
+
+    # handed-off (finished, submission unconfirmed) → resumes
+    app2 = repo.start_application(db, uid, job_id, run_id="run-2")
+    repo.finish_application(db, app2, "finished", outcome="not submitted")
+    seen = {}
+
+    async def fake_main(
+        user_id, url, model, run_id=None, autosubmit=False, continue_run=False
+    ):
+        seen.update(url=url, autosubmit=autosubmit, continue_run=continue_run)
+
+    monkeypatch.setattr(loop_mod, "main", fake_main)
+    assert cli.cmd_continue(args) == 0
+    assert seen == {
+        "url": "https://ex.dev/j/1",
+        "autosubmit": True,
+        "continue_run": True,
+    }
+    # a new attempt row was recorded, autosubmit outcome applied
+    apps = repo.list_applications(db, uid, job_id)
+    assert len(apps) == 3
+    assert apps[0]["status"] == "finished"
+    assert apps[0]["outcome"] == "submitted"
 
 
 def test_parser_rejects_bad_status():

@@ -157,8 +157,10 @@ def test_years_of_experience():
 
 
 def test_review_yes_accepts_all_defaults():
-    data = interactive_review(_parsed(), yes=True)
+    # the password is the one prompt --yes does NOT skip (it has no default)
+    data = interactive_review(_parsed(), yes=True, ask_secret=lambda _: "hunter2")
     assert data.resume.contact.email == "jane@x.dev"
+    assert data.login == {"login_email": "jane@x.dev", "login_password": "hunter2"}
     p = data.profile
     assert p["city"] == "Austin" and p["state"] == "TX"  # split from location
     assert p["work_eligible_us"] is True
@@ -170,6 +172,11 @@ def test_review_yes_accepts_all_defaults():
     assert p["years_of_experience"] >= 6
 
 
+def test_review_password_skippable():
+    data = interactive_review(_parsed(), yes=True, ask_secret=lambda _: "  ")
+    assert data.login["login_password"] is None
+
+
 def test_review_prompts_override_and_clear():
     answers = iter(
         [
@@ -179,6 +186,7 @@ def test_review_prompts_override_and_clear():
             "",
             "",
             "",  # location, linkedin, github kept
+            "portal@x.dev",  # portal login email overridden
             "1",  # drop experience [1]
             "",
             "",
@@ -204,13 +212,16 @@ def test_review_prompts_override_and_clear():
             "",  # signature
         ]
     )
-    data = interactive_review(_parsed(), ask=lambda _: next(answers))
+    data = interactive_review(
+        _parsed(), ask=lambda _: next(answers), ask_secret=lambda _: "pw1"
+    )
     assert data.resume.contact.full_name == "Janet Doe"
     assert data.resume.contact.email == "jane@x.dev"
     assert data.resume.contact.phone is None
     assert data.resume.work_experiences == []  # dropped
     assert data.profile["visa_sponsorship"] is True
     assert data.profile["years_of_experience"] == 10
+    assert data.login == {"login_email": "portal@x.dev", "login_password": "pw1"}
 
 
 def test_review_requires_email():
@@ -235,7 +246,7 @@ class FakeStorage:
 def test_save_writes_everything_and_is_idempotent(db, tmp_path):
     pdf = tmp_path / "r.pdf"
     pdf.write_bytes(b"%PDF")
-    data = interactive_review(_parsed(), yes=True)
+    data = interactive_review(_parsed(), yes=True, ask_secret=lambda _: "hunter2")
     storage = FakeStorage()
 
     uid = save(db, storage, data, str(pdf), None)
@@ -253,6 +264,13 @@ def test_save_writes_everything_and_is_idempotent(db, tmp_path):
     assert len(p.education) == 1
     assert p.skill_groups[0]["skills"] == ["Python", "SQL"]
     assert any(k.endswith("pdf.pdf") for k in storage.files)
+    assert p.login["login_email"] == "jane@x.dev"
+    assert p.login["login_password"] == "hunter2"
+
+    # re-running init and skipping the password must keep the stored credential
+    data2 = interactive_review(_parsed(), yes=True, ask_secret=lambda _: "")
+    save(db, storage, data2, str(pdf), None)
+    assert repo.fetch_profile(db, uid).login["login_password"] == "hunter2"
 
 
 def test_profile_parser_wiring():

@@ -72,9 +72,15 @@ uv run autoapply tailor                            # capture JDs + tailor resume
 uv run autoapply status [JOB]                      # pipeline state + scores
 uv run autoapply resume show JOB [--open]          # download the tailored PDF
 uv run autoapply gmail connect                     # optional: 2FA email access for apply
-uv run autoapply apply JOB                         # run the apply agent
+uv run autoapply apply JOB [--autosubmit]          # run the apply agent
+uv run autoapply apply --all [--today]             # batch: every jd_ready job one by one
+                                                   # (--today = only jobs added today;
+                                                   #  skips already-submitted)
                                                    # (watch at http://localhost:6080/vnc.html;
-                                                   #  it pauses before final submit)
+                                                   #  pauses before final submit unless
+                                                   #  --autosubmit, then it clicks Submit)
+uv run autoapply continue JOB [--autosubmit]       # finish an interrupted run: keeps what
+                                                   # the open browser page already has
 ```
 
 `JOB` is a job id, an id prefix, or the posting URL. With more than one active

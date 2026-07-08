@@ -5,7 +5,10 @@
     autoapply tailor [--user U] [--retry-failed]       # jd-capture + drain tailor queue
     autoapply status [JOB] [--user U]                  # pipeline state + scores
     autoapply resume show JOB [--user U] [--out P] [--open]
-    autoapply apply JOB [JOB ...] [--user U] [--model M]
+    autoapply apply [JOB ...] [--all] [--today] [--user U] [--model M] [--autosubmit]
+                                                       # --all: batch every jd_ready job one by one;
+                                                       # --today restricts to jobs added today
+    autoapply continue JOB [--autosubmit]              # finish an interrupted run in the open browser
 
 JOB accepts a full job_id UUID, an unambiguous id prefix, or the job URL.
 
@@ -195,7 +198,9 @@ def cmd_jobs_add(args) -> int:
 
 def _today_start() -> datetime:
     """Local midnight, tz-aware (job timestamps are UTC; 'today' means the user's day)."""
-    return datetime.now().astimezone().replace(hour=0, minute=0, second=0, microsecond=0)
+    return (
+        datetime.now().astimezone().replace(hour=0, minute=0, second=0, microsecond=0)
+    )
 
 
 def _apply_marker(row: dict) -> str:
@@ -212,21 +217,29 @@ def _apply_marker(row: dict) -> str:
     return status
 
 
-def list_jobs(conn, user_id: str, status: str | None, since: datetime | None = None) -> list[dict]:
+def list_jobs(
+    conn, user_id: str, status: str | None, since: datetime | None = None
+) -> list[dict]:
     return repo.list_jobs_for_user(conn, user_id, status, since=since)
 
 
 def cmd_jobs_list(args) -> int:
     with _connect() as conn:
         user_id = resolve_user(conn, args.user)
-        rows = list_jobs(conn, user_id, args.status, _today_start() if args.today else None)
+        rows = list_jobs(
+            conn, user_id, args.status, _today_start() if args.today else None
+        )
     if not rows:
         scope = " added today" if args.today else ""
-        print(f"no jobs{scope}" + (f" with status {args.status}" if args.status else ""))
+        print(
+            f"no jobs{scope}" + (f" with status {args.status}" if args.status else "")
+        )
         return 0
     for r in rows:
         title = (r["title"] or "")[:40]
-        print(f"{_id8(r['job_id'])}  {r['status']:<12} {_apply_marker(r):<12} {title:<40} {r['url']}")
+        print(
+            f"{_id8(r['job_id'])}  {r['status']:<12} {_apply_marker(r):<12} {title:<40} {r['url']}"
+        )
     return 0
 
 
@@ -453,7 +466,9 @@ def cmd_status(args) -> int:
                     out = f"  {a['outcome']}" if a["outcome"] else ""
                     print(f"  {when}  {a['status']}{out}  (run {a['run_id'] or '-'})")
             return 0
-        _print_summary(tailoring_summary(conn, user_id, _today_start() if args.today else None))
+        _print_summary(
+            tailoring_summary(conn, user_id, _today_start() if args.today else None)
+        )
         return 0
 
 
@@ -534,43 +549,129 @@ def _cmd_profile_show(args) -> int:
 # apply
 
 
-def cmd_apply(args) -> int:
+def _run_apply_agent(
+    conn,
+    user_id: str,
+    job_id,
+    url: str,
+    model: str,
+    autosubmit: bool,
+    continue_run: bool = False,
+) -> bool:
+    """One agent run against one job, with the applications-row bookkeeping.
+    Returns True on success."""
     from agent import loop
     from agent.observability import new_run_id
+
+    tailored = repo.lookup_tailored(conn, user_id, job_id)
+    run_id = new_run_id()
+    app_id = repo.start_application(
+        conn,
+        user_id,
+        job_id,
+        run_id=run_id,
+        tailored_resume_id=tailored["id"] if tailored else None,
+    )
+    print(f"{'continuing' if continue_run else 'applying'} {_id8(job_id)}  {url}")
+    if autosubmit:
+        print("  autosubmit on — agent clicks the final Submit itself")
+        print("  watch at http://localhost:6080/vnc.html")
+    else:
+        print("  watch + confirm final submit at http://localhost:6080/vnc.html")
+    try:
+        asyncio.run(
+            loop.main(
+                user_id,
+                url,
+                model,
+                run_id=run_id,
+                autosubmit=autosubmit,
+                continue_run=continue_run,
+            )
+        )
+    except Exception as exc:
+        repo.finish_application(conn, app_id, "failed", outcome=str(exc)[:500])
+        print(f"apply failed for {_id8(job_id)}: {exc}", file=sys.stderr)
+        return False
+    outcome = "submitted" if autosubmit else _confirm_submitted()
+    repo.finish_application(conn, app_id, "finished", outcome=outcome)
+    return True
+
+
+def select_ready_jobs(conn, user_id: str, since: datetime | None) -> list[dict]:
+    """Batch-apply selection: jd_ready jobs (added since `since` when given),
+    minus the ones whose latest attempt already ended in a confirmed submit."""
+    rows = repo.list_jobs_for_user(conn, user_id, "jd_ready", since=since)
+    return [r for r in rows if r.get("apply_outcome") != "submitted"]
+
+
+def cmd_apply(args) -> int:
+    from agent import loop
+
+    batch = args.all or args.today
+    if not args.jobs and not batch:
+        raise SystemExit("pass job(s), or --all / --today to batch through ready jobs")
 
     model = args.model or loop.DEFAULT_MODEL
     failed = 0
     with _connect() as conn:
         user_id = resolve_user(conn, args.user)
+        targets: list[tuple] = []  # (job_id, url)
         for ref in args.jobs:
             if "://" in ref:  # URL: create on the fly, like agent.loop does
                 job_id = repo.add_job_for_user(conn, user_id, ref, source="manual")
-                url = ref
+                targets.append((job_id, ref))
             else:
                 job = resolve_job(conn, ref)
-                job_id, url = job["job_id"], job["url"]
                 # applying implies ownership — link it (idempotent)
-                repo.add_job_for_user(conn, user_id, url, source="manual")
-            tailored = repo.lookup_tailored(conn, user_id, job_id)
-            run_id = new_run_id()
-            app_id = repo.start_application(
-                conn,
-                user_id,
-                job_id,
-                run_id=run_id,
-                tailored_resume_id=tailored["id"] if tailored else None,
-            )
-            print(f"applying {_id8(job_id)}  {url}")
-            print("  watch + confirm final submit at http://localhost:6080/vnc.html")
-            try:
-                asyncio.run(loop.main(user_id, url, model, run_id=run_id))
-            except Exception as exc:
-                repo.finish_application(conn, app_id, "failed", outcome=str(exc)[:500])
-                print(f"apply failed for {_id8(job_id)}: {exc}", file=sys.stderr)
+                repo.add_job_for_user(conn, user_id, job["url"], source="manual")
+                targets.append((job["job_id"], job["url"]))
+        if batch:
+            since = _today_start() if args.today else None
+            picked = select_ready_jobs(conn, user_id, since)
+            seen = {j for j, _ in targets}
+            picked = [r for r in picked if r["job_id"] not in seen]
+            scope = "added today" if args.today else "all time"
+            print(f"batch: {len(picked)} ready job(s) ({scope}) still to apply")
+            targets += [(r["job_id"], r["url"]) for r in picked]
+        if not targets:
+            print("nothing to apply to")
+            return 0
+        for i, (job_id, url) in enumerate(targets, 1):
+            print(f"[{i}/{len(targets)}]", end=" ")
+            if not _run_apply_agent(conn, user_id, job_id, url, model, args.autosubmit):
                 failed += 1
-            else:
-                repo.finish_application(conn, app_id, "finished", outcome=_confirm_submitted())
     return 1 if failed else 0
+
+
+def cmd_continue(args) -> int:
+    """Resume a partially filled application still open in the browser: the agent
+    reads the current page and completes only what's missing (no navigation)."""
+    from agent import loop
+
+    model = args.model or loop.DEFAULT_MODEL
+    with _connect() as conn:
+        user_id = resolve_user(conn, args.user)
+        job = resolve_job(conn, args.job)
+        job_id, url = job["job_id"], job["url"]
+        apps = repo.list_applications(conn, user_id, job_id)
+        if not apps:
+            raise SystemExit(
+                f"no apply attempt recorded for {_id8(job_id)} — start one: "
+                f"autoapply apply {args.job}"
+            )
+        last = apps[0]
+        if last["status"] == "running":
+            raise SystemExit(
+                "an apply run for this job is still marked running — wait for it "
+                "or check `autoapply status`"
+            )
+        if last["outcome"] == "submitted":
+            raise SystemExit("already submitted — nothing to continue")
+        ok = _run_apply_agent(
+            conn, user_id, job_id, url, model, args.autosubmit, continue_run=True
+        )
+    return 0 if ok else 1
 
 
 def _confirm_submitted(ask=input) -> str | None:
@@ -690,12 +791,47 @@ def build_parser() -> argparse.ArgumentParser:
     gstatus.set_defaults(func=cmd_gmail_status)
 
     apply_p = sub.add_parser("apply", help="run the apply agent for job(s)")
-    apply_p.add_argument("jobs", nargs="+", help="job ids, id prefixes, or URLs")
+    apply_p.add_argument("jobs", nargs="*", help="job ids, id prefixes, or URLs")
+    apply_p.add_argument(
+        "--all",
+        action="store_true",
+        help="batch: apply to every jd_ready job (skips already-submitted), one by one",
+    )
+    apply_p.add_argument(
+        "--today",
+        action="store_true",
+        help="restrict the batch to jobs added today (implies --all)",
+    )
     apply_p.add_argument("--user", help="user id or email")
     apply_p.add_argument(
         "--model", help="OpenRouter model (default: OPENROUTER_MODEL env)"
     )
+    apply_p.add_argument(
+        "--autosubmit",
+        action="store_true",
+        help="agent clicks the final Submit itself (no review pause, no confirm prompt)",
+    )
     apply_p.set_defaults(func=cmd_apply)
+
+    cont = sub.add_parser(
+        "continue",
+        help="finish a handed-off/failed apply run from the page still open in the browser",
+        description="Resumes an interrupted apply run: the agent reads the current "
+        "browser page, keeps what's already filled, and completes only the missing "
+        "fields (resume upload, cleared dropdowns, ...). Requires a previous apply "
+        "attempt for the job and an active page in the browser container.",
+    )
+    cont.add_argument("job", help="job id, id prefix, or URL")
+    cont.add_argument("--user", help="user id or email")
+    cont.add_argument(
+        "--model", help="OpenRouter model (default: OPENROUTER_MODEL env)"
+    )
+    cont.add_argument(
+        "--autosubmit",
+        action="store_true",
+        help="agent clicks the final Submit itself (no review pause, no confirm prompt)",
+    )
+    cont.set_defaults(func=cmd_continue)
 
     return p
 

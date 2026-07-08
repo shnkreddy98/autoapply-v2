@@ -72,6 +72,10 @@ HIL_SCENARIOS: list[str] = [
 # agent loop (not forwarded to the browser MCP) — see _human_handoff.
 HUMAN_TOOL_NAME = "request_human_help"
 
+# Withheld from the model's tool list: the harness performs the single initial
+# navigation itself (see main()); the agent must stay inside the application flow.
+NAVIGATE_TOOL_NAME = "browser_navigate"
+
 
 def _handoff_block(scenarios: list[str]) -> str:
     bullets = "\n".join(f"  - {s}" for s in scenarios)
@@ -121,22 +125,22 @@ _EMAIL_BLOCK = (
     f"link was sent to the applicant's email, call `{EMAIL_TOOL_NAME}` with the "
     "company/portal name shown on the page (and `sender_hint` if the page names the "
     "sending address). It waits for the email and returns either the code — type it "
-    "into the page — or the email's content, in which case find the confirmation "
-    "link and `browser_navigate` to it. If it reports nothing found, fall back to "
+    "into the page — or the email's content; if that content is a confirmation LINK, "
+    f"call `{HUMAN_TOOL_NAME}` with the link in `instructions` so the human opens it "
+    "(you have no navigation tool). If it reports nothing found, fall back to "
     f"`{HUMAN_TOOL_NAME}`."
 )
 
-SYSTEM_PROMPT = (
-    """You are a browser agent applying for a job on the applicant's behalf, using the APPLICANT PROFILE below and the browser tools provided.
+_PROMPT_HEAD = """You are a browser agent applying for a job on the applicant's behalf, using the APPLICANT PROFILE below and the browser tools provided.
 
-WORKFLOW: you are given a job URL. `browser_navigate` to it, then read the page. The action tools (`browser_navigate`, `browser_click`, `browser_type`, `browser_fill_form`) return the page's VISIBLE TEXT — not refs. To act on an element you need its `ref`: `fetch_aria` searches the page's ARIA for one or more text keys and returns each match's `[ref=...]`. So the loop is: read the visible text, `fetch_aria` the label(s) you want, then click/type using that ref as `target`. After every action the page text updates so you can continue.
+WORKFLOW: the job page is ALREADY OPEN in the browser — its visible text is at the end of your first message (CURRENT PAGE). There is no navigation tool: you never leave the application flow; move between steps with the page's own links and buttons. The action tools (`browser_click`, `browser_type`, `browser_fill_form`) return the page's VISIBLE TEXT — not refs. To act on an element you need its `ref`: `fetch_aria` searches the page's ARIA for one or more text keys and returns each match's `[ref=...]`. So the loop is: read the visible text, `fetch_aria` the label(s) you want, then click/type using that ref as `target`. After every action the page text updates so you can continue.
 
-GOAL: fill every field across every step and reach the final review/submit step. Upload the resume along the way. Do NOT click the final Submit.
+"""
+
+_PROMPT_MID = """
 
 Eg — fill the name:
-user: "url: https://job-boards.greenhouse.io/imaginepediatrics/jobs/4709050005"
-agent: browser_navigate(url="https://job-boards.greenhouse.io/imaginepediatrics/jobs/4709050005")
-result: "Some Role, Some Company ... Apply  Name*: type here  Autofill..."
+page: "Some Role, Some Company ... Apply  Name*: type here  Autofill..."
 agent: fetch_aria(keys=["Name"])
 result:
 "Name": |2-
@@ -173,18 +177,52 @@ agent: browser_click(target="e436")
 
 MUST DOs:
 - Pass a ref as the `target` argument EXACTLY as shown, with no decoration. For the line `- button "Apply Now" [ref=e76] [cursor=pointer]`, click with: browser_click({"element": "Apply Now button", "target": "e76"}). Never wrap the ref in a selector (NOT `button[ref=e76]`, NOT `#e76`) and never invent a CSS/text selector — only the bare ref token (`e76`) matches.
-- Navigate to the job URL, follow Apply links, fill the application from the profile, and upload the resume (path is at the top of the profile).
+- Follow the Apply link/button when the posting page shows one (click it — never a URL), fill the application from the profile, and upload the resume (path is at the top of the profile).
+- RESUME UPLOAD: click the attach/upload control, then IMMEDIATELY call `browser_file_upload` with the resume path. While the file chooser is open the page text can appear EMPTY — that is normal, not an error: the chooser is a native dialog. Do not click elsewhere or treat the blank text as a broken page; just call `browser_file_upload`.
 - Prefer autofill from the uploaded RESUME when the page offers it. Sign-in / account-based autofill is allowed where the portal requires it (per-ATS rules may forbid it).
 - If the portal requires an account: ALWAYS try to SIGN IN FIRST, using the Login Email and Login Password from the profile (use that same given password for every site). Only if sign-in fails because no account exists (e.g. "account not found", "no user", "incorrect email") should you then CREATE an account, reusing the same email and given password. Never create an account before trying to sign in.
-- Work through every page/step. Do NOT click the final Submit — stop before it and return a short plain-text summary of what you filled and anything you couldn't.
+"""
+
+_PROMPT_TAIL = """
 - State your next step in one short sentence before each tool call."""
-    + "\n\n"
-    + _SECURITY_BLOCK
-    + "\n\n"
-    + _EMAIL_BLOCK
-    + "\n\n"
-    + _handoff_block(HIL_SCENARIOS)
+
+_GOAL_REVIEW = "GOAL: fill every field across every step and reach the final review/submit step. Upload the resume along the way. Do NOT click the final Submit."
+_GOAL_AUTOSUBMIT = "GOAL: fill every field across every step, upload the resume along the way, and click the final Submit to complete the application."
+
+_RULE_REVIEW = "- Work through every page/step. Do NOT click the final Submit — stop before it and return a short plain-text summary of what you filled and anything you couldn't."
+_RULE_AUTOSUBMIT = "- Work through every page/step. At the final review/submit step, check the form is complete, click the final Submit, and wait for the page to confirm the application was received. Return a short plain-text summary of what you filled, whether the confirmation appeared, and anything you couldn't do. If the Submit fails or no confirmation appears, say so explicitly."
+
+_CONTINUE_BLOCK = (
+    "\n\nCONTINUING A PREVIOUS RUN: an earlier run already filled part of this "
+    "application; the browser is still on it. Read the CURRENT PAGE state first and "
+    "verify what is already filled. Complete ONLY what is missing or invalid — "
+    "commonly the resume upload and dropdowns that lost their value. Do not restart "
+    "the application or refill fields that already show correct values."
 )
+
+
+def build_system_prompt(autosubmit: bool = False, continue_run: bool = False) -> str:
+    """Default: stop before the final Submit for human review; autosubmit clicks it.
+    continue_run resumes a partially filled application already open in the browser."""
+    goal = _GOAL_AUTOSUBMIT if autosubmit else _GOAL_REVIEW
+    rule = _RULE_AUTOSUBMIT if autosubmit else _RULE_REVIEW
+    return (
+        _PROMPT_HEAD
+        + goal
+        + (_CONTINUE_BLOCK if continue_run else "")
+        + _PROMPT_MID
+        + rule
+        + _PROMPT_TAIL
+        + "\n\n"
+        + _SECURITY_BLOCK
+        + "\n\n"
+        + _EMAIL_BLOCK
+        + "\n\n"
+        + _handoff_block(HIL_SCENARIOS)
+    )
+
+
+SYSTEM_PROMPT = build_system_prompt()
 
 # Virtual tool exposed to the model alongside the browser MCP tools. Calling it
 # pauses the run and hands control to the human (see _human_handoff).
@@ -667,10 +705,18 @@ async def agent_loop(
     trace: Trace | None = None,
     max_iterations: int = MAX_ITERATIONS,
     email_fetcher: Any = None,  # async (company, sender_hint) -> str; see email_otp
+    initial_page_text: str = "",  # page text seeded into the task by the harness
 ) -> str:
     tools_result = await session.list_tools()
     # Browser MCP tools + the virtual human-handoff tool (handled in-loop).
-    openrouter_tools = [mcp_tool_to_openai(tool) for tool in tools_result.tools]
+    # browser_navigate is withheld: the harness performs the one legitimate
+    # navigation (the job URL) before the loop starts. Mid-run navigates only ever
+    # destroyed state (blank file-chooser panic wiped a whole form once).
+    openrouter_tools = [
+        mcp_tool_to_openai(tool)
+        for tool in tools_result.tools
+        if tool.name != NAVIGATE_TOOL_NAME
+    ]
     openrouter_tools.append(HUMAN_TOOL)
     if email_fetcher is not None:
         openrouter_tools.append(EMAIL_TOOL)
@@ -691,8 +737,9 @@ async def agent_loop(
     base_messages = list(messages)
     context_resets = 0
     # L4: honeypot markers harvested from page content seen so far. Outgoing field
-    # values that echo one are refused before they reach the browser.
-    taint: set[str] = set()
+    # values that echo one are refused before they reach the browser. The initial
+    # page arrives via the task message (not a tool result), so harvest it here.
+    taint: set[str] = _harvest_taint(initial_page_text) if initial_page_text else set()
 
     for iteration in range(1, max_iterations + 1):
         request: dict[str, Any] = {
@@ -880,15 +927,34 @@ SCRATCH_ROOT = os.getenv("SCRATCH_ROOT", str(HERE / "output" / "resume"))
 RESUME_CONTAINER_ROOT = os.getenv("RESUME_CONTAINER_ROOT", "/resume")
 
 
+def _is_blank_page(text: str) -> bool:
+    """True when the browser has nothing to continue from: no page text, an
+    about:blank tab, or the snapshot itself failed (browser gone)."""
+    t = text.strip()
+    return not t or t.startswith("(snapshot unavailable") or "about:blank" in t[:200]
+
+
 async def main(
-    user_id: str, job_url: str, model: str, run_id: str | None = None
+    user_id: str,
+    job_url: str,
+    model: str,
+    run_id: str | None = None,
+    autosubmit: bool = False,
+    continue_run: bool = False,
 ) -> None:
     # Caller-supplied run_id lets the CLI link the applications row to this run's
     # trace/log files even if the run crashes.
     run_id = run_id or new_run_id()
     setup_logging(run_id)
     trace = Trace(run_id)
-    log.info("run start: model=%s user=%s job_url=%s", model, user_id, job_url)
+    log.info(
+        "run start: model=%s user=%s job_url=%s autosubmit=%s continue=%s",
+        model,
+        user_id,
+        job_url,
+        autosubmit,
+        continue_run,
+    )
 
     storage = storagemod.from_env()
     host_resume = f"{SCRATCH_ROOT}/{run_id}/resume.pdf"
@@ -916,11 +982,24 @@ async def main(
         )
         log.info("gmail 2FA tool enabled (%s)", gmail_grant.get("gmail_address"))
     ats_instructions = load_ats_instructions()
-    task = (
-        f"Apply for this job: {job_url}\n\n"
-        "Fill the application using the applicant profile, upload the resume, "
-        "and STOP before the final submit so the user can review."
+    submit_clause = (
+        "and click the final Submit to complete the application."
+        if autosubmit
+        else "and STOP before the final submit so the user can review."
     )
+    if continue_run:
+        task = (
+            f"Continue the partially completed application for this job: {job_url}\n\n"
+            "A previous run already filled part of the form; the browser is still on "
+            "it. Verify what is filled, complete the rest (including the resume "
+            f"upload if missing), {submit_clause}"
+        )
+    else:
+        task = (
+            f"Apply for this job: {job_url}\n\n"
+            "Fill the application using the applicant profile, upload the resume, "
+            + submit_clause
+        )
 
     client = create_openrouter_client()
     usage = _new_usage()
@@ -931,11 +1010,31 @@ async def main(
         async with streamable_http_client(PROXY_MCP_URL) as (read, write, _):
             async with ClientSession(read, write) as session:
                 await session.initialize()
+                # The one navigation of the run happens here, not in the agent loop
+                # (the model has no navigate tool). A continued run keeps whatever
+                # page the browser is on — but only if there actually is one.
+                if continue_run:
+                    page = await _current_page_text(session)
+                    if _is_blank_page(page):
+                        raise RuntimeError(
+                            "nothing to resume: the browser shows no active "
+                            "application page (blank or unreachable)"
+                        )
+                else:
+                    page = result_text(
+                        await session.call_tool(NAVIGATE_TOOL_NAME, {"url": job_url})
+                    )
+                trace.event(
+                    "initial_page",
+                    mode="continue" if continue_run else "navigate",
+                    chars=len(page),
+                )
+                task = f"{task}\n\nCURRENT PAGE:\n{_wrap_untrusted(page)}"
                 today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
                 messages: list[dict[str, Any]] = [
                     {
                         "role": "system",
-                        "content": f"{SYSTEM_PROMPT}\n\nToday's date is {today}.",
+                        "content": f"{build_system_prompt(autosubmit, continue_run)}\n\nToday's date is {today}.",
                     },
                     {"role": "system", "content": f"APPLICANT PROFILE:\n\n{profile}"},
                 ]
@@ -960,6 +1059,7 @@ async def main(
                     usage,
                     trace=trace,
                     email_fetcher=email_fetcher,
+                    initial_page_text=page,
                 )
                 log.info("final: %s", result)
                 print(f"final: {result}")

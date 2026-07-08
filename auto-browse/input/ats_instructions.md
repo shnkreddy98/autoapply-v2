@@ -22,6 +22,12 @@ wins.
   "Career Websites" then "Corporate Website" (prefer Company/Corporate Website, else
   Job Boards/LinkedIn, else the nearest). Keep clicking until the field shows a value
   (`1 item selected`); don't labour over it — pick the closest and move on.
+- Education "Field of Study": if the field is NOT required (no asterisk `*` on its
+  label), SKIP it entirely — do not open the dropdown. When it IS required: the
+  applicant's majors (e.g. Data Analytics) usually don't exist in Workday's list;
+  do NOT scroll hunting for an exact match — pick the closest broad option
+  (Data Science, Computer Science, Information Systems/Technology) and if none of
+  those appears quickly, select "Other" and move on.
 
 ## General
 

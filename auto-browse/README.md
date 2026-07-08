@@ -43,6 +43,15 @@ uv run python -m agent.loop "https://example.com/careers/job/123"
 
 The agent loads the profile, fills the application form, uploads the resume, and
 **stops before the final submit** — review in the noVNC window and submit yourself.
+`autoapply apply --autosubmit` flips this: the agent clicks the final Submit
+itself, waits for the confirmation page, and the run is recorded as `applied`
+with no confirm prompt.
+
+The model has **no navigation tool**: the harness performs the single initial
+`browser_navigate` before the loop starts and seeds the page text into the task.
+If a run dies mid-form (cost cap, crash, handoff) while the browser is still on
+the page, `autoapply continue JOB` resumes it — the agent reads the current page
+and fills only what's missing instead of starting over.
 
 ## How the proxy works
 
