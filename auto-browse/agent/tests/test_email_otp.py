@@ -94,32 +94,44 @@ def test_rank_sender_hint_counts():
 
 
 def _part(mime, text):
-    return {"mimeType": mime, "body": {"data": base64.urlsafe_b64encode(text.encode()).decode()}}
+    return {
+        "mimeType": mime,
+        "body": {"data": base64.urlsafe_b64encode(text.encode()).decode()},
+    }
 
 
 def test_body_text_prefers_plain():
     payload = {
         "mimeType": "multipart/alternative",
-        "parts": [_part("text/plain", "plain body"), _part("text/html", "<b>html body</b>")],
+        "parts": [
+            _part("text/plain", "plain body"),
+            _part("text/html", "<b>html body</b>"),
+        ],
     }
     assert email_otp.body_text(payload) == "plain body"
 
 
 def test_body_text_html_stripped_keeps_links():
-    payload = _part("text/html", '<p>Confirm: <a href="https://x.dev/verify?t=1">here</a></p>')
+    payload = _part(
+        "text/html", '<p>Confirm: <a href="https://x.dev/verify?t=1">here</a></p>'
+    )
     text = email_otp.body_text(payload)
     assert "https://x.dev/verify?t=1" in text
     assert "<a" not in text
 
 
 def test_format_result_code_path_hides_body():
-    out = email_otp.format_result("no-reply@acme.com", "Your code", "code is 123456\nSECRETBODY")
+    out = email_otp.format_result(
+        "no-reply@acme.com", "Your code", "code is 123456\nSECRETBODY"
+    )
     assert "VERIFICATION CODE: 123456" in out
     assert "SECRETBODY" not in out
 
 
 def test_format_result_link_path_fenced():
-    out = email_otp.format_result("no-reply@acme.com", "Confirm email", "click https://a.dev/v?t=9")
+    out = email_otp.format_result(
+        "no-reply@acme.com", "Confirm email", "click https://a.dev/v?t=9"
+    )
     assert "<EMAIL_CONTENT untrusted>" in out
     assert "https://a.dev/v?t=9" in out
 
@@ -136,7 +148,9 @@ def _fake_transport(messages):
         if path.endswith("/token"):
             return httpx.Response(200, json={"access_token": "tok"})
         if path.endswith("/messages"):
-            return httpx.Response(200, json={"messages": [{"id": m["id"]} for m in messages]})
+            return httpx.Response(
+                200, json={"messages": [{"id": m["id"]} for m in messages]}
+            )
         mid = path.rsplit("/", 1)[-1]
         m = next(x for x in messages if x["id"] == mid)
         payload = {
@@ -148,7 +162,8 @@ def _fake_transport(messages):
         if q.get("format") == "full":
             payload.update(_part("text/plain", m["body"]))
         return httpx.Response(
-            200, json={"id": mid, "internalDate": str(m["internal_ms"]), "payload": payload}
+            200,
+            json={"id": mid, "internalDate": str(m["internal_ms"]), "payload": payload},
         )
 
     return httpx.MockTransport(handler)
@@ -164,11 +179,19 @@ async def _fetch(messages, company, *, seen=None, timeout=0.0, monkeypatch=None)
         return _REAL_ASYNC_CLIENT(transport=transport, **kw)
 
     monkeypatch.setattr(httpx, "AsyncClient", patched_client)
+
     async def no_sleep(_):
         return None
+
     return await email_otp.fetch_email(
-        "rt", company, None, 0, seen if seen is not None else set(),
-        timeout=timeout, poll=0.01, sleep=no_sleep,
+        "rt",
+        company,
+        None,
+        0,
+        seen if seen is not None else set(),
+        timeout=timeout,
+        poll=0.01,
+        sleep=no_sleep,
     )
 
 
@@ -180,8 +203,13 @@ def _gmail_env(monkeypatch):
 
 async def test_fetch_code_email(monkeypatch):
     msgs = [
-        {"id": "1", "from": "no-reply@acme.com", "subject": "Acme code",
-         "body": "Your verification code is 314159", "internal_ms": 5},
+        {
+            "id": "1",
+            "from": "no-reply@acme.com",
+            "subject": "Acme code",
+            "body": "Your verification code is 314159",
+            "internal_ms": 5,
+        },
     ]
     out = await _fetch(msgs, "Acme", monkeypatch=monkeypatch)
     assert "VERIFICATION CODE: 314159" in out
@@ -189,8 +217,13 @@ async def test_fetch_code_email(monkeypatch):
 
 async def test_fetch_link_email_returns_fenced_body(monkeypatch):
     msgs = [
-        {"id": "1", "from": "no-reply@acme.com", "subject": "Confirm your Acme account",
-         "body": "Confirm here: https://acme.com/verify?t=abc", "internal_ms": 5},
+        {
+            "id": "1",
+            "from": "no-reply@acme.com",
+            "subject": "Confirm your Acme account",
+            "body": "Confirm here: https://acme.com/verify?t=abc",
+            "internal_ms": 5,
+        },
     ]
     out = await _fetch(msgs, "Acme", monkeypatch=monkeypatch)
     assert "<EMAIL_CONTENT untrusted>" in out
@@ -198,15 +231,28 @@ async def test_fetch_link_email_returns_fenced_body(monkeypatch):
 
 
 async def test_fetch_no_match_times_out(monkeypatch):
-    msgs = [{"id": "1", "from": "x@other.dev", "subject": "hi", "body": "hey", "internal_ms": 5}]
+    msgs = [
+        {
+            "id": "1",
+            "from": "x@other.dev",
+            "subject": "hi",
+            "body": "hey",
+            "internal_ms": 5,
+        }
+    ]
     out = await _fetch(msgs, "Acme", monkeypatch=monkeypatch)
     assert out == email_otp.NOT_FOUND
 
 
 async def test_fetch_seen_set_prevents_regrab(monkeypatch):
     msgs = [
-        {"id": "1", "from": "no-reply@acme.com", "subject": "Acme code",
-         "body": "code is 111111", "internal_ms": 5},
+        {
+            "id": "1",
+            "from": "no-reply@acme.com",
+            "subject": "Acme code",
+            "body": "code is 111111",
+            "internal_ms": 5,
+        },
     ]
     seen = set()
     first = await _fetch(msgs, "Acme", seen=seen, monkeypatch=monkeypatch)

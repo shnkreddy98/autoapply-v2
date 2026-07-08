@@ -16,7 +16,7 @@ from typing import Awaitable, Callable
 
 import psycopg
 
-from common import keys, repo
+from common import repo
 from common import storage as storagemod
 
 log = logging.getLogger(__name__)
@@ -60,7 +60,9 @@ async def resolve_resume(
     # separate base variants ('docx' for the tailoring source, 'pdf' for upload).
     base_docx = repo.get_base_asset(conn, user_id, variant="docx")
     if tailored is None:  # never queued for this user×job -> trigger on-demand
-        repo.enqueue_tailoring(conn, user_id, job_id, base_docx["id"] if base_docx else None)
+        repo.enqueue_tailoring(
+            conn, user_id, job_id, base_docx["id"] if base_docx else None
+        )
 
     polls = max(1, math.ceil(wait_timeout / poll_interval))
     for _ in range(polls):

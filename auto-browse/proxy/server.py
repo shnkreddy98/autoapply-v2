@@ -61,7 +61,9 @@ class _Upstream:
 
     session: ClientSession | None = None
     ready: asyncio.Event = asyncio.Event()  # set while `session` is usable
-    reconnect_request: asyncio.Event = asyncio.Event()  # set to ask the manager to cycle
+    reconnect_request: asyncio.Event = (
+        asyncio.Event()
+    )  # set to ask the manager to cycle
     stop: asyncio.Event = asyncio.Event()  # set on shutdown
     lock: asyncio.Lock = asyncio.Lock()  # serialize reconnect triggers
     # Read-before-write gate: refs the agent has read via fetch_aria since the last
@@ -216,39 +218,43 @@ _AUGMENT_TOOLS: frozenset[str] = (
 # fetch_aria) via the upstream session, bypassing this allowlist. `browser_snapshot`
 # is exposed too, but like every snapshot-returning call its result is reduced to the
 # page's visible TEXT — raw ARIA still comes only from `fetch_aria`.
-KEEP_TOOLS: frozenset[str] = frozenset({
-    "browser_navigate",
-    "browser_navigate_back",
-    "browser_click",
-    "browser_type",
-    "browser_fill_form",
-    "browser_select_option",
-    "browser_press_key",
-    "browser_file_upload",
-    "browser_handle_dialog",
-    "browser_console_messages",
-    "browser_evaluate",
-    "browser_hover",
-    "browser_tabs",
-    "browser_wait_for",
-    "browser_snapshot",
-})
+KEEP_TOOLS: frozenset[str] = frozenset(
+    {
+        "browser_navigate",
+        "browser_navigate_back",
+        "browser_click",
+        "browser_type",
+        "browser_fill_form",
+        "browser_select_option",
+        "browser_press_key",
+        "browser_file_upload",
+        "browser_handle_dialog",
+        "browser_console_messages",
+        "browser_evaluate",
+        "browser_hover",
+        "browser_tabs",
+        "browser_wait_for",
+        "browser_snapshot",
+    }
+)
 
 # Interaction tools whose result means the page may have navigated/re-rendered, so
 # every ref the model captured from an earlier fetch_aria/snapshot is now stale. We
 # prepend a hint telling it to re-fetch before acting (browser_snapshot/fetch_aria
 # are excluded — they already hand the model a fresh view to read refs from).
-_REF_INVALIDATING_TOOLS: frozenset[str] = frozenset({
-    "browser_navigate",
-    "browser_navigate_back",
-    "browser_click",
-    "browser_type",
-    "browser_fill_form",
-    "browser_select_option",
-    "browser_press_key",
-    "browser_file_upload",
-    "browser_handle_dialog",
-})
+_REF_INVALIDATING_TOOLS: frozenset[str] = frozenset(
+    {
+        "browser_navigate",
+        "browser_navigate_back",
+        "browser_click",
+        "browser_type",
+        "browser_fill_form",
+        "browser_select_option",
+        "browser_press_key",
+        "browser_file_upload",
+        "browser_handle_dialog",
+    }
+)
 
 _STALE_REF_HINT = (
     "⚠ The page changed — every ref from an earlier snapshot or fetch_aria is now "
@@ -259,20 +265,22 @@ _STALE_REF_HINT = (
 
 # Ref-taking action tools gated by the read-before-write invariant: each must be
 # preceded by a fetch_aria that surfaced the target ref since the last mutation.
-_REF_GATED_TOOLS: frozenset[str] = frozenset({
-    "browser_click",
-    "browser_type",
-    "browser_fill_form",
-    "browser_select_option",
-    "browser_press_key",
-    "browser_file_upload",
-    "browser_hover",
-    "browser_drag",
-    "browser_drop",
-})
+_REF_GATED_TOOLS: frozenset[str] = frozenset(
+    {
+        "browser_click",
+        "browser_type",
+        "browser_fill_form",
+        "browser_select_option",
+        "browser_press_key",
+        "browser_file_upload",
+        "browser_hover",
+        "browser_drag",
+        "browser_drop",
+    }
+)
 
-_ARIA_REF_RE = re.compile(r"\[ref=(e\d+)\]")       # refs as they appear in ARIA
-_TARGET_REF_RE = re.compile(r"(?:ref=|#)(e\d+)")   # refs as the agent passes them
+_ARIA_REF_RE = re.compile(r"\[ref=(e\d+)\]")  # refs as they appear in ARIA
+_TARGET_REF_RE = re.compile(r"(?:ref=|#)(e\d+)")  # refs as the agent passes them
 
 
 def _refs_in_aria(text: str) -> set[str]:
@@ -396,7 +404,9 @@ async def _fetch_aria(arguments: dict) -> list[types.TextContent]:
     keys = [str(k).strip() for k in raw_keys if str(k).strip()]
     if not keys:
         return [
-            TextContent(type="text", text="fetch_aria: 'keys' must be a non-empty array.")
+            TextContent(
+                type="text", text="fetch_aria: 'keys' must be a non-empty array."
+            )
         ]
     try:
         context = int(arguments.get("context", FETCH_ARIA_CONTEXT))
@@ -507,7 +517,11 @@ def _build_server() -> Server:
         # fetch_aria since the last mutation — do NOT forward it to the browser.
         gate = _ref_gate(name, args, upstream.fresh_refs)
         if gate is not None:
-            logger.info("ref gate blocked %s: %s", name, sorted(_target_refs(args) - upstream.fresh_refs))
+            logger.info(
+                "ref gate blocked %s: %s",
+                name,
+                sorted(_target_refs(args) - upstream.fresh_refs),
+            )
             return [TextContent(type="text", text=gate)]
         result = await _upstream_call(name, args)
         text = _extract_text(result)
@@ -576,7 +590,9 @@ async def _upstream_manager() -> None:
                     upstream.fresh_refs.clear()  # new session/page -> no read refs
                     upstream.reconnect_request.clear()
                     upstream.ready.set()
-                    logger.info("Connected to upstream Playwright MCP: %s", UPSTREAM_URL)
+                    logger.info(
+                        "Connected to upstream Playwright MCP: %s", UPSTREAM_URL
+                    )
                     await _wait_first(upstream.reconnect_request, upstream.stop)
         except Exception as exc:  # connect/init failed or session blew up
             logger.warning("upstream session error: %s", exc)
@@ -691,7 +707,11 @@ def _visible_text(snapshot: str) -> str:
                 continue
         else:
             continue
-        if value and not _CONSOLE_NOISE_RE.match(value) and (not out or out[-1] != value):
+        if (
+            value
+            and not _CONSOLE_NOISE_RE.match(value)
+            and (not out or out[-1] != value)
+        ):
             out.append(value)
     return "\n".join(out)
 

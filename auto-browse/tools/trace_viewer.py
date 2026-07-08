@@ -62,7 +62,9 @@ def _list_traces(trace_dir: Path) -> list[dict]:
         try:
             out.append(_summary(f))
         except Exception as exc:  # never let one bad file break the list
-            out.append({"name": f.name, "task": f"(unreadable: {exc})", "outcome": "error"})
+            out.append(
+                {"name": f.name, "task": f"(unreadable: {exc})", "outcome": "error"}
+            )
     return out
 
 
@@ -79,7 +81,9 @@ def _tailor_status() -> dict:
 
     try:
         with db.connect() as conn, conn.cursor() as cur:
-            cur.execute("SELECT status, count(*) AS n FROM tailored_resumes GROUP BY status")
+            cur.execute(
+                "SELECT status, count(*) AS n FROM tailored_resumes GROUP BY status"
+            )
             tailor_counts = {r["status"]: r["n"] for r in cur.fetchall()}
             cur.execute("SELECT status, count(*) AS n FROM jobs GROUP BY status")
             job_counts = {r["status"]: r["n"] for r in cur.fetchall()}
@@ -139,7 +143,9 @@ def _make_handler(trace_dir: Path):
             self.wfile.write(body)
 
         def _json(self, obj, status: int = 200) -> None:
-            self._send(json.dumps(obj).encode(), "application/json; charset=utf-8", status)
+            self._send(
+                json.dumps(obj).encode(), "application/json; charset=utf-8", status
+            )
 
         def do_GET(self) -> None:  # noqa: N802
             parsed = urlparse(self.path)
@@ -633,8 +639,12 @@ def main() -> None:
     ap = argparse.ArgumentParser(description="Local web viewer for agent run traces.")
     ap.add_argument("--port", type=int, default=8000)
     ap.add_argument("--host", default="127.0.0.1")
-    ap.add_argument("--dir", default=str(TRACE_DIR), help="trace directory (default output/traces)")
-    ap.add_argument("--no-open", action="store_true", help="don't auto-open the browser")
+    ap.add_argument(
+        "--dir", default=str(TRACE_DIR), help="trace directory (default output/traces)"
+    )
+    ap.add_argument(
+        "--no-open", action="store_true", help="don't auto-open the browser"
+    )
     args = ap.parse_args()
 
     trace_dir = Path(args.dir).resolve()

@@ -36,8 +36,12 @@ SUMMARY = (
 
 WORK = [
     (
-        "Founding Engineer", "AirFold", "San Francisco, California",
-        "2025-01-01", None, True,
+        "Founding Engineer",
+        "AirFold",
+        "San Francisco, California",
+        "2025-01-01",
+        None,
+        True,
         [
             "Designed dimensional data models and logging schemas in collaboration with product and engineering teams, enabling efficient analytics queries and reducing time-to-insight for strategic business decisions.",
             "Engineered event-driven data ingestion systems using Kafka and Debezium CDC, processing millions of unstructured events with sub-second latency and exactly-once semantics.",
@@ -48,8 +52,12 @@ WORK = [
         ],
     ),
     (
-        "Data Engineer", "Kantar", "Bengaluru, India",
-        "2020-04-01", "2022-04-01", False,
+        "Data Engineer",
+        "Kantar",
+        "Bengaluru, India",
+        "2020-04-01",
+        "2022-04-01",
+        False,
         [
             "Orchestrated large-scale distributed data processing pipelines using Apache Spark and Airflow, ingesting terabytes of structured and unstructured data streams.",
             "Modernized legacy data models by deploying dbt for SQL transformations, establishing reliable data structures that improved analytical time-to-insight by 25%.",
@@ -60,8 +68,12 @@ WORK = [
         ],
     ),
     (
-        "Data Engineer", "The Sparks Foundation", "Bengaluru, India",
-        "2018-04-01", "2020-03-01", False,
+        "Data Engineer",
+        "The Sparks Foundation",
+        "Bengaluru, India",
+        "2018-04-01",
+        "2020-03-01",
+        False,
         [
             "Enhanced ETL pipeline performance by 25% through parallel processing techniques and query optimization to support high-volume data generation.",
             "Tuned complex SQL queries and database indexing strategies for PostgreSQL and MySQL, significantly reducing latency for downstream analytical reporting.",
@@ -73,18 +85,97 @@ WORK = [
 ]
 
 EDUCATION = [
-    ("Master's Degree", "Data Analytics", "San Jose State University", "2023-01-01", "2024-12-01"),
-    ("Post Graduate Diploma", "Data Science", "IIIT Bangalore", "2020-11-01", "2021-10-01"),
-    ("Bachelor of Engineering", "Computer Science", "Visvesvaraya Technological University", "2016-07-01", "2020-08-01"),
+    (
+        "Master's Degree",
+        "Data Analytics",
+        "San Jose State University",
+        "2023-01-01",
+        "2024-12-01",
+    ),
+    (
+        "Post Graduate Diploma",
+        "Data Science",
+        "IIIT Bangalore",
+        "2020-11-01",
+        "2021-10-01",
+    ),
+    (
+        "Bachelor of Engineering",
+        "Computer Science",
+        "Visvesvaraya Technological University",
+        "2016-07-01",
+        "2020-08-01",
+    ),
 ]
 
 SKILLS = [
     ("Languages", ["Python", "SQL", "Java", "Go", "Bash", "TypeScript"]),
-    ("Big Data & Streaming", ["Spark", "PySpark", "Apache Kafka", "Airflow", "dbt", "Debezium CDC", "Ray Serve", "ETL/ELT", "Hadoop", "Hive"]),
-    ("Cloud & Infrastructure", ["AWS (EC2, S3, Lambda, EKS, RDS)", "GCP", "Azure", "Terraform", "Kubernetes", "Docker", "Istio", "GitOps"]),
-    ("Databases & Storage", ["Snowflake", "ClickHouse", "PostgreSQL", "DynamoDB", "Redshift", "MySQL", "Redis", "Delta Lake", "MongoDB", "Cassandra"]),
-    ("DevOps & CI/CD", ["Git/GitHub Actions", "Pytest", "CI/CD Pipelines", "Agile Development", "Docker"]),
-    ("Concepts & Protocols", ["FastAPI", "RESTful APIs", "Pandas", "NumPy", "Data Modeling", "Data Governance", "Distributed Systems", "Data Structuring"]),
+    (
+        "Big Data & Streaming",
+        [
+            "Spark",
+            "PySpark",
+            "Apache Kafka",
+            "Airflow",
+            "dbt",
+            "Debezium CDC",
+            "Ray Serve",
+            "ETL/ELT",
+            "Hadoop",
+            "Hive",
+        ],
+    ),
+    (
+        "Cloud & Infrastructure",
+        [
+            "AWS (EC2, S3, Lambda, EKS, RDS)",
+            "GCP",
+            "Azure",
+            "Terraform",
+            "Kubernetes",
+            "Docker",
+            "Istio",
+            "GitOps",
+        ],
+    ),
+    (
+        "Databases & Storage",
+        [
+            "Snowflake",
+            "ClickHouse",
+            "PostgreSQL",
+            "DynamoDB",
+            "Redshift",
+            "MySQL",
+            "Redis",
+            "Delta Lake",
+            "MongoDB",
+            "Cassandra",
+        ],
+    ),
+    (
+        "DevOps & CI/CD",
+        [
+            "Git/GitHub Actions",
+            "Pytest",
+            "CI/CD Pipelines",
+            "Agile Development",
+            "Docker",
+        ],
+    ),
+    (
+        "Concepts & Protocols",
+        [
+            "FastAPI",
+            "RESTful APIs",
+            "Pandas",
+            "NumPy",
+            "Data Modeling",
+            "Data Governance",
+            "Distributed Systems",
+            "Data Structuring",
+        ],
+    ),
 ]
 
 
@@ -96,7 +187,9 @@ def seed(conn, user_id: str) -> None:
             (EMAIL, FULL_NAME, PHONE, LINKEDIN, GITHUB, LOCATION, SUMMARY, user_id),
         )
         if cur.rowcount == 0:
-            raise SystemExit(f"no users row for user_id={user_id} (seed the user first)")
+            raise SystemExit(
+                f"no users row for user_id={user_id} (seed the user first)"
+            )
 
         cur.execute(
             "INSERT INTO application_profiles "
@@ -115,8 +208,20 @@ def seed(conn, user_id: str) -> None:
             " willing_travel=EXCLUDED.willing_travel, "
             " current_employee=EXCLUDED.current_employee, "
             " ever_terminated=EXCLUDED.ever_terminated, updated_at=now()",
-            (user_id, "San Jose", "CA", True, True, False,
-             "Full-time", 5, True, True, False, False),
+            (
+                user_id,
+                "San Jose",
+                "CA",
+                True,
+                True,
+                False,
+                "Full-time",
+                5,
+                True,
+                True,
+                False,
+                False,
+            ),
         )
 
         # Replace normalized resume rows (idempotent on rerun).

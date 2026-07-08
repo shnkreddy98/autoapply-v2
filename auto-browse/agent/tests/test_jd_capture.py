@@ -53,8 +53,13 @@ def _seed_job_and_user(db, url="https://example.com/jobs/1", email="u@example.co
         user_id = cur.fetchone()["user_id"]
     db.commit()
     job_id = repo.add_job_for_user(db, user_id, url, "Eng")
-    repo.insert_resume_asset(db, user_id, "base", f"users/{user_id}/resumes/base/default.docx",
-                             variant="docx")
+    repo.insert_resume_asset(
+        db,
+        user_id,
+        "base",
+        f"users/{user_id}/resumes/base/default.docx",
+        variant="docx",
+    )
     return job_id, user_id
 
 
@@ -74,7 +79,9 @@ async def test_capture_success_enqueues_tailoring(db):
         row = cur.fetchone()
     assert row["status"] == "jd_ready"
     assert row["jd_s3_key"] == keys.jd_key(job_id)
-    assert store.objs[keys.jd_key(job_id)] == jd_capture._clean_jd(_VALID_JD).encode("utf-8")
+    assert store.objs[keys.jd_key(job_id)] == jd_capture._clean_jd(_VALID_JD).encode(
+        "utf-8"
+    )
 
     # tailoring enqueued for the owner, linked to their base asset
     t = repo.lookup_tailored(db, user_id, job_id)

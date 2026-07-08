@@ -72,7 +72,9 @@ _CODE_NEAR_KEYWORD = re.compile(
     r"(?:code|otp|pin|passcode|password)\b\D{0,20}?(\d{4,8})\b",
     re.IGNORECASE | re.DOTALL,
 )
-_KEYWORD = re.compile(r"\b(?:verification|verify|code|otp|passcode|one[- ]time)\b", re.IGNORECASE)
+_KEYWORD = re.compile(
+    r"\b(?:verification|verify|code|otp|passcode|one[- ]time)\b", re.IGNORECASE
+)
 _STANDALONE_6 = re.compile(r"\b(\d{6})\b")
 # "123-456" / "123 456" style six-digit groups.
 _SPLIT_6 = re.compile(r"\b(\d{3})[- ](\d{3})\b")
@@ -125,14 +127,20 @@ def _strip_html(html: str) -> str:
     html = re.sub(r'(?i)<a\s[^>]*href="([^"]+)"[^>]*>', r" \1 ", html)
     text = re.sub(r"<[^>]+>", " ", html)
     text = (
-        text.replace("&nbsp;", " ").replace("&amp;", "&")
-        .replace("&lt;", "<").replace("&gt;", ">").replace("&#39;", "'").replace("&quot;", '"')
+        text.replace("&nbsp;", " ")
+        .replace("&amp;", "&")
+        .replace("&lt;", "<")
+        .replace("&gt;", ">")
+        .replace("&#39;", "'")
+        .replace("&quot;", '"')
     )
     return re.sub(r"[ \t]{2,}", " ", text)
 
 
 def _b64url(data: str) -> str:
-    return base64.urlsafe_b64decode(data + "=" * (-len(data) % 4)).decode("utf-8", "replace")
+    return base64.urlsafe_b64decode(data + "=" * (-len(data) % 4)).decode(
+        "utf-8", "replace"
+    )
 
 
 def body_text(payload: dict[str, Any]) -> str:
@@ -175,9 +183,8 @@ def format_result(frm: str, subject: str, body: str) -> str:
     No code -> fenced full content so the model can pick out a confirmation link."""
     code = extract_code(subject + "\n" + body)
     if code:
-        return (
-            f"VERIFICATION CODE: {code}\n"
-            + _fence(f"From: {frm}\nSubject: {subject}")
+        return f"VERIFICATION CODE: {code}\n" + _fence(
+            f"From: {frm}\nSubject: {subject}"
         )
     return (
         "No code auto-extracted — decide from the email content (a code in an "
@@ -221,7 +228,9 @@ async def _search_once(
 ) -> str | None:
     auth = {"Authorization": f"Bearer {token}"}
     q = f"is:unread after:{since_epoch}"
-    resp = await client.get(GMAIL_API + "/messages", params={"q": q, "maxResults": 25}, headers=auth)
+    resp = await client.get(
+        GMAIL_API + "/messages", params={"q": q, "maxResults": 25}, headers=auth
+    )
     resp.raise_for_status()
     ids = [m["id"] for m in resp.json().get("messages") or [] if m["id"] not in seen]
     if not ids:
@@ -275,23 +284,31 @@ async def fetch_email(
         token = await refresh_access_token(client, refresh_token)
         deadline = time.monotonic() + timeout
         while True:
-            result = await _search_once(client, token, company, sender_hint, since_epoch, seen)
+            result = await _search_once(
+                client, token, company, sender_hint, since_epoch, seen
+            )
             if result:
                 return result
             if time.monotonic() >= deadline:
                 return NOT_FOUND
-            log.info("email not yet found (company=%s) — repolling in %.0fs", company, poll)
+            log.info(
+                "email not yet found (company=%s) — repolling in %.0fs", company, poll
+            )
             await sleep(poll)
 
 
-def make_fetcher(refresh_token: str, since_epoch: int) -> Callable[[str, str | None], Awaitable[str]]:
+def make_fetcher(
+    refresh_token: str, since_epoch: int
+) -> Callable[[str, str | None], Awaitable[str]]:
     """Per-run tool backend: closes over the user's token, the run start time, and
     a seen-set so a re-poll never returns the same message twice."""
     seen: set[str] = set()
 
     async def fetcher(company: str, sender_hint: str | None = None) -> str:
         try:
-            return await fetch_email(refresh_token, company, sender_hint, since_epoch, seen)
+            return await fetch_email(
+                refresh_token, company, sender_hint, since_epoch, seen
+            )
         except Exception as exc:  # tool must degrade, not kill the run
             log.warning("email fetch failed: %s", exc)
             return f"Email lookup failed ({type(exc).__name__}). {NOT_FOUND}"
@@ -330,16 +347,20 @@ def run_oauth_flow(open_browser: bool = True) -> tuple[str | None, str, list[str
     thread = threading.Thread(target=server.serve_forever, daemon=True)
     thread.start()
     try:
-        auth_url = AUTH_URL + "?" + urllib.parse.urlencode(
-            {
-                "client_id": cid,
-                "redirect_uri": redirect,
-                "response_type": "code",
-                "scope": SCOPE,
-                "access_type": "offline",  # -> refresh token
-                "prompt": "consent",       # force refresh token even on re-grant
-                "state": state,
-            }
+        auth_url = (
+            AUTH_URL
+            + "?"
+            + urllib.parse.urlencode(
+                {
+                    "client_id": cid,
+                    "redirect_uri": redirect,
+                    "response_type": "code",
+                    "scope": SCOPE,
+                    "access_type": "offline",  # -> refresh token
+                    "prompt": "consent",  # force refresh token even on re-grant
+                    "state": state,
+                }
+            )
         )
         print(f"Open this URL to grant Gmail read access:\n  {auth_url}")
         if open_browser:
@@ -353,7 +374,9 @@ def run_oauth_flow(open_browser: bool = True) -> tuple[str | None, str, list[str
     if got.get("state") != state:
         raise RuntimeError("OAuth state mismatch — aborting")
     if "code" not in got:
-        raise RuntimeError(f"OAuth flow returned no code: {got.get('error', 'unknown error')}")
+        raise RuntimeError(
+            f"OAuth flow returned no code: {got.get('error', 'unknown error')}"
+        )
 
     with httpx.Client(timeout=30.0) as client:
         resp = client.post(
