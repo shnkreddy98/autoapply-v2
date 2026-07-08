@@ -438,6 +438,22 @@ def cmd_gmail_status(args) -> int:
 
 
 # ---------------------------------------------------------------------------
+# profile (onboarding lives in cli/onboard.py; lazy so `jobs list` stays fast)
+
+
+def _cmd_profile_init(args) -> int:
+    from cli import onboard
+
+    return onboard.cmd_profile_init(args)
+
+
+def _cmd_profile_show(args) -> int:
+    from cli import onboard
+
+    return onboard.cmd_profile_show(args)
+
+
+# ---------------------------------------------------------------------------
 # apply
 
 
@@ -522,6 +538,26 @@ def build_parser() -> argparse.ArgumentParser:
     show.add_argument("--out", help="destination path (default output/resume/cli/<job_id>.pdf)")
     show.add_argument("--open", action="store_true", help="open with xdg-open")
     show.set_defaults(func=cmd_resume_show)
+
+    profile = sub.add_parser("profile", help="user onboarding + profile inspection")
+    profile_sub = profile.add_subparsers(dest="profile_command", required=True)
+    pinit = profile_sub.add_parser(
+        "init",
+        help="interactive onboarding: parse a resume, review extracted fields, save",
+        description="Extracts contact/experience/education/skills from the resume "
+        "via LLM (needs OPENROUTER_API_KEY), asks for the rest with autofilled "
+        "defaults, then writes the profile and uploads the base resume assets.",
+    )
+    pinit.add_argument("--pdf", help="base resume PDF (uploaded for applications; "
+                       "derived from --docx via LibreOffice when omitted)")
+    pinit.add_argument("--docx", help="same resume as DOCX (tailoring source; also preferred for parsing)")
+    pinit.add_argument("--email", help="override the email extracted from the resume")
+    pinit.add_argument("--model", help="OpenRouter model for parsing (default: OPENROUTER_MODEL)")
+    pinit.add_argument("--yes", action="store_true", help="accept all defaults, no prompts")
+    pinit.set_defaults(func=_cmd_profile_init)
+    pshow = profile_sub.add_parser("show", help="print the stored profile")
+    pshow.add_argument("--user", help="user id or email")
+    pshow.set_defaults(func=_cmd_profile_show)
 
     gmail = sub.add_parser("gmail", help="Gmail access for 2FA emails during apply")
     gmail_sub = gmail.add_subparsers(dest="gmail_command", required=True)

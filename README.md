@@ -43,14 +43,19 @@ Each module is a self-contained Python package managed with `uv`.
 docker compose up -d        # repo root; schema loads from db/init.sql on first boot
 ```
 
-### 2. Seed a user (one-time)
+### 2. Onboard yourself (one-time)
 
 ```bash
 cd auto-browse
-uv run python -m tools.seed_user --email you@example.com \
-    --pdf ../ai-assist/data/your_resume.pdf --docx ../ai-assist/data/your_resume.docx
-uv run python -m tools.seed_profile --user-id <uuid printed above>
+uv run autoapply profile init --pdf your_resume.pdf --docx your_resume.docx
 ```
+
+Parses the resume with an LLM (needs `OPENROUTER_API_KEY`), walks you through
+every field interactively — extracted values are the defaults, Enter keeps
+them, `-` clears — then asks the application questions a resume can't answer
+(work authorization, relocation, EEO, certifications) with autofilled answers.
+`--yes` accepts all defaults non-interactively. Re-running refreshes the
+profile. Inspect with `autoapply profile show`.
 
 ### 3. The `autoapply` CLI
 
