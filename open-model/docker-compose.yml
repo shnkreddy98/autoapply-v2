@@ -1,0 +1,44 @@
+# Local OpenAI-compatible LLM endpoint (Ollama).
+#
+#   docker compose up -d          # serve + pull ${MODEL} on first start
+#   curl localhost:11434/v1/models
+#
+# Point any OpenAI/OpenRouter client at it:
+#   base_url = http://localhost:11434/v1, api_key = anything non-empty
+# For auto-browse: set OPENROUTER_BASE_URL / OPENROUTER_MODEL in its .env.
+services:
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    volumes:
+      - models:/root/.ollama
+    environment:
+      # Ollama's default context is 4096 — silently truncates agent prompts
+      # (system prompt + ARIA snapshots). Keep this as high as VRAM allows.
+      OLLAMA_CONTEXT_LENGTH: ${CONTEXT_LENGTH:-16384}
+      OLLAMA_KEEP_ALIVE: 30m
+      # Uncomment + set to use Ollama's cloud-only tags (e.g. glm-5.2:cloud):
+      # OLLAMA_API_KEY: ${OLLAMA_API_KEY}
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        ollama serve &
+        sleep 3
+        ollama pull "${MODEL:-qwen3:4b}"
+        wait
+    healthcheck:
+      test: ["CMD", "ollama", "ls"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+volumes:
+  models:

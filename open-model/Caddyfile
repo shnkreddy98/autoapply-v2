@@ -1,0 +1,18 @@
+# Bearer-token gate in front of Ollama. Plain HTTP on :11434 — RunPod's proxy
+# terminates TLS (https://<pod-id>-11434.proxy.runpod.net).
+{
+	auto_https off
+	admin off
+}
+
+:11434 {
+	@authed header Authorization "Bearer {$PROXY_TOKEN}"
+
+	handle @authed {
+		reverse_proxy 127.0.0.1:11435
+	}
+
+	handle {
+		respond "unauthorized" 401
+	}
+}

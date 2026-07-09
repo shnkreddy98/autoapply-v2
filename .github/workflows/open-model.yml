@@ -1,0 +1,66 @@
+name: open-model
+
+# Build + push the authed Ollama image on changes, then (when RunPod secrets
+# are configured) roll the pod onto the new image. See open-model/setup.md.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "open-model/**"
+      - ".github/workflows/open-model.yml"
+  workflow_dispatch:
+
+env:
+  IMAGE: ghcr.io/${{ github.repository_owner }}/open-model
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      tag: ${{ env.IMAGE }}:${{ github.sha }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: docker/build-push-action@v6
+        with:
+          context: open-model
+          push: true
+          tags: |
+            ${{ env.IMAGE }}:${{ github.sha }}
+            ${{ env.IMAGE }}:latest
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    # secrets can't be read in `if:` — the step below no-ops when unset
+    steps:
+      - name: Roll RunPod pod onto the new image
+        env:
+          RUNPOD_API_KEY: ${{ secrets.RUNPOD_API_KEY }}
+          RUNPOD_POD_ID: ${{ secrets.RUNPOD_POD_ID }}
+          TAG: ${{ needs.build.outputs.tag }}
+        run: |
+          if [ -z "$RUNPOD_API_KEY" ] || [ -z "$RUNPOD_POD_ID" ]; then
+            echo "RUNPOD_API_KEY / RUNPOD_POD_ID not set — build-only run, skipping deploy"
+            exit 0
+          fi
+          auth="Authorization: Bearer $RUNPOD_API_KEY"
+          base="https://rest.runpod.io/v1/pods/$RUNPOD_POD_ID"
+
+          curl -fsS -X POST "$base/stop" -H "$auth"
+          # image swap requires the pod to be stopped
+          curl -fsS -X PATCH "$base" -H "$auth" -H "Content-Type: application/json" \
+            -d "{\"imageName\": \"$TAG\"}"
+          curl -fsS -X POST "$base/start" -H "$auth"
+
+          echo "pod $RUNPOD_POD_ID rolling to $TAG"
