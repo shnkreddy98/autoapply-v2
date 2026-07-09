@@ -224,6 +224,31 @@ def test_review_prompts_override_and_clear():
     assert data.login == {"login_email": "portal@x.dev", "login_password": "pw1"}
 
 
+def test_review_yes_keeps_existing_profile_values():
+    # re-running init with --yes must not wipe previously entered answers
+    existing = {
+        "street_address": "100 Example St",
+        "zip_code": "95126",
+        "city": "San Jose",  # beats the resume-location guess (Austin)
+        "visa_sponsorship": True,
+        "years_of_experience": 9,
+        "gender": "Woman",
+        "desired_salary": "150000",
+    }
+    data = interactive_review(
+        _parsed(), yes=True, ask_secret=lambda _: "", existing=existing
+    )
+    p = data.profile
+    assert p["street_address"] == "100 Example St"
+    assert p["zip_code"] == "95126"
+    assert p["city"] == "San Jose"
+    assert p["state"] == "TX"  # not in existing -> resume guess still applies
+    assert p["visa_sponsorship"] is True
+    assert p["years_of_experience"] == 9
+    assert p["gender"] == "Woman"
+    assert p["desired_salary"] == "150000"
+
+
 def test_review_requires_email():
     parsed = _parsed()
     parsed.contact.email = None

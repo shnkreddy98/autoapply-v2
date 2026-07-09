@@ -292,10 +292,36 @@ class OnboardData:
     login: dict = field(default_factory=dict)
 
 
+def load_existing_profile(conn, email: str | None) -> dict | None:
+    """Stored application_profiles row for this email. Re-running init must
+    default every prompt to what the user already entered — the save is a
+    full-row upsert, so anything not re-answered would otherwise be wiped."""
+    if not email:
+        return None
+    with conn.cursor() as cur:
+        cur.execute(
+            "SELECT ap.* FROM application_profiles ap "
+            "JOIN users u ON u.user_id = ap.user_id WHERE u.email = %s",
+            (email,),
+        )
+        return cur.fetchone()
+
+
 def interactive_review(
-    parsed: ParsedResume, *, ask=input, yes: bool = False, ask_secret=None
+    parsed: ParsedResume,
+    *,
+    ask=input,
+    yes: bool = False,
+    ask_secret=None,
+    existing: dict | None = None,
 ) -> OnboardData:
     c = parsed.contact
+    ex = existing or {}
+
+    def prior(col: str, fallback=None):
+        v = ex.get(col)
+        return fallback if v in (None, "") else v
+
     print("\n-- contact (extracted from resume; Enter keeps, '-' clears) --")
     c.full_name = _ask("full name", c.full_name, ask=ask, yes=yes)
     c.email = _ask("email", c.email, ask=ask, yes=yes)
@@ -343,53 +369,79 @@ def interactive_review(
     city, state = _guess_city_state(c.location)
     print("\n-- address (application forms want it split) --")
     profile: dict = {}
-    profile["street_address"] = _ask("street address", None, ask=ask, yes=yes)
-    profile["city"] = _ask("city", city, ask=ask, yes=yes)
-    profile["state"] = _ask("state", state, ask=ask, yes=yes)
-    profile["zip_code"] = _ask("zip", None, ask=ask, yes=yes)
-    profile["date_of_birth"] = _ask_date("date of birth", None, ask=ask, yes=yes)
+    profile["street_address"] = _ask(
+        "street address", prior("street_address"), ask=ask, yes=yes
+    )
+    profile["city"] = _ask("city", prior("city", city), ask=ask, yes=yes)
+    profile["state"] = _ask("state", prior("state", state), ask=ask, yes=yes)
+    profile["zip_code"] = _ask("zip", prior("zip_code"), ask=ask, yes=yes)
+    profile["date_of_birth"] = _ask_date(
+        "date of birth", prior("date_of_birth"), ask=ask, yes=yes
+    )
 
     print("\n-- work authorization + logistics --")
     profile["work_eligible_us"] = _ask_bool(
-        "eligible to work in the US?", True, ask=ask, yes=yes
+        "eligible to work in the US?", prior("work_eligible_us", True), ask=ask, yes=yes
     )
     profile["visa_sponsorship"] = _ask_bool(
-        "need visa sponsorship (now or future)?", False, ask=ask, yes=yes
+        "need visa sponsorship (now or future)?",
+        prior("visa_sponsorship", False),
+        ask=ask,
+        yes=yes,
     )
     profile["security_clearance"] = _ask_bool(
-        "hold a security clearance?", False, ask=ask, yes=yes
+        "hold a security clearance?",
+        prior("security_clearance", False),
+        ask=ask,
+        yes=yes,
     )
     profile["years_of_experience"] = int(
         _ask(
             "years of experience",
-            str(years_of_experience(parsed.work_experiences) or 0),
+            str(
+                prior(
+                    "years_of_experience",
+                    years_of_experience(parsed.work_experiences) or 0,
+                )
+            ),
             ask=ask,
             yes=yes,
         )
         or 0
     )
-    profile["employment_type"] = _ask("employment type", "Full-time", ask=ask, yes=yes)
+    profile["employment_type"] = _ask(
+        "employment type", prior("employment_type", "Full-time"), ask=ask, yes=yes
+    )
     profile["desired_salary"] = _ask(
-        "desired salary (blank = leave to agent)", None, ask=ask, yes=yes
+        "desired salary (blank = leave to agent)",
+        prior("desired_salary"),
+        ask=ask,
+        yes=yes,
     )
     profile["available_start_date"] = _ask_date(
-        "available start date", None, ask=ask, yes=yes
+        "available start date", prior("available_start_date"), ask=ask, yes=yes
     )
     profile["willing_relocate"] = _ask_bool(
-        "willing to relocate?", True, ask=ask, yes=yes
+        "willing to relocate?", prior("willing_relocate", True), ask=ask, yes=yes
     )
-    profile["willing_travel"] = _ask_bool("willing to travel?", True, ask=ask, yes=yes)
+    profile["willing_travel"] = _ask_bool(
+        "willing to travel?", prior("willing_travel", True), ask=ask, yes=yes
+    )
     profile["travel_percentage"] = (
-        _ask("max travel percentage", "25%", ask=ask, yes=yes)
+        _ask(
+            "max travel percentage", prior("travel_percentage", "25%"), ask=ask, yes=yes
+        )
         if profile["willing_travel"]
         else None
     )
     profile["current_employee"] = False
     profile["ever_terminated"] = _ask_bool(
-        "ever terminated from a job?", False, ask=ask, yes=yes
+        "ever terminated from a job?", prior("ever_terminated", False), ask=ask, yes=yes
     )
     if profile["ever_terminated"]:
-        profile["termination_explanation"] = _ask("explanation", None, ask=ask, yes=yes)
+        profile["termination_explanation"] = _ask(
+            "explanation", prior("termination_explanation"), ask=ask, yes=yes
+        )
 
     print("\n-- EEO (voluntary; Enter keeps 'Prefer not to say') --")
     for col, label in (
@@ -398,12 +450,12 @@ def interactive_review(
         ("veteran_status", "veteran status"),
         ("disability_status", "disability status"),
     ):
-        profile[col] = _ask(label, "Prefer not to say", ask=ask, yes=yes)
+        profile[col] = _ask(label, prior(col, "Prefer not to say"), ask=ask, yes=yes)
 
     print("\n-- application certifications (the boilerplate checkboxes) --")
     agree_all = _ask_bool(
         "agree to standard certifications (accuracy, background check, ...)?",
-        True,
+        prior("cert_accuracy", True),
         ask=ask,
         yes=yes,
     )
@@ -419,7 +471,10 @@ def interactive_review(
     ):
         profile[col] = agree_all
     profile["electronic_signature"] = _ask(
-        "electronic signature", c.full_name, ask=ask, yes=yes
+        "electronic signature",
+        prior("electronic_signature", c.full_name),
+        ask=ask,
+        yes=yes,
     )
     profile["signature_date"] = date.today()
 
@@ -548,9 +603,14 @@ def cmd_profile_init(args) -> int:
     if args.email:
         parsed.contact.email = args.email
 
-    data = interactive_review(parsed, yes=args.yes)
-
     from cli.main import _connect, _storage  # lazy: avoids cycle at import time
+
+    with _connect() as conn:
+        existing = load_existing_profile(conn, args.email or parsed.contact.email)
+    if existing:
+        print("(existing profile found — prompts default to your stored answers)")
+
+    data = interactive_review(parsed, yes=args.yes, existing=existing)
 
     with _connect() as conn:
         user_id = save(conn, _storage(), data, pdf, docx)

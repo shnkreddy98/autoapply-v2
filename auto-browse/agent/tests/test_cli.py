@@ -454,6 +454,19 @@ def test_build_system_prompt_autosubmit():
         assert "fetch_aria" in prompt
 
 
+def test_system_prompt_spells_out_hcaptcha_accessibility_path():
+    # agents kept handing off at the hCaptcha options menu instead of clicking
+    # through to the solvable text challenge (iCIMS runs, 2026-06/07)
+    from agent.loop import HUMAN_TOOL_NAME, build_system_prompt
+
+    p = build_system_prompt()
+    assert "About hCaptcha & Accessibility Options" in p
+    assert "Display hCaptcha Accessibility Challenge" in p
+    assert "seeing the menu is not the same as switching the challenge" in p
+    # handoff is the last resort, conditioned on the control being absent
+    assert f"Only call `{HUMAN_TOOL_NAME}` when step 1 or 2 has no such control" in p
+
+
 def test_build_system_prompt_continue_and_no_navigate():
     from agent.loop import build_system_prompt
 
