@@ -3,6 +3,7 @@
     autoapply jobs add [URL ...] [--file urls.txt]     # -> jobs table (source=manual)
     autoapply jobs list [--status S]
     autoapply tailor [--user U] [--retry-failed]       # jd-capture + drain tailor queue
+    autoapply retry [--all] [--user U]                 # reset today's failed JD fetches + recapture
     autoapply status [JOB] [--user U]                  # pipeline state + scores
     autoapply resume show JOB [--user U] [--out P] [--open]
     autoapply apply [JOB ...] [--all] [--today] [--user U] [--model M] [--autosubmit]
@@ -342,6 +343,55 @@ def run_tailor_worker() -> int:
     return proc.returncode
 
 
+def run_jd_capture(conn) -> int:
+    """Capture JDs for every jd_pending row (needs playwright+proxy containers).
+    Prints one line per job; returns a shell exit code."""
+    with conn.cursor() as cur:
+        cur.execute("SELECT count(*) AS n FROM jobs WHERE status = 'jd_pending'")
+        n_pending = cur.fetchone()["n"]
+    if not n_pending:
+        return 0
+    from agent import jd_capture
+
+    storage = _storage()
+
+    async def _drain_capture() -> None:
+        async with jd_capture.proxy_navigator() as navigate:
+            while True:
+                job_id = await jd_capture.capture_once(
+                    conn, navigate, storage, worker_id="cli"
+                )
+                if job_id is None:
+                    return
+                with conn.cursor() as cur:
+                    cur.execute(
+                        "SELECT status, error, title, url FROM jobs WHERE job_id = %s",
+                        (job_id,),
+                    )
+                    row = cur.fetchone()
+                outcome = (
+                    row["status"]
+                    if row["status"] != "failed"
+                    else f"failed: {row['error']}"
+                )
+                print(
+                    f"capture {_id8(job_id)}  {(row['title'] or row['url'])[:60]}  ->  {outcome}"
+                )
+
+    print(f"capturing JDs for {n_pending} pending job(s)...")
+    try:
+        asyncio.run(_drain_capture())
+    except Exception as exc:
+        print(
+            f"JD capture failed: {exc}\n"
+            f"hint: is the proxy MCP up at {jd_capture.PROXY_MCP_URL}? "
+            "start it: docker compose up -d (in auto-browse/)",
+            file=sys.stderr,
+        )
+        return 1
+    return 0
+
+
 def cmd_tailor(args) -> int:
     with _connect() as conn:
         user_id = resolve_user(conn, args.user)
@@ -362,48 +412,9 @@ def cmd_tailor(args) -> int:
             print(f"reset {n_jobs} failed jobs, {n_rows} failed tailoring rows")
 
         # Phase 1 — capture JDs for pending jobs (needs playwright+proxy containers).
-        with conn.cursor() as cur:
-            cur.execute("SELECT count(*) AS n FROM jobs WHERE status = 'jd_pending'")
-            n_pending = cur.fetchone()["n"]
-        if n_pending:
-            from agent import jd_capture
-
-            storage = _storage()
-
-            async def _drain_capture() -> None:
-                async with jd_capture.proxy_navigator() as navigate:
-                    while True:
-                        job_id = await jd_capture.capture_once(
-                            conn, navigate, storage, worker_id="cli"
-                        )
-                        if job_id is None:
-                            return
-                        with conn.cursor() as cur:
-                            cur.execute(
-                                "SELECT status, error, title, url FROM jobs WHERE job_id = %s",
-                                (job_id,),
-                            )
-                            row = cur.fetchone()
-                        outcome = (
-                            row["status"]
-                            if row["status"] != "failed"
-                            else f"failed: {row['error']}"
-                        )
-                        print(
-                            f"capture {_id8(job_id)}  {(row['title'] or row['url'])[:60]}  ->  {outcome}"
-                        )
-
-            print(f"capturing JDs for {n_pending} pending job(s)...")
-            try:
-                asyncio.run(_drain_capture())
-            except Exception as exc:
-                print(
-                    f"JD capture failed: {exc}\n"
-                    f"hint: is the proxy MCP up at {jd_capture.PROXY_MCP_URL}? "
-                    "start it: docker compose up -d (in auto-browse/)",
-                    file=sys.stderr,
-                )
-                return 1
+        rc = run_jd_capture(conn)
+        if rc:
+            return rc
 
         # Phase 2 — make sure every captured job has a tailoring row for this user.
         n_backfilled = backfill_tailoring(conn, user_id)
@@ -431,6 +442,62 @@ def cmd_tailor(args) -> int:
         _print_summary(s)
         bad = s["tailor_counts"].get("failed", 0) + s["tailor_counts"].get("pending", 0)
         return 1 if bad else 0
+
+
+# ---------------------------------------------------------------------------
+# retry
+
+
+def reset_failed_jobs(conn, user_id: str, since: datetime | None) -> int:
+    """Flip this user's failed JD fetches back to jd_pending so the capture
+    worker picks them up again. `since` limits to jobs added on/after it."""
+    added = " AND uj.added_at >= %s" if since is not None else ""
+    params = (user_id, *((since,) if since is not None else ()))
+    with conn.cursor() as cur:
+        cur.execute(
+            "UPDATE jobs SET status = 'jd_pending', error = NULL, updated_at = now() "
+            "WHERE status = 'failed' AND job_id IN "
+            f"(SELECT uj.job_id FROM user_jobs uj WHERE uj.user_id = %s{added})",
+            params,
+        )
+        n = cur.rowcount
+    conn.commit()
+    return n
+
+
+def count_failed_jobs(conn, user_id: str, since: datetime | None) -> int:
+    added = " AND uj.added_at >= %s" if since is not None else ""
+    params = (user_id, *((since,) if since is not None else ()))
+    with conn.cursor() as cur:
+        cur.execute(
+            "SELECT count(*) AS n FROM jobs j "
+            "JOIN user_jobs uj ON uj.job_id = j.job_id AND uj.user_id = %s "
+            f"WHERE j.status = 'failed'{added}",
+            params,
+        )
+        return cur.fetchone()["n"]
+
+
+def cmd_retry(args) -> int:
+    with _connect() as conn:
+        user_id = resolve_user(conn, args.user)
+        since = None if args.all else _today_start()
+        scope = "" if args.all else " added today"
+        n = reset_failed_jobs(conn, user_id, since)
+        if not n:
+            print(f"no failed jobs{scope}")
+            return 0
+        print(f"reset {n} failed job(s){scope} to jd_pending")
+        rc = run_jd_capture(conn)
+        if rc:
+            return rc
+        still = count_failed_jobs(conn, user_id, since)
+        if still:
+            print(
+                f"{still} job(s){scope} failed again — see errors: "
+                "autoapply jobs list --status failed"
+            )
+        return 1 if still else 0
 
 
 # ---------------------------------------------------------------------------
@@ -744,6 +811,19 @@ def build_parser() -> argparse.ArgumentParser:
         "--retry-failed", action="store_true", help="reset failed rows and retry them"
     )
     tailor.set_defaults(func=cmd_tailor)
+
+    retry = sub.add_parser(
+        "retry",
+        help="reset today's failed JD fetches and recapture them",
+        description="Flips your failed jobs (added today, or all with --all) back "
+        "to jd_pending and re-runs JD capture (needs the playwright+proxy "
+        "containers). Failed TAILORING rows are covered by tailor --retry-failed.",
+    )
+    retry.add_argument(
+        "--all", action="store_true", help="retry all failed jobs, not just today's"
+    )
+    retry.add_argument("--user", help="user id or email (default: the only active user)")
+    retry.set_defaults(func=cmd_retry)
 
     status = sub.add_parser("status", help="pipeline status + scores")
     status.add_argument(

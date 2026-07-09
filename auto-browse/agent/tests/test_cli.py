@@ -240,6 +240,49 @@ def test_tailoring_summary_since(db):
 
 
 # ---------------------------------------------------------------------------
+# retry
+
+
+def _fail_job(db, job_id, error="net timeout"):
+    with db.cursor() as cur:
+        cur.execute(
+            "UPDATE jobs SET status = 'failed', error = %s WHERE job_id = %s",
+            (error, job_id),
+        )
+    db.commit()
+
+
+def test_reset_failed_jobs_today_scope(db):
+    uid = _mk_user(db)
+    old = cli.add_jobs(db, uid, ["https://ex.dev/j/old"])[0]["job_id"]
+    new = cli.add_jobs(db, uid, ["https://ex.dev/j/new"])[0]["job_id"]
+    _fail_job(db, old)
+    _fail_job(db, new)
+    _backdate_added(db, uid, old)
+
+    assert cli.reset_failed_jobs(db, uid, cli._today_start()) == 1
+    with db.cursor() as cur:
+        cur.execute("SELECT job_id, status, error FROM jobs")
+        rows = {r["job_id"]: r for r in cur.fetchall()}
+    assert rows[new]["status"] == "jd_pending"
+    assert rows[new]["error"] is None
+    assert rows[old]["status"] == "failed"  # older than today: untouched
+
+    assert cli.reset_failed_jobs(db, uid, None) == 1  # --all sweeps the rest
+    assert cli.count_failed_jobs(db, uid, None) == 0
+
+
+def test_reset_failed_jobs_scoped_to_owner(db):
+    uid = _mk_user(db)
+    other = _mk_user(db, "other@test.dev")
+    theirs = cli.add_jobs(db, other, ["https://ex.dev/j/theirs"])[0]["job_id"]
+    _fail_job(db, theirs)
+
+    assert cli.reset_failed_jobs(db, uid, None) == 0
+    assert cli.count_failed_jobs(db, other, None) == 1
+
+
+# ---------------------------------------------------------------------------
 # apply tracking surfaced
 
 
@@ -356,6 +399,8 @@ def test_run_tailor_worker_wiring(monkeypatch):
         ["jobs", "list", "--today"],
         ["tailor"],
         ["tailor", "--user", "u@x.dev", "--retry-failed"],
+        ["retry"],
+        ["retry", "--all", "--user", "u@x.dev"],
         ["status"],
         ["status", "--today"],
         ["status", "abcd1234"],
