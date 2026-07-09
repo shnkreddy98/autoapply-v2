@@ -394,7 +394,9 @@ def _tainted_hit(value: str, taint: set[str]) -> str | None:
     return None
 
 
-OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
+# Any OpenAI-compatible endpoint works: OpenRouter (default), a local Ollama
+# (http://localhost:11434/v1 — see open-model/), or a rented GPU box.
+OPENROUTER_BASE_URL = os.getenv("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1")
 PROXY_MCP_URL = os.getenv("PROXY_MCP_URL", "http://localhost:8932/mcp")
 DEFAULT_MODEL = os.getenv("OPENROUTER_MODEL", "google/gemini-3-flash-preview")
 

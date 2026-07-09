@@ -168,7 +168,10 @@ def parse_resume_llm(text: str, model: str = PARSE_MODEL, client=None) -> Parsed
         api_key = os.getenv("OPENROUTER_API_KEY")
         if not api_key:
             raise SystemExit("OPENROUTER_API_KEY is not set (env or auto-browse/.env)")
-        client = OpenAI(base_url="https://openrouter.ai/api/v1", api_key=api_key)
+        client = OpenAI(
+            base_url=os.getenv("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1"),
+            api_key=api_key,
+        )
 
     system = _PARSE_PROMPT.format(schema=json.dumps(ParsedResume.model_json_schema()))
     messages = [
