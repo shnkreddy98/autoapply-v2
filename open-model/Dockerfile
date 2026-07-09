@@ -22,6 +22,8 @@ ENV OLLAMA_MODELS=/workspace/ollama
 ENV MODEL=qwen3:32b
 ENV OLLAMA_CONTEXT_LENGTH=32768
 ENV OLLAMA_KEEP_ALIVE=30m
+# Caddy is the auth boundary; ollama shouldn't second-guess proxied origins
+ENV OLLAMA_ORIGINS=*
 
 EXPOSE 11434
 ENTRYPOINT ["/entrypoint.sh"]

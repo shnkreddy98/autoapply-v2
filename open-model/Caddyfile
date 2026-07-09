@@ -9,7 +9,11 @@
 	@authed header Authorization "Bearer {$PROXY_TOKEN}"
 
 	handle @authed {
-		reverse_proxy 127.0.0.1:11435
+		reverse_proxy 127.0.0.1:11435 {
+			# ollama 403s any Host it doesn't consider local (rebinding
+			# protection) — present ourselves as the loopback upstream
+			header_up Host {upstream_hostport}
+		}
 	}
 
 	handle {
