@@ -1,0 +1,12 @@
+"LinkedIn": |-
+    - generic "LinkedIn Profile" [ref=e772]
+    - textbox "LinkedIn Profile" [ref=e776]
+  - generic [ref=e777]:
+    - generic [ref=e780]:
+      - generic "Home Phone Number" [ref=e782]
+  --
+          - option "LinkedIn" [ref=e1896]:
+            - generic [ref=e1897]: LinkedIn
+          - option "Other" [ref=e1898]:
+            - generic [ref=e1899]: Other
+          - option "Private Public Partnership Office (P3O)" [ref=e1900]:

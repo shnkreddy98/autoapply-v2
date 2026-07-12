@@ -1,0 +1,11 @@
+"Are you legally eligible to work in the country to which you are applying? Select One Required": (no match)
+"Will you now or in the future require sponsorship for an employment visa (e.g., H-1B visa status)? Select One Required": (no match)
+"Are you 18 years of age or older? Select One Required": (no match)
+"Do you currently have a noncompete that may impact this job application? Select One Required": (no match)
+"Do you have relatives who work for our company? Select One Required": (no match)
+"What is your desired salary range for the position you are applying to?": |-
+        - group "What is your desired salary range for the position you are applying to?" [ref=e1328]:
+          - paragraph [ref=e1332]: What is your desired salary range for the position you are applying to?
+          - textbox [ref=e1335]
+  - generic [ref=e368]:
+    - button "Back" [ref=e567] [cursor=pointer]

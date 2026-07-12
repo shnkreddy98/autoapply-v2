@@ -1,0 +1,6 @@
+"Master's Degree": |-
+  - option "Master's Degree" [ref=e1772]:
+    - generic [ref=e1773]: Master's Degree
+  - option "Doctorate" [ref=e1774]:
+    - generic [ref=e1775]: Doctorate
+  - option "Vocational/Technical" [ref=e1776]:

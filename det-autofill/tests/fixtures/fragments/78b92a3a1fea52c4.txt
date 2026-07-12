@@ -1,0 +1,72 @@
+"First Name": |-
+    - generic [ref=f84e406]: First Name*
+    - textbox "First Name" [ref=f84e407]
+  - generic [ref=f84e410]:
+    - generic [ref=f84e411]: Last Name*
+    - textbox "Last Name" [ref=f84e412]
+  --
+    - generic [ref=f84e416]: Preferred First Name
+    - textbox "Preferred First Name" [ref=f84e417]
+  - generic [ref=f84e420]:
+    - generic [ref=f84e421]: Email*
+    - textbox "Email" [ref=f84e422]
+"Last Name": |-
+    - generic [ref=f84e411]: Last Name*
+    - textbox "Last Name" [ref=f84e412]
+  - generic [ref=f84e415]:
+    - generic [ref=f84e416]: Preferred First Name
+    - textbox "Preferred First Name" [ref=f84e417]
+"Email": |-
+        - paragraph [ref=f84e386]: Interested in building your career at Nextdoor? Get future opportunities sent straight to your email.
+        - link "Create alert" [ref=f84e387] [cursor=pointer]:
+          - /url: https://my.greenhouse.io/users/sign_in?job_board=nextdoor&source=job_alert_post
+  - separator [ref=f84e388]
+  --
+          - generic [ref=f84e421]: Email*
+          - textbox "Email" [ref=f84e422]
+        - group "Phone" [ref=f84e424]:
+          - generic [ref=f84e425]: Phone
+          - generic [ref=f84e428]:
+"Phone": |-
+  - group "Phone" [ref=f84e424]:
+    - generic [ref=f84e425]: Phone
+    - generic [ref=f84e428]:
+      - generic [ref=f84e429]: Country*
+      - generic [ref=f84e430]:
+  --
+      - generic [ref=f84e445]: Phone*
+      - textbox "Phone" [ref=f84e447]
+  - group "Resume/CV*" [ref=f84e449]:
+    - generic [ref=f84e450]: Resume/CV*
+    - generic [ref=f84e452]:
+"Country": |-
+  - generic [ref=f84e429]: Country*
+  - generic [ref=f84e430]:
+    - log [ref=f84e432]
+    - generic [ref=f84e434]:
+      - combobox "Country" [ref=f84e437]
+      - button "Toggle flyout" [ref=f84e439] [cursor=pointer]:
+        - img [ref=f84e440]
+    - textbox
+"Resume/CV": |-
+  - group "Resume/CV*" [ref=f84e449]:
+    - generic [ref=f84e450]: Resume/CV*
+    - generic [ref=f84e452]:
+      - generic [ref=f84e454]:
+        - button "Attach" [ref=f84e455] [cursor=pointer]
+"LinkedIn Profile": |-
+    - generic [ref=f84e487]: LinkedIn Profile
+    - textbox "LinkedIn Profile" [ref=f84e488]
+  - generic [ref=f84e491]:
+    - generic [ref=f84e492]: Website
+    - textbox "Website" [ref=f84e493]
+"Where do you currently reside?": |-
+  - generic [ref=f84e497]: Where do you currently reside?*
+  - generic [ref=f84e498]:
+    - log [ref=f84e500]
+    - generic [ref=f84e502]:
+  --
+        - combobox "Where do you currently reside?" [ref=f84e506]
+      - button "Toggle flyout" [ref=f84e508] [cursor=pointer]:
+        - img [ref=f84e509]
+    - textbox

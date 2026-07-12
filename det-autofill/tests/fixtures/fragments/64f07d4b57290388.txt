@@ -1,0 +1,5 @@
+"Accessibility Options": |-
+  - button "About hCaptcha & Accessibility Options" [active] [ref=f17e20] [cursor=pointer]:
+    - img [ref=f17e22]
+    - img [ref=f17e27]
+  - button "Refresh Challenge." [ref=f17e31] [cursor=pointer]:

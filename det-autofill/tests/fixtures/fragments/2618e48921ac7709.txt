@@ -1,0 +1,58 @@
+"Start date year": |-
+    - generic [ref=e542]: Start date year
+    - spinbutton "Start date year" [ref=e543]
+  - generic [ref=e546]:
+    - generic [ref=e547]: End date year
+    - spinbutton "End date year" [ref=e548]
+"End date year": |-
+          - generic [ref=e547]: End date year
+          - spinbutton "End date year" [ref=e548]
+    - button "Add another" [ref=e549] [cursor=pointer]
+  - generic [ref=e550]:
+    - separator [ref=e551]
+"comfortable leveraging AI-powered tools": |-
+  - generic [ref=e565]: Our company embraces AI tools to drive innovation and productivity. Are you comfortable leveraging AI-powered tools in your role?*
+  - generic [ref=e566]:
+    - log [ref=e568]
+    - generic [ref=e570]:
+  --
+        - combobox "Our company embraces AI tools to drive innovation and productivity. Are you comfortable leveraging AI-powered tools in your role?" [ref=e574]
+      - button "Toggle flyout" [ref=e576] [cursor=pointer]:
+        - img [ref=e577]
+    - textbox
+"authorized to work in the United States": |-
+  - generic [ref=e582]: Are you legally authorized to work in the United States?*
+  - generic [ref=e583]:
+    - log [ref=e585]
+    - generic [ref=e587]:
+  --
+        - combobox "Are you legally authorized to work in the United States?" [ref=e591]
+      - button "Toggle flyout" [ref=e593] [cursor=pointer]:
+        - img [ref=e594]
+    - textbox
+"require work visa sponsorship": |-
+  - generic [ref=e599]: Will you now, or in the future, require work visa sponsorship? *
+  - generic [ref=e600]:
+    - log [ref=e602]
+    - generic [ref=e604]:
+  --
+        - combobox "Will you now, or in the future, require work visa sponsorship?" [ref=e608]
+      - button "Toggle flyout" [ref=e610] [cursor=pointer]:
+        - img [ref=e611]
+    - textbox
+"referred to this position": |-
+    - generic [ref=e619]: Were you referred to this position by an existing Age of Learning employee? *
+    - generic [ref=e620]:
+      - log [ref=e622]
+      - generic [ref=e624]:
+  --
+          - combobox "Were you referred to this position by an existing Age of Learning employee?" [ref=e628]
+        - button "Toggle flyout" [ref=e630] [cursor=pointer]:
+          - img [ref=e631]
+      - textbox
+  --
+    - generic [ref=e636]: If you were referred to this position, what is the name of the referring employee?
+    - textbox "If you were referred to this position, what is the name of the referring employee?" [ref=e637]
+  - generic [ref=e640]:
+    - generic [ref=e641]: What is your desired salary?*
+    - textbox "What is your desired salary?" [ref=e642]: "150000"

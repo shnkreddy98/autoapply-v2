@@ -1,0 +1,6 @@
+"My Computer": |-
+      - text: My Computer
+    - button "Click the My Computer link to upload your resume from your computer" [ref=e28]
+  - link "Dropbox" [ref=e31] [cursor=pointer]:
+    - /url: "#"
+    - text: Dropbox

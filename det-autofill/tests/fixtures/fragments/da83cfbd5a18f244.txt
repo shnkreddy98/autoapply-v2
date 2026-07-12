@@ -1,0 +1,38 @@
+"Gender": |-
+        - generic [ref=e1460]: Please select your gender.*
+        - button "Please select your gender. Select One Required" [ref=e1464]: Select One
+      - generic [ref=e1465]:
+        - generic [ref=e1466]: Please select the veteran status which most accurately describes how you identify yourself.
+        - button "Please select the veteran status which most accurately describes how you identify yourself. Select One" [ref=e1470]: Select One
+  - group "Terms and Conditions" [ref=e1471]:
+    - heading "Terms and Conditions" [level=4] [ref=e1472]
+    - generic [ref=e1473]:
+      - paragraph [ref=e1477]: I CERTIFY THAT ALL THE INFORMATION SUBMITTED BY ME ON THIS APPLICATION IS TRUE AND COMPLETE TO THE BEST OF MY KNOWLEDGE, AND I UNDERSTAND THAT IF ANY FALSE OR MISLEADING INFORMATION, OMISSIONS, OR MISREPRESENTATIONS ARE DISCOVERED, MY APPLICATION MAY BE REJECTED, AND IF I AM EMPLOYED, MY EMPLOYMENT MAY BE TERMINATED AT ANY TIME. I ALSO UNDERSTAND THAT BY SUBMITTING MY APPLICATION, I GIVE CAMBRIDGE THE AUTHORITY TO VERIFY EDUCATION AND EXPERIENCE INCLUDING CAMBRIDGE’S USE OF INTERNET SOURCES TO OBTAIN THIS INFORMATION.
+      - generic [ref=e1478]:
+"Male": (no match)
+"Female": (no match)
+"Prefer not to say": (no match)
+"I do not wish to answer": |-
+  - row "American Indian or Alaska Native (United States of America) Asian (United States of America) Black or African American (United States of America) Hispanic or Latino (United States of America) I do not wish to answer. (United States of America) Native Hawaiian or Other Pacific Islander (United States of America) Two or More Races (not hispanic or latino) (United States of America) White (United States of America)" [ref=e1402]:
+    - row "American Indian or Alaska Native (United States of America)" [ref=e1403]:
+      - cell "American Indian or Alaska Native (United States of America)" [ref=e1404]:
+        - generic [ref=e1405]:
+          - checkbox "American Indian or Alaska Native (United States of America)" [ref=e1407] [cursor=pointer]
+          - generic [ref=e1408] [cursor=pointer]: American Indian or Alaska Native (United States of America)
+    - row "Asian (United States of America)" [ref=e1409]:
+      - cell "Asian (United States of America)" [ref=e1410]:
+        - generic [ref=e1411]:
+  --
+    - row "I do not wish to answer. (United States of America)" [ref=e1427]:
+      - cell "I do not wish to answer. (United States of America)" [ref=e1428]:
+        - generic [ref=e1429]:
+          - checkbox "I do not wish to answer. (United States of America)" [ref=e1431] [cursor=pointer]
+          - generic [ref=e1432] [cursor=pointer]: I do not wish to answer. (United States of America)
+    - row "Native Hawaiian or Other Pacific Islander (United States of America)" [ref=e1433]:
+      - cell "Native Hawaiian or Other Pacific Islander (United States of America)" [ref=e1434]:
+        - generic [ref=e1435]:
+          - checkbox "Native Hawaiian or Other Pacific Islander (United States of America)" [ref=e1437] [cursor=pointer]
+          - generic [ref=e1438] [cursor=pointer]: Native Hawaiian or Other Pacific Islander (United States of America)
+    - row "Two or More Races (not hispanic or latino) (United States of America)" [ref=e1439]:
+      - cell "Two or More Races (not hispanic or latino) (United States of America)" [ref=e1440]:
+        - generic [ref=e1441]:

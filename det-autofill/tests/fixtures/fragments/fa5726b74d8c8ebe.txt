@@ -1,0 +1,5 @@
+"Attach resume": |-
+  - link "Attach resume" [ref=e348] [cursor=pointer]:
+    - /url: "#"
+  - text: or
+  - link "Paste resume" [ref=e349] [cursor=pointer]:

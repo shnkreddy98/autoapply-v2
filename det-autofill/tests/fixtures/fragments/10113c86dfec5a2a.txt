@@ -1,0 +1,12 @@
+"Data Engineer Senior Associate": |-
+  - heading "Data Engineer Senior Associate" [level=3] [ref=e608]:
+    - link "Data Engineer Senior Associate" [ref=e609] [cursor=pointer]:
+      - /url: /en-US/global/job/Quincy-Massachusetts/Data-Engineer-Senior-Associate_R-793107
+  - generic [ref=e618]:
+    - term [ref=e619]: locations
+  --
+  - heading "Data Engineer Senior Associate" [level=3] [ref=e642]:
+    - link "Data Engineer Senior Associate" [ref=e643] [cursor=pointer]:
+      - /url: /en-US/global/job/Quincy-Massachusetts/Data-Engineer-Senior-Associate_R-793105-1
+  - generic [ref=e652]:
+    - term [ref=e653]: locations

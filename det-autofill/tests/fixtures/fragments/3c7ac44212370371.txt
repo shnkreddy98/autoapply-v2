@@ -1,0 +1,13 @@
+"Apply": |-
+              - strong [ref=e38]: "Why You Should Apply:"
+              - list [ref=e39]:
+                - listitem [ref=e40]: Outstanding culture with a family-oriented feel, where technology is highly valued.
+                - listitem [ref=e41]: Competitive compensation and benefits package with $0 cost healthcare options.
+  --
+                - listitem [ref=e50]: Apply best practices in data modeling for enterprise-scale data warehouse environments.
+                - listitem [ref=e51]: Architect and manage data warehouse solutions using Microsoft Fabric’s Data Warehouse and OneLake.
+                - listitem [ref=e52]: Ensure consistency, reliability, and scalability of data across reporting and analytics platforms.
+                - listitem [ref=e53]: Work closely with developers to structure data for efficient Power BI usage, including semantic modeling and partitioning.
+  --
+        - button "Apply" [ref=e90] [cursor=pointer]
+  ```

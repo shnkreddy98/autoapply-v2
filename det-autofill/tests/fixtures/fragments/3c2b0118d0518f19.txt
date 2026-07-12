@@ -1,0 +1,5 @@
+"Apply Now": |-
+  - button "Apply Now" [ref=e40] [cursor=pointer]
+  - generic [ref=e41]:
+    - button "Share with friends " [ref=e42] [cursor=pointer]:
+      - text: Share with friends

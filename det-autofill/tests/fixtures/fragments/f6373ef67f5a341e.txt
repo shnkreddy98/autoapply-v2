@@ -1,0 +1,26 @@
+"Enter manually": |-
+          - button "Enter manually" [active] [ref=e182] [cursor=pointer]
+          - generic [ref=e183]: Enter manually
+        - paragraph [ref=e184]: "Accepted file types: pdf, doc, docx, txt, rtf"
+  - generic [ref=e185]:
+    - generic [ref=e186]:
+"School": |-
+    - generic [ref=e192]: School
+    - generic [ref=e193]:
+      - log [ref=e195]
+      - generic [ref=e197]:
+  --
+          - combobox "School" [ref=e201]
+        - button "Toggle flyout" [ref=e203] [cursor=pointer]:
+          - img [ref=e204]
+  - generic [ref=e207]:
+"Are you a U.S. citizen?": |-
+  - generic [ref=e254]: Are you a U.S. citizen? *
+  - generic [ref=e255]:
+    - log [ref=e257]
+    - generic [ref=e259]:
+  --
+        - combobox "Are you a U.S. citizen?" [ref=e263]
+      - button "Toggle flyout" [ref=e265] [cursor=pointer]:
+        - img [ref=e266]
+    - textbox

@@ -1,0 +1,25 @@
+"Linkedin": |-
+              - button "Error Linkedin" [ref=e1244] [cursor=pointer]:
+                - text: Error
+                - generic [ref=e1245]: "-"
+                - text: Linkedin
+              - generic [ref=e1246]: Invalid LinkedIn URL
+      - generic [ref=e684]:
+        - group "Work Experience" [ref=e685]:
+          - heading "Work Experience" [level=4] [ref=e686]
+  --
+            - generic [ref=e1152]: Linkedin
+            - generic [ref=e1153]:
+              - textbox "Linkedin" [invalid] [ref=e1155]: https://linkedin.com/in/janedoe
+              - paragraph [ref=e1262]:
+                - generic [ref=e1263]: "Error:"
+                - text: Invalid LinkedIn URL
+    - generic [ref=e368]:
+      - button "Back" [ref=e567] [cursor=pointer]
+      - button "Save and Continue" [ref=e568] [cursor=pointer]
+  --
+    - link "LinkedIn" [ref=e58]:
+      - /url: https://www.linkedin.com/company/amerisourcebergen/
+  - listitem [ref=e62] [cursor=pointer]:
+    - link "X" [ref=e63]:
+      - /url: https://twitter.com/healthcare_abc?lang=en

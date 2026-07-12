@@ -1,0 +1,12 @@
+"Upload file": |-
+      - button "Upload file" [ref=e74] [cursor=pointer]
+  - generic [ref=e76]:
+    - generic [ref=e77]:
+      - generic [ref=e78]: Full Legal Name*
+  --
+        - button "Upload File" [ref=e92] [cursor=pointer]:
+          - img [ref=e93]
+          - generic [ref=e95]: Upload File
+        - paragraph [ref=e96]: or drag and drop here
+    - generic [ref=e97]:
+      - generic [ref=e98]: LinkedIn URL*

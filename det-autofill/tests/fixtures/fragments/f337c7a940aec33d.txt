@@ -1,0 +1,81 @@
+"Individual Contributor": |-
+      - checkbox "Senior Individual Contributor" [ref=e421]
+      - text: Senior Individual Contributor
+    - generic [ref=e422]:
+      - checkbox "Individual Contributor" [ref=e423]
+      - text: Individual Contributor
+  - generic [ref=e424]:
+    - generic [ref=e425]: Which industries have you supported?*
+    - generic [ref=e426]:
+"Senior Individual Contributor": |-
+    - checkbox "Senior Individual Contributor" [ref=e421]
+    - text: Senior Individual Contributor
+  - generic [ref=e422]:
+    - checkbox "Individual Contributor" [ref=e423]
+    - text: Individual Contributor
+"Technology": |-
+  - paragraph [ref=e148]: At SynergenX, your work will have a direct impact on how healthcare data is transformed into meaningful business insights and better patient outcomes. You'll collaborate with experienced technology leaders, work on modern Azure cloud initiatives, help drive AI adoption, and contribute to a growing enterprise data platform that supports operations across multiple states.
+  - paragraph [ref=e149]: If you're looking for an opportunity to build, innovate, mentor, and grow your career in a stable, technology-driven organization, we encourage you to apply.
+  - separator [ref=e150]
+  - heading "Equal Employment Opportunity" [level=2] [ref=e151]
+  - paragraph [ref=e152]: SynergenX Health Holdings is an Equal Opportunity Employer and makes employment decisions without regard to race, color, religion, sex, national origin, age, disability, genetic information, protected veteran status, or any other status protected under applicable federal, state, or local law.
+  --
+        - checkbox "Technology" [ref=e441]
+        - text: Technology
+    - generic [ref=e442]:
+      - generic [ref=e443]: Which BI platforms have you supported?*
+      - textbox "Which BI platforms have you supported?*" [ref=e444]: Power BI, Tableau, Snowflake, dbt-based custom reporting.
+"None": |-
+      - checkbox "None" [ref=e266]
+      - text: None
+    - generic [ref=e267]:
+      - checkbox "Less than 1 year" [ref=e268]
+      - text: Less than 1 year
+  --
+      - checkbox "None" [ref=e296]
+      - text: None
+  - generic [ref=e297]:
+    - generic [ref=e298]: Have you built enterprise ETL/ELT pipelines using Azure Databricks?*
+    - generic [ref=e299]:
+  --
+      - checkbox "None" [ref=e306]
+      - text: None
+  - generic [ref=e307]:
+    - generic [ref=e308]: Which Azure services have you used professionally?*
+    - generic [ref=e309]:
+  --
+      - checkbox "None" [ref=e332]
+      - text: None
+  - generic [ref=e333]:
+    - generic [ref=e334]: Have you worked on projects supporting Artificial Intelligence or Machine Learning?*
+    - generic [ref=e335]:
+  --
+      - checkbox "None" [ref=e362]
+      - text: None
+  - generic [ref=e363]:
+    - generic [ref=e364]: Describe one project where you built data pipelines supporting AI, machine learning, predictive analytics, or advanced reporting. (AI detection software will be used on responses)*
+    - textbox "Describe one project where you built data pipelines supporting AI, machine learning, predictive analytics, or advanced reporting. (AI detection software will be used on responses)*" [ref=e365]: At AirFold, I engineered event-driven data ingestion systems using Kafka and Debezium CDC, processing millions of unstructured events with sub-second latency for vector search retrieval and large-scale analytical queries. I also implemented automated data governance workflows using dbt and Snowflake to reduce reporting discrepancies.
+  --
+      - checkbox "None" [ref=e377]
+      - text: None
+    - generic [ref=e378]:
+      - checkbox "Under 10 million" [ref=e379]
+      - text: Under 10 million
+"Over 1 billion": |-
+      - checkbox "Over 1 billion" [ref=e385]
+      - text: Over 1 billion
+  - generic [ref=e386]:
+    - generic [ref=e387]: Which programming languages do you use professionally?*
+    - generic [ref=e388]:
+"I DON\u2019T WISH TO ANSWER": |-
+        - radio "I DON’T WISH TO ANSWER" [checked] [ref=e492]
+        - text: I DON’T WISH TO ANSWER
+  - separator [ref=e493]
+  - generic [ref=e494]:
+    - strong [ref=e496]: Voluntary Self-Identification of Disability
+"I DO NOT WANT TO ANSWER": |-
+      - radio "I DO NOT WANT TO ANSWER" [checked] [ref=e542]
+      - text: I DO NOT WANT TO ANSWER
+  - paragraph [ref=e543]: "PUBLIC BURDEN STATEMENT: According to the Paperwork Reduction Act of 1995 no persons are required to respond to a collection of information unless such collection displays a valid OMB control number. This survey should take about 5 minutes to complete."
+  - table [ref=e544]:
+    - rowgroup [ref=e545]:

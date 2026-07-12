@@ -1,0 +1,14 @@
+"Work Experience 5": |-
+  - group "Work Experience 5" [ref=e1305]:
+    - generic [ref=e1306]:
+      - heading "Work Experience 5" [level=5] [ref=e1307]
+      - button "Delete" [ref=e1308] [cursor=pointer]: Delete
+    - generic [ref=e1314]:
+      - generic [ref=e1315]:
+        - generic [ref=e1317]: Job Title*
+        - textbox "Job Title" [ref=e1320]: Data Engineer
+      - generic [ref=e1321]:
+        - generic [ref=e1323]: Company*
+        - textbox "Company" [ref=e1326]: Kantar
+      - generic [ref=e1327]:
+        - generic [ref=e1328]: Location

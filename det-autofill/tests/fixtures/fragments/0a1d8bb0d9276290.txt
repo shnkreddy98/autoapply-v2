@@ -1,0 +1,8 @@
+"Online Source": |-
+  - option "Online Source not checked" [ref=e597]:
+    - generic [ref=e599] [cursor=pointer]: Online Source
+  - option "Online Source - Asia Job Boards not checked" [ref=e604]:
+    - generic [ref=e606] [cursor=pointer]: Online Source - Asia Job Boards
+  - option "Other not checked" [ref=e611]:
+    - generic [ref=e613] [cursor=pointer]: Other
+  - option "Professional Association/Organization not checked" [ref=e618]:

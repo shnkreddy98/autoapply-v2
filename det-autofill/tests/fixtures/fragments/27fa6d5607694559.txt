@@ -1,0 +1,24 @@
+"*Gender": |-
+  - generic [ref=e565]: "*Gender"
+  - combobox "*Gender" [ref=e566]:
+    - option "Choose..."
+    - option "Male" [selected]
+    - option "Female"
+"*Race": |-
+  - generic [ref=e2027]: "*Race"
+  - combobox "*Race" [ref=e2028]:
+    - option "Choose..." [selected]
+    - option "White"
+    - option "Black or African American"
+"*Are you a protected veteran?": |-
+  - generic [ref=e594]: "*Are you a protected veteran?"
+  - combobox "*Are you a protected veteran?" [ref=e595]:
+    - option "Choose..." [selected]
+    - option "Yes"
+    - option "No"
+"*Please choose one of the options below:": |-
+  - generic [ref=e663]: "*Please choose one of the options below:"
+  - radiogroup "*Please choose one of the options below:" [ref=e664]:
+    - generic [ref=e666]:
+      - radio "Yes, I have a disability, or have had one in the past" [ref=e667] [cursor=pointer]
+      - text: Yes, I have a disability, or have had one in the past

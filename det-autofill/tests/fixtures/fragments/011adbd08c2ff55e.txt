@@ -1,0 +1,12 @@
+"How many direct reports": |-
+    - generic [ref=e298]: How many direct reports have you managed and for how long? Describe their career stages and the roles they were in.*
+    - textbox "How many direct reports have you managed and for how long? Describe their career stages and the roles they were in." [ref=e299]
+  - generic [ref=e300]:
+    - generic [ref=e302]:
+      - generic [ref=e303]: Are you legally authorized to work in the United States?*
+"What is your preferred name?": |-
+    - generic [ref=e266]: What is your preferred name?*
+    - textbox "What is your preferred name?" [ref=e267]
+  - generic [ref=e270]:
+    - generic [ref=e271]: LinkedIn Profile*
+    - textbox "LinkedIn Profile" [ref=e272]: https://www.linkedin.com/in/janedoe

@@ -1,0 +1,25 @@
+"Apply": |-
+    - button "Apply" [ref=e41] [cursor=pointer]
+  - generic [ref=e42]:
+    - generic [ref=e43]:
+      - generic [ref=e51]:
+  --
+      - paragraph [ref=e92]: We are looking for a capable engineer to help our team design and develop highly scalable software applications, data pipelines, and database solutions, apply scientific and mathematical principles, and deliver on Nordstrom's strategic vision.
+      - paragraph [ref=e93]
+      - paragraph [ref=e94]: A day at work…
+      - list [ref=e95]:
+  --
+        - listitem [ref=e99]: Design and develop distributed data processing pipelines in the Big Data ecosystem in the Cloud, apply data definitions, modeling, structures, and infrastructure technologies and adhere to good engineering practices.
+        - listitem [ref=e100]: Conduct code reviews and drive accountability in following software engineering principles.
+        - listitem [ref=e101]: Build testing tools and CI/CD pipeline, reduce automation friction to speed up the path to business outcomes.
+        - listitem [ref=e102]: Identify data performance issues and optimize the solution.
+  --
+      - text: "This position may be eligible for performance-based incentives/bonuses. Benefits include 401k, medical/vision/dental/life/disability insurance options, PTO accruals, Holidays, and more. Eligibility requirements may apply based on location, job level, classification, and length of employment. Learn more in the Nordstrom Benefits Overview by copying and pasting the following URL into your browser: https://careers.nordstrom.com/pdfs/Ben_Overview_16.pdf"
+      - paragraph [ref=e132]
+      - paragraph [ref=e133]: A few more important points...
+      - paragraph [ref=e134]: The job posting highlights the most critical responsibilities and requirements of the job. It’s not all-inclusive. There may be additional duties, responsibilities and qualifications for this job.
+  --
+      - paragraph [ref=e140]: "Current Nordstrom employees: To apply, log into Workday, click the Careers button and then click Find Jobs."
+      - paragraph [ref=e141]
+      - text: Nordstrom keeps job postings open for at least one day after the posting date.
+      - paragraph [ref=e142]

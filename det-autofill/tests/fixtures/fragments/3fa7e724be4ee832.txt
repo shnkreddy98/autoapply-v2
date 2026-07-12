@@ -1,0 +1,172 @@
+"First Name": |-
+      - text: First Name
+      - generic [ref=e130]: "*"
+    - textbox "First Name" [ref=e133]
+  - generic [ref=e134]:
+    - generic [ref=e136]:
+      - text: Last Name
+"Last Name": |-
+        - text: Last Name
+        - generic [ref=e137]: "*"
+      - textbox "Last Name" [ref=e140]
+  - generic [ref=e141]:
+    - generic [ref=e143]:
+      - text: Email
+"Email": |-
+      - text: Email
+      - generic [ref=e144]: "*"
+    - textbox "Email" [ref=e147]
+  - generic [ref=e148]:
+    - generic [ref=e150]:
+      - text: Phone
+"Phone": |-
+      - text: Phone
+      - generic [ref=e151]: "*"
+    - textbox "Phone" [ref=e154]
+  - generic [ref=e155]:
+    - generic [ref=e156]:
+      - generic [ref=e158]:
+"Address": |-
+      - text: Address
+      - generic [ref=e159]: "*"
+    - textbox "Address" [ref=e162]
+  - generic [ref=e163]:
+    - generic [ref=e164]:
+      - generic [ref=e166]:
+"City": |-
+        - text: City
+        - generic [ref=e167]: "*"
+      - textbox "City" [ref=e170]
+    - generic [ref=e171]:
+      - generic [ref=e173]:
+        - text: State
+  --
+  - generic [ref=e329]: Ethnicity
+  - button "Ethnicity –Select–" [ref=e334] [cursor=pointer]:
+    - generic [ref=e335]:
+      - generic [ref=e336]: –Select–
+      - img [ref=e338]
+"State": |-
+      - generic [ref=e28]: Data Science - United States (Remote)
+    - separator [ref=e29]
+  - generic [ref=e120]:
+    - generic [ref=e121]:
+  --
+                  - text: State
+                  - generic [ref=e174]: "*"
+                - button "State –Select–" [ref=e179] [cursor=pointer]:
+                  - generic [ref=e180]:
+                    - generic [ref=e181]: –Select–
+                    - img [ref=e183]
+  --
+                - button "Country United States" [ref=e200] [cursor=pointer]:
+                  - generic [ref=e201]:
+                    - generic [ref=e202]: United States
+                    - img [ref=e204]
+                - button "Clear Selection" [ref=e207] [cursor=pointer]:
+                  - img [ref=e209]
+  --
+          - radiogroup "Are you authorized to work in the United States?" [ref=e259]:
+            - generic [ref=e263]:
+              - text: Are you authorized to work in the United States?
+              - generic [ref=e264]: "*"
+            - radiogroup [ref=e266]:
+              - generic [ref=e268] [cursor=pointer]:
+  --
+      - paragraph [ref=e80]: United States (Remote)
+      - separator [ref=e81]
+    - generic [ref=e82]:
+      - paragraph [ref=e84]: Department
+"ZIP": |-
+        - text: ZIP
+        - generic [ref=e188]: "*"
+      - textbox "ZIP" [ref=e191]
+  - generic [ref=e192]:
+    - generic [ref=e194]:
+      - text: Country
+"Country": |-
+    - text: Country
+    - generic [ref=e195]: "*"
+  - generic [ref=e199]:
+    - button "Country United States" [ref=e200] [cursor=pointer]:
+      - generic [ref=e201]:
+        - generic [ref=e202]: United States
+        - img [ref=e204]
+"Date Available": |-
+    - text: Date Available
+    - generic [ref=e233]: "*"
+  - generic [ref=e235]:
+    - textbox "Date Available" [ref=e236]:
+      - /placeholder: mm/dd/yyyy
+    - button "Pick a date." [ref=e239] [cursor=pointer]:
+      - img [ref=e240]
+"Desired Pay": |-
+        - text: Desired Pay
+        - generic [ref=e245]: "*"
+      - textbox "Desired Pay" [ref=e248]
+  - separator [ref=e249]
+  - generic [ref=e251]:
+    - generic [ref=e253]: References (Name, Company, and Contact Info)
+"References": |-
+    - generic [ref=e253]: References (Name, Company, and Contact Info)
+    - textbox "References (Name, Company, and Contact Info)" [ref=e255]
+  - separator [ref=e256]
+  - generic [ref=e257]:
+    - radiogroup "Are you authorized to work in the United States?" [ref=e259]:
+"Yes": |-
+    - radio "Yes" [ref=e270]
+    - generic [ref=e272]: "Yes"
+  - generic [ref=e274] [cursor=pointer]:
+    - radio "No" [ref=e276]
+    - generic [ref=e278]: "No"
+"No": |-
+                  - radio "No" [ref=e276]
+                  - generic [ref=e278]: "No"
+            - generic [ref=e279]:
+              - generic [ref=e281]:
+                - text: How many years of experience do you have as an analyst in the healthcare industry?
+  --
+              - paragraph [ref=e313]: This information will not be used as selection criteria. If you'd rather not share this information, feel free to select "Decline to Answer".
+            - generic [ref=e314]:
+              - generic [ref=e316]: Gender
+              - button "Gender –Select–" [ref=e321] [cursor=pointer]:
+  --
+                  - radio "Not a Veteran" [ref=e370]
+                  - generic [ref=e372]: Not a Veteran
+                - generic [ref=e374] [cursor=pointer]:
+                  - radio "Veteran" [ref=e376]
+                  - generic [ref=e378]: Veteran
+  --
+              - checkbox "I'm not a robot" [ref=f172e7]
+              - generic [ref=f172e11]: I'm not a robot
+            - generic [ref=f172e15]: reCAPTCHA
+  - generic [ref=e45]:
+    - generic [ref=e47]:
+"How many years of experience do you have as an analyst in the healthcare industry?": |-
+      - text: How many years of experience do you have as an analyst in the healthcare industry?
+      - generic [ref=e282]: "*"
+    - textbox "How many years of experience do you have as an analyst in the healthcare industry?" [ref=e285]
+  - generic [ref=e286]:
+    - generic [ref=e288]:
+      - text: How many years of experience do you have with SQL?
+"How many years of experience do you have with SQL?": |-
+      - text: How many years of experience do you have with SQL?
+      - generic [ref=e289]: "*"
+    - textbox "How many years of experience do you have with SQL?" [ref=e292]
+  - generic [ref=e293]:
+    - generic [ref=e295]:
+      - text: How many years of experience do you have with Tableau?
+"How many years of experience do you have with Tableau?": |-
+      - text: How many years of experience do you have with Tableau?
+      - generic [ref=e296]: "*"
+    - textbox "How many years of experience do you have with Tableau?" [ref=e299]
+  - generic [ref=e300]:
+    - generic [ref=e302]:
+      - text: What excites you about working with healthcare data?
+"What excites you about working with healthcare data?": |-
+        - text: What excites you about working with healthcare data?
+        - generic [ref=e303]: "*"
+      - textbox "What excites you about working with healthcare data?" [ref=e305]
+  - separator [ref=e306]
+  - generic [ref=e307]:
+    - generic [ref=e308]:

@@ -1,0 +1,22 @@
+"opt-out": |-
+    - paragraph [ref=f77e47]: Your participation in this questionnaire is important to us and we appreciate your time. The information contained in the Employment Tax Credit questionnaire will screen for relevant tax credits for which we may be eligible should you be selected for this position. The information provided will not be visible to those involved in hiring decisions and will only be used by our third-party vendor for determining tax credit eligibility. We certainly respect your time and encourage you to participate in this process. The completion of this questionnaire typically takes as little as 45 seconds and certainly no more than a few minutes. If for any reason you prefer not to complete the questionnaire, you may scroll to the bottom of the questions and select “opt-out.”
+  - generic [ref=f77e38]:
+    - link "Application FAQs" [ref=f77e39] [cursor=pointer]:
+      - /url: https://icims.help/candidate-faq
+"Skip": |-
+  - link "Skip Branding" [ref=e111] [cursor=pointer]:
+    - /url: https://careers-nfiindustries.icims.com/jobs/29459/senior-data-engineer/assessment#icims_content_iframe
+  - main [ref=e2]:
+    - navigation [ref=e3]:
+  --
+              - link "Skip to Main Content" [ref=f77e2] [cursor=pointer]:
+                - /url: "#iCIMS_Header"
+              - generic [ref=f77e3]:
+                - generic [ref=f77e6]:
+"Continue": |-
+    - link "Click Here To Continue" [ref=f77e43] [cursor=pointer]:
+      - /url: https://careers-nfiindustries.icims.com/jobs/29459/senior-data-engineer/assessment?url=https%3A%2F%2Fquestionnaire.waltonmgt.com%2Fmobile%2Fquestionnaire.php%3Fcustomer%3D048e2f1447691907b18b2a37e7ed2322%26applicant%3D91a74456b33c0a67b9db&submittal=798081&i=0&hashed=607971738&in_iframe=1
+      - button "Click Here To Continue" [ref=f77e45]
+    - paragraph [ref=f77e47]: Your participation in this questionnaire is important to us and we appreciate your time. The information contained in the Employment Tax Credit questionnaire will screen for relevant tax credits for which we may be eligible should you be selected for this position. The information provided will not be visible to those involved in hiring decisions and will only be used by our third-party vendor for determining tax credit eligibility. We certainly respect your time and encourage you to participate in this process. The completion of this questionnaire typically takes as little as 45 seconds and certainly no more than a few minutes. If for any reason you prefer not to complete the questionnaire, you may scroll to the bottom of the questions and select “opt-out.”
+  - generic [ref=f77e38]:
+    - link "Application FAQs" [ref=f77e39] [cursor=pointer]:

@@ -1,0 +1,117 @@
+"No": |-
+  - Page URL: https://ntrs.wd1.myworkdayjobs.com/en-US/northerntrust/job/Chicago%2C-IL/Associate-AI-Engineer_R156480/apply/autofillWithResume?src=sns-102&source=APPLICANT_SOURCE-6-210
+  - Page Title: Sign In
+  ### Snapshot
+  ```yaml
+  --
+    - generic "Please view Northern Trust's cookie policy here." [ref=e9]:
+      - paragraph [ref=e11]:
+        - text: Please view Northern Trust's cookie policy
+        - link "here" [ref=e12] [cursor=pointer]:
+          - /url: https://www.northerntrust.com/cookie-policy
+        - text: .
+      - generic [ref=e13]:
+        - button "Decline" [ref=e16] [cursor=pointer]
+  --
+          - /url: https://www.northerntrust.com/about-us/careers
+          - img "careers home" [ref=e29]
+        - heading "NT Careers" [level=1] [ref=e31]
+        - generic [ref=e33]:
+  --
+            - button "northerntrust.com" [ref=e49] [cursor=pointer]
+            - button "Search for Jobs" [ref=e50] [cursor=pointer]
+            - button "Candidate Home" [ref=e360] [cursor=pointer]
+            - button "Job Alerts" [ref=e361] [cursor=pointer]
+  --
+                - 'group "Have you previously worked for this organization? If Yes, please answer the questions below. CURRENT NORTHERN TRUST PARTNERS: Do not apply through this careers site. You must go to My Place > Workday > Jobs Hub." [ref=e441]':
+                  - generic [ref=e444]: "Have you previously worked for this organization? If Yes, please answer the questions below. CURRENT NORTHERN TRUST PARTNERS: Do not apply through this careers site. You must go to My Place > Workday > Jobs Hub.*"
+                  - 'generic "Have you previously worked for this organization? If Yes, please answer the questions below. CURRENT NORTHERN TRUST PARTNERS: Do not apply through this careers site. You must go to My Place > Workday > Jobs Hub." [ref=e447]':
+                    - generic [ref=e448]:
+                      - radio "Yes" [ref=e450] [cursor=pointer]
+                      - generic [ref=e451]: "Yes"
+  --
+                      - radio "No" [ref=e454] [cursor=pointer]
+                      - generic [ref=e455]: "No"
+              - group [ref=e456]:
+                - generic [ref=e458]:
+                  - generic [ref=e460]: Country*
+  --
+            - /url: https://www.youtube.com/northerntrustvideos
+        - listitem [ref=e66] [cursor=pointer]:
+          - link "LinkedIn" [ref=e67]:
+            - /url: http://www.linkedin.com/company/northern-trust/
+        - listitem [ref=e71] [cursor=pointer]:
+          - link "Facebook" [ref=e72]:
+            - /url: https://www.facebook.com/ntcareers
+  --
+      - link "Candidate Privacy Notice" [ref=e82] [cursor=pointer]:
+        - /url: https://www.northerntrust.com/documents/careers/privacy-policy.pdf
+      - generic [ref=e83]:
+        - img [ref=e87]
+        - generic [ref=e107]: © 2026 Workday, Inc. All rights reserved.
+"First Name": |-
+    - generic [ref=e471]: First Name*
+    - textbox "First Name" [ref=e474]: Jane
+  - generic [ref=e475]:
+    - generic [ref=e477]: Last Name*
+    - textbox "Last Name" [ref=e480]: Doe
+"Last Name": |-
+    - generic [ref=e477]: Last Name*
+    - textbox "Last Name" [ref=e480]: Doe
+  - generic [ref=e481]:
+    - generic [ref=e482]: I have a preferred name
+    - checkbox "I have a preferred name" [ref=e487] [cursor=pointer]
+"Address Line 1": |-
+    - generic [ref=e494]: Address Line 1*
+    - textbox "Address Line 1" [ref=e497]
+  - generic [ref=e498]:
+    - generic [ref=e499]: Address Line 2
+    - textbox "Address Line 2" [ref=e502]
+"City": |-
+    - generic [ref=e505]: City*
+    - textbox "City" [ref=e508]: San Jose
+  - generic [ref=e509]:
+    - generic [ref=e511]: State*
+    - button "State California Required" [ref=e515]: California
+"State": |-
+      - button "Country United States of America Required" [ref=e464]: United States of America
+  - group "Legal Name" [ref=e466]:
+    - heading "Legal Name" [level=4] [ref=e467]
+    - generic [ref=e468]:
+  --
+        - generic [ref=e511]: State*
+        - button "State California Required" [ref=e515]: California
+      - generic [ref=e516]:
+        - generic [ref=e518]: Postal Code*
+        - textbox "Postal Code" [ref=e521]
+  --
+            - generic [ref=e548]: 1 item selected, United States of America (+1)
+          - listbox "items selected" [ref=e550]:
+            - option "United States of America (+1), press delete to clear value." [ref=e551]:
+              - paragraph [ref=e556]: United States of America (+1)
+      - generic [ref=e560]:
+        - generic [ref=e562]: Phone Number*
+        - textbox "Phone Number" [ref=e565]: (555) 010-0199
+"Postal Code": |-
+        - generic [ref=e518]: Postal Code*
+        - textbox "Postal Code" [ref=e521]
+  - group "Email Address" [ref=e523]:
+    - heading "Email Address" [level=4] [ref=e524]
+    - generic [ref=e527]: jane.doe@example.com
+"Phone Device Type": |-
+    - generic [ref=e534]: Phone Device Type*
+    - button "Phone Device Type Select One Required" [ref=e538]: Select One
+  - generic [ref=e539]:
+    - generic [ref=e541]: Country Phone Code*
+    - generic [ref=e546] [cursor=pointer]:
+"Phone Number": |-
+    - generic [ref=e562]: Phone Number*
+    - textbox "Phone Number" [ref=e565]: (555) 010-0199
+  - generic [ref=e566]:
+    - generic [ref=e567]: Phone Extension
+    - textbox "Phone Extension" [ref=e570]
+"Save and Continue": |-
+          - button "Save and Continue" [ref=e574] [cursor=pointer]
+  - generic [ref=e56]:
+    - heading "Follow Us" [level=4] [ref=e57]
+    - list [ref=e58]:

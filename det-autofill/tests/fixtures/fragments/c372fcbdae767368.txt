@@ -1,0 +1,44 @@
+"First Name": |-
+    - generic [ref=e27]: First Name*
+    - textbox "First Name" [ref=e30]: Jane Quinn
+  - generic [ref=e32]:
+    - generic [ref=e35]: Last Name*
+    - textbox "Last Name" [ref=e38]: Doe
+"Last Name": |-
+      - generic [ref=e35]: Last Name*
+      - textbox "Last Name" [ref=e38]: Doe
+  - generic [ref=e41]:
+    - generic [ref=e44]: Email Address (Required)*
+    - textbox "Email Address (Required)" [ref=e47]: jane.doe@example.com
+"Email Address (Required)": |-
+    - generic [ref=e44]: Email Address (Required)*
+    - textbox "Email Address (Required)" [ref=e47]: jane.doe@example.com
+  - generic [ref=e50]:
+    - generic [ref=e53]: Confirm Email Address*
+    - textbox "Confirm Email Address" [ref=e56]: jane.doe@example.com
+"Confirm Email Address": |-
+    - generic [ref=e53]: Confirm Email Address*
+    - textbox "Confirm Email Address" [ref=e56]: jane.doe@example.com
+  - generic [ref=e59]:
+    - generic [ref=e62]: Password*
+    - textbox "Password" [ref=e65]: App!icant2026!
+"Password": |-
+    - generic [ref=e62]: Password*
+    - textbox "Password" [ref=e65]: App!icant2026!
+  - generic [ref=e68]:
+    - generic [ref=e71]: Confirm Password*
+    - textbox "Confirm Password" [ref=e74]: App!icant2026!
+  - generic [ref=e76]:
+    - text: Dayforce will use the personal information collected on this form to create your account, which will allow you to apply directly with Dayforce's clients using the same credentials, saving you time and making your account more secure. The processing of the personal information for this purpose is subject to
+    - link "Dayforce's Global Privacy Statement" [ref=e77] [cursor=pointer]:
+"Confirm Password": |-
+    - generic [ref=e71]: Confirm Password*
+    - textbox "Confirm Password" [ref=e74]: App!icant2026!
+  - generic [ref=e76]:
+    - text: Dayforce will use the personal information collected on this form to create your account, which will allow you to apply directly with Dayforce's clients using the same credentials, saving you time and making your account more secure. The processing of the personal information for this purpose is subject to
+    - link "Dayforce's Global Privacy Statement" [ref=e77] [cursor=pointer]:
+"Next": |-
+    - button "Next" [ref=e90] [cursor=pointer]
+  - generic [ref=e92]:
+    - text: Have an account?
+    - link "Sign In" [ref=e93] [cursor=pointer]:

@@ -1,0 +1,98 @@
+"Email Address": |-
+  - generic "Required" [ref=e108]: "Email Address: *"
+  - 'textbox "Email Address: *" [ref=e109]'
+  - generic "Required" [ref=e110]: "Retype Email Address: *"
+  - 'textbox "Retype Email Address: *" [ref=e111]'
+  - generic "Required" [ref=e112]: "Choose Password: *"
+  - generic [ref=e113]:
+    - 'textbox "Choose Password: *" [ref=e114]'
+"Password": |-
+  - generic "Required" [ref=e112]: "Choose Password: *"
+  - generic [ref=e113]:
+    - 'textbox "Choose Password: *" [ref=e114]'
+    - button "Show" [ref=e115] [cursor=pointer]
+  - list [ref=e477]:
+    - listitem [ref=e478]: Password must be at least 8 characters long.
+    - listitem [ref=e479]: Password must not be longer than 18 characters.
+    - listitem [ref=e480]: Password must contain at least one upper case and one lower case letter.
+    - listitem [ref=e481]: Password must contain at least one number or punctuation character.
+    - listitem [ref=e482]: Password must not contain space or unicode characters.
+  - generic "Required" [ref=e117]: "Retype Password: *"
+  - generic [ref=e118]:
+    - 'textbox "Retype Password: *" [ref=e119]'
+    - button "Show" [ref=e120] [cursor=pointer]
+  - generic "Required" [ref=e121]: "First Name: *"
+  - 'textbox "First Name: *" [ref=e122]'
+"Re-enter Password": (no match)
+"First Name": |-
+  - generic "Required" [ref=e121]: "First Name: *"
+  - 'textbox "First Name: *" [ref=e122]'
+  - text: Middle Name
+  - textbox "Middle Name" [ref=e123]
+  - generic "Required" [ref=e124]: "Last Name: *"
+"Last Name": |-
+  - generic "Required" [ref=e124]: "Last Name: *"
+  - 'textbox "Last Name: *" [ref=e125]'
+  - table [ref=e127]:
+    - rowgroup [ref=e128]:
+      - row "APPLICATION INFORMATION" [ref=e129]:
+"Primary Phone": |-
+  - generic "Required" [ref=e135]: Primary Phone*
+  - textbox "Primary Phone" [ref=e136]
+  - button "Primary Phone Show help" [ref=e138] [cursor=pointer]: 
+  - generic "Required" [ref=e139]: Country of residence*
+  - generic [ref=e142]:
+    - status [ref=e144]
+"Country of residence": |-
+  - generic "Required" [ref=e139]: Country of residence*
+  - generic [ref=e142]:
+    - status [ref=e144]
+    - combobox "Country of residence" [ref=e145]
+    - button "Country of residence" [ref=e146] [cursor=pointer]:
+      - generic [ref=e147]: 
+  - generic "Required" [ref=e148]: Street Address*
+  - textbox "Street Address" [ref=e149]
+"Street Address": |-
+  - generic "Required" [ref=e148]: Street Address*
+  - textbox "Street Address" [ref=e149]
+  - generic "Required" [ref=e150]: City*
+  - textbox "City" [ref=e151]
+  - generic "Required" [ref=e152]: State/Prov/County*
+"City": |-
+  - generic "Required" [ref=e150]: City*
+  - textbox "City" [ref=e151]
+  - generic "Required" [ref=e152]: State/Prov/County*
+  - generic [ref=e155]:
+    - status [ref=e157]
+  --
+  - generic "Required" [ref=e296]: Ethnicity:*
+  - generic [ref=e299]:
+    - status [ref=e301]
+    - combobox "Ethnicity:" [ref=e302]
+    - button "Ethnicity:" [ref=e303] [cursor=pointer]:
+      - generic [ref=e304]: 
+  - generic [ref=e305]:
+    - paragraph [ref=e306]: Form
+  --
+    - option "Holy See (Vatican City State)"
+    - option "Honduras"
+    - option "Hong Kong"
+    - option "Hungary"
+"State/Prov/County": |-
+  - generic "Required" [ref=e152]: State/Prov/County*
+  - generic [ref=e155]:
+    - status [ref=e157]
+    - textbox "State/Prov/County" [disabled] [ref=e158]:
+      - /placeholder: No Selection
+    - button "State/Prov/County" [disabled] [ref=e159]:
+      - generic [ref=e160]: 
+  - button "State/Prov/County Show help" [ref=e162] [cursor=pointer]: 
+  - generic "Required" [ref=e163]: Zip/Postal Code*
+  - textbox "Zip/Postal Code" [ref=e164]
+  - generic [ref=e165]:
+"Zip/Postal Code": |-
+  - generic "Required" [ref=e163]: Zip/Postal Code*
+  - textbox "Zip/Postal Code" [ref=e164]
+  - generic [ref=e165]:
+    - table [ref=e166]:
+      - rowgroup [ref=e167]:

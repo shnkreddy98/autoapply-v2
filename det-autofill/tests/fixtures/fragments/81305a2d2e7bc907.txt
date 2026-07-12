@@ -1,0 +1,8 @@
+"User Name": (no match)
+"Password": (no match)
+"Login": |-
+  - Page URL: https://atkcareers.taleo.net/careersection/iam/accessmanagement/login.jsf?lang=en&redirectionURI=https%3A%2F%2Fatkcareers.taleo.net%2Fcareersection%2Fcareersection%2Fcandidateacquisition%2Fflow.jsf%3Fportal%3D2101381138&TARGET=https%3A%2F%2Fatkcareers.taleo.net%2Fcareersection%2Fcareersection%2Fcandidateacquisition%2Fflow.jsf%3Fportal%3D2101381138
+  - Page Title: Login
+  ### Snapshot
+  ```yaml
+  - generic [active] [ref=e1]:

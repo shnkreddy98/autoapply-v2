@@ -1,0 +1,20 @@
+"LinkedIn": |-
+  - 0: (current) [Manual Application | Dayforce Jobs](https://jobs.dayforcehcm.com/en-US/twoharbors/Round-Point/jobs/3050/apply/manualApplication?source=LinkedIn&applicationSource=Manual)
+  - 1: [Begin the submission process](https://recruit.hirebridge.com/v3/applicationv2/Jobapplylogin.aspx?cid=7765&jid=731316)
+  ### Page
+  - Page URL: https://jobs.dayforcehcm.com/en-US/twoharbors/Round-Point/jobs/3050/apply/manualApplication?source=LinkedIn&applicationSource=Manual
+  - Page Title: Manual Application | Dayforce Jobs
+  - Console: 3 errors, 2 warnings
+  ### Snapshot
+  --
+                      - generic "LinkedIn Profile" [ref=e507]
+                      - textbox "LinkedIn Profile" [ref=e511]: https://www.linkedin.com/in/janedoe
+                    - generic [ref=e512]:
+                      - generic [ref=e515]:
+                        - generic "Home Phone Number" [ref=e517]
+  --
+                            - option "LinkedIn" [ref=e825]:
+                              - generic [ref=e826]: LinkedIn
+                        - generic:
+                          - img:
+                            - img

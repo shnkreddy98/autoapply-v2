@@ -1,0 +1,5 @@
+"What are your compensation expectations (base and bonus)? *": |-
+          - textbox "What are your compensation expectations (base and bonus)? *" [ref=e1698]
+  - generic [ref=e738]:
+    - generic [ref=e739]:
+      - button "Cancel" [ref=e740] [cursor=pointer]:

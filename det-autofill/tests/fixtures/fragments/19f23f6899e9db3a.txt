@@ -1,0 +1,12 @@
+"LinkedIn": |-
+    - generic "LinkedIn Profile" [ref=e204]
+    - textbox "LinkedIn Profile" [ref=e208]: https://www.linkedin.com/in/janedoe
+  - generic [ref=e209]:
+    - generic [ref=e212]:
+      - generic "Home Phone Number" [ref=e214]
+  --
+          - option "LinkedIn" [ref=e729]:
+            - generic [ref=e730]: LinkedIn
+          - option "Military Spouse Foundation" [ref=e731]:
+            - generic [ref=e732]: Military Spouse Foundation
+          - option "NAAIA" [ref=e733]:

@@ -1,0 +1,25 @@
+"Email*": |-
+    - generic [ref=e136]: Email*
+    - textbox "Email" [ref=e139]
+  - generic [ref=e142]:
+    - generic [ref=e145]: Password*
+"Password*": |-
+    - generic [ref=e145]: Password*
+    - textbox "Password" [ref=e148]
+  - link "Forgot Password?" [ref=e151] [cursor=pointer]:
+    - /url: /globalidentity/account/forgotpassword
+"Sign In": |-
+  - Page Title: Sign In | Dayforce Identity
+  - Console: 4 errors, 0 warnings
+  ### Snapshot
+  ```yaml
+  --
+        - heading "Sign In" [level=1] [ref=e127]
+        - generic [ref=e130]:
+          - generic [ref=e133]:
+            - generic [ref=e136]: Email*
+  --
+          - button "Sign In" [ref=e155] [cursor=pointer]
+          - generic [ref=e157]:
+            - text: Don't have an account?
+            - link "Create one now." [ref=e158] [cursor=pointer]:

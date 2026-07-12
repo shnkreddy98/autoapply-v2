@@ -1,0 +1,21 @@
+"Willing to relocate": |-
+  - generic [ref=e269]: "*Willing to relocate"
+  - generic [ref=e273]:
+    - combobox "Willing to relocate" [ref=e274] [cursor=pointer]:
+      - generic [ref=e275]: Select an Option
+    - generic:
+      - generic:
+"Willing for background check": |-
+  - generic [ref=e278]: "*Willing for background check"
+  - generic [ref=e282]:
+    - combobox "Willing for background check" [ref=e283] [cursor=pointer]:
+      - generic [ref=e284]: Select an Option
+    - generic:
+      - generic:
+"Source": |-
+  - generic [ref=e287]: "*Source"
+  - generic [ref=e291]:
+    - combobox "Source" [ref=e292] [cursor=pointer]:
+      - generic [ref=e293]: Select an Option
+    - generic:
+      - generic:

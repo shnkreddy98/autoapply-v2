@@ -1,0 +1,45 @@
+"Are you 18 years of age or older?": |-
+  - group "Are you 18 years of age or older? (If you are under 18 years of age, you may be required to provide a work authorization permit)*" [ref=e1872]:
+    - paragraph [ref=e1876]: Are you 18 years of age or older? (If you are under 18 years of age, you may be required to provide a work authorization permit)*
+    - button "Select One Required" [ref=e1880]: Select One
+  - 'group "Will you now or in the future require sponsorship for employment visa status to work in the country of the position for which you are expressing an interest? (Note: If you are currently on a student visa, temporary work visa, or any other type of temporary work authorization, please select “Yes” to this question).*" [ref=e1882]':
+    - paragraph [ref=e1886]: "Will you now or in the future require sponsorship for employment visa status to work in the country of the position for which you are expressing an interest? (Note: If you are currently on a student visa, temporary work visa, or any other type of temporary work authorization, please select “Yes” to this question).*"
+"sponsorship": |-
+  - 'group "Will you now or in the future require sponsorship for employment visa status to work in the country of the position for which you are expressing an interest? (Note: If you are currently on a student visa, temporary work visa, or any other type of temporary work authorization, please select “Yes” to this question).*" [ref=e1882]':
+    - paragraph [ref=e1886]: "Will you now or in the future require sponsorship for employment visa status to work in the country of the position for which you are expressing an interest? (Note: If you are currently on a student visa, temporary work visa, or any other type of temporary work authorization, please select “Yes” to this question).*"
+    - button "Select One Required" [ref=e1890]: Select One
+  - group "Have you ever been an employee of either Northern Trust or any affiliates of Northern Trust?*" [ref=e1892]:
+    - paragraph [ref=e1896]:
+"employee of either Northern Trust": |-
+  - group "Have you ever been an employee of either Northern Trust or any affiliates of Northern Trust?*" [ref=e1892]:
+    - paragraph [ref=e1896]:
+      - generic [ref=e1897]: Have you ever been an employee of either Northern Trust or any affiliates of Northern Trust?*
+    - button "Select One Required" [ref=e1901]: Select One
+  - group "Do you currently have a personal relationship (including marital or other committed relationship, significant familial relationship, romantic relationship, or any other close personal relationship (whether formal or informal)) with any current Northern Trust employee, contractor, or vendor?*" [ref=e1903]:
+    - paragraph [ref=e1907]:
+"personal relationship": |-
+  - group "Do you currently have a personal relationship (including marital or other committed relationship, significant familial relationship, romantic relationship, or any other close personal relationship (whether formal or informal)) with any current Northern Trust employee, contractor, or vendor?*" [ref=e1903]:
+    - paragraph [ref=e1907]:
+      - generic [ref=e1908]: Do you currently have a personal relationship (including marital or other committed relationship, significant familial relationship, romantic relationship, or any other close personal relationship (whether formal or informal)) with any current Northern Trust employee, contractor, or vendor?*
+    - button "Select One Required" [ref=e1912]: Select One
+  - group "Are you under any agreement/obligation with your current or prior employer which restricts your ability to work for Northern Trust or any affiliates of Northern Trust?*" [ref=e1914]:
+    - paragraph [ref=e1918]:
+"agreement/obligation": |-
+  - group "Are you under any agreement/obligation with your current or prior employer which restricts your ability to work for Northern Trust or any affiliates of Northern Trust?*" [ref=e1914]:
+    - paragraph [ref=e1918]:
+      - generic [ref=e1919]: Are you under any agreement/obligation with your current or prior employer which restricts your ability to work for Northern Trust or any affiliates of Northern Trust?
+      - text: "*"
+    - button "Select One Required" [ref=e1923]: Select One
+  - group "Are you currently or have you been in the last five years serving as a government official, either domestic or foreign?*" [ref=e1925]:
+"serving as a government official": |-
+  - group "Are you currently or have you been in the last five years serving as a government official, either domestic or foreign?*" [ref=e1925]:
+    - paragraph [ref=e1929]: Are you currently or have you been in the last five years serving as a government official, either domestic or foreign?*
+    - button "Select One Required" [ref=e1933]: Select One
+  - group "Are you related to a government official, either domestic or foreign?*" [ref=e1935]:
+    - paragraph [ref=e1939]: Are you related to a government official, either domestic or foreign?*
+"related to a government official": |-
+        - group "Are you related to a government official, either domestic or foreign?*" [ref=e1935]:
+          - paragraph [ref=e1939]: Are you related to a government official, either domestic or foreign?*
+          - button "Select One Required" [ref=e1943]: Select One
+  - generic [ref=e396]:
+    - button "Back" [ref=e573] [cursor=pointer]

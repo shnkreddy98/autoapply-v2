@@ -1,0 +1,10 @@
+"Continue": |-
+  - button "Continue" [ref=e312] [cursor=pointer]:
+    - generic [ref=e314]:
+      - generic: Continue
+  - button "Use phone number" [ref=e316] [cursor=pointer]:
+    - generic [ref=e318]:
+      - generic: Use phone number
+"Next": (no match)
+"Password": (no match)
+"Create Account": (no match)

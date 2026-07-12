@@ -1,0 +1,26 @@
+"United States": |-
+        - option "United States"
+        - option "United States Minor Outlying Islands"
+        - option "Uruguay"
+        - option "Uzbekistan"
+        - option "Vanuatu"
+        - option "Venezuela, Bolivarian Republic of"
+        - option "Vietnam"
+        - option "Virgin Islands, British"
+        - option "Virgin Islands, U.S."
+        - option "Wallis and Futuna"
+        - option "Western Sahara"
+        - option "Yemen"
+  --
+    - generic [ref=e140]: Are you legally authorized to work in the United States?*
+    - combobox "Are you legally authorized to work in the United States?" [ref=e141]:
+      - option "Please Select" [selected]
+      - option "Yes"
+      - option "No"
+  - generic [ref=e143]:
+    - generic [ref=e144]: Have you worked for Blood Cancer United, formerly LLS before?*
+    - combobox "Have you worked for Blood Cancer United, formerly LLS before?" [ref=e145]:
+      - option "Please Select" [selected]
+      - option "Yes"
+      - option "No"
+  - generic [ref=e147]:

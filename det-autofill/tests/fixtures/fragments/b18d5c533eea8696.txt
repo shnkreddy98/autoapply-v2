@@ -1,0 +1,5 @@
+"I agree with this statement": |-
+        - combobox "I accept and agree to the terms and conditions stated above." [expanded] [active] [ref=e1012]: I agree with this statement
+        - button "I accept and agree to the terms and conditions stated above." [ref=e1013] [cursor=pointer]:
+          - generic [ref=e1014]: 
+  - generic [ref=e1017]:

@@ -1,0 +1,20 @@
+"OK": |-
+          - text: You have already signed in as . To continue, click OK. Otherwise, click Sign Out.
+        - generic [ref=e45]:
+          - button "OK" [ref=e46] [cursor=pointer]
+          - button "Sign Out" [ref=e47] [cursor=pointer]
+  - generic [ref=e48]:
+    - link "LinkedIn" [ref=e49] [cursor=pointer]:
+  --
+    - link "Facebook" [ref=e53] [cursor=pointer]:
+      - /url: https://www.facebook.com/kearney
+      - img "Facebook" [ref=e54]
+    - link "Instagram" [ref=e55] [cursor=pointer]:
+      - /url: https://www.instagram.com/kearneyofficial/
+      - img "Instagram" [ref=e56]
+  --
+    - link "Cookie Notice" [ref=e66] [cursor=pointer]:
+      - /url: https://www.kearney.com/cookie-notice
+  - generic [ref=e67]:
+    - link "EU Website privacy policy" [ref=e68] [cursor=pointer]:
+      - /url: https://www.kearney.com/website-privacy-policy-gdpr

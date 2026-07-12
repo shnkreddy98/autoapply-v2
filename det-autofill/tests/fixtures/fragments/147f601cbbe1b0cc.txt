@@ -1,0 +1,18 @@
+"No": |-
+        - /url: http://www.statestreet.com/about/careers/regional-privacy-notices.html
+        - generic [ref=e25]: LEARN MORE
+  - generic [ref=e26]:
+    - button "Decline" [ref=e29] [cursor=pointer]
+  --
+                  - radio "No" [ref=e451] [cursor=pointer]
+                  - generic [ref=e452]: "No"
+          - group [ref=e453]:
+            - generic [ref=e455]:
+              - generic [ref=e457]: Country*
+  --
+  - link "State Street Privacy Notice" [ref=e100] [cursor=pointer]:
+    - /url: https://careers.statestreet.com/global/en/privacy-notices-and-important-information
+  - generic [ref=e101]:
+    - img [ref=e105]
+    - generic [ref=e125]: © 2026 Workday, Inc. All rights reserved.
+"Mobile": (no match)

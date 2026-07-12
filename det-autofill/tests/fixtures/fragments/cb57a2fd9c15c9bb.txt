@@ -1,0 +1,33 @@
+"Email Address": |-
+    - generic [ref=e248]: Email Address*
+    - textbox "Email Address" [ref=e251]
+  - generic [ref=e253]:
+    - generic [ref=e255]: Password*
+    - textbox "Password" [ref=e258]
+"Password": |-
+        - generic [ref=e255]: Password*
+        - textbox "Password" [ref=e258]
+      - generic [ref=e263]:
+        - button "Sign In" [ref=e264] [cursor=pointer]
+        - button [ref=e265] [cursor=pointer]: Sign In
+  --
+    - button "Forgot your password?" [ref=e269] [cursor=pointer]
+  - generic:
+    - generic:
+      - generic [ref=e270]: Enter website. This input is for robots only, do not enter if you're human.
+"Sign In": |-
+    - generic [ref=e118]: Create Account/Sign In
+  - listitem [ref=e119]:
+    - generic: step 2 of 8
+    - generic [ref=e125]: Autofill with Resume
+  --
+  - heading "Sign In" [active] [level=3] [ref=e244]
+  - generic [ref=e245]:
+    - generic [ref=e246]:
+      - generic [ref=e248]: Email Address*
+  --
+      - button "Sign In" [ref=e264] [cursor=pointer]
+      - button [ref=e265] [cursor=pointer]: Sign In
+  - generic [ref=e266]:
+    - text: Don't have an account yet?
+    - button "Create Account" [ref=e267] [cursor=pointer]

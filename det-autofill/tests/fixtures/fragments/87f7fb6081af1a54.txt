@@ -1,0 +1,5 @@
+"United States +1": |-
+  - option "United States +1" [ref=f84e731]: United States +1
+  - option "Afghanistan +93" [ref=f84e733]: Afghanistan +93
+  - option "Åland Islands +358" [ref=f84e735]: Åland Islands +358
+  - option "Albania +355" [ref=f84e737]: Albania +355

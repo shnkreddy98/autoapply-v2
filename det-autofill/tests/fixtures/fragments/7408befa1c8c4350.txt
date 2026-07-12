@@ -1,0 +1,5 @@
+"Phone Device Type Select One Required": |-
+    - button "Phone Device Type Select One Required" [ref=e468]: Select One
+  - generic [ref=e469]:
+    - generic [ref=e471]: Country Phone Code*
+    - generic [ref=e476] [cursor=pointer]:

@@ -1,0 +1,75 @@
+"Job Board: LinkedIn": |-
+  - 'option "Job Board: LinkedIn not checked" [ref=e647]':
+    - generic [ref=e648] [cursor=pointer]:
+      - radio [ref=e653]
+      - generic [ref=e654]: "Job Board: LinkedIn"
+  - 'option "Job Board: Monster not checked" [ref=e655]':
+    - generic [ref=e656] [cursor=pointer]:
+      - radio [ref=e661]
+"No": |-
+                  - radio "No" [ref=e400] [cursor=pointer]
+                  - generic [ref=e401]: "No"
+          - group [ref=e402]:
+            - generic [ref=e404]:
+              - generic [ref=e406]: Country*
+  --
+        - /url: https://twitter.com/SanManuelCasino?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor
+    - listitem [ref=e41] [cursor=pointer]:
+      - link "LinkedIn" [ref=e42]:
+        - /url: https://www.linkedin.com/company/san-manuel-band-of-mission-indians/
+  --
+  - 'option "Job Board: Career Builder not checked" [selected] [ref=e591]':
+    - generic [ref=e592] [cursor=pointer]:
+      - radio [ref=e597]
+      - generic [ref=e598]: "Job Board: Career Builder"
+  - 'option "Job Board: Casino Careers not checked" [ref=e599]':
+    - generic [ref=e600] [cursor=pointer]:
+      - radio [ref=e605]
+      - generic [ref=e606]: "Job Board: Casino Careers"
+  - 'option "Job Board: Craigslist not checked" [ref=e607]':
+    - generic [ref=e608] [cursor=pointer]:
+      - radio [ref=e613]
+      - generic [ref=e614]: "Job Board: Craigslist"
+  - 'option "Job Board: Dice not checked" [ref=e615]':
+    - generic [ref=e616] [cursor=pointer]:
+      - radio [ref=e621]
+      - generic [ref=e622]: "Job Board: Dice"
+  - 'option "Job Board: Glassdoor not checked" [ref=e623]':
+    - generic [ref=e624] [cursor=pointer]:
+      - radio [ref=e629]
+      - generic [ref=e630]: "Job Board: Glassdoor"
+  - 'option "Job Board: Handshake not checked" [ref=e631]':
+    - generic [ref=e632] [cursor=pointer]:
+      - radio [ref=e637]
+      - generic [ref=e638]: "Job Board: Handshake"
+  - 'option "Job Board: Indeed not checked" [ref=e639]':
+    - generic [ref=e640] [cursor=pointer]:
+      - radio [ref=e645]
+      - generic [ref=e646]: "Job Board: Indeed"
+  - 'option "Job Board: LinkedIn not checked" [ref=e647]':
+    - generic [ref=e648] [cursor=pointer]:
+      - radio [ref=e653]
+      - generic [ref=e654]: "Job Board: LinkedIn"
+  - 'option "Job Board: Monster not checked" [ref=e655]':
+    - generic [ref=e656] [cursor=pointer]:
+      - radio [ref=e661]
+      - generic [ref=e662]: "Job Board: Monster"
+  - 'option "Job Board: Recruiter via LinkedIn not checked" [ref=e663]':
+    - generic [ref=e664] [cursor=pointer]:
+      - radio [ref=e669]
+      - generic [ref=e670]: "Job Board: Recruiter via LinkedIn"
+  - 'option "Job Board: Zip Recruiter not checked" [ref=e671]':
+    - generic [ref=e672] [cursor=pointer]:
+      - radio [ref=e677]
+      - generic [ref=e678]: "Job Board: Zip Recruiter"
+"Phone Device Type Select One Required": |-
+    - button "Phone Device Type Select One Required" [ref=e468]: Select One
+  - generic [ref=e469]:
+    - generic [ref=e471]: Country Phone Code*
+    - generic [ref=e476] [cursor=pointer]:
+"City": |-
+    - generic [ref=e437]: City
+    - textbox "City" [ref=e440]: San Jose
+  - generic [ref=e441]:
+    - generic [ref=e442]: State
+    - button "State California" [ref=e446]: California

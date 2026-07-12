@@ -1,0 +1,11 @@
+"I agree to the Terms and Conditions and Voluntary Disclosures": |-
+            - generic [ref=e1436]: I agree to the Terms and Conditions and Voluntary Disclosures*
+            - checkbox "I agree to the Terms and Conditions and Voluntary Disclosures" [ref=e1441] [cursor=pointer]
+  - generic [ref=e368]:
+    - button "Back" [ref=e567] [cursor=pointer]
+    - button "Save and Continue" [ref=e568] [cursor=pointer]
+"Save and Continue": |-
+          - button "Save and Continue" [ref=e568] [cursor=pointer]
+  - generic [ref=e41]:
+    - heading "Follow Us" [level=4] [ref=e42]
+    - list [ref=e43]:

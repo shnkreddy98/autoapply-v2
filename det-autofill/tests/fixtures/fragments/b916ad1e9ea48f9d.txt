@@ -1,0 +1,30 @@
+"Address * required.": (no match)
+"Language Preference": |-
+      - text: Language Preference
+      - generic [ref=f67e108]: "*"
+    - generic [ref=f67e109]:
+      - generic [ref=f67e110]: Language Preference
+      - option [selected]
+      - combobox "Language Preference" [ref=f67e111] [cursor=pointer]:
+        - generic [ref=f67e112]: — Make a Selection —
+  - generic [ref=f67e115]:
+    - generic [ref=f67e116]:
+"Do you consent to receive text message communication during your application process?": |-
+      - text: Do you consent to receive text message communication during your application process?
+      - generic [ref=f67e117]: "*"
+    - generic [ref=f67e118]:
+      - generic [ref=f67e119]: Do you consent to receive text message communication during your application process?
+      - option [selected]
+      - combobox "Do you consent to receive text message communication during your application process?" [ref=f67e120] [cursor=pointer]:
+        - generic [ref=f67e121]: — Make a Selection —
+  - generic [ref=f67e124]:
+    - group "Addresses (1)* required." [ref=f67e125]:
+"Zip/Postal Code": |-
+      - generic [ref=f67e158]: Zip/Postal Code
+      - generic [ref=f67e159]:
+        - text: "*"
+        - generic [ref=f67e160]: required.
+    - textbox "Zip/Postal Code" [ref=f67e162]
+  - generic [ref=f67e163]:
+    - generic [ref=f67e164]:
+      - generic [ref=f67e165]: Country

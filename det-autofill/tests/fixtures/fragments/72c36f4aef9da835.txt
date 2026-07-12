@@ -1,0 +1,5 @@
+"Get an audio challenge": |-
+          - button "Get an audio challenge" [ref=f60e19] [cursor=pointer]
+          - button "Get a visual challenge" [ref=f60e21] [cursor=pointer]
+          - button "Help" [ref=f60e23] [cursor=pointer]
+  ```

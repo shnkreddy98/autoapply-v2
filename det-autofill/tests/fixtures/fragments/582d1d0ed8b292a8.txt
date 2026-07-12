@@ -1,0 +1,30 @@
+"Data": |-
+          - textbox "Role Description" [ref=e677]: Architected enterprise cloud platform (GCP) using Terraform, GKE, and Istio, ensuring high availability for 50+ services and enhancing system resilience. • Engineered event-driven pipeline (Kafka, Debezium CDC, ClickHouse) processing millions of daily events with sub-second latency and exactly-once semantics. • Developed 100+ production-grade FastAPI endpoints with robust Auth0/RBAC security, serving as the backbone for scalable client interactions. • Integrated dbt into the ELT pipeline to standardize transformation logic in BigQuery & ClickHouse, reducing reporting errors by 40% via automated quality tests. • Implemented scalable K8s infrastructure with Karpenter auto-scaling and FluxCD GitOps, automating continuous delivery for over 60 Helm releases. • Managed multi-database architecture (PostgreSQL, Bigtable, ClickHouse), optimizing storage for vector search, caching, and large-scale analytics.
+    - group "Work Experience 2" [ref=e678]:
+      - generic [ref=e679]:
+        - heading "Work Experience 2" [level=5] [ref=e680]
+  --
+          - textbox "Job Title" [ref=e693]: Data Engineer
+        - generic [ref=e694]:
+          - generic [ref=e696]: Company*
+          - textbox "Company" [ref=e699]: Kantar
+  --
+          - textbox "Role Description" [ref=e761]: Orchestrated ELT pipelines using Airflow and Spark, integrating Kafka streams to ingest advertising data with exactly-once semantics. • Accelerated data modeling by deploying dbt for complex SQL transformations, replacing ad-hoc scripts with modular pipelines that reduced time-to-insight by 25%. • Designed real-time processing framework with Kafka Streams and Spark Streaming, providing near real- time insights into campaign performance. • Deployed serverless architecture (Cloud Functions, Cloud Storage) to automate data workflows, reducing manual intervention by 80% and improving reliability. • Engineered ROI optimization algorithms that increased client sales by 34% for global enterprises through data-driven ad spend allocation.
+    - group "Work Experience 3" [ref=e762]:
+      - generic [ref=e763]:
+        - heading "Work Experience 3" [level=5] [ref=e764]
+  --
+          - textbox "Job Title" [ref=e777]: Data Engineer
+        - generic [ref=e778]:
+          - generic [ref=e780]: Company*
+          - textbox "Company" [ref=e783]: The Sparks Foundation
+  --
+          - textbox "Role Description" [ref=e845]: Optimized ETL pipeline performance, achieving 25% efficiency improvement through parallel processing and exponential backoff retry logic. • Enhanced PostgreSQL & MySQL query performance by 30% through strategic indexing and execution plan analysis. • Integrated automated data validation scripts using Python and Pandas to detect schema mismatches and null values, reducing downstream data corruption incidents by 40%. • Collaborated with business analysts to design star-schema data models in PostgreSQL, enabling faster generation of daily operational reports and supporting strategic decision-making. • Mentored junior engineers on TDD and code reviews, establishing 80% test coverage targets and improving code maintainability.
+    - button "Add Another" [ref=e849] [cursor=pointer]
+  - group "Education" [ref=e851]:
+    - heading "Education" [level=4] [ref=e852]
+  --
+                - text: Data
+              - generic [ref=e888]: Minimized
+          - button "The field will alphabetically return the first 100 results and can also return specified matches." [ref=e892] [cursor=pointer]
+        - generic [ref=e896]:

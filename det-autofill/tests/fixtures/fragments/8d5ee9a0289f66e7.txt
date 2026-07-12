@@ -1,0 +1,73 @@
+"How Did You Hear About Us?": |-
+      - generic [ref=e422]: How Did You Hear About Us?*
+      - button "How Did You Hear About Us? Select One Required" [ref=e426]: Select One
+  - group [ref=e427]:
+    - group "Have you ever worked for Corewell Health or any of the current or former entities?" [ref=e430]:
+      - generic [ref=e433]: Have you ever worked for Corewell Health or any of the current or former entities?*
+"First Name": |-
+    - generic [ref=e460]: First Name*
+    - textbox "First Name" [ref=e463]: Jane
+  - generic [ref=e464]:
+    - generic [ref=e465]: Middle Name
+    - textbox "Middle Name" [ref=e468]: Quinn
+"Last Name": |-
+    - generic [ref=e471]: Last Name*
+    - textbox "Last Name" [ref=e474]: Doe
+  - generic [ref=e475]:
+    - generic [ref=e476]: I have a preferred name
+    - checkbox "I have a preferred name" [ref=e481] [cursor=pointer]
+"Address Line 1": |-
+    - generic [ref=e488]: Address Line 1*
+    - textbox "Address Line 1" [ref=e491]
+  - generic [ref=e492]:
+    - generic [ref=e494]: City*
+    - textbox "City" [ref=e497]: Redwood City
+"City": |-
+    - generic [ref=e494]: City*
+    - textbox "City" [ref=e497]: Redwood City
+  - generic [ref=e498]:
+    - generic [ref=e500]: State*
+    - button "State California Required" [ref=e504]: California
+"State": |-
+      - button "Country United States of America Required" [ref=e453]: United States of America
+  - group "Legal Name" [ref=e455]:
+    - heading "Legal Name" [level=4] [ref=e456]
+    - generic [ref=e457]:
+  --
+        - generic [ref=e500]: State*
+        - button "State California Required" [ref=e504]: California
+      - generic [ref=e505]:
+        - generic [ref=e507]: Postal Code*
+        - textbox "Postal Code" [ref=e510]
+  --
+            - generic [ref=e543]: 1 item selected, United States of America (+1)
+          - listbox "items selected" [ref=e545]:
+            - option "United States of America (+1), press delete to clear value." [ref=e546]:
+              - paragraph [ref=e551]: United States of America (+1)
+      - generic [ref=e555]:
+        - generic [ref=e557]: Phone Number*
+        - textbox "Phone Number" [ref=e560]: (555) 010-0199
+"Postal Code": |-
+    - generic [ref=e507]: Postal Code*
+    - textbox "Postal Code" [ref=e510]
+  - generic [ref=e511]:
+    - generic [ref=e513]: County*
+    - textbox "County" [ref=e516]
+"Phone Device Type": |-
+    - generic [ref=e529]: Phone Device Type*
+    - button "Phone Device Type Select One Required" [ref=e533]: Select One
+  - generic [ref=e534]:
+    - generic [ref=e536]: Country Phone Code*
+    - generic [ref=e541] [cursor=pointer]:
+"Phone Number": |-
+    - generic [ref=e557]: Phone Number*
+    - textbox "Phone Number" [ref=e560]: (555) 010-0199
+  - generic [ref=e561]:
+    - generic [ref=e562]: Phone Extension
+    - textbox "Phone Extension" [ref=e565]
+"No": |-
+          - radio "No" [ref=e443] [cursor=pointer]
+          - generic [ref=e444]: "No"
+  - group [ref=e445]:
+    - generic [ref=e447]:
+      - generic [ref=e449]: Country*

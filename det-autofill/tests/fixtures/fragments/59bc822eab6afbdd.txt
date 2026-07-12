@@ -1,0 +1,113 @@
+"Job Title": |-
+    - generic [ref=e737]: Job Title*
+    - textbox "Job Title" [ref=e740]: Founding Engineer
+  - generic [ref=e741]:
+    - generic [ref=e743]: Company*
+    - textbox "Company" [ref=e746]: AirFold
+  --
+    - generic [ref=e821]: Job Title*
+    - textbox "Job Title" [ref=e824]: Data Engineer
+  - generic [ref=e825]:
+    - generic [ref=e827]: Company*
+    - textbox "Company" [ref=e830]: Kantar
+  --
+    - generic [ref=e905]: Job Title*
+    - textbox "Job Title" [ref=e908]: Data Engineer
+  - generic [ref=e909]:
+    - generic [ref=e911]: Company*
+    - textbox "Company" [ref=e914]: The Sparks Foundation
+  --
+    - generic [ref=e989]: Job Title*
+    - textbox "Job Title" [ref=e992]: Founding Engineer
+  - generic [ref=e993]:
+    - generic [ref=e995]: Company*
+    - textbox "Company" [ref=e998]: AirFold
+  --
+    - generic [ref=e1073]: Job Title*
+    - textbox "Job Title" [ref=e1076]: Data Engineer
+  - generic [ref=e1077]:
+    - generic [ref=e1079]: Company*
+    - textbox "Company" [ref=e1082]: Kantar
+  --
+    - generic [ref=e1157]: Job Title*
+    - textbox "Job Title" [ref=e1160]: Data Engineer
+  - generic [ref=e1161]:
+    - generic [ref=e1163]: Company*
+    - textbox "Company" [ref=e1166]: The Sparks Foundation
+"Company": |-
+                  - generic [ref=e743]: Company*
+                  - textbox "Company" [ref=e746]: AirFold
+                - generic [ref=e747]:
+                  - generic [ref=e748]: Location
+                  - textbox "Location" [ref=e751]: San Francisco California
+  --
+                  - generic [ref=e827]: Company*
+                  - textbox "Company" [ref=e830]: Kantar
+                - generic [ref=e831]:
+                  - generic [ref=e832]: Location
+                  - textbox "Location" [ref=e835]: Bengaluru India
+  --
+                  - generic [ref=e911]: Company*
+                  - textbox "Company" [ref=e914]: The Sparks Foundation
+                - generic [ref=e915]:
+                  - generic [ref=e916]: Location
+                  - textbox "Location" [ref=e919]: Bengaluru India
+  --
+                  - generic [ref=e995]: Company*
+                  - textbox "Company" [ref=e998]: AirFold
+                - generic [ref=e999]:
+                  - generic [ref=e1000]: Location
+                  - textbox "Location" [ref=e1003]: San Francisco California
+  --
+                  - generic [ref=e1079]: Company*
+                  - textbox "Company" [ref=e1082]: Kantar
+                - generic [ref=e1083]:
+                  - generic [ref=e1084]: Location
+                  - textbox "Location" [ref=e1087]: Bengaluru India
+  --
+                  - generic [ref=e1163]: Company*
+                  - textbox "Company" [ref=e1166]: The Sparks Foundation
+                - generic [ref=e1167]:
+                  - generic [ref=e1168]: Location
+                  - textbox "Location" [ref=e1171]: Bengaluru India
+  --
+        - /url: https://www.linkedin.com/company/corewell-health
+  - link "Website Privacy Policy" [ref=e66] [cursor=pointer]:
+    - /url: https://corewellhealth.org/policies/privacy
+  - generic [ref=e67]:
+"Role Description": |-
+          - generic [ref=e805]: Role Description
+          - textbox "Role Description" [ref=e808]: Architected multi-cloud platform (AWS/GCP) using Terraform, EKS, and Istio, ensuring high availability for 50+ services and enhancing system resilience. * Engineered event-driven pipeline (Kafka, Debezium CDC, ClickHouse) processing millions of daily events with sub-second latency and exactly-once semantics. * Developed 100+ production-grade FastAPI endpoints with robust Auth0/RBAC security, serving as the backbone for scalable client interactions. * Integrated dbt into the ELT pipeline to standardize transformation logic in Snowflake & ClickHouse, reducing reporting errors by 40% via automated quality tests. * Implemented scalable K8s infrastructure with Karpenter auto-scaling and FluxCD GitOps, automating continuous delivery for over 60 Helm releases. * Managed multi-database architecture (PostgreSQL, DynamoDB, ClickHouse), optimizing storage for vector search, caching, and large-scale analytics.
+    - group "Work Experience 2" [ref=e809]:
+      - generic [ref=e810]:
+        - heading "Work Experience 2" [level=5] [ref=e811]
+  --
+          - generic [ref=e889]: Role Description
+          - textbox "Role Description" [ref=e892]: Orchestrated ELT pipelines using Airflow and Spark, integrating Kafka streams to ingest advertising data with exactly-once semantics. * Accelerated data modeling by deploying dbt for complex SQL transformations, replacing ad-hoc scripts with modular pipelines that reduced time-to-insight by 25%. * Designed dimensional data models (star schema) aligned with healthcare analytics requirements, enabling self- service reporting and supporting data governance compliance across multiple data consumers. * Deployed serverless architecture (AWS Lambda, S3) to automate data workflows, reducing manual intervention by 80% and improving reliability. * Engineered ROI optimization algorithms that increased client sales by 34% for global enterprises through data- driven ad spend allocation.
+    - group "Work Experience 3" [ref=e893]:
+      - generic [ref=e894]:
+        - heading "Work Experience 3" [level=5] [ref=e895]
+  --
+          - generic [ref=e973]: Role Description
+          - textbox "Role Description" [ref=e976]: Optimized ETL pipeline performance, achieving 25% efficiency improvement through parallel processing and exponential backoff retry logic. * Enhanced PostgreSQL & MySQL query performance by 30% through strategic indexing and execution plan analysis. * Integrated automated data validation scripts using Python and Pandas to detect schema mismatches and null values, reducing downstream data corruption incidents by 40%. * Collaborated with business analysts to design star-schema data models in PostgreSQL, enabling faster generation of daily operational reports and supporting strategic decision-making. * Mentored junior engineers on TDD and code reviews, establishing 80% test coverage targets and improving code maintainability.
+    - group "Work Experience 4" [ref=e977]:
+      - generic [ref=e978]:
+        - heading "Work Experience 4" [level=5] [ref=e979]
+  --
+          - generic [ref=e1057]: Role Description
+          - textbox "Role Description" [ref=e1060]
+    - group "Work Experience 5" [ref=e1061]:
+      - generic [ref=e1062]:
+        - heading "Work Experience 5" [level=5] [ref=e1063]
+  --
+          - generic [ref=e1141]: Role Description
+          - textbox "Role Description" [ref=e1144]
+    - group "Work Experience 6" [ref=e1145]:
+      - generic [ref=e1146]:
+        - heading "Work Experience 6" [level=5] [ref=e1147]
+  --
+          - generic [ref=e1225]: Role Description
+          - textbox "Role Description" [ref=e1228]: Optimized ETL pipeline performance, achieving 25% efficiency improvement through parallel processing and exponential backoff retry logic. Enhanced PostgreSQL & MySQL query performance by 30% through strategic indexing and execution plan analysis. Integrated automated data validation scripts using Python and Pandas to detect schema mismatches and null values, reducing downstream data corruption incidents by 40%. Collaborated with business analysts to design star-schema data models in PostgreSQL, enabling faster generation of daily operational reports and supporting strategic decision-making. Mentored junior engineers on TDD and code reviews, establishing 80% test coverage targets and improving code maintainability.
+    - button "Add Another" [ref=e1232] [cursor=pointer]
+  - group "Languages" [ref=e1234]:
+    - heading "Languages" [level=4] [ref=e1235]

@@ -1,0 +1,151 @@
+"Search": |-
+    - link "Job Search" [ref=e33] [cursor=pointer]:
+      - /url: "#"
+  - listitem [ref=e34]:
+    - link "My Jobpage" [ref=e35] [cursor=pointer]:
+  --
+                    - strong [ref=e158]: Select/Search
+                    - text: links to enter your Education information. If you cannot find your institution, major or degree using the search feature, please select ‘
+                    - strong [ref=e159]: Other
+                    - text: ’ and ensure your CV has the correct information.
+                  - generic [ref=e161]:
+  --
+                          - strong [ref=e186]: Search
+                          - text: next to each text box
+                      - listitem [ref=e187]:
+                        - generic [ref=e188]:
+  --
+                        - option "Biotechnology Research"
+                        - option "Bipphysics"
+                        - option "Blood Bank Technology"
+                        - option "Botany"
+  --
+                        - option "Marketing Research"
+                        - option "Marketing Strategy"
+                        - option "Marriage and Family Counselin"
+                        - option "Mass Communications"
+  --
+                        - option "Operational Research"
+                        - option "Operations"
+                        - option "Operations & SCM"
+                        - option "Operations Analysis"
+  --
+                        - option "Operations Research"
+                        - option "Operations Strategy"
+                        - option "Operations Systems"
+                        - option "Ophthalmic Lab Technician"
+  --
+                    - strong [ref=e277]: Select/Search
+                    - text: links to enter your Education information. If you cannot find your institution, major or degree using the search feature, please select ‘
+                    - strong [ref=e278]: Other
+                    - text: ’ and ensure your CV has the correct information.
+                  - generic [ref=e280]:
+  --
+                          - strong [ref=e305]: Search
+                          - text: next to each text box
+                      - listitem [ref=e306]:
+                        - generic [ref=e307]:
+  --
+                        - option "Biotechnology Research"
+                        - option "Bipphysics"
+                        - option "Blood Bank Technology"
+                        - option "Botany"
+  --
+                        - option "Marketing Research"
+                        - option "Marketing Strategy"
+                        - option "Marriage and Family Counselin"
+                        - option "Mass Communications"
+  --
+                        - option "Operational Research"
+                        - option "Operations"
+                        - option "Operations & SCM"
+                        - option "Operations Analysis"
+  --
+                        - option "Operations Research"
+                        - option "Operations Strategy"
+                        - option "Operations Systems"
+                        - option "Ophthalmic Lab Technician"
+  --
+                    - strong [ref=e400]: Select/Search
+                    - text: links to enter your Education information. If you cannot find your institution, major or degree using the search feature, please select ‘
+                    - strong [ref=e401]: Other
+                    - text: ’ and ensure your CV has the correct information.
+                  - generic [ref=e403]:
+  --
+                          - strong [ref=e428]: Search
+                          - text: next to each text box
+                      - listitem [ref=e429]:
+                        - generic [ref=e430]:
+  --
+                        - option "Biotechnology Research"
+                        - option "Bipphysics"
+                        - option "Blood Bank Technology"
+                        - option "Botany"
+  --
+                        - option "Marketing Research"
+                        - option "Marketing Strategy"
+                        - option "Marriage and Family Counselin"
+                        - option "Mass Communications"
+  --
+                        - option "Operational Research"
+                        - option "Operations"
+                        - option "Operations & SCM"
+                        - option "Operations Analysis"
+  --
+                        - option "Operations Research"
+                        - option "Operations Strategy"
+                        - option "Operations Systems"
+                        - option "Ophthalmic Lab Technician"
+  --
+                  - generic [ref=e525]: ’ link to search for your previous employer. If you cannot find it, select ‘
+                  - strong [ref=e526]: Other
+                  - generic [ref=e527]: ’ and ensure your CV is updated with the correct name.
+                - generic [ref=e529]:
+  --
+                    - generic [ref=e536]: Please click on Search to select the value
+                  - combobox "Country Please click on Search to select the value" [ref=e538]:
+                    - option "Not Specified" [selected]
+                    - option "Afghanistan"
+                    - option "Aland Islands"
+  --
+                  - generic [ref=e539]: Please click on Search to select the value
+                - group "Employer . Required" [ref=e541]:
+                  - generic "The field Employer is mandatory." [ref=e543]:
+                    - text: Employer
+  --
+                  - textbox "Achievements and Certifications" [ref=e607]: • Built analytics data warehouse and reporting infrastructure supporting 50+ business metrics, enabling executive dashboards and real-time operational insights for strategic planning and ROI optimization. • Engineered event-driven pipeline (Kafka, Debezium CDC, ClickHouse) processing millions of daily events with sub-second latency and exactly-once semantics. • Developed 100+ production-grade FastAPI endpoints with robust Auth0/RBAC security, serving as the backbone for scalable client interactions. • Integrated dbt into the ELT pipeline to standardize transformation logic in Snowflake & ClickHouse, reducing reporting errors by 40% via automated quality tests. • Implemented scalable K8s infrastructure with Karpenter auto-scaling and FluxCD GitOps, automating continuous delivery for over 60 Helm releases. • Managed multi-database architecture (PostgreSQL, DynamoDB, ClickHouse) , optimizing storage for vector search, caching, and large-scale analytics.
+              - link "Remove Work Experience" [ref=e609] [cursor=pointer]:
+                - /url: "#"
+                - text: Remove Work Experience
+  --
+                  - generic [ref=e628]: ’ link to search for your previous employer. If you cannot find it, select ‘
+                  - strong [ref=e629]: Other
+                  - generic [ref=e630]: ’ and ensure your CV is updated with the correct name.
+                - generic [ref=e632]:
+  --
+                    - generic [ref=e639]: Please click on Search to select the value
+                  - combobox "Country Please click on Search to select the value" [ref=e641]:
+                    - option "Not Specified" [selected]
+                    - option "Afghanistan"
+                    - option "Aland Islands"
+  --
+                  - generic [ref=e642]: Please click on Search to select the value
+                - group "Employer . Required" [ref=e644]:
+                  - generic "The field Employer is mandatory." [ref=e646]:
+                    - text: Employer
+  --
+                  - generic [ref=e735]: ’ link to search for your previous employer. If you cannot find it, select ‘
+                  - strong [ref=e736]: Other
+                  - generic [ref=e737]: ’ and ensure your CV is updated with the correct name.
+                - generic [ref=e739]:
+  --
+                    - generic [ref=e746]: Please click on Search to select the value
+                  - combobox "Country Please click on Search to select the value" [ref=e748]:
+                    - option "Not Specified" [selected]
+                    - option "Afghanistan"
+                    - option "Aland Islands"
+  --
+                  - generic [ref=e749]: Please click on Search to select the value
+                - group "Employer . Required" [ref=e751]:
+                  - generic "The field Employer is mandatory." [ref=e753]:
+                    - text: Employer

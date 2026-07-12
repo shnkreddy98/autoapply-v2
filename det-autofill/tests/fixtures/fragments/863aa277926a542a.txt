@@ -1,0 +1,5 @@
+"Do you have any relatives or do you reside with anyone currently working for Yuhaaviatam of San Manuel Nation or Yaamava Resort & Casino?*": |-
+  - group "Do you have any relatives or do you reside with anyone currently working for Yuhaaviatam of San Manuel Nation or Yaamava Resort & Casino?*" [ref=e1731]:
+    - paragraph [ref=e1735]: Do you have any relatives or do you reside with anyone currently working for Yuhaaviatam of San Manuel Nation or Yaamava Resort & Casino?*
+    - generic [ref=e1736]:
+      - button "Select One Required" [ref=e1739]: Select One

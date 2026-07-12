@@ -1,0 +1,11 @@
+"What is your desired salary range for the position you are applying to?": |-
+        - group "What is your desired salary range for the position you are applying to?" [ref=e1328]:
+          - paragraph [ref=e1332]: What is your desired salary range for the position you are applying to?
+          - textbox [ref=e1335]
+  - generic [ref=e368]:
+    - button "Back" [ref=e567] [cursor=pointer]
+"Save and Continue": |-
+          - button "Save and Continue" [ref=e568] [cursor=pointer]
+  - generic [ref=e41]:
+    - heading "Follow Us" [level=4] [ref=e42]
+    - list [ref=e43]:

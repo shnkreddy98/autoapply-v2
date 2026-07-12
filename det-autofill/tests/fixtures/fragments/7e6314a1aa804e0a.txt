@@ -1,0 +1,30 @@
+"LinkedIn": |-
+  - Page URL: https://luriechildrens.wd1.myworkdayjobs.com/en-US/externalportal/job/Streeterville%2C-Chicago%2C-IL/Data-Engineer-IV_JR2026-1973-1/apply/autofillWithResume?source=LinkedIn
+  - Page Title: Sign In
+  ### Snapshot
+  ```yaml
+  --
+                    - button "Error LinkedIn" [ref=e1172] [cursor=pointer]:
+                      - text: Error
+                      - generic [ref=e1173]: "-"
+                      - text: LinkedIn
+                    - generic [ref=e1174]: Invalid LinkedIn URL
+            - generic [ref=e641]:
+              - group "Work Experience" [ref=e642]:
+                - heading "Work Experience" [level=4] [ref=e643]
+  --
+                    - generic [ref=e1126]: LinkedIn
+                    - generic [ref=e1127]:
+                      - textbox "LinkedIn" [active] [invalid] [ref=e1129]: https://www.linkedin.com/in/janedoe
+                      - paragraph [ref=e1176]:
+                        - generic [ref=e1177]: "Error:"
+                        - text: Invalid LinkedIn URL
+          - generic [ref=e346]:
+            - button "Back" [ref=e461] [cursor=pointer]
+            - button "Save and Continue" [ref=e462] [cursor=pointer]
+  --
+          - link "LinkedIn" [ref=e68]:
+            - /url: https://www.linkedin.com/company/ann-and-robert-h-lurie-children's-hospital-of-chicago
+      - generic [ref=e72]:
+        - img [ref=e76]
+        - generic [ref=e96]: © 2026 Workday, Inc. All rights reserved.

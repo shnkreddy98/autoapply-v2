@@ -1,0 +1,23 @@
+"Hispanic/Latino status": |-
+    - generic [ref=e1831]: Corewell Health is subject to certain governmental record-keeping and reporting requirements for the administration of civil rights laws and regulations. To comply with these laws, we invite you to voluntarily self-identify gender, race, ethnicity, veteran, and Hispanic/Latino status. Participation is voluntary and refusal to provide information will not subject you to any adverse treatment. The information is kept confidential and will only be used in accordance with the provisions of applicable laws, executive orders, and regulations, including those that require the information to be summarized and reported to the federal government for civil rights enforcement. When reported, data will not identify specific individuals. While we would appreciate each employee completing this information, doing so is entirely optional.
+  - generic [ref=e1832]:
+    - generic [ref=e1833]:
+      - generic [ref=e1835]: I wish to identify myself as:*
+"I wish to identify myself as:*": |-
+        - generic [ref=e1835]: I wish to identify myself as:*
+        - 'button "I wish to identify myself as: Select One Required" [ref=e1839]': Select One
+      - generic [ref=e1840]:
+        - generic [ref=e1842]: I wish to identify myself as:*
+        - 'button "I wish to identify myself as: Select One Required" [ref=e1846]': Select One
+      - generic [ref=e1847]:
+        - generic [ref=e1848]: Please indicate Hispanic/Latino below.
+  --
+        - generic [ref=e1855]: I wish to identify myself as:*
+        - 'button "I wish to identify myself as: Select One Required" [ref=e1859]': Select One
+  - group "Terms and Conditions" [ref=e1860]:
+    - heading "Terms and Conditions" [level=4] [ref=e1861]
+"Yes, I have read and agree to the Consent Agreement.*": |-
+            - generic [ref=e1882]: Yes, I have read and agree to the Consent Agreement.*
+            - checkbox "Yes, I have read and agree to the Consent Agreement." [ref=e1887] [cursor=pointer]
+  - generic [ref=e376]:
+    - button "Back" [ref=e568] [cursor=pointer]

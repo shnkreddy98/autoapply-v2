@@ -1,0 +1,13 @@
+"Primary Number type": (no match)
+"Sources": |-
+      - listitem [ref=e164]: You must select a value in the field "Sources".
+      - listitem [ref=e165]: The field "Street Address (line 1)" is mandatory.
+      - listitem [ref=e166]: The field "Zip/Postal Code" is mandatory.
+      - listitem [ref=e167]: You must select ALL possible values in the section Place of Residence.
+      - listitem [ref=e168]: The field "Primary Number" is mandatory.
+  - link "Beginning of the main content section." [ref=e169] [cursor=pointer]:
+    - /url: "#"
+  - table [ref=e170]:
+    - rowgroup [ref=e171]:
+      - row [ref=e394]:
+        - cell [ref=e395]:

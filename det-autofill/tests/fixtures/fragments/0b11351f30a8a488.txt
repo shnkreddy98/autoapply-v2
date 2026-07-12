@@ -1,0 +1,25 @@
+"Email address": |-
+    - generic [ref=e14]: Email address *
+    - textbox "Email address" [active] [ref=e15]
+  - generic [ref=e17]:
+    - generic [ref=e18]: Password *
+    - textbox "Password" [ref=e19]
+"Password": |-
+        - generic [ref=e18]: Password *
+        - textbox "Password" [ref=e19]
+        - switch "Show password" [ref=e20] [cursor=pointer]
+    - paragraph [ref=e21]:
+      - link "Forgot your password?" [ref=e22] [cursor=pointer]:
+        - /url: /u/login/password-reset-start/xTyFALXbvBAdTyeQ-custom?state=hqFo2SA1Vzk0M1dJamRFX3doc3ZvTVFMZVlFcmZOSFBWRXNwTKFur3VuaXZlcnNhbC1sb2dpbqN0aWTZIHhnVmEzMkFnRnQxR1JzdTc2WUpDR3hTX1JuSERnck5wo2NpZNkkNmI3OTAxNmUtNzI2OS00OGFlLWI4NTktZDZlMDVjYzZlNjllpW9yZ2lktG9yZ194VHlGQUxYYnZCQWRUeWVRp29yZ25hbWWnbmVsMTAwNA&ui_locales=en
+    - button "Sign in" [ref=e24] [cursor=pointer]
+  - paragraph [ref=e26]:
+    - text: Don't have an account?
+"Sign in": |-
+    - button "Sign in" [ref=e24] [cursor=pointer]
+  - paragraph [ref=e26]:
+    - text: Don't have an account?
+    - link "Sign up" [ref=e27] [cursor=pointer]:
+"Sign up": |-
+          - link "Sign up" [ref=e27] [cursor=pointer]:
+            - /url: /u/signup?state=hqFo2SA1Vzk0M1dJamRFX3doc3ZvTVFMZVlFcmZOSFBWRXNwTKFur3VuaXZlcnNhbC1sb2dpbqN0aWTZIHhnVmEzMkFnRnQxR1JzdTc2WUpDR3hTX1JuSERnck5wo2NpZNkkNmI3OTAxNmUtNzI2OS00OGFlLWI4NTktZDZlMDVjYzZlNjllpW9yZ2lktG9yZ194VHlGQUxYYnZCQWRUeWVRp29yZ25hbWWnbmVsMTAwNA&ui_locales=en
+  ```

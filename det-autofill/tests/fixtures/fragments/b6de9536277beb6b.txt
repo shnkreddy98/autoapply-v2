@@ -1,0 +1,8 @@
+"Male": |-
+      - option "Female" [ref=e2483]:
+        - generic [ref=e2484]: Female
+      - option "Male" [ref=e2485]:
+        - generic [ref=e2486]: Male
+      - option "Prefer Not to Disclose" [ref=e2487]:
+        - generic [ref=e2488]: Prefer Not to Disclose
+  ```

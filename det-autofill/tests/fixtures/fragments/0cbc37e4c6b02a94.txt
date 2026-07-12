@@ -1,0 +1,11 @@
+"Yes": |-
+                      - button "Yes Required" [ref=e1886]: "Yes"
+                    - group "Are you legally eligible for employment in the United States?*" [ref=e1691]:
+                      - paragraph [ref=e1695]: Are you legally eligible for employment in the United States?*
+                      - button "Select One Required" [expanded] [ref=e1699]: Select One
+  --
+      - option "Yes" [ref=e1892]:
+        - generic [ref=e1893]: "Yes"
+      - option "No" [ref=e1894]:
+        - generic [ref=e1895]: "No"
+  ```

@@ -1,0 +1,6 @@
+"Salary": |-
+  - option "Salary" [ref=e686]:
+    - generic "Salary" [ref=e688]
+  - option "1099" [ref=e689]:
+    - generic "1099" [ref=e691]
+  - option "W2/YR" [ref=e692]:

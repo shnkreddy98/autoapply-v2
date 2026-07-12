@@ -1,0 +1,10 @@
+"Choose a file or drop it here": |-
+      - button "Choose a file or drop it here" [ref=e40] [cursor=pointer]
+      - generic [ref=e41]: 10MB size limit
+    - generic:
+      - paragraph
+  --
+      - button "Choose a file or drop it here" [ref=e284] [cursor=pointer]
+      - generic [ref=e285]: 10MB size limit
+    - list
+  - generic:

@@ -1,0 +1,44 @@
+"No radio": (no match)
+"Address Line 1": |-
+    - generic [ref=e578]: Address Line 1*
+    - textbox "Address Line 1" [ref=e581]
+  - generic [ref=e582]:
+    - generic [ref=e583]: Address Line 2
+    - textbox "Address Line 2" [ref=e586]
+"City": |-
+    - generic [ref=e589]: City*
+    - textbox "City" [ref=e592]: Redwood City
+  - generic [ref=e593]:
+    - generic [ref=e595]: State*
+    - button "State California Required" [ref=e599]: California
+"State": |-
+      - button "Country United States of America Required" [ref=e531]: United States of America
+  - group "Legal Name" [ref=e533]:
+    - heading "Legal Name" [level=4] [ref=e534]
+    - generic [ref=e535]:
+  --
+        - generic [ref=e595]: State*
+        - button "State California Required" [ref=e599]: California
+      - generic [ref=e600]:
+        - generic [ref=e602]: Postal Code*
+        - textbox "Postal Code" [ref=e605]
+  --
+            - generic [ref=e637]: 1 item selected, United States of America (+1)
+          - listbox "items selected" [ref=e639]:
+            - option "United States of America (+1), press delete to clear value." [ref=e640]:
+              - paragraph [ref=e645]: United States of America (+1)
+      - generic [ref=e649]:
+        - generic [ref=e651]: Phone Number*
+        - textbox "Phone Number" [ref=e654]: (555) 010-0199
+"Postal Code": |-
+    - generic [ref=e602]: Postal Code*
+    - textbox "Postal Code" [ref=e605]
+  - generic [ref=e606]:
+    - generic [ref=e607]: County
+    - textbox "County" [ref=e610]
+"Phone Number": |-
+    - generic [ref=e651]: Phone Number*
+    - textbox "Phone Number" [ref=e654]: (555) 010-0199
+  - generic [ref=e655]:
+    - generic [ref=e656]: Phone Extension
+    - textbox "Phone Extension" [ref=e659]

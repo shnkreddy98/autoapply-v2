@@ -1,0 +1,24 @@
+"Are you legally able to work in the United States?": |-
+    - generic [ref=e2776]: Are you legally able to work in the United States?
+  - generic [ref=e2778]:
+    - generic [ref=e2780]:
+      - generic [ref=e2781]: Are you legally able to work in the United States?
+      - text: "*"
+    - generic [ref=e2786]:
+      - generic [ref=e2788] [cursor=pointer]:
+"Do you now or have you ever worked for us before?": |-
+    - generic [ref=e2802]: Do you now or have you ever worked for us before? If so, when?
+  - generic [ref=e2804]:
+    - generic [ref=e2806]:
+      - generic [ref=e2807]: Do you now or have you ever worked for us before? If so, when?
+      - text: "*"
+    - generic [ref=e2812]:
+      - generic [ref=e2814] [cursor=pointer]:
+"Will you now or in the future require sponsorship": |-
+    - generic [ref=e2828]: Will you now or in the future require sponsorship for employment visa status (e.g., H-1B visa status) or an immigration-related employment benefit?
+  - generic [ref=e2830]:
+    - generic [ref=e2832]:
+      - generic [ref=e2833]: Will you now or in the future require sponsorship for employment visa status (e.g., H-1B visa status) or an immigration-related employment benefit?
+      - text: "*"
+    - generic [ref=e2838]:
+      - generic [ref=e2840] [cursor=pointer]:

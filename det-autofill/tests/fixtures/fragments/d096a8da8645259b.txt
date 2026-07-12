@@ -1,0 +1,54 @@
+"Most Recent Company/Employer Name:": |-
+  - generic "Required" [ref=e242]: Most Recent Company/Employer Name:*
+  - textbox "Most Recent Company/Employer Name:" [ref=e243]: AirFold
+  - generic "Required" [ref=e244]: Most Recent/Current Job Title:*
+  - textbox "Most Recent/Current Job Title:" [active] [ref=e245]: Founding Engineer
+  - generic "Required" [ref=e246]: Starting Date:*
+"Most Recent/Current Job Title:": |-
+  - generic "Required" [ref=e244]: Most Recent/Current Job Title:*
+  - textbox "Most Recent/Current Job Title:" [active] [ref=e245]: Founding Engineer
+  - generic "Required" [ref=e246]: Starting Date:*
+  - generic "Starting Date:" [ref=e248]:
+    - 'generic "Starting Date: Required" [ref=e483]':
+"Starting Date:": |-
+  - generic "Required" [ref=e246]: Starting Date:*
+  - generic "Starting Date:" [ref=e248]:
+    - 'generic "Starting Date: Required" [ref=e483]':
+      - generic [ref=e487]:
+        - 'textbox "Starting Date: Required" [ref=e488]':
+          - /placeholder: MM/DD/YYYY
+        - img [ref=e491] [cursor=pointer]
+  - 'button "Starting Date: Show help" [ref=e253] [cursor=pointer]': 
+  - text: "Ending Date:"
+  - generic "Ending Date:" [ref=e255]:
+    - generic "Ending Date:" [ref=e493]:
+"Ending Date:": |-
+  - text: "Ending Date:"
+  - generic "Ending Date:" [ref=e255]:
+    - generic "Ending Date:" [ref=e493]:
+      - generic [ref=e497]:
+        - textbox "Ending Date:" [ref=e498]:
+          - /placeholder: MM/DD/YYYY
+        - img [ref=e501] [cursor=pointer]
+  - 'button "Ending Date: Show help" [ref=e260] [cursor=pointer]': 
+  - text: "Reasons for Leaving:"
+  - textbox "Reasons for Leaving:" [ref=e261]
+  - generic "Required" [ref=e262]: Description of Duties/Responsibilities (IF YOU UPLOADED A RESUME YOU CAN ENTER "SEE RESUME")*
+"Reasons for Leaving:": |-
+  - text: "Reasons for Leaving:"
+  - textbox "Reasons for Leaving:" [ref=e261]
+  - generic "Required" [ref=e262]: Description of Duties/Responsibilities (IF YOU UPLOADED A RESUME YOU CAN ENTER "SEE RESUME")*
+  - textbox "Description of Duties/Responsibilities (IF YOU UPLOADED A RESUME YOU CAN ENTER \"SEE RESUME\") Required" [ref=e263]
+  - generic "Required" [ref=e264]: Desired Salary*
+"Description of Duties/Responsibilities": |-
+  - generic "Required" [ref=e262]: Description of Duties/Responsibilities (IF YOU UPLOADED A RESUME YOU CAN ENTER "SEE RESUME")*
+  - textbox "Description of Duties/Responsibilities (IF YOU UPLOADED A RESUME YOU CAN ENTER \"SEE RESUME\") Required" [ref=e263]
+  - generic "Required" [ref=e264]: Desired Salary*
+  - textbox "Desired Salary" [ref=e265]
+  - table [ref=e267]:
+"Desired Salary": |-
+  - generic "Required" [ref=e264]: Desired Salary*
+  - textbox "Desired Salary" [ref=e265]
+  - table [ref=e267]:
+    - rowgroup [ref=e268]:
+      - row "INVITATION TO VOLUNTARILY SELF-IDENTIFY" [ref=e269]:

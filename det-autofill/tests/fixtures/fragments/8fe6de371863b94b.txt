@@ -1,0 +1,60 @@
+"User Name (Do not use spaces)": |-
+  - 'row "User Name (Do not use spaces) . Required Password . Required Re-enter Password . Required or Sign in with: Use your Yahoo! account information to login" [ref=e74]':
+    - cell "User Name (Do not use spaces) . Required Password . Required Re-enter Password . Required" [ref=e75]:
+      - generic "The field User Name (Do not use spaces) is mandatory." [ref=e76]:
+        - text: User Name (Do not use spaces)
+        - generic [ref=e77]: .
+        - generic [ref=e78]: Required
+      - textbox "User Name (Do not use spaces) . Required" [ref=e79]
+      - generic "The field Password is mandatory." [ref=e80]:
+        - text: Password
+        - generic [ref=e81]: .
+"Password": |-
+    - text: Please choose a User Name and Password and click ‘Register.’ Be sure to enter a User Name and Password that you can remember. You will need this information when you return in the future. Your password needs to be at least 6 characters long.
+  - generic "This field is mandatory" [ref=e70]: Required fields indicated by red asterisk.
+  - table [ref=e72]:
+    - rowgroup [ref=e73]:
+      - 'row "User Name (Do not use spaces) . Required Password . Required Re-enter Password . Required or Sign in with: Use your Yahoo! account information to login" [ref=e74]':
+        - cell "User Name (Do not use spaces) . Required Password . Required Re-enter Password . Required" [ref=e75]:
+          - generic "The field User Name (Do not use spaces) is mandatory." [ref=e76]:
+            - text: User Name (Do not use spaces)
+            - generic [ref=e77]: .
+  --
+          - generic "The field Password is mandatory." [ref=e80]:
+            - text: Password
+            - generic [ref=e81]: .
+            - generic [ref=e82]: Required
+          - textbox "Password . Required" [ref=e83]
+          - generic "The field Re-enter Password is mandatory." [ref=e84]:
+            - text: Re-enter Password
+            - generic [ref=e85]: .
+            - generic [ref=e86]: Required
+          - textbox "Re-enter Password . Required" [ref=e87]
+        - 'cell "or Sign in with: Use your Yahoo! account information to login" [ref=e88]':
+          - generic [ref=e89]:
+            - generic [ref=e90]: "or Sign in with:"
+"Re-enter Password": |-
+  - 'row "User Name (Do not use spaces) . Required Password . Required Re-enter Password . Required or Sign in with: Use your Yahoo! account information to login" [ref=e74]':
+    - cell "User Name (Do not use spaces) . Required Password . Required Re-enter Password . Required" [ref=e75]:
+      - generic "The field User Name (Do not use spaces) is mandatory." [ref=e76]:
+        - text: User Name (Do not use spaces)
+        - generic [ref=e77]: .
+  --
+      - generic "The field Re-enter Password is mandatory." [ref=e84]:
+        - text: Re-enter Password
+        - generic [ref=e85]: .
+        - generic [ref=e86]: Required
+      - textbox "Re-enter Password . Required" [ref=e87]
+    - 'cell "or Sign in with: Use your Yahoo! account information to login" [ref=e88]':
+      - generic [ref=e89]:
+        - generic [ref=e90]: "or Sign in with:"
+"Register": |-
+            - text: Please choose a User Name and Password and click ‘Register.’ Be sure to enter a User Name and Password that you can remember. You will need this information when you return in the future. Your password needs to be at least 6 characters long.
+          - generic "This field is mandatory" [ref=e70]: Required fields indicated by red asterisk.
+          - table [ref=e72]:
+            - rowgroup [ref=e73]:
+  --
+          - button "Register" [ref=e100] [cursor=pointer]
+          - button "Cancel" [ref=e101] [cursor=pointer]
+  - generic [ref=e104]:
+    - link "Any personal information you provide is subject to the terms of our Privacy Policy" [ref=e105] [cursor=pointer]:

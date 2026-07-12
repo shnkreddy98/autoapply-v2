@@ -1,0 +1,10 @@
+"Save and Continue": |-
+      - button "Save and Continue" [ref=e157] [cursor=pointer]
+      - button "Save as Draft" [ref=e158] [cursor=pointer]
+      - button "Quit" [ref=e159] [cursor=pointer]
+  - generic [ref=e160]:
+  --
+    - button "Save and Continue" [ref=e310] [cursor=pointer]
+    - button "Save as Draft" [ref=e311] [cursor=pointer]
+    - button "Quit" [ref=e312] [cursor=pointer]
+  - link "Privacy Agreement" [ref=e321] [cursor=pointer]:

@@ -1,0 +1,56 @@
+"Highest Education Level": |-
+    - generic [ref=e288]: Highest Education Level *
+    - combobox "Highest Education Level" [ref=e289]:
+      - option "Select an option" [selected]
+      - option "High School Diploma or Equivalent"
+      - option "Associate's Degree"
+  --
+      - text: College or University of Highest Education Level
+      - generic [ref=e292]: Select an option
+    - generic [ref=e293]:
+      - combobox [ref=e294]
+      - combobox "College or University of Highest Education Level" [ref=e297] [cursor=pointer]:
+        - textbox [ref=e298]
+  - generic [ref=e299]:
+    - paragraph [ref=e300]: Education History *
+"College or University of Highest Education Level": |-
+      - text: College or University of Highest Education Level
+      - generic [ref=e292]: Select an option
+    - generic [ref=e293]:
+      - combobox [ref=e294]
+      - combobox "College or University of Highest Education Level" [ref=e297] [cursor=pointer]:
+        - textbox [ref=e298]
+  - generic [ref=e299]:
+    - paragraph [ref=e300]: Education History *
+"School Type": |-
+  - generic [ref=e307]: School Type *
+  - combobox "School Type" [ref=e308]:
+    - option "Select an option" [selected]
+    - option "College"
+    - option "Community"
+"School Name": |-
+    - generic [ref=e311]: School Name *
+    - textbox "School Name" [ref=e312]:
+      - /placeholder: ""
+  - generic [ref=e314]:
+    - generic [ref=e315]: Degree Level *
+"Degree Level": |-
+  - generic [ref=e315]: Degree Level *
+  - combobox "Degree Level" [ref=e316]:
+    - option "Select an option" [selected]
+    - option "High School Diploma or Equivalent"
+    - option "Associate's Degree"
+"Education History State": (no match)
+"Education History City": (no match)
+"Major": |-
+    - generic [ref=e327]: Major *
+    - textbox "Major" [ref=e328]:
+      - /placeholder: ""
+  - generic [ref=e330]:
+    - generic [ref=e331]: Graduated? *
+"Graduated?": |-
+  - generic [ref=e331]: Graduated? *
+  - combobox "Graduated?" [ref=e332]:
+    - option "Select an option" [selected]
+    - option "No"
+    - option "Yes"

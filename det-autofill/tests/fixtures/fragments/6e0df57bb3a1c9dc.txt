@@ -1,0 +1,23 @@
+"Do you have recent federal contracting experience?": |-
+  - generic [ref=e180]: Do you have recent federal contracting experience?*
+  - combobox "Do you have recent federal contracting experience?*" [ref=e182]:
+    - option [selected]
+    - option "Yes"
+    - option "No"
+"Upload File": |-
+    - generic [ref=e140] [cursor=pointer]: Upload File
+    - button "Upload File" [ref=e141]
+  - generic [ref=e142]: Or
+  - link "Type/Paste Text" [ref=e144] [cursor=pointer]:
+    - /url: "#resume_text_input"
+  --
+    - generic [ref=e159] [cursor=pointer]: Upload File
+    - button "Upload File" [ref=e160]
+  - generic [ref=e161]: Or
+  - link "Type/Paste Text" [ref=e163] [cursor=pointer]:
+    - /url: "#cover_letter_input"
+"Submit Application": |-
+          - button "Submit Application" [ref=e194] [cursor=pointer]
+          - link "Privacy Policy" [ref=e196] [cursor=pointer]:
+            - /url: https://www.careerplug.com/privacy/
+  - iframe [ref=e198]:

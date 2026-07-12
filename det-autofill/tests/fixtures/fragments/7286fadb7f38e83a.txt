@@ -1,0 +1,46 @@
+"Title": |-
+  - Page Title: Application for Senior Data Engineer at Mphasis - RippleHire.com
+  - Console: 1 errors, 0 warnings
+  ### Snapshot
+  ```yaml
+  --
+              - generic [ref=e389]: "Title:"
+              - combobox "Title:" [ref=e391]:
+                - option "Select..." [selected]
+                - option "Miss"
+                - option "Mr."
+"First name": |-
+    - generic [ref=e393]: "*First name:"
+    - textbox "*First name:" [ref=e395]:
+      - /placeholder: First name
+    - generic [ref=e396]: Must be as per Govt. issued ID e.g., Driver’s License/Passport
+  - generic [ref=e397]:
+    - generic [ref=e398]: "Middle name:"
+"Middle name": |-
+    - generic [ref=e398]: "Middle name:"
+    - textbox "Middle name:" [ref=e400]:
+      - /placeholder: Middle name
+  - generic [ref=e401]:
+    - generic [ref=e402]: "*Last name:"
+    - textbox "*Last name:" [ref=e404]:
+"Last name": |-
+    - generic [ref=e402]: "*Last name:"
+    - textbox "*Last name:" [ref=e404]:
+      - /placeholder: Last name
+    - generic [ref=e405]: Must be as per Govt. issued ID e.g., Driver’s License/Passport
+  - generic [ref=e406]:
+    - generic [ref=e407]: "*Email ID:"
+"Email ID": |-
+    - generic [ref=e407]: "*Email ID:"
+    - textbox "*Email ID:" [ref=e409]:
+      - /placeholder: ""
+  - generic [ref=e410]:
+    - generic [ref=e411]: "*Contact number 1:"
+"Contact number 1": |-
+    - generic [ref=e411]: "*Contact number 1:"
+    - generic [ref=e413]:
+      - 'generic "United States: +1" [ref=e415]'
+      - textbox "*Contact number 1:" [ref=e418]:
+        - /placeholder: ""
+  - generic [ref=e419]:
+    - generic [ref=e420]: "Contact number 2:"

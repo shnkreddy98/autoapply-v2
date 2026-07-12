@@ -1,0 +1,4 @@
+"Sign up": |-
+          - link "Sign up" [ref=e29] [cursor=pointer]:
+            - /url: /u/signup?state=hqFo2SA1Vzk0M1dJamRFX3doc3ZvTVFMZVlFcmZOSFBWRXNwTKFur3VuaXZlcnNhbC1sb2dpbqN0aWTZIHhnVmEzMkFnRnQxR1JzdTc2WUpDR3hTX1JuSERnck5wo2NpZNkkNmI3OTAxNmUtNzI2OS00OGFlLWI4NTktZDZlMDVjYzZlNjllpW9yZ2lktG9yZ194VHlGQUxYYnZCQWRUeWVRp29yZ25hbWWnbmVsMTAwNA&ui_locales=en
+  ```

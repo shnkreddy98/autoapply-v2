@@ -1,0 +1,5 @@
+"Are you 18 years or above?": |-
+  - generic [ref=e55]: Are you 18 years or above?*
+  - generic [ref=e57]:
+    - generic [ref=e58]:
+      - radio [checked] [ref=e59]

@@ -1,0 +1,108 @@
+"LinkedIn or Professional Website": |-
+    - generic [ref=e486]: LinkedIn or Professional Website:*
+    - textbox "LinkedIn or Professional Website:*" [ref=e488] [cursor=pointer]:
+      - /placeholder: https://example.com...
+  - generic [ref=e489]:
+    - generic [ref=e490]: Location*
+"Location": |-
+    - heading "Location" [level=2] [ref=e20]
+    - paragraph [ref=e21]: United States; Canada
+  - generic [ref=e22]:
+    - heading "Employment Type" [level=2] [ref=e23]
+  --
+    - heading "Location Type" [level=2] [ref=e26]
+    - paragraph [ref=e27]: Remote
+  - generic [ref=e28]:
+    - heading "Department" [level=2] [ref=e29]
+  --
+          - text: US locations. Please note that the actual compensation for this position may vary and is dependent on factors such as geographic location, interview performance, years of experience, education level, and specific skills. We encourage candidates to discuss compensation expectations during the interview process to ensure alignment with their qualifications and our company’s compensation philosophy.
+      - paragraph [ref=e42]:
+        - emphasis [ref=e43]: "This position is eligible for the following benefits and perks:"
+      - list [ref=e44]:
+  --
+        - generic [ref=e490]: Location*
+        - generic [ref=e491]:
+          - combobox "Start typing..." [ref=e492] [cursor=pointer]: Redwood City,CA,US
+          - button [ref=e493] [cursor=pointer]:
+"What is your desired salary range": |-
+    - generic [ref=e497]: What is your desired salary range for this role, including base and any variable or on-target earnings?*
+    - textbox "What is your desired salary range for this role, including base and any variable or on-target earnings?*" [ref=e499] [cursor=pointer]:
+      - /placeholder: Type here...
+  - generic [ref=e500]:
+    - generic [ref=e501]: Why did you decide to apply to this role at ClickUp?*
+"Why did you decide to apply": |-
+    - generic [ref=e501]: Why did you decide to apply to this role at ClickUp?*
+    - textbox "Why did you decide to apply to this role at ClickUp?*" [ref=e502] [cursor=pointer]:
+      - /placeholder: Type here...
+  - generic [ref=e503]:
+    - generic [ref=e504]: Are you legally authorized to work in the country you are based in?*
+"Are you legally authorized to work": |-
+  - generic [ref=e504]: Are you legally authorized to work in the country you are based in?*
+  - generic [ref=e505]:
+    - button "Yes" [ref=e506] [cursor=pointer]
+    - button "No" [ref=e507] [cursor=pointer]
+"Will you now or in the future need an employer to sponsor you": |-
+  - generic [ref=e510]: Will you now or in the future need an employer to sponsor you for a work visa (e.g., H-1B, etc) in the country where you will be working?*
+  - generic [ref=e511]:
+    - radio "Yes, I will need sponsorship for a work visa." [ref=e514] [cursor=pointer]
+    - generic [ref=e515]: Yes, I will need sponsorship for a work visa.
+"Gender": |-
+    - paragraph [ref=e324]: ClickUp provides equal employment opportunities to applicants and employees without regard to race, color, religion, sex, sexual orientation, gender identity, national origin, protected veteran status, or disability.
+    - paragraph [ref=e325]
+    - paragraph [ref=e326]: We invite all applicants to voluntarily self-identify their race, ethnicity, and gender. Submission of the information on this form is strictly voluntary and refusal to provide it will not subject you to any adverse treatment. Information obtained will be retained in a confidential file and separate from personnel records. This information may only be used in accordance with the provision of applicable federal laws, executive orders, and regulations. If you want more information about any of the sections, please check with a company representative.
+  - group [ref=e328]:
+    - generic [ref=e329]: Gender
+    - paragraph [ref=e331]: Input gender
+    - generic [ref=e332]:
+      - radio "Male" [ref=e335] [cursor=pointer]
+      - generic [ref=e336]: Male
+"Race": |-
+    - paragraph [ref=e324]: ClickUp provides equal employment opportunities to applicants and employees without regard to race, color, religion, sex, sexual orientation, gender identity, national origin, protected veteran status, or disability.
+    - paragraph [ref=e325]
+    - paragraph [ref=e326]: We invite all applicants to voluntarily self-identify their race, ethnicity, and gender. Submission of the information on this form is strictly voluntary and refusal to provide it will not subject you to any adverse treatment. Information obtained will be retained in a confidential file and separate from personnel records. This information may only be used in accordance with the provision of applicable federal laws, executive orders, and regulations. If you want more information about any of the sections, please check with a company representative.
+  - group [ref=e328]:
+    - generic [ref=e329]: Gender
+    - paragraph [ref=e331]: Input gender
+  --
+    - generic [ref=e349]: Race
+    - generic [ref=e350]:
+      - list [ref=e351]:
+        - listitem [ref=e352]:
+  --
+            - text: "- A person of Cuban, Mexican, Puerto Rican, South or Central American, or other Spanish culture or origin regardless of race."
+      - list [ref=e355]:
+        - listitem [ref=e356]:
+          - paragraph [ref=e357]:
+  --
+            - strong [ref=e373]: Two or More Races
+            - text: (Not Hispanic or Latino) - All persons who identify with more than one of the above five races.
+    - generic [ref=e374]:
+      - radio "Hispanic or Latino" [ref=e377] [cursor=pointer]
+      - generic [ref=e378]: Hispanic or Latino
+  --
+      - radio "Two or More Races (Not Hispanic or Latino)" [ref=e407] [cursor=pointer]
+      - generic [ref=e408]: Two or More Races (Not Hispanic or Latino)
+    - generic [ref=e409]:
+      - radio "Decline to self-identify" [ref=e412] [cursor=pointer]
+      - generic [ref=e413]: Decline to self-identify
+"Veteran Status": |-
+        - paragraph [ref=e324]: ClickUp provides equal employment opportunities to applicants and employees without regard to race, color, religion, sex, sexual orientation, gender identity, national origin, protected veteran status, or disability.
+        - paragraph [ref=e325]
+        - paragraph [ref=e326]: We invite all applicants to voluntarily self-identify their race, ethnicity, and gender. Submission of the information on this form is strictly voluntary and refusal to provide it will not subject you to any adverse treatment. Information obtained will be retained in a confidential file and separate from personnel records. This information may only be used in accordance with the provision of applicable federal laws, executive orders, and regulations. If you want more information about any of the sections, please check with a company representative.
+      - group [ref=e328]:
+  --
+          - strong [ref=e418]: SELF-IDENTIFICATION OF VETERAN STATUS
+          - text: (Completion is voluntary and will not subject you to adverse treatment)
+        - paragraph [ref=e419]: If you believe that you belong to any of the following categories of protected veterans, please indicate by making the appropriate selection
+        - list [ref=e420]:
+  --
+        - generic [ref=e435]: Veteran Status
+        - generic [ref=e436]:
+          - radio "I identify as one or more of the classifications of protected veteran listed above" [ref=e439] [cursor=pointer]
+          - generic [ref=e440]: I identify as one or more of the classifications of protected veteran listed above
+  --
+          - radio "I decline to self-identify for protected veteran status" [ref=e449] [cursor=pointer]
+          - generic [ref=e450]: I decline to self-identify for protected veteran status
+  - generic [ref=e451]:
+    - generic:
+      - link "Recruiting Privacy Policy":

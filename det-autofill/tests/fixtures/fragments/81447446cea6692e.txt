@@ -1,0 +1,109 @@
+"How Did You Hear About Us?": |-
+      - generic [ref=e414]: How Did You Hear About Us?*
+      - generic [ref=e420] [cursor=pointer]:
+        - textbox "How Did You Hear About Us?" [ref=e421]:
+          - /placeholder: Search
+        - generic [ref=e422]: 0 items selected
+  - group [ref=e426]:
+"No": |-
+  - generic "We use cookies and tracking technologies to offer you a better browsing experience, analyze site traffic, and improve the website." [ref=e9]:
+    - paragraph [ref=e11]: We use cookies and tracking technologies to offer you a better browsing experience, analyze site traffic, and improve the website.
+    - generic [ref=e12]:
+      - button "Decline" [ref=e15] [cursor=pointer]
+      - button "Accept Cookies" [ref=e19] [cursor=pointer]
+  --
+      - heading "AmerisourceBergen is now Cencora! Explore our careers." [level=1] [ref=e30]
+      - button "main menu" [ref=e32] [cursor=pointer]
+  - main [ref=e100]:
+    - generic [ref=e101]:
+  --
+              - group "Have you previously worked for this organization? If Yes, please answer the questions below. If No, please continue to the next page." [ref=e429]:
+                - generic [ref=e432]: Have you previously worked for this organization? If Yes, please answer the questions below. If No, please continue to the next page.*
+                - generic "Have you previously worked for this organization? If Yes, please answer the questions below. If No, please continue to the next page." [ref=e435]:
+                  - generic [ref=e436]:
+                    - radio "Yes" [ref=e438] [cursor=pointer]
+                    - generic [ref=e439]: "Yes"
+  --
+                    - radio "No" [ref=e442] [cursor=pointer]
+                    - generic [ref=e443]: "No"
+            - group [ref=e444]:
+              - generic [ref=e446]:
+                - generic [ref=e448]: Country*
+  --
+                - checkbox "I consent to receive periodic automated text messages (including both transactional and marketing SMS and MMS) related to employment applications, prospective employment opportunities, employment- and job-related correspondence, and/or student admissions, student registration, student billing and scheduling related correspondence. I understand that these and related two-way text message exchanges in which I participate may originate from different numbers and agree that these exchanges may be retained, shared, and processed by the sender and/or its business partners. I accept the associated Terms and Conditions and understand that my consent is not required. Reply STOP to any text to opt-out of all messaging. Standard message and data rates may apply." [ref=e562] [cursor=pointer]
+                - generic [ref=e563] [cursor=pointer]: I consent to receive periodic automated text messages (including both transactional and marketing SMS and MMS) related to employment applications, prospective employment opportunities, employment- and job-related correspondence, and/or student admissions, student registration, student billing and scheduling related correspondence. I understand that these and related two-way text message exchanges in which I participate may originate from different numbers and agree that these exchanges may be retained, shared, and processed by the sender and/or its business partners. I accept the associated Terms and Conditions and understand that my consent is not required. Reply STOP to any text to opt-out of all messaging. Standard message and data rates may apply.
+              - link "Terms and Conditions" [ref=e564] [cursor=pointer]:
+                - /url: /en-US/global/smsTermsAndConditionsModal/11117c1d83f10101ef60e67431250000
+        - generic [ref=e368]:
+"First Name": |-
+    - generic [ref=e459]: First Name*
+    - textbox "First Name" [ref=e462]: Jane
+  - generic [ref=e463]:
+    - generic [ref=e465]: Last Name*
+    - textbox "Last Name" [ref=e468]: Doe
+"Last Name": |-
+    - generic [ref=e465]: Last Name*
+    - textbox "Last Name" [ref=e468]: Doe
+  - generic [ref=e469]:
+    - generic [ref=e470]: I have a preferred name
+    - checkbox "I have a preferred name" [ref=e475] [cursor=pointer]
+"Address Line 1": |-
+    - generic [ref=e482]: Address Line 1*
+    - textbox "Address Line 1" [ref=e485]
+  - generic [ref=e486]:
+    - generic [ref=e487]: Address Line 2
+    - textbox "Address Line 2" [ref=e490]
+"City": |-
+    - generic [ref=e493]: City*
+    - textbox "City" [ref=e496]: San Jose
+  - generic [ref=e497]:
+    - generic [ref=e499]: State*
+    - button "State California Required" [ref=e503]: California
+"State": |-
+              - button "Country United States of America Required" [ref=e452]: United States of America
+          - group "Legal Name" [ref=e454]:
+            - heading "Legal Name" [level=4] [ref=e455]
+            - generic [ref=e456]:
+  --
+                - generic [ref=e499]: State*
+                - button "State California Required" [ref=e503]: California
+              - generic [ref=e504]:
+                - generic [ref=e506]: Postal Code*
+                - textbox "Postal Code" [ref=e509]
+  --
+                    - generic [ref=e536]: 1 item selected, United States of America (+1)
+                  - listbox "items selected" [ref=e538]:
+                    - option "United States of America (+1), press delete to clear value." [ref=e539]:
+                      - paragraph [ref=e544]: United States of America (+1)
+              - generic [ref=e548]:
+                - generic [ref=e550]: Phone Number*
+                - textbox "Phone Number" [ref=e553]: (555) 010-0199
+  --
+  - link "Privacy Statement" [ref=e73] [cursor=pointer]:
+    - /url: https://www.cencora.com/global-privacy-statement
+  - generic [ref=e74]:
+    - img [ref=e78]
+    - generic [ref=e98]: © 2026 Workday, Inc. All rights reserved.
+"Postal Code": |-
+        - generic [ref=e506]: Postal Code*
+        - textbox "Postal Code" [ref=e509]
+  - group "Email Address" [ref=e511]:
+    - heading "Email Address" [level=4] [ref=e512]
+    - generic [ref=e515]: jane.doe@example.com
+"Phone Device Type": |-
+    - generic [ref=e522]: Phone Device Type*
+    - button "Phone Device Type Cell Required" [ref=e526]: Cell
+  - generic [ref=e527]:
+    - generic [ref=e529]: Country Phone Code*
+    - generic [ref=e534] [cursor=pointer]:
+"Phone Number": |-
+    - generic [ref=e550]: Phone Number*
+    - textbox "Phone Number" [ref=e553]: (555) 010-0199
+  - generic [ref=e554]:
+    - generic [ref=e555]: Phone Extension
+    - textbox "Phone Extension" [ref=e558]
+"Save and Continue": |-
+          - button "Save and Continue" [ref=e568] [cursor=pointer]
+  - generic [ref=e41]:
+    - heading "Follow Us" [level=4] [ref=e42]
+    - list [ref=e43]:

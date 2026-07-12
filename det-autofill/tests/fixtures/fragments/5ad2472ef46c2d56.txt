@@ -1,0 +1,60 @@
+"No": |-
+  - Page URL: https://ntrs.wd1.myworkdayjobs.com/en-US/northerntrust/job/Chicago%2C-IL/Associate-AI-Engineer_R156480/apply/autofillWithResume?src=sns-102&source=APPLICANT_SOURCE-6-210
+  - Page Title: Sign In
+  ### Snapshot
+  ```yaml
+  --
+      - generic "Please view Northern Trust's cookie policy here." [ref=e9]:
+        - paragraph [ref=e11]:
+          - text: Please view Northern Trust's cookie policy
+          - link "here" [ref=e12] [cursor=pointer]:
+            - /url: https://www.northerntrust.com/cookie-policy
+          - text: .
+        - generic [ref=e13]:
+          - button "Decline" [ref=e16] [cursor=pointer]
+  --
+            - /url: https://www.northerntrust.com/about-us/careers
+            - img "careers home" [ref=e29]
+          - heading "NT Careers" [level=1] [ref=e31]
+          - generic [ref=e33]:
+  --
+              - button "northerntrust.com" [ref=e49] [cursor=pointer]
+              - button "Search for Jobs" [ref=e50] [cursor=pointer]
+              - button "Candidate Home" [ref=e360] [cursor=pointer]
+              - button "Job Alerts" [ref=e361] [cursor=pointer]
+  --
+                  - 'group "Will you now or in the future require sponsorship for employment visa status to work in the country of the position for which you are expressing an interest? (Note: If you are currently on a student visa, temporary work visa, or any other type of temporary work authorization, please select “Yes” to this question).*" [ref=e1882]':
+                    - paragraph [ref=e1886]: "Will you now or in the future require sponsorship for employment visa status to work in the country of the position for which you are expressing an interest? (Note: If you are currently on a student visa, temporary work visa, or any other type of temporary work authorization, please select “Yes” to this question).*"
+                    - button "Yes Required" [ref=e1963]: "Yes"
+                  - group "Have you ever been an employee of either Northern Trust or any affiliates of Northern Trust?*" [ref=e1892]:
+                    - paragraph [ref=e1896]:
+                      - generic [ref=e1897]: Have you ever been an employee of either Northern Trust or any affiliates of Northern Trust?*
+                    - button "No Required" [ref=e1973]: "No"
+                  - group "Do you currently have a personal relationship (including marital or other committed relationship, significant familial relationship, romantic relationship, or any other close personal relationship (whether formal or informal)) with any current Northern Trust employee, contractor, or vendor?*" [ref=e1903]:
+                    - paragraph [ref=e1907]:
+                      - generic [ref=e1908]: Do you currently have a personal relationship (including marital or other committed relationship, significant familial relationship, romantic relationship, or any other close personal relationship (whether formal or informal)) with any current Northern Trust employee, contractor, or vendor?*
+                    - button "No Required" [ref=e1983]: "No"
+                  - group "Are you under any agreement/obligation with your current or prior employer which restricts your ability to work for Northern Trust or any affiliates of Northern Trust?*" [ref=e1914]:
+                    - paragraph [ref=e1918]:
+                      - generic [ref=e1919]: Are you under any agreement/obligation with your current or prior employer which restricts your ability to work for Northern Trust or any affiliates of Northern Trust?
+                      - text: "*"
+                    - button "Select One Required" [expanded] [ref=e1923]: Select One
+                  - group "Are you currently or have you been in the last five years serving as a government official, either domestic or foreign?*" [ref=e1925]:
+  --
+              - /url: https://www.youtube.com/northerntrustvideos
+          - listitem [ref=e66] [cursor=pointer]:
+            - link "LinkedIn" [ref=e67]:
+              - /url: http://www.linkedin.com/company/northern-trust/
+          - listitem [ref=e71] [cursor=pointer]:
+            - link "Facebook" [ref=e72]:
+              - /url: https://www.facebook.com/ntcareers
+  --
+        - link "Candidate Privacy Notice" [ref=e82] [cursor=pointer]:
+          - /url: https://www.northerntrust.com/documents/careers/privacy-policy.pdf
+        - generic [ref=e83]:
+          - img [ref=e87]
+          - generic [ref=e107]: © 2026 Workday, Inc. All rights reserved.
+  --
+      - option "No" [ref=e1991]:
+        - generic [ref=e1992]: "No"
+  ```

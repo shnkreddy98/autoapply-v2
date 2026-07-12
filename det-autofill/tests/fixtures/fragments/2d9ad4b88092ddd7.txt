@@ -1,0 +1,6 @@
+"I am not a protected veteran": |-
+      - menuitem "I am not a protected veteran" [ref=e495] [cursor=pointer]:
+        - generic [ref=e497]: I am not a protected veteran
+      - menuitem "I decline to self-identify for protected veteran status" [ref=e498] [cursor=pointer]:
+        - generic [ref=e500]: I decline to self-identify for protected veteran status
+  ```

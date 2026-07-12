@@ -1,0 +1,5 @@
+"Yes": |-
+        - option "Yes" [ref=e263]
+        - option "No" [ref=e264]
+      - textbox
+  - generic [ref=e215]:

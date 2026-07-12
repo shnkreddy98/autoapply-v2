@@ -1,0 +1,12 @@
+"Apply": |-
+  - Page URL: https://careers.nfiindustries.com/careers-home/jobs/29459?lang=en-us&iis=LinkedIn&iisn=Linkedin&mode=apply
+  - Page Title: Senior Data Engineer in CAMDEN, New Jersey | NFI Industries
+  - Console: 1 errors, 0 warnings
+  ### Snapshot
+  --
+                - 'link "Apply : Senior Data Engineer" [ref=e122] [cursor=pointer]':
+                  - /url: https://careers-nfiindustries.icims.com/jobs/29459/login?iis=LinkedIn&iisn=Linkedin
+                  - text: Apply
+                - generic [ref=e125]:
+                  - link "Share on Facebook" [ref=e126] [cursor=pointer]:
+                    - /url: "javascript:"

@@ -1,0 +1,6 @@
+"Next": |-
+          - button "Next" [ref=e454] [cursor=pointer]:
+            - generic [ref=e455]: Next
+  - contentinfo [ref=e45]:
+    - generic [ref=e48]:
+      - generic [ref=e49]: ©2009-2026 Dayforce HCM, Inc. All Rights Reserved.

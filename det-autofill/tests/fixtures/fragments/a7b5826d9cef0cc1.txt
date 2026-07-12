@@ -1,0 +1,6 @@
+"Corporate Website": |-
+        - option "Corporate Website not checked" [selected] [ref=e579]:
+          - generic [ref=e580] [cursor=pointer]:
+            - radio [ref=e585]
+            - generic [ref=e586]: Corporate Website
+  ```

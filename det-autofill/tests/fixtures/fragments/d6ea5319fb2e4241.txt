@@ -1,0 +1,6 @@
+"Apply for This Job": |-
+  - button "Apply for This Job" [ref=e48] [cursor=pointer]:
+    - generic [ref=e49]: Apply for This Job
+  - separator [ref=e50]
+  - generic [ref=e52]:
+    - generic [ref=e54]: Link to This Job

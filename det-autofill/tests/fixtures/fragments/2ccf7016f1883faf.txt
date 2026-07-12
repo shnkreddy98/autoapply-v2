@@ -1,0 +1,52 @@
+"Email Address": |-
+    - generic [ref=e244]: Email Address*
+    - textbox "Email Address" [ref=e247]
+  - generic [ref=e249]:
+    - generic [ref=e251]: Password*
+    - textbox "Password" [ref=e254]
+"Password": |-
+      - paragraph [ref=e233]: "Password Requirements:"
+      - list [ref=e234]:
+        - listitem [ref=e235]: A lowercase character
+        - listitem [ref=e236]: An alphabetic character
+  --
+        - generic [ref=e251]: Password*
+        - textbox "Password" [ref=e254]
+      - generic [ref=e255]:
+        - generic [ref=e257]: Verify New Password*
+        - textbox "Verify New Password" [ref=e260]
+      - generic [ref=e265]:
+        - button "Create Account" [ref=e266] [cursor=pointer]
+        - button [ref=e267] [cursor=pointer]: Create Account
+  --
+    - button "Forgot your password?" [ref=e271] [cursor=pointer]
+  - generic:
+    - generic:
+      - generic [ref=e272]: Enter website. This input is for robots only, do not enter if you're human.
+"Verify New Password": |-
+    - generic [ref=e257]: Verify New Password*
+    - textbox "Verify New Password" [ref=e260]
+  - generic [ref=e265]:
+    - button "Create Account" [ref=e266] [cursor=pointer]
+    - button [ref=e267] [cursor=pointer]: Create Account
+"Create Account": |-
+  - Page Title: Create Account
+  ### Snapshot
+  ```yaml
+  - generic [ref=e4]:
+  --
+              - generic [ref=e94]: Create Account/Sign In
+            - listitem [ref=e95]:
+              - generic: step 2 of 7
+              - generic [ref=e101]: Autofill with Resume
+  --
+            - heading "Create Account" [active] [level=3] [ref=e229]
+            - generic [ref=e232]:
+              - paragraph [ref=e233]: "Password Requirements:"
+              - list [ref=e234]:
+  --
+                - button "Create Account" [ref=e266] [cursor=pointer]
+                - button [ref=e267] [cursor=pointer]: Create Account
+            - generic [ref=e268]:
+              - text: Already have an account?
+              - button "Sign In" [ref=e269] [cursor=pointer]

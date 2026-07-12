@@ -1,0 +1,30 @@
+"Email Address": |-
+    - paragraph [ref=e148]: You may have entered the wrong email address or password or your account might be locked.
+  - generic [ref=e115]:
+    - generic [ref=e116]:
+      - generic [ref=e118]: Email Address*
+      - textbox "Email Address" [ref=e121]: jane.doe@example.com
+    - generic [ref=e123]:
+      - generic [ref=e125]: Password*
+      - textbox "Password" [ref=e128]: Example#Pass1
+"Password": |-
+      - paragraph [ref=e148]: You may have entered the wrong email address or password or your account might be locked.
+    - generic [ref=e115]:
+      - generic [ref=e116]:
+        - generic [ref=e118]: Email Address*
+  --
+        - generic [ref=e125]: Password*
+        - textbox "Password" [ref=e128]: Example#Pass1
+      - generic [ref=e133]:
+        - button "Submit" [active] [ref=e134] [cursor=pointer]
+        - button [ref=e135] [cursor=pointer]: Sign In
+  --
+    - button "Forgot your password?" [ref=e139] [cursor=pointer]
+  - generic:
+    - generic:
+      - generic [ref=e140]: Enter website. This input is for robots only, do not enter if you're human.
+"Submit": |-
+      - button "Submit" [active] [ref=e134] [cursor=pointer]
+      - button [ref=e135] [cursor=pointer]: Sign In
+  - generic [ref=e136]:
+    - text: Don't have an account yet?

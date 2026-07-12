@@ -1,0 +1,10 @@
+"Education 2 Degree dropdown": (no match)
+"Education 1 Field of Study search box": (no match)
+"Education 2 Field of Study search box": (no match)
+"Type to Add Skills": |-
+      - generic [ref=e1069]: Type to Add Skills
+      - generic [ref=e1075] [cursor=pointer]:
+        - textbox "Type to Add Skills" [ref=e1076]:
+          - /placeholder: Search
+        - generic [ref=e1077]: 0 items selected
+  - group "Resume/CV" [ref=e1082]:

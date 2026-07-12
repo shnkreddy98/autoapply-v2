@@ -1,0 +1,22 @@
+"Country dialing code": |-
+  - generic "Country dialing code" [ref=e522] [cursor=pointer]:
+    - combobox "Country dialing code" [ref=e525]
+    - generic:
+      - img:
+        - img
+  --
+    - generic "Country dialing code" [ref=e536] [cursor=pointer]:
+      - combobox "Country dialing code" [ref=e539]
+      - generic:
+        - img:
+          - img
+"Mobile Phone Number *": |-
+      - generic "Mobile Phone Number" [ref=e531]: Mobile Phone Number *
+      - generic [ref=e532]:
+        - generic [ref=e535]:
+          - generic "Country dialing code" [ref=e536] [cursor=pointer]:
+  --
+          - textbox "Mobile Phone Number *" [invalid] [ref=e540]: (555) 010-0199
+        - alert [ref=e834]:
+          - generic [ref=e835]: Mobile Phone number is invalid
+  - generic [ref=e541]:

@@ -1,0 +1,5 @@
+"Spark SQL not checked": |-
+  - option "Spark SQL not checked" [ref=e1595]:
+    - generic [ref=e1596] [cursor=pointer]:
+      - checkbox [ref=e1601]
+      - generic [ref=e1602]: Spark SQL

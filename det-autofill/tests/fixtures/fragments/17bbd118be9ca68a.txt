@@ -1,0 +1,44 @@
+"No": |-
+  - Page URL: https://nordstrom.wd501.myworkdayjobs.com/en-US/nordstrom_careers/job/Seattle%2C-WA/Data-Engineer-2_R-854641-1/apply/autofillWithResume
+  - Page Title: Sign In
+  ### Snapshot
+  ```yaml
+  --
+            - /url: https://nordstrom.wd501.myworkdayjobs.com/nordstrom_careers
+            - img "careers home" [ref=e14]
+          - generic [ref=e15]:
+            - heading [level=1]
+  --
+                  - group "Will you now or in the future require an employer to sponsor you for an employment based visa/status? (e.g. US H-1B)*" [ref=e1212]:
+                    - paragraph [ref=e1216]: Will you now or in the future require an employer to sponsor you for an employment based visa/status? (e.g. US H-1B)*
+                    - button "Select One Required" [expanded] [ref=e1220]: Select One
+                  - group "Have you ever worked for Nordstrom or one of its affiliates?*" [ref=e1222]:
+                    - paragraph [ref=e1226]:
+                      - generic [ref=e1227]: Have you ever worked for Nordstrom or one of its affiliates?*
+                    - button "Select One Required" [ref=e1231]: Select One
+                  - group "Please select how Nordstrom can contact you. Message and data rates may apply. (If you already answered this using the Nora chat/text application, that answer will be used as your communication preference in all platforms.)*" [ref=e1233]:
+                    - generic [ref=e1236]:
+                      - paragraph [ref=e1237]: Please select how Nordstrom can contact you. Message and data rates may apply.
+                      - paragraph [ref=e1238]
+                      - paragraph [ref=e1239]:
+                        - generic [ref=e1240]: (If you already answered this using the Nora chat/text application, that answer will be used as your communication preference in all platforms.)*
+                    - button "Select One Required" [ref=e1244]: Select One
+            - generic [ref=e260]:
+              - button "Back" [ref=e378] [cursor=pointer]
+  --
+              - /url: https://www.linkedin.com/company/nordstrom/mycompany/
+          - listitem [ref=e38] [cursor=pointer]:
+            - link "Facebook" [ref=e39]:
+              - /url: https://www.facebook.com/Nordstrom/
+          - listitem [ref=e43] [cursor=pointer]:
+            - link "X" [ref=e44]:
+              - /url: https://twitter.com/nordstromnow?lang=en
+        - link "Nordstrom Careers Privacy Policy" [ref=e49] [cursor=pointer]:
+          - /url: https://careers.nordstrom.com/pdfs/Nordstrom_Careers_Privacy_Policy.pdf
+        - generic [ref=e50]:
+          - img [ref=e54]
+          - generic [ref=e74]: © 2026 Workday, Inc. All rights reserved.
+  --
+      - option "No" [ref=e1272]:
+        - generic [ref=e1273]: "No"
+  ```

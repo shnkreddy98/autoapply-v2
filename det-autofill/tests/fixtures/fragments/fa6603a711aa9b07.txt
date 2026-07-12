@@ -1,0 +1,6 @@
+"I agree with this statement": |-
+            - option "I agree with this statement" [ref=e1317] [cursor=pointer]:
+              - menuitem "I agree with this statement" [ref=e1318]
+        - button "I accept and agree to the terms and conditions stated above." [ref=e1013] [cursor=pointer]:
+          - generic [ref=e1014]: 
+  - generic [ref=e1017]:

@@ -1,0 +1,8 @@
+"Answer using digits only for the question below.": |-
+      - heading "Answer using digits only for the question below." [level=2] [ref=f17e129]
+      - paragraph
+    - generic [ref=f17e117]: Only if the ending is 9, replace the last character with 1 in 625344.
+    - textbox "Answer using digits only for the question below. Only if the ending is 9, replace the last character with 1 in 625344." [active] [ref=f17e130]
+  - generic [ref=f17e12]:
+    - alert [ref=f17e13]:
+      - generic [ref=f17e14]: Please try again. ⚠️

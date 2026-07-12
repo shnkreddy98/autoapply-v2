@@ -1,0 +1,26 @@
+"Gender Select One": |-
+    - button "Gender Select One" [ref=e2084]: Select One
+  - generic [ref=e2085]:
+    - generic [ref=e2086]: Hispanic or Latino
+    - button "Hispanic or Latino" [ref=e2090]: Select One
+"Race/Ethnicity Select One": |-
+    - button "Race/Ethnicity Select One" [ref=e2096]: Select One
+  - generic [ref=e2097]:
+    - generic [ref=e2098]: Veterans Status
+    - button "Veterans Status Select One" [ref=e2102]: Select One
+"Veterans Status Select One": |-
+        - button "Veterans Status Select One" [ref=e2102]: Select One
+  - group "Terms and Conditions" [ref=e2103]:
+    - heading "Terms and Conditions" [level=4] [ref=e2104]
+    - generic [ref=e2105]:
+"checking the box below": |-
+            - generic [ref=e2136]: Please acknowledge your acceptance of the foregoing terms and conditions by checking the box below.*
+            - checkbox "Please acknowledge your acceptance of the foregoing terms and conditions by checking the box below." [ref=e2141] [cursor=pointer]
+  - generic [ref=e396]:
+    - button "Back" [ref=e573] [cursor=pointer]
+    - button "Save and Continue" [ref=e574] [cursor=pointer]
+"Save and Continue": |-
+          - button "Save and Continue" [ref=e574] [cursor=pointer]
+  - generic [ref=e56]:
+    - heading "Follow Us" [level=4] [ref=e57]
+    - list [ref=e58]:

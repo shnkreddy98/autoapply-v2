@@ -1,0 +1,22 @@
+"Email Address": |-
+    - generic [ref=e492]: Email Address*
+    - textbox "Email Address" [ref=e495]
+  - generic [ref=e497]:
+    - generic [ref=e499]: Password*
+    - textbox "Password" [ref=e502]
+"Password": |-
+        - generic [ref=e499]: Password*
+        - textbox "Password" [ref=e502]
+      - generic [ref=e507]:
+        - button "Submit" [ref=e508] [cursor=pointer]
+        - button [ref=e509] [cursor=pointer]: Sign In
+  --
+    - button "Forgot your password?" [ref=e513] [cursor=pointer]
+  - generic:
+    - generic:
+      - generic [ref=e514]: Enter website. This input is for robots only, do not enter if you're human.
+"Submit": |-
+      - button "Submit" [ref=e508] [cursor=pointer]
+      - button [ref=e509] [cursor=pointer]: Sign In
+  - generic [ref=e510]:
+    - text: Don't have an account yet?

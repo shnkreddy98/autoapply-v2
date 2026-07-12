@@ -1,0 +1,6 @@
+"Cencora Career Website": |-
+        - option "Cencora Career Website not checked" [selected] [ref=e655]:
+          - generic [ref=e656] [cursor=pointer]:
+            - radio [ref=e661]
+            - generic [ref=e662]: Cencora Career Website
+  ```

@@ -1,0 +1,10 @@
+"Are you able to work in the WoodmenLife Home Office in Omaha, Nebraska?": |-
+    - generic [ref=e2882]: Are you able to work in the WoodmenLife Home Office in Omaha, Nebraska?
+  - generic [ref=e2884]:
+    - generic [ref=e2886]:
+      - generic [ref=e2887]: Are you able to work in the WoodmenLife Home Office in Omaha, Nebraska?
+      - text: "*"
+    - generic [ref=e2892]:
+      - generic [ref=e2894] [cursor=pointer]:
+        - radio "Yes" [ref=e2896]
+        - generic [ref=e2898]: "Yes"

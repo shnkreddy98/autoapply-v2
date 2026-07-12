@@ -1,0 +1,6 @@
+"Male": |-
+        - option "Male" [ref=f84e1224]
+        - option "Female" [ref=f84e1225]
+        - option "Decline To Self Identify" [ref=f84e1226]
+  - generic [ref=f84e534]:
+    - generic [ref=f84e536]:

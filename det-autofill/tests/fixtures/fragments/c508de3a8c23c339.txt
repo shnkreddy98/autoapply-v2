@@ -1,0 +1,10 @@
+"Minimum of 3 years of experience in data engineering*": (no match)
+"Experience with Python, SQL, and/or Java*": (no match)
+"What is your desired salary expectation for this role?*": (no match)
+"Website/Portfolio URL": (no match)
+"LinkedIn Profile URL": |-
+    - generic [ref=e354]: LinkedIn Profile URL:*
+    - textbox "LinkedIn Profile URL:*" [ref=e355]: https://www.linkedin.com/in/janedoe
+  - generic [ref=e356]:
+    - generic [ref=e357]:
+      - text: Are you legally authorized to work in the U.S.?

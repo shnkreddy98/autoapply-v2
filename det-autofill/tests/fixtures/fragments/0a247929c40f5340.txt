@@ -1,0 +1,10 @@
+"Are you located in Latin America (LatAm)?": |-
+  - generic [ref=e233]: Are you located in Latin America (LatAm)?*
+  - generic [ref=e234]:
+    - log [ref=e236]
+    - generic [ref=e238]:
+  --
+        - combobox "Are you located in Latin America (LatAm)?" [ref=e242]
+      - button "Toggle flyout" [ref=e244] [cursor=pointer]:
+        - img [ref=e245]
+    - textbox

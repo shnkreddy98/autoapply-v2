@@ -1,0 +1,244 @@
+"Are you Hispanic/Latino?": |-
+    - generic [ref=f103e344]: Are you Hispanic/Latino?
+    - generic [ref=f103e345]:
+      - log [ref=f103e347]
+      - generic [ref=f103e349]:
+  --
+          - combobox "Are you Hispanic/Latino?" [ref=f103e353]
+        - button "Toggle flyout" [ref=f103e355] [cursor=pointer]:
+          - img [ref=f103e356]
+  - link "Race & Ethnicity Definitions" [ref=f103e358] [cursor=pointer]:
+"Veteran Status": |-
+    - emphasis [ref=f103e87]: Butterfly Network is an equal opportunity employer. Regardless of race, traits associated with race, color, ancestry, religion, gender, national origin, sexual orientation, age, citizenship, marital status, disability or Veteran status. All your information will be kept confidential according to EEO guidelines.
+  - paragraph [ref=f103e88]:
+    - emphasis [ref=f103e89]: "Butterfly requires security adherence responsibilities from all employees. These include: adhering to all company security policies and procedures, utilize provided company assets securely, and complete all required security awareness training programs. Safeguarding company data and systems from unauthorized access, modification, or destruction, contributing to the overall security posture of the organization. Immediately reporting any suspected or actual security incidents, including phishing attempts, malware infections, or unauthorized access, following the established incident response procedure"
+  - paragraph [ref=f103e90]: "#LI-KG"
+  --
+      - generic [ref=f103e368]: Veteran Status
+      - generic [ref=f103e369]:
+        - log [ref=f103e371]
+        - generic [ref=f103e373]:
+  --
+            - combobox "Veteran Status" [ref=f103e377]
+          - button "Toggle flyout" [ref=f103e379] [cursor=pointer]:
+            - img [ref=f103e380]
+    - separator [ref=f103e382]
+"Disability Status": |-
+  - generic [ref=f103e425]: Disability Status
+  - generic [ref=f103e426]:
+    - log [ref=f103e428]: 3 results available.Use Up and Down to choose options, press Enter to select the currently focused option, press Escape to exit the menu, press Tab to select the option and exit the menu.
+    - generic [ref=f103e430]:
+  --
+        - combobox "Disability Status" [expanded] [active] [ref=f103e434]
+      - button "Toggle flyout" [ref=f103e436] [cursor=pointer]:
+        - img [ref=f103e437]
+    - listbox [ref=f103e478]:
+"No": |-
+        - text: We’re a team of bold thinkers, problem-solvers, and innovators driving a digital revolution in medical imaging.
+        - text: ‍
+        - text: Let’s build something extraordinary together!
+      - link "See open roles" [ref=e70] [cursor=pointer]:
+  --
+      - text: Innovation is what we do. Our values are how we make it happen.
+      - text: They shape our work, our culture, and the impact we create.
+  - generic [ref=e80]:
+    - generic [ref=e83]:
+  --
+        - generic [ref=e87]: Patient-centric innovators
+        - generic [ref=e88]:
+          - generic [ref=e89]: Our mission is THE mission.
+          - paragraph [ref=e90]: We’re dedicated to making a lasting impact on health care and won’t stop until our mission is fulfilled. Every day, we work hard to put our products in the hands of care givers worldwide and empower them to deliver the best care possible for patients everywhere.
+  --
+          - paragraph [ref=e97]: Every individual has the power to make a difference. We think boldly, take ownership, and aren’t afraid to speak up. If we see a better way forward, we know our voices can spark meaningful change.
+      - generic [ref=e100]:
+        - generic [ref=e101]: One team, one goal
+        - generic [ref=e102]:
+  --
+          - paragraph [ref=e104]: Our success comes from helping and supporting one another. When we proactively share ideas and collaborate, our collective strength enables us to grow faster and go further.
+      - generic [ref=e107]:
+        - generic [ref=e108]: Growth champions
+        - generic [ref=e109]:
+  --
+          - paragraph [ref=e111]: We are disruptors at the forefront of innovation, turning challenges into opportunities for growth. By pushing boundaries, we deliver value to our investors, team, customers, and patients – ultimately, drive sustained progress and transformation in the industry.
+      - generic [ref=e114]:
+        - generic [ref=e115]: Action-oriented achievers
+        - generic [ref=e116]:
+  --
+    - heading "Our team values focus, dedication, innovation, and the power of what can happen when they converge." [level=2] [ref=e133]
+    - paragraph [ref=e134]: Hear what our employees say about their experience at Butterfly.
+  - generic [ref=e135]:
+    - generic [ref=e138]:
+  --
+        - paragraph [ref=e143]: “I joined Butterfly Network because it offers a unique opportunity to be at the forefront of medical technology innovation.”
+        - generic [ref=e144]:
+          - paragraph [ref=e145]: I joined Butterfly Network because it offers a unique opportunity to be at the forefront of medical technology innovation. With a mission to democratize healthcare through accessible and affordable imaging, the company is making a real difference in people's lives.
+          - generic [ref=e146]:
+            - generic [ref=e147]: Christy Won
+            - generic [ref=e148]: Director of Product, Devices
+  --
+          - paragraph [ref=e156]: I started as an intern at Butterfly, not fully realizing how much this company would shape my career. Over the years, I’ve grown in ways I never expected—taking on new challenges, working alongside some of the smartest and most driven people, and learning something new every day. Being part of a team that’s pushing the boundaries of what’s possible in healthcare is incredibly rewarding, and I’m proud to be a part of it.
+          - generic [ref=e157]:
+            - generic [ref=e158]: Calvin Solomon
+            - generic [ref=e159]: Product Manager II, Clinical Experience
+  --
+        - paragraph [ref=e165]: “Knowing that the technology I help develop improves patient care and brings the wonders of imaging to those who need it most makes every challenge worth it.”
+        - generic [ref=e166]:
+          - paragraph [ref=e167]: I love working at Butterfly Network because, every day, I'm reminded that technology is only part of the equation. Healthcare, at its core, is a deeply personal interaction between patients and their doctors, and I'm inspired by the many stories about how our work has helped strengthen and nurture that connection. Knowing that the technology I help develop improves patient care and brings the wonders of imaging to those who need it most makes every challenge worth it.
+          - generic [ref=e168]:
+            - generic [ref=e169]: Fernando Quivira
+            - generic [ref=e170]: Distinguished Engineer, Performance Engineering
+  --
+            - generic [ref=e192]: GM, Sales, Northeast Acute Care
+      - generic [ref=e197]:
+        - paragraph [ref=e198]: “I saw Butterfly shared my belief when it coupled ultrasound imaging with novel technologies such as AI, mobile devices and a whole-body probe.”
+        - generic [ref=e199]:
+          - paragraph [ref=e200]: I joined Butterfly because ultrasound imaging is a superpower that allows physicians to see inside of our bodies, and I believe that everyone should have access to this superpower. I saw Butterfly shared my belief when it coupled ultrasound imaging with novel technologies such as AI, mobile devices and a whole-body probe.The Clinical Research team is essential to executing Butterfly's mission. We generate the objective clinical and economic evidence that articulates the value of Butterfly to multiple stakeholders—not only the regulatory stakeholders but most importantly to patients and the healthcare systems.
+          - generic [ref=e201]:
+            - generic [ref=e202]: Carolina Amador
+            - generic [ref=e203]: Director of Clinical Research
+  --
+              - paragraph [ref=f103e25]: "Butterfly Network, Inc. (NYSE: BFLY) is driving a digital revolution in ultrasound imaging and sensing with its proprietary Ultrasound-on-Chip™ semiconductor technology and software solutions. Butterfly first proved its technology in the point-of-care ultrasound market – commercializing the world’s first single-probe, whole-body portable ultrasound device, which is now on its best-selling, third-generation: Butterfly iQ3™. The Company combines its advanced hardware with cloud software and AI, an enterprise workflow solution (Compass AI™) and other offerings to drive adoption of affordable, accessible ultrasound. Butterfly also enables third-party development of imaging AI apps through Butterfly Garden™, its software development kit and AI partnership initiative."
+              - paragraph [ref=f103e26]: In addition to its medical imaging products, Butterfly Embedded™ is the Company’s Ultrasound-on-Chip™ licensing and co-development program designed to enable a new wave of ultrasound-enabled technologies across non-competitive healthcare markets and beyond. Through Butterfly Embedded™, partners can build and scale novel ultrasound applications powered by Butterfly’s proprietary semiconductor chip and software platform. Butterfly’s innovations have been recognized by Prix Galien USA, Fierce 50, TIME’s Best Inventions and Fast Company’s World Changing Ideas, among other achievements.
+              - paragraph [ref=f103e27]: We’re a team of bold thinkers, problem-solvers, and innovators ready to shape the future of medical imaging. Let’s build something extraordinary together!
+              - heading "Job Description" [level=2] [ref=f103e28]:
+                - strong [ref=f103e29]: Job Description
+              - paragraph [ref=f103e30]: The Revenue Analytics Engineer owns the data foundation that powers Butterfly's commercial team. You'll build and maintain the reports, dashboards, and data integrations that Sales, Sales Ops, and Commercial leadership depend on — while also owning the CRM data quality that makes those analytics trustworthy. This role sits at the intersection of analytics engineering and revenue operations, and requires someone comfortable working both in the data layer and directly with Sales teams.
+  --
+                - listitem [ref=f103e44]: 5+ years of SQL experience in a data warehouse or data lake environment (Databricks, BigQuery, Snowflake, Redshift, or equivalent)
+                - listitem [ref=f103e45]: 5+ years of experience in a Salesforce-heavy environment — either as a report analyst or administrator, or as a BI/analytics engineer embedded in a CRM-centric organization
+                - listitem [ref=f103e46]: Demonstrated ability to work cross-functionally with Sales, Sales Operations, and business stakeholders to drive data quality and CRM hygiene at scale
+              - paragraph [ref=f103e47]: "Ideally, you also have these skills/experiences/attributes (but it’s ok if you don’t!):"
+  --
+              - paragraph [ref=f103e54]: Innovation is what we do. Our values are how we make it happen. Butterflies are and believe in…
+              - list [ref=f103e55]:
+                - listitem [ref=f103e56]: "Patient-Centric Innovators: Our mission is THE mission."
+                - listitem [ref=f103e57]: "Empowered to Impact: Every voice matters."
+                - listitem [ref=f103e58]: "One Team, One Goal: Unity fuels progress."
+                - listitem [ref=f103e59]: "Growth Champions: We embrace challenges."
+  --
+                - emphasis [ref=f103e81]: For this role, we are only considering candidates who are legally authorized to work in the United States and who do not now or in the future require sponsorship for employment visa status.
+              - paragraph [ref=f103e82]:
+                - emphasis [ref=f103e83]: Butterfly Network does not accept agency resumes.
+              - paragraph [ref=f103e84]:
+                - emphasis [ref=f103e85]: Butterfly Network is an E-Verify Company.
+              - paragraph [ref=f103e86]:
+  --
+                - button "Add another" [ref=f103e237] [cursor=pointer]
+              - generic [ref=f103e238]:
+                - separator [ref=f103e239]
+                - generic [ref=f103e242]:
+  --
+                  - textbox "In 2-4 sentences, describe why you are interested in working at Butterfly Network." [ref=f103e244]: I am inspired by Butterfly Network's mission to democratize medical imaging. As a Data Engineer with 5+ years of experience in high-throughput pipelines, I am eager to contribute my expertise in AWS, Spark, and Kafka to help scale your life-saving technology.
+                - generic [ref=f103e247]:
+                  - generic [ref=f103e248]: LinkedIn Profile*
+                  - textbox "LinkedIn Profile" [ref=f103e249]: https://www.linkedin.com/in/janedoe
+  --
+                  - textbox "Are you currently located in NYC and willing to commute to the office 2-3 days a week?" [ref=f103e254]: No, I am based in San Jose, CA, but I am willing to relocate as stated in my profile.
+                - generic [ref=f103e257]:
+                  - generic [ref=f103e258]: Will you now or in the future require visa sponsorship for employment at Butterfly Network?*
+                  - generic [ref=f103e259]:
+                    - log [ref=f103e261]
+                    - generic [ref=f103e263]:
+  --
+                        - combobox "Will you now or in the future require visa sponsorship for employment at Butterfly Network?" [ref=f103e267]
+                      - button "Toggle flyout" [ref=f103e269] [cursor=pointer]:
+                        - img [ref=f103e270]
+                    - textbox
+  --
+                    - generic [ref=f103e292]: GDPR Notice for EU Residents*
+                    - generic [ref=f103e293]:
+                      - log [ref=f103e295]
+                      - generic [ref=f103e297]:
+  --
+                          - combobox "GDPR Notice for EU Residents" [ref=f103e301]
+                        - button "Toggle flyout" [ref=f103e303] [cursor=pointer]:
+                          - img [ref=f103e304]
+                      - textbox
+  --
+                    - paragraph [ref=f103e309]: Your personal data will be shared with Greenhouse Software, Inc., a cloud services provider located in the United States of America and engaged by Controller to help manage its recruitment and hiring process on Controller’s behalf. Accordingly, if you are located outside of the United States, your personal data will be transferred to the United States once you submit it through this site. Because the European Union Commission has determined that United States data privacy laws do not ensure an adequate level of protection for personal data collected from EU data subjects, the transfer will be subject to appropriate additional safeguards under the standard contractual clauses]. You can obtain a copy of the standard contractual clauses by contacting us at recruiting@butterflynetinc.com.
+                    - paragraph [ref=f103e310]: Your personal data will be retained by Controller as long as Controller determines it is necessary to evaluate your application for employment. Under the GDPR, you have the right to request access to your personal data, to request that your personal data be rectified or erased, and to request that processing of your personal data be restricted. You also have to right to data portability. In addition, you may lodge a complaint with an EU supervisory authority.
+                    - paragraph [ref=f103e311]:
+                      - link "Butterfly Network Global Privacy" [ref=f103e312] [cursor=pointer]:
+  --
+                  - paragraph [ref=f103e322]: For government reporting purposes, we ask candidates to respond to the below self-identification survey. Completion of the form is entirely voluntary. Whatever your decision, it will not be considered in the hiring process or thereafter. Any information that you do provide will be recorded and maintained in a confidential file.
+                  - paragraph [ref=f103e323]: As set forth in Butterfly Network’s Equal Employment Opportunity policy, we do not discriminate on the basis of any protected group status under any applicable law.
+                - generic [ref=f103e326]:
+                  - generic [ref=f103e327]: Gender
+                  - generic [ref=f103e328]:
+  --
+                    - generic [ref=f103e344]: Are you Hispanic/Latino?
+                    - generic [ref=f103e345]:
+                      - log [ref=f103e347]
+                      - generic [ref=f103e349]:
+  --
+                          - combobox "Are you Hispanic/Latino?" [ref=f103e353]
+                        - button "Toggle flyout" [ref=f103e355] [cursor=pointer]:
+                          - img [ref=f103e356]
+                  - link "Race & Ethnicity Definitions" [ref=f103e358] [cursor=pointer]:
+  --
+                    - text: Completing this form is voluntary, and we hope that you will choose to do so. Your answer is confidential. No one who makes hiring decisions will see it. Your decision to complete the form and your answer will not harm you in any way. If you want to learn more about the law or this form, visit the U.S. Department of Labor’s Office of Federal Contract Compliance Programs (OFCCP) website at
+                    - link "www.dol.gov/ofccp" [ref=f103e395] [cursor=pointer]:
+                      - /url: https://www.dol.gov/ofccp
+                    - text: .
+                  - strong [ref=f103e396]: How do you know if you have a disability?
+                  - paragraph [ref=f103e397]:
+                    - text: A disability is a condition that substantially limits one or more of your “major life activities.” If you have or have ever had such a condition, you are a person with a disability.
+                    - strong [ref=f103e398]: "Disabilities include, but are not limited to:"
+                  - list [ref=f103e399]:
+                    - listitem [ref=f103e400]: Alcohol or other substance use disorder (not currently using drugs illegally)
+                    - listitem [ref=f103e401]: Autoimmune disorder, for example, lupus, fibromyalgia, rheumatoid arthritis, HIV/AIDS
+                    - listitem [ref=f103e402]: Blind or low vision
+                    - listitem [ref=f103e403]: Cancer (past or present)
+  --
+                      - option "No, I do not have a disability and have not had one in the past" [ref=f103e480]
+                      - option "I do not want to answer" [ref=f103e481]
+                - paragraph [ref=f103e440]: "PUBLIC BURDEN STATEMENT: According to the Paperwork Reduction Act of 1995 no persons are required to respond to a collection of information unless such collection displays a valid OMB control number. This survey should take about 5 minutes to complete."
+              - button "Submit application" [ref=f103e442] [cursor=pointer]
+      - iframe [ref=f103e447]:
+        - generic [ref=f105e6]:
+  --
+            - /url: /technology
+            - generic [ref=e462]: Ultrasound-on-Chip™
+          - link "Mission" [ref=e463] [cursor=pointer]:
+            - /url: /our-mission
+  --
+          - link "Cookie Notice" [ref=e522] [cursor=pointer]:
+            - /url: /cookie-notice
+            - generic [ref=e523]: Cookie Notice
+          - link "Global Privacy" [ref=e524] [cursor=pointer]:
+            - /url: /global-privacy
+            - generic [ref=e525]: Global Privacy
+          - link "Privacy Notice" [ref=e526] [cursor=pointer]:
+            - /url: /privacy-notice
+            - generic [ref=e527]: Privacy Notice
+          - link "Notice at Collection" [ref=e528] [cursor=pointer]:
+            - /url: /notice-at-collection
+            - generic [ref=e529]: Notice at Collection
+          - link "Terms of Use" [ref=e530] [cursor=pointer]:
+            - /url: /terms-of-use
+            - generic [ref=e531]: Terms of Use
+  --
+    - generic "Footnotes" [ref=e543]:
+      - generic [ref=e545]:
+        - paragraph [ref=e546]:
+          - strong [ref=e547]: For prescription use only
+  --
+          - text: Butterfly iQ+/iQ3™ is a portable ultrasound system designed for external ultrasound imaging. Butterfly iQ+ Bladder™ is a portable ultrasound system designed for noninvasive ultrasound imaging of the bladder for urinary volume measurement. iQ+ Bladder available for purchase individually. Read the User Manual for warnings, precautions and/or contraindications.
+        - paragraph [ref=e549]: Compass AI™ is not intended to provide information used to make decisions regarding diagnosis or therapeutic purposes.
+        - paragraph [ref=e550]: Not all presets, imaging modes and features are available everywhere. Check for availability in your country, subscription type, and software version.
+        - paragraph [ref=e551]: Names and data used in examples on product screens are fictitious unless otherwise noted.
+        - paragraph [ref=e552]: All comparative claims are made relative to second-generation iQ+ product.
+      - generic [ref=e553]:
+        - paragraph [ref=e554]: TeleGuidance™ is only available for compatible iOS devices.
+  --
+        - paragraph [ref=e556]: Tutorials on, or linked to, from this page are not a substitute for professional clinician training.
+        - paragraph [ref=e557]: ScanLab is for educational use only and not for diagnostic use. ScanLab is a separately downloadable educational app included with your Butterfly membership.
+        - paragraph [ref=e558]:
+          - text: "*Your rate will be 0% APR or 10-36% APR based on credit, and is subject to an eligibility check. For example, a $3,119 purchase might cost $87/mo over 36 months at 0% APR. Payment options through Affirm are provided by these lending partners:"
+          - link "Affirm's lending partners" [ref=e559] [cursor=pointer]:
+"I am not a protected veteran": (no match)
+"No, I do not have a disability and have not had one in the past": |-
+          - option "No, I do not have a disability and have not had one in the past" [ref=f103e480]
+          - option "I do not want to answer" [ref=f103e481]
+    - paragraph [ref=f103e440]: "PUBLIC BURDEN STATEMENT: According to the Paperwork Reduction Act of 1995 no persons are required to respond to a collection of information unless such collection displays a valid OMB control number. This survey should take about 5 minutes to complete."
+  - button "Submit application" [ref=f103e442] [cursor=pointer]

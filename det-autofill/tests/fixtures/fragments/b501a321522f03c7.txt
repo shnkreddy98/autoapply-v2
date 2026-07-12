@@ -1,0 +1,70 @@
+"First name": |-
+    - generic [ref=e168]: First name *
+    - textbox [ref=e172]
+  - generic [ref=e173]:
+    - generic [ref=e174]: Last name *
+"Last name": |-
+    - generic [ref=e174]: Last name *
+    - textbox [ref=e178]
+  - generic [ref=e179]:
+    - generic [ref=e180]: Email *
+"Email": |-
+    - generic [ref=e180]: Email *
+    - textbox [ref=e184]
+  - generic [ref=e185]:
+    - generic [ref=e186]: LinkedIn URL
+"LinkedIn URL": |-
+    - generic [ref=e186]: LinkedIn URL
+    - textbox [ref=e190]
+  - generic [ref=e191]:
+    - generic [ref=e192]: Phone number *
+"Phone number": |-
+    - generic [ref=e192]: Phone number *
+    - textbox [ref=e196]
+  - generic [ref=e197]:
+    - generic [ref=e198]: Resume *
+"Resume": |-
+  - generic [ref=e198]: Resume *
+  - generic [ref=e201] [cursor=pointer]:
+    - generic [ref=e202]:
+      - img [ref=e204]
+"Are you legally authorized to work in the U.S.?": |-
+  - generic [ref=e223]: Are you legally authorized to work in the U.S.? *
+  - generic [ref=e227]:
+    - generic [ref=e228]:
+      - radio "Yes"
+"Will you now or in the future require sponsorship": |-
+  - generic [ref=e238]: Will you now or in the future require sponsorship by our company to attain or maintain your employment eligibility (e.g. H-1B visa status)? *
+  - generic [ref=e242]:
+    - generic [ref=e243]:
+      - radio "Yes"
+"Privacy Policy": |-
+    - generic [ref=e253]: "Please review our Privacy Policy and acknowledge below: https://fetch.com/employee-privacy-policy *"
+    - generic [ref=e258]:
+      - radio "Acknowledge/Confirm"
+      - generic [ref=e261] [cursor=pointer]: Acknowledge/Confirm
+  --
+    - link "privacy policy" [ref=e347] [cursor=pointer]:
+      - /url: https://www.gem.com/compliance/privacy
+    - text: .
+  - generic [ref=e348]: Save your info to apply to other roles faster & help employers reach you.
+"Fetch Rewards uses technology tools with artificial intelligence": |-
+  - generic [ref=e264]: Fetch Rewards uses technology tools with artificial intelligence capabilities to help our recruiting team review applications and manage the hiring process. These tools assist (but do not replace) our recruiters and hiring managers, who make all employment decisions. Your information will not be used in any solely automated hiring decision. You may contact talent@fetchrewards.com with questions or to request accommodations or opt-out of use of AI in processing your application. For full details on how we collect, use, and protect your personal information during the recruiting process, please review our Notice at Collection for Employees and Applicants https://fetch.com/employee-privacy-policy. *
+  - generic [ref=e269]:
+    - radio "I have read and understand the Fetch Rewards Notice at Collection for Employees and Applicants, including the section describing the use of AI-assisted tools in recruiting, and I consent to the processing of my personal information as described therein."
+    - generic [ref=e272] [cursor=pointer]: I have read and understand the Fetch Rewards Notice at Collection for Employees and Applicants, including the section describing the use of AI-assisted tools in recruiting, and I consent to the processing of my personal information as described therein.
+"What is your current title?": |-
+    - generic [ref=e275]: What is your current title? *
+    - textbox [ref=e278]
+  - generic [ref=e279]:
+    - generic [ref=e281]: What is your current company? *
+"What is your current company?": |-
+    - generic [ref=e281]: What is your current company? *
+    - textbox [ref=e284]
+  - generic [ref=e285]:
+    - generic [ref=e287]: What led you to apply to Fetch? *
+"What led you to apply to Fetch?": |-
+      - generic [ref=e287]: What led you to apply to Fetch? *
+      - textbox [ref=e290]
+  - generic [ref=e293]:
+    - generic [ref=e294]: Voluntary Self-Identification

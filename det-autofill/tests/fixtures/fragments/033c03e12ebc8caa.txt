@@ -1,0 +1,41 @@
+"Are you a current Supplemental Labor employee?": |-
+    - generic [ref=e632]: Are you a current Supplemental Labor employee?
+    - text: "*"
+  - radiogroup "Are you a current Supplemental Labor employee?" [ref=e633]:
+    - generic:
+      - radio "Yes" [ref=e634]:
+        - generic [ref=e646] [cursor=pointer]: "Yes"
+"Are you a former employee?": |-
+    - generic [ref=e671]: Are you a former employee?
+    - text: "*"
+  - radiogroup "Are you a former employee?" [ref=e672]:
+    - generic:
+      - radio "Yes" [ref=e673]:
+        - generic [ref=e685] [cursor=pointer]: "Yes"
+"Are you a U.S. citizen?": |-
+    - generic [ref=e710]: Are you a U.S. citizen?
+    - text: "*"
+  - radiogroup "Are you a U.S. citizen?" [ref=e711]:
+    - generic:
+      - radio "Yes" [ref=e712]:
+        - generic [ref=e724] [cursor=pointer]: "Yes"
+"No, I do not have a disability and have not had one in the past.": |-
+      - radio "No, I do not have a disability and have not had one in the past." [ref=e846]:
+        - generic [ref=e858] [cursor=pointer]: No, I do not have a disability and have not had one in the past.
+      - radio "I do not want to answer." [ref=e859]:
+        - generic [ref=e871] [cursor=pointer]: I do not want to answer.
+  - generic:
+"Are you a protected veteran? (definitions)": |-
+  - radiogroup "Are you a protected veteran? (definitions)" [ref=e885]:
+    - generic:
+      - radio "Yes" [ref=e886]:
+        - generic [ref=e898] [cursor=pointer]: "Yes"
+"You declare that you have read and understand the job applications privacy notice of LLNL.": |-
+  - checkbox "You declare that you have read and understand the job applications privacy notice of LLNL." [ref=e951] [cursor=pointer]
+  - generic [ref=e952]:
+    - generic [ref=e957] [cursor=pointer]:
+      - generic [ref=e959]:
+        - generic: You declare that you have read and understand the job applications privacy notice of LLNL.
+      - text: "*"
+    - generic:
+      - paragraph

@@ -1,0 +1,24 @@
+"require \u201csponsorship": |-
+    - generic [ref=e132]: Will you now or in the future require “sponsorship for an immigration-related employment benefit?"
+    - table [ref=e134]:
+      - rowgroup [ref=e135]:
+        - row "No Yes" [ref=e136]:
+          - cell "No" [ref=e137]:
+            - radio "No" [ref=e138]
+            - generic [ref=e139] [cursor=pointer]: "No"
+          - cell "Yes" [ref=e140]:
+            - radio "Yes" [ref=e141]
+            - generic [ref=e142] [cursor=pointer]: "Yes"
+  - generic [ref=e143]:
+"currently working?": |-
+    - generic [ref=e158]: Are you currently working?
+    - table [ref=e160]:
+      - rowgroup [ref=e161]:
+        - row "No Yes" [ref=e162]:
+          - cell "No" [ref=e163]:
+            - radio "No" [ref=e164]
+            - generic [ref=e165] [cursor=pointer]: "No"
+          - cell "Yes" [ref=e166]:
+            - radio "Yes" [ref=e167]
+            - generic [ref=e168] [cursor=pointer]: "Yes"
+  - generic [ref=e169]:

@@ -1,0 +1,7 @@
+"Create account": |-
+        - button "Create account" [ref=e96] [cursor=pointer]:
+          - generic [ref=e97]:
+            - generic: Create account
+  - contentinfo [ref=e84]:
+    - link "www.nelsonworldwide.com This link will open in a new tab" [ref=e89] [cursor=pointer]:
+      - /url: http://www.nelsonworldwide.com

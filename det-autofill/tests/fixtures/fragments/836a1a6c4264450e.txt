@@ -1,0 +1,16 @@
+"I Consent": |-
+                  - generic [ref=e1480]: I Consent*
+                  - checkbox "I Consent" [ref=e1485] [cursor=pointer]
+        - generic [ref=e180]:
+          - button "Back" [ref=e391] [cursor=pointer]
+          - button "Save and Continue" [ref=e392] [cursor=pointer]
+  - generic [ref=e54]:
+    - heading "Follow Us" [level=4] [ref=e55]
+"Consent": |-
+                  - generic [ref=e1480]: I Consent*
+                  - checkbox "I Consent" [ref=e1485] [cursor=pointer]
+        - generic [ref=e180]:
+          - button "Back" [ref=e391] [cursor=pointer]
+          - button "Save and Continue" [ref=e392] [cursor=pointer]
+  - generic [ref=e54]:
+    - heading "Follow Us" [level=4] [ref=e55]

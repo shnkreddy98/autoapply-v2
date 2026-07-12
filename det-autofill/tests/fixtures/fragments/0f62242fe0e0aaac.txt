@@ -1,0 +1,6 @@
+"Header": |-
+  - navigation "Header" [ref=e6]:
+    - generic [ref=e8]:
+      - img "Career Homepage" [ref=e11]
+      - list [ref=e18]:
+"jane.doe@example.com": (no match)

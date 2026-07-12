@@ -1,0 +1,75 @@
+"How Did You Hear About Us?": |-
+      - generic [ref=e493]: How Did You Hear About Us?*
+      - generic [ref=e499] [cursor=pointer]:
+        - textbox "How Did You Hear About Us?" [ref=e500]:
+          - /placeholder: Search
+        - generic [ref=e501]: 0 items selected
+  - group [ref=e505]:
+"Have you previously been employed": |-
+  - group "Have you previously been employed by Wells Fargo or engaged as a contingent resource?" [ref=e508]:
+    - generic [ref=e511]: Have you previously been employed by Wells Fargo or engaged as a contingent resource?*
+    - generic "Have you previously been employed by Wells Fargo or engaged as a contingent resource?" [ref=e514]:
+      - generic [ref=e515]:
+        - radio "Yes" [ref=e517] [cursor=pointer]
+        - generic [ref=e518]: "Yes"
+"First Name": |-
+    - generic [ref=e544]: First Name*
+    - textbox "First Name" [ref=e547]: Jane
+  - generic [ref=e548]:
+    - generic [ref=e549]: Middle Name
+    - textbox "Middle Name" [ref=e552]: Quinn
+"Last Name": |-
+    - generic [ref=e555]: Last Name*
+    - textbox "Last Name" [ref=e558]: Doe
+  - generic [ref=e559]:
+    - generic [ref=e560]: Suffix
+    - button "Suffix Select One" [ref=e564]: Select One
+"Address Line 1": |-
+    - generic [ref=e578]: Address Line 1*
+    - textbox "Address Line 1" [ref=e581]
+  - generic [ref=e582]:
+    - generic [ref=e583]: Address Line 2
+    - textbox "Address Line 2" [ref=e586]
+"City": |-
+    - generic [ref=e589]: City*
+    - textbox "City" [ref=e592]: Redwood City
+  - generic [ref=e593]:
+    - generic [ref=e595]: State*
+    - button "State California Required" [ref=e599]: California
+"State": |-
+      - button "Country United States of America Required" [ref=e531]: United States of America
+  - group "Legal Name" [ref=e533]:
+    - heading "Legal Name" [level=4] [ref=e534]
+    - generic [ref=e535]:
+  --
+        - generic [ref=e595]: State*
+        - button "State California Required" [ref=e599]: California
+      - generic [ref=e600]:
+        - generic [ref=e602]: Postal Code*
+        - textbox "Postal Code" [ref=e605]
+  --
+            - generic [ref=e637]: 1 item selected, United States of America (+1)
+          - listbox "items selected" [ref=e639]:
+            - option "United States of America (+1), press delete to clear value." [ref=e640]:
+              - paragraph [ref=e645]: United States of America (+1)
+      - generic [ref=e649]:
+        - generic [ref=e651]: Phone Number*
+        - textbox "Phone Number" [ref=e654]: (555) 010-0199
+"Postal Code": |-
+    - generic [ref=e602]: Postal Code*
+    - textbox "Postal Code" [ref=e605]
+  - generic [ref=e606]:
+    - generic [ref=e607]: County
+    - textbox "County" [ref=e610]
+"Phone Device Type": |-
+    - generic [ref=e623]: Phone Device Type*
+    - button "Phone Device Type Select One Required" [ref=e627]: Select One
+  - generic [ref=e628]:
+    - generic [ref=e630]: Country Phone Code*
+    - generic [ref=e635] [cursor=pointer]:
+"Phone Number": |-
+    - generic [ref=e651]: Phone Number*
+    - textbox "Phone Number" [ref=e654]: (555) 010-0199
+  - generic [ref=e655]:
+    - generic [ref=e656]: Phone Extension
+    - textbox "Phone Extension" [ref=e659]

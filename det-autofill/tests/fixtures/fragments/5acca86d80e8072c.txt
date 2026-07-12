@@ -1,0 +1,4 @@
+"reCAPTCHA": |-
+            - strong [ref=f65e7]: reCAPTCHA
+      - img "Powered by Dayforce" [ref=e99]
+  ```

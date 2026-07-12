@@ -1,0 +1,14 @@
+"Yes": |-
+                - button "Yes Required" [ref=e2281]: "Yes"
+              - group "Do you now, or will you in the future, require the sponsorship of an employer in order to have valid work authorization?*" [ref=e2150]:
+                - paragraph [ref=e2154]: Do you now, or will you in the future, require the sponsorship of an employer in order to have valid work authorization?*
+                - button "Yes Required" [ref=e2291]: "Yes"
+              - group "Please detail the duration of your notice period?*" [ref=e2160]:
+                - paragraph [ref=e2164]: Please detail the duration of your notice period?*
+                - button "None Required" [ref=e2313]: None
+  --
+  - option "Yes" [ref=e2319]:
+    - generic [ref=e2320]: "Yes"
+  - option "N/A - Already Local" [ref=e2321]:
+    - generic [ref=e2322]: N/A - Already Local
+  - option "No" [ref=e2323]:

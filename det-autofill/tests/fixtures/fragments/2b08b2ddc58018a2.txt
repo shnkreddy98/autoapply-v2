@@ -1,0 +1,8 @@
+"Answer the following question with numbers only.": |-
+      - heading "Answer the following question with numbers only." [level=2] [ref=f17e132]
+      - paragraph
+    - generic [ref=f17e117]: Replace the last character with 0 only when the ending character is 5 in 881172.
+    - textbox "Answer the following question with numbers only. Replace the last character with 0 only when the ending character is 5 in 881172." [active] [ref=f17e133]
+  - generic [ref=f17e12]:
+    - alert [ref=f17e13]:
+      - generic [ref=f17e14]: Please try again. ⚠️

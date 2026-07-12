@@ -1,0 +1,101 @@
+"First Name": |-
+    - generic [ref=e105]: First Name*
+    - textbox "First Name" [ref=e106]
+  - generic [ref=e109]:
+    - generic [ref=e110]: Last Name*
+    - textbox "Last Name" [ref=e111]
+"Last Name": |-
+    - generic [ref=e110]: Last Name*
+    - textbox "Last Name" [ref=e111]
+  - generic [ref=e114]:
+    - generic [ref=e115]: Email*
+    - textbox "Email" [ref=e116]
+"Email": |-
+        - paragraph [ref=e85]: Interested in building your career at Correlation One? Get future opportunities sent straight to your email.
+        - link "Create alert" [ref=e404] [cursor=pointer]:
+          - /url: https://my.greenhouse.io/users/sign_in?job_board=correlationone&source=job_alert_post
+  - separator [ref=e87]
+  --
+          - generic [ref=e115]: Email*
+          - textbox "Email" [ref=e116]
+        - group "Phone" [ref=e118]:
+          - generic [ref=e119]: Phone
+          - generic [ref=e122]:
+"Phone": |-
+  - group "Phone" [ref=e118]:
+    - generic [ref=e119]: Phone
+    - generic [ref=e122]:
+      - generic [ref=e123]: Country
+      - generic [ref=e124]:
+  --
+      - generic [ref=e139]: Phone
+      - textbox "Phone" [ref=e140]
+  - group "Resume/CV" [ref=e142]:
+    - generic [ref=e143]: Resume/CV
+    - generic [ref=e145]:
+"Resume/CV": |-
+  - group "Resume/CV" [ref=e142]:
+    - generic [ref=e143]: Resume/CV
+    - generic [ref=e145]:
+      - generic [ref=e147]:
+        - button "Attach" [ref=e148] [cursor=pointer]
+"LinkedIn Profile": |-
+    - generic [ref=e184]: LinkedIn Profile*
+    - textbox "LinkedIn Profile" [ref=e185]
+  - generic [ref=e188]:
+    - generic [ref=e189]: How did you hear about this opportunity?*
+    - textbox "How did you hear about this opportunity?" [ref=e190]
+"How did you hear about this opportunity?": |-
+    - generic [ref=e189]: How did you hear about this opportunity?*
+    - textbox "How did you hear about this opportunity?" [ref=e190]
+  - generic [ref=e193]:
+    - generic [ref=e194]: Do you know anyone at Correlation One? If so, whom? *
+    - textbox "Do you know anyone at Correlation One? If so, whom?" [ref=e195]
+"Do you know anyone at Correlation One?": |-
+    - generic [ref=e194]: Do you know anyone at Correlation One? If so, whom? *
+    - textbox "Do you know anyone at Correlation One? If so, whom?" [ref=e195]
+  - generic [ref=e198]:
+    - generic [ref=e199]: Are you currently a Learner / participant in a Correlation One training program?*
+    - generic [ref=e200]:
+"Are you currently a Learner": |-
+  - generic [ref=e199]: Are you currently a Learner / participant in a Correlation One training program?*
+  - generic [ref=e200]:
+    - log [ref=e202]
+    - generic [ref=e204]:
+  --
+        - combobox "Are you currently a Learner / participant in a Correlation One training program?" [ref=e208]
+      - button "Toggle flyout" [ref=e210] [cursor=pointer]:
+        - img [ref=e211]
+    - textbox
+"Are you a graduate of a previous Correlation One training program?": |-
+  - generic [ref=e216]: Are you a graduate of a previous Correlation One training program?*
+  - generic [ref=e217]:
+    - log [ref=e219]
+    - generic [ref=e221]:
+  --
+        - combobox "Are you a graduate of a previous Correlation One training program?" [ref=e225]
+      - button "Toggle flyout" [ref=e227] [cursor=pointer]:
+        - img [ref=e228]
+    - textbox
+"Are you located in Latin America (LatAm)?": |-
+  - generic [ref=e233]: Are you located in Latin America (LatAm)?*
+  - generic [ref=e234]:
+    - log [ref=e236]
+    - generic [ref=e238]:
+  --
+        - combobox "Are you located in Latin America (LatAm)?" [ref=e242]
+      - button "Toggle flyout" [ref=e244] [cursor=pointer]:
+        - img [ref=e245]
+    - textbox
+"In which city and country are you located?": |-
+    - generic [ref=e250]: In which city and country are you located?*
+    - textbox "In which city and country are you located?" [ref=e251]
+  - generic [ref=e254]:
+    - generic [ref=e255]: What are your compensation expectations? (in USD, please)*
+    - textbox "What are your compensation expectations? (in USD, please)" [ref=e256]
+"What are your compensation expectations?": |-
+      - generic [ref=e255]: What are your compensation expectations? (in USD, please)*
+      - textbox "What are your compensation expectations? (in USD, please)" [ref=e256]
+  - generic [ref=e257]:
+    - separator [ref=e258]
+    - generic [ref=e259]:

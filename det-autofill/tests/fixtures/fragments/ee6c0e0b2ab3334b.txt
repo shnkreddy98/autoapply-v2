@@ -1,0 +1,8 @@
+"Male": |-
+      - option "Female" [ref=e1893]:
+        - generic [ref=e1894]: Female
+      - option "I do not wish to answer" [ref=e1895]:
+        - generic [ref=e1896]: I do not wish to answer
+      - option "Male" [ref=e1897]:
+        - generic [ref=e1898]: Male
+  ```

@@ -1,0 +1,84 @@
+"Month": |-
+    - generic [ref=e238]: Month
+    - combobox "Month" [ref=e239]:
+      - option "Month"
+      - option "Jan" [selected]
+      - option "Feb"
+      - option "Mar"
+  --
+    - generic [ref=e254]: Month
+    - combobox "Month" [ref=e255]:
+      - option "Month"
+      - option "Jan"
+      - option "Feb"
+      - option "Mar"
+  --
+    - generic [ref=e359]: Month
+    - combobox "Month" [ref=e360]:
+      - option "Month"
+      - option "Jan" [selected]
+      - option "Feb"
+      - option "Mar"
+  --
+    - generic [ref=e375]: Month
+    - combobox "Month" [ref=e376]:
+      - option "Month"
+      - option "Jan" [selected]
+      - option "Feb"
+      - option "Mar"
+  --
+    - generic [ref=e484]: Month
+    - combobox "Month" [ref=e485]:
+      - option "Month"
+      - option "Jan" [selected]
+      - option "Feb"
+      - option "Mar"
+  --
+    - generic [ref=e500]: Month
+    - combobox "Month" [ref=e501]:
+      - option "Month"
+      - option "Jan" [selected]
+      - option "Feb"
+      - option "Mar"
+  --
+  - generic [ref=e595]: Month
+  - combobox "Month" [ref=e596]:
+    - option "Month"
+    - option "Jan"
+    - option "Feb"
+    - option "Mar"
+  --
+  - generic [ref=e609]: Month
+  - combobox "Month" [ref=e610]:
+    - option "Month" [selected]
+    - option "Jan"
+    - option "Feb"
+    - option "Mar"
+  --
+  - generic [ref=e698]: Month
+  - combobox "Month" [ref=e699]:
+    - option "Month"
+    - option "Jan"
+    - option "Feb"
+    - option "Mar"
+  --
+  - generic [ref=e712]: Month
+  - combobox "Month" [ref=e713]:
+    - option "Month"
+    - option "Jan"
+    - option "Feb"
+    - option "Mar"
+  --
+  - generic [ref=e805]: Month
+  - combobox "Month" [ref=e806]:
+    - option "Month"
+    - option "Jan"
+    - option "Feb"
+    - option "Mar"
+  --
+  - generic [ref=e819]: Month
+  - combobox "Month" [ref=e820]:
+    - option "Month"
+    - option "Jan"
+    - option "Feb"
+    - option "Mar" [selected]

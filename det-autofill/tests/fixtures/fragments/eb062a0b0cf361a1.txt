@@ -1,0 +1,5 @@
+"Forgot your password?": |-
+    - button "Forgot your password?" [ref=e513] [cursor=pointer]
+  - generic:
+    - generic:
+      - generic [ref=e514]: Enter website. This input is for robots only, do not enter if you're human.

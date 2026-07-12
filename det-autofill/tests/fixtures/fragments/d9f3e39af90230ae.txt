@@ -1,0 +1,27 @@
+"No": |-
+      - generic "We use cookies and tracking technologies to offer you a better browsing experience, analyze site traffic, and improve the website." [ref=e9]:
+        - paragraph [ref=e11]: We use cookies and tracking technologies to offer you a better browsing experience, analyze site traffic, and improve the website.
+        - generic [ref=e12]:
+          - button "Decline" [ref=e15] [cursor=pointer]
+          - button "Accept Cookies" [ref=e19] [cursor=pointer]
+  --
+          - heading "AmerisourceBergen is now Cencora! Explore our careers." [level=1] [ref=e30]
+          - button "main menu" [ref=e32] [cursor=pointer]
+      - main [ref=e100]:
+        - generic [ref=e101]:
+  --
+                  - group "Will you now or in the future require sponsorship for an employment visa (e.g., H-1B visa status)?*" [ref=e1288]:
+                    - paragraph [ref=e1292]: Will you now or in the future require sponsorship for an employment visa (e.g., H-1B visa status)?*
+                    - button "Yes Required" [ref=e1355]: "Yes"
+                  - group "Are you 18 years of age or older?*" [ref=e1298]:
+                    - paragraph [ref=e1302]: Are you 18 years of age or older?*
+  --
+                  - group "Do you currently have a noncompete that may impact this job application?*" [ref=e1308]:
+                    - paragraph [ref=e1312]: Do you currently have a noncompete that may impact this job application?*
+                    - button "Select One Required" [expanded] [ref=e1316]: Select One
+                  - group "Do you have relatives who work for our company?*" [ref=e1318]:
+                    - paragraph [ref=e1322]: Do you have relatives who work for our company?*
+  --
+      - option "No" [ref=e1373]:
+        - generic [ref=e1374]: "No"
+  ```

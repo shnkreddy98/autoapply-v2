@@ -1,0 +1,8 @@
+"are you willing to relocate?": |-
+    - generic [ref=e2038]: If you are applying for a position outside of your current location, are you willing to relocate?
+  - generic [ref=e2040]:
+    - generic [ref=e2042]:
+      - generic [ref=e2043]: If you are applying for a position outside of your current location, are you willing to relocate?
+      - text: "*"
+    - generic [ref=e2048]:
+      - generic [ref=e2050] [cursor=pointer]:

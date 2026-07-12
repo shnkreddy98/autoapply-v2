@@ -1,0 +1,62 @@
+"Based on what you know about Livefront right now, why do you want to be a part of our team?": |-
+    - generic [ref=e640]: Based on what you know about Livefront right now, why do you want to be a part of our team?*
+    - textbox "Based on what you know about Livefront right now, why do you want to be a part of our team?" [ref=e641]
+  - generic [ref=e644]:
+    - generic [ref=e645]: If you were referred to Livefront, tell us how.*
+    - generic [ref=e646]:
+"If you were referred to Livefront, tell us how.": |-
+  - generic [ref=e645]: If you were referred to Livefront, tell us how.*
+  - generic [ref=e646]:
+    - log [ref=e648]
+    - generic [ref=e650]:
+  --
+        - combobox "If you were referred to Livefront, tell us how." [ref=e654]
+      - button "Toggle flyout" [ref=e656] [cursor=pointer]:
+        - img [ref=e657]
+    - textbox
+"If applicable, what is the name of the person who referred you?": |-
+    - generic [ref=e662]: If applicable, what is the name of the person who referred you?*
+    - textbox "If applicable, what is the name of the person who referred you?" [ref=e663]
+  - generic [ref=e666]:
+    - generic [ref=e667]: We get really excited about folks with experience at service-based companies (as opposed to SaaS or in-house product teams). Please describe any digital agency experience you have!
+    - textbox "We get really excited about folks with experience at service-based companies (as opposed to SaaS or in-house product teams). Please describe any digital agency experience you have!" [ref=e668]
+"Gender": |-
+    - generic [ref=e678]: Gender
+    - generic [ref=e679]:
+      - log [ref=e681]
+      - generic [ref=e683]:
+  --
+          - combobox "Gender" [ref=e687]
+        - button "Toggle flyout" [ref=e689] [cursor=pointer]:
+          - img [ref=e690]
+  - generic [ref=e692]:
+"Are you Hispanic/Latino?": |-
+    - generic [ref=e695]: Are you Hispanic/Latino?
+    - generic [ref=e696]:
+      - log [ref=e698]
+      - generic [ref=e700]:
+  --
+          - combobox "Are you Hispanic/Latino?" [ref=e704]
+        - button "Toggle flyout" [ref=e706] [cursor=pointer]:
+          - img [ref=e707]
+  - link "Race & Ethnicity Definitions" [ref=e709] [cursor=pointer]:
+"Veteran Status": |-
+    - generic [ref=e719]: Veteran Status
+    - generic [ref=e720]:
+      - log [ref=e722]
+      - generic [ref=e724]:
+  --
+          - combobox "Veteran Status" [ref=e728]
+        - button "Toggle flyout" [ref=e730] [cursor=pointer]:
+          - img [ref=e731]
+  - separator [ref=e733]
+"Disability Status": |-
+    - generic [ref=e776]: Disability Status
+    - generic [ref=e777]:
+      - log [ref=e779]
+      - generic [ref=e781]:
+  --
+          - combobox "Disability Status" [ref=e785]
+        - button "Toggle flyout" [ref=e787] [cursor=pointer]:
+          - img [ref=e788]
+  - paragraph [ref=e791]: "PUBLIC BURDEN STATEMENT: According to the Paperwork Reduction Act of 1995 no persons are required to respond to a collection of information unless such collection displays a valid OMB control number. This survey should take about 5 minutes to complete."

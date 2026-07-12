@@ -1,0 +1,13 @@
+"Bachelors of Arts or Science": |-
+  - option "Bachelors of Arts or Science" [ref=e1211]:
+    - generic [ref=e1212]: Bachelors of Arts or Science
+  - option "Masters of Arts or Science or Business Administration" [ref=e1213]:
+    - generic [ref=e1214]: Masters of Arts or Science or Business Administration
+  - option "Doctor of Philosophy or Juris Doctor" [ref=e1215]:
+"Type to Add Skills": |-
+      - generic [ref=e1069]: Type to Add Skills
+      - generic [ref=e1075] [cursor=pointer]:
+        - textbox "Type to Add Skills" [ref=e1076]:
+          - /placeholder: Search
+        - generic [ref=e1077]: 0 items selected
+  - group "Resume/CV" [ref=e1082]:

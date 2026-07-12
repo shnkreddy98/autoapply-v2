@@ -1,0 +1,17 @@
+"Resume/CV": |-
+  - generic [ref=e130]: Resume/CV *
+  - group [ref=e131]:
+    - generic [ref=e133]:
+      - generic "Attach file (.pdf, .doc, .docx, .rtf, .txt)" [ref=e135]:
+"Upload File": |-
+    - generic [ref=e140] [cursor=pointer]: Upload File
+    - button "Upload File" [ref=e141]
+  - generic [ref=e142]: Or
+  - link "Type/Paste Text" [ref=e144] [cursor=pointer]:
+    - /url: "#resume_text_input"
+  --
+    - generic [ref=e159] [cursor=pointer]: Upload File
+    - button "Upload File" [ref=e160]
+  - generic [ref=e161]: Or
+  - link "Type/Paste Text" [ref=e163] [cursor=pointer]:
+    - /url: "#cover_letter_input"

@@ -1,0 +1,26 @@
+"Resume*": |-
+    - generic [ref=e69]: "Resume*:"
+    - button "Choose File" [active] [ref=e71]
+  - generic [ref=e73]: "(Max file size allowed: 1 MB)"
+  - generic [ref=e74]:
+"I'm not a robot": |-
+          - checkbox "I'm not a robot" [ref=f76e7]
+          - generic [ref=f76e11]: I'm not a robot
+        - generic [ref=f76e15]: reCAPTCHA
+  - generic [ref=e105]:
+    - text: Fields marked with * are required. Other fields are optional.
+"Apply": |-
+  - Page URL: https://www.roseint.com/hotjobs/ApplyJobs.aspx?OpID=503822&RD=L
+  - Page Title: ApplyJobs
+  ### Snapshot
+  ```yaml
+  - generic [ref=e3]:
+  --
+      - generic [ref=e18]: Apply With Rose International
+      - generic:
+        - generic [ref=e19]:
+          - generic [ref=e20]: "Position Title:"
+  --
+            - button "Apply" [ref=e114] [cursor=pointer]
+            - button "Cancel" [ref=e115] [cursor=pointer]
+  ```

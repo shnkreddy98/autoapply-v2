@@ -1,0 +1,16 @@
+"radio": |-
+              - radio "Yes" [ref=e2239]
+              - generic [ref=e2241]: "Yes"
+            - generic [ref=e2243] [cursor=pointer]:
+              - radio "No" [checked] [ref=e2245]
+              - generic [ref=e2247]: "No"
+  - listitem [ref=e2248]:
+    - generic [ref=e2251]:
+  --
+              - radio "Yes" [ref=e2276]
+              - generic [ref=e2278]: "Yes"
+            - generic [ref=e2280] [cursor=pointer]:
+              - radio "No" [checked] [ref=e2282]
+              - generic [ref=e2284]: "No"
+  - listitem [ref=e2285]:
+    - generic [ref=e2288]:

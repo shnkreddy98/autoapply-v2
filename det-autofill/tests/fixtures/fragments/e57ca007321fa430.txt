@@ -1,0 +1,35 @@
+"Work Experience 1": |-
+  - group "Work Experience 1" [ref=e969]:
+    - generic [ref=e970]:
+      - heading "Work Experience 1" [level=5] [ref=e971]
+      - button "Delete" [ref=e972] [cursor=pointer]: Delete
+    - generic [ref=e978]:
+      - generic [ref=e979]:
+"Work Experience 2": |-
+  - group "Work Experience 2" [ref=e1053]:
+    - generic [ref=e1054]:
+      - heading "Work Experience 2" [level=5] [ref=e1055]
+      - button "Delete" [ref=e1056] [cursor=pointer]: Delete
+    - generic [ref=e1062]:
+      - generic [ref=e1063]:
+"Work Experience 3": |-
+  - group "Work Experience 3" [ref=e1137]:
+    - generic [ref=e1138]:
+      - heading "Work Experience 3" [level=5] [ref=e1139]
+      - button "Delete" [ref=e1140] [cursor=pointer]: Delete
+    - generic [ref=e1146]:
+      - generic [ref=e1147]:
+"Education 1": |-
+  - group "Education 1" [ref=e1483]:
+    - generic [ref=e1484]:
+      - heading "Education 1" [level=5] [ref=e1485]
+      - button "Delete" [ref=e1486] [cursor=pointer]: Delete
+    - generic [ref=e1492]:
+      - generic [ref=e1493]:
+"Education 2": |-
+  - group "Education 2" [ref=e1545]:
+    - generic [ref=e1546]:
+      - heading "Education 2" [level=5] [ref=e1547]
+      - button "Delete" [ref=e1548] [cursor=pointer]: Delete
+    - generic [ref=e1554]:
+      - generic [ref=e1555]:

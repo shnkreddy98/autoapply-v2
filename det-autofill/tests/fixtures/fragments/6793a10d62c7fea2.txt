@@ -1,0 +1,11 @@
+"Resume": |-
+    - generic [ref=e172]: Resume*
+    - generic [ref=e217]:
+      - generic [ref=e218]:
+        - text: Attach resume as .pdf, .doc, .docx, .odt, .txt, or .rtf (limit 5MB) or
+        - link "Paste resume" [ref=e219] [cursor=pointer]:
+          - /url: "#"
+      - button "Resume*" [ref=e221]
+  - generic [ref=e176]:
+    - generic [ref=e177]: This position requires significant overlap with U.S. Mountain Time business hours, including evening or overnight schedules. Are you able to meet this requirement?*
+    - combobox "This position requires significant overlap with U.S. Mountain Time business hours, including evening or overnight schedules. Are you able to meet this requirement?*" [ref=e178]:

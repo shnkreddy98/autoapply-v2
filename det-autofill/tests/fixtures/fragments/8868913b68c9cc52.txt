@@ -1,0 +1,27 @@
+"Yes": |-
+              - option "Yes" [ref=e548] [cursor=pointer]
+              - option "No" [ref=e549] [cursor=pointer]
+            - status: 3 results available. Use down and up arrow keys to navigate.
+      - generic [ref=e153]:
+  --
+            - option "Yes" [selected]
+            - option "No"
+      - group "Education (2)" [ref=e254]:
+        - generic [ref=e255]: Education (2)
+  --
+            - option "Yes" [selected]
+            - option "No"
+      - generic [ref=e284]:
+        - group "Education (3)" [ref=e285]:
+  --
+              - option "Yes" [selected]
+              - option "No"
+        - button "Add More (Education)" [ref=e321] [cursor=pointer]
+  - group [ref=e322]:
+"How did you hear about us?": |-
+    - text: How did you hear about us?
+    - generic [ref=e155]: "*"
+  - combobox "How did you hear about us?" [ref=e157]:
+    - option "— Make a Selection —" [selected]
+    - option "Agency"
+    - option "Career Fair/Networking Event"

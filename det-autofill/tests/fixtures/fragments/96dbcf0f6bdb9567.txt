@@ -1,0 +1,53 @@
+"Country": |-
+      - generic [ref=e167]: Country*
+      - generic [ref=e168]:
+        - generic [ref=e169]:
+          - text: option , selected.
+  --
+          - combobox "Country" [active] [invalid] [ref=e175]
+          - button "Toggle flyout" [ref=e177] [cursor=pointer]:
+            - img [ref=e178]
+        - textbox
+    - paragraph [ref=e521]: Select a country
+  - generic [ref=e182]:
+    - generic [ref=e183]: Phone*
+    - textbox "Phone" [ref=e184]: (555) 010-0199
+"Location (City)": |-
+      - generic [ref=e188]: Location (City)*
+      - generic [ref=e189]:
+        - log [ref=e191]
+        - combobox "Location (City)" [invalid] [ref=e196]
+        - textbox
+    - paragraph [ref=e522]: Please enter your location
+  - button "Locate me" [ref=e197] [cursor=pointer]
+"Attach": |-
+    - button "Attach" [ref=e205] [cursor=pointer]
+    - generic [ref=e206]: Attach
+    - button "Attach" [ref=e207]
+  - button "Dropbox" [ref=e209] [cursor=pointer]
+  - button "Google Drive" [ref=e211] [cursor=pointer]
+  - generic [ref=e213]:
+  --
+    - button "Attach" [ref=e224] [cursor=pointer]
+    - generic [ref=e225]: Attach
+    - button "Attach" [ref=e226]
+  - button "Dropbox" [ref=e228] [cursor=pointer]
+  - button "Google Drive" [ref=e230] [cursor=pointer]
+  - generic [ref=e232]:
+"LinkedIn Profile": |-
+    - generic [ref=e241]: LinkedIn Profile
+    - textbox "LinkedIn Profile" [ref=e242]
+  - generic [ref=e245]:
+    - generic [ref=e246]: Website
+    - textbox "Website" [ref=e247]
+"Website": |-
+    - generic [ref=e246]: Website
+    - textbox "Website" [ref=e247]
+  - generic [ref=e249]:
+    - generic [ref=e250]:
+      - generic [ref=e251]: How did you first hear about Planet before applying for this position?*
+  --
+      - text: Completing this form is voluntary, and we hope that you will choose to do so. Your answer is confidential. No one who makes hiring decisions will see it. Your decision to complete the form and your answer will not harm you in any way. If you want to learn more about the law or this form, visit the U.S. Department of Labor’s Office of Federal Contract Compliance Programs (OFCCP) website at
+      - link "www.dol.gov/ofccp" [ref=e446] [cursor=pointer]:
+        - /url: https://www.dol.gov/ofccp
+      - text: .

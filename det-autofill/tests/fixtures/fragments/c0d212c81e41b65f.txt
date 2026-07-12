@@ -1,0 +1,6 @@
+"Asian (not Hispanic or Latino)": |-
+  - option "Asian (not Hispanic or Latino)" [ref=e1647]:
+    - generic [ref=e1648]: Asian (not Hispanic or Latino)
+  - option "American Indian or Alaska Native (not Hispanic or Latino)" [ref=e1649]:
+    - generic [ref=e1650]: American Indian or Alaska Native (not Hispanic or Latino)
+  - option "Two or More Races (not Hispanic or Latino)" [ref=e1651]:

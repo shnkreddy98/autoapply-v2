@@ -1,0 +1,19 @@
+"Education 2": |-
+  - group "Education 2" [ref=e1545]:
+    - generic [ref=e1546]:
+      - heading "Education 2" [level=5] [ref=e1547]
+      - button "Delete" [ref=e1548] [cursor=pointer]: Delete
+    - generic [ref=e1554]:
+      - generic [ref=e1555]:
+        - generic [ref=e1557]: School or University*
+        - generic [ref=e1562] [cursor=pointer]:
+          - generic:
+            - textbox "School or University" [ref=e1563]:
+              - /placeholder: Search
+            - generic [ref=e1564]: 1 item selected, Visvesvaraya Technological University
+          - listbox "items selected" [ref=e1566]:
+            - option "Visvesvaraya Technological University, press delete to clear value." [ref=e1567]:
+              - paragraph [ref=e1572]: Visvesvaraya Technological University
+      - generic [ref=e1576]:
+        - generic [ref=e1578]: Degree*
+        - button "Degree Select One Required" [ref=e1582]: Select One

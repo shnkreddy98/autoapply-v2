@@ -1,0 +1,54 @@
+"Data Scientist": |-
+  - Page Title: Data Scientist #731316 USA: GA-Atlanta
+  - Console: 1 errors, 0 warnings
+  ### Snapshot
+  ```yaml
+  - generic [active] [ref=e1]:
+    - dialog "cookieconsent" [ref=e2]:
+      - generic [ref=e3]:
+        - text: We use cookies to provide the best possible experience on our site. If you do not agree to accept these cookies simply close this window. What are cookies and how do we use them?
+        - button "learn more about cookies" [ref=e4] [cursor=pointer]: Click Here
+      - button "dismiss cookie message" [ref=e6] [cursor=pointer]: Continue
+    - generic [ref=e7]:
+  --
+                - heading "Data Scientist" [level=2] [ref=e25]
+                - generic [ref=e26]:
+                  - list [ref=e27]:
+                    - listitem [ref=e28]:
+                      - generic [ref=e29]: 
+                      - text: "USA: GA-Atlanta"
+                    - listitem [ref=e30]:
+                      - generic [ref=e31]: 
+                    - listitem [ref=e32]:
+                      - generic [ref=e33]: 
+                      - text: Full Time
+  --
+                    - row "Job Title Data Scientist" [ref=e49]:
+                      - cell "Job Title" [ref=e50]:
+                        - paragraph [ref=e51]:
+                          - strong [ref=e52]: Job Title
+                      - cell "Data Scientist" [ref=e53]:
+                        - paragraph [ref=e54]:
+                          - strong [ref=e55]: Data Scientist
+                    - row [ref=e56]:
+                      - cell [ref=e57]:
+                        - paragraph [ref=e58]
+                      - cell [ref=e59]:
+                        - paragraph [ref=e60]
+                    - row "Employment Type Full-time" [ref=e61]:
+                      - cell "Employment Type" [ref=e62]:
+                        - paragraph [ref=e63]:
+                          - strong [ref=e64]: Employment Type
+                      - cell "Full-time" [ref=e65]:
+"Full Time": |-
+      - text: Full Time
+    - listitem [ref=e34]:
+      - generic [ref=e35]: 
+      - text: "731316"
+  - generic [ref=e36]:
+    - generic [ref=e37] [cursor=pointer]:
+      - generic [ref=e38]: 
+      - text: Apply
+    - generic [ref=e39]:
+      - button " Share" [ref=e40] [cursor=pointer]:
+        - generic [ref=e41]: 

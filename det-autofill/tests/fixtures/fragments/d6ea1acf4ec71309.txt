@@ -1,0 +1,75 @@
+"Are you 18 years of age": |-
+      - button "Error Are you 18 years of age or older?" [ref=e1928] [cursor=pointer]:
+        - text: Error
+        - generic [ref=e1929]: "-"
+        - text: Are you 18 years of age or older?
+      - generic [ref=e1930]: The field Are you 18 years of age or older? is required and must have a value.
+  - listitem [ref=e1931]:
+    - generic [ref=e1932]:
+      - button "Error Are you a current or former Wells Fargo employee? (Contractors/Contingent Resources are not employees of Wells Fargo.)" [ref=e1933] [cursor=pointer]:
+        - text: Error
+        - generic [ref=e1934]: "-"
+  --
+    - group "Are you 18 years of age or older?*" [ref=e1878]:
+      - paragraph [ref=e1882]: Are you 18 years of age or older?*
+      - generic [ref=e1883]:
+        - button "Select One Required" [ref=e1886]: Select One
+        - paragraph [ref=e1942]:
+          - generic [ref=e1943]: "Error:"
+          - text: The field Are you 18 years of age or older? is required and must have a value.
+    - group "Are you a current or former Wells Fargo employee? (Contractors/Contingent Resources are not employees of Wells Fargo.)*" [ref=e1888]:
+      - paragraph [ref=e1892]: Are you a current or former Wells Fargo employee? (Contractors/Contingent Resources are not employees of Wells Fargo.)*
+      - generic [ref=e1893]:
+        - button "Select One Required" [ref=e1896]: Select One
+        - paragraph [ref=e1945]:
+"current or former Wells Fargo employee?": |-
+      - button "Error Are you a current or former Wells Fargo employee? (Contractors/Contingent Resources are not employees of Wells Fargo.)" [ref=e1933] [cursor=pointer]:
+        - text: Error
+        - generic [ref=e1934]: "-"
+        - text: Are you a current or former Wells Fargo employee? (Contractors/Contingent Resources are not employees of Wells Fargo.)
+      - generic [ref=e1935]: The field Are you a current or former Wells Fargo employee? (Contractors/Contingent Resources are not employees of Wells Fargo.) is required and must have a value.
+  - listitem [ref=e1936]:
+    - generic [ref=e1937]:
+      - button "Error Will you now or in the future require sponsorship for employment visa to work in the country you are applying to work in? For the US, this includes sponsorship of H-1B, TN, or E-3 visas. Persons currently on F-1 visas completing curricular practical training (CPT) and optional practical training (OPT) should also answer yes." [ref=e1938] [cursor=pointer]:
+        - text: Error
+        - generic [ref=e1939]: "-"
+  --
+    - group "Are you a current or former Wells Fargo employee? (Contractors/Contingent Resources are not employees of Wells Fargo.)*" [ref=e1888]:
+      - paragraph [ref=e1892]: Are you a current or former Wells Fargo employee? (Contractors/Contingent Resources are not employees of Wells Fargo.)*
+      - generic [ref=e1893]:
+        - button "Select One Required" [ref=e1896]: Select One
+        - paragraph [ref=e1945]:
+          - generic [ref=e1946]: "Error:"
+          - text: The field Are you a current or former Wells Fargo employee? (Contractors/Contingent Resources are not employees of Wells Fargo.) is required and must have a value.
+    - group "Will you now or in the future require sponsorship for employment visa to work in the country you are applying to work in? For the US, this includes sponsorship of H-1B, TN, or E-3 visas. Persons currently on F-1 visas completing curricular practical training (CPT) and optional practical training (OPT) should also answer yes.*" [ref=e1898]:
+      - generic [ref=e1901]:
+        - paragraph [ref=e1902]: Will you now or in the future require sponsorship for employment visa to work in the country you are applying to work in?
+        - paragraph [ref=e1903]
+        - paragraph [ref=e1904]: For the US, this includes sponsorship of H-1B, TN, or E-3 visas. Persons currently on F-1 visas completing curricular practical training (CPT) and optional practical training (OPT) should also answer yes.*
+"require sponsorship for employment visa": |-
+                  - button "Error Will you now or in the future require sponsorship for employment visa to work in the country you are applying to work in? For the US, this includes sponsorship of H-1B, TN, or E-3 visas. Persons currently on F-1 visas completing curricular practical training (CPT) and optional practical training (OPT) should also answer yes." [ref=e1938] [cursor=pointer]:
+                    - text: Error
+                    - generic [ref=e1939]: "-"
+                    - text: Will you now or in the future require sponsorship for employment visa to work in the country you are applying to work in? For the US, this includes sponsorship of H-1B, TN, or E-3 visas. Persons currently on F-1 visas completing curricular practical training (CPT) and optional practical training (OPT) should also answer yes.
+                  - generic [ref=e1940]: The field Will you now or in the future require sponsorship for employment visa to work in the country you are applying to work in? For the US, this includes sponsorship of H-1B, TN, or E-3 visas. Persons currently on F-1 visas completing curricular practical training (CPT) and optional practical training (OPT) should also answer yes. is required and must have a value.
+          - generic [ref=e1866]:
+            - generic [ref=e1868]:
+              - paragraph [ref=e1869]: "IMPORTANT: Please review and update each question as necessary to ensure all responses are accurate."
+              - paragraph [ref=e1870]
+              - paragraph [ref=e1871]:
+  --
+                - group "Will you now or in the future require sponsorship for employment visa to work in the country you are applying to work in? For the US, this includes sponsorship of H-1B, TN, or E-3 visas. Persons currently on F-1 visas completing curricular practical training (CPT) and optional practical training (OPT) should also answer yes.*" [ref=e1898]:
+                  - generic [ref=e1901]:
+                    - paragraph [ref=e1902]: Will you now or in the future require sponsorship for employment visa to work in the country you are applying to work in?
+                    - paragraph [ref=e1903]
+                    - paragraph [ref=e1904]: For the US, this includes sponsorship of H-1B, TN, or E-3 visas. Persons currently on F-1 visas completing curricular practical training (CPT) and optional practical training (OPT) should also answer yes.*
+                    - paragraph [ref=e1905]
+                  - generic [ref=e1906]:
+                    - button "Select One Required" [ref=e1909]: Select One
+  --
+                      - text: The field Will you now or in the future require sponsorship for employment visa to work in the country you are applying to work in? For the US, this includes sponsorship of H-1B, TN, or E-3 visas. Persons currently on F-1 visas completing curricular practical training (CPT) and optional practical training (OPT) should also answer yes. is required and must have a value.
+        - generic [ref=e451]:
+          - button "Back" [ref=e662] [cursor=pointer]
+          - button "Save and Continue" [ref=e663] [cursor=pointer]
+  - generic [ref=e60]:
+    - heading "Follow Us" [level=4] [ref=e61]

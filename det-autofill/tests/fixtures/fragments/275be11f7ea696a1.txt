@@ -1,0 +1,62 @@
+"Keyword": |-
+  - row "Selector - Country of Residence This page allows you to select an item from the list of available items. Refine by Keyword is USA United States Refresh Available Entries << < > >> This page allows you to select an item from the list of available items. << < > >>" [ref=e45]:
+    - cell "Selector - Country of Residence This page allows you to select an item from the list of available items. Refine by Keyword is USA United States Refresh Available Entries << < > >> This page allows you to select an item from the list of available items. << < > >>" [ref=e46]:
+      - heading "Selector - Country of Residence" [level=1] [ref=e47]: Selector - Country of Residence
+      - generic [ref=e49]: This page allows you to select an item from the list of available items.
+      - generic [ref=e50]:
+  --
+            - option "Keyword" [selected]
+        - generic [ref=e55]:
+          - generic [ref=e56]: is
+          - textbox "is" [ref=e57]: USA United States
+"is": |-
+  - Page URL: https://atkcareers.taleo.net/careersection/careersection/candidateacquisition/flow.jsf
+  - Page Title: Selector - Country of Residence
+  ### Snapshot
+  ```yaml
+  --
+          - list [ref=e30]:
+            - listitem [ref=e31]:
+              - link "Job Search" [ref=e33] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e34]:
+              - link "My Jobpage" [ref=e35] [cursor=pointer]:
+                - /url: "#"
+        - generic [ref=e36]:
+  --
+                - row "Selector - Country of Residence This page allows you to select an item from the list of available items. Refine by Keyword is USA United States Refresh Available Entries << < > >> This page allows you to select an item from the list of available items. << < > >>" [ref=e45]:
+                  - cell "Selector - Country of Residence This page allows you to select an item from the list of available items. Refine by Keyword is USA United States Refresh Available Entries << < > >> This page allows you to select an item from the list of available items. << < > >>" [ref=e46]:
+                    - heading "Selector - Country of Residence" [level=1] [ref=e47]: Selector - Country of Residence
+                    - generic [ref=e49]: This page allows you to select an item from the list of available items.
+                    - generic [ref=e50]:
+                      - generic [ref=e51]:
+                        - generic [ref=e52]: Refine by
+  --
+                        - generic [ref=e56]: is
+                        - textbox "is" [ref=e57]: USA United States
+                      - button "Refresh" [ref=e58] [cursor=pointer]
+                    - generic [ref=e59]:
+                      - generic [ref=e60]:
+  --
+                      - table "This page allows you to select an item from the list of available items." [ref=e86]:
+                        - rowgroup [ref=e87]:
+                          - row "Code ↑ Description ↑" [ref=e88]:
+                            - columnheader [ref=e89]
+  --
+        - link "Legal Disclaimer" [ref=e149] [cursor=pointer]:
+          - /url: https://www.kearney.com/legal-disclaimer
+        - link "Client Confidentiality" [ref=e150] [cursor=pointer]:
+          - /url: https://www.kearney.com/client-confidentiality
+        - link "Cookie Notice" [ref=e151] [cursor=pointer]:
+"contains": (no match)
+"Refresh": |-
+  - row "Selector - Country of Residence This page allows you to select an item from the list of available items. Refine by Keyword is USA United States Refresh Available Entries << < > >> This page allows you to select an item from the list of available items. << < > >>" [ref=e45]:
+    - cell "Selector - Country of Residence This page allows you to select an item from the list of available items. Refine by Keyword is USA United States Refresh Available Entries << < > >> This page allows you to select an item from the list of available items. << < > >>" [ref=e46]:
+      - heading "Selector - Country of Residence" [level=1] [ref=e47]: Selector - Country of Residence
+      - generic [ref=e49]: This page allows you to select an item from the list of available items.
+      - generic [ref=e50]:
+  --
+        - button "Refresh" [ref=e58] [cursor=pointer]
+      - generic [ref=e59]:
+        - generic [ref=e60]:
+          - link "Available Entries":

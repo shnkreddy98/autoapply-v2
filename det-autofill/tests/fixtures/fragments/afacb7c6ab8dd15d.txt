@@ -1,0 +1,71 @@
+"Sources": |-
+      - listitem [ref=e164]: You must select a value in the field "Sources".
+      - listitem [ref=e165]: The field "Street Address (line 1)" is mandatory.
+      - listitem [ref=e166]: The field "Zip/Postal Code" is mandatory.
+      - listitem [ref=e167]: You must select ALL possible values in the section Place of Residence.
+      - listitem [ref=e168]: The field "Primary Number" is mandatory.
+  - link "Beginning of the main content section." [ref=e169] [cursor=pointer]:
+    - /url: "#"
+  - table [ref=e170]:
+    - rowgroup [ref=e171]:
+      - row [ref=e392]:
+        - cell [ref=e393]:
+"Primary Number type": (no match)
+"Street Address (line 1)": |-
+      - listitem [ref=e165]: The field "Street Address (line 1)" is mandatory.
+      - listitem [ref=e166]: The field "Zip/Postal Code" is mandatory.
+      - listitem [ref=e167]: You must select ALL possible values in the section Place of Residence.
+      - listitem [ref=e168]: The field "Primary Number" is mandatory.
+  - link "Beginning of the main content section." [ref=e169] [cursor=pointer]:
+    - /url: "#"
+  - table [ref=e170]:
+    - rowgroup [ref=e171]:
+      - row [ref=e392]:
+        - cell [ref=e393]:
+          - heading "Candidate Information" [level=1] [ref=e174]:
+  --
+                  - img "The field \"Street Address (line 1)\" is mandatory." [ref=e230]
+                  - generic "The field Street Address (line 1) is mandatory." [ref=e231]:
+                    - text: Street Address (line 1)
+                    - generic [ref=e234]: .
+                    - generic [ref=e235]: Required
+                  - textbox "Street Address (line 1) . Required" [ref=e236]: 100 Example St
+                - generic [ref=e237]:
+                  - generic [ref=e238]: Address (line 2)
+                  - textbox "Address (line 2)" [ref=e241]
+              - generic [ref=e242]:
+                - generic "The field City is mandatory." [ref=e243]:
+                  - text: City
+                  - generic [ref=e246]: .
+                  - generic [ref=e247]: Required
+                - textbox "City . Required" [ref=e248]: San Jose
+              - generic [ref=e249]:
+"Primary Number": |-
+      - listitem [ref=e168]: The field "Primary Number" is mandatory.
+  - link "Beginning of the main content section." [ref=e169] [cursor=pointer]:
+    - /url: "#"
+  - table [ref=e170]:
+    - rowgroup [ref=e171]:
+      - row [ref=e392]:
+        - cell [ref=e393]:
+          - heading "Candidate Information" [level=1] [ref=e174]:
+            - generic [ref=e175]: Candidate Information
+          - generic [ref=e178]:
+            - text: Mandatory fields are marked with an asterisk.
+  --
+                - img "The field \"Primary Number\" is mandatory." [ref=e287]
+                - generic "The field Primary Number is mandatory." [ref=e288]:
+                  - text: Primary Number
+                  - generic [ref=e291]: .
+                  - generic [ref=e292]: Required
+                - combobox "Primary Number . Required" [ref=e293]:
+                  - option "Not Specified" [selected]
+                  - option "Home Phone"
+                  - option "Work Phone"
+                  - option "Cellular Phone"
+              - generic [ref=e294]:
+                - generic [ref=e295]: Cellular Number
+                - textbox "Cellular Number" [ref=e298]
+              - generic [ref=e299]:
+                - generic [ref=e300]: Home Phone Number
+                - textbox "Home Phone Number" [ref=e303]: 555-010-0199

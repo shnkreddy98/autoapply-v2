@@ -1,0 +1,6 @@
+"Terms of Use": |-
+          - generic [ref=e428]: Terms of Use:*
+          - button "Terms of Use YOU MUST CLICK HERE TO READ and ACCEPT the data privacy statement BEFORE you click the Create Account or APPLY button. Required" [ref=e430] [cursor=pointer]: YOU MUST CLICK HERE TO READ and ACCEPT the data privacy statement BEFORE you click the Create Account or APPLY button.
+          - button "Apply" [ref=e435] [cursor=pointer]
+  - contentinfo [ref=e436]:
+    - generic [ref=e439]:

@@ -1,0 +1,6 @@
+"No, I do not have a disability and have not had one in the past.": |-
+      - radio "No, I do not have a disability and have not had one in the past." [ref=e846]:
+        - generic [ref=e858] [cursor=pointer]: No, I do not have a disability and have not had one in the past.
+      - radio "I do not want to answer." [ref=e859]:
+        - generic [ref=e871] [cursor=pointer]: I do not want to answer.
+  - generic:

@@ -1,0 +1,6 @@
+"Corewell Health website": |-
+  - option "Corewell Health website" [ref=e589]:
+    - generic [ref=e590]: Corewell Health website
+  - option "Diversity job posting site" [ref=e591]:
+    - generic [ref=e592]: Diversity job posting site
+  - option "DiversityMD" [ref=e593]:

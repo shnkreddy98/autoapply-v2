@@ -1,0 +1,57 @@
+"Phone": |-
+  - group "Phone" [ref=f84e424]:
+    - generic [ref=f84e425]: Phone
+    - generic [ref=f84e428]:
+      - generic [ref=f84e429]: Country*
+      - generic [ref=f84e430]:
+  --
+      - generic [ref=f84e445]: Phone*
+      - textbox "Phone" [active] [ref=f84e447]: (555) 010-0199
+  - group "Resume/CV*" [ref=f84e449]:
+    - generic [ref=f84e450]: Resume/CV*
+    - generic [ref=f84e639]:
+"Gender": |-
+  - paragraph [ref=f84e378]: At Nextdoor, we empower our employees to build stronger local communities. To create a platform where all feel welcome, we want our workforce to reflect the diversity of the neighbors we serve. We encourage everyone interested in our mission to apply. We do not discriminate on the basis of race, gender, religion, sexual orientation, age, or any other trait that unfairly targets a group of people. In accordance with the San Francisco Fair Chance Ordinance, we always consider qualified applicants with arrest and conviction records.
+  - paragraph [ref=f84e379]:
+    - text: For information about our collection and use of applicants’ personal information, please see Nextdoor's Personnel Privacy Notice, found
+    - link "here" [ref=f84e380] [cursor=pointer]:
+  --
+      - generic [ref=f84e520]: Gender
+      - generic [ref=f84e521]:
+        - log [ref=f84e523]
+        - generic [ref=f84e525]:
+  --
+            - combobox "Gender" [ref=f84e529]
+          - button "Toggle flyout" [ref=f84e531] [cursor=pointer]:
+            - img [ref=f84e532]
+    - generic [ref=f84e534]:
+"Hispanic/Latino": |-
+    - generic [ref=f84e537]: Are you Hispanic/Latino?
+    - generic [ref=f84e538]:
+      - log [ref=f84e540]
+      - generic [ref=f84e542]:
+  --
+          - combobox "Are you Hispanic/Latino?" [ref=f84e546]
+        - button "Toggle flyout" [ref=f84e548] [cursor=pointer]:
+          - img [ref=f84e549]
+  - link "Race & Ethnicity Definitions" [ref=f84e551] [cursor=pointer]:
+"Veteran Status": |-
+    - generic [ref=f84e561]: Veteran Status
+    - generic [ref=f84e562]:
+      - log [ref=f84e564]
+      - generic [ref=f84e566]:
+  --
+          - combobox "Veteran Status" [ref=f84e570]
+        - button "Toggle flyout" [ref=f84e572] [cursor=pointer]:
+          - img [ref=f84e573]
+  - separator [ref=f84e575]
+"Disability Status": |-
+    - generic [ref=f84e618]: Disability Status
+    - generic [ref=f84e619]:
+      - log [ref=f84e621]
+      - generic [ref=f84e623]:
+  --
+          - combobox "Disability Status" [ref=f84e627]
+        - button "Toggle flyout" [ref=f84e629] [cursor=pointer]:
+          - img [ref=f84e630]
+  - paragraph [ref=f84e633]: "PUBLIC BURDEN STATEMENT: According to the Paperwork Reduction Act of 1995 no persons are required to respond to a collection of information unless such collection displays a valid OMB control number. This survey should take about 5 minutes to complete."

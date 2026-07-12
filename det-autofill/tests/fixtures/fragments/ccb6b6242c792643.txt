@@ -1,0 +1,6 @@
+"I do not wish to answer. (United States of America)": |-
+  - option "I do not wish to answer. (United States of America)" [ref=e2437]:
+    - generic [ref=e2438]: I do not wish to answer. (United States of America)
+  - option "Native Hawaiian or Other Pacific Islander (Not Hispanic or Latino) (United States of America)" [ref=e2439]:
+    - generic [ref=e2440]: Native Hawaiian or Other Pacific Islander (Not Hispanic or Latino) (United States of America)
+  - option "Two or More Races (Not Hispanic or Latino) (United States of America)" [ref=e2441]:

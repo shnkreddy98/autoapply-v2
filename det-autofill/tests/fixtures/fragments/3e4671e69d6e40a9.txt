@@ -1,0 +1,9 @@
+"Work Experience 4": |-
+  - group "Work Experience 4" [ref=e1221]:
+    - generic [ref=e1222]:
+      - heading "Work Experience 4" [level=5] [ref=e1223]
+      - button "Delete" [ref=e1224] [cursor=pointer]: Delete
+    - generic [ref=e1230]:
+      - generic [ref=e1231]:
+        - generic [ref=e1233]: Job Title*
+        - textbox "Job Title" [ref=e1236]: Founding Engineer

@@ -1,0 +1,21 @@
+"Apply": |-
+    - button "Apply" [ref=e50] [cursor=pointer]
+  - generic [ref=e51]:
+    - generic [ref=e52]:
+      - generic [ref=e60]:
+  --
+          - term [ref=e94]: time left to apply
+          - definition [ref=e95]: "End Date: July 15, 2026 (14 days left to apply)"
+        - generic [ref=e104]:
+          - term [ref=e105]: job requisition id
+          - definition [ref=e106]: R2611058
+  --
+      - paragraph [ref=e123]: Our team members are at the heart of everything we do. At Cencora, we are united in our responsibility to create healthier futures, and every person here is essential to us being able to deliver on that purpose. If you want to make a difference at the center of health, come join our innovative company and help us improve the lives of people and animals everywhere. Apply today!
+      - paragraph [ref=e124]
+      - paragraph [ref=e125]
+      - heading "Job Details" [level=1] [ref=e147]
+  --
+      - paragraph [ref=e229]: "1.) Research the Company: Thoroughly research any company before applying or sharing personal information, check their website, read reviews, and verify their legitimacy."
+      - paragraph [ref=e230]: "2.) Be Wary of Unrealistic Promises: Exercise caution If a job posting offers high salaries and minimal qualifications. Legitimate jobs will have realistic expectations and provide detailed job requirements. Jobs at Cencora can be found on Cencora.com/careers"
+      - paragraph [ref=e231]: "3.) Guard Your Personal Information: Only share sensitive information after vetting the employer’s credibility. Avoid sharing your Social Security number, bank account details, or identification documents during the application process. Cencora does not request this information as part of the employment application."
+      - paragraph [ref=e232]: "4.) Avoid Upfront Payments: Legitimate employers do not require payment during the hiring process. Be suspicious if you are asked to pay for training materials, processing fees, or background checks before securing a job offer. Cencora will never ask you for payment information during the hiring or onboarding process."

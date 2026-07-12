@@ -1,0 +1,53 @@
+"Email Address": |-
+    - generic [ref=e297]: Email Address*
+    - textbox "Email Address" [ref=e300]
+  - generic [ref=e302]:
+    - generic [ref=e304]: Password*
+    - textbox "Password" [ref=e307]
+"Password": |-
+      - paragraph [ref=e286]: "Password Requirements:"
+      - list [ref=e287]:
+        - listitem [ref=e288]: A minimum of 8 characters
+        - listitem [ref=e289]: An alphabetic character
+  --
+        - generic [ref=e304]: Password*
+        - textbox "Password" [ref=e307]
+      - generic [ref=e308]:
+        - generic [ref=e310]: Verify New Password*
+        - textbox "Verify New Password" [ref=e313]
+      - paragraph [ref=e319]:
+        - text: Cencora respects your privacy. By submitting your personal data you expressly agree that Cencora and its third-party vendors may collect, process, and transfer your personal data as described in our
+        - link "Applicant Privacy Statement" [ref=e320] [cursor=pointer]:
+  --
+    - button "Forgot your password?" [ref=e339] [cursor=pointer]
+  - generic:
+    - generic:
+      - generic [ref=e340]: Enter website. This input is for robots only, do not enter if you're human.
+"Verify New Password": |-
+    - generic [ref=e310]: Verify New Password*
+    - textbox "Verify New Password" [ref=e313]
+  - paragraph [ref=e319]:
+    - text: Cencora respects your privacy. By submitting your personal data you expressly agree that Cencora and its third-party vendors may collect, process, and transfer your personal data as described in our
+    - link "Applicant Privacy Statement" [ref=e320] [cursor=pointer]:
+"Yes, I have read and consent to the Applicant Privacy Statement.": |-
+    - checkbox "Yes, I have read and consent to the Applicant Privacy Statement." [ref=e327] [cursor=pointer]
+    - generic [ref=e328] [cursor=pointer]: Yes, I have read and consent to the Applicant Privacy Statement.
+  - generic [ref=e333]:
+    - button "Create Account" [ref=e334] [cursor=pointer]
+    - button [ref=e335] [cursor=pointer]: Create Account
+"Create Account": |-
+    - generic [ref=e118]: Create Account/Sign In
+  - listitem [ref=e119]:
+    - generic: step 2 of 8
+    - generic [ref=e125]: Autofill with Resume
+  --
+  - heading "Create Account" [active] [level=3] [ref=e282]
+  - generic [ref=e285]:
+    - paragraph [ref=e286]: "Password Requirements:"
+    - list [ref=e287]:
+  --
+      - button "Create Account" [ref=e334] [cursor=pointer]
+      - button [ref=e335] [cursor=pointer]: Create Account
+  - generic [ref=e336]:
+    - text: Already have an account?
+    - button "Sign In" [ref=e337] [cursor=pointer]

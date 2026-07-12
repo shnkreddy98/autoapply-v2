@@ -1,0 +1,10 @@
+"in-office schedule": |-
+  - generic [ref=e214]: This role is based fully in-office, Monday–Friday. Are you comfortable with a 5-day in-office schedule on an ongoing basis?*
+  - generic [ref=e215]:
+    - log [ref=e217]
+    - generic [ref=e219]:
+  --
+        - combobox "This role is based fully in-office, Monday–Friday. Are you comfortable with a 5-day in-office schedule on an ongoing basis?" [ref=e223]
+      - button "Toggle flyout" [ref=e225] [cursor=pointer]:
+        - img [ref=e226]
+    - textbox

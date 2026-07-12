@@ -1,0 +1,53 @@
+"Email Address": |-
+    - generic [ref=e164]: Email Address*
+    - textbox "Email Address" [ref=e167]
+  - generic [ref=e169]:
+    - generic [ref=e171]: Password*
+    - textbox "Password" [ref=e174]
+"Password": |-
+      - paragraph [ref=e153]: "Password Requirements:"
+      - list [ref=e154]:
+        - listitem [ref=e155]: A minimum of 8 characters
+        - listitem [ref=e156]: A special character
+  --
+        - generic [ref=e171]: Password*
+        - textbox "Password" [ref=e174]
+      - generic [ref=e175]:
+        - generic [ref=e177]: Verify New Password*
+        - textbox "Verify New Password" [ref=e180]
+      - generic [ref=e183]:
+        - generic [ref=e185]:
+          - paragraph [ref=e186]:
+  --
+    - button "Forgot your password?" [ref=e216] [cursor=pointer]
+  - generic:
+    - generic:
+      - generic [ref=e217]: Enter website. This input is for robots only, do not enter if you're human.
+"Verify New Password": |-
+    - generic [ref=e177]: Verify New Password*
+    - textbox "Verify New Password" [ref=e180]
+  - generic [ref=e183]:
+    - generic [ref=e185]:
+      - paragraph [ref=e186]:
+"I agree": |-
+    - checkbox "I agree" [ref=e204] [cursor=pointer]
+    - generic [ref=e205] [cursor=pointer]: I agree
+  - generic [ref=e210]:
+    - button "Create Account" [ref=e211] [cursor=pointer]
+    - button [ref=e212] [cursor=pointer]: Create Account
+"Create Account": |-
+  - Page Title: Create Account
+  - Console: 0 errors, 1 warnings
+  ### Snapshot
+  ```yaml
+  --
+              - heading "Create Account" [active] [level=3] [ref=e149]
+              - generic [ref=e152]:
+                - paragraph [ref=e153]: "Password Requirements:"
+                - list [ref=e154]:
+  --
+                  - button "Create Account" [ref=e211] [cursor=pointer]
+                  - button [ref=e212] [cursor=pointer]: Create Account
+              - generic [ref=e213]:
+                - text: Already have an account?
+                - button "Sign In" [ref=e214] [cursor=pointer]

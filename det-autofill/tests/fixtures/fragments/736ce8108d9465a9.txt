@@ -1,0 +1,27 @@
+"Degree": |-
+    - generic [ref=e232]: Degree
+    - generic [ref=e233]:
+      - generic [ref=e234]: Degree
+      - option "MS" [selected]
+      - combobox "Degree" [ref=e235] [cursor=pointer]:
+        - generic [ref=e236]: MS
+  - generic [ref=e239]:
+    - generic [ref=e241]: Major
+  --
+    - generic [ref=e263]: Degree
+    - generic [ref=e264]:
+      - generic [ref=e265]: Degree
+      - option "MCS" [selected]
+      - combobox "Degree" [ref=e266] [cursor=pointer]:
+        - generic [ref=e267]: MCS
+  - generic [ref=e270]:
+    - generic [ref=e272]: Major
+  --
+      - generic [ref=e297]: Degree
+      - generic [ref=e298]:
+        - generic [ref=e299]: Degree
+        - option [selected]
+        - combobox "Degree" [ref=e300] [cursor=pointer]:
+          - generic [ref=e301]: — Make a Selection —
+    - generic [ref=e304]:
+      - generic [ref=e306]: Major

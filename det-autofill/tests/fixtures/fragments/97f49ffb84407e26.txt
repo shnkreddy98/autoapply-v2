@@ -1,0 +1,64 @@
+"First Name": |-
+    - generic [ref=e106]: First Name*
+    - textbox "First Name" [ref=e107]
+  - generic [ref=e110]:
+    - generic [ref=e111]: Last Name*
+    - textbox "Last Name" [ref=e112]
+  --
+    - generic [ref=e116]: Preferred First Name
+    - textbox "Preferred First Name" [ref=e117]
+  - generic [ref=e120]:
+    - generic [ref=e121]: Email*
+    - textbox "Email" [ref=e122]
+"Last Name": |-
+    - generic [ref=e111]: Last Name*
+    - textbox "Last Name" [ref=e112]
+  - generic [ref=e115]:
+    - generic [ref=e116]: Preferred First Name
+    - textbox "Preferred First Name" [ref=e117]
+"Email": |-
+    - generic [ref=e121]: Email*
+    - textbox "Email" [ref=e122]
+  - group "Phone" [ref=e124]:
+    - generic [ref=e125]: Phone
+    - generic [ref=e128]:
+"Phone": |-
+  - group "Phone" [ref=e124]:
+    - generic [ref=e125]: Phone
+    - generic [ref=e128]:
+      - generic [ref=e129]: Country*
+      - generic [ref=e130]:
+  --
+      - generic [ref=e145]: Phone*
+      - textbox "Phone" [ref=e146]
+  - group "Resume/CV*" [ref=e148]:
+    - generic [ref=e149]: Resume/CV*
+    - generic [ref=e290]:
+"Enter manually": |-
+          - button "Enter manually" [ref=e182] [cursor=pointer]
+          - generic [ref=e183]: Enter manually
+        - paragraph [ref=e184]: "Accepted file types: pdf, doc, docx, txt, rtf"
+  - generic [ref=e185]:
+    - generic [ref=e186]:
+"LinkedIn Profile": |-
+    - generic [ref=e244]: LinkedIn Profile
+    - textbox "LinkedIn Profile" [ref=e245]
+  - generic [ref=e248]:
+    - generic [ref=e249]: Website
+    - textbox "Website" [ref=e250]
+"Website": |-
+    - generic [ref=e249]: Website
+    - textbox "Website" [ref=e250]
+  - generic [ref=e253]:
+    - generic [ref=e254]: Are you a U.S. citizen? *
+    - generic [ref=e255]:
+"Are you a U.S. citizen?": |-
+  - generic [ref=e254]: Are you a U.S. citizen? *
+  - generic [ref=e255]:
+    - log [ref=e257]
+    - generic [ref=e259]:
+  --
+        - combobox "Are you a U.S. citizen?" [ref=e263]
+      - button "Toggle flyout" [ref=e265] [cursor=pointer]:
+        - img [ref=e266]
+    - textbox

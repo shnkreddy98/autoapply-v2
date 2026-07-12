@@ -1,0 +1,5 @@
+"No, I do not consent to receiving text messages": |-
+          - option "No, I do not consent to receiving text messages" [ref=e462]
+  - generic [ref=e410]:
+    - generic [ref=e411]: If you select "Yes", you consent to receive text messages from USI Insurance Services and its subsidiaries regarding your job application at the phone number you provided.
+    - strong [ref=e413]: Your decision does not affect your ability to apply or be considered for employment.

@@ -1,0 +1,29 @@
+"Sign in with email": |-
+          - button "Sign in with email" [ref=e191] [cursor=pointer]
+  - generic [ref=e44]:
+    - heading "Follow Us" [level=4] [ref=e45]
+    - list [ref=e46]:
+"Sign in with Apple": |-
+  - button "Sign in with Apple" [ref=e167] [cursor=pointer]:
+    - generic [ref=e168]:
+      - img [ref=e169]
+      - text: Sign in with Apple
+  - button "Sign in with Google" [ref=e177] [cursor=pointer]:
+    - generic [ref=e178]:
+      - img [ref=e180]
+"Sign in with Google": |-
+  - button "Sign in with Google" [ref=e177] [cursor=pointer]:
+    - generic [ref=e178]:
+      - img [ref=e180]
+      - text: Sign in with Google
+  - generic [ref=e186]:
+    - generic [ref=e187]: OR
+    - button "Sign in with email" [ref=e191] [cursor=pointer]
+"Continue as guest": (no match)
+"Skip Sign-In": (no match)
+"Back to Job Posting": |-
+    - link "Back to Job Posting" [ref=e83] [cursor=pointer]:
+      - generic [ref=e87]: Back to Job Posting
+    - heading "Principal Data Engineer" [level=2] [ref=e88]
+  - generic "Application Progress" [ref=e89]:
+    - list [ref=e90]:

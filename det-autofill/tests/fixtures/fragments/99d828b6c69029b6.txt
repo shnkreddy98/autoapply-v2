@@ -1,0 +1,54 @@
+"First Name": |-
+    - generic [ref=f94e117]: First Name*
+    - textbox "First Name" [ref=f94e118]
+  - generic [ref=f94e121]:
+    - generic [ref=f94e122]: Last Name*
+    - textbox "Last Name" [ref=f94e123]
+"Last Name": |-
+    - generic [ref=f94e122]: Last Name*
+    - textbox "Last Name" [ref=f94e123]
+  - generic [ref=f94e126]:
+    - generic [ref=f94e127]: Email*
+    - textbox "Email" [ref=f94e128]
+"Email": |-
+        - paragraph [ref=f94e97]: Interested in building your career at Butterfly Network? Get future opportunities sent straight to your email.
+        - link "Create alert" [ref=f94e443] [cursor=pointer]:
+          - /url: https://my.greenhouse.io/users/sign_in?job_board=butterflynetwork&source=job_alert_post
+  - separator [ref=f94e99]
+  --
+          - generic [ref=f94e127]: Email*
+          - textbox "Email" [ref=f94e128]
+        - group "Phone" [ref=f94e130]:
+          - generic [ref=f94e131]: Phone
+          - generic [ref=f94e134]:
+  --
+            - paragraph [ref=f94e308]: When you apply to a job on this site, the personal data contained in your application will be collected by Butterfly Network, Inc. (“Controller”), which is located at 530 Whitfield Street Guilford CT 06437 and can be contacted by emailing recruiting@butterflynetinc.com. Controller’s data protection officer is Dalini Khemlani, who can be contacted at dpo@butterflynetinc.com. Your personal data will be processed for the purposes of managing Controller’s recruitment related activities, which include setting up and conducting interviews and tests for applicants, evaluating and assessing the results thereto, and as is otherwise needed in the recruitment and hiring processes. Such processing is legally permissible under Art. 6(1)(f) of Regulation (EU) 2016/679 (General Data Protection Regulation) as necessary for the purposes of the legitimate interests pursued by the Controller, which are the solicitation, evaluation, and selection of applicants for employment.
+            - paragraph [ref=f94e309]: Your personal data will be shared with Greenhouse Software, Inc., a cloud services provider located in the United States of America and engaged by Controller to help manage its recruitment and hiring process on Controller’s behalf. Accordingly, if you are located outside of the United States, your personal data will be transferred to the United States once you submit it through this site. Because the European Union Commission has determined that United States data privacy laws do not ensure an adequate level of protection for personal data collected from EU data subjects, the transfer will be subject to appropriate additional safeguards under the standard contractual clauses]. You can obtain a copy of the standard contractual clauses by contacting us at recruiting@butterflynetinc.com.
+            - paragraph [ref=f94e310]: Your personal data will be retained by Controller as long as Controller determines it is necessary to evaluate your application for employment. Under the GDPR, you have the right to request access to your personal data, to request that your personal data be rectified or erased, and to request that processing of your personal data be restricted. You also have to right to data portability. In addition, you may lodge a complaint with an EU supervisory authority.
+            - paragraph [ref=f94e311]:
+"Phone": |-
+  - group "Phone" [ref=f94e130]:
+    - generic [ref=f94e131]: Phone
+    - generic [ref=f94e134]:
+      - generic [ref=f94e135]: Country*
+      - generic [ref=f94e136]:
+  --
+      - generic [ref=f94e151]: Phone*
+      - textbox "Phone" [ref=f94e152]
+  - generic [ref=f94e153]:
+    - generic [ref=f94e155]:
+      - generic [ref=f94e156]: Location (City)*
+"Location (City)": |-
+      - generic [ref=f94e156]: Location (City)*
+      - generic [ref=f94e157]:
+        - log [ref=f94e159]
+        - combobox "Location (City)" [ref=f94e164]
+        - textbox
+    - button "Locate me" [ref=f94e165] [cursor=pointer]
+  - group "Resume/CV*" [ref=f94e167]:
+"Resume/CV": |-
+  - group "Resume/CV*" [ref=f94e167]:
+    - generic [ref=f94e168]: Resume/CV*
+    - generic [ref=f94e170]:
+      - generic [ref=f94e172]:
+        - button "Attach" [ref=f94e173] [cursor=pointer]

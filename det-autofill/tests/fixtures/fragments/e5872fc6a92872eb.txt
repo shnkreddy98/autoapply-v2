@@ -1,0 +1,8 @@
+"Have you ever worked for Nordstrom or one of its affiliates?*": |-
+  - group "Have you ever worked for Nordstrom or one of its affiliates?*" [ref=e1222]:
+    - paragraph [ref=e1226]:
+      - generic [ref=e1227]: Have you ever worked for Nordstrom or one of its affiliates?*
+    - button "Select One Required" [ref=e1231]: Select One
+  - group "Please select how Nordstrom can contact you. Message and data rates may apply. (If you already answered this using the Nora chat/text application, that answer will be used as your communication preference in all platforms.)*" [ref=e1233]:
+    - generic [ref=e1236]:
+"Please select how Nordstrom can contact you. Required": (no match)

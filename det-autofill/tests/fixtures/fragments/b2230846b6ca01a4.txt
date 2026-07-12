@@ -1,0 +1,54 @@
+"First Name": |-
+    - generic [ref=e149]: First Name*
+    - textbox "First Name" [ref=e150]
+  - generic [ref=e153]:
+    - generic [ref=e154]: Last Name*
+    - textbox "Last Name" [ref=e155]
+"Last Name": |-
+    - generic [ref=e154]: Last Name*
+    - textbox "Last Name" [ref=e155]
+  - generic [ref=e158]:
+    - generic [ref=e159]: Email*
+    - textbox "Email" [ref=e160]
+"Email": |-
+        - paragraph [ref=e129]: Interested in building your career at Planet? Get future opportunities sent straight to your email.
+        - link "Create alert" [ref=e510] [cursor=pointer]:
+          - /url: https://my.greenhouse.io/users/sign_in?job_board=planetlabs&source=job_alert_post
+  - separator [ref=e131]
+  --
+          - generic [ref=e159]: Email*
+          - textbox "Email" [ref=e160]
+        - group "Phone" [ref=e162]:
+          - generic [ref=e163]: Phone
+          - generic [ref=e166]:
+"Phone": |-
+    - listitem [ref=e80]: Monthly Phone and Internet Reimbursement
+    - listitem [ref=e81]: Tuition Reimbursement and access to LinkedIn Learning
+    - listitem [ref=e82]: Equity
+    - listitem [ref=e83]: Commuter Benefits (if local to an office)
+  --
+  - group "Phone" [ref=e162]:
+    - generic [ref=e163]: Phone
+    - generic [ref=e166]:
+      - generic [ref=e167]: Country*
+      - generic [ref=e168]:
+  --
+      - generic [ref=e183]: Phone*
+      - textbox "Phone" [ref=e184]
+  - generic [ref=e185]:
+    - generic [ref=e187]:
+      - generic [ref=e188]: Location (City)*
+"Location (City)": |-
+      - generic [ref=e188]: Location (City)*
+      - generic [ref=e189]:
+        - log [ref=e191]
+        - combobox "Location (City)" [ref=e196]
+        - textbox
+    - button "Locate me" [ref=e197] [cursor=pointer]
+  - group "Resume/CV*" [ref=e199]:
+"LinkedIn Profile": |-
+    - generic [ref=e241]: LinkedIn Profile
+    - textbox "LinkedIn Profile" [ref=e242]
+  - generic [ref=e245]:
+    - generic [ref=e246]: Website
+    - textbox "Website" [ref=e247]

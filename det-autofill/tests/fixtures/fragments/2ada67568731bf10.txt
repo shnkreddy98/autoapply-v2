@@ -1,0 +1,66 @@
+"Gender": |-
+    - emphasis [ref=f103e87]: Butterfly Network is an equal opportunity employer. Regardless of race, traits associated with race, color, ancestry, religion, gender, national origin, sexual orientation, age, citizenship, marital status, disability or Veteran status. All your information will be kept confidential according to EEO guidelines.
+  - paragraph [ref=f103e88]:
+    - emphasis [ref=f103e89]: "Butterfly requires security adherence responsibilities from all employees. These include: adhering to all company security policies and procedures, utilize provided company assets securely, and complete all required security awareness training programs. Safeguarding company data and systems from unauthorized access, modification, or destruction, contributing to the overall security posture of the organization. Immediately reporting any suspected or actual security incidents, including phishing attempts, malware infections, or unauthorized access, following the established incident response procedure"
+  - paragraph [ref=f103e90]: "#LI-KG"
+  --
+      - generic [ref=f103e327]: Gender
+      - generic [ref=f103e328]:
+        - log [ref=f103e330]
+        - generic [ref=f103e332]:
+  --
+            - combobox "Gender" [ref=f103e336]
+          - button "Toggle flyout" [ref=f103e338] [cursor=pointer]:
+            - img [ref=f103e339]
+    - generic [ref=f103e341]:
+"Race": |-
+      - generic [ref=e110]: Embrace challenges.
+      - paragraph [ref=e111]: We are disruptors at the forefront of innovation, turning challenges into opportunities for growth. By pushing boundaries, we deliver value to our investors, team, customers, and patients – ultimately, drive sustained progress and transformation in the industry.
+  - generic [ref=e114]:
+    - generic [ref=e115]: Action-oriented achievers
+  --
+            - listitem [ref=f103e59]: "Growth Champions: We embrace challenges."
+            - listitem [ref=f103e60]: "Action-Oriented Achievers: We follow through, every time."
+          - heading "Location" [level=2] [ref=f103e61]:
+            - strong [ref=f103e62]: Location
+  --
+            - emphasis [ref=f103e87]: Butterfly Network is an equal opportunity employer. Regardless of race, traits associated with race, color, ancestry, religion, gender, national origin, sexual orientation, age, citizenship, marital status, disability or Veteran status. All your information will be kept confidential according to EEO guidelines.
+          - paragraph [ref=f103e88]:
+            - emphasis [ref=f103e89]: "Butterfly requires security adherence responsibilities from all employees. These include: adhering to all company security policies and procedures, utilize provided company assets securely, and complete all required security awareness training programs. Safeguarding company data and systems from unauthorized access, modification, or destruction, contributing to the overall security posture of the organization. Immediately reporting any suspected or actual security incidents, including phishing attempts, malware infections, or unauthorized access, following the established incident response procedure"
+          - paragraph [ref=f103e90]: "#LI-KG"
+  --
+              - link "Race & Ethnicity Definitions" [ref=f103e358] [cursor=pointer]:
+                - /url: https://job-boards.cdn.greenhouse.io/docs/2023/RaceEthnicityDefinitions.pdf
+            - generic [ref=f103e359]:
+              - paragraph [ref=f103e360]: "If you believe you belong to any of the categories of protected veterans listed below, please indicate by making the appropriate selection. As a government contractor subject to the Vietnam Era Veterans Readjustment Assistance Act (VEVRAA), we request this information in order to measure the effectiveness of the outreach and positive recruitment efforts we undertake pursuant to VEVRAA. Classification of protected categories is as follows:"
+              - paragraph [ref=f103e361]: "A \"disabled veteran\" is one of the following: a veteran of the U.S. military, ground, naval or air service who is entitled to compensation (or who but for the receipt of military retired pay would be entitled to compensation) under laws administered by the Secretary of Veterans Affairs; or a person who was discharged or released from active duty because of a service-connected disability."
+  --
+                - listitem [ref=f103e415]: Mobility impairment, benefiting from the use of a wheelchair, scooter, walker, leg brace(s) and/or other supports
+                - listitem [ref=f103e416]: Nervous system condition, for example, migraine headaches, Parkinson’s disease, multiple sclerosis (MS)
+                - listitem [ref=f103e417]: Neurodivergence, for example, attention-deficit/hyperactivity disorder (ADHD), autism spectrum disorder, dyslexia, dyspraxia, other learning disabilities
+                - listitem [ref=f103e418]: Partial or complete paralysis (any cause)
+"Veteran Status": |-
+    - emphasis [ref=f103e87]: Butterfly Network is an equal opportunity employer. Regardless of race, traits associated with race, color, ancestry, religion, gender, national origin, sexual orientation, age, citizenship, marital status, disability or Veteran status. All your information will be kept confidential according to EEO guidelines.
+  - paragraph [ref=f103e88]:
+    - emphasis [ref=f103e89]: "Butterfly requires security adherence responsibilities from all employees. These include: adhering to all company security policies and procedures, utilize provided company assets securely, and complete all required security awareness training programs. Safeguarding company data and systems from unauthorized access, modification, or destruction, contributing to the overall security posture of the organization. Immediately reporting any suspected or actual security incidents, including phishing attempts, malware infections, or unauthorized access, following the established incident response procedure"
+  - paragraph [ref=f103e90]: "#LI-KG"
+  --
+      - generic [ref=f103e368]: Veteran Status
+      - generic [ref=f103e369]:
+        - log [ref=f103e371]
+        - generic [ref=f103e373]:
+  --
+            - combobox "Veteran Status" [ref=f103e377]
+          - button "Toggle flyout" [ref=f103e379] [cursor=pointer]:
+            - img [ref=f103e380]
+    - separator [ref=f103e382]
+"Disability Status": |-
+    - generic [ref=f103e425]: Disability Status
+    - generic [ref=f103e426]:
+      - log [ref=f103e428]
+      - generic [ref=f103e430]:
+  --
+          - combobox "Disability Status" [ref=f103e434]
+        - button "Toggle flyout" [ref=f103e436] [cursor=pointer]:
+          - img [ref=f103e437]
+  - paragraph [ref=f103e440]: "PUBLIC BURDEN STATEMENT: According to the Paperwork Reduction Act of 1995 no persons are required to respond to a collection of information unless such collection displays a valid OMB control number. This survey should take about 5 minutes to complete."

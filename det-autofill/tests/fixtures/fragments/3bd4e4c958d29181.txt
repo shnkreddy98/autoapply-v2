@@ -1,0 +1,5 @@
+"Select One Required": |-
+    - button "Select One Required" [ref=e2187]: Select One
+  - group "Please select if you have worked previously for any of the following companies (multi select):" [ref=e2189]:
+    - paragraph [ref=e2193]: "Please select if you have worked previously for any of the following companies (multi select):"
+    - group [ref=e2197]:

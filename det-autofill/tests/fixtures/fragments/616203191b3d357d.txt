@@ -1,0 +1,61 @@
+"MA": |-
+  - link "Skip to main content" [ref=e5] [cursor=pointer]:
+    - /url: ""
+  - generic "You may choose to display a cookie banner on the external site. You must specify the message in the cookie banner and may add a link to a relevant policy. If you are unfamiliar with these requirements, please seek the advice of legal counsel." [ref=e9]:
+    - paragraph [ref=e11]: You may choose to display a cookie banner on the external site. You must specify the message in the cookie banner and may add a link to a relevant policy. If you are unfamiliar with these requirements, please seek the advice of legal counsel.
+    - generic [ref=e12]:
+      - button "Decline" [ref=e15] [cursor=pointer]
+      - button "Accept Cookies" [ref=e19] [cursor=pointer]
+  - banner [ref=e22]:
+    - generic [ref=e24]:
+  --
+          - button "jane.doe@example.com" [ref=e42] [cursor=pointer]:
+            - generic [ref=e47]: jane.doe@example.com
+        - navigation [ref=e48]:
+          - button "Search for Jobs" [ref=e49] [cursor=pointer]
+          - button "Candidate Home" [ref=e50] [cursor=pointer]
+  - main [ref=e89]:
+    - generic [ref=e90]:
+      - generic [ref=e91]:
+        - link "Back to Job Posting" [ref=e93] [cursor=pointer]:
+          - generic [ref=e97]: Back to Job Posting
+        - heading "Principal Data Engineer" [level=2] [ref=e98]
+  --
+            - generic [ref=e114]: My Information
+          - listitem [ref=e115]:
+            - generic: current step 3 of 7
+            - generic [ref=e121]: My Experience
+          - listitem [ref=e122]:
+            - generic: step 4 of 7
+  --
+                    - button "The field will alphabetically return the first 100 results and can also return specified matches." [ref=e658] [cursor=pointer]
+              - group "Education 2" [ref=e662]:
+                - generic [ref=e663]:
+                  - heading "Education 2" [level=5] [ref=e664]
+                  - button "Delete" [ref=e665] [cursor=pointer]: Delete
+                - generic [ref=e671]:
+  --
+                    - button "The field will alphabetically return the first 100 results and can also return specified matches." [ref=e700] [cursor=pointer]
+              - button "Add Another" [ref=e707] [cursor=pointer]
+            - group "Certifications" [ref=e709]:
+              - heading "Certifications" [level=4] [ref=e710]
+              - button "Add" [ref=e714] [cursor=pointer]
+            - group "Resume/CV" [ref=e716]:
+  --
+                  - generic [ref=e722]: Upload a file (5MB max)*
+                  - generic "Upload a file (5MB max)" [ref=e725]:
+                    - generic [ref=e727] [cursor=pointer]:
+                      - generic [ref=e733]: Drop files here
+                      - generic [ref=e734]:
+                        - generic [ref=e735]: or
+                        - button "Select files" [ref=e736]:
+  --
+  - option "MA" [ref=e859]:
+    - generic [ref=e860]: MA
+  - option "MS" [ref=e861]:
+    - generic [ref=e862]: MS
+  - option "MBA" [ref=e863]:
+    - generic [ref=e864]: MBA
+  - option "PhD" [ref=e865]:
+"Master": (no match)
+"Master's": (no match)

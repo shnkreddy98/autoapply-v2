@@ -1,0 +1,40 @@
+"MS": |-
+  - Page URL: https://careers-marquiscompanies.icims.com/jobs/15432/data-engineer/candidate?from=login&csrf=FEBEE9AAE40BBFA3&hashed=-625888722&uploadResume=1&uploadResume=1
+  - Page Title: Candidate Profile - Data Engineer
+  - Console: 0 errors, 1 warnings
+  ### Snapshot
+  --
+      - /url: "#iCIMS_Header"
+    - link [ref=e4] [cursor=pointer]:
+      - /url: https://careers-marquiscompanies.icims.com/jobs?hashed=-625888722
+      - img [ref=e5]
+    - text: 
+    - generic [ref=e7]:
+  --
+          - /url: https://careers-marquiscompanies.icims.com/jobs/15432/data-engineer/login?loginOnly=1&redirect=candidate&hashed=-625888722
+      - generic [ref=e16]:
+        - heading "Data Engineer" [level=1] [ref=e19]
+        - generic [ref=e20]:
+  --
+                      - option "MS" [ref=e556] [cursor=pointer]
+                      - option "PhD" [ref=e557] [cursor=pointer]
+                      - option "MBA" [ref=e558] [cursor=pointer]
+                      - option "MCS" [ref=e559] [cursor=pointer]
+  --
+                - textbox "Description" [ref=e456]: "* Orchestrated ELT pipelines using Airflow and Spark, integrating Kafka streams to ingest advertising data with exactly-once semantics. * Accelerated data modeling by deploying dbt for complex SQL transformations, replacing ad-hoc scripts with modular pipelines that reduced time-to-insight by 25%. * Designed real-time processing framework with Kafka Streams and Spark Streaming, providing near real-time insights into campaign performance. * Deployed serverless architecture (AWS Lambda, S3) to automate data workflows, reducing manual intervention by 80% and improving reliability. * Engineered ROI optimization algorithms that increased client sales by 34% for global enterprises through data-driven ad spend allocation."
+            - generic [ref=e457]:
+              - group "Professional Experience (3)* required." [ref=e458]:
+                - generic [ref=e460]:
+  --
+          - /url: https://icims.help/candidate-faq
+        - paragraph [ref=e537]:
+          - text: Software Powered by iCIMS
+          - link "www.icims.com" [ref=e538] [cursor=pointer]:
+            - /url: http://www.icims.com/platform_help?utm_source=platform&utm_medium=link&utm_content=page1&utm_campaign=platform%20help
+    - generic [ref=e539]:
+      - button "Close hCaptcha attribution notice" [ref=e540] [cursor=pointer]: 
+      - generic [ref=e541]:
+  --
+        - link "Terms" [ref=e543] [cursor=pointer]:
+          - /url: https://www.hcaptcha.com/terms
+  ```

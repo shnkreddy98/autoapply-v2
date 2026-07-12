@@ -1,0 +1,11 @@
+"No": |-
+                  - group "Do you now, or will you in the future, require immigration sponsorship for work authorization (e.g., H-1B)? (if hired, verification will be required consistent with federal law.)*" [ref=e1222]:
+                    - paragraph [ref=e1226]:
+                      - generic [ref=e1227]: Do you now, or will you in the future, require immigration sponsorship for work authorization (e.g., H-1B)? (if hired, verification will be required consistent with federal law.)
+                      - text: "*"
+                    - button "Select One Required" [ref=e1231]: Select One
+                  - group "Do you have any relatives employed by this organization?*" [ref=e1233]:
+  --
+      - option "No" [ref=e1279]:
+        - generic [ref=e1280]: "No"
+  ```

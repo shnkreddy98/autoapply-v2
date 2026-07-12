@@ -1,0 +1,23 @@
+"First Name": |-
+    - generic [ref=e417]: First Name*
+    - textbox "First Name" [ref=e687]: Jane Quinn
+  - generic [ref=e421]:
+    - generic [ref=e423]: Last Name*
+    - textbox "Last Name" [ref=e426]: Doe
+"Last Name": |-
+        - generic [ref=e423]: Last Name*
+        - textbox "Last Name" [ref=e426]: Doe
+  - group "Address" [ref=e428]:
+    - heading "Address" [level=4] [ref=e429]
+    - generic [ref=e430]:
+"Phone Number": |-
+    - generic [ref=e492]: Phone Number*
+    - textbox "Phone Number" [ref=e495]: (555) 010-0199
+  - generic [ref=e496]:
+    - generic [ref=e497]: Phone Extension
+    - textbox "Phone Extension" [ref=e500]
+"Save and Continue": |-
+          - button "Save and Continue" [ref=e504] [cursor=pointer]
+  - generic [ref=e33]:
+    - heading "Follow Us" [level=4] [ref=e34]
+    - list [ref=e35]:

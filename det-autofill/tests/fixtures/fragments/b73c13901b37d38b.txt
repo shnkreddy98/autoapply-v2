@@ -1,0 +1,24 @@
+"Questionnaire": |-
+    - button "Questionnaire" [ref=e2698]:
+      - img [ref=e655]:
+        - img [ref=e2704]
+      - generic [ref=e659]: Questionnaire
+    - generic [ref=e661]:
+      - img [ref=e664]:
+        - img [ref=e665]
+      - generic [ref=e668]: Submit
+  - separator [ref=e630]
+  - heading "Questionnaire" [level=1] [ref=e2706]
+  - generic [ref=e2707]:
+    - generic [ref=e2708]:
+      - generic [ref=e2709]: Questionnaire 2 of 6
+      - heading "Equal Employment Opportunity" [level=2] [ref=e2731]
+    - list [ref=e2732]:
+      - listitem [ref=e2733]:
+        - generic [ref=e2736]:
+          - generic "Race/Ethnicity" [ref=e2738]
+          - generic [ref=e2742] [cursor=pointer]:
+            - combobox "Race/Ethnicity" [ref=e2745]
+            - generic:
+              - img:
+                - img

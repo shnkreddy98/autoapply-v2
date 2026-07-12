@@ -1,0 +1,36 @@
+"valid driver's license": |-
+  - generic [ref=e195]: Do you have a valid driver's license?*
+  - combobox "Do you have a valid driver's license?*" [ref=e196]:
+    - option "No answer"
+    - option "Yes" [selected]
+    - option "No"
+"citizenship / employment eligibility": |-
+  - generic [ref=e198]: What's your citizenship / employment eligibility?*
+  - combobox "What's your citizenship / employment eligibility?*" [ref=e199]:
+    - option "No answer"
+    - option "I am a U.S. Citizen/Permanent Resident" [selected]
+    - option "Non-citizen allowed to work for any employer"
+"18 years of age or older": |-
+  - generic [ref=e201]: Are you 18 years of age or older?*
+  - combobox "Are you 18 years of age or older?*" [ref=e202]:
+    - option "No answer" [selected]
+    - option "Yes"
+    - option "No"
+"Can you work weekends": |-
+  - generic [ref=e216]: Can you work weekends?
+  - combobox "Can you work weekends?" [ref=e217]:
+    - option "No answer" [selected]
+    - option "Yes"
+    - option "No"
+"Can you work evenings": |-
+  - generic [ref=e219]: Can you work evenings?
+  - combobox "Can you work evenings?" [ref=e220]:
+    - option "No answer" [selected]
+    - option "Yes"
+    - option "No"
+"convicted of a felony": |-
+  - generic [ref=e222]: Have you ever been convicted of a felony?*
+  - combobox "Have you ever been convicted of a felony?*" [ref=e223]:
+    - option "No answer" [selected]
+    - option "No"
+    - option "Yes"

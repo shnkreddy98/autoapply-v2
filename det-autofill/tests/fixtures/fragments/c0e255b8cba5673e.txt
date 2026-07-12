@@ -1,0 +1,5 @@
+"Autofill with Resume": |-
+  - button "Autofill with Resume" [ref=e483] [cursor=pointer]
+  - button "Apply Manually" [ref=e487] [cursor=pointer]
+  - button "Use My Last Application" [ref=e492] [cursor=pointer]
+  - iframe [ref=e496]:

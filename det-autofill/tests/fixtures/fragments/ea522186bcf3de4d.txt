@@ -1,0 +1,24 @@
+"No": |-
+                - radio "No" [ref=e400] [cursor=pointer]
+                - generic [ref=e401]: "No"
+        - group [ref=e402]:
+          - generic [ref=e404]:
+            - generic [ref=e406]: Country*
+  --
+      - /url: https://twitter.com/SanManuelCasino?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor
+  - listitem [ref=e41] [cursor=pointer]:
+    - link "LinkedIn" [ref=e42]:
+      - /url: https://www.linkedin.com/company/san-manuel-band-of-mission-indians/
+"City": |-
+    - generic [ref=e437]: City
+    - textbox "City" [ref=e440]: San Jose
+  - generic [ref=e441]:
+    - generic [ref=e442]: State
+    - button "State California" [ref=e446]: California
+"How Did You Hear About Us?": |-
+      - generic [ref=e372]: How Did You Hear About Us?*
+      - generic [ref=e378] [cursor=pointer]:
+        - textbox "How Did You Hear About Us?" [ref=e379]:
+          - /placeholder: Search
+        - generic [ref=e380]: 0 items selected
+  - group [ref=e384]:

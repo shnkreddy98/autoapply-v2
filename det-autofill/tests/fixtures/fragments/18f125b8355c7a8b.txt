@@ -1,0 +1,10 @@
+"I Agree": |-
+              - text: • To the extent you are asked to click on/check "I accept", "I agree" or similar buttons/checkboxes/functionalities in relation to a privacy statement, doing so will be considered as providing your consent to process your personal information, only in the countries where such consent is required by mandatory law. In all other countries, such action will be considered as a mere acknowledgement and the legal basis of the processing of your personal information will not be your consent but any other applicable legal basis.
+              - strong [ref=e202]: "4. To fulfill a Legal Obligation:"
+              - text: • To identify you for compliance purposes.
+              - text: • To detect, investigate and prevent activity we think may be potentially illegal, unlawful, or harmful.
+  --
+          - button "I Agree" [ref=e358] [cursor=pointer]
+          - button "I Don't Agree" [ref=e359] [cursor=pointer]
+  - contentinfo [ref=e361]:
+    - generic [ref=e363]:

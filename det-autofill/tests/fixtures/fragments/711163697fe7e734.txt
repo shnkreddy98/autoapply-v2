@@ -1,0 +1,9 @@
+"You declare that you have read and understand the job applications privacy notice of LLNL.": |-
+  - checkbox "You declare that you have read and understand the job applications privacy notice of LLNL." [ref=e951] [cursor=pointer]
+  - generic [ref=e952]:
+    - generic [ref=e957] [cursor=pointer]:
+      - generic [ref=e959]:
+        - generic: You declare that you have read and understand the job applications privacy notice of LLNL.
+      - text: "*"
+    - generic:
+      - paragraph

@@ -1,0 +1,6 @@
+"M.S.": |-
+  - option "M.S." [ref=e1810]:
+    - generic [ref=e1811]: M.S.
+  - option "M.A." [ref=e1812]:
+    - generic [ref=e1813]: M.A.
+  - option "PhD" [ref=e1814]:

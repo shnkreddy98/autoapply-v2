@@ -1,0 +1,62 @@
+"Sign In": |-
+  - button "Sign In" [ref=e33] [cursor=pointer]:
+    - generic [ref=e38]: Sign In
+  - navigation [ref=e39]:
+    - button "Careers Home" [ref=e40] [cursor=pointer]
+    - button "Search for Jobs" [ref=e41] [cursor=pointer]
+  --
+      - generic [ref=e115]: Create Account/Sign In
+    - listitem [ref=e116]:
+      - generic: step 2 of 8
+      - generic [ref=e122]: Autofill with Resume
+  --
+      - button "Sign In" [ref=e214] [cursor=pointer]
+    - button "Forgot your password?" [ref=e216] [cursor=pointer]
+  - generic:
+    - generic:
+"Email Address": |-
+    - generic [ref=e189]: Email Address*
+    - textbox "Email Address" [ref=e192]
+  - generic [ref=e194]:
+    - generic [ref=e196]: Password*
+    - textbox "Password" [ref=e199]
+"Password": |-
+      - paragraph [ref=e178]: "Password Requirements:"
+      - list [ref=e179]:
+        - listitem [ref=e180]: A numeric character
+        - listitem [ref=e181]: An uppercase character
+  --
+        - generic [ref=e196]: Password*
+        - textbox "Password" [ref=e199]
+      - generic [ref=e200]:
+        - generic [ref=e202]: Verify New Password*
+        - textbox "Verify New Password" [ref=e205]
+      - generic [ref=e210]:
+        - button "Create Account" [ref=e211] [cursor=pointer]
+        - button [ref=e212] [cursor=pointer]: Create Account
+  --
+    - button "Forgot your password?" [ref=e216] [cursor=pointer]
+  - generic:
+    - generic:
+      - generic [ref=e217]: Enter website. This input is for robots only, do not enter if you're human.
+"Create Account": |-
+  - Page Title: Create Account
+  ### Snapshot
+  ```yaml
+  - generic [ref=e4]:
+  --
+              - generic [ref=e115]: Create Account/Sign In
+            - listitem [ref=e116]:
+              - generic: step 2 of 8
+              - generic [ref=e122]: Autofill with Resume
+  --
+            - heading "Create Account" [active] [level=3] [ref=e174]
+            - generic [ref=e177]:
+              - paragraph [ref=e178]: "Password Requirements:"
+              - list [ref=e179]:
+  --
+                - button "Create Account" [ref=e211] [cursor=pointer]
+                - button [ref=e212] [cursor=pointer]: Create Account
+            - generic [ref=e213]:
+              - text: Already have an account?
+              - button "Sign In" [ref=e214] [cursor=pointer]

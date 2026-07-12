@@ -1,0 +1,5 @@
+"Continue": |-
+          - button "Continue" [ref=e430] [cursor=pointer]
+  - contentinfo [ref=e361]:
+    - generic [ref=e363]:
+      - generic [ref=e364]: Copyright © 2026 RippleHire

@@ -1,0 +1,6 @@
+"Masters Degree": |-
+  - option "Masters Degree" [ref=e1215] [cursor=pointer]:
+    - menuitem "Masters Degree" [ref=e1216]
+  - option "Other" [ref=e1217] [cursor=pointer]:
+    - menuitem "Other" [ref=e1218]
+  - option "Some College" [ref=e1219] [cursor=pointer]:

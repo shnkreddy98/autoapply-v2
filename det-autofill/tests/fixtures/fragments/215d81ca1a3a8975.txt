@@ -1,0 +1,266 @@
+"Application Source Type": |-
+      - text: Application Source Type
+    - generic [ref=e755]:
+      - generic [ref=e756]:
+        - status
+      - combobox "Application Source Type" [ref=e757]
+      - button "Application Source Type" [ref=e758] [cursor=pointer]:
+        - generic [ref=e759]: 
+  - generic [ref=e761]:
+    - generic [ref=e762]:
+      - generic [ref=e763]: "*"
+      - text: Application Source
+"Application Source": |-
+      - text: Application Source Type
+    - generic [ref=e755]:
+      - generic [ref=e756]:
+        - status
+      - combobox "Application Source Type" [ref=e757]
+      - button "Application Source Type" [ref=e758] [cursor=pointer]:
+        - generic [ref=e759]: 
+  - generic [ref=e761]:
+    - generic [ref=e762]:
+      - generic [ref=e763]: "*"
+      - text: Application Source
+    - generic [ref=e764]:
+      - generic [ref=e765]:
+        - status
+      - textbox "Application Source" [disabled] [ref=e766]:
+        - /placeholder: No Selection
+      - button "Application Source" [disabled] [ref=e767]:
+        - generic [ref=e768]: 
+  - generic [ref=e770]:
+    - text: "If Other, please explain:"
+    - textbox "If Other, please explain:" [ref=e772]
+  - generic [ref=e775]:
+"Have you worked for Grainger, Imperial Supplies or Zoro previously?": |-
+      - text: Have you worked for Grainger, Imperial Supplies or Zoro previously?
+    - generic [ref=e778]:
+      - generic [ref=e779]:
+        - status
+      - combobox "Have you worked for Grainger, Imperial Supplies or Zoro previously?" [ref=e780]
+      - button "Have you worked for Grainger, Imperial Supplies or Zoro previously?" [ref=e781] [cursor=pointer]:
+        - generic [ref=e782]: 
+  - generic [ref=e784]:
+    - generic [ref=e785]:
+      - generic [ref=e786]: "*"
+      - text: Do you have a legal right to work in the country of this position and the ability to immediately begin the position for which you are specifically applying?
+"Do you have a legal right to work in the country of this position and the ability to immediately begin the position for which you are specifically applying?": |-
+      - text: Do you have a legal right to work in the country of this position and the ability to immediately begin the position for which you are specifically applying?
+    - generic [ref=e787]:
+      - generic [ref=e788]:
+        - status
+      - combobox "Do you have a legal right to work in the country of this position and the ability to immediately begin the position for which you are specifically applying?" [ref=e789]
+      - button "Do you have a legal right to work in the country of this position and the ability to immediately begin the position for which you are specifically applying?" [ref=e790] [cursor=pointer]:
+        - generic [ref=e791]: 
+  - generic [ref=e793]:
+    - generic [ref=e794]:
+      - generic [ref=e795]: "*"
+      - text: Will you now or in the future require sponsorship for employment visa status (e.g., H-1B)?
+"Will you now or in the future require sponsorship for employment visa status (e.g., H-1B)?": |-
+      - text: Will you now or in the future require sponsorship for employment visa status (e.g., H-1B)?
+    - generic [ref=e796]:
+      - generic [ref=e797]:
+        - status
+      - combobox "Will you now or in the future require sponsorship for employment visa status (e.g., H-1B)?" [ref=e798]
+      - button "Will you now or in the future require sponsorship for employment visa status (e.g., H-1B)?" [ref=e799] [cursor=pointer]:
+        - generic [ref=e800]: 
+  - generic [ref=e803]:
+    - generic [ref=e804]:
+      - generic [ref=e805]: "*"
+      - text: Do you have a commitment to any employer that might affect or limit your right to be employed by us (e.g. Agreement, Contract, Restrictive Covenant, Non-Competition, Non-Disclosure, Confidentiality or Non-Solicitation obligation, etc.)?
+"Do you have a commitment to any employer that might affect or limit your right to be employed by us": |-
+      - text: Do you have a commitment to any employer that might affect or limit your right to be employed by us (e.g. Agreement, Contract, Restrictive Covenant, Non-Competition, Non-Disclosure, Confidentiality or Non-Solicitation obligation, etc.)?
+    - generic [ref=e806]:
+      - generic [ref=e807]:
+        - status
+      - combobox "Do you have a commitment to any employer that might affect or limit your right to be employed by us (e.g. Agreement, Contract, Restrictive Covenant, Non-Competition, Non-Disclosure, Confidentiality or Non-Solicitation obligation, etc.)?" [ref=e808]
+      - button "Do you have a commitment to any employer that might affect or limit your right to be employed by us (e.g. Agreement, Contract, Restrictive Covenant, Non-Competition, Non-Disclosure, Confidentiality or Non-Solicitation obligation, etc.)?" [ref=e809] [cursor=pointer]:
+        - generic [ref=e810]: 
+  - note [ref=e812]:
+    - generic [ref=e813]: For certain positions, our hiring process requires current team members to participate in a criminal and/or employment background check and a test for illegal drug use.
+  - generic [ref=e815]:
+    - generic [ref=e816]:
+"Is this acceptable to you?": |-
+      - text: Is this acceptable to you?
+    - generic [ref=e818]:
+      - generic [ref=e819]:
+        - status
+      - combobox "Is this acceptable to you?" [ref=e820]
+      - button "Is this acceptable to you?" [ref=e821] [cursor=pointer]:
+        - generic [ref=e822]: 
+  - note [ref=e824]:
+    - table [ref=e826]:
+      - rowgroup [ref=e827]:
+        - row "EQUAL EMPLOYMENT OPPORTUNITY/DATA" [ref=e828]:
+"Gender": |-
+      - paragraph [ref=e742]: All qualified applicants will receive consideration for employment without regard to race, color, religion, sex, sexual orientation,gender identity, national origin, disability, or protected veteran status.
+  - note [ref=e744]:
+    - table [ref=e746]:
+      - rowgroup [ref=e747]:
+        - row "PERSONAL INFORMATION" [ref=e748]:
+          - cell "PERSONAL INFORMATION" [ref=e749]:
+  --
+                - paragraph [ref=e839]: Grainger is an Equal Opportunity Employer. All qualified applicants will receive consideration for employment without regard to race, color, religion, sex, sexual orientation, gender identity, national origin, disability, or protected veteran status, or any other protected characteristic under federal, state, or local law. In addition, in some jurisdictions, Grainger is required by law to maintain certain information regarding applicants interested in employment.
+                - paragraph [ref=e840]: As such, you are invited to voluntarily respond to and provide self-identification information while completing your application for employment.
+                - paragraph [ref=e841]: If you choose to provide this information, it will be treated confidentially and will be used only for purposes allowed by law.
+                - paragraph [ref=e842]: If you choose not to disclose self-identifying information, you will not be subject you to any adverse treatment should you become employed by Grainger.
+                - paragraph [ref=e843]: Furthermore, please understand that if you choose to disclose self-identifying information, this information will not be visible to or shared with anyone involved in the hiring process or selection decision for this position at Grainger.
+              - paragraph
+  --
+      - text: Gender
+    - generic [ref=e849]:
+      - generic [ref=e850]:
+        - status
+      - combobox "Gender" [ref=e851]
+      - button "Gender" [ref=e852] [cursor=pointer]:
+        - generic [ref=e853]: 
+  - generic [ref=e855]:
+    - generic [ref=e856]:
+      - generic [ref=e857]: "*"
+      - text: Ethnicity
+  --
+      - paragraph [ref=e983]: Submission of this information is voluntary and refusal to provide it will not subject you to any adverse treatment. The information provided will be used only in ways that are not inconsistent with VEVRAA as amended. We are an equal opportunity employer. We do not discriminate in hiring or employment against any individual on the basis of race, color, gender, national origin, ancestry, religion, physical or mental disability, age, veteran status, sexual orientation, gender identity or expression, marital status, pregnancy, citizenship, or any other factor protected by anti-discrimination laws.
+  - note [ref=e985]:
+    - table [ref=e989]:
+      - rowgroup [ref=e990]:
+        - row "TERMS AND CONDITIONS" [ref=e991]:
+          - cell "TERMS AND CONDITIONS" [ref=e992]:
+"Ethnicity": |-
+      - text: Ethnicity
+    - generic [ref=e858]:
+      - generic [ref=e859]:
+        - status
+      - combobox "Ethnicity" [ref=e860]
+      - button "Ethnicity" [ref=e861] [cursor=pointer]:
+        - generic [ref=e862]: 
+  - generic [ref=e864]:
+    - generic [ref=e865]:
+      - generic [ref=e866]: "*"
+      - text: What is your race if not Hispanic or Latino?
+"What is your race if not Hispanic or Latino?": |-
+      - text: What is your race if not Hispanic or Latino?
+    - generic [ref=e867]:
+      - generic [ref=e868]:
+        - status
+      - textbox "What is your race if not Hispanic or Latino?" [disabled] [ref=e869]:
+        - /placeholder: No Selection
+      - button "What is your race if not Hispanic or Latino?" [disabled] [ref=e870]:
+        - generic [ref=e871]: 
+  - note [ref=e874]:
+    - generic [ref=e875]:
+      - paragraph
+      - paragraph
+"Disability Status": |-
+      - text: Disability Status
+    - generic [ref=e936]:
+      - generic [ref=e937]:
+        - status
+      - combobox "Disability Status" [ref=e938]
+      - button "Disability Status" [ref=e939] [cursor=pointer]:
+        - generic [ref=e940]: 
+  - note [ref=e942]:
+    - paragraph [ref=e945]: "PUBLIC BURDEN STATEMENT: According to the Paperwork Reduction Act of 1995 no persons are required to respond to a collection of information unless such collection displays a valid OMB control number. This survey should take about 5 minutes to complete."
+  - note [ref=e947]:
+    - generic [ref=e949]:
+"Veteran Status": |-
+      - paragraph [ref=e742]: All qualified applicants will receive consideration for employment without regard to race, color, religion, sex, sexual orientation,gender identity, national origin, disability, or protected veteran status.
+  - note [ref=e744]:
+    - table [ref=e746]:
+      - rowgroup [ref=e747]:
+        - row "PERSONAL INFORMATION" [ref=e748]:
+          - cell "PERSONAL INFORMATION" [ref=e749]:
+  --
+                - paragraph [ref=e839]: Grainger is an Equal Opportunity Employer. All qualified applicants will receive consideration for employment without regard to race, color, religion, sex, sexual orientation, gender identity, national origin, disability, or protected veteran status, or any other protected characteristic under federal, state, or local law. In addition, in some jurisdictions, Grainger is required by law to maintain certain information regarding applicants interested in employment.
+                - paragraph [ref=e840]: As such, you are invited to voluntarily respond to and provide self-identification information while completing your application for employment.
+                - paragraph [ref=e841]: If you choose to provide this information, it will be treated confidentially and will be used only for purposes allowed by law.
+                - paragraph [ref=e842]: If you choose not to disclose self-identifying information, you will not be subject you to any adverse treatment should you become employed by Grainger.
+                - paragraph [ref=e843]: Furthermore, please understand that if you choose to disclose self-identifying information, this information will not be visible to or shared with anyone involved in the hiring process or selection decision for this position at Grainger.
+              - paragraph
+              - paragraph [ref=e844]: It is the policy of Grainger not to discriminate or allow the harassment of employees or applicants on the basis of sex, race, color, religion, national origin, physical or mental disability, and/or protected veteran status with regard to any employment practices, including recruitment, advertising, job application procedures, hiring, upgrading, training, promotion, transfer, compensation, job assignments, benefits and/or other terms, conditions, or privileges of employment, provided the individual is qualified, with or without reasonable accommodations, to perform the essential functions of the job. Grainger will treat qualified individuals without discrimination in all employment practices.
+  - generic [ref=e846]:
+    - generic [ref=e847]:
+      - generic [ref=e848]: "*"
+      - text: Gender
+    - generic [ref=e849]:
+  --
+      - text: Veteran Status
+    - generic [ref=e973]:
+      - generic [ref=e974]:
+        - status
+      - combobox "Veteran Status" [ref=e975]
+      - button "Veteran Status" [ref=e976] [cursor=pointer]:
+        - generic [ref=e977]: 
+  - note [ref=e979]:
+    - generic [ref=e982]:
+      - paragraph
+      - paragraph
+  --
+      - paragraph [ref=e983]: Submission of this information is voluntary and refusal to provide it will not subject you to any adverse treatment. The information provided will be used only in ways that are not inconsistent with VEVRAA as amended. We are an equal opportunity employer. We do not discriminate in hiring or employment against any individual on the basis of race, color, gender, national origin, ancestry, religion, physical or mental disability, age, veteran status, sexual orientation, gender identity or expression, marital status, pregnancy, citizenship, or any other factor protected by anti-discrimination laws.
+  - note [ref=e985]:
+    - table [ref=e989]:
+      - rowgroup [ref=e990]:
+        - row "TERMS AND CONDITIONS" [ref=e991]:
+          - cell "TERMS AND CONDITIONS" [ref=e992]:
+"I accept and agree to the terms and conditions stated above.": |-
+        - text: I accept and agree to the terms and conditions stated above.
+      - generic [ref=e1010]:
+        - generic [ref=e1011]:
+          - status
+        - combobox "I accept and agree to the terms and conditions stated above." [ref=e1012]
+        - button "I accept and agree to the terms and conditions stated above." [ref=e1013] [cursor=pointer]:
+          - generic [ref=e1014]: 
+  - generic [ref=e1017]:
+    - generic [ref=e1021]:
+      - generic [ref=e1022]:
+        - generic [ref=e1023]: "*"
+"Are you authorized to work in the country for the position for which you are specifically applying?": |-
+    - text: Are you authorized to work in the country for the position for which you are specifically applying?
+  - radiogroup "Are you authorized to work in the country for the position for which you are specifically applying?" [ref=e1025]:
+    - generic [ref=e1027]:
+      - radio "Yes" [ref=e1028]
+      - text: "Yes"
+    - generic [ref=e1031]:
+      - radio "No" [ref=e1032]
+"How are you authorized to work in the United States?": |-
+      - text: "How are you authorized to work in the United States? Options: U.S. Citizen, U.S. Green card holder, U.S. Visa holder type: ___, Other (include details):"
+    - generic [ref=e1041]:
+      - generic [ref=e1042]: "How are you authorized to work in the United States? Options: U.S. Citizen, U.S. Green card holder, U.S. Visa holder type: ___, Other (include details):"
+      - 'textbox "How are you authorized to work in the United States? Options: U.S. Citizen, U.S. Green card holder, U.S. Visa holder type: ___, Other (include details):" [ref=e1044]'
+      - tooltip "Answer size should be 200 characters or less." [ref=e1045]
+  - generic [ref=e1050]:
+    - generic [ref=e1051]:
+      - generic [ref=e1052]: "*"
+      - text: Have you completed a Bachelor's degree or are you currently enrolled to complete a Bachelor's degree?
+"Bachelor's degree or are you currently enrolled to complete a Bachelor's degree?": |-
+    - text: Have you completed a Bachelor's degree or are you currently enrolled to complete a Bachelor's degree?
+  - radiogroup "Have you completed a Bachelor's degree or are you currently enrolled to complete a Bachelor's degree?" [ref=e1054]:
+    - generic [ref=e1056]:
+      - radio "Yes" [ref=e1057]
+      - text: "Yes"
+    - generic [ref=e1060]:
+      - radio "No" [ref=e1061]
+"SQL experience is highly preferred- do you have experience with SQL?": |-
+    - text: SQL experience is highly preferred- do you have experience with SQL?
+  - radiogroup "SQL experience is highly preferred- do you have experience with SQL?" [ref=e1071]:
+    - generic [ref=e1073]:
+      - radio "Yes" [ref=e1074]
+      - text: "Yes"
+    - generic [ref=e1077]:
+      - radio "No" [ref=e1078]
+"The work location is (Chicago and/or Lake Forest, IL). Are you capable of physically working in that location?": |-
+    - text: The work location is (Chicago and/or Lake Forest, IL). Are you capable of physically working in that location?
+  - radiogroup "The work location is (Chicago and/or Lake Forest, IL). Are you capable of physically working in that location?" [ref=e1088]:
+    - generic [ref=e1090]:
+      - radio "Yes" [ref=e1091]
+      - text: "Yes"
+    - generic [ref=e1094]:
+      - radio "No" [ref=e1095]
+"Are you seeking any relocation reimbursement or financial assistance to relocate if offered this role?": |-
+    - text: Are you seeking any relocation reimbursement or financial assistance to relocate if offered this role?
+  - radiogroup "Are you seeking any relocation reimbursement or financial assistance to relocate if offered this role?" [ref=e1122]:
+    - generic [ref=e1124]:
+      - radio "Yes" [ref=e1125]
+      - text: "Yes"
+    - generic [ref=e1128]:
+      - radio "No" [ref=e1129]

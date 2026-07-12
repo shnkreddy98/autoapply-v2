@@ -1,0 +1,19 @@
+"Country": |-
+  - generic [ref=e115]: "*Country"
+  - generic [ref=e119]:
+    - combobox "Country" [ref=e120] [cursor=pointer]:
+      - generic [ref=e121]: Select an Option
+    - generic:
+      - generic:
+"State": |-
+    - generic [ref=e124]: "*State"
+    - generic [ref=e128]:
+      - combobox "State" [ref=e129] [cursor=pointer]:
+        - generic [ref=e130]: Select an Option
+      - generic:
+        - generic:
+  --
+    - textbox "University/School Attended" [ref=e211]: San Jose State University
+  - generic [ref=e214]:
+    - generic [ref=e215]: "*Grad Year"
+    - textbox "Grad Year" [ref=e217]: "2024"

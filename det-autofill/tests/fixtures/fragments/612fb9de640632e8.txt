@@ -1,0 +1,18 @@
+"Register": |-
+  - Page URL: https://signin.ultipro.com/ui/#/signin/pass/t/cap1015ccfc?goto=https:%2F%2Fsignin.ultipro.com%2Fsignin%2Foauth2%2Ft%2Fcap1015ccfc%2Fauthorize%3Fclient_id%3Drec-prod-atl-77%26response_type%3Dcode%26scope%3Dopenid%2520profile%26redirect_uri%3Dhttps%253A%252F%252Frecruiting.ultipro.com%252FAuthCode%252FPostLogin%26state%3DreturnUrl%253D%252FCAP1015CCFC%252FJobBoard%252F6f4434b4-0b72-4e52-b60d-afcc1a963060%252FOpportunityApply%253FopportunityId%253D06415c17-c63b-42cb-b2d3-61edd586fb23%257Cta%253DCAP1015CCFC%26nonce%3Dge_E7m8go10PXB2dqqKXfTWCwIQ_BIjgFagjTiKI3So%26register_uri%3Dhttps%253A%252F%252Frecruiting.ultipro.com%252FCAP1015CCFC%252FJobBoard%252F6f4434b4-0b72-4e52-b60d-afcc1a963060%252FAccount%252FRegister%253FredirectUrl%253D%25252FCAP1015CCFC%25252FJobBoard%25252F6f4434b4-0b72-4e52-b60d-afcc1a963060%25252FOpportunityApply%25253FopportunityId%25253D06415c17-c63b-42cb-b2d3-61edd586fb23%2526cancelUrl%253Dhttp%25253A%25252F%25252Frecruiting.ultipro.com%25252FCAP1015CCFC%25252FJobBoard%25252F6f4434b4-0b72-4e52-b60d-afcc1a963060%25252FOpportunityDetail%25253FopportunityId%25253D06415c17-c63b-42cb-b2d3-61edd586fb23%252526source%25253DLinkedIn%26locale%3Den-US&realm=%2Ft%2Fcap1015ccfc&locale=en-US
+  - Page Title: UKGPro Login
+  - Console: 2 errors, 0 warnings
+  ### Snapshot
+  ```yaml
+  - generic:
+  --
+                  - button "Sign in Don't have an account? Register now Username jane.doe@example.com Password hide/show password Example#Pass1 warning We don't recognize that username/email and password combination. Try again or reset your password. sign in Create or reset your password Copyright © 1997-2025. UKG Inc. All rights reserved." [ref=e67]
+                  - generic [ref=e4]:
+                    - heading "Sign in" [level=1] [ref=e7]
+                    - generic [ref=e9]:
+                      - generic [ref=e16]: Don't have an account? Register now
+                      - generic [ref=e26]:
+                        - generic [ref=e27]:
+                          - generic: Username
+                        - textbox "Username" [ref=e30]:
+                          - /placeholder: ""

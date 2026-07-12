@@ -1,0 +1,35 @@
+"Location": |-
+      - heading "Location" [level=2] [ref=e291]
+      - paragraph [ref=e19]: United States
+    - generic [ref=e20]:
+      - heading "Employment Type" [level=2] [ref=e292]
+  --
+      - heading "Location Type" [level=2] [ref=e293]
+      - paragraph [ref=e25]: Remote
+    - generic [ref=e26]:
+      - heading "Department" [level=2] [ref=e294]
+  --
+      - paragraph [ref=e36]: The compensation offered for this role will depend on various factors, including the candidate's location, qualifications, work history, and interview performance, and may differ from the stated range.
+  - generic [ref=e37]:
+    - tablist [ref=e38]:
+      - tab "Overview" [ref=e296] [cursor=pointer]
+  --
+          - generic [ref=e206]: Location*
+          - generic [ref=e207]:
+            - combobox "Start typing..." [ref=e208] [cursor=pointer]: San Jose, California, United States
+            - button [ref=e209] [cursor=pointer]:
+"Will you now or in the future require sponsorship": |-
+  - generic [ref=e218]: Will you now or in the future require sponsorship for employment visa status (e.g., H-1B, etc.)*
+  - generic [ref=e219]:
+    - button "Yes" [active] [ref=e310] [cursor=pointer]
+    - button "No" [ref=e311] [cursor=pointer]
+"Are you available to attend an in-person interview": |-
+  - generic [ref=e223]: Are you available to attend an in-person interview if requested as part of the hiring process?*
+  - generic [ref=e224]:
+    - button "Yes" [ref=e312] [cursor=pointer]
+    - button "No" [ref=e313] [cursor=pointer]
+"We conduct thorough background checks": |-
+  - generic [ref=e228]: We conduct thorough background checks as part of our hiring process. By selecting “Yes,” you acknowledge and consent to this verification if you advance in the process*
+  - generic [ref=e229]:
+    - button "Yes" [ref=e314] [cursor=pointer]
+    - button "No" [ref=e315] [cursor=pointer]

@@ -1,0 +1,10 @@
+"Apply Now": |-
+      - link "Apply Now" [ref=e71] [cursor=pointer]:
+        - /url: "#"
+      - link [ref=e72] [cursor=pointer]:
+        - /url: https://www.addtoany.com/share#url=https%3A%2F%2Fwww.roseint.com%2FJobs%2FApplication-Developer-FL-Tampa-Rose-International-Job-503822.html%3FRD%3DL&title=Python%20Developer%20Jobs%20in%20USA%2C%20FL%2C%20Tampa%20%7C%20Rose%20International%20Job
+  --
+  - link "Apply Now" [ref=e77] [cursor=pointer]:
+    - /url: "#"
+  - paragraph [ref=e78]
+  - generic [ref=e80]:

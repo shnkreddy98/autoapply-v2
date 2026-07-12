@@ -1,0 +1,15 @@
+"No, I do not have a disability and have not had one in the past": |-
+          - option "No, I do not have a disability and have not had one in the past" [ref=e515]
+          - option "I do not want to answer" [ref=e516]
+    - paragraph [ref=e379]: "PUBLIC BURDEN STATEMENT: According to the Paperwork Reduction Act of 1995 no persons are required to respond to a collection of information unless such collection displays a valid OMB control number. This survey should take about 5 minutes to complete."
+  - separator [ref=e380]
+"Are you located in Latin America (LatAm)?": |-
+  - generic [ref=e233]: Are you located in Latin America (LatAm)?*
+  - generic [ref=e234]:
+    - log [ref=e236]
+    - generic [ref=e238]:
+  --
+        - combobox "Are you located in Latin America (LatAm)?" [invalid] [ref=e242]
+      - generic [ref=e243]:
+        - button "Clear selections" [ref=e449] [cursor=pointer]:
+          - img [ref=e450]

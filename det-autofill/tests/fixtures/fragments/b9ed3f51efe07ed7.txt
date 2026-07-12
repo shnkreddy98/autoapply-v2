@@ -1,0 +1,156 @@
+"Degree": |-
+    - text: links to enter your Education information. If you cannot find your institution, major or degree using the search feature, please select ‘
+    - strong [ref=e159]: Other
+    - text: ’ and ensure your CV has the correct information.
+  - generic [ref=e161]:
+  --
+    - paragraph [ref=e181]: "Please use the following steps to input your Degree/Major:"
+    - list [ref=e182]:
+      - listitem [ref=e183]:
+        - generic [ref=e185]:
+  --
+          - text: If you cannot find your Degree/Major select
+          - strong [ref=e192]: "'Other'"
+  - generic [ref=e194]:
+    - generic [ref=e195]: "*In order to submit, follow the steps above"
+  --
+      - generic [ref=e198]: Degree
+      - combobox "Degree" [ref=e201]:
+        - option "Not Specified" [selected]
+        - option "High School"
+        - option "Associate Diploma"
+  --
+        - option "Not Currently pursuing a degree"
+  - generic [ref=e202]:
+    - generic [ref=e203]: "*In order to submit, follow the steps above"
+    - generic [ref=e205]:
+  --
+    - text: links to enter your Education information. If you cannot find your institution, major or degree using the search feature, please select ‘
+    - strong [ref=e278]: Other
+    - text: ’ and ensure your CV has the correct information.
+  - generic [ref=e280]:
+  --
+    - paragraph [ref=e300]: "Please use the following steps to input your Degree/Major:"
+    - list [ref=e301]:
+      - listitem [ref=e302]:
+        - generic [ref=e304]:
+  --
+          - text: If you cannot find your Degree/Major select
+          - strong [ref=e311]: "'Other'"
+  - generic [ref=e313]:
+    - generic [ref=e314]: "*In order to submit, follow the steps above"
+  --
+      - generic [ref=e317]: Degree
+      - combobox "Degree" [ref=e320]:
+        - option "Not Specified" [selected]
+        - option "High School"
+        - option "Associate Diploma"
+  --
+        - option "Not Currently pursuing a degree"
+  - generic [ref=e321]:
+    - generic [ref=e322]: "*In order to submit, follow the steps above"
+    - generic [ref=e324]:
+  --
+    - text: links to enter your Education information. If you cannot find your institution, major or degree using the search feature, please select ‘
+    - strong [ref=e401]: Other
+    - text: ’ and ensure your CV has the correct information.
+  - generic [ref=e403]:
+  --
+    - paragraph [ref=e423]: "Please use the following steps to input your Degree/Major:"
+    - list [ref=e424]:
+      - listitem [ref=e425]:
+        - generic [ref=e427]:
+  --
+          - text: If you cannot find your Degree/Major select
+          - strong [ref=e434]: "'Other'"
+  - generic [ref=e436]:
+    - generic [ref=e437]: "*In order to submit, follow the steps above"
+  --
+      - generic [ref=e440]: Degree
+      - combobox "Degree" [ref=e443]:
+        - option "Not Specified" [selected]
+        - option "High School"
+        - option "Associate Diploma"
+  --
+        - option "Not Currently pursuing a degree"
+  - generic [ref=e444]:
+    - generic [ref=e445]: "*In order to submit, follow the steps above"
+    - generic [ref=e447]:
+"Institution": |-
+    - text: links to enter your Education information. If you cannot find your institution, major or degree using the search feature, please select ‘
+    - strong [ref=e159]: Other
+    - text: ’ and ensure your CV has the correct information.
+  - generic [ref=e161]:
+    - group "Institution . Required" [ref=e163]:
+      - generic "The field Institution is mandatory." [ref=e165]:
+        - text: Institution
+        - generic [ref=e168]: .
+        - generic [ref=e169]: Required
+      - generic [ref=e170]:
+  --
+          - textbox "Institution . Required" [ref=e173]: San Jose State University (SJSU)
+        - link "Select" [ref=e174] [cursor=pointer]:
+          - /url: "#"
+          - generic [ref=e177]: Select
+    - generic [ref=e178]: "*As a required step to proceed, ensure that you have selected your institution"
+  - generic [ref=e180]:
+    - paragraph [ref=e181]: "Please use the following steps to input your Degree/Major:"
+    - list [ref=e182]:
+  --
+        - option "Institutional Food Services"
+        - option "Institutional Food Workers"
+        - option "Instrumentation Technology"
+        - option "Insurance"
+        - option "Int'l & European Governance"
+  --
+    - text: links to enter your Education information. If you cannot find your institution, major or degree using the search feature, please select ‘
+    - strong [ref=e278]: Other
+    - text: ’ and ensure your CV has the correct information.
+  - generic [ref=e280]:
+    - group "Institution . Required" [ref=e282]:
+      - generic "The field Institution is mandatory." [ref=e284]:
+        - text: Institution
+        - generic [ref=e287]: .
+        - generic [ref=e288]: Required
+      - generic [ref=e289]:
+  --
+          - textbox "Institution . Required" [ref=e292]: International Institute of Information Technology, Bangalore (IIIT-B)
+        - link "Select" [ref=e293] [cursor=pointer]:
+          - /url: "#"
+          - generic [ref=e296]: Select
+    - generic [ref=e297]: "*As a required step to proceed, ensure that you have selected your institution"
+  - generic [ref=e299]:
+    - paragraph [ref=e300]: "Please use the following steps to input your Degree/Major:"
+    - list [ref=e301]:
+  --
+        - option "Institutional Food Services"
+        - option "Institutional Food Workers"
+        - option "Instrumentation Technology"
+        - option "Insurance"
+        - option "Int'l & European Governance"
+  --
+    - text: links to enter your Education information. If you cannot find your institution, major or degree using the search feature, please select ‘
+    - strong [ref=e401]: Other
+    - text: ’ and ensure your CV has the correct information.
+  - generic [ref=e403]:
+    - group "Institution . Required" [ref=e405]:
+      - generic "The field Institution is mandatory." [ref=e407]:
+        - text: Institution
+        - generic [ref=e410]: .
+        - generic [ref=e411]: Required
+      - generic [ref=e412]:
+  --
+          - textbox "Institution . Required" [ref=e415]: Visvesvaraya Technological University
+        - link "Select" [ref=e416] [cursor=pointer]:
+          - /url: "#"
+          - generic [ref=e419]: Select
+    - generic [ref=e420]: "*As a required step to proceed, ensure that you have selected your institution"
+  - generic [ref=e422]:
+    - paragraph [ref=e423]: "Please use the following steps to input your Degree/Major:"
+    - list [ref=e424]:
+  --
+        - option "Institutional Food Services"
+        - option "Institutional Food Workers"
+        - option "Instrumentation Technology"
+        - option "Insurance"
+        - option "Int'l & European Governance"

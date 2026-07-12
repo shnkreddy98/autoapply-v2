@@ -1,0 +1,128 @@
+"Email Address:": |-
+    - generic [ref=e67]: "Email Address:"
+    - generic [ref=e68]:
+      - generic [ref=e69]: "*"
+      - textbox "Email Address:" [ref=e70]
+  - generic [ref=e71]:
+    - generic [ref=e73]: "Password:"
+    - generic [ref=e74]:
+"Password:": |-
+    - generic [ref=e73]: "Password:"
+    - generic [ref=e74]:
+      - generic [ref=e75]: "*"
+      - textbox "Password:" [ref=e76]
+  - generic [ref=e77]:
+    - generic [ref=e79]: "Re-Enter Password:"
+    - generic [ref=e80]:
+      - generic [ref=e81]: "*"
+      - textbox "Re-Enter Password:" [ref=e82]
+  - generic [ref=e86]:
+    - generic [ref=e87]: "Enter a password that includes the following:"
+    - generic [ref=e88]: 
+"Re-Enter Password:": |-
+    - generic [ref=e79]: "Re-Enter Password:"
+    - generic [ref=e80]:
+      - generic [ref=e81]: "*"
+      - textbox "Re-Enter Password:" [ref=e82]
+  - generic [ref=e86]:
+    - generic [ref=e87]: "Enter a password that includes the following:"
+    - generic [ref=e88]: 
+"First Name:": |-
+    - generic [ref=e112]: "First Name:"
+    - generic [ref=e113]:
+      - generic [ref=e114]: "*"
+      - textbox "First Name:" [ref=e115]
+  - generic [ref=e116]:
+    - generic [ref=e118]: "Last Name:"
+    - generic [ref=e119]:
+"Last Name:": |-
+    - generic [ref=e118]: "Last Name:"
+    - generic [ref=e119]:
+      - generic [ref=e120]: "*"
+      - textbox "Last Name:" [ref=e121]
+  - generic [ref=e122]:
+    - generic [ref=e124]: "Middle Name:"
+    - textbox "Middle Name:" [ref=e126]
+"Main Phone:": |-
+    - generic [ref=e134]: "Main Phone:"
+    - generic [ref=e135]:
+      - generic [ref=e136]: "*"
+      - textbox "Main Phone:" [ref=e137]
+  - generic [ref=e138]:
+    - generic [ref=e140]: "Mobile Phone:"
+    - textbox "Mobile Phone:" [ref=e142]
+"Current Address:": |-
+    - generic [ref=e153]: "Current Address:"
+    - generic [ref=e154]:
+      - generic [ref=e155]: "*"
+      - textbox "Current Address:" [ref=e156]
+  - generic [ref=e157]:
+    - generic [ref=e159]: "Address cont:"
+    - textbox "Address cont:" [ref=e161]
+"City:": |-
+    - generic [ref=e164]: "City:"
+    - generic [ref=e165]:
+      - generic [ref=e166]: "*"
+      - textbox "City:" [ref=e167]
+  - generic [ref=e168]:
+    - generic [ref=e170]: "State/Province:"
+    - generic [ref=e171]:
+"State/Province:": |-
+    - generic [ref=e170]: "State/Province:"
+    - generic [ref=e171]:
+      - generic [ref=e172]: "*"
+      - textbox "State/Province:" [ref=e173]
+  - generic [ref=e174]:
+    - generic [ref=e176]: "Postal Code:"
+    - generic [ref=e177]:
+"Postal Code:": |-
+    - generic [ref=e176]: "Postal Code:"
+    - generic [ref=e177]:
+      - generic [ref=e178]: "*"
+      - textbox "Postal Code:" [ref=e179]
+  - generic [ref=e180]:
+    - generic [ref=e182]: "Country:"
+    - generic [ref=e183]:
+"Country:": |-
+        - generic [ref=e182]: "Country:"
+        - generic [ref=e183]:
+          - generic [ref=e184]: "*"
+          - textbox "Country:" [ref=e185]
+  - generic [ref=e191]:
+    - generic [ref=e193]:
+      - text: "*"
+"Gender": |-
+    - paragraph [ref=e12]: We provide equal opportunities to all existing and prospective employees, recognizing that our future is dependent on their work quality, effectiveness and skils base. Amphenol is an "Equal Opportunity Employer" - Minority/Female/Disabled/Veteran/Sexual Orientation/ Gender Identity or National Origin.
+    - heading "Job Opportunities" [level=2] [ref=e13]
+  - iframe [ref=e15]:
+    - generic [active] [ref=f25e1]:
+  --
+        - heading "Gender *" [level=3] [ref=e209]
+        - paragraph [ref=e210]: "What is your gender? Select one from the options below:"
+        - list [ref=e211]:
+          - listitem [ref=e212]:
+            - generic [ref=e213]:
+"Ethnicity/Race": |-
+  - heading "Ethnicity/Race *" [level=3] [ref=e224]:
+    - generic [ref=e225]: Ethnicity/Race
+    - text: "*"
+  - paragraph [ref=e226]: What is your race/ethnicity? Please mark the one bold box that describes the race/ethnicity category with which you primarily identify.
+  - list [ref=e227]:
+"Protected Veteran Status": |-
+  - heading "Protected Veteran Status *" [level=3] [ref=e261]:
+    - generic [ref=e262]: Protected Veteran Status
+    - text: "*"
+  - paragraph [ref=e263]: "Amphenol ICC is a government contractor subject to the Vietnam Era Veterans’ Readjustment Assistance Act of 1974, as amended (VEVRAA), which requires government contractors to take affirmative action to employ and advance in employment the following protected veterans: Disabled Veteran, Recently Separated Veteran, Active Duty Wartime or Campaign Badge Veteran, and Armed Forces Service Medal Veteran."
+  - list [ref=e265]:
+"I agree": |-
+        - checkbox "I agree to the terms and conditions of this site and consent to receive electronic communications including emails and text messages from this organization." [ref=e296]
+        - generic [ref=e297] [cursor=pointer]:
+          - text: I agree to the
+          - link "terms and conditions" [ref=e298]:
+            - /url: /registerterms.aspx
+          - text: of this site and
+  --
+        - generic [ref=e312]: Check the "I Agree" to continue
+  - link "Powered by AcquireTM Logo AcquireTM Applicant Tracking Software" [ref=e317] [cursor=pointer]:
+    - /url: http://www.acquiretm.com
+    - text: Powered by

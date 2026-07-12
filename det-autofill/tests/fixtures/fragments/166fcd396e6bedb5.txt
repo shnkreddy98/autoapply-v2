@@ -1,0 +1,6 @@
+"Personal Cell": |-
+  - option "Personal Cell" [ref=e944]:
+    - generic [ref=e945]: Personal Cell
+  - option "Voice Over IP" [ref=e946]:
+    - generic [ref=e947]: Voice Over IP
+  - option "Work" [ref=e948]:

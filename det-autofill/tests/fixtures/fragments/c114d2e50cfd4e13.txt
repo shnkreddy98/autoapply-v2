@@ -1,0 +1,60 @@
+"Email Address": |-
+    - generic "Email Address" [ref=e142]: Email Address *
+    - textbox "Email Address *" [ref=e146]: jane.doe@example.com
+  - generic [ref=e149]:
+    - generic "Prefix" [ref=e151]
+    - generic [ref=e155] [cursor=pointer]:
+"First Name": |-
+    - generic "First Name" [ref=e164]: First Name *
+    - textbox "First Name *" [ref=e168]: Jane
+  - generic [ref=e171]:
+    - generic "Middle Name" [ref=e173]
+    - textbox "Middle Name" [ref=e177]: Quinn
+"Last Name": |-
+    - generic "Last Name" [ref=e182]: Last Name *
+    - textbox "Last Name *" [ref=e186]: Doe
+  - generic [ref=e189]:
+    - generic "Suffix" [ref=e191]
+    - generic [ref=e195] [cursor=pointer]:
+"LinkedIn Profile": |-
+    - generic "LinkedIn Profile" [ref=e204]
+    - textbox "LinkedIn Profile" [ref=e208]
+  - generic [ref=e209]:
+    - generic [ref=e212]:
+      - generic "Home Phone Number" [ref=e214]
+"Mobile Phone Number": |-
+      - generic "Mobile Phone Number" [ref=e228]: Mobile Phone Number *
+      - generic [ref=e232]:
+        - generic "Country dialing code" [ref=e233] [cursor=pointer]:
+          - combobox "Country dialing code" [ref=e236]
+  --
+        - textbox "Mobile Phone Number *" [ref=e237]: (555) 010-0199
+  - generic [ref=e241]:
+    - generic "Preferred Contact Method" [ref=e243]: Preferred Contact Method *
+    - generic [ref=e247] [cursor=pointer]:
+"Preferred Contact Method": |-
+  - generic "Preferred Contact Method" [ref=e243]: Preferred Contact Method *
+  - generic [ref=e247] [cursor=pointer]:
+    - combobox "Preferred Contact Method *" [ref=e250]
+    - generic:
+      - img:
+        - img
+"City": |-
+    - generic "City" [ref=e301]: City *
+    - textbox "City *" [ref=e305]: Redwood City
+  - generic [ref=e308]:
+    - generic "County" [ref=e310]
+    - textbox "County" [ref=e314]
+"Zip / Postal Code": |-
+      - generic "Zip / Postal Code" [ref=e319]: Zip / Postal Code *
+      - textbox "Zip / Postal Code *" [ref=e323]
+  - generic [ref=e327]:
+    - generic "How did you hear about this job?" [ref=e329]: How did you hear about this job? *
+    - generic [ref=e333] [cursor=pointer]:
+"How did you hear about this job?": |-
+  - generic "How did you hear about this job?" [ref=e329]: How did you hear about this job? *
+  - generic [ref=e333] [cursor=pointer]:
+    - combobox "How did you hear about this job? *" [ref=e336]
+    - generic:
+      - img:
+        - img

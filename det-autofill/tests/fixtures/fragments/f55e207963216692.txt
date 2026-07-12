@@ -1,0 +1,55 @@
+"No": |-
+  - generic "This website uses cookies and similar technology for performance purposes. By clicking “Accept Cookies” you consent to the use of these cookies." [ref=e9]:
+    - paragraph [ref=e11]: This website uses cookies and similar technology for performance purposes. By clicking “Accept Cookies” you consent to the use of these cookies.
+    - generic [ref=e12]:
+      - button "Decline" [ref=e15] [cursor=pointer]
+      - button "Accept Cookies" [ref=e19] [cursor=pointer]
+  --
+              - group "Have you previously worked for DraftKings? If Yes, please answer the questions below. If No, please continue to the next section." [ref=e358]:
+                - generic [ref=e361]: Have you previously worked for DraftKings? If Yes, please answer the questions below. If No, please continue to the next section.*
+                - generic "Have you previously worked for DraftKings? If Yes, please answer the questions below. If No, please continue to the next section." [ref=e364]:
+                  - generic [ref=e365]:
+                    - radio "Yes" [ref=e367] [cursor=pointer]
+                    - generic [ref=e368]: "Yes"
+  --
+                    - radio "No" [ref=e371] [cursor=pointer]
+                    - generic [ref=e372]: "No"
+            - group [ref=e258]:
+              - generic [ref=e260]:
+                - generic [ref=e262]: Country*
+"First Name": |-
+    - generic [ref=e273]: First Name*
+    - textbox "First Name" [ref=e276]: Jane
+  - generic [ref=e277]:
+    - generic [ref=e278]: Middle Name
+    - textbox "Middle Name" [ref=e281]: Quinn
+"Last Name": |-
+    - generic [ref=e284]: Last Name*
+    - textbox "Last Name" [ref=e287]: Doe
+  - generic [ref=e288]:
+    - generic [ref=e289]: I have a preferred name
+    - checkbox "I have a preferred name" [ref=e294] [cursor=pointer]
+"Address Line 1": |-
+    - generic [ref=e331]: Address Line 1
+    - textbox "Address Line 1" [ref=e334]
+  - generic [ref=e335]:
+    - generic [ref=e336]: Address Line 2
+    - textbox "Address Line 2" [ref=e339]
+"City": |-
+    - generic [ref=e341]: City
+    - textbox "City" [ref=e344]: Redwood City
+  - generic [ref=e345]:
+    - generic [ref=e346]: State
+    - button "State California" [ref=e373]: California
+"Postal Code": |-
+        - generic [ref=e352]: Postal Code
+        - textbox "Postal Code" [ref=e355]
+  - group "Email Address" [ref=e308]:
+    - heading "Email Address" [level=4] [ref=e309]
+    - generic [ref=e312]: jane.doe@example.com
+"Phone Number": |-
+    - generic [ref=e405]: Phone Number*
+    - textbox "Phone Number" [ref=e408]: (555) 010-0199
+  - generic [ref=e409]:
+    - generic [ref=e410]: Phone Extension
+    - textbox "Phone Extension" [ref=e413]

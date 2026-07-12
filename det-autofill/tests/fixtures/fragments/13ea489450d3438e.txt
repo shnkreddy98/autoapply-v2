@@ -1,0 +1,66 @@
+"Professional Experience (1)": |-
+  - group "Professional Experience (1)* required." [ref=e326]:
+    - generic [ref=e328]:
+      - text: Professional Experience (1)
+      - generic [ref=e329]:
+        - text: "*"
+        - generic [ref=e330]: required.
+"Employer": |-
+    - generic [ref=e333]: Employer
+    - textbox "Employer" [ref=e335]: AirFold
+  - generic [ref=e336]:
+    - generic [ref=e338]: City
+    - textbox "City" [ref=e340]: San Francisco
+  --
+    - generic [ref=e399]: Employer
+    - textbox "Employer" [ref=e401]: Kantar
+  - generic [ref=e402]:
+    - generic [ref=e404]: City
+    - textbox "City" [ref=e406]: Bengaluru
+  --
+      - generic [ref=e468]: Employer
+      - textbox "Employer" [ref=e470]: The Sparks Foundation
+    - generic [ref=e471]:
+      - generic [ref=e473]: City
+      - textbox "City" [ref=e475]: Bengaluru
+"Title": |-
+  - Page Title: Candidate Profile - Data Engineer
+  - Console: 0 errors, 1 warnings
+  ### Snapshot
+  ```yaml
+  --
+                - generic [ref=e351]: Title
+                - textbox "Title" [ref=e353]: Founding Engineer
+              - group "Start Date" [ref=e354]:
+                - generic [ref=e355]:
+                  - generic [ref=e356]: Start Date
+  --
+                - generic [ref=e417]: Title
+                - textbox "Title" [ref=e419]: Data Engineer
+              - group "Start Date" [ref=e420]:
+                - generic [ref=e421]:
+                  - generic [ref=e422]: Start Date
+  --
+                  - generic [ref=e486]: Title
+                  - textbox "Title" [ref=e488]: Data Engineer
+                - group "Start Date" [ref=e489]:
+                  - generic [ref=e490]:
+                    - generic [ref=e491]: Start Date
+"Professional Experience (2)": |-
+  - group "Professional Experience (2)* required." [ref=e392]:
+    - generic [ref=e394]:
+      - text: Professional Experience (2)
+      - generic [ref=e395]:
+        - text: "*"
+        - generic [ref=e396]: required.
+"Professional Experience (3)": |-
+  - group "Professional Experience (3)* required." [ref=e458]:
+    - generic [ref=e460]:
+      - text: Professional Experience (3)
+      - generic [ref=e461]:
+        - text: "*"
+        - generic [ref=e462]: required.
+    - button "Delete Professional Experience (3)" [ref=e464] [cursor=pointer]:
+      - generic [ref=e465]: 
+    - generic [ref=e466]:
+      - generic [ref=e468]: Employer

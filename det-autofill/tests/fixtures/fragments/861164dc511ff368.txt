@@ -1,0 +1,16 @@
+"opt-out": (no match)
+"Social Security": |-
+    - text: "Social Security #:"
+    - generic [ref=e32]: "*"
+  - textbox "xxx-xx-xxxx" [ref=e33]
+  - text: "Show:"
+"DOB": |-
+          - text: "DOB:"
+          - generic [ref=e65]: "*"
+        - textbox [ref=e66]
+  - paragraph [ref=e67]:
+"Continue To Questionnaire": |-
+      - button "Continue To Questionnaire" [ref=e70] [cursor=pointer]
+  - generic [ref=e14]:
+    - text: Walton Management works diligently to keep your information private and secure. You can read our privacy policy
+    - link "here" [ref=e15] [cursor=pointer]:

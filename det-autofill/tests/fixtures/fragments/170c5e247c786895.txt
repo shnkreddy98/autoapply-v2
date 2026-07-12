@@ -1,0 +1,5 @@
+"We conduct thorough background checks": |-
+  - generic [ref=e228]: We conduct thorough background checks as part of our hiring process. By selecting “Yes,” you acknowledge and consent to this verification if you advance in the process*
+  - generic [ref=e229]:
+    - button "Yes" [ref=e314] [cursor=pointer]
+    - button "No" [ref=e315] [cursor=pointer]

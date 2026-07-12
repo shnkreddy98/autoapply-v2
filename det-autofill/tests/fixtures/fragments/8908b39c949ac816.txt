@@ -1,0 +1,35 @@
+"require sponsorship": |-
+  - generic [ref=e197]: Will you now, or in the future, require sponsorship to work in the United States?*
+  - generic [ref=e198]:
+    - log [ref=e200]
+    - generic [ref=e202]:
+  --
+        - combobox "Will you now, or in the future, require sponsorship to work in the United States?" [ref=e206]
+      - button "Toggle flyout" [ref=e208] [cursor=pointer]:
+        - img [ref=e209]
+    - textbox
+"in-office schedule": |-
+  - generic [ref=e214]: This role is based fully in-office, Monday–Friday. Are you comfortable with a 5-day in-office schedule on an ongoing basis?*
+  - generic [ref=e215]:
+    - log [ref=e217]
+    - generic [ref=e219]:
+  --
+        - combobox "This role is based fully in-office, Monday–Friday. Are you comfortable with a 5-day in-office schedule on an ongoing basis?" [ref=e223]
+      - button "Toggle flyout" [ref=e225] [cursor=pointer]:
+        - img [ref=e226]
+    - textbox
+"AI. *": |-
+    - generic [ref=e231]: Briefly tell us about your experience with and philosophy around using AI. *
+    - textbox "Briefly tell us about your experience with and philosophy around using AI." [ref=e232]
+  - generic [ref=e235]:
+    - generic [ref=e236]: Do you have at minimum 3 years of experience within financial services focused on building data pipelines?*
+"3 years of experience": |-
+  - generic [ref=e236]: Do you have at minimum 3 years of experience within financial services focused on building data pipelines?*
+  - generic [ref=e237]:
+    - log [ref=e239]
+    - generic [ref=e241]:
+  --
+        - combobox "Do you have at minimum 3 years of experience within financial services focused on building data pipelines?" [ref=e245]
+      - button "Toggle flyout" [ref=e247] [cursor=pointer]:
+        - img [ref=e248]
+    - textbox

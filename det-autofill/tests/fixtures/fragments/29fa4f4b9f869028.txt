@@ -1,0 +1,29 @@
+"I Understand": |-
+            - radio "I Understand" [ref=e1551]
+            - generic [ref=e1553]: I Understand
+  - listitem [ref=e1554]:
+    - generic [ref=e1557]:
+      - generic [ref=e1559]:
+"Gender Identity *": |-
+  - combobox "Gender Identity *" [ref=e1567]
+  - generic:
+    - img:
+      - img
+"Race/Ethnicity *": |-
+  - combobox "Race/Ethnicity *" [ref=e1581]
+  - generic:
+    - img:
+      - img
+"Veteran Status *": |-
+  - combobox "Veteran Status *" [ref=e1595]
+  - generic:
+    - img:
+      - img
+"disability": |-
+    - generic [ref=e1602]: "The ADA defines an individual with a disability as a person who: (1) has a physical or mental impairment or medical condition that substantially limits a major life activity (hereafter “disability”), (2) has a record or history of a substantially limiting impairment, or (3) is regarded or perceived by an employer as having a substantially limiting impairment. Do you currently or have you ever had a disability? Individuals with disabilities who wish to request a reasonable accommodation to participate in the job application or interview process, or to perform essential job functions, should contact us at: hrservices@Hanover.com and include the link of the job posting in which you are interested."
+    - text: "*"
+  - generic [ref=e1606] [cursor=pointer]:
+    - 'combobox "The ADA defines an individual with a disability as a person who: (1) has a physical or mental impairment or medical condition that substantially limits a major life activity (hereafter “disability”), (2) has a record or history of a substantially limiting impairment, or (3) is regarded or perceived by an employer as having a substantially limiting impairment. Do you currently or have you ever had a disability? Individuals with disabilities who wish to request a reasonable accommodation to participate in the job application or interview process, or to perform essential job functions, should contact us at: hrservices@Hanover.com and include the link of the job posting in which you are interested. *" [ref=e1609]'
+    - generic:
+      - img:
+        - img

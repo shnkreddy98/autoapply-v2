@@ -1,0 +1,5 @@
+"Submit": |-
+      - button "Submit" [ref=e214] [cursor=pointer]
+      - button [ref=e215] [cursor=pointer]: Sign In
+  - generic [ref=e216]:
+    - text: Don't have an account yet?

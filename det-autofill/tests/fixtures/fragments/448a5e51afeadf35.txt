@@ -1,0 +1,6 @@
+"California": |-
+  - menuitem "California" [ref=e447] [cursor=pointer]:
+    - generic [ref=e450]: California
+  - menuitem "Colorado" [ref=e451] [cursor=pointer]:
+    - generic [ref=e454]: Colorado
+  - menuitem "Connecticut" [ref=e455] [cursor=pointer]:

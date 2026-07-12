@@ -1,0 +1,9 @@
+"Upload a Resume": |-
+          - tooltip "Upload a Resume" [ref=e124]
+          - generic [ref=e125]: Upload a Resume
+          - generic [ref=e126]:
+            - button "Resume Upload a Resume Opens a dialog" [ref=e127]: 
+            - tooltip "Upload a Resume Opens a dialog" [ref=e128]
+  - generic [ref=e131]:
+    - heading "Profile Information" [level=2]:
+      - button "Profile Information" [ref=e132] [cursor=pointer]:

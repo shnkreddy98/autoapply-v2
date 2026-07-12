@@ -1,0 +1,10 @@
+"AWS not checked": |-
+  - option "AWS not checked" [ref=e1864]:
+    - generic [ref=e1865] [cursor=pointer]:
+      - checkbox [ref=e1870]
+      - generic [ref=e1871]: AWS
+"Save and Continue": |-
+          - button "Save and Continue" [ref=e569] [cursor=pointer]
+  - generic [ref=e68]:
+    - heading "Follow Us" [level=4] [ref=e69]
+    - list [ref=e70]:

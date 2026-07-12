@@ -1,0 +1,101 @@
+"How Did You Hear About Us?": |-
+      - generic [ref=e218]: How Did You Hear About Us?*
+      - generic [ref=e224] [cursor=pointer]:
+        - textbox "How Did You Hear About Us?" [ref=e225]:
+          - /placeholder: Search
+        - generic [ref=e226]: 0 items selected
+  - group [ref=e230]:
+"Have you previously worked for this organization?": |-
+  - group "Have you previously worked for this organization? If yes, please answer the question below. If No, please continue to the next page." [ref=e233]:
+    - generic [ref=e236]: Have you previously worked for this organization? If yes, please answer the question below. If No, please continue to the next page.*
+    - generic "Have you previously worked for this organization? If yes, please answer the question below. If No, please continue to the next page." [ref=e239]:
+      - generic [ref=e240]:
+        - radio "Yes" [ref=e242] [cursor=pointer]
+        - generic [ref=e243]: "Yes"
+"Country": |-
+      - generic [ref=e252]: Country*
+      - button "Country United States of America Required" [ref=e256]: United States of America
+  - group "Legal Name" [ref=e258]:
+    - heading "Legal Name" [level=4] [ref=e259]
+    - generic [ref=e260]:
+  --
+        - generic [ref=e355]: Country Phone Code*
+        - generic [ref=e360] [cursor=pointer]:
+          - generic:
+            - textbox "Country Phone Code" [ref=e361]:
+              - /placeholder: Search
+            - generic [ref=e362]: 1 item selected, United States of America (+1)
+          - listbox "items selected" [ref=e364]:
+"Prefix": |-
+    - generic [ref=e262]: Prefix
+    - button "Prefix Select One" [ref=e266]: Select One
+  - generic [ref=e267]:
+    - generic [ref=e269]: First Name*
+    - textbox "First Name" [ref=e272]: Jane
+"First Name": |-
+    - generic [ref=e269]: First Name*
+    - textbox "First Name" [ref=e272]: Jane
+  - generic [ref=e273]:
+    - generic [ref=e274]: Middle Name
+    - textbox "Middle Name" [ref=e277]: Quinn
+"Last Name": |-
+    - generic [ref=e280]: Last Name*
+    - textbox "Last Name" [ref=e283]: Doe
+  - generic [ref=e284]:
+    - generic [ref=e285]: Suffix
+    - button "Suffix Select One" [ref=e289]: Select One
+"Suffix": |-
+    - generic [ref=e285]: Suffix
+    - button "Suffix Select One" [ref=e289]: Select One
+  - generic [ref=e290]:
+    - generic [ref=e291]: I have a preferred name
+    - checkbox "I have a preferred name" [ref=e296] [cursor=pointer]
+"Address Line 1": |-
+    - generic [ref=e303]: Address Line 1*
+    - textbox "Address Line 1" [ref=e306]
+  - generic [ref=e307]:
+    - generic [ref=e308]: Address Line 2
+    - textbox "Address Line 2" [ref=e311]
+"City": |-
+    - generic [ref=e314]: City*
+    - textbox "City" [ref=e317]: San Jose
+  - generic [ref=e318]:
+    - generic [ref=e320]: State*
+    - button "State California Required" [ref=e324]: California
+"State": |-
+      - button "Country United States of America Required" [ref=e256]: United States of America
+  - group "Legal Name" [ref=e258]:
+    - heading "Legal Name" [level=4] [ref=e259]
+    - generic [ref=e260]:
+  --
+        - generic [ref=e320]: State*
+        - button "State California Required" [ref=e324]: California
+      - generic [ref=e325]:
+        - generic [ref=e327]: Postal Code*
+        - textbox "Postal Code" [ref=e330]
+  --
+            - generic [ref=e362]: 1 item selected, United States of America (+1)
+          - listbox "items selected" [ref=e364]:
+            - option "United States of America (+1), press delete to clear value." [ref=e365]:
+              - paragraph [ref=e370]: United States of America (+1)
+      - generic [ref=e374]:
+        - generic [ref=e376]: Phone Number*
+        - textbox "Phone Number" [ref=e379]: (555) 010-0199
+"Postal Code": |-
+    - generic [ref=e327]: Postal Code*
+    - textbox "Postal Code" [ref=e330]
+  - generic [ref=e331]:
+    - generic [ref=e332]: County
+    - textbox "County" [ref=e335]
+"Phone Device Type": |-
+    - generic [ref=e348]: Phone Device Type*
+    - button "Phone Device Type Select One Required" [ref=e352]: Select One
+  - generic [ref=e353]:
+    - generic [ref=e355]: Country Phone Code*
+    - generic [ref=e360] [cursor=pointer]:
+"Phone Number": |-
+    - generic [ref=e376]: Phone Number*
+    - textbox "Phone Number" [ref=e379]: (555) 010-0199
+  - generic [ref=e380]:
+    - generic [ref=e381]: Phone Extension
+    - textbox "Phone Extension" [ref=e384]

@@ -1,0 +1,16 @@
+"Will you now or in the future require sponsorship by our company to attain or maintain your employment eligibility (e.g. H-1B visa status)?": |-
+  - generic [ref=e238]: Will you now or in the future require sponsorship by our company to attain or maintain your employment eligibility (e.g. H-1B visa status)? *
+  - generic [ref=e242]:
+    - generic [ref=e243]:
+      - radio "Yes"
+"Please review our Privacy Policy and acknowledge below: https://fetch.com/employee-privacy-policy *": |-
+  - generic [ref=e253]: "Please review our Privacy Policy and acknowledge below: https://fetch.com/employee-privacy-policy *"
+  - generic [ref=e258]:
+    - radio "Acknowledge/Confirm"
+    - generic [ref=e261] [cursor=pointer]: Acknowledge/Confirm
+"I have read and understand the Fetch Rewards Notice at Collection for Employees and Applicants": |-
+      - radio "I have read and understand the Fetch Rewards Notice at Collection for Employees and Applicants, including the section describing the use of AI-assisted tools in recruiting, and I consent to the processing of my personal information as described therein."
+      - generic [ref=e272] [cursor=pointer]: I have read and understand the Fetch Rewards Notice at Collection for Employees and Applicants, including the section describing the use of AI-assisted tools in recruiting, and I consent to the processing of my personal information as described therein.
+  - generic [ref=e273]:
+    - generic [ref=e275]: What is your current title? *
+    - textbox [ref=e278]

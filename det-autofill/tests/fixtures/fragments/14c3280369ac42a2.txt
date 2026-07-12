@@ -1,0 +1,49 @@
+"Name*": |-
+    - generic [ref=e137]: Name*
+    - textbox "Name*" [ref=e139] [cursor=pointer]:
+      - /placeholder: Type here...
+  - generic [ref=e140]:
+    - generic [ref=e141]: Email*
+"Email*": |-
+    - generic [ref=e141]: Email*
+    - textbox "Email*" [ref=e143] [cursor=pointer]:
+      - /placeholder: hello@example.com...
+  - generic [ref=e144]:
+    - generic [ref=e145]: Resume*
+"LinkedIn Profile URL*": |-
+    - generic [ref=e161]: LinkedIn Profile URL*
+    - paragraph [ref=e163]
+    - textbox "LinkedIn Profile URL*" [ref=e165] [cursor=pointer]:
+      - /placeholder: Type here...
+  - generic [ref=e166]:
+    - generic [ref=e167]: Are you legally authorized to work in the United States? *
+"Are you legally authorized to work in the United States? *": |-
+    - generic [ref=e167]: Are you legally authorized to work in the United States? *
+    - textbox "Are you legally authorized to work in the United States? *" [ref=e169] [cursor=pointer]:
+      - /placeholder: Type here...
+  - generic [ref=e170]:
+    - generic [ref=e171]: Will you now or in the future require GovWell to sponsor you for employment?*
+"Will you now or in the future require GovWell to sponsor you for employment?*": |-
+    - generic [ref=e171]: Will you now or in the future require GovWell to sponsor you for employment?*
+    - textbox "Will you now or in the future require GovWell to sponsor you for employment?*" [ref=e173] [cursor=pointer]:
+      - /placeholder: Type here...
+  - group [ref=e175]:
+    - generic [ref=e176]: Do you currently live in the NYC metro area? If not, are you willing to relocate?*
+"Do you currently live in the NYC metro area? If not, are you willing to relocate?*": |-
+  - generic [ref=e176]: Do you currently live in the NYC metro area? If not, are you willing to relocate?*
+  - paragraph [ref=e178]
+  - generic [ref=e179]:
+    - radio "In the NYC metropolitan area" [ref=e182] [cursor=pointer]
+"How do you feel about this requirement?*": |-
+    - generic [ref=e195]: GovWell offers a hybrid work model, where teammates are expected to work 3+ days per week from our NYC office. How do you feel about this requirement?*
+    - textbox "GovWell offers a hybrid work model, where teammates are expected to work 3+ days per week from our NYC office. How do you feel about this requirement?*" [ref=e197] [cursor=pointer]:
+      - /placeholder: Type here...
+  - generic [ref=e198]:
+    - generic [ref=e199]: Why are you interested in this role?*
+"Why are you interested in this role?*": |-
+      - generic [ref=e199]: Why are you interested in this role?*
+      - paragraph [ref=e201]: We're curious what piqued your interest. A few sentences is sufficient.
+      - textbox "Why are you interested in this role?*" [ref=e202] [cursor=pointer]:
+        - /placeholder: Type here...
+  - button "Submit Application" [ref=e115] [cursor=pointer]:
+    - text: Submit Application

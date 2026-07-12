@@ -1,0 +1,10 @@
+"Register": |-
+            - text: Please choose a User Name and Password and click ‘Register.’ Be sure to enter a User Name and Password that you can remember. You will need this information when you return in the future. Your password needs to be at least 6 characters long.
+          - generic "This field is mandatory" [ref=e70]: Required fields indicated by red asterisk.
+          - table [ref=e72]:
+            - rowgroup [ref=e73]:
+  --
+          - button "Register" [ref=e100] [cursor=pointer]
+          - button "Cancel" [ref=e101] [cursor=pointer]
+  - generic [ref=e104]:
+    - link "Any personal information you provide is subject to the terms of our Privacy Policy" [ref=e105] [cursor=pointer]:

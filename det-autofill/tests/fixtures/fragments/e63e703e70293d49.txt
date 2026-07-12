@@ -1,0 +1,6 @@
+"relatives employed by this organization": |-
+  - group "Do you have any relatives employed by this organization?*" [ref=e1233]:
+    - paragraph [ref=e1237]: Do you have any relatives employed by this organization?*
+    - button "Select One Required" [ref=e1241]: Select One
+  - group "What are your salary expectations for this role?(Hourly rate or Salary Range)*" [ref=e1243]:
+    - paragraph [ref=e1247]:

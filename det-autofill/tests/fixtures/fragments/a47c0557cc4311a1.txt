@@ -1,0 +1,29 @@
+"How Did You Hear About Us?": |-
+      - generic [ref=e222]: How Did You Hear About Us?*
+      - generic [ref=e228] [cursor=pointer]:
+        - textbox "How Did You Hear About Us?" [ref=e229]:
+          - /placeholder: Search
+        - generic [ref=e230]: 0 items selected
+  - group [ref=e234]:
+    - group "Have you previously worked for this organization? If yes, please answer the question below. If No, please continue to the next page." [ref=e237]:
+"Prefix": |-
+    - generic [ref=e266]: Prefix
+    - button "Prefix Select One" [ref=e270]: Select One
+  - generic [ref=e271]:
+    - generic [ref=e273]: First Name*
+    - textbox "First Name" [ref=e276]: Jane
+  - generic [ref=e277]:
+"Suffix": |-
+        - generic [ref=e289]: Suffix
+        - button "Suffix Select One" [ref=e293]: Select One
+      - generic [ref=e294]:
+        - generic [ref=e295]: I have a preferred name
+        - checkbox "I have a preferred name" [ref=e300] [cursor=pointer]
+  - group "Address" [ref=e302]:
+"Phone Device Type": |-
+    - generic [ref=e352]: Phone Device Type*
+    - button "Phone Device Type Select One Required" [ref=e356]: Select One
+  - generic [ref=e357]:
+    - generic [ref=e359]: Country Phone Code*
+    - generic [ref=e364] [cursor=pointer]:
+      - generic:

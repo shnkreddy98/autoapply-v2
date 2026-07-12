@@ -1,0 +1,56 @@
+"First Name": |-
+    - generic [ref=e85]: First Name*
+    - textbox "First Name*" [ref=e87]: Jane Quinn
+  - generic [ref=e89]:
+    - generic [ref=e91]: Last Name*
+    - textbox "Last Name*" [ref=e93]: Doe
+"Last Name": |-
+      - generic [ref=e91]: Last Name*
+      - textbox "Last Name*" [ref=e93]: Doe
+  - generic [ref=e94]:
+    - generic [ref=e96]: Email*
+    - textbox "Email*" [ref=e98]: jane.doe@example.com
+"Email": |-
+  - link "Share via email" [ref=e22] [cursor=pointer]:
+    - /url: mailto:?subject=Magnus%20Management%20Group%20LLC%20is%20hiring%21&body=Data%20Engineer%20-%20DC%20-%20Washington%20DC%2020001%0AApply%20here%3A%20https%3A%2F%2Fmagnus-management-group-llc.careerplug.com%2Fj%2F031nmcf
+  - link "Share on Nextdoor":
+    - /url: https://nextdoor.com/sharekit/?body=I+have+an+opening+for%3A+Data+Engineer+-+DC+-+Washington+DC+20001.+Apply+here%3A+https%3A%2F%2Fmagnus-management-group-llc.careerplug.com%2Fj%2F031nmcg&source=careerplug
+  --
+  - link "Share via email" [ref=e253] [cursor=pointer]:
+    - /url: mailto:?subject=Magnus%20Management%20Group%20LLC%20is%20hiring%21&body=Data%20Engineer%20-%20DC%20-%20Washington%20DC%2020001%0AApply%20here%3A%20https%3A%2F%2Fmagnus-management-group-llc.careerplug.com%2Fj%2F031nmcf
+  - link "Share on Nextdoor":
+    - /url: https://nextdoor.com/sharekit/?body=I+have+an+opening+for%3A+Data+Engineer+-+DC+-+Washington+DC+20001.+Apply+here%3A+https%3A%2F%2Fmagnus-management-group-llc.careerplug.com%2Fj%2F031nmcg&source=careerplug
+  --
+    - generic [ref=e96]: Email*
+    - textbox "Email*" [ref=e98]: jane.doe@example.com
+  - generic [ref=e99]:
+    - generic [ref=e101]: Phone*
+    - textbox "Phone*" [ref=e103]: (555) 010-0199
+"Phone": |-
+    - generic [ref=e101]: Phone*
+    - textbox "Phone*" [ref=e103]: (555) 010-0199
+  - generic [ref=e104]:
+    - checkbox "Get faster updates with texting! Message and data rates may apply. Message frequency varies. Reply STOP to opt out. Reply HELP for help. See our User Terms of Service and Privacy Policy for details." [ref=e105]
+    - generic [ref=e106]:
+"City": |-
+  - textbox "City" [ref=e119]: San Jose
+  - generic [ref=e120]:
+    - combobox "States" [ref=e124]:
+      - option "State"
+"State": |-
+  - combobox "States" [ref=e124]:
+    - option "State"
+    - option "Alabama"
+    - option "Alaska"
+    - option "American Samoa"
+"Do you have recent federal contracting experience?": |-
+  - generic [ref=e180]: Do you have recent federal contracting experience?*
+  - combobox "Do you have recent federal contracting experience?*" [ref=e182]:
+    - option
+    - option "Yes"
+    - option "No" [selected]
+"Submit Application": |-
+          - button "Submit Application" [ref=e194] [cursor=pointer]
+          - link "Privacy Policy" [ref=e196] [cursor=pointer]:
+            - /url: https://www.careerplug.com/privacy/
+  - iframe [ref=e198]:

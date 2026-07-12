@@ -1,0 +1,27 @@
+"Apply": |-
+  - generic "This Wells Fargo Digital Privacy and Cookies Policy (“Policy”) applies to your interaction with Wells Fargo & Company or any of its subsidiaries (collectively, “Wells Fargo,” “we,” “us,” “our”), at any online or mobile site or application that we own and control (“Site”), unless a different online and/or mobile or other privacy policy is posted at a particular site, or is made available to you and by its terms supplants this Policy. Other privacy policies may also apply in addition to the terms of this Policy. By using a Site or interacting with a Wells Fargo advertisement or page or account on a third party site, you consent to this Policy, including your consent to our use and disclosure of information about you in the manner described in this Policy." [ref=e9]:
+    - generic [ref=e10]:
+      - paragraph [ref=e11]: This Wells Fargo Digital Privacy and Cookies Policy (“Policy”) applies to your interaction with Wells Fargo & Company or any of its subsidiaries (collectively, “Wells Fargo,” “we,” “us,” “our”), at any online or mobile site or application that we own and control (“Site”), unless a different online and/or mobile or other privacy policy is posted at a particular site, or is made available to you and by its terms supplants this Policy. Other privacy policies may also apply in addition to the terms of this Policy.
+      - paragraph [ref=e12]
+      - paragraph [ref=e13]: By using a Site or interacting with a Wells Fargo advertisement or page or account on a third party site, you consent to this Policy, including your consent to our use and disclosure of information about you in the manner described in this Policy.
+    - button "Read Full Privacy Message" [ref=e14]:
+  --
+          - button "Apply" [ref=e69] [cursor=pointer]
+        - generic [ref=e70]:
+          - generic [ref=e71]:
+            - generic [ref=e79]:
+  --
+                - paragraph [ref=e131]: "Apply data governance and discovery practices using Dataplex: metadata management, dataset organization, classification support, and ensuring data is consumption-ready."
+              - listitem [ref=e132]:
+                - paragraph [ref=e133]: "Build and operationalize data quality controls using Informatica Data Quality: profiling, rule implementation, thresholds, exception handling, and embedding quality gates into pipelines."
+              - listitem [ref=e134]:
+  --
+              - generic [ref=e208]: "Candidates applying to job openings posted in Canada: Applications for employment are encouraged from all qualified candidates, including women, persons with disabilities, aboriginal peoples and visible minorities. Accommodation for applicants with disabilities is available upon request in connection with the recruitment process."
+            - paragraph [ref=e209]
+            - paragraph [ref=e210]:
+              - generic [ref=e211]: Applicants with Disabilities
+  --
+          - text: For questions on how to search and apply, visit
+          - link "frequently asked questions" [ref=e265] [cursor=pointer]:
+            - /url: https://www.wellsfargojobs.com/en/frequently-asked-questions
+          - text: .

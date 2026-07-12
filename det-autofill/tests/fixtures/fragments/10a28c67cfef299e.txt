@@ -1,0 +1,37 @@
+"authorized": |-
+      - option "I am authorized to work in?*" [selected]
+      - option "India"
+      - option "Asia Pacific"
+      - option "Middle East"
+      - option "Europe"
+      - option "US"
+  - generic [ref=e54]:
+    - generic [ref=e55]: Are you 18 years or above?*
+    - generic [ref=e57]:
+      - generic [ref=e58]:
+        - radio [ref=e59]
+"above?": |-
+    - generic [ref=e55]: Are you 18 years or above?*
+    - generic [ref=e57]:
+      - generic [ref=e58]:
+        - radio [ref=e59]
+        - text: "Yes"
+      - generic [ref=e60]:
+        - radio [ref=e61]
+        - text: "No"
+  - generic [ref=e62]:
+    - paragraph [ref=e63]:
+      - strong [ref=e64]: Terms and Conditions
+"agree to the Terms": |-
+          - checkbox "I have read and agree to the Terms & Conditions and Data Privacy Policy. I confirm that the information provided is true, complete, accurate, and I understand that any false or misleading details may result in disqualification or termination of employment. I also consent to the verification of my information through lawful checks." [ref=e79]
+          - text: I have read and agree to the Terms & Conditions and Data Privacy Policy. I confirm that the information provided is true, complete, accurate, and I understand that any false or misleading details may result in disqualification or termination of employment. I also consent to the verification of my information through lawful checks.
+        - button "APPLY NOW" [ref=e81] [cursor=pointer]
+  - generic [ref=e83]:
+    - generic [ref=e85]:
+      - generic [ref=e86]:
+        - generic [ref=e87]: Industries
+        - list [ref=e88]:
+          - listitem [ref=e89]:
+            - link "BFSI" [ref=e90] [cursor=pointer]:
+              - /url: /industries/banking-financial-services-insurance-bfsi/
+          - listitem [ref=e91]:

@@ -1,0 +1,128 @@
+"First Name": |-
+    - generic [ref=e72]: First Name *
+    - textbox "First Name" [ref=e73]:
+      - /placeholder: ""
+  - generic [ref=e74]:
+    - generic [ref=e75]: Last Name *
+"Last Name": |-
+    - generic [ref=e75]: Last Name *
+    - textbox "Last Name" [ref=e76]:
+      - /placeholder: ""
+  - generic [ref=e77]:
+    - generic [ref=e78]: Home Email *
+"Home Email": |-
+    - generic [ref=e78]: Home Email *
+    - textbox "Home Email" [ref=e79]:
+      - /placeholder: ""
+  - generic [ref=e80]:
+    - generic [ref=e81]: Mobile Phone Number *
+"Mobile Phone Number": |-
+    - generic [ref=e81]: Mobile Phone Number *
+    - textbox "Mobile Phone Number" [ref=e82]:
+      - /placeholder: ""
+  - generic [ref=e83]:
+    - generic [ref=e84]: Current Position Title *
+"Current Position Title": |-
+    - generic [ref=e84]: Current Position Title *
+    - textbox "Current Position Title" [ref=e85]:
+      - /placeholder: ""
+  - generic [ref=e86]:
+    - generic [ref=e87]: Current Employer *
+"Current Employer": |-
+    - generic [ref=e87]: Current Employer *
+    - textbox "Current Employer" [ref=e88]:
+      - /placeholder: ""
+  - generic [ref=e89]:
+    - generic [ref=e90]: Home Country *
+"Home Country": |-
+  - generic [ref=e90]: Home Country *
+  - combobox "Home Country" [ref=e92]:
+    - option "Select a country"
+    - option "Afghanistan"
+    - option "Albania"
+"Home State": |-
+  - generic [ref=e94]: Home State *
+  - combobox "Home State" [ref=e95]:
+    - option "Select an option" [selected]
+    - option "Alabama"
+    - option "Alaska"
+"Home City": |-
+    - generic [ref=e97]: Home City *
+    - textbox "Home City" [ref=e98]:
+      - /placeholder: ""
+  - generic [ref=e99]:
+    - generic [ref=e100]: Home Zip *
+"Home Zip": |-
+      - generic [ref=e100]: Home Zip *
+      - textbox "Home Zip" [ref=e101]:
+        - /placeholder: ""
+  - group [ref=e102]:
+    - generic [ref=e104]: Application Questions
+"Are you legally authorized to work in the United States?": |-
+  - generic [ref=e106]: Are you legally authorized to work in the United States? *
+  - combobox "Are you legally authorized to work in the United States?" [ref=e107]:
+    - option "Select an option" [selected]
+    - option "No"
+    - option "Yes"
+"Will you now or in the future require sponsorship for employment visa status (e.g. H-1B status)?": |-
+  - generic [ref=e109]: Will you now or in the future require sponsorship for employment visa status (e.g. H-1B status)? *
+  - combobox "Will you now or in the future require sponsorship for employment visa status (e.g. H-1B status)?" [ref=e110]:
+    - option "Select an option" [selected]
+    - option "No"
+    - option "Yes"
+"Are you at least 18 years of age?": |-
+  - generic [ref=e112]: Are you at least 18 years of age? *
+  - combobox "Are you at least 18 years of age?" [ref=e113]:
+    - option "Select an option" [selected]
+    - option "No"
+    - option "Yes"
+"Do you have a family member who currently works at USI?": |-
+  - generic [ref=e115]: Do you have a family member who currently works at USI? *
+  - combobox "Do you have a family member who currently works at USI?" [ref=e116]:
+    - option "Select an option" [selected]
+    - option "No"
+    - option "Yes"
+"Are you a former USI Employee?": |-
+  - generic [ref=e118]: Are you a former USI Employee? *
+  - combobox "Are you a former USI Employee?" [ref=e119]:
+    - option "Select an option" [selected]
+    - option "No"
+    - option "Yes"
+"Salary Expectations": |-
+    - generic [ref=e121]: Salary Expectations *
+    - textbox "Salary Expectations" [ref=e122]:
+      - /placeholder: ""
+  - generic [ref=e123]:
+    - generic [ref=e124]: How did you hear about USI? *
+"How did you hear about USI?": |-
+  - generic [ref=e124]: How did you hear about USI? *
+  - combobox "How did you hear about USI?" [ref=e125]:
+    - option "Select an option" [selected]
+    - option "Career Fair"
+    - option "Career/Job Fair"
+"I attest": |-
+    - generic [ref=e164]: I attest that to the best of my knowledge and belief, all information provided above is true and accurate.
+    - generic [ref=e165]:
+      - checkbox "I attest" [ref=e166] [cursor=pointer]
+      - generic [ref=e167] [cursor=pointer]: I attest *
+  - group [ref=e169]:
+    - generic [ref=e170]:
+      - text: I have read and accept the
+"I accept": |-
+      - checkbox "I accept" [ref=e173] [cursor=pointer]
+      - generic [ref=e174] [cursor=pointer]: I accept *
+  - generic [ref=e175]:
+    - generic [ref=e176]:
+      - text: Would you like to receive text messages from USI Insurance Services regarding your job application (e.g., interview scheduling and hiring updates)? *
+"receive text messages": |-
+      - text: Would you like to receive text messages from USI Insurance Services regarding your job application (e.g., interview scheduling and hiring updates)? *
+      - generic [ref=e279]: Select an option
+    - generic [ref=e177]:
+      - combobox [ref=e280]
+      - combobox "Would you like to receive text messages from USI Insurance Services regarding your job application (e.g., interview scheduling and hiring updates)?" [ref=e283] [cursor=pointer]:
+        - textbox [ref=e284]
+  - generic [ref=e184]:
+    - generic [ref=e185]: If you select "Yes", you consent to receive text messages from USI Insurance Services and its subsidiaries regarding your job application at the phone number you provided.
+    - strong [ref=e187]: Your decision does not affect your ability to apply or be considered for employment.
+    - generic [ref=e188]:
+      - text: Message and data rates may apply. You may reply

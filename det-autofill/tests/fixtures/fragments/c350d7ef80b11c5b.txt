@@ -1,0 +1,21 @@
+"Address Line 1": |-
+    - generic [ref=e307]: Address Line 1*
+    - textbox "Address Line 1" [ref=e310]
+  - generic [ref=e311]:
+    - generic [ref=e312]: Address Line 2
+    - textbox "Address Line 2" [ref=e315]
+  - generic [ref=e316]:
+"City": |-
+    - generic [ref=e318]: City*
+    - textbox "City" [ref=e321]: San Jose
+  - generic [ref=e322]:
+    - generic [ref=e324]: State*
+    - button "State California Required" [ref=e328]: California
+  - generic [ref=e329]:
+"Postal Code": |-
+        - generic [ref=e331]: Postal Code*
+        - textbox "Postal Code" [ref=e334]
+      - generic [ref=e335]:
+        - generic [ref=e336]: County
+        - textbox "County" [ref=e339]
+  - group "Email Address" [ref=e341]:

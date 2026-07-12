@@ -1,0 +1,42 @@
+"In 2-4 sentences, describe why you are interested in working at Butterfly Network.": |-
+    - generic [ref=f103e243]: In 2-4 sentences, describe why you are interested in working at Butterfly Network. *
+    - textbox "In 2-4 sentences, describe why you are interested in working at Butterfly Network." [ref=f103e244]
+  - generic [ref=f103e247]:
+    - generic [ref=f103e248]: LinkedIn Profile*
+    - textbox "LinkedIn Profile" [ref=f103e249]: https://www.linkedin.com/in/janedoe
+  - generic [ref=f103e252]:
+    - generic [ref=f103e253]: Are you currently located in NYC and willing to commute to the office 2-3 days a week? *
+"Are you currently located in NYC and willing to commute to the office 2-3 days a week?": |-
+    - generic [ref=f103e253]: Are you currently located in NYC and willing to commute to the office 2-3 days a week? *
+    - textbox "Are you currently located in NYC and willing to commute to the office 2-3 days a week?" [ref=f103e254]: "No"
+  - generic [ref=f103e257]:
+    - generic [ref=f103e258]: Will you now or in the future require visa sponsorship for employment at Butterfly Network?*
+    - generic [ref=f103e259]:
+      - log [ref=f103e261]: 2 results available.Use Up and Down to choose options, press Enter to select the currently focused option, press Escape to exit the menu, press Tab to select the option and exit the menu.
+      - generic [ref=f103e263]:
+"Will you now or in the future require visa sponsorship for employment at Butterfly Network?": |-
+  - generic [ref=f103e258]: Will you now or in the future require visa sponsorship for employment at Butterfly Network?*
+  - generic [ref=f103e259]:
+    - log [ref=f103e261]: 2 results available.Use Up and Down to choose options, press Enter to select the currently focused option, press Escape to exit the menu, press Tab to select the option and exit the menu.
+    - generic [ref=f103e263]:
+      - generic [ref=f103e264]:
+        - generic [ref=f103e265]: Select...
+        - combobox "Will you now or in the future require visa sponsorship for employment at Butterfly Network?" [expanded] [active] [ref=f103e267]
+      - button "Toggle flyout" [ref=f103e269] [cursor=pointer]:
+        - img [ref=f103e270]
+    - listbox [ref=f103e454]:
+      - option "Yes" [ref=f103e455]
+      - option "No" [ref=f103e456]
+"EU Resident": |-
+    - generic [ref=f103e292]: GDPR Notice for EU Residents*
+    - generic [ref=f103e293]:
+      - log [ref=f103e295]
+      - generic [ref=f103e297]:
+        - generic [ref=f103e298]:
+          - generic [ref=f103e299]: Select...
+          - combobox "GDPR Notice for EU Residents" [ref=f103e301]
+        - button "Toggle flyout" [ref=f103e303] [cursor=pointer]:
+          - img [ref=f103e304]
+      - textbox
+  - generic [ref=f103e307]:
+    - paragraph [ref=f103e308]: When you apply to a job on this site, the personal data contained in your application will be collected by Butterfly Network, Inc. (“Controller”), which is located at 530 Whitfield Street Guilford CT 06437 and can be contacted by emailing recruiting@butterflynetinc.com. Controller’s data protection officer is Dalini Khemlani, who can be contacted at dpo@butterflynetinc.com. Your personal data will be processed for the purposes of managing Controller’s recruitment related activities, which include setting up and conducting interviews and tests for applicants, evaluating and assessing the results thereto, and as is otherwise needed in the recruitment and hiring processes. Such processing is legally permissible under Art. 6(1)(f) of Regulation (EU) 2016/679 (General Data Protection Regulation) as necessary for the purposes of the legitimate interests pursued by the Controller, which are the solicitation, evaluation, and selection of applicants for employment.

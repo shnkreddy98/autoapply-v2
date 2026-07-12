@@ -1,0 +1,35 @@
+"Email Address": (no match)
+"Password": (no match)
+"Create Account": |-
+    - generic [ref=e111]: Create Account/Sign In
+  - listitem [ref=e112]:
+    - generic: step 2 of 8
+    - generic [ref=e118]: Autofill with Resume
+"Sign In": |-
+  - Page Title: Sign In
+  ### Snapshot
+  ```yaml
+  - generic [ref=e4]:
+  --
+          - button "Sign In" [ref=e20] [cursor=pointer]:
+            - generic [ref=e25]: Sign In
+          - navigation [ref=e26]:
+            - button "Home" [ref=e27] [cursor=pointer]
+            - button "Search for Jobs" [ref=e28] [cursor=pointer]
+  --
+              - generic [ref=e111]: Create Account/Sign In
+            - listitem [ref=e112]:
+              - generic: step 2 of 8
+              - generic [ref=e118]: Autofill with Resume
+  --
+          - heading "Sign In" [level=2] [ref=e172]
+          - button "Sign in with Google" [ref=e177] [cursor=pointer]:
+            - generic [ref=e178]:
+              - img [ref=e180]
+              - text: Sign in with Google
+          - generic [ref=e186]:
+            - generic [ref=e187]: OR
+            - button "Sign in with email" [ref=e191] [cursor=pointer]
+    - generic [ref=e34]:
+      - heading "Follow Us" [level=4] [ref=e35]
+      - list [ref=e36]:

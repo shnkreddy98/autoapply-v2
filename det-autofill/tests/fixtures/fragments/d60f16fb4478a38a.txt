@@ -1,0 +1,5 @@
+"willing to work in a smoking environment?*": |-
+  - group "Yaamava’ Resort & Casino at San Manuel is a smoking facility, employees may be subject to second-hand smoke while performing their duties. Are you willing to work in a smoking environment?*" [ref=e1779]:
+    - paragraph [ref=e1783]: Yaamava’ Resort & Casino at San Manuel is a smoking facility, employees may be subject to second-hand smoke while performing their duties. Are you willing to work in a smoking environment?*
+    - generic [ref=e1784]:
+      - button "Select One Required" [ref=e1787]: Select One

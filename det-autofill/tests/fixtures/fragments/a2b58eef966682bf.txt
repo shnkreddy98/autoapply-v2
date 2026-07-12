@@ -1,0 +1,32 @@
+"Address Line 1": |-
+    - generic [ref=e236]: Address Line 1*
+    - textbox "Address Line 1" [ref=e239]
+  - generic [ref=e240]:
+    - generic [ref=e241]: Address Line 2
+    - textbox "Address Line 2" [ref=e244]
+  - generic [ref=e245]:
+    - generic [ref=e247]: City*
+"City": |-
+    - generic [ref=e247]: City*
+    - textbox "City" [ref=e250]
+  - generic [ref=e251]:
+    - generic [ref=e253]: State*
+    - button "State California Required" [ref=e525]: California
+  - generic [ref=e258]:
+    - generic [ref=e260]: Postal Code*
+"Postal Code": |-
+        - generic [ref=e260]: Postal Code*
+        - textbox "Postal Code" [ref=e263]
+      - generic [ref=e264]:
+        - generic [ref=e265]: County
+        - textbox "County" [ref=e268]
+  - group "Email Address" [ref=e270]:
+    - heading "Email Address" [level=4] [ref=e271]
+"Phone Number": |-
+            - generic [ref=e391]: Phone Number*
+            - textbox "Phone Number" [ref=e394]
+          - generic [ref=e395]:
+            - generic [ref=e396]: Phone Extension
+            - textbox "Phone Extension" [ref=e399]
+  - generic [ref=e159]:
+    - button "Back" [ref=e288] [cursor=pointer]

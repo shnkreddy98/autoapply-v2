@@ -1,0 +1,61 @@
+"2 years of experience": |-
+  - generic [ref=e180]: Do you have at least 2 years of experience as a Data Engineer, MarTech Developer, or similar role?*
+  - combobox "Do you have at least 2 years of experience as a Data Engineer, MarTech Developer, or similar role?*" [ref=e181]:
+    - option "-- No answer --" [selected]
+    - option "Yes"
+    - option "No"
+"ETL/ELT data pipelines": |-
+    - generic [ref=e83]: Experience designing, building, and optimizing end-to-end ETL/ELT data pipelines.
+  - listitem [ref=e84]:
+    - generic [ref=e86]: Experience developing and maintaining REST APIs, webhooks, and third-party system integrations.
+  - listitem [ref=e87]:
+  --
+    - generic [ref=e183]: Do you have experience designing, building, and optimizing end-to-end ETL/ELT data pipelines?*
+    - combobox "Do you have experience designing, building, and optimizing end-to-end ETL/ELT data pipelines?*" [ref=e184]:
+      - option "-- No answer --" [selected]
+      - option "Yes"
+      - option "No"
+"BigQuery": |-
+    - generic [ref=e64]: Data Warehouse Performance – Optimize data storage and retrieval performance across platforms such as BigQuery, Snowflake, or Azure Synapse to improve query efficiency, scalability, and data accessibility.
+  - listitem [ref=e65]:
+    - generic [ref=e67]: Business Intelligence Reporting – Create and maintain Power BI and other business intelligence dashboards that provide accurate, timely reporting and actionable insights for stakeholders.
+  - listitem [ref=e68]:
+  --
+    - generic [ref=e92]: Experience working with Google BigQuery, Data Lake environments, or similar cloud-based data platforms.
+  - listitem [ref=e93]:
+    - generic [ref=e95]: Experience creating reports and dashboards using Power BI, Tableau, or similar business intelligence tools.
+  - listitem [ref=e96]:
+  --
+    - generic [ref=e186]: Do you have experience working with Google BigQuery, Data Lake environments, or similar cloud-based data platforms?*
+    - combobox "Do you have experience working with Google BigQuery, Data Lake environments, or similar cloud-based data platforms?*" [ref=e187]:
+      - option "-- No answer --" [selected]
+      - option "Yes"
+      - option "No"
+"REST APIs": |-
+    - generic [ref=e86]: Experience developing and maintaining REST APIs, webhooks, and third-party system integrations.
+  - listitem [ref=e87]:
+    - generic [ref=e89]: Knowledge of data modeling, data architecture, and data integration best practices.
+  - listitem [ref=e90]:
+  --
+    - generic [ref=e189]: Do you have experience developing and maintaining REST APIs, webhooks, and third-party system integrations?*
+    - combobox "Do you have experience developing and maintaining REST APIs, webhooks, and third-party system integrations?*" [ref=e190]:
+      - option "-- No answer --" [selected]
+      - option "Yes"
+      - option "No"
+"Philippines": |-
+  - generic [ref=e192]: Are you currently located in the Philippines?*
+  - combobox "Are you currently located in the Philippines?*" [ref=e193]:
+    - option "-- No answer --" [selected]
+    - option "Yes"
+    - option "No"
+"I consent to receive SMS": |-
+            - checkbox "I consent to receive SMS/text messages regarding my job application with Spartan Investment Group. These messages may include updates on my application status, interview invitations, reminders, and other information directly related to this job application. Message frequency will vary. Message and data rates may apply. Reply HELP for help or STOP to cancel." [ref=e203]
+            - text: I consent to receive SMS/text messages regarding my job application with Spartan Investment Group. These messages may include updates on my application status, interview invitations, reminders, and other information directly related to this job application. Message frequency will vary. Message and data rates may apply. Reply HELP for help or STOP to cancel.
+          - link "Submit Application" [ref=e205] [cursor=pointer]:
+            - /url: "#"
+  - contentinfo [ref=e206]:
+"Attach resume": |-
+    - text: Attach resume as .pdf, .doc, .docx, .odt, .txt, or .rtf (limit 5MB) or
+    - link "Paste resume" [ref=e219] [cursor=pointer]:
+      - /url: "#"
+  - button "Resume*" [ref=e221]

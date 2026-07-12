@@ -1,0 +1,10 @@
+"I will need a sponsorship visa from Rose International, now or in the future, to work as a W2 employee.": |-
+    - text: I will need a sponsorship visa from Rose International, now or in the future, to work as a W2 employee.
+    - checkbox [ref=e66]
+    - text: "Yes"
+  - generic [ref=e68]:
+"Choose File": |-
+    - button "Choose File" [ref=e71]
+  - generic [ref=e73]: "(Max file size allowed: 1 MB)"
+  - generic [ref=e74]:
+    - generic [ref=e75]: "Military Status:"

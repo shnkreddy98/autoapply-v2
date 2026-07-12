@@ -1,0 +1,11 @@
+"I choose not to respond": |-
+      - strong [ref=e277]: If you are not willing to share this information, please select "I choose not to respond" below.
+      - text: Please be assured that you will not be subjected to any adverse treatment if you do not provide the information requested. In the event you do provide the information requested, the information will be processed and maintained separately from your employment application forms and, if you are hired, from your personnel file. The information obtained may only be used in accordance with the provisions of applicable laws, executive orders, and regulations, including those that require the information to be summarized and reported to the government for civil rights enforcement. When reported, data will not identify any specific individual.
+  - generic "Required" [ref=e278]: Do you agree to these terms?*
+  - generic [ref=e281]:
+  --
+        - option "I choose not to respond" [ref=e1251] [cursor=pointer]:
+          - menuitem "I choose not to respond" [ref=e1252]
+        - option "Male" [ref=e1253] [cursor=pointer]:
+          - menuitem "Male" [ref=e1254]
+        - option "Other" [ref=e1255] [cursor=pointer]:

@@ -1,0 +1,5 @@
+"Acknowledge/Confirm": |-
+          - option "Acknowledge/Confirm" [ref=f94e525]
+        - textbox
+    - paragraph [ref=f94e476]: This field is required.
+  - generic [ref=f94e307]:

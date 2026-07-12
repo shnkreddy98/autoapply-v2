@@ -1,0 +1,16 @@
+"Male": |-
+  - option "Male" [ref=e2154] [cursor=pointer]:
+    - paragraph [ref=e2156]:
+      - paragraph [ref=e2160]:
+        - generic "Male" [ref=e2161]:
+          - generic [ref=e2165]:
+            - generic: Male
+  - option "Female" [ref=e2168] [cursor=pointer]:
+    - paragraph [ref=e2170]:
+      - paragraph [ref=e2174]:
+        - generic "Female" [ref=e2175]:
+          - generic [ref=e2179]:
+            - generic: Female
+  - option "Prefer not to answer" [ref=e2182] [cursor=pointer]:
+    - paragraph [ref=e2184]:
+      - paragraph [ref=e2188]:

@@ -1,0 +1,21 @@
+"Male": |-
+    - radio "Male" [ref=e612] [cursor=pointer]
+    - generic [ref=e336]: Male
+  - generic [ref=e337]:
+    - radio "Female" [ref=e613] [cursor=pointer]
+    - generic [ref=e341]: Female
+  - generic [ref=e342]:
+    - radio "Decline to self-identify" [ref=e614] [cursor=pointer]
+    - generic [ref=e346]: Decline to self-identify
+"Asian (Not Hispanic or Latino)": |-
+    - radio "Asian (Not Hispanic or Latino)" [ref=e619] [cursor=pointer]
+    - generic [ref=e398]: Asian (Not Hispanic or Latino)
+  - generic [ref=e399]:
+    - radio "American Indian or Alaska Native (Not Hispanic or Latino)" [ref=e620] [cursor=pointer]
+    - generic [ref=e403]: American Indian or Alaska Native (Not Hispanic or Latino)
+"I am not a protected veteran": |-
+    - radio "I am not a protected veteran" [ref=e624] [cursor=pointer]
+    - generic [ref=e445]: I am not a protected veteran
+  - generic [ref=e446]:
+    - radio "I decline to self-identify for protected veteran status" [ref=e625] [cursor=pointer]
+    - generic [ref=e450]: I decline to self-identify for protected veteran status

@@ -1,0 +1,19 @@
+"Application Source": |-
+      - text: Application Source Type
+    - generic [ref=e755]:
+      - status [ref=e1136]: One or more results available. Press Up or Down Arrow Keys to navigate the selection list. Press Alt + Arrow keys to resize the selection list.
+      - combobox "Application Source Type" [expanded] [active] [ref=e757]: Professional Network
+      - button "Application Source Type" [ref=e758] [cursor=pointer]:
+        - generic [ref=e759]: 
+  - generic [ref=e761]:
+    - generic [ref=e762]:
+  --
+      - text: Application Source
+    - generic [ref=e764]:
+      - generic [ref=e765]:
+        - status
+      - combobox "Application Source" [ref=e1160]
+      - button "Application Source" [ref=e767] [cursor=pointer]:
+        - generic [ref=e768]: 
+  - generic [ref=e770]:
+    - text: "If Other, please explain:"

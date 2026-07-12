@@ -1,0 +1,34 @@
+"I hereby certify": |-
+      - listitem [ref=f67e28]: "I hereby certify that I have not knowingly withheld any information that might adversely affect my application. I further certify that I, the undersigned applicant, have personally completed this application. I understand that any omission, misstatement or falsification on this application or on any documents used to secure employment shall be grounds for rejection of this application or for immediate discharge if I am employed, regardless of the time elapsed before discovery.: required."
+  - separator [ref=f67e29]
+  - generic:
+    - list:
+  --
+      - generic [ref=f67e125]: "I hereby certify that I have not knowingly withheld any information that might adversely affect my application. I further certify that I, the undersigned applicant, have personally completed this application. I understand that any omission, misstatement or falsification on this application or on any documents used to secure employment shall be grounds for rejection of this application or for immediate discharge if I am employed, regardless of the time elapsed before discovery.: required."
+      - generic [ref=f67e127]:
+        - checkbox "I hereby certify I hereby certify that I have not knowingly withheld any information that might adversely affect my application. I further certify that I, the undersigned applicant, have personally completed this application. I understand that any omission, misstatement or falsification on this application or on any documents used to secure employment shall be grounds for rejection of this application or for immediate discharge if I am employed, regardless of the time elapsed before discovery.*" [active] [ref=f67e129]
+        - generic [ref=f67e130]: 
+        - generic [ref=f67e131]:
+          - text: I hereby certify I hereby certify that I have not knowingly withheld any information that might adversely affect my application. I further certify that I, the undersigned applicant, have personally completed this application. I understand that any omission, misstatement or falsification on this application or on any documents used to secure employment shall be grounds for rejection of this application or for immediate discharge if I am employed, regardless of the time elapsed before discovery.
+          - generic [ref=f67e132]: "*"
+      - generic [ref=f67e134]:
+        - button "Finish Later" [ref=f67e135] [cursor=pointer]
+"Submit": |-
+          - text: I understand that if offered employment, I will, as a condition of employment, be required to submit proof of my identity and legal right to work in the United States on my first day of employment.
+          - generic [ref=f67e108]: "*"
+        - combobox "I understand that if offered employment, I will, as a condition of employment, be required to submit proof of my identity and legal right to work in the United States on my first day of employment.*" [ref=f67e110]:
+          - option "— Make a Selection —"
+          - option "Yes" [selected]
+          - option "No"
+  --
+          - text: I understand that if offered employment, I will be asked to submit a drug screen as a condition of hire.
+          - generic [ref=f67e120]: "*"
+        - combobox "I understand that if offered employment, I will be asked to submit a drug screen as a condition of hire.*" [ref=f67e122]:
+          - option "— Make a Selection —"
+          - option "Yes" [selected]
+          - option "No"
+  --
+        - button "Submit" [ref=f67e136] [cursor=pointer]
+  - generic [ref=f67e137]:
+    - link "Application FAQs" [ref=f67e138] [cursor=pointer]:
+      - /url: https://icims.help/candidate-faq

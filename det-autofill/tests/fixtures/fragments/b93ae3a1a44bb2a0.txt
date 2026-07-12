@@ -1,0 +1,6 @@
+"I am Not a Veteran": |-
+      - option "I am Not a Veteran" [ref=e1949]:
+        - generic [ref=e1950]: I am Not a Veteran
+      - option "I prefer not to answer" [ref=e1951]:
+        - generic [ref=e1952]: I prefer not to answer
+  ```

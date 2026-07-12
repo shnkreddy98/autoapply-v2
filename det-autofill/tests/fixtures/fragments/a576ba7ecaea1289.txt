@@ -1,0 +1,20 @@
+"jane.doe@example.com": |-
+    - textbox [ref=e371]: jane.doe@example.com
+  - generic [ref=e296]:
+    - generic [ref=e298]: Mobile Number*
+    - group [ref=e299]:
+  --
+    - radio "jane.doe@example.com" [ref=e421]:
+      - img [ref=e423]
+      - generic [ref=e426]:
+        - generic:
+          - generic: jane.doe@example.com
+    - button "Send" [ref=e428] [cursor=pointer]:
+      - generic [ref=e430]:
+        - generic: Send
+"Send": |-
+              - button "Send" [ref=e428] [cursor=pointer]:
+                - generic [ref=e430]:
+                  - generic: Send
+          - region
+  ```

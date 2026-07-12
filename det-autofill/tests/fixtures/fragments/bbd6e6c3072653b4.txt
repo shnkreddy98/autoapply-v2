@@ -1,0 +1,81 @@
+"Location (City)": |-
+      - generic [ref=e188]: Location (City)*
+      - generic [ref=e189]:
+        - log [ref=e191]
+        - combobox "Location (City)" [invalid] [ref=e196]
+        - textbox
+    - paragraph [ref=e522]: Please enter your location
+  - button "Locate me" [ref=e197] [cursor=pointer]
+"Attach": |-
+    - button "Attach" [ref=e205] [cursor=pointer]
+    - generic [ref=e206]: Attach
+    - button "Attach" [ref=e207]
+  - button "Dropbox" [ref=e209] [cursor=pointer]
+  - button "Google Drive" [ref=e211] [cursor=pointer]
+  - generic [ref=e213]:
+  --
+    - button "Attach" [ref=e224] [cursor=pointer]
+    - generic [ref=e225]: Attach
+    - button "Attach" [ref=e226]
+  - button "Dropbox" [ref=e228] [cursor=pointer]
+  - button "Google Drive" [ref=e230] [cursor=pointer]
+  - generic [ref=e232]:
+"LinkedIn Profile": |-
+    - generic [ref=e241]: LinkedIn Profile
+    - textbox "LinkedIn Profile" [ref=e242]
+  - generic [ref=e245]:
+    - generic [ref=e246]: Website
+    - textbox "Website" [ref=e247]
+"How did you first hear": |-
+  - generic [ref=e251]: How did you first hear about Planet before applying for this position?*
+  - generic [ref=e252]:
+    - log [ref=e254]
+    - generic [ref=e256]:
+  --
+        - combobox "How did you first hear about Planet before applying for this position?" [invalid] [ref=e260]
+      - button "Toggle flyout" [ref=e262] [cursor=pointer]:
+        - img [ref=e263]
+    - textbox
+"How did you find this position": |-
+  - generic [ref=e273]: How did you find this position? *
+  - generic [ref=e274]:
+    - log [ref=e276]
+    - generic [ref=e278]:
+  --
+        - combobox "How did you find this position?" [invalid] [ref=e282]
+      - button "Toggle flyout" [ref=e284] [cursor=pointer]:
+        - img [ref=e285]
+    - textbox
+"previously worked for Planet": |-
+  - generic [ref=e290]: Have you previously worked for Planet or any Planet subsidiary? *
+  - generic [ref=e291]:
+    - log [ref=e293]
+    - generic [ref=e295]:
+  --
+        - combobox "Have you previously worked for Planet or any Planet subsidiary?" [invalid] [ref=e299]
+      - button "Toggle flyout" [ref=e301] [cursor=pointer]:
+        - img [ref=e302]
+    - textbox
+"targeting for the impact you will make": |-
+    - generic [ref=e316]: To make sure we are in the same solar system of expectations, what base salary are you targeting for the impact you will make? (Please provide in local currency)
+    - textbox "To make sure we are in the same solar system of expectations, what base salary are you targeting for the impact you will make? (Please provide in local currency)" [ref=e317]
+  - generic [ref=e318]:
+    - generic [ref=e319]:
+      - generic [ref=e320]:
+"ensure compliance with U.S. laws": (no match)
+"Immigration Status": |-
+      - generic [ref=e346]: "If you selected \"None of the Above\" to the previous question, please indicate your U.S. Immigration Status: *"
+      - textbox "If you selected \"None of the Above\" to the previous question, please indicate your U.S. Immigration Status:" [invalid] [ref=e347]
+    - paragraph [ref=e528]: This field is required.
+  - paragraph [ref=e350]:
+    - emphasis [ref=e351]: Please answer 'N/A' if you selected a response other than "None of the Above" to the previous question.
+"reside in or maintain an established permanent residence": |-
+  - generic [ref=e355]: "Do you reside in or maintain an established permanent residence in any of the following countries: Cuba, Iran, North Korea, Syria, or the following territories of Ukraine (Luhansk, Donetsk, Crimea)?*"
+  - generic [ref=e356]:
+    - log [ref=e358]
+    - generic [ref=e360]:
+  --
+        - 'combobox "Do you reside in or maintain an established permanent residence in any of the following countries: Cuba, Iran, North Korea, Syria, or the following territories of Ukraine (Luhansk, Donetsk, Crimea)?" [invalid] [ref=e364]'
+      - button "Toggle flyout" [ref=e366] [cursor=pointer]:
+        - img [ref=e367]
+    - textbox

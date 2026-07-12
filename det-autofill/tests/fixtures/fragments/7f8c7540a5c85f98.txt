@@ -1,0 +1,35 @@
+"First Name": |-
+  - textbox "First Name*" [ref=e22]
+  - textbox "Middle Name" [ref=e25]
+  - textbox "Last Name*" [ref=e28]
+  - textbox "Email*" [ref=e31]
+"Last Name": |-
+    - textbox "Last Name*" [ref=e28]
+    - textbox "Email*" [ref=e31]
+    - textbox "Phone*" [ref=e34]
+  - generic [ref=e35]:
+"Email": |-
+    - textbox "Email*" [ref=e31]
+    - textbox "Phone*" [ref=e34]
+  - generic [ref=e35]:
+    - spinbutton [ref=e38]
+"Phone": |-
+    - textbox "Phone*" [ref=e34]
+  - generic [ref=e35]:
+    - spinbutton [ref=e38]
+    - textbox "City*" [ref=e41]
+"City": |-
+  - textbox "City*" [ref=e41]
+  - textbox "State*" [ref=e44]
+  - combobox [disabled] [ref=e47]:
+    - option "How did you find this position?*"
+"State": |-
+  - textbox "State*" [ref=e44]
+  - combobox [disabled] [ref=e47]:
+    - option "How did you find this position?*"
+    - option "Internal Job Application"
+  --
+    - option "State Employment Office"
+    - option "Employee Referral"
+    - option "Referral – Non Employee"
+    - option "Other"

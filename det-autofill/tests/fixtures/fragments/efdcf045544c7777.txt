@@ -1,0 +1,10 @@
+"alert": |-
+    - alert [ref=e54]: Manual Application | Dayforce Jobs
+  ```
+"invalid": (no match)
+"error": |-
+  - Console: 0 errors, 1 warnings
+  ### Snapshot
+  ```yaml
+  - generic [ref=e1]:
+"This field is required": (no match)

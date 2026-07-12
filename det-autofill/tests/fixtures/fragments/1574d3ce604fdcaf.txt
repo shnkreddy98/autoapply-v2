@@ -1,0 +1,12 @@
+"LinkedIn": |-
+              - option "LinkedIn" [ref=e1149] [cursor=pointer]:
+                - menuitem "LinkedIn" [ref=e1150]
+              - option "Monster" [ref=e1151] [cursor=pointer]:
+                - menuitem "Monster" [ref=e1152]
+              - option "Nexxt" [ref=e1153] [cursor=pointer]:
+  --
+        - link "Follow us on LinkedIn" [ref=e452] [cursor=pointer]:
+          - /url: https://www.linkedin.com/company/crh/posts/?feedView=all
+          - generic [ref=e453]: Opens in a new tab.
+          - img [ref=e454]
+  - contentinfo [ref=e458]:

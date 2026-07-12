@@ -1,0 +1,59 @@
+"Employer Name": |-
+    - generic [ref=e343]: Employer Name *
+    - textbox "Employer Name" [ref=e344]:
+      - /placeholder: ""
+  - generic [ref=e346]:
+    - generic [ref=e347]: Title *
+"Title": |-
+  - Page Title: Register | USI Insurance
+  ### Snapshot
+  ```yaml
+  - generic [ref=e2]:
+  --
+                - generic [ref=e84]: Current Position Title *
+                - textbox "Current Position Title" [ref=e85]:
+                  - /placeholder: ""
+                  - text: Founding Engineer
+              - generic [ref=e86]:
+  --
+                      - generic [ref=e347]: Title *
+                      - textbox "Title" [ref=e348]:
+                        - /placeholder: ""
+                    - generic [ref=e350]:
+                      - generic [ref=e351]: Is this your current employer? *
+"Is this your current employer?": |-
+  - generic [ref=e351]: Is this your current employer? *
+  - combobox "Is this your current employer?" [ref=e352]:
+    - option "Select an option" [selected]
+    - option "No"
+    - option "Yes"
+"Location": |-
+                - generic [ref=e355]: Location *
+                - textbox "Location" [ref=e356]:
+                  - /placeholder: ""
+              - generic [ref=e359]:
+                - generic [ref=e360]: Start Date *
+  --
+  - link "Locations" [ref=e227] [cursor=pointer]:
+    - /url: https://www.usi.com/about-usi/locations/
+  - generic [ref=e228]: "|"
+  - link "USI in the News" [ref=e229] [cursor=pointer]:
+    - /url: https://www.usi.com/about-usi/usi-in-the-news/
+"Start Date": |-
+            - generic [ref=e360]: Start Date *
+            - textbox "Start Date" [ref=e361]
+        - button "add another entry to Please provide the following information" [ref=e362] [cursor=pointer]: add another
+  - group [ref=e148]:
+    - generic [ref=e149]:
+"text messages": |-
+      - text: Would you like to receive text messages from USI Insurance Services regarding your job application (e.g., interview scheduling and hiring updates)? *
+      - generic [ref=e279]: Select an option
+    - generic [ref=e177]:
+      - combobox [ref=e280]
+      - combobox "Would you like to receive text messages from USI Insurance Services regarding your job application (e.g., interview scheduling and hiring updates)?" [ref=e283] [cursor=pointer]:
+        - textbox [ref=e284]
+  - generic [ref=e184]:
+    - generic [ref=e185]: If you select "Yes", you consent to receive text messages from USI Insurance Services and its subsidiaries regarding your job application at the phone number you provided.
+    - strong [ref=e187]: Your decision does not affect your ability to apply or be considered for employment.
+    - generic [ref=e188]:
+      - text: Message and data rates may apply. You may reply

@@ -1,0 +1,17 @@
+"Asian: A person having origins in any of the original peoples of the Far East, Southeast Asia, or the Indian subcontinent": |-
+      - 'radio "Asian: A person having origins in any of the original peoples of the Far East, Southeast Asia, or the Indian subcontinent including, for example, Cambodia, China, India, Japan, Korea, Malaysia, Pakistan, the Philippine Islands, Thailand, and Vietnam." [ref=e242]'
+      - generic [ref=e243] [cursor=pointer]: "Asian: A person having origins in any of the original peoples of the Far East, Southeast Asia, or the Indian subcontinent including, for example, Cambodia, China, India, Japan, Korea, Malaysia, Pakistan, the Philippine Islands, Thailand, and Vietnam."
+  - listitem [ref=e244]:
+    - generic [ref=e245]:
+      - 'radio "Native Hawaiian or Other Pacific Islander: A person having origins in any of the original peoples of Hawaii, Guam, Samoa, or other Pacific Islands" [ref=e246]'
+"I am NOT a protected veteran.": |-
+    - radio "I am NOT a protected veteran." [ref=e283]
+    - generic [ref=e284] [cursor=pointer]: I am NOT a protected veteran.
+  - listitem [ref=e285]:
+    - radio "I do not wish to self-identify." [ref=e286]
+    - generic [ref=e287] [cursor=pointer]: I do not wish to self-identify.
+"I agree to the terms and conditions": |-
+  - checkbox "I agree to the terms and conditions of this site and consent to receive electronic communications including emails and text messages from this organization." [ref=e296]
+  - generic [ref=e297] [cursor=pointer]:
+    - text: I agree to the
+    - link "terms and conditions" [ref=e298]:

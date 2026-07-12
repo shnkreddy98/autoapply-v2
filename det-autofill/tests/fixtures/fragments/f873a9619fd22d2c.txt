@@ -1,0 +1,12 @@
+"Social Media": |-
+      - option "Social Media not checked" [ref=e591]:
+        - generic [ref=e593] [cursor=pointer]: Social Media
+      - option "Staffing Agency not checked" [ref=e598]:
+        - generic [ref=e600] [cursor=pointer]: Staffing Agency
+  ```
+"Job Boards": |-
+  - option "Job Boards not checked" [ref=e542]:
+    - generic [ref=e544] [cursor=pointer]: Job Boards
+  - option "Job Fair not checked" [ref=e549]:
+    - generic [ref=e551] [cursor=pointer]: Job Fair
+  - option "Nordstrom Careers not checked" [ref=e556]:

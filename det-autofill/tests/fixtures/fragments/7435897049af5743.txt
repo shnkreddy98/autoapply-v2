@@ -1,0 +1,5 @@
+"Please select your gender: Select One Required": |-
+    - 'button "Please select your gender: Select One Required" [ref=e2372]': Select One
+  - generic [ref=e2373]:
+    - generic [ref=e2375]: Please select your race:*
+    - 'button "Please select your race: Select One Required" [ref=e2379]': Select One

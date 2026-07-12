@@ -1,0 +1,5 @@
+"Create Account": |-
+      - button "Create Account" [ref=e324] [cursor=pointer]
+    - button "Forgot your password?" [ref=e326] [cursor=pointer]
+  - generic:
+    - generic:

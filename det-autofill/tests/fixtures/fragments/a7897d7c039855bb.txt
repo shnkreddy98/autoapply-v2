@@ -1,0 +1,6 @@
+"Apply without an Account": |-
+  - button "Apply without an Account" [ref=e497] [cursor=pointer]:
+    - generic [ref=e498]: Apply without an Account
+  - separator [ref=e500]:
+    - generic [ref=e501]: or
+  - generic [ref=e503]:

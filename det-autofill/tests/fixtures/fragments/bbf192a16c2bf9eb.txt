@@ -1,0 +1,34 @@
+"Java": |-
+  - row "Java JavaScript Python C# Scala Other (not listed) None of the above" [ref=e1376]:
+    - row "Java" [ref=e1377]:
+      - cell "Java" [ref=e1378]:
+        - generic [ref=e1379]:
+          - checkbox "Java" [ref=e1381] [cursor=pointer]
+          - generic [ref=e1382] [cursor=pointer]: Java
+    - row "JavaScript" [ref=e1383]:
+      - cell "JavaScript" [ref=e1384]:
+        - generic [ref=e1385]:
+          - checkbox "JavaScript" [ref=e1387] [cursor=pointer]
+          - generic [ref=e1388] [cursor=pointer]: JavaScript
+    - row "Python" [ref=e1389]:
+      - cell "Python" [ref=e1390]:
+        - generic [ref=e1391]:
+"Python": |-
+  - row "Java JavaScript Python C# Scala Other (not listed) None of the above" [ref=e1376]:
+    - row "Java" [ref=e1377]:
+      - cell "Java" [ref=e1378]:
+        - generic [ref=e1379]:
+  --
+    - row "Python" [ref=e1389]:
+      - cell "Python" [ref=e1390]:
+        - generic [ref=e1391]:
+          - checkbox "Python" [ref=e1393] [cursor=pointer]
+          - generic [ref=e1394] [cursor=pointer]: Python
+    - row "C#" [ref=e1395]:
+      - cell "C#" [ref=e1396]:
+        - generic [ref=e1397]:
+"Select One Required": |-
+          - button "Select One Required" [ref=e1428]: Select One
+  - generic [ref=e260]:
+    - button "Back" [ref=e378] [cursor=pointer]
+    - button "Save and Continue" [ref=e379] [cursor=pointer]

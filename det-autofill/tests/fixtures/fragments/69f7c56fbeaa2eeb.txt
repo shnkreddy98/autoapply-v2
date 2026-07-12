@@ -1,0 +1,29 @@
+"Source Type": |-
+  - generic "The field Source Type is mandatory." [ref=e189]:
+    - text: Source Type
+    - generic [ref=e190]: .
+    - generic [ref=e191]: Required
+  - combobox "Source Type . Required" [ref=e193]:
+    - option "Select One..."
+    - option "Ad or event ID"
+    - option "Campus - Non Career Fair"
+    - option "Career Fair - College"
+    - option "Company Web Site"
+    - option "Direct Sourcing"
+    - option "Job Boards" [selected]
+    - option "Military"
+    - option "Newspapers"
+    - option "Professional Associations"
+"State/Province": |-
+  - generic [ref=e273]: State/Province
+  - combobox "State/Province" [ref=e274]:
+    - option "Not Specified"
+    - option "Alabama"
+    - option "Alaska"
+    - option "Arizona"
+    - option "Arkansas"
+    - option "California" [selected]
+    - option "Colorado"
+    - option "Connecticut"
+    - option "Delaware"
+    - option "District of Columbia"

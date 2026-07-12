@@ -1,0 +1,21 @@
+"Verification code": |-
+  - Page Title: Enter Verification Code | Dayforce Identity
+  ### Snapshot
+  ```yaml
+  - main [ref=e2]:
+  --
+        - heading "Enter Verification Code" [level=1] [ref=e75]
+        - generic [ref=e77]:
+          - text: We’ve sent your verification code to
+          - strong [ref=e78]: jane.doe@example.com
+        - generic [ref=e79]:
+          - generic [ref=e82]:
+            - generic [ref=e85]: Verification code*
+            - textbox "Verification code" [ref=e88]
+          - generic [ref=e90]:
+            - text: Didn't get it?
+            - button "Resend Code" [ref=e91] [cursor=pointer]
+"Continue": |-
+          - button "Continue" [ref=e95] [cursor=pointer]
+      - img "Powered by Dayforce" [ref=e98]
+  ```

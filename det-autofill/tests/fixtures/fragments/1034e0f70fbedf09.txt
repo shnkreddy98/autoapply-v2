@@ -1,0 +1,30 @@
+"Race": |-
+    - text: Planet is committed to building a community where everyone belongs and we invite people from all backgrounds to apply. Planet is an equal opportunity employer, and committed to providing employment opportunities regardless of race, religious creed, color, national origin, ancestry, physical disability, mental disability, medical condition, genetic information, marital status, sex, gender, gender identity, gender expression, pregnancy, childbirth and breastfeeding, age, sexual orientation, military or veteran status, or any other protected classification, in accordance with applicable federal, state, and local laws.
+    - link "Know Your Rights." [ref=e108] [cursor=pointer]:
+      - /url: https://www.eeoc.gov/sites/default/files/2023-06/22-088_EEOC_KnowYourRights6.12.pdf
+  - paragraph [ref=e109]:
+  --
+    - text: ": Planet embraces Artificial Intelligence (AI) tools, and we encourage its responsible use. We understand that candidates may use various resources, including AI tools, to"
+    - emphasis [ref=e122]: prepare
+    - text: for interviews and assessments. However,
+    - emphasis [ref=e123]: during any live interview stage or when actively completing assessments for this position, the use of AI tools—e.g. Large Language Models (LLMs), deep fake technology, etc.—is strictly prohibited unless explicitly prompted by an interviewer or assessment instructions
+  --
+      - generic [ref=e659]: Please identify your race
+      - generic [ref=e660]:
+        - log [ref=e662]: 0 results available for search term Decline to Self-Identify.Use Up and Down to choose options, press Enter to select the currently focused option, press Escape to exit the menu, press Tab to select the option and exit the menu.
+        - generic [ref=e664]:
+          - combobox "Please identify your race" [expanded] [active] [ref=e668]: Decline to Self-Identify
+          - button "Toggle flyout" [ref=e670] [cursor=pointer]:
+            - img [ref=e671]
+        - listbox [ref=e674]:
+  --
+    - link "Race & Ethnicity Definitions" [ref=e409] [cursor=pointer]:
+      - /url: https://job-boards.cdn.greenhouse.io/docs/2023/RaceEthnicityDefinitions.pdf
+  - generic [ref=e410]:
+    - paragraph [ref=e411]: "If you believe you belong to any of the categories of protected veterans listed below, please indicate by making the appropriate selection. As a government contractor subject to the Vietnam Era Veterans Readjustment Assistance Act (VEVRAA), we request this information in order to measure the effectiveness of the outreach and positive recruitment efforts we undertake pursuant to VEVRAA. Classification of protected categories is as follows:"
+    - paragraph [ref=e412]: "A \"disabled veteran\" is one of the following: a veteran of the U.S. military, ground, naval or air service who is entitled to compensation (or who but for the receipt of military retired pay would be entitled to compensation) under laws administered by the Secretary of Veterans Affairs; or a person who was discharged or released from active duty because of a service-connected disability."
+  --
+      - listitem [ref=e466]: Mobility impairment, benefiting from the use of a wheelchair, scooter, walker, leg brace(s) and/or other supports
+      - listitem [ref=e467]: Nervous system condition, for example, migraine headaches, Parkinson’s disease, multiple sclerosis (MS)
+      - listitem [ref=e468]: Neurodivergence, for example, attention-deficit/hyperactivity disorder (ADHD), autism spectrum disorder, dyslexia, dyspraxia, other learning disabilities
+      - listitem [ref=e469]: Partial or complete paralysis (any cause)

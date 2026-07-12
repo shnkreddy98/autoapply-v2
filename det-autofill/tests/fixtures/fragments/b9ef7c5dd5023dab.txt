@@ -1,0 +1,90 @@
+"State": |-
+      - option "Bolivia (Plurinational State of)"
+      - option "Bonaire, Sint Eustatius and Saba"
+      - option "Bosnia and Herzegovina"
+      - option "Botswana"
+      - option "Bouvet Island"
+      - option "Brazil"
+  --
+      - option "Holy See (Vatican City State)"
+      - option "Honduras"
+      - option "Hong Kong"
+      - option "Hungary"
+      - option "Iceland"
+      - option "India"
+  --
+      - option "Micronesia, Federated States of"
+      - option "Moldova, Republic of"
+      - option "Monaco"
+      - option "Mongolia"
+      - option "Montenegro"
+      - option "Montserrat"
+  --
+      - option "Palestine, State of"
+      - option "Panama"
+      - option "Papua New Guinea"
+      - option "Paraguay"
+      - option "Peru"
+      - option "Philippines"
+  --
+      - option "United States" [selected]
+      - option "United States Minor Outlying Islands"
+      - option "Uruguay"
+      - option "Uzbekistan"
+      - option "Vanuatu"
+      - option "Venezuela (Bolivarian Republic of)"
+      - option "Vietnam"
+  --
+    - generic [ref=e94]: Home State *
+    - combobox "Home State" [ref=e95]:
+      - option "Select an option"
+      - option "Alabama"
+      - option "Alaska"
+      - option "American Samoa"
+      - option "Arizona"
+  --
+      - option "United States Minor Outlying Islands"
+      - option "Utah"
+      - option "Vermont"
+      - option "Virgin Islands, U.S."
+      - option "Virginia"
+      - option "Washington"
+  --
+    - generic [ref=e106]: Are you legally authorized to work in the United States? *
+    - combobox "Are you legally authorized to work in the United States?" [ref=e107]:
+      - option "Select an option"
+      - option "No"
+      - option "Yes" [selected]
+  - generic [ref=e108]:
+    - generic [ref=e109]: Will you now or in the future require sponsorship for employment visa status (e.g. H-1B status)? *
+  --
+          - generic [ref=e319]: State *
+          - textbox "State" [ref=e320]:
+            - /placeholder: ""
+        - generic [ref=e322]:
+          - generic [ref=e323]: City *
+          - textbox "City" [ref=e324]:
+            - /placeholder: ""
+"City": |-
+      - option "Holy See (Vatican City State)"
+      - option "Honduras"
+      - option "Hong Kong"
+      - option "Hungary"
+      - option "Iceland"
+      - option "India"
+  --
+    - generic [ref=e97]: Home City *
+    - textbox "Home City" [ref=e98]:
+      - /placeholder: ""
+      - text: San Jose
+  - generic [ref=e99]:
+    - generic [ref=e100]: Home Zip *
+    - textbox "Home Zip" [ref=e101]:
+  --
+          - generic [ref=e323]: City *
+          - textbox "City" [ref=e324]:
+            - /placeholder: ""
+        - generic [ref=e326]:
+          - generic [ref=e327]: Major *
+          - textbox "Major" [ref=e328]:
+            - /placeholder: ""

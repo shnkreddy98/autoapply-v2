@@ -1,0 +1,20 @@
+"Yes": |-
+              - option "Yes" [ref=f67e581] [cursor=pointer]
+              - option "No" [ref=f67e582] [cursor=pointer]
+            - status: 3 results available. Use down and up arrow keys to navigate.
+      - generic [ref=f67e124]:
+  --
+            - option "Yes" [selected]
+            - option "No"
+      - group "Education (2)" [ref=f67e231]:
+        - generic [ref=f67e232]: Education (2)
+  --
+            - option "Yes" [selected]
+            - option "No"
+      - generic [ref=f67e270]:
+        - group "Education (3)" [ref=f67e271]:
+  --
+              - option "Yes" [selected]
+              - option "No"
+        - button "Add More (Education)" [ref=f67e316] [cursor=pointer]
+  - group [ref=f67e317]:

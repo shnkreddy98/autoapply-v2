@@ -1,0 +1,38 @@
+"Yes": |-
+    - radio "Yes" [checked] [active] [ref=e1666]
+    - generic [ref=e1668]: "Yes"
+  - generic [ref=e1670] [cursor=pointer]:
+    - radio "No" [ref=e1672]
+    - generic [ref=e1674]: "No"
+"No": |-
+            - heading "Non-Compete/Non-Solicitation" [level=2] [ref=e1648]
+          - list [ref=e1612]:
+            - listitem [ref=e1649]:
+              - group [ref=e1650]:
+  --
+                    - generic [ref=e1652]: Are you currently subject to a non-compete or non-solicit?
+                  - generic [ref=e1654]:
+                    - generic [ref=e1656]:
+                      - generic [ref=e1657]: Are you currently subject to a non-compete or non-solicit?
+                      - text: "*"
+                    - generic [ref=e1662]:
+                      - generic [ref=e1664] [cursor=pointer]:
+  --
+                        - radio "No" [ref=e1672]
+                        - generic [ref=e1674]: "No"
+        - generic [ref=e738]:
+          - generic [ref=e739]:
+            - button "Cancel" [ref=e740] [cursor=pointer]:
+  --
+    - text: We use technology, such as cookies, to improve site functionality, personalize content, and analyze web traffic. By clicking "Accept" you also allow us to share information with third party advertising and analytics partners and use your information for advertising and analytics purposes. You can learn more about online tracking in our
+    - link "Cookie Statement" [ref=e340] [cursor=pointer]:
+      - /url: https://www.dayforce.com/privacy/cookie-notice
+  - generic [ref=e343]:
+    - button "Accept" [ref=e345] [cursor=pointer]:
+      - generic [ref=e346]: Accept
+"Next": |-
+        - button "Next" [ref=e1680] [cursor=pointer]:
+          - generic [ref=e744]: Next
+  - iframe [ref=e748]:
+    - generic [ref=f115e6]:
+      - text: protected by

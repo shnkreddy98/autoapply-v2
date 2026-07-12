@@ -1,0 +1,52 @@
+"Zip/Postal Code": |-
+    - generic "The field Zip/Postal Code is mandatory." [ref=e210]:
+      - text: Zip/Postal Code
+      - generic [ref=e213]: .
+      - generic [ref=e214]: Required
+    - textbox "Zip/Postal Code . Required" [ref=e215]
+  - generic [ref=e216]:
+    - generic [ref=e217]: "Alternate Location: (State/Providence)"
+    - 'textbox "Alternate Location: (State/Providence)" [ref=e220]'
+"Cellular Number": |-
+    - generic [ref=e232]: Cellular Number (xxx-xxx-xxxx)
+    - textbox "Cellular Number (xxx-xxx-xxxx)" [ref=e235]
+  - generic [ref=e236]:
+    - generic "The field Email Address is mandatory." [ref=e237]:
+      - text: Email Address
+"Email Address": |-
+    - generic "The field Email Address is mandatory." [ref=e237]:
+      - text: Email Address
+      - generic [ref=e240]: .
+      - generic [ref=e241]: Required
+    - textbox "Email Address . Required" [ref=e242]: jane.doe@example.com
+  - group "1st Location Preference . Required" [ref=e244]:
+    - generic "The field 1st Location Preference is mandatory." [ref=e248]:
+      - text: 1st Location Preference
+"1st Location Preference": |-
+  - group "1st Location Preference . Required" [ref=e244]:
+    - generic "The field 1st Location Preference is mandatory." [ref=e248]:
+      - text: 1st Location Preference
+      - generic [ref=e251]: .
+      - generic [ref=e252]: Required
+    - generic [ref=e253]: Value
+  --
+      - textbox "1st Location Preference . Required Value" [ref=e255]
+      - button "Search" [ref=e256] [cursor=pointer]:
+        - generic [ref=e259]: Search
+  - group "2nd Location Preference . Required" [ref=e261]:
+"Are you legally eligible to work in the U.S.?": |-
+  - generic "The field Are you legally eligible to work in the U.S.? is mandatory." [ref=e288]:
+    - text: Are you legally eligible to work in the U.S.?
+    - generic [ref=e291]: .
+    - generic [ref=e292]: Required
+  - combobox "Are you legally eligible to work in the U.S.? . Required" [ref=e293]:
+    - option "Not Specified" [selected]
+    - option "Yes"
+    - option "No"
+"Date of Availability": |-
+  - group "Date of Availability . Required" [ref=e301]:
+    - generic "The field Date of Availability is mandatory." [ref=e305]:
+      - text: Date of Availability
+      - generic [ref=e308]: .
+      - generic [ref=e309]: Required
+    - generic [ref=e310]:

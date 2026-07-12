@@ -1,0 +1,16 @@
+"I want to upload a resume.": |-
+      - radio "I want to upload a resume." [ref=e147]
+      - text: I want to upload a resume.
+  - generic [ref=e148]:
+    - generic [ref=e149]: Select the resume file to upload
+    - button "Select the resume file to upload" [disabled] [ref=e150]
+"Save and Continue": |-
+          - button "Save and Continue" [ref=e115] [cursor=pointer]
+          - button "Save as Draft" [ref=e116] [cursor=pointer]
+          - button "Quit" [ref=e117] [cursor=pointer]
+      - generic [ref=e118]:
+  --
+        - button "Save and Continue" [ref=e157] [cursor=pointer]
+        - button "Save as Draft" [ref=e158] [cursor=pointer]
+        - button "Quit" [ref=e159] [cursor=pointer]
+  - generic [ref=e161]:

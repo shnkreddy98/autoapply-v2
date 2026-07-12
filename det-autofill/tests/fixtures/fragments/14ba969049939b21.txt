@@ -1,0 +1,18 @@
+"Name *": |-
+    - generic "Name" [ref=e1848]: Name *
+    - textbox "Name *" [disabled] [ref=e1852]: Jane Quinn Doe
+  - generic [ref=e1855]:
+    - generic "Date" [ref=e1857]: Date *
+    - textbox "Date *" [disabled] [ref=e1861]: 30/06/2026
+"Date *": |-
+      - generic "Date" [ref=e1857]: Date *
+      - textbox "Date *" [disabled] [ref=e1861]: 30/06/2026
+  - generic [ref=e1864]:
+    - generic [ref=e1866]:
+      - generic "Employee ID" [ref=e1868]
+"No, I do not have a disability": |-
+    - checkbox "No, I do not have a disability and have not had one in the past" [ref=e1926]
+    - generic [ref=e1928]: No, I do not have a disability and have not had one in the past
+  - generic [ref=e1929] [cursor=pointer]:
+    - checkbox "I do not want to answer" [ref=e1931]
+    - generic [ref=e1933]: I do not want to answer

@@ -1,0 +1,71 @@
+"Education Level": |-
+  - generic "The field Education Level is mandatory." [ref=e514]:
+    - text: Education Level
+    - generic [ref=e517]: .
+    - generic [ref=e518]: Required
+  - combobox "Education Level . Required" [ref=e519]:
+    - option "Not Specified"
+    - option "None"
+    - option "High School Diploma/GED (±11 years)"
+  --
+  - generic "The field Education Level is mandatory." [ref=e550]:
+    - text: Education Level
+    - generic [ref=e553]: .
+    - generic [ref=e554]: Required
+  - combobox "Education Level . Required" [ref=e555]:
+    - option "Not Specified"
+    - option "None"
+    - option "High School Diploma/GED (±11 years)"
+  --
+  - generic "The field Education Level is mandatory." [ref=e592]:
+    - text: Education Level
+    - generic [ref=e595]: .
+    - generic [ref=e596]: Required
+  - combobox "Education Level . Required" [ref=e597]:
+    - option "Not Specified"
+    - option "None"
+    - option "High School Diploma/GED (±11 years)"
+"School Name": |-
+      - listitem [ref=e167]: The field "School Name" is mandatory.
+  - link "Beginning of the main content section." [ref=e168] [cursor=pointer]:
+    - /url: "#"
+  - table [ref=e169]:
+  --
+                    - generic "The field School Name is mandatory." [ref=e521]:
+                      - text: School Name
+                      - generic [ref=e524]: .
+                      - generic [ref=e525]: Required
+                    - textbox "School Name . Required" [ref=e526]: San Jose State University
+                - generic [ref=e527]:
+                  - generic [ref=e528]: GPA
+                  - textbox "GPA" [ref=e531]
+  --
+                    - img "The field \"School Name\" is mandatory." [ref=e558]
+                    - generic "The field School Name is mandatory." [ref=e559]:
+                      - text: School Name
+                      - generic [ref=e562]: .
+                      - generic [ref=e563]: Required
+                    - textbox "School Name . Required" [ref=e564]
+                - generic [ref=e565]:
+                  - generic [ref=e566]: GPA
+                  - textbox "GPA" [ref=e569]
+  --
+                    - img "The field \"School Name\" is mandatory." [ref=e600]
+                    - generic "The field School Name is mandatory." [ref=e601]:
+                      - text: School Name
+                      - generic [ref=e604]: .
+                      - generic [ref=e605]: Required
+                    - textbox "School Name . Required" [ref=e606]
+                - generic [ref=e607]:
+                  - generic [ref=e608]: GPA
+                  - textbox "GPA" [ref=e611]
+"Save and Continue": |-
+      - button "Save and Continue" [ref=e160] [cursor=pointer]
+      - button "Save as Draft" [ref=e161] [cursor=pointer]
+      - button "Quit" [ref=e162] [cursor=pointer]
+  - generic [ref=e163]:
+  --
+    - button "Save and Continue" [ref=e708] [cursor=pointer]
+    - button "Save as Draft" [ref=e709] [cursor=pointer]
+    - button "Quit" [ref=e710] [cursor=pointer]
+  - link "Privacy Agreement" [ref=e719] [cursor=pointer]:

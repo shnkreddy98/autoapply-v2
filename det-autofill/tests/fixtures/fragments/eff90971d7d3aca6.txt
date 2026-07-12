@@ -1,0 +1,92 @@
+"No": |-
+              - paragraph [ref=e433]: You are a Databricks-focused Data Engineer who understands that great data platforms are only as valuable as the products, AI workflows, and experiences they enable. You bring deep, production-grade expertise across the Databricks platform and know how to connect platform capabilities to real business outcomes.
+              - paragraph [ref=e434]: You thrive in ambiguity and can quickly assess a client's data landscape to recommend and implement the right solutions. You understand that in consulting, your Databricks depth is most valuable when it connects platform capabilities to the products and experiences clients actually use — and you're as comfortable in a product design conversation as you are building a DLT pipeline.
+              - paragraph [ref=e435]: You excel at translating complex data challenges into clear technical requirements and can confidently navigate conversations with everyone from data scientists to executives. Your engineering principles are mature and grounded in real-world experience across various industries and scales.
+              - paragraph [ref=e436]: You have an interest in and a curiosity about data platforms and the latest advances in data technology.
+              - heading "What you will be doing" [level=2] [ref=e437]:
+                - strong [ref=e438]: What you will be doing
+              - list [ref=e439]:
+  --
+                - listitem [ref=e442]: Build and maintain Databricks transformation layers — DLT pipelines, PySpark notebooks, and dbt — with data quality constraints and SLAs baked in.
+                - listitem [ref=e443]: Design and maintain the data and AI foundations — Unity Catalog, Feature Store, MLflow, and Model Serving — that power production ML, agent workflows, and AI-enabled digital products.
+                - listitem [ref=e444]: Collaborate with product and backend engineers to design data models, APIs, and application data contracts — ensuring the platform serves the product, not just the warehouse.
+                - listitem [ref=e445]: Consult with clients to understand their data challenges, develop data strategies, and implement sustainable solutions.
+                - listitem [ref=e446]: Adapt your approach based on project needs — sometimes leading data architecture discussions with clients, other times supporting internal teams with specialized data expertise.
+                - listitem [ref=e447]: Work within multi-cloud environments — primarily AWS and Azure — anchoring data platform recommendations around Databricks where it fits the client's architecture and goals.
+                - listitem [ref=e448]: Champion data governance through Unity Catalog — access control, lineage, data quality policies, and compliance — as a first-class part of every engagement, not an afterthought.
+                - listitem [ref=e449]: Design data-to-application architectures — including Lakebase-backed services and Databricks Apps — that connect governed data to AI workflows, digital products, and user-facing experiences.
+                - listitem [ref=e450]: Help build Livefront's Databricks practice — contributing to accelerators, internal enablement, certification goals, and Databricks partner go-to-market materials alongside delivery work.
+              - heading "Why you should apply" [level=2] [ref=e451]:
+  --
+                - listitem [ref=e456]: You want colleagues who take their work seriously but not themselves, and who know how to let loose and have a good time.
+                - listitem [ref=e457]: You like being part of a team with a reputation for excellence that gives back to the community by educating, mentoring, and sponsoring.
+                - listitem [ref=e458]: You want to work on products and accounts that have outsized impact and reach.
+                - listitem [ref=e459]: You believe in sweating the details, giving a damn about quality, and taking pride in going the extra mile.
+  --
+                - listitem [ref=e465]: Solid working knowledge of AWS and Azure cloud services relevant to Databricks deployments — storage, networking, IAM, and compute — with GCP familiarity a plus.
+                - listitem [ref=e466]: "Deep, production-grade Databricks expertise: Lakeflow Declarative Pipelines, Autoloader, Structured Streaming, Lakeflow Jobs, Unity Catalog (including fine-grained access control and lineage) — demonstrated through shipped production workloads, not prototypes."
+                - listitem [ref=e467]: Proven experience designing Lakehouse architectures — medallion patterns, Delta Lake table design, partitioning, Z-ordering, and query optimization — at production scale.
+                - listitem [ref=e468]: Hands-on experience with data pipeline testing, observability, and CI/CD for data — including unit testing, data quality frameworks, and version-controlled deployments via Git and Declarative Automation Bundles.
+                - listitem [ref=e469]: Strong proficiency in SQL and Python, with the ability to write clean, performant, and maintainable code.
+  --
+                - listitem [ref=e471]: Excellent communication skills with the ability to explain complex data concepts to both technical and non-technical stakeholders.
+                - listitem [ref=e472]: Strong problem-solving skills with the ability to navigate ambiguous requirements and deliver pragmatic solutions.
+                - listitem [ref=e473]: Above-average discipline and personal organization skills.
+                - listitem [ref=e474]: Obvious comfort with critique and peer review in the context of an iterative development process.
+  --
+                - listitem [ref=e480]: Have worked with real-time streaming technologies (Kafka, Kinesis, etc.).
+                - listitem [ref=e481]: Have hands-on experience with alternative cloud data platforms — useful context for migrations and competitive assessments, though Databricks is our primary platform focus.
+                - listitem [ref=e482]: Have experience in healthcare or fintech domains.
+                - listitem [ref=e483]: Have hands-on experience with MLOps or LLMOps on Databricks — MLflow experiment tracking, model registry, Model Serving endpoints, or Vector Search for RAG pipelines.
+  --
+              - generic [ref=e492]: When applying, please include a short note about yourself, a summary of your work experience, and a link to any public profiles you actively maintain (e.g., GitHub, LinkedIn, etc).
+              - generic [ref=e494]: Our hiring process moves quickly and consists of several stages for candidates who capture our attention with their initial submission, sometimes including but not limited to a short preliminary phone interview, a series of video interviews, and a short take-home exercise, which you'll have up to a week to complete.
+              - generic [ref=e496]: Compensation is $120,000 - $145,000
+              - heading "Additional information" [level=2] [ref=e498]
+              - generic [ref=e499]: We go out of our way to evaluate all employees and job applicants equally based on merit, competence, and qualifications. We encourage candidates from all backgrounds to apply and consider all qualified applicants. Don't worry, every application will be reviewed by a human.
+  --
+              - generic [ref=e640]: Based on what you know about Livefront right now, why do you want to be a part of our team?*
+              - textbox "Based on what you know about Livefront right now, why do you want to be a part of our team?" [ref=e641]: I am a Databricks-focused Data Engineer who thrives on building scalable, event-driven data platforms that power product experiences. I am particularly drawn to Livefront's reputation for excellence in digital product design and its egoless, collaborative culture. I am excited about the opportunity to help build Livefront's Databricks practice from the ground up and connect high-quality data architecture to meaningful client impact.
+            - generic [ref=e644]:
+              - generic [ref=e645]: If you were referred to Livefront, tell us how.*
+              - generic [ref=e646]:
+  --
+              - paragraph [ref=e673]: For government reporting purposes, we ask candidates to respond to the below self-identification survey. Completion of the form is entirely voluntary. Whatever your decision, it will not be considered in the hiring process or thereafter. Any information that you do provide will be recorded and maintained in a confidential file.
+              - paragraph [ref=e674]: As set forth in Livefront’s Equal Employment Opportunity policy, we do not discriminate on the basis of any protected group status under any applicable law.
+            - generic [ref=e677]:
+              - generic [ref=e678]: Gender
+              - generic [ref=e679]:
+  --
+                - generic [ref=e695]: Are you Hispanic/Latino?
+                - generic [ref=e696]:
+                  - log [ref=e698]:
+                    - text: All selected options have been cleared.
+  --
+                      - combobox "Are you Hispanic/Latino?" [expanded] [active] [ref=e704]
+                    - button "Toggle flyout" [ref=e706] [cursor=pointer]:
+                      - img [ref=e707]
+                  - listbox [ref=e893]:
+  --
+                    - option "No" [ref=e895]
+                    - option "Decline To Self Identify" [ref=e896]
+              - link "Race & Ethnicity Definitions" [ref=e709] [cursor=pointer]:
+                - /url: https://job-boards.cdn.greenhouse.io/docs/2023/RaceEthnicityDefinitions.pdf
+  --
+                - text: Completing this form is voluntary, and we hope that you will choose to do so. Your answer is confidential. No one who makes hiring decisions will see it. Your decision to complete the form and your answer will not harm you in any way. If you want to learn more about the law or this form, visit the U.S. Department of Labor’s Office of Federal Contract Compliance Programs (OFCCP) website at
+                - link "www.dol.gov/ofccp" [ref=e746] [cursor=pointer]:
+                  - /url: https://www.dol.gov/ofccp
+                - text: .
+              - strong [ref=e747]: How do you know if you have a disability?
+              - paragraph [ref=e748]:
+                - text: A disability is a condition that substantially limits one or more of your “major life activities.” If you have or have ever had such a condition, you are a person with a disability.
+                - strong [ref=e749]: "Disabilities include, but are not limited to:"
+              - list [ref=e750]:
+                - listitem [ref=e751]: Alcohol or other substance use disorder (not currently using drugs illegally)
+                - listitem [ref=e752]: Autoimmune disorder, for example, lupus, fibromyalgia, rheumatoid arthritis, HIV/AIDS
+                - listitem [ref=e753]: Blind or low vision
+                - listitem [ref=e754]: Cancer (past or present)
+  --
+            - paragraph [ref=e791]: "PUBLIC BURDEN STATEMENT: According to the Paperwork Reduction Act of 1995 no persons are required to respond to a collection of information unless such collection displays a valid OMB control number. This survey should take about 5 minutes to complete."
+          - button "Submit application" [ref=e793] [cursor=pointer]
+  - contentinfo [ref=e794]:
+    - generic [ref=e795]:

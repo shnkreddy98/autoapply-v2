@@ -1,0 +1,13 @@
+"AWS": |-
+  - row "AWS Azure Google Proprietary Other (not listed) None of the above" [ref=e1328]:
+    - row "AWS" [ref=e1329]:
+      - cell "AWS" [ref=e1330]:
+        - generic [ref=e1331]:
+          - checkbox "AWS" [ref=e1333] [cursor=pointer]
+          - generic [ref=e1334] [cursor=pointer]: AWS
+    - row "Azure" [ref=e1335]:
+      - cell "Azure" [ref=e1336]:
+        - generic [ref=e1337]:
+"Google checkbox": (no match)
+"Java checkbox": (no match)
+"Python checkbox": (no match)

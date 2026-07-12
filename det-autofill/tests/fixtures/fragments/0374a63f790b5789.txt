@@ -1,0 +1,6 @@
+"Yes": |-
+      - option "Yes" [ref=e1267]:
+        - generic [ref=e1268]: "Yes"
+      - option "No" [ref=e1269]:
+        - generic [ref=e1270]: "No"
+  ```

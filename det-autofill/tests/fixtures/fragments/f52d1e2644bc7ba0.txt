@@ -1,0 +1,342 @@
+"Institution . Required": |-
+  - group "Institution . Required" [ref=e164]:
+    - generic "The field Institution is mandatory." [ref=e166]:
+      - text: Institution
+      - generic [ref=e169]: .
+  --
+        - textbox "Institution . Required" [ref=e174]: San Jose State University
+      - link "Select" [ref=e175] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=e178]: Select
+  --
+  - group "Institution . Required" [ref=e283]:
+    - generic "The field Institution is mandatory." [ref=e285]:
+      - text: Institution
+      - generic [ref=e288]: .
+  --
+        - textbox "Institution . Required" [ref=e293]: IIIT
+      - link "Select" [ref=e294] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=e297]: Select
+  --
+  - group "Institution . Required" [ref=e406]:
+    - generic "The field Institution is mandatory." [ref=e408]:
+      - text: Institution
+      - generic [ref=e411]: .
+  --
+        - textbox "Institution . Required" [ref=e416]: Visvesvaraya Technological University
+      - link "Select" [ref=e417] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=e420]: Select
+"Select": |-
+      - strong [ref=e159]: Select/Search
+      - text: links to enter your Education information. If you cannot find your institution, major or degree using the search feature, please select ‘
+      - strong [ref=e160]: Other
+      - text: ’ and ensure your CV has the correct information.
+    - generic [ref=e162]:
+  --
+          - link "Select" [ref=e175] [cursor=pointer]:
+            - /url: "#"
+            - generic [ref=e178]: Select
+      - generic [ref=e179]: "*As a required step to proceed, ensure that you have selected your institution"
+    - generic [ref=e181]:
+      - paragraph [ref=e182]: "Please use the following steps to input your Degree/Major:"
+      - list [ref=e183]:
+  --
+            - strong [ref=e190]: Select
+        - listitem [ref=e191]:
+          - generic [ref=e192]:
+            - text: If you cannot find your Degree/Major select
+            - strong [ref=e193]: "'Other'"
+    - generic [ref=e195]:
+      - generic [ref=e196]: "*In order to submit, follow the steps above"
+  --
+          - option "Not Specified" [selected]
+          - option "High School"
+          - option "Associate Diploma"
+          - option "Advanced Level"
+  --
+          - option "Not Specified" [selected]
+          - option "(MMgt) Defence Studies"
+          - option "Accounting"
+          - option "Accounting & Sustainability"
+  --
+          - option "Jan" [selected]
+          - option "Feb"
+          - option "Mar"
+          - option "Apr"
+  --
+          - option "2023" [selected]
+          - option "2022"
+          - option "2021"
+          - option "2020"
+  --
+          - option "Jan" [selected]
+          - option "Feb"
+          - option "Mar"
+          - option "Apr"
+  --
+          - option "2024" [selected]
+          - option "2023"
+          - option "2022"
+          - option "2021"
+  --
+      - strong [ref=e278]: Select/Search
+      - text: links to enter your Education information. If you cannot find your institution, major or degree using the search feature, please select ‘
+      - strong [ref=e279]: Other
+      - text: ’ and ensure your CV has the correct information.
+    - generic [ref=e281]:
+  --
+          - link "Select" [ref=e294] [cursor=pointer]:
+            - /url: "#"
+            - generic [ref=e297]: Select
+      - generic [ref=e298]: "*As a required step to proceed, ensure that you have selected your institution"
+    - generic [ref=e300]:
+      - paragraph [ref=e301]: "Please use the following steps to input your Degree/Major:"
+      - list [ref=e302]:
+  --
+            - strong [ref=e309]: Select
+        - listitem [ref=e310]:
+          - generic [ref=e311]:
+            - text: If you cannot find your Degree/Major select
+            - strong [ref=e312]: "'Other'"
+    - generic [ref=e314]:
+      - generic [ref=e315]: "*In order to submit, follow the steps above"
+  --
+          - option "Not Specified" [selected]
+          - option "High School"
+          - option "Associate Diploma"
+          - option "Advanced Level"
+  --
+          - option "Not Specified" [selected]
+          - option "(MMgt) Defence Studies"
+          - option "Accounting"
+          - option "Accounting & Sustainability"
+  --
+          - option "Jan" [selected]
+          - option "Feb"
+          - option "Mar"
+          - option "Apr"
+  --
+          - option "2020" [selected]
+          - option "2019"
+          - option "2018"
+          - option "2017"
+  --
+          - option "Jan" [selected]
+          - option "Feb"
+          - option "Mar"
+          - option "Apr"
+  --
+          - option "2021" [selected]
+          - option "2020"
+          - option "2019"
+          - option "2018"
+  --
+      - strong [ref=e401]: Select/Search
+      - text: links to enter your Education information. If you cannot find your institution, major or degree using the search feature, please select ‘
+      - strong [ref=e402]: Other
+      - text: ’ and ensure your CV has the correct information.
+    - generic [ref=e404]:
+  --
+          - link "Select" [ref=e417] [cursor=pointer]:
+            - /url: "#"
+            - generic [ref=e420]: Select
+      - generic [ref=e421]: "*As a required step to proceed, ensure that you have selected your institution"
+    - generic [ref=e423]:
+      - paragraph [ref=e424]: "Please use the following steps to input your Degree/Major:"
+      - list [ref=e425]:
+  --
+            - strong [ref=e432]: Select
+        - listitem [ref=e433]:
+          - generic [ref=e434]:
+            - text: If you cannot find your Degree/Major select
+            - strong [ref=e435]: "'Other'"
+    - generic [ref=e437]:
+      - generic [ref=e438]: "*In order to submit, follow the steps above"
+  --
+          - option "Not Specified" [selected]
+          - option "High School"
+          - option "Associate Diploma"
+          - option "Advanced Level"
+  --
+          - option "Not Specified" [selected]
+          - option "(MMgt) Defence Studies"
+          - option "Accounting"
+          - option "Accounting & Sustainability"
+  --
+          - option "Jan" [selected]
+          - option "Feb"
+          - option "Mar"
+          - option "Apr"
+  --
+          - option "2016" [selected]
+          - option "2015"
+          - option "2014"
+          - option "2013"
+  --
+          - option "Jan" [selected]
+          - option "Feb"
+          - option "Mar"
+          - option "Apr"
+  --
+          - option "2020" [selected]
+          - option "2019"
+          - option "2018"
+          - option "2017"
+  --
+    - strong [ref=e525]: Select
+    - generic [ref=e526]: ’ link to search for your previous employer. If you cannot find it, select ‘
+    - strong [ref=e527]: Other
+    - generic [ref=e528]: ’ and ensure your CV is updated with the correct name.
+  - generic [ref=e530]:
+  --
+      - generic [ref=e537]: Please click on Search to select the value
+    - combobox "Country Please click on Search to select the value" [ref=e539]:
+      - option "Not Specified" [selected]
+      - option "Afghanistan"
+      - option "Aland Islands"
+      - option "Albania"
+  --
+    - generic [ref=e540]: Please click on Search to select the value
+  - group "Employer . Required" [ref=e542]:
+    - generic "The field Employer is mandatory." [ref=e544]:
+      - text: Employer
+  --
+      - link "Select" [ref=e553] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=e556]: Select
+  - group "Job Function" [ref=e558]:
+    - generic [ref=e560]: Job Function
+    - generic [ref=e563]:
+  --
+      - link "Select" [ref=e567] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=e570]: Select
+  - generic [ref=e571]:
+    - generic [ref=e572]: Job Title
+    - textbox "Job Title" [ref=e575]
+  --
+        - option "Sep" [selected]
+        - option "Oct"
+        - option "Nov"
+        - option "Dec"
+  --
+        - option "2024" [selected]
+        - option "2023"
+        - option "2022"
+        - option "2021"
+  --
+        - option "Month" [selected]
+        - option "Jan"
+        - option "Feb"
+        - option "Mar"
+  --
+        - option "Year" [selected]
+        - option "2049"
+        - option "2048"
+        - option "2047"
+  --
+    - strong [ref=e628]: Select
+    - generic [ref=e629]: ’ link to search for your previous employer. If you cannot find it, select ‘
+    - strong [ref=e630]: Other
+    - generic [ref=e631]: ’ and ensure your CV is updated with the correct name.
+  - generic [ref=e633]:
+  --
+      - generic [ref=e640]: Please click on Search to select the value
+    - combobox "Country Please click on Search to select the value" [ref=e642]:
+      - option "Not Specified" [selected]
+      - option "Afghanistan"
+      - option "Aland Islands"
+      - option "Albania"
+  --
+    - generic [ref=e643]: Please click on Search to select the value
+  - group "Employer . Required" [ref=e645]:
+    - generic "The field Employer is mandatory." [ref=e647]:
+      - text: Employer
+  --
+      - link "Select" [ref=e656] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=e659]: Select
+  - group "Job Function" [ref=e661]:
+    - generic [ref=e663]: Job Function
+    - generic [ref=e666]:
+  --
+      - link "Select" [ref=e670] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=e673]: Select
+  - generic [ref=e674]:
+    - generic [ref=e675]: Job Title
+    - textbox "Job Title" [ref=e678]
+  --
+        - option "Apr" [selected]
+        - option "May"
+        - option "Jun"
+        - option "Jul"
+  --
+        - option "2020" [selected]
+        - option "2019"
+        - option "2018"
+        - option "2017"
+  --
+        - option "Apr" [selected]
+        - option "May"
+        - option "Jun"
+        - option "Jul"
+  --
+        - option "2022" [selected]
+        - option "2021"
+        - option "2020"
+        - option "2019"
+  --
+    - strong [ref=e735]: Select
+    - generic [ref=e736]: ’ link to search for your previous employer. If you cannot find it, select ‘
+    - strong [ref=e737]: Other
+    - generic [ref=e738]: ’ and ensure your CV is updated with the correct name.
+  - generic [ref=e740]:
+  --
+      - generic [ref=e747]: Please click on Search to select the value
+    - combobox "Country Please click on Search to select the value" [ref=e749]:
+      - option "Not Specified" [selected]
+      - option "Afghanistan"
+      - option "Aland Islands"
+      - option "Albania"
+  --
+    - generic [ref=e750]: Please click on Search to select the value
+  - group "Employer . Required" [ref=e752]:
+    - generic "The field Employer is mandatory." [ref=e754]:
+      - text: Employer
+  --
+      - link "Select" [ref=e763] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=e766]: Select
+  - group "Job Function" [ref=e768]:
+    - generic [ref=e770]: Job Function
+    - generic [ref=e773]:
+  --
+      - link "Select" [ref=e777] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=e780]: Select
+  - generic [ref=e781]:
+    - generic [ref=e782]: Job Title
+    - textbox "Job Title" [ref=e785]
+  --
+        - option "Apr" [selected]
+        - option "May"
+        - option "Jun"
+        - option "Jul"
+  --
+        - option "2018" [selected]
+        - option "2017"
+        - option "2016"
+        - option "2015"
+  --
+        - option "Mar" [selected]
+        - option "Apr"
+        - option "May"
+        - option "Jun"
+  --
+        - option "2020" [selected]
+        - option "2019"
+        - option "2018"
+        - option "2017"

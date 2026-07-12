@@ -1,0 +1,63 @@
+"Major": |-
+    - text: links to enter your Education information. If you cannot find your institution, major or degree using the search feature, please select ‘
+    - strong [ref=e159]: Other
+    - text: ’ and ensure your CV has the correct information.
+  - generic [ref=e161]:
+  --
+    - paragraph [ref=e181]: "Please use the following steps to input your Degree/Major:"
+    - list [ref=e182]:
+      - listitem [ref=e183]:
+        - generic [ref=e185]:
+  --
+          - text: If you cannot find your Degree/Major select
+          - strong [ref=e192]: "'Other'"
+  - generic [ref=e194]:
+    - generic [ref=e195]: "*In order to submit, follow the steps above"
+  --
+      - generic [ref=e206]: Major
+      - combobox "Major" [ref=e209]:
+        - option "Not Specified" [selected]
+        - option "(MMgt) Defence Studies"
+        - option "Accounting"
+  --
+    - text: links to enter your Education information. If you cannot find your institution, major or degree using the search feature, please select ‘
+    - strong [ref=e278]: Other
+    - text: ’ and ensure your CV has the correct information.
+  - generic [ref=e280]:
+  --
+    - paragraph [ref=e300]: "Please use the following steps to input your Degree/Major:"
+    - list [ref=e301]:
+      - listitem [ref=e302]:
+        - generic [ref=e304]:
+  --
+          - text: If you cannot find your Degree/Major select
+          - strong [ref=e311]: "'Other'"
+  - generic [ref=e313]:
+    - generic [ref=e314]: "*In order to submit, follow the steps above"
+  --
+      - generic [ref=e325]: Major
+      - combobox "Major" [ref=e328]:
+        - option "Not Specified" [selected]
+        - option "(MMgt) Defence Studies"
+        - option "Accounting"
+  --
+    - text: links to enter your Education information. If you cannot find your institution, major or degree using the search feature, please select ‘
+    - strong [ref=e401]: Other
+    - text: ’ and ensure your CV has the correct information.
+  - generic [ref=e403]:
+  --
+    - paragraph [ref=e423]: "Please use the following steps to input your Degree/Major:"
+    - list [ref=e424]:
+      - listitem [ref=e425]:
+        - generic [ref=e427]:
+  --
+          - text: If you cannot find your Degree/Major select
+          - strong [ref=e434]: "'Other'"
+  - generic [ref=e436]:
+    - generic [ref=e437]: "*In order to submit, follow the steps above"
+  --
+      - generic [ref=e448]: Major
+      - combobox "Major" [ref=e451]:
+        - option "Not Specified" [selected]
+        - option "(MMgt) Defence Studies"
+        - option "Accounting"

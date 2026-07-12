@@ -1,0 +1,5 @@
+"Country of Residence . Required Value": |-
+      - textbox "Country of Residence . Required Value" [ref=e204]: USA United States
+      - button "Search" [ref=e205] [cursor=pointer]:
+        - generic [ref=e208]: Search
+  - generic [ref=e209]:

@@ -1,0 +1,8 @@
+"Male": |-
+      - option "Female" [ref=e2165]:
+        - generic [ref=e2166]: Female
+      - option "Male" [ref=e2167]:
+        - generic [ref=e2168]: Male
+  ```
+  ### Events
+  - New console entries: .playwright-mcp/console-2026-07-01T00-42-28-333Z.log#L316-L317

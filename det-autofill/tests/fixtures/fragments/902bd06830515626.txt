@@ -1,0 +1,128 @@
+"First Name": |-
+    - generic [ref=e166]: First Name*
+    - textbox "First Name*" [ref=e167]
+  - generic [ref=e168]:
+    - generic [ref=e169]: Last Name*
+    - textbox "Last Name*" [ref=e170]
+"Last Name": |-
+    - generic [ref=e169]: Last Name*
+    - textbox "Last Name*" [ref=e170]
+  - generic [ref=e171]:
+    - generic [ref=e172]: Email Address*
+    - textbox "Email Address*" [ref=e173]
+  --
+    - generic [ref=e197]: Who referred you to this position? Enter their first and last name here.
+    - textbox "Who referred you to this position? Enter their first and last name here." [ref=e198]
+  - generic [ref=e199]:
+    - generic [ref=e200]: LinkedIn Profile URL:*
+    - textbox "LinkedIn Profile URL:*" [ref=e201]
+"Email Address": |-
+    - generic [ref=e172]: Email Address*
+    - textbox "Email Address*" [ref=e173]
+  - generic [ref=e174]:
+    - generic [ref=e175]: Phone*
+    - textbox "Phone*" [ref=e176]
+"Phone": |-
+    - generic [ref=e175]: Phone*
+    - textbox "Phone*" [ref=e176]
+  - generic [ref=e177]:
+    - generic [ref=e178]: Address
+    - generic [ref=e179]:
+"Address": |-
+    - generic [ref=e172]: Email Address*
+    - textbox "Email Address*" [ref=e173]
+  - generic [ref=e174]:
+    - generic [ref=e175]: Phone*
+    - textbox "Phone*" [ref=e176]
+  --
+    - generic [ref=e178]: Address
+    - generic [ref=e179]:
+      - textbox "Address" [ref=e180]
+      - generic [ref=e181]:
+        - textbox "City" [ref=e183]
+        - textbox "State/Province" [ref=e185]
+"City": |-
+        - textbox "City" [ref=e183]
+        - textbox "State/Province" [ref=e185]
+        - textbox "Postal" [ref=e187]
+  - generic [ref=e188]:
+  --
+    - text: Race/Ethnicity
+    - combobox "Race/Ethnicity" [ref=e239]:
+      - option "Decline to answer" [selected]
+      - option "Hispanic or Latino"
+      - option "White, not Hispanic or Latino"
+"State/Province": |-
+        - textbox "State/Province" [ref=e185]
+        - textbox "Postal" [ref=e187]
+  - generic [ref=e188]:
+    - generic [ref=e189]: Resume*
+"Postal": |-
+        - textbox "Postal" [ref=e187]
+  - generic [ref=e188]:
+    - generic [ref=e189]: Resume*
+    - generic [ref=e190]:
+"Resume": |-
+    - generic [ref=e189]: Resume*
+    - generic [ref=e190]:
+      - link "Attach resume" [ref=e191] [cursor=pointer]:
+        - /url: "#"
+      - text: or
+      - link "Paste resume" [ref=e192] [cursor=pointer]:
+        - /url: "#"
+  - generic [ref=e193]:
+    - generic [ref=e194]: Cover Letter
+"LinkedIn Profile URL": |-
+    - generic [ref=e200]: LinkedIn Profile URL:*
+    - textbox "LinkedIn Profile URL:*" [ref=e201]
+  - generic [ref=e202]:
+    - generic [ref=e203]: Desired salary
+    - textbox "Desired salary" [ref=e204]
+"Desired salary": |-
+    - generic [ref=e203]: Desired salary
+    - textbox "Desired salary" [ref=e204]
+  - generic [ref=e205]:
+    - generic [ref=e206]: Earliest start date?
+    - textbox "Earliest start date?" [ref=e207]
+"Earliest start date?": |-
+    - generic [ref=e206]: Earliest start date?
+    - textbox "Earliest start date?" [ref=e207]
+  - generic [ref=e208]:
+    - generic [ref=e209]: "References: Please enter names and contact information:"
+    - 'textbox "References: Please enter names and contact information:" [ref=e210]'
+"References": |-
+    - generic [ref=e209]: "References: Please enter names and contact information:"
+    - 'textbox "References: Please enter names and contact information:" [ref=e210]'
+  - generic [ref=e211]:
+    - generic [ref=e212]: Have you ever been employed by Blue Acorn iCi, Infosys or any of its affiliates (Mediotype, iCIDIGITAL, Blue Acorn, Brandshop)?*
+    - combobox "Have you ever been employed by Blue Acorn iCi, Infosys or any of its affiliates (Mediotype, iCIDIGITAL, Blue Acorn, Brandshop)?*" [ref=e213]:
+"Have you ever been employed by Blue Acorn iCi": |-
+  - generic [ref=e212]: Have you ever been employed by Blue Acorn iCi, Infosys or any of its affiliates (Mediotype, iCIDIGITAL, Blue Acorn, Brandshop)?*
+  - combobox "Have you ever been employed by Blue Acorn iCi, Infosys or any of its affiliates (Mediotype, iCIDIGITAL, Blue Acorn, Brandshop)?*" [ref=e213]:
+    - option "-- No answer --" [selected]
+    - option "yes"
+    - option "no"
+"non-competition": |-
+  - generic [ref=e215]: Are you a party to a non-competition, non-solicitation or similar agreement with another employer that may affect your ability work at Blue Acorn iCi?*
+  - combobox "Are you a party to a non-competition, non-solicitation or similar agreement with another employer that may affect your ability work at Blue Acorn iCi?*" [ref=e216]:
+    - option "-- No answer --" [selected]
+    - option "yes"
+    - option "no"
+"preferred name": |-
+    - generic [ref=e218]: What is your preferred name?
+    - textbox "What is your preferred name?" [ref=e219]
+  - generic [ref=e220]:
+    - generic [ref=e221]: What are your preferred pronouns?
+    - textbox "What are your preferred pronouns?" [ref=e222]
+"preferred pronouns": |-
+    - generic [ref=e221]: What are your preferred pronouns?
+    - textbox "What are your preferred pronouns?" [ref=e222]
+  - generic [ref=e223]:
+    - generic [ref=e224]: Are you currently authorized to work in the United States without employer sponsorship now or in the future, given that Infosys Nova Holdings, LLC dba Blue Acorn iCi does not provide immigration or visa sponsorship (including H4- EAD, H-1B, OPT, CPT, TN, O-1, E-3, or J-1 visas)*
+    - combobox "Are you currently authorized to work in the United States without employer sponsorship now or in the future, given that Infosys Nova Holdings, LLC dba Blue Acorn iCi does not provide immigration or visa sponsorship (including H4- EAD, H-1B, OPT, CPT, TN, O-1, E-3, or J-1 visas)*" [ref=e225]:
+"authorized to work": |-
+  - generic [ref=e224]: Are you currently authorized to work in the United States without employer sponsorship now or in the future, given that Infosys Nova Holdings, LLC dba Blue Acorn iCi does not provide immigration or visa sponsorship (including H4- EAD, H-1B, OPT, CPT, TN, O-1, E-3, or J-1 visas)*
+  - combobox "Are you currently authorized to work in the United States without employer sponsorship now or in the future, given that Infosys Nova Holdings, LLC dba Blue Acorn iCi does not provide immigration or visa sponsorship (including H4- EAD, H-1B, OPT, CPT, TN, O-1, E-3, or J-1 visas)*" [ref=e225]:
+    - option "-- No answer --" [selected]
+    - option "Yes"
+    - option "No"

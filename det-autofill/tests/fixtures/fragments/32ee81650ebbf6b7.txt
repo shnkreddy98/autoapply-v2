@@ -1,0 +1,6 @@
+"I DON'T WISH TO ANSWER": |-
+  - option "I DON'T WISH TO ANSWER" [ref=e1295] [cursor=pointer]:
+    - menuitem "I DON'T WISH TO ANSWER" [ref=e1296]
+  - option "NO, I DON'T HAVE A DISABILITY, Or A History/Record Of Having A Disability" [ref=e1297] [cursor=pointer]:
+    - menuitem "NO, I DON'T HAVE A DISABILITY, Or A History/Record Of Having A Disability" [ref=e1298]
+  - option "YES, I HAVE A DISABILITY, Or Have A History/Record Of Having A Disability" [ref=e1299] [cursor=pointer]:

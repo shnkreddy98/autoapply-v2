@@ -1,0 +1,25 @@
+"Source Type": |-
+  - row "Job Opportunity Source Tracking Please indicate how you heard about this job. Source Type . Required Select One..." [ref=e119]:
+    - cell "Job Opportunity Source Tracking Please indicate how you heard about this job. Source Type . Required Select One..." [ref=e120]:
+      - heading "Job Opportunity" [level=1] [ref=e121]:
+        - generic [ref=e122]: Job Opportunity
+      - generic [ref=e125]:
+  --
+          - generic "The field Source Type is mandatory." [ref=e131]:
+            - text: Source Type
+            - generic [ref=e132]: .
+            - generic [ref=e133]: Required
+          - combobox "Source Type . Required" [ref=e135]:
+            - option "Select One..." [selected]
+            - option "Agency"
+            - option "Career Fair"
+"Save and Continue": |-
+          - button "Save and Continue" [ref=e112] [cursor=pointer]
+          - button "Save as Draft" [ref=e113] [cursor=pointer]
+          - button "Quit" [ref=e114] [cursor=pointer]
+      - generic [ref=e115]:
+  --
+        - button "Save and Continue" [ref=e141] [cursor=pointer]
+        - button "Save as Draft" [ref=e142] [cursor=pointer]
+        - button "Quit" [ref=e143] [cursor=pointer]
+  - generic [ref=e145]:

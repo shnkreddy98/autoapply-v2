@@ -1,0 +1,42 @@
+"Security code": |-
+  - generic [ref=e337]: Security code
+  - generic [ref=e338]:
+    - textbox "Security code" [ref=e339]
+    - textbox [ref=e340]
+    - textbox [ref=e341]
+    - textbox [ref=e342]
+"School": |-
+    - generic [ref=e192]: School
+    - generic [ref=e193]:
+      - log [ref=e195]
+      - generic [ref=e197]:
+  --
+          - combobox "School" [ref=e201]
+        - button "Toggle flyout" [ref=e203] [cursor=pointer]:
+          - img [ref=e204]
+  - generic [ref=e207]:
+"Degree": |-
+  - listitem [ref=e46]: Bachelor's degree in Computer Science, Information Systems, Data Science, or a related field - or equivalent practical experience
+  - listitem [ref=e47]: 1 to 3 years industry experience
+  - listitem [ref=e48]:
+    - text: Basic understanding of and training in
+  --
+    - generic [ref=e208]: Degree
+    - generic [ref=e209]:
+      - log [ref=e211]
+      - generic [ref=e213]:
+  --
+          - combobox "Degree" [ref=e217]
+        - button "Toggle flyout" [ref=e219] [cursor=pointer]:
+          - img [ref=e220]
+  - generic [ref=e223]:
+"Discipline": |-
+      - generic [ref=e224]: Discipline
+      - generic [ref=e225]:
+        - log [ref=e227]
+        - generic [ref=e229]:
+  --
+            - combobox "Discipline" [ref=e233]
+          - button "Toggle flyout" [ref=e235] [cursor=pointer]:
+            - img [ref=e236]
+  - button "Add another" [ref=e238] [cursor=pointer]

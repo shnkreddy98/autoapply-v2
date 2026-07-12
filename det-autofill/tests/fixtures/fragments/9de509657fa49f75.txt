@@ -1,0 +1,114 @@
+"First Name": |-
+      - text: First Name
+      - generic [ref=e104]: "*"
+    - textbox "First Name" [ref=e106]: Jane
+  - generic [ref=e107]:
+    - generic [ref=e108]:
+      - text: Last Name
+  --
+      - text: Preferred First Name
+      - generic [ref=e114]: "*"
+    - textbox "Preferred First Name" [ref=e116]
+  - generic [ref=e117]:
+    - generic [ref=e118]: Preferred Pronouns
+    - listbox "Preferred Pronouns" [ref=e120]:
+"Last Name": |-
+      - text: Last Name
+      - generic [ref=e109]: "*"
+    - textbox "Last Name" [ref=e111]: Doe
+  - generic [ref=e112]:
+    - generic [ref=e113]:
+      - text: Preferred First Name
+"Preferred First Name": |-
+      - text: Preferred First Name
+      - generic [ref=e114]: "*"
+    - textbox "Preferred First Name" [ref=e116]
+  - generic [ref=e117]:
+    - generic [ref=e118]: Preferred Pronouns
+    - listbox "Preferred Pronouns" [ref=e120]:
+"Number": |-
+          - generic [ref=e135]: Number
+          - generic [ref=e136]:
+            - text: "*"
+            - generic [ref=e137]: required.
+        - textbox "Number" [ref=e139]: +1 555 010-0199
+    - button "Add More (Phones)" [ref=e143] [cursor=pointer]
+  - generic [ref=e144]:
+    - generic [ref=e145]:
+"Do you consent to receive text message communication": |-
+      - text: Do you consent to receive text message communication during your application process?
+      - generic [ref=e146]: "*"
+    - generic [ref=e147]:
+      - generic [ref=e148]: Do you consent to receive text message communication during your application process?
+      - option [selected]
+      - combobox "Do you consent to receive text message communication during your application process?" [ref=e149] [cursor=pointer]:
+        - generic [ref=e150]: — Make a Selection —
+  - generic [ref=e153]:
+    - generic [ref=e154]:
+"How did you hear about us?": |-
+    - text: How did you hear about us?
+    - generic [ref=e155]: "*"
+  - combobox "How did you hear about us?" [ref=e157]:
+    - option "— Make a Selection —" [selected]
+    - option "Agency"
+    - option "Career Fair/Networking Event"
+"Address": |-
+        - group "Addresses (1)* required." [ref=e164]:
+          - generic [ref=e166]:
+            - text: Addresses (1)
+            - generic [ref=e167]:
+              - text: "*"
+              - generic [ref=e168]: required.
+  --
+              - generic [ref=e171]: Address
+              - generic [ref=e172]:
+                - text: "*"
+                - generic [ref=e173]: required.
+            - textbox "Address" [ref=e175]
+          - generic [ref=e176]:
+            - generic [ref=e178]: Address 2
+            - textbox "Address 2" [ref=e180]
+          - generic [ref=e181]:
+            - generic [ref=e182]:
+              - generic [ref=e183]: City
+  --
+        - button "Add More (Addresses)" [ref=e218] [cursor=pointer]
+  - group [ref=e219]:
+    - heading "Education" [level=2] [ref=e220]
+    - generic [ref=e221]:
+"City": |-
+        - generic [ref=e183]: City
+        - generic [ref=e184]:
+          - text: "*"
+          - generic [ref=e185]: required.
+      - textbox "City" [ref=e187]: Redwood City
+    - generic [ref=e188]:
+      - generic [ref=e189]:
+        - generic [ref=e190]: Zip/Postal Code
+  --
+    - generic [ref=e338]: City
+    - textbox "City" [ref=e340]: San Francisco
+  - generic [ref=e341]:
+    - generic [ref=e343]: State
+    - generic [ref=e344]:
+  --
+    - generic [ref=e404]: City
+    - textbox "City" [ref=e406]: Bengaluru
+  - generic [ref=e407]:
+    - generic [ref=e409]: State
+    - generic [ref=e410]:
+  --
+      - generic [ref=e473]: City
+      - textbox "City" [ref=e475]: Bengaluru
+    - generic [ref=e476]:
+      - generic [ref=e478]: State
+      - generic [ref=e479]:
+"Zip/Postal Code": |-
+      - generic [ref=e190]: Zip/Postal Code
+      - generic [ref=e191]:
+        - text: "*"
+        - generic [ref=e192]: required.
+    - textbox "Zip/Postal Code" [ref=e194]
+  - generic [ref=e195]:
+    - generic [ref=e196]:
+      - generic [ref=e197]: Country

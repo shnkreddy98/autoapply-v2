@@ -1,0 +1,30 @@
+"FINRA": |-
+  - group "Have you held FINRA securities licenses?*" [ref=e1261]:
+    - paragraph [ref=e1265]: Have you held FINRA securities licenses?*
+    - button "Yes Required" [expanded] [ref=e1329]: "Yes"
+  - group "Which licenses are currently active?*" [ref=e1331]:
+    - paragraph [ref=e1335]: Which licenses are currently active?*
+    - textbox [ref=e1338]
+  - group "Are you a citizen of the United States or an alien authorized for employment in the United States without any restriction to the length of the employment period?*" [ref=e1271]:
+    - paragraph [ref=e1275]: Are you a citizen of the United States or an alien authorized for employment in the United States without any restriction to the length of the employment period?*
+    - button "Select One Required" [ref=e1279]: Select One
+  - group "Have you ever been convicted of a felony and/or serious misdemeanor?*" [ref=e1281]:
+    - paragraph [ref=e1285]: Have you ever been convicted of a felony and/or serious misdemeanor?*
+    - button "Select One Required" [ref=e1289]: Select One
+"No": |-
+                  - group "Have you ever been convicted of a felony and/or serious misdemeanor?*" [ref=e1281]:
+                    - paragraph [ref=e1285]: Have you ever been convicted of a felony and/or serious misdemeanor?*
+                    - button "Select One Required" [ref=e1289]: Select One
+            - generic [ref=e180]:
+              - button "Back" [ref=e391] [cursor=pointer]
+              - button "Save and Continue" [ref=e392] [cursor=pointer]
+      - generic [ref=e54]:
+        - heading "Follow Us" [level=4] [ref=e55]
+        - list [ref=e56]:
+          - listitem [ref=e57] [cursor=pointer]:
+            - link "LinkedIn" [ref=e58]:
+              - /url: https://www.linkedin.com/company/cambridge-investment-research/posts/?feedView=all
+  --
+      - option "No" [ref=e1355]:
+        - generic [ref=e1356]: "No"
+  ```

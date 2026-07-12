@@ -1,0 +1,94 @@
+"No": |-
+  - Page URL: https://ntrs.wd1.myworkdayjobs.com/en-US/northerntrust/job/Chicago%2C-IL/Associate-AI-Engineer_R156480/apply/autofillWithResume?src=sns-102&source=APPLICANT_SOURCE-6-210
+  - Page Title: Sign In
+  ### Snapshot
+  ```yaml
+  --
+      - generic "Please view Northern Trust's cookie policy here." [ref=e9]:
+        - paragraph [ref=e11]:
+          - text: Please view Northern Trust's cookie policy
+          - link "here" [ref=e12] [cursor=pointer]:
+            - /url: https://www.northerntrust.com/cookie-policy
+          - text: .
+        - generic [ref=e13]:
+          - button "Decline" [ref=e16] [cursor=pointer]
+  --
+            - /url: https://www.northerntrust.com/about-us/careers
+            - img "careers home" [ref=e29]
+          - heading "NT Careers" [level=1] [ref=e31]
+          - generic [ref=e33]:
+  --
+              - button "northerntrust.com" [ref=e49] [cursor=pointer]
+              - button "Search for Jobs" [ref=e50] [cursor=pointer]
+              - button "Candidate Home" [ref=e360] [cursor=pointer]
+              - button "Job Alerts" [ref=e361] [cursor=pointer]
+  --
+                    - paragraph [ref=e2050]: As long-standing core values, diversity and inclusion are invaluable to Northern Trust’s business success. We recognize that the broad array of perspectives in a globally diverse workforce promotes innovation and helps us succeed as a business enterprise and community advocate.
+                    - paragraph [ref=e2051]
+                    - paragraph [ref=e2052]: Our focus on diversity and inclusion helps us provide unrivaled service to clients and create a healthy, thriving workplace environment. We celebrate differences, whether in thought or background and continue to educate our employees about those differences.
+                    - paragraph [ref=e2053]
+  --
+                    - paragraph [ref=e2056]: In order to implement our equal opportunity policy and strategy effectively, and for no other purpose, we ask all candidates to provide the information requested.
+                    - paragraph [ref=e2057]
+                    - paragraph [ref=e2058]: All information provided will be kept in strictest confidence. Data will be utilized for reporting and monitoring purposes.
+                    - paragraph [ref=e2059]
+                    - paragraph [ref=e2060]: We encourage you to provide your information below. Your responses are strictly voluntary. Any data provided will not be made available to anyone involved in making the decision regarding your application.
+                    - paragraph [ref=e2061]
+                    - paragraph [ref=e2062]: (VEVRAA) Veteran's Self-Identification Form (Pre-offer)
+                    - paragraph [ref=e2063]
+  --
+                      - generic [ref=e2086]: Hispanic or Latino
+                      - button "Hispanic or Latino" [expanded] [ref=e2090]: Select One
+                    - generic [ref=e2091]:
+                      - generic [ref=e2092]: Race/Ethnicity
+                      - button "Race/Ethnicity Select One" [ref=e2096]: Select One
+  --
+                      - paragraph [ref=e2109]: Northern Trust Job Application - Terms and Conditions - United States
+                      - paragraph [ref=e2110]
+                      - paragraph [ref=e2111]: “Northern Trust,” as referenced in this application, is intended to refer to The Northern Trust Company and its affiliates.
+                      - list [ref=e2112]:
+                        - listitem [ref=e2113]:
+                          - paragraph [ref=e2114]: It is the policy of The Northern Trust Company to afford equal opportunity in all phases of employment without regard to an individual’s age, race, color, religion, creed, gender, national origin, citizenship status, marital status, pregnancy, sexual orientation, gender identity, gender expression, genetic tests and information, physical or mental disability, protected veteran status or any other legally protected status.
+                        - listitem [ref=e2115]:
+                          - paragraph [ref=e2116]: The Immigration Reform and Control Act of 1986 requires any person offered employment to produce legal documentation evidencing his or her identity and U.S. employment authorization.
+                        - listitem [ref=e2117]:
+                          - paragraph [ref=e2118]: I understand that I must provide satisfactory documentation of my authorization to work in the United States as a condition of employment with Northern Trust.
+                        - listitem [ref=e2119]:
+                          - paragraph [ref=e2120]:
+                            - text: I understand and agree that any employment or offer of employment is subject to receipt by Northern Trust of satisfactory references concerning employment and educational history, a satisfactory criminal background check, submission of required documents for personnel records, and fingerprint
+                            - generic [ref=e2121]: identification.
+                        - listitem [ref=e2122]:
+                          - paragraph [ref=e2123]: I agree to be fingerprinted by Northern Trust for purposes of conducting a criminal background check.
+                        - listitem [ref=e2124]:
+                          - paragraph [ref=e2125]: I understand that federal law restricts employment by Northern Trust of individuals who have been convicted of a crime involving dishonesty, breach of trust, money laundering, or who have avoided such a conviction by participating in a pretrial diversion or similar program.
+                        - listitem [ref=e2126]:
+                          - paragraph [ref=e2127]: Some offers of employment will require the passing of a pre-employment drug screening. I agree to submit to legally permissible drug and/or alcohol testing upon request by Northern Trust prior to or during my employment with Northern Trust.
+                        - listitem [ref=e2128]:
+                          - paragraph [ref=e2129]: I understand and agree that any employment with Northern Trust is at-will, and that such employment is not guaranteed for any specific period of time and may be terminated for any reason, with or without cause, by me or by Northern Trust.
+                        - listitem [ref=e2130]:
+                          - paragraph [ref=e2131]: I certify that the information furnished on this application and during the application process is true, complete and correct.
+                        - listitem [ref=e2132]:
+  --
+                      - generic [ref=e2136]: Please acknowledge your acceptance of the foregoing terms and conditions by checking the box below.*
+                      - checkbox "Please acknowledge your acceptance of the foregoing terms and conditions by checking the box below." [ref=e2141] [cursor=pointer]
+            - generic [ref=e396]:
+              - button "Back" [ref=e573] [cursor=pointer]
+              - button "Save and Continue" [ref=e574] [cursor=pointer]
+  --
+              - /url: https://www.youtube.com/northerntrustvideos
+          - listitem [ref=e66] [cursor=pointer]:
+            - link "LinkedIn" [ref=e67]:
+              - /url: http://www.linkedin.com/company/northern-trust/
+          - listitem [ref=e71] [cursor=pointer]:
+            - link "Facebook" [ref=e72]:
+              - /url: https://www.facebook.com/ntcareers
+  --
+        - link "Candidate Privacy Notice" [ref=e82] [cursor=pointer]:
+          - /url: https://www.northerntrust.com/documents/careers/privacy-policy.pdf
+        - generic [ref=e83]:
+          - img [ref=e87]
+          - generic [ref=e107]: © 2026 Workday, Inc. All rights reserved.
+  --
+      - option "No" [ref=e2159]:
+        - generic [ref=e2160]: "No"
+  ```

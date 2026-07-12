@@ -1,0 +1,12 @@
+"Apply": |-
+  - Page URL: https://careers.beazer.com/careershome/jobs/5663/Data+Engineer+Sr?lang=en-US&mode=apply&iis=LinkedIn
+  - Page Title: Data Engineer Sr in Atlanta, Georgia | Beazer Homes
+  - Console: 2 errors, 0 warnings
+  ### Snapshot
+  --
+                - 'link "Apply : Data Engineer Sr" [ref=e73] [cursor=pointer]':
+                  - /url: https://careers-beazer.icims.com/jobs/5663/login?iis=LinkedIn
+                  - text: Apply
+                - link "Refer" [ref=e74] [cursor=pointer]:
+                  - /url: https://careers-beazer.icims.com/jobs/5663/referral?iis=LinkedIn
+                - generic [ref=e77]:

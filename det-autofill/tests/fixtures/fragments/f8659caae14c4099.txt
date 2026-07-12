@@ -1,0 +1,10 @@
+"Professional misconduct": |-
+  - 'group "If you are a licensed professional, have you ever had or currently have any license infractions or pending investigations? License infractions include, but are not limited to: Professional misconduct (e.g., incompetence, negligence, substance abuse) Ethical or legal violations (e.g., patient boundary violations, falsifying documents, fraud, practicing without a valid license)*" [ref=e1644]':
+    - generic [ref=e1647]:
+      - paragraph [ref=e1648]: "If you are a licensed professional, have you ever had or currently have any license infractions or pending investigations? License infractions include, but are not limited to:"
+      - list [ref=e1649]:
+  --
+          - paragraph [ref=e1651]: Professional misconduct (e.g., incompetence, negligence, substance abuse)
+        - listitem [ref=e1652]:
+          - paragraph [ref=e1653]:
+            - generic [ref=e1654]: Ethical or legal violations (e.g., patient boundary violations, falsifying documents, fraud, practicing without a valid license)*

@@ -1,0 +1,14 @@
+"Gender": |-
+  - generic "Gender" [ref=e2751]
+  - generic [ref=e2755] [cursor=pointer]:
+    - combobox "Gender" [ref=e2758]
+    - generic:
+      - img:
+        - img
+"Race/Ethnicity": |-
+  - generic "Race/Ethnicity" [ref=e2738]
+  - generic [ref=e2742] [cursor=pointer]:
+    - combobox "Race/Ethnicity" [ref=e2745]
+    - generic:
+      - img:
+        - img

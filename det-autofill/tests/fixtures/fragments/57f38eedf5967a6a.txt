@@ -1,0 +1,10 @@
+"Asian": |-
+  - option "Asian" [ref=e2218] [cursor=pointer]:
+    - paragraph [ref=e2220]:
+      - paragraph [ref=e2224]:
+        - generic "Asian" [ref=e2225]:
+          - generic [ref=e2229]:
+            - generic: Asian
+  - option "Black or African American" [ref=e2232] [cursor=pointer]:
+    - paragraph [ref=e2234]:
+      - paragraph [ref=e2238]:

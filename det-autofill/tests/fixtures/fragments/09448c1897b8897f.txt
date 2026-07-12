@@ -1,0 +1,13 @@
+"I'm interested": |-
+            - link "I'm interested" [ref=e147] [cursor=pointer]:
+              - /url: https://jobs.smartrecruiters.com/oneclick-ui/company/LLNL/publication/a0fe5b99-9578-447c-8d3c-7a8ed2ea7029?dcr_ci=LLNL&sid=2d92f286-613b-4daf-9dfa-6340ffbecf73
+            - link "Privacy Notice" [ref=e149] [cursor=pointer]:
+              - /url: https://www.llnl.gov/join-our-team/careers/privacy-statement
+  --
+          - link "I'm interested" [ref=e155] [cursor=pointer]:
+            - /url: https://jobs.smartrecruiters.com/oneclick-ui/company/LLNL/publication/a0fe5b99-9578-447c-8d3c-7a8ed2ea7029?dcr_ci=LLNL&sid=2d92f286-613b-4daf-9dfa-6340ffbecf73
+          - link "Refer a friend" [ref=e156] [cursor=pointer]:
+            - /url: https://jobs.smartrecruiters.com/external-referrals/company/LLNL/publication/a0fe5b99-9578-447c-8d3c-7a8ed2ea7029?dcr_ci=LLNL
+  --
+          - text: I'm interested
+  ```

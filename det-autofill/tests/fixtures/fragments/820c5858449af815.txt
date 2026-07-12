@@ -1,0 +1,10 @@
+"Create Account": |-
+      - generic [ref=e94]: Create Account/Sign In
+    - listitem [ref=e95]:
+      - generic: step 2 of 7
+      - generic [ref=e101]: Autofill with Resume
+  --
+      - button "Create Account" [ref=e214] [cursor=pointer]
+    - button "Forgot your password?" [ref=e216] [cursor=pointer]
+  - generic:
+    - generic:

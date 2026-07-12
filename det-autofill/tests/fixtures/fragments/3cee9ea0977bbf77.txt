@@ -1,0 +1,306 @@
+"No Selection": |-
+          - option "No Selection" [ref=e1197] [cursor=pointer]:
+            - menuitem "No Selection" [ref=e1198]
+          - option "No" [ref=e1199] [cursor=pointer]:
+            - menuitem "No" [ref=e1200]
+          - option "Yes" [ref=e1201] [cursor=pointer]:
+  --
+        - /placeholder: No Selection
+      - button "What is your race if not Hispanic or Latino?" [disabled] [ref=e870]:
+        - generic [ref=e871]: 
+  - note [ref=e874]:
+"No": |-
+            - paragraph [ref=e8]: We use cookies to offer you the best possible website experience. Your cookie preferences will be stored in your browser’s local storage. This includes cookies necessary for the website's operation. Additionally, you can freely decide and change any time whether you accept cookies or choose to opt out of cookies to improve website's performance, as well as cookies used to display content tailored to your interests. Your experience of the site and the services we are able to offer may be impacted if you do not accept all cookies.
+            - button "Modify Cookie Preferences" [ref=e9] [cursor=pointer]
+            - generic [ref=e10]:
+              - button "Reject All Cookies" [ref=e11] [cursor=pointer]
+  --
+              - note [ref=e211]:
+                - text: Dear candidate,
+                - text: Thank you for your interest in our company.
+                - text: In this section you have the possibility to add more details about your profile. Please be aware that if you have applied to a specific opening the information you provide here is available to the reviewers of your application.
+                - text: If you do not find any specific open position now or if you would also be interested in other positions you can fill in (or complete) your profile and save it thus making it available to our recruiters who may contact you in case there is a match to a vacancy with your profile and preferences.
+                - text: Sincerely,
+                - text: Grainger Businesses Recruiting Team
+              - generic [ref=e212]:
+  --
+                  - generic [ref=e223]: "Accepted file types: DOCX, PDF, Image and Text (MSG, PPT and XLS file types are not accepted for resume or cover letters)"
+                  - generic [ref=e229]:
+                    - text: Resume
+                    - generic [ref=e233] [cursor=pointer]:
+  --
+                          - textbox "Description" [ref=e403]: "* Architected secure multi-cloud infrastructure (AWS/GCP) using Terraform and Istio, ensuring high availability and resilience for mission-critical microservices.* Engineered event-driven data ingestion systems using Kafka and Debezium CDC, processing millions of unstructured events with sub-second latency and exactly-once semantics.* Developed modular API frameworks (FastAPI) with robust RBAC security protocols to support secure data access and integration for enterprise-scale applications.* Implemented automated data governance workflows using dbt and Snowflake, creating validatable transformation logic that reduced reporting discrepancies by 40%.* Optimized NoSQL and distributed database performance (DynamoDB, ClickHouse) to handle complex vector search retrieval and large-scale analytical queries.* Tech Stack: AWS, GCP, Terraform, Kubernetes, Kafka, Debezium, ClickHouse, FastAPI, PostgreSQL, DynamoDB"
+                        - generic [ref=e405]:
+                          - text: Level
+                          - generic [ref=e406]:
+  --
+                            - combobox "Is this current position?" [ref=e427]: "No"
+                            - button "Is this current position?" [ref=e428] [cursor=pointer]:
+                              - generic [ref=e429]: 
+                        - generic [ref=e431]:
+  --
+                            - combobox "Is this current position?" [ref=e506]: "No"
+                            - button "Is this current position?" [ref=e507] [cursor=pointer]:
+                              - generic [ref=e508]: 
+                        - generic [ref=e510]:
+  --
+                          - textbox "Description" [ref=e561]: "* Enhanced ETL pipeline performance by 25% through parallel processing techniques and query optimization to support high-volume data generation.* Tuned complex SQL queries and database indexing strategies for PostgreSQL and MySQL, significantly reducing latency for downstream analytical reporting.* Integrated automated data validation scripts to detect schema anomalies and null values, ensuring data integrity and minimizing downstream corruption incidents.* Collaborated with stakeholders to design dimensional data models (Star Schema), facilitating efficient querying and supporting strategic decision-making processes.* Tech Stack: Python, Pandas, PostgreSQL, MySQL, ETL, SQL, Git"
+                        - generic [ref=e563]:
+                          - text: Level
+                          - generic [ref=e564]:
+  --
+                          - textbox "School" [ref=e680]: Visvesvaraya Technological University
+                        - generic [ref=e682]:
+                          - text: Major
+                          - generic [ref=e683]:
+  --
+                    - note [ref=e725]:
+                      - table [ref=e727]:
+                        - rowgroup [ref=e728]:
+                          - row "APPLICATION FOR EMPLOYMENT" [ref=e729]:
+  --
+                    - note [ref=e733]:
+                      - paragraph [ref=e735]:
+                        - generic [ref=e736]:
+                          - text: Note – all fields that have a
+                          - generic [ref=e737]: red
+                          - text: asterisk are required. You cannot apply unless you complete those fields.
+                    - note [ref=e739]:
+                      - generic [ref=e740]:
+                        - paragraph [ref=e741]: Grainger is an Equal Opportunity Workplace and an Affirmative Action Employer.
+                        - paragraph [ref=e742]: All qualified applicants will receive consideration for employment without regard to race, color, religion, sex, sexual orientation,gender identity, national origin, disability, or protected veteran status.
+                    - note [ref=e744]:
+                      - table [ref=e746]:
+                        - rowgroup [ref=e747]:
+                          - row "PERSONAL INFORMATION" [ref=e748]:
+  --
+                            - option "No Selection" [ref=e1197] [cursor=pointer]:
+                              - menuitem "No Selection" [ref=e1198]
+                            - option "No" [ref=e1199] [cursor=pointer]:
+                              - menuitem "No" [ref=e1200]
+                            - option "Yes" [ref=e1201] [cursor=pointer]:
+                              - menuitem "Yes" [ref=e1202]
+                        - button "Have you worked for Grainger, Imperial Supplies or Zoro previously?" [ref=e781] [cursor=pointer]:
+  --
+                        - text: Will you now or in the future require sponsorship for employment visa status (e.g., H-1B)?
+                      - generic [ref=e796]:
+                        - generic [ref=e797]:
+                          - status
+                        - combobox "Will you now or in the future require sponsorship for employment visa status (e.g., H-1B)?" [ref=e798]
+                        - button "Will you now or in the future require sponsorship for employment visa status (e.g., H-1B)?" [ref=e799] [cursor=pointer]:
+                          - generic [ref=e800]: 
+                    - generic [ref=e803]:
+                      - generic [ref=e804]:
+  --
+                        - text: Do you have a commitment to any employer that might affect or limit your right to be employed by us (e.g. Agreement, Contract, Restrictive Covenant, Non-Competition, Non-Disclosure, Confidentiality or Non-Solicitation obligation, etc.)?
+                      - generic [ref=e806]:
+                        - generic [ref=e807]:
+                          - status
+                        - combobox "Do you have a commitment to any employer that might affect or limit your right to be employed by us (e.g. Agreement, Contract, Restrictive Covenant, Non-Competition, Non-Disclosure, Confidentiality or Non-Solicitation obligation, etc.)?" [ref=e808]
+                        - button "Do you have a commitment to any employer that might affect or limit your right to be employed by us (e.g. Agreement, Contract, Restrictive Covenant, Non-Competition, Non-Disclosure, Confidentiality or Non-Solicitation obligation, etc.)?" [ref=e809] [cursor=pointer]:
+                          - generic [ref=e810]: 
+                    - note [ref=e812]:
+                      - generic [ref=e813]: For certain positions, our hiring process requires current team members to participate in a criminal and/or employment background check and a test for illegal drug use.
+                    - generic [ref=e815]:
+                      - generic [ref=e816]:
+  --
+                    - note [ref=e824]:
+                      - table [ref=e826]:
+                        - rowgroup [ref=e827]:
+                          - row "EQUAL EMPLOYMENT OPPORTUNITY/DATA" [ref=e828]:
+  --
+                    - note [ref=e832]:
+                      - generic [ref=e833]:
+                        - paragraph
+                        - paragraph
+  --
+                                  - paragraph [ref=e842]: If you choose not to disclose self-identifying information, you will not be subject you to any adverse treatment should you become employed by Grainger.
+                                  - paragraph [ref=e843]: Furthermore, please understand that if you choose to disclose self-identifying information, this information will not be visible to or shared with anyone involved in the hiring process or selection decision for this position at Grainger.
+                                - paragraph
+                                - paragraph [ref=e844]: It is the policy of Grainger not to discriminate or allow the harassment of employees or applicants on the basis of sex, race, color, religion, national origin, physical or mental disability, and/or protected veteran status with regard to any employment practices, including recruitment, advertising, job application procedures, hiring, upgrading, training, promotion, transfer, compensation, job assignments, benefits and/or other terms, conditions, or privileges of employment, provided the individual is qualified, with or without reasonable accommodations, to perform the essential functions of the job. Grainger will treat qualified individuals without discrimination in all employment practices.
+                    - generic [ref=e846]:
+                      - generic [ref=e847]:
+                        - generic [ref=e848]: "*"
+  --
+                        - text: What is your race if not Hispanic or Latino?
+                      - generic [ref=e867]:
+                        - generic [ref=e868]:
+                          - status
+                        - textbox "What is your race if not Hispanic or Latino?" [disabled] [ref=e869]:
+                          - /placeholder: No Selection
+                        - button "What is your race if not Hispanic or Latino?" [disabled] [ref=e870]:
+                          - generic [ref=e871]: 
+                    - note [ref=e874]:
+                      - generic [ref=e875]:
+                        - paragraph
+                        - paragraph
+  --
+                    - note [ref=e881]:
+                      - generic [ref=e882]:
+                        - paragraph
+                        - paragraph
+  --
+                    - note [ref=e886]:
+                      - paragraph [ref=e888]:
+                        - generic [ref=e889]:
+                          - text: We are a federal contractor or subcontractor. The law requires us to provide equal employment opportunity to qualified people with disabilities. We have a goal of having at least 7% of our workers as people with disabilities. To do this, we must ask applicants and employees if they have a disability or have ever had one. People can become disabled, so we need to ask this question at least every five years.
+                          - text: Completing this form is voluntary, and we hope that you will choose to do so. Your answer is confidential. No one who makes hiring decisions will see it. Your decision to complete the form and your answer will not harm you in any way. If you want to learn more about the law or this form, visit the U.S. Department of Labor’s Office of Federal Contract Compliance Programs (OFCCP) website at
+                          - link "www.dol.gov/ofccp." [ref=e890] [cursor=pointer]:
+                            - /url: http://www.dol.gov/ofccp
+                    - note [ref=e892]:
+                      - generic [ref=e893]:
+                        - paragraph
+                        - paragraph [ref=e894]:
+                          - strong [ref=e896]: How do I know if I have a disability?
+                    - note [ref=e898]:
+                      - generic [ref=e899]:
+                        - paragraph
+                        - paragraph
+  --
+                            - generic [ref=e902]: "Disabilities include, but are not limited to:"
+                        - table [ref=e903]:
+                          - rowgroup [ref=e904]:
+                            - row [ref=e905]:
+                              - cell "Alcohol or other substance use disorder (not currently using drugs illegally) Autoimmune disorder, for example, lupus, fibromyalgia, rheumatoid arthritis, or HIV/AIDS Blind or low vision Cancer (past or present) Cardiovascular or heart disease Celiac disease Cerebral palsy Deaf or serious difficulty hearing Diabetes" [ref=e906]:
+                                - listitem [ref=e907]: Alcohol or other substance use disorder (not currently using drugs illegally)
+                                - listitem [ref=e908]: Autoimmune disorder, for example, lupus, fibromyalgia, rheumatoid arthritis, or HIV/AIDS
+                                - listitem [ref=e909]: Blind or low vision
+                                - listitem [ref=e910]: Cancer (past or present)
+  --
+                    - note [ref=e942]:
+                      - paragraph [ref=e945]: "PUBLIC BURDEN STATEMENT: According to the Paperwork Reduction Act of 1995 no persons are required to respond to a collection of information unless such collection displays a valid OMB control number. This survey should take about 5 minutes to complete."
+                    - note [ref=e947]:
+                      - generic [ref=e949]:
+                        - paragraph
+                        - paragraph
+  --
+                    - note [ref=e954]:
+                      - generic [ref=e957]:
+                        - paragraph
+                        - paragraph
+  --
+                    - note [ref=e961]:
+                      - generic [ref=e964]:
+                        - paragraph
+                        - paragraph
+  --
+                    - note [ref=e979]:
+                      - generic [ref=e982]:
+                        - paragraph
+                        - paragraph
+  --
+                        - paragraph [ref=e983]: Submission of this information is voluntary and refusal to provide it will not subject you to any adverse treatment. The information provided will be used only in ways that are not inconsistent with VEVRAA as amended. We are an equal opportunity employer. We do not discriminate in hiring or employment against any individual on the basis of race, color, gender, national origin, ancestry, religion, physical or mental disability, age, veteran status, sexual orientation, gender identity or expression, marital status, pregnancy, citizenship, or any other factor protected by anti-discrimination laws.
+                    - note [ref=e985]:
+                      - table [ref=e989]:
+                        - rowgroup [ref=e990]:
+                          - row "TERMS AND CONDITIONS" [ref=e991]:
+  --
+                    - note [ref=e995]:
+                      - generic [ref=e998]: If I am employed, I understand that my employment is at will employment, meaning that my employment is for no fixed duration and can be terminated by me or Grainger at any time with or without cause or notice. I understand that no representative of Grainger has the authority to make any contrary agreement, and I understand that I may not rely on any other verbal or written agreements or promises that may have been made to me. Further, I represent that I am genuinely interested in working in the position for which I am applying and I am making this application for no other purpose.
+                    - note [ref=e1000]:
+                      - generic [ref=e1003]: I certify that the information in this application is true and correct to the best of my knowledge and I understand that falsification of this information, or unsatisfactory references, are grounds for rejection or dismissal. I authorize representatives of my past employers, educational institutions, and other references to give Grainger any and all information concerning my previous employment, education, and any other pertinent information they may have, personal or otherwise, and release all parties from all liability for any damage that may result from furnishing this information. I understand that, unless prohibited by law, any job offer will be contingent on my taking a drug urinalysis test at a medical facility designated by the company, and that if a confirmed positive drug screen result is reported to Grainger, I will be ineligible for employment.
+                    - generic [ref=e1007]:
+                      - generic [ref=e1008]:
+                        - generic [ref=e1009]: "*"
+  --
+                          - radio "No" [ref=e1032]
+                          - text: "No"
+                    - generic [ref=e1038]:
+                      - generic [ref=e1039]:
+                        - generic [ref=e1040]: "*"
+  --
+                          - radio "No" [ref=e1061]
+                          - text: "No"
+                    - generic [ref=e1067]:
+                      - generic [ref=e1068]:
+                        - generic [ref=e1069]: "*"
+  --
+                          - radio "No" [ref=e1078]
+                          - text: "No"
+                    - generic [ref=e1084]:
+                      - generic [ref=e1085]:
+                        - generic [ref=e1086]: "*"
+  --
+                          - radio "No" [ref=e1095]
+                          - text: "No"
+                    - generic [ref=e1101]:
+                      - generic [ref=e1102]:
+                        - generic [ref=e1103]: "*"
+                        - text: Will you now or in the future require sponsorship for employment visa status e.g., H-1B?
+                      - radiogroup "Will you now or in the future require sponsorship for employment visa status e.g., H-1B?" [ref=e1105]:
+                        - generic [ref=e1107]:
+                          - radio "Yes" [ref=e1108]
+                          - text: "Yes"
+  --
+                          - radio "No" [ref=e1112]
+                          - text: "No"
+                    - generic [ref=e1118]:
+                      - generic [ref=e1119]:
+                        - generic [ref=e1120]: "*"
+  --
+                          - radio "No" [ref=e1129]
+                          - text: "No"
+              - note
+              - generic:
+                - generic:
+                  - generic:
+  --
+              - link "Recruitment Fraud Notice" [ref=e51] [cursor=pointer]:
+                - /url: https://jobs.grainger.com/content/Recruitment-Fraud-Notice/?locale=en_US
+            - listitem [ref=e52]:
+              - link "Privacy Policy" [ref=e53] [cursor=pointer]:
+                - /url: https://www.grainger.com/content/privacy-policy
+  --
+        - paragraph [ref=e83]: © 2026. W.W. Grainger, Inc. All Rights Reserved. From Fortune. © 2026 Fortune Media IP Limited All rights reserved. Used under license. Fortune World’s Most Admired and Best Companies to Work For are registered trademarks of Fortune Media IP Limited and are used under license. Fortune and Fortune Media IP Limited are not affiliated with, and do not endorse products or services of, W.W. Grainger.
+      - generic: Yes No   Yes No Yes No   Yes No
+  ```
+"Yes": |-
+                            - combobox "Is this current position?" [ref=e348]: "Yes"
+                            - button "Is this current position?" [ref=e349] [cursor=pointer]:
+                              - generic [ref=e350]: 
+                        - generic [ref=e352]:
+  --
+                            - option "Yes" [ref=e1201] [cursor=pointer]:
+                              - menuitem "Yes" [ref=e1202]
+                        - button "Have you worked for Grainger, Imperial Supplies or Zoro previously?" [ref=e781] [cursor=pointer]:
+                          - generic [ref=e782]: 
+                    - generic [ref=e784]:
+  --
+                          - radio "Yes" [ref=e1028]
+                          - text: "Yes"
+                        - generic [ref=e1031]:
+                          - radio "No" [ref=e1032]
+                          - text: "No"
+  --
+                          - radio "Yes" [ref=e1057]
+                          - text: "Yes"
+                        - generic [ref=e1060]:
+                          - radio "No" [ref=e1061]
+                          - text: "No"
+  --
+                          - radio "Yes" [ref=e1074]
+                          - text: "Yes"
+                        - generic [ref=e1077]:
+                          - radio "No" [ref=e1078]
+                          - text: "No"
+  --
+                          - radio "Yes" [ref=e1091]
+                          - text: "Yes"
+                        - generic [ref=e1094]:
+                          - radio "No" [ref=e1095]
+                          - text: "No"
+  --
+                          - radio "Yes" [ref=e1108]
+                          - text: "Yes"
+                        - generic [ref=e1111]:
+                          - radio "No" [ref=e1112]
+                          - text: "No"
+  --
+                          - radio "Yes" [ref=e1125]
+                          - text: "Yes"
+                        - generic [ref=e1128]:
+                          - radio "No" [ref=e1129]
+                          - text: "No"
+  --
+      - generic: Yes No   Yes No Yes No   Yes No
+  ```

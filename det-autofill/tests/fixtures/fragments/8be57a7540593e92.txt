@@ -1,0 +1,12 @@
+"Email": |-
+    - generic "Email address" [ref=e470]: Email address *
+    - textbox "Email address *" [ref=e474]: jane.doe@example.com
+  - generic [ref=e477]:
+    - generic "Prefix" [ref=e479]
+    - generic [ref=e483] [cursor=pointer]:
+  --
+        - option "Email" [ref=e1774]:
+          - generic [ref=e1775]: Email
+        - option "Mobile phone" [ref=e1776]:
+          - generic [ref=e1777]: Mobile phone
+        - option "Home phone" [ref=e1778]:

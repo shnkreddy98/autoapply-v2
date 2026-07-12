@@ -1,0 +1,13 @@
+"employment or contractual obligations to your current or past employer(s)": |-
+              - generic [ref=e1803]: Do you have any employment or contractual obligations to your current or past employer(s) (e.g. confidentiality agreement(s), non-solicitation agreement(s)
+            - generic [ref=e1805]:
+              - generic [ref=e1807]:
+                - generic [ref=e1808]: Do you have any employment or contractual obligations to your current or past employer(s) (e.g. confidentiality agreement(s), non-solicitation agreement(s)
+                - text: "*"
+              - generic [ref=e1809]:
+                - generic [ref=e1813]:
+  --
+                  - generic [ref=e1850]: "'Do you have any employment or contractual obligations to your current or past employer(s) (e.g. confidentiality agreement(s), non-solicitation agreement(s)' is required."
+  - generic [ref=e449]:
+    - generic [ref=e450]:
+      - button "Cancel" [ref=e451] [cursor=pointer]:

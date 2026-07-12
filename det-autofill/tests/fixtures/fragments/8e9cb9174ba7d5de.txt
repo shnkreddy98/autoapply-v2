@@ -1,0 +1,60 @@
+"Choose File": |-
+  - button "Choose File" [ref=e50] [cursor=pointer]
+  - generic:
+    - generic:
+      - generic:
+"First Name": |-
+    - generic [ref=e70]: "*First Name"
+    - textbox "First Name" [ref=e72]
+  - generic [ref=e75]:
+    - generic [ref=e76]: "*Last Name/Surname"
+    - textbox "Last Name/Surname" [ref=e78]
+"Last Name/Surname": |-
+    - generic [ref=e76]: "*Last Name/Surname"
+    - textbox "Last Name/Surname" [ref=e78]
+  - generic [ref=e81]:
+    - generic [ref=e82]: "*Email"
+    - textbox "Email" [ref=e84]
+"Email": |-
+    - generic [ref=e82]: "*Email"
+    - textbox "Email" [ref=e84]
+  - generic [ref=e87]:
+    - generic [ref=e88]: "*Mobile Phone Number"
+    - textbox "Mobile Phone Number" [ref=e90]
+"Mobile Phone Number": |-
+    - generic [ref=e88]: "*Mobile Phone Number"
+    - textbox "Mobile Phone Number" [ref=e90]
+  - generic [ref=e93]:
+    - generic [ref=e94]: "*Last 4 digits of SSN/Aadhar/SIN"
+    - textbox "Last 4 digits of SSN/Aadhar/SIN" [ref=e96]
+"Last 4 digits of SSN/Aadhar/SIN": |-
+        - generic [ref=e94]: "*Last 4 digits of SSN/Aadhar/SIN"
+        - textbox "Last 4 digits of SSN/Aadhar/SIN" [ref=e96]
+  - generic [ref=e98]:
+    - heading "button icon Current Mailing Address" [level=3] [ref=e99]:
+      - button "button icon Current Mailing Address" [ref=e100] [cursor=pointer]:
+"Country": |-
+  - generic [ref=e115]: "*Country"
+  - generic [ref=e119]:
+    - combobox "Country" [ref=e120] [cursor=pointer]:
+      - generic [ref=e121]: United States
+    - generic:
+      - generic:
+"State": |-
+      - generic [ref=e121]: United States
+    - generic:
+      - generic:
+        - generic:
+  --
+  - generic [ref=e124]: "*State"
+  - generic [ref=e128]:
+    - combobox "State" [ref=e129] [cursor=pointer]:
+      - generic [ref=e130]: Select an Option
+    - generic:
+      - generic:
+"City": |-
+        - generic [ref=e134]: "*City"
+        - textbox "City" [ref=e136]
+  - generic [ref=e138]:
+    - heading "button icon Experience" [level=3] [ref=e139]:
+      - button "button icon Experience" [ref=e140] [cursor=pointer]:

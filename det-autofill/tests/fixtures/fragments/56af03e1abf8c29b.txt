@@ -1,0 +1,10 @@
+"Apply": |-
+    - button "Apply" [ref=e50] [cursor=pointer]
+  - generic [ref=e51]:
+    - generic [ref=e52]:
+      - generic [ref=e53]:
+  --
+        - generic [ref=e144]: CURRENT COREWELL HEALTH TEAM MEMBERS – Please apply through Find Jobs from your Workday team member account. This career site is for Non-Corewell Health team members only.
+      - paragraph [ref=e145]
+      - paragraph [ref=e146]: Corewell Health is committed to providing a safe environment for our team members, patients, visitors, and community. We require a drug-free workplace and require team members to comply with the MMR, Varicella, Tdap, and Influenza vaccine requirement if in an on-site or hybrid workplace category. We are committed to supporting prospective team members who require reasonable accommodations to participate in the job application process, to perform the essential functions of a job, or to enjoy equal benefits and privileges of employment due to a disability, pregnancy, or sincerely held religious belief.
+      - paragraph [ref=e147]

@@ -1,0 +1,12 @@
+"Will you now or in the future need an employer to sponsor you": |-
+  - generic [ref=e510]: Will you now or in the future need an employer to sponsor you for a work visa (e.g., H-1B, etc) in the country where you will be working?*
+  - generic [ref=e511]:
+    - radio "Yes, I will need sponsorship for a work visa." [ref=e514] [cursor=pointer]
+    - generic [ref=e515]: Yes, I will need sponsorship for a work visa.
+"Location box": (no match)
+"Location placeholder": (no match)
+"Start typing": |-
+      - combobox "Start typing..." [ref=e492] [cursor=pointer]: Redwood City,CA,US
+      - button [ref=e493] [cursor=pointer]:
+        - img [ref=e494]
+  - generic [ref=e496]:

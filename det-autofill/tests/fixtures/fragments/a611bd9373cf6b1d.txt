@@ -1,0 +1,19 @@
+"Education (1)": |-
+  - group "Education (1)" [ref=f67e191]:
+    - generic [ref=f67e192]: Education (1)
+    - generic [ref=f67e193]:
+      - generic [ref=f67e195]: School
+      - generic [ref=f67e196]:
+"Education (2)": |-
+  - group "Education (2)" [ref=f67e231]:
+    - generic [ref=f67e232]: Education (2)
+    - text: 
+    - generic [ref=f67e233]:
+      - generic [ref=f67e235]: School
+"Education (3)": |-
+  - group "Education (3)" [ref=f67e271]:
+    - generic [ref=f67e272]: Education (3)
+    - button "Delete Education (3)" [ref=f67e274] [cursor=pointer]:
+      - generic [ref=f67e275]: 
+    - generic [ref=f67e276]:
+      - generic [ref=f67e278]: School

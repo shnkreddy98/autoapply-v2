@@ -1,0 +1,103 @@
+"United States": |-
+        - option "United States"
+        - option "United States Minor Outlying Islands"
+        - option "Uruguay"
+        - option "Uzbekistan"
+        - option "Vanuatu"
+        - option "Venezuela, Bolivarian Republic of"
+        - option "Vietnam"
+        - option "Virgin Islands, British"
+        - option "Virgin Islands, U.S."
+        - option "Wallis and Futuna"
+        - option "Western Sahara"
+        - option "Yemen"
+        - option "Zambia"
+        - option "Zimbabwe"
+    - generic [ref=e113]:
+      - generic [ref=e114]: State/Province
+      - combobox "State/Province" [ref=e115]:
+        - option "-" [selected]
+  - generic [ref=e118]:
+    - generic [ref=e119]: Address Line 1
+    - textbox "Address Line 1" [ref=e120]
+  - generic [ref=e122]:
+    - generic [ref=e123]: Address Line 2
+    - textbox "Address Line 2" [ref=e124]
+  - generic [ref=e126]:
+    - generic [ref=e127]: City
+    - textbox "City" [ref=e128]: San Jose
+  - generic [ref=e130]:
+    - generic [ref=e131]: ZIP / Postal Code
+    - textbox "ZIP / Postal Code" [ref=e132]
+  - generic [ref=e134]:
+    - generic [ref=e135]:
+      - text: How did you hear about this Job?
+      - generic [ref=e136]: "*"
+    - combobox "How did you hear about this Job?" [disabled] [ref=e137]:
+      - option "Please Select"
+      - option "LinkedIn" [selected]
+      - option "Indeed"
+      - option "Employee Referral"
+      - option "Other"
+      - option "Job Board"
+      - option "Glassdoor"
+      - option "Google"
+      - option "Current Temp"
+      - option "Educational Institution"
+      - option "Recruiter"
+      - option "Handshake"
+      - option "Fundraising Professionals"
+      - option "Client Careers Site"
+  - generic [ref=e139]:
+    - generic [ref=e140]: Are you legally authorized to work in the United States?*
+    - combobox "Are you legally authorized to work in the United States?" [ref=e141]:
+      - option "Please Select" [selected]
+      - option "Yes"
+      - option "No"
+  - generic [ref=e143]:
+    - generic [ref=e144]: Have you worked for Blood Cancer United, formerly LLS before?*
+    - combobox "Have you worked for Blood Cancer United, formerly LLS before?" [ref=e145]:
+      - option "Please Select" [selected]
+      - option "Yes"
+      - option "No"
+  - generic [ref=e147]:
+    - generic [ref=e148]: Are you at least 18 years old?*
+    - combobox "Are you at least 18 years old?" [ref=e149]:
+      - option "Please Select" [selected]
+      - option "Yes"
+      - option "No"
+  - generic [ref=e151]:
+    - generic [ref=e152]: What are your salary requirements?
+    - textbox "What are your salary requirements?" [ref=e153]
+  - generic [ref=e155]:
+    - generic [ref=e156]: Do you have any relatives employed by this organization? If yes, please indicate their name.
+    - textbox "Do you have any relatives employed by this organization? If yes, please indicate their name." [ref=e157]
+  - generic [ref=e159]:
+    - generic [ref=e160]: Have you previously held a temporary or contract assignment with Blood Cancer United, formerly LLS before? If so, please share the department or region.
+    - textbox "Have you previously held a temporary or contract assignment with Blood Cancer United, formerly LLS before? If so, please share the department or region." [ref=e161]
+  - generic [ref=e163]:
+    - generic [ref=e164]: Do you now, or will you in the future, require immigration sponsorship for work authorization (e.g., H-1B)?*
+    - combobox "Do you now, or will you in the future, require immigration sponsorship for work authorization (e.g., H-1B)?" [ref=e165]:
+      - option "Please Select" [selected]
+      - option "Yes"
+      - option "No"
+  - generic [ref=e167]:
+    - generic [ref=e168]: Are you a current or past national board member or associated with anyone current or past? If so, please share who.
+    - textbox "Are you a current or past national board member or associated with anyone current or past? If so, please share who." [ref=e169]
+  - generic [ref=e171]:
+    - generic [ref=e172]: Have you volunteered with Blood Cancer United, formerly LLS? (Currently volunteering or previously. If so, please share which location)
+    - textbox "Have you volunteered with Blood Cancer United, formerly LLS? (Currently volunteering or previously. If so, please share which location)" [ref=e173]
+  - generic [ref=e175]:
+    - generic [ref=e176]: All staff and temporary roles will require a background check. If required, you will agree to provide the necessary personal information to complete the background check?*
+    - combobox "All staff and temporary roles will require a background check. If required, you will agree to provide the necessary personal information to complete the background check?" [ref=e177]:
+      - option "Please Select" [selected]
+      - option "Yes"
+      - option "No"
+  - group "Work experience :" [ref=e180]:
+    - heading "Work experience :" [level=2] [ref=e181]
+    - generic [ref=e379]:
+      - group [ref=e382]:
+        - generic [ref=e383]:
+          - generic [ref=e384]: Job title*
+          - textbox "Job title" [ref=e385]: Founding Engineer
+        - generic [ref=e386]:

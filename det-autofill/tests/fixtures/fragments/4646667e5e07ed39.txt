@@ -1,0 +1,7 @@
+"Choose File": |-
+  - button "Choose File*" [ref=e219] [cursor=pointer]:
+    - img [ref=e221]
+    - generic [ref=e223]: Choose File*
+  - generic [ref=e224]:
+    - img [ref=e225]
+    - paragraph [ref=e227]: No file selected

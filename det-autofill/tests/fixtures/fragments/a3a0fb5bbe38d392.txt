@@ -1,0 +1,50 @@
+"Degree": |-
+          - button "Error Degree" [ref=e838] [cursor=pointer]:
+            - text: Error
+            - generic [ref=e839]: "-"
+            - text: Degree
+          - generic [ref=e840]: The field Degree is required and must have a value.
+  - generic [ref=e617]:
+    - group "Education" [ref=e618]:
+      - heading "Education" [level=4] [ref=e619]
+      - group "Education 1" [ref=e620]:
+        - generic [ref=e621]:
+          - heading "Education 1" [level=5] [ref=e622]
+          - button "Delete" [ref=e623] [cursor=pointer]: Delete
+        - generic [ref=e629]:
+          - generic [ref=e630]:
+            - generic [ref=e632]: School or University*
+  --
+            - generic [ref=e638]: Degree*
+            - button "Degree AS Required" [active] [ref=e841]: AS
+          - generic [ref=e643]:
+            - generic [ref=e645]:
+              - generic [ref=e646]: Field of Study
+              - generic [ref=e652] [cursor=pointer]:
+                - textbox "Field of Study" [ref=e653]:
+                  - /placeholder: Search
+                - generic [ref=e654]: 0 items selected
+            - button "The field will alphabetically return the first 100 results and can also return specified matches." [ref=e658] [cursor=pointer]
+      - group "Education 2" [ref=e662]:
+        - generic [ref=e663]:
+  --
+            - generic [ref=e680]: Degree*
+            - generic [ref=e681]:
+              - button "Degree Select One Required" [ref=e684]: Select One
+              - paragraph [ref=e804]:
+                - generic [ref=e805]: "Error:"
+                - text: The field Degree is required and must have a value.
+          - generic [ref=e685]:
+            - generic [ref=e687]:
+              - generic [ref=e688]: Field of Study
+              - generic [ref=e694] [cursor=pointer]:
+                - textbox "Field of Study" [ref=e695]:
+                  - /placeholder: Search
+                - generic [ref=e696]: 0 items selected
+            - button "The field will alphabetically return the first 100 results and can also return specified matches." [ref=e700] [cursor=pointer]
+      - button "Add Another" [ref=e707] [cursor=pointer]
+    - group "Certifications" [ref=e709]:
+"Bachelor": (no match)
+"Master": (no match)
+"Associate": (no match)
+"Doctorate": (no match)

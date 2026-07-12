@@ -1,0 +1,6 @@
+"Career Websites": |-
+  - option "Career Websites not checked" [ref=e664]:
+    - generic [ref=e666] [cursor=pointer]: Career Websites
+  - option "Employee Referral not checked" [ref=e671]:
+    - generic [ref=e673] [cursor=pointer]: Employee Referral
+  - option "Event not checked" [ref=e678]:

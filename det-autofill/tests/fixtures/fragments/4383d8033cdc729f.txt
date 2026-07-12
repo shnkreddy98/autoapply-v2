@@ -1,0 +1,35 @@
+"Apply": |-
+          - text: Apply
+        - generic [ref=e39]:
+          - button " Share" [ref=e40] [cursor=pointer]:
+            - generic [ref=e41]: 
+            - text: Share
+          - text:     
+  - separator [ref=e43]
+  - generic [ref=e46]:
+    - paragraph
+    - paragraph
+    - table [ref=e47]:
+  --
+    - paragraph [ref=e85]: · Apply machine learning algorithms and statistical models to large datasets to identify trends, patterns, and relationships.
+    - paragraph [ref=e86]: · Collaborate with cross-functional teams to understand business objectives and develop data-driven solutions.
+    - paragraph [ref=e87]: · Design and implement end-to-end machine learning pipelines, from data preprocessing to model training, evaluation, and deployment.
+    - paragraph [ref=e88]: · Stay up-to-date with the latest research and developments in machine learning and artificial intelligence
+    - paragraph [ref=e89]: · Communicate complex data insights and findings to non-technical stakeholders through visualizations and presentations.
+    - paragraph [ref=e90]: · Mentor and guide interns on the team.
+    - paragraph [ref=e91]: · Other duties as assigned.
+    - paragraph [ref=e92]:
+      - strong [ref=e93]: Knowledge & Qualifications
+    - paragraph [ref=e94]: · Master of Science in a relevant field such as Computer Science, Statistics, Mathematics, Engineering, or Data Science.
+    - paragraph [ref=e95]: · PhD preferred.
+    - paragraph [ref=e96]: · Minimum of 1 year of experience applying machine learning techniques to solve complex data problems.
+    - paragraph [ref=e97]: · Strong knowledge of machine learning algorithms and statistical models, including supervised and unsupervised learning methods.
+    - paragraph [ref=e98]: · Experience with data preprocessing, feature engineering, and data visualization techniques.
+    - paragraph [ref=e99]: · Proficiency in Python programming, and experience working with big data tools such as Spark.
+    - paragraph [ref=e100]: · Excellent communication skills, with the ability to explain complex concepts to non-technical stakeholders.
+    - paragraph [ref=e101]: · Strong problem-solving skills and attention to detail.
+    - paragraph [ref=e102]: · Experience with agile development methodologies and version control tools such as Git.
+    - paragraph [ref=e103]: "Preferred Qualifications:"
+    - list [ref=e104]:
+      - listitem [ref=e105]: Experience working with natural language processing (NLP) techniques.
+      - listitem [ref=e106]: Familiarity with deep learning frameworks such as TensorFlow or PyTorch.

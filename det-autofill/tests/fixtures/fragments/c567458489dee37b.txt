@@ -1,0 +1,10 @@
+"California": |-
+    - generic [ref=e467]: San Jose, California, United States
+    - combobox "Location (City)" [ref=e221]
+  - button "Clear selections" [ref=e469] [cursor=pointer]:
+    - img [ref=e470]
+  --
+  - option "California" [ref=e493]
+  - option "Outside US (Canada)" [ref=e494]
+  - option "Colorado" [ref=e495]
+  - option "Connecticut" [ref=e496]

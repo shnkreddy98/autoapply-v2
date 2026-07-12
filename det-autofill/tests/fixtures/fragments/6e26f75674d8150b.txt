@@ -1,0 +1,10 @@
+"Resume Upload": |-
+  - heading [level=2] [ref=e360]: Resume Upload
+  - generic [ref=e363]:
+    - generic [ref=e365]: "Attachment:"
+    - button [ref=e372] [cursor=pointer]:
+"Attachment": |-
+  - generic [ref=e365]: "Attachment:"
+  - button [ref=e372] [cursor=pointer]:
+    - img [ref=e374]:
+      - img [ref=e375]

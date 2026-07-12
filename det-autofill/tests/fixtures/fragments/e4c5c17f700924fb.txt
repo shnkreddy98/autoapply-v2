@@ -1,0 +1,53 @@
+"State": |-
+                - button "Country United States of America Required" [ref=e322]: United States of America
+            - group "Legal Name" [ref=e219]:
+              - heading "Legal Name" [level=4] [ref=e220]
+              - generic [ref=e323]:
+                - generic [ref=e324]:
+                  - generic [ref=e325]: Prefix
+                  - button "Prefix Select One" [ref=e329]: Select One
+                - generic [ref=e330]:
+                  - generic [ref=e332]: First Name*
+                  - textbox "First Name" [ref=e335]
+                - generic [ref=e336]:
+  --
+                  - generic [ref=e253]: State*
+                  - button "State Select One Required" [ref=e257]: Select One
+                - generic [ref=e258]:
+                  - generic [ref=e260]: Postal Code*
+                  - textbox "Postal Code" [ref=e263]
+                - generic [ref=e264]:
+                  - generic [ref=e265]: County
+                  - textbox "County" [ref=e268]
+            - group "Email Address" [ref=e270]:
+              - heading "Email Address" [level=4] [ref=e271]
+              - generic [ref=e274]: jane.doe@example.com
+            - group "Phone" [ref=e276]:
+  --
+                      - generic [ref=e377]: 1 item selected, United States of America (+1)
+                    - listbox "items selected" [ref=e379]:
+                      - option "United States of America (+1), press delete to clear value." [ref=e380]:
+                        - paragraph [ref=e385]: United States of America (+1)
+                - generic [ref=e389]:
+                  - generic [ref=e391]: Phone Number*
+                  - textbox "Phone Number" [ref=e394]
+                - generic [ref=e395]:
+                  - generic [ref=e396]: Phone Extension
+                  - textbox "Phone Extension" [ref=e399]
+        - generic [ref=e159]:
+          - button "Back" [ref=e288] [cursor=pointer]
+          - button "Save and Continue" [ref=e289] [cursor=pointer]
+  - generic [ref=e56]:
+"Phone Device Type": |-
+    - generic [ref=e363]: Phone Device Type*
+    - button "Phone Device Type Select One Required" [ref=e367]: Select One
+  - generic [ref=e368]:
+    - generic [ref=e370]: Country Phone Code*
+    - generic [ref=e375] [cursor=pointer]:
+      - generic:
+        - textbox "Country Phone Code" [ref=e376]:
+          - /placeholder: Search
+        - generic [ref=e377]: 1 item selected, United States of America (+1)
+      - listbox "items selected" [ref=e379]:
+        - option "United States of America (+1), press delete to clear value." [ref=e380]:
+          - paragraph [ref=e385]: United States of America (+1)

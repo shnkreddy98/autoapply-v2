@@ -1,0 +1,16 @@
+"Yes": |-
+          - generic [ref=e478]: "Yes"
+          - combobox "Do you currently, or will you in the future, require any immigration-related support or sponsorship from Crunchyroll in order to begin or continue employment with Crunchyroll?" [ref=e266]
+        - generic [ref=e267]:
+          - button "Clear selections" [ref=e480] [cursor=pointer]:
+  --
+    - generic [ref=e274]: "If you answered yes to the above question, and you are currently located in the U.S., please indicate your current U.S. immigration status/visa and type of sponsorship required (if known):"
+    - textbox "If you answered yes to the above question, and you are currently located in the U.S., please indicate your current U.S. immigration status/visa and type of sponsorship required (if known):" [ref=e275]: H1B sponsorship required
+  - generic [ref=e278]:
+    - generic [ref=e279]: Are you able and willing to work out of our San Francisco office 3 days/week? *
+    - generic [ref=e280]:
+  --
+        - option "Yes" [ref=e485]
+        - option "No" [ref=e486]
+      - textbox
+  - generic [ref=e293]:

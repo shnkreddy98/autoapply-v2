@@ -1,0 +1,26 @@
+"future require sponsorship for employment visa status?": |-
+          - generic [ref=e1729]: Will you now or in the future require sponsorship for employment visa status?
+        - generic [ref=e1731]:
+          - generic [ref=e1733]:
+            - generic [ref=e1734]: Will you now or in the future require sponsorship for employment visa status?
+            - text: "*"
+          - generic [ref=e1735]:
+            - generic [ref=e1739]:
+              - generic [ref=e1741] [cursor=pointer]:
+                - radio "Yes" [ref=e1743]
+                - generic [ref=e1745]: "Yes"
+              - generic [ref=e1747] [cursor=pointer]:
+                - radio "No" [ref=e1749]
+                - generic [ref=e1751]: "No"
+            - alert [ref=e1837]:
+              - generic [ref=e1838]: "'Will you now or in the future require sponsorship for employment visa status?' is required."
+  - listitem [ref=e1752]:
+    - generic [ref=e1755]:
+      - generic [ref=e1757]:
+        - generic [ref=e1758]: What is your minimum requirement for total target compensation?
+        - text: "*"
+      - textbox "What is your minimum requirement for total target compensation? *" [ref=e1762]: "150000"
+  - listitem [ref=e1763]:
+    - generic [ref=e1766]:
+      - generic [ref=e1768]:
+        - generic [ref=e1769]: What is your desired total target compensation?

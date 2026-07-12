@@ -1,0 +1,25 @@
+"Select a file": |-
+      - generic [ref=e62]: Select a file using the browse button then click continue.
+      - text: Otherwise click "Skip" to continue. You can always upload a resume later.
+  - generic [ref=e63]:
+    - generic [ref=e65]: Please upload a Word or PDF document.
+    - button "Select a file using the browse button then click continue." [ref=e66]
+  - generic [ref=e68]:
+    - button "Upload and Continue" [ref=e69] [cursor=pointer]
+    - link "Skip" [ref=e70] [cursor=pointer]:
+"Upload and Continue": |-
+  - button "Upload and Continue" [ref=e69] [cursor=pointer]
+  - link "Skip" [ref=e70] [cursor=pointer]:
+    - /url: javascript:__doPostBack('ctl00$ContentPlaceHolder1$ctl00$bSkip','')
+  - paragraph [ref=e71]:
+"Skip": |-
+      - text: Otherwise click "Skip" to continue. You can always upload a resume later.
+  - generic [ref=e63]:
+    - generic [ref=e65]: Please upload a Word or PDF document.
+    - button "Select a file using the browse button then click continue." [ref=e66]
+  --
+    - link "Skip" [ref=e70] [cursor=pointer]:
+      - /url: javascript:__doPostBack('ctl00$ContentPlaceHolder1$ctl00$bSkip','')
+    - paragraph [ref=e71]:
+      - strong [ref=e72]:
+        - text: Already registered,

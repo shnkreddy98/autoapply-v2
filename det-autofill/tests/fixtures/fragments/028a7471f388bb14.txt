@@ -1,0 +1,14 @@
+"Verify Email Address": |-
+  - generic [ref=e25]: Verify Email Address
+  - textbox "Verify Email Address" [active] [ref=e26]
+  - generic [ref=e27]:
+    - text: If the email address above is incorrect,
+    - link "click here" [ref=e28] [cursor=pointer]:
+"Next": |-
+          - generic [ref=e18]: Enter your email address and click next
+          - generic [ref=e19]:
+            - generic [ref=e21]:
+              - generic [ref=e22]: Email Address
+  --
+          - button "Next" [ref=e31] [cursor=pointer]
+  ```

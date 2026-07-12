@@ -1,0 +1,17 @@
+"Address Line 1 *": |-
+    - generic "Address Line 1" [ref=e283]: Address Line 1 *
+    - generic [ref=e284]:
+      - textbox "Address Line 1 *" [invalid] [ref=e287]
+      - alert [ref=e755]:
+        - generic [ref=e756]: "'Address Line 1' is required."
+  - generic [ref=e290]:
+"Mobile Phone Number *": |-
+      - generic "Mobile Phone Number" [ref=e228]: Mobile Phone Number *
+      - generic [ref=e232]:
+        - generic "Country dialing code" [ref=e233] [cursor=pointer]:
+          - generic: US
+  --
+        - textbox "Mobile Phone Number *" [ref=e237]: "5550100199"
+  - generic [ref=e241]:
+    - generic "Preferred Contact Method" [ref=e243]: Preferred Contact Method *
+    - generic [ref=e247] [cursor=pointer]:

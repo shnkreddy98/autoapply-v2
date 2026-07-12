@@ -1,0 +1,10 @@
+"Please identify your race": |-
+    - generic [ref=e659]: Please identify your race
+    - generic [ref=e660]:
+      - log [ref=e662]
+      - generic [ref=e664]:
+  --
+          - combobox "Please identify your race" [active] [ref=e668]
+        - button "Toggle flyout" [ref=e670] [cursor=pointer]:
+          - img [ref=e671]
+  - link "Race & Ethnicity Definitions" [ref=e409] [cursor=pointer]:

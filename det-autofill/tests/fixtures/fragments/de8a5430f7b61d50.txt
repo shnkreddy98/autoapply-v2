@@ -1,0 +1,6 @@
+"I do not want to Answer": |-
+  - option "I do not want to Answer" [ref=e1275] [cursor=pointer]:
+    - menuitem "I do not want to Answer" [ref=e1276]
+  - option "No, I don't have a disability and have not had one in the past" [ref=e1277] [cursor=pointer]:
+    - menuitem "No, I don't have a disability and have not had one in the past" [ref=e1278]
+  - option "Yes, I have a disability, or have had one in the past" [ref=e1279] [cursor=pointer]:

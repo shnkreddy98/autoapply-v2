@@ -1,0 +1,11 @@
+"legally authorized to work in the U.S.": |-
+    - text: Are you legally authorized to work in the U.S.?
+    - text: "Note: If hired, a Form I-9, Employment Eligibility Verification, must be completed at the start of employment.*"
+  - 'combobox "Are you legally authorized to work in the U.S.? Note: If hired, a Form I-9, Employment Eligibility Verification, must be completed at the start of employment.*" [ref=e358]':
+    - option "-- No answer --" [selected]
+    - option "Yes"
+    - option "No"
+"Minimum of 3 years of experience in data engineering": (no match)
+"Experience with Python and SQL": (no match)
+"Salary expectation": (no match)
+"Website/Portfolio/GitHub": (no match)

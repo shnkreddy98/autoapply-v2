@@ -1,0 +1,62 @@
+"How Did You Hear About Us?": |-
+      - generic [ref=e235]: How Did You Hear About Us?*
+      - generic [ref=e241] [cursor=pointer]:
+        - textbox "How Did You Hear About Us?" [ref=e242]:
+          - /placeholder: Search
+        - generic [ref=e243]: 0 items selected
+  - group [ref=e247]:
+"First Name": |-
+    - generic [ref=e273]: First Name*
+    - textbox "First Name" [ref=e276]: Jane
+  - generic [ref=e277]:
+    - generic [ref=e278]: Middle Name
+    - textbox "Middle Name" [ref=e281]: Quinn
+"Last Name": |-
+    - generic [ref=e284]: Last Name*
+    - textbox "Last Name" [ref=e287]: Doe
+  - generic [ref=e288]:
+    - generic [ref=e289]: I have a preferred name
+    - checkbox "I have a preferred name" [ref=e294] [cursor=pointer]
+"Address Line 1": |-
+    - generic [ref=e331]: Address Line 1
+    - textbox "Address Line 1" [ref=e334]
+  - generic [ref=e335]:
+    - generic [ref=e336]: Address Line 2
+    - textbox "Address Line 2" [ref=e339]
+"City": |-
+    - generic [ref=e341]: City
+    - textbox "City" [ref=e344]: Redwood City
+  - generic [ref=e345]:
+    - generic [ref=e346]: State
+    - button "State California" [ref=e373]: California
+"State": |-
+      - button "Country United States of America Required" [ref=e266]: United States of America
+  - group "Legal Name" [ref=e268]:
+    - heading "Legal Name" [level=4] [ref=e269]
+    - generic [ref=e270]:
+  --
+        - generic [ref=e346]: State
+        - button "State California" [ref=e373]: California
+      - generic [ref=e351]:
+        - generic [ref=e352]: Postal Code
+        - textbox "Postal Code" [ref=e355]
+  --
+            - generic [ref=e391]: 1 item selected, United States of America (+1)
+          - listbox "items selected" [ref=e393]:
+            - option "United States of America (+1), press delete to clear value." [ref=e394]:
+              - paragraph [ref=e399]: United States of America (+1)
+      - generic [ref=e403]:
+        - generic [ref=e405]: Phone Number*
+        - textbox "Phone Number" [ref=e408]: (555) 010-0199
+"Postal Code": |-
+        - generic [ref=e352]: Postal Code
+        - textbox "Postal Code" [ref=e355]
+  - group "Email Address" [ref=e308]:
+    - heading "Email Address" [level=4] [ref=e309]
+    - generic [ref=e312]: jane.doe@example.com
+"Phone Device Type": |-
+    - generic [ref=e377]: Phone Device Type*
+    - button "Phone Device Type Mobile Required" [ref=e381]: Mobile
+  - generic [ref=e382]:
+    - generic [ref=e384]: Country Phone Code*
+    - generic [ref=e389] [cursor=pointer]:

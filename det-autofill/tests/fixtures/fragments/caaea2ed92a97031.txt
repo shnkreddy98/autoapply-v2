@@ -1,0 +1,19 @@
+"Please enter your full name:": |-
+      - 'generic "The field Please enter your full name: is mandatory." [ref=e202]':
+        - text: "Please enter your full name:"
+        - generic [ref=e205]: .
+        - generic [ref=e206]: Required
+      - 'textbox "Please enter your full name: . Required" [ref=e207]'
+  - generic [ref=e208]:
+    - heading "Job Posting Notification" [level=2] [ref=e209]:
+      - generic [ref=e210]: Job Posting Notification
+"Save and Continue": |-
+      - button "Save and Continue" [ref=e164] [cursor=pointer]
+      - button "Save as Draft" [ref=e165] [cursor=pointer]
+      - button "Quit" [ref=e166] [cursor=pointer]
+  - generic [ref=e167]:
+  --
+    - button "Save and Continue" [ref=e232] [cursor=pointer]
+    - button "Save as Draft" [ref=e233] [cursor=pointer]
+    - button "Quit" [ref=e234] [cursor=pointer]
+  - link "Privacy Agreement" [ref=e243] [cursor=pointer]:

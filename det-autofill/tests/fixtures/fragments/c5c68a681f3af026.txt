@@ -1,0 +1,6 @@
+"I am not a protected veteran": |-
+    - radio "I am not a protected veteran" [ref=e1992]
+    - generic [ref=e1994]: I am not a protected veteran
+  - generic [ref=e1996] [cursor=pointer]:
+    - radio "I prefer not to answer" [ref=e1998]
+    - generic [ref=e2000]: I prefer not to answer

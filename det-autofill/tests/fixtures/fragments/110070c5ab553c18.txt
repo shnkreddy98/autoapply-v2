@@ -1,0 +1,53 @@
+"Last Name": |-
+          - button "Error Last Name" [ref=e566] [cursor=pointer]:
+            - text: Error
+            - generic [ref=e567]: "-"
+            - text: Last Name
+          - generic [ref=e568]: The field Last Name is required and must have a value.
+      - listitem [ref=e569]:
+        - generic [ref=e570]:
+          - button "Error Phone Device Type" [ref=e571] [cursor=pointer]:
+            - text: Error
+            - generic [ref=e572]: "-"
+            - text: Phone Device Type
+          - generic [ref=e573]: The field Phone Device Type is required and must have a value.
+  - generic [ref=e191]:
+    - group [ref=e192]:
+      - generic [ref=e291]:
+        - generic [ref=e293]: How Did You Hear About Us?*
+        - generic [ref=e294]:
+          - generic [ref=e299]:
+            - textbox "How Did You Hear About Us?" [invalid] [ref=e300]:
+              - /placeholder: Search
+              - text: Job Boards
+            - generic [ref=e301]: Expanded
+          - paragraph [ref=e575]:
+            - generic [ref=e576]: "Error:"
+            - text: The field How Did You Hear About Us? is required and must have a value.
+  --
+          - generic [ref=e343]: Last Name*
+          - generic [ref=e344]:
+            - textbox "Last Name" [invalid] [ref=e346]
+            - paragraph [ref=e581]:
+              - generic [ref=e582]: "Error:"
+              - text: The field Last Name is required and must have a value.
+        - generic [ref=e347]:
+          - generic [ref=e348]: Suffix
+          - button "Suffix Select One" [ref=e352]: Select One
+        - generic [ref=e353]:
+          - generic [ref=e354]: I have a preferred name
+          - checkbox "I have a preferred name" [ref=e359] [cursor=pointer]
+    - group "Address" [ref=e231]:
+      - heading "Address" [level=4] [ref=e232]
+      - generic [ref=e233]:
+        - generic [ref=e234]:
+          - generic [ref=e236]: Address Line 1*
+          - textbox "Address Line 1" [ref=e535]: 100 Example St
+        - generic [ref=e240]:
+          - generic [ref=e241]: Address Line 2
+          - textbox "Address Line 2" [ref=e244]
+        - generic [ref=e245]:
+          - generic [ref=e247]: City*
+          - textbox "City" [ref=e536]: San Jose
+        - generic [ref=e251]:
+          - generic [ref=e253]: State*

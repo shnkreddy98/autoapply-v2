@@ -1,0 +1,15 @@
+"English": |-
+          - option "English" [ref=f67e571] [cursor=pointer]
+          - option "Spanish" [ref=f67e572] [cursor=pointer]
+        - status: 3 results available. Use down and up arrow keys to navigate.
+  - generic [ref=f67e115]:
+"Do you consent to receive text message communication during your application process?": |-
+      - text: Do you consent to receive text message communication during your application process?
+      - generic [ref=f67e117]: "*"
+    - generic [ref=f67e118]:
+      - generic [ref=f67e119]: Do you consent to receive text message communication during your application process?
+      - option [selected]
+      - combobox "Do you consent to receive text message communication during your application process?" [ref=f67e120] [cursor=pointer]:
+        - generic [ref=f67e121]: — Make a Selection —
+  - generic [ref=f67e124]:
+    - group "Addresses (1)* required." [ref=f67e125]:

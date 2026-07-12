@@ -1,0 +1,32 @@
+"Resume": |-
+    - generic [ref=e346]: Resume*
+    - generic [ref=e347]:
+      - link "Attach resume" [ref=e348] [cursor=pointer]:
+        - /url: "#"
+      - text: or
+      - link "Paste resume" [ref=e349] [cursor=pointer]:
+        - /url: "#"
+  - generic [ref=e350]:
+    - generic [ref=e351]: What's your highest level of education completed?*
+"Website": |-
+      - link "View Our Website " [ref=e9] [cursor=pointer]:
+        - /url: https://www.cutsforth.com/
+        - text: View Our Website
+        - generic [ref=e10]: 
+  - generic [ref=e13]:
+    - text: 
+  --
+                  - text: Completing this form is voluntary, and we hope that you will choose to do so. Your answer is confidential. No one who makes hiring decisions will see it. Your decision to complete the form and your answer will not harm you in any way. If you want to learn more about the law or this form, visit the U.S. Department of Labor’s Office of Federal Contract Compliance Programs (OFCCP) website at
+                  - link "www.dol.gov/ofccp" [ref=e443] [cursor=pointer]:
+                    - /url: https://www.dol.gov/ofccp
+                  - text: .
+  --
+      - heading "This website uses cookies and other analytics technologies." [level=3] [ref=e506]
+      - text: By selecting "Allow", you consent to the recording, use and sharing of your website activity by this website and its service providers.
+    - generic [ref=e507]:
+      - button "Allow" [ref=e508] [cursor=pointer]
+      - button "Reject All" [ref=e509] [cursor=pointer]
+"Salary expectation": (no match)
+"Databricks experience": (no match)
+"Spark experience": (no match)
+"Cloud experience": (no match)

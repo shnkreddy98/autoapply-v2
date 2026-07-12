@@ -1,0 +1,10 @@
+"Email": (no match)
+"Password": (no match)
+"Sign In": |-
+        - button "Sign In" [ref=e33] [cursor=pointer]:
+          - generic [ref=e38]: Sign In
+        - navigation [ref=e39]:
+          - button "Search for Jobs" [ref=e40] [cursor=pointer]
+  - generic [ref=e44]:
+"username": (no match)
+"log in": (no match)

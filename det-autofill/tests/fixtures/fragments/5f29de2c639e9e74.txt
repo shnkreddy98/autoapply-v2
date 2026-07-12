@@ -1,0 +1,16 @@
+"Male": |-
+      - option "Male"
+      - option "Female"
+      - option "Opt Out"
+  - generic [ref=f67e50]:
+    - generic [ref=f67e51]:
+"Asian (Not Hispanic or Latino)": |-
+    - text: •Asian (not Hispanic or Latino) - A person having origins in any of the original peoples of the Far East, Southeast Asia, or the Indian Subcontinent, including, for example, Cambodia, China, India, Japan, Korea, Malaysia, Pakistan, the Philippine Islands, Thailand, and Vietnam.
+    - text: •American Indian or Alaska Native (not Hispanic or Latino) - A person having origins in any of the original peoples of North and South America (including Central America ), and who maintain tribal affiliation or community attachment.
+    - text: "•Two or More Races (not Hispanic or Latino) - A person who identifies with more than one of the following, as defined above: White; Black or African American; Native Hawaiian or Other Pacific Islander; Asian; or American Indian or Alaska Native."
+  - heading "Voluntary Information" [level=2] [ref=f67e43]
+  --
+        - option "Asian (Not Hispanic or Latino)"
+        - option "Black or African American (Not Hispanic or Latino)"
+        - option "Native Hawaiian or Other Pacific Islander (Not Hispanic or Latino)"
+        - option "Two or More Races (Not Hispanic or Latino)"

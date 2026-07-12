@@ -1,0 +1,10 @@
+"Are you a US Military Veteran? Select One": |-
+        - button "Are you a US Military Veteran? Select One" [ref=e1554]: Select One
+  - group "Terms and Conditions" [ref=e1555]:
+    - heading "Terms and Conditions" [level=4] [ref=e1556]
+    - generic [ref=e1557]:
+"Yes, I have read and consent to the terms and conditions*": |-
+            - generic [ref=e1598]: Yes, I have read and consent to the terms and conditions*
+            - checkbox "Yes, I have read and consent to the terms and conditions" [ref=e1603] [cursor=pointer]
+  - generic [ref=e260]:
+    - button "Back" [ref=e378] [cursor=pointer]

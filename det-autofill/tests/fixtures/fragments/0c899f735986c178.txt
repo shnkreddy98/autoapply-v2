@@ -1,0 +1,11 @@
+"Yes": |-
+                    - button "Yes Required" [ref=e1678]: "Yes"
+                  - group "Will you now or in the future require sponsorship for employment visa status?*" [ref=e1491]:
+                    - paragraph [ref=e1495]:
+                      - generic [ref=e1496]: Will you now or in the future require sponsorship for employment visa status?*
+  --
+      - option "Yes" [ref=e1684]:
+        - generic [ref=e1685]: "Yes"
+      - option "No" [ref=e1686]:
+        - generic [ref=e1687]: "No"
+  ```

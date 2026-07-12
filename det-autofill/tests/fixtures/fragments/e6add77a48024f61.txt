@@ -1,0 +1,36 @@
+"Are you authorized to work in the country for the position for which you are specifically applying?": |-
+    - text: Are you authorized to work in the country for the position for which you are specifically applying?
+  - radiogroup "Are you authorized to work in the country for the position for which you are specifically applying?" [ref=e1025]:
+    - generic [ref=e1027]:
+      - radio "Yes" [ref=e1028]
+      - text: "Yes"
+"Have you completed a Bachelor's degree or are you currently enrolled to complete a Bachelor's degree?": |-
+    - text: Have you completed a Bachelor's degree or are you currently enrolled to complete a Bachelor's degree?
+  - radiogroup "Have you completed a Bachelor's degree or are you currently enrolled to complete a Bachelor's degree?" [ref=e1054]:
+    - generic [ref=e1056]:
+      - radio "Yes" [ref=e1057]
+      - text: "Yes"
+"SQL experience is highly preferred- do you have experience with SQL?": |-
+    - text: SQL experience is highly preferred- do you have experience with SQL?
+  - radiogroup "SQL experience is highly preferred- do you have experience with SQL?" [ref=e1071]:
+    - generic [ref=e1073]:
+      - radio "Yes" [ref=e1074]
+      - text: "Yes"
+"Are you capable of physically working in that location?": |-
+    - text: The work location is (Chicago and/or Lake Forest, IL). Are you capable of physically working in that location?
+  - radiogroup "The work location is (Chicago and/or Lake Forest, IL). Are you capable of physically working in that location?" [ref=e1088]:
+    - generic [ref=e1090]:
+      - radio "Yes" [ref=e1091]
+      - text: "Yes"
+"Will you now or in the future require sponsorship for employment visa status e.g., H-1B?": |-
+    - text: Will you now or in the future require sponsorship for employment visa status e.g., H-1B?
+  - radiogroup "Will you now or in the future require sponsorship for employment visa status e.g., H-1B?" [ref=e1105]:
+    - generic [ref=e1107]:
+      - radio "Yes" [ref=e1108]
+      - text: "Yes"
+"Are you seeking any relocation reimbursement or financial assistance to relocate if offered this role?": |-
+    - text: Are you seeking any relocation reimbursement or financial assistance to relocate if offered this role?
+  - radiogroup "Are you seeking any relocation reimbursement or financial assistance to relocate if offered this role?" [ref=e1122]:
+    - generic [ref=e1124]:
+      - radio "Yes" [ref=e1125]
+      - text: "Yes"

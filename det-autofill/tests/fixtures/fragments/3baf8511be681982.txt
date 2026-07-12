@@ -1,0 +1,11 @@
+"No": |-
+          - radio "No" [ref=e443] [cursor=pointer]
+          - generic [ref=e444]: "No"
+  - group [ref=e445]:
+    - generic [ref=e447]:
+      - generic [ref=e449]: Country*
+"Phone Device Type Select One Required": |-
+    - button "Phone Device Type Select One Required" [ref=e533]: Select One
+  - generic [ref=e534]:
+    - generic [ref=e536]: Country Phone Code*
+    - generic [ref=e541] [cursor=pointer]:

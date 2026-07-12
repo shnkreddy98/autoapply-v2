@@ -1,0 +1,10 @@
+"My Computer": |-
+    - generic [ref=f67e64]: My Computer (Opens new window)
+    - 'button "My Computer (Opens new window) Please upload your resume (Max size: 5 MB)" [ref=f67e65]'
+    - generic [ref=f67e66]:
+      - generic [ref=f67e67]: 
+      - text: 
+    - text: My Computer
+  - generic [ref=f67e68]:
+    - generic [ref=f67e69]: Google Drive (Opens new window)
+    - 'button "Google Drive (Opens new window) Please upload your resume (Max size: 5 MB)" [ref=f67e70] [cursor=pointer]':

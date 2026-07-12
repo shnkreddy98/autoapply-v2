@@ -1,0 +1,27 @@
+"Major": |-
+    - generic [ref=f67e218]: Major
+    - generic [ref=f67e219]:
+      - generic [ref=f67e220]: Major
+      - option [selected]
+      - combobox "Major" [ref=f67e221] [cursor=pointer]:
+        - generic [ref=f67e222]: — Make a Selection —
+  - generic [ref=f67e225]:
+    - generic [ref=f67e227]: Did You Graduate?
+  --
+    - generic [ref=f67e258]: Major
+    - generic [ref=f67e259]:
+      - generic [ref=f67e260]: Major
+      - option [selected]
+      - combobox "Major" [ref=f67e261] [cursor=pointer]:
+        - generic [ref=f67e262]: — Make a Selection —
+  - generic [ref=f67e265]:
+    - generic [ref=f67e267]: Did You Graduate?
+  --
+      - generic [ref=f67e301]: Major
+      - generic [ref=f67e302]:
+        - generic [ref=f67e303]: Major
+        - option "Computer Science" [selected]
+        - combobox "Major" [ref=f67e304] [cursor=pointer]:
+          - generic [ref=f67e305]: Computer Science
+    - generic [ref=f67e308]:
+      - generic [ref=f67e310]: Did You Graduate?

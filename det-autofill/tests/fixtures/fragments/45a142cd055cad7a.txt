@@ -1,0 +1,42 @@
+"If Other, please explain:": |-
+    - text: "If Other, please explain:"
+    - textbox "If Other, please explain:" [ref=e772]
+  - generic [ref=e775]:
+    - generic [ref=e776]:
+      - generic [ref=e777]: "*"
+"Have you worked for Grainger, Imperial Supplies or Zoro previously?": |-
+      - text: Have you worked for Grainger, Imperial Supplies or Zoro previously?
+    - generic [ref=e778]:
+      - generic [ref=e779]:
+        - status
+      - combobox "Have you worked for Grainger, Imperial Supplies or Zoro previously?" [ref=e780]
+      - button "Have you worked for Grainger, Imperial Supplies or Zoro previously?" [ref=e781] [cursor=pointer]:
+        - generic [ref=e782]: 
+  - generic [ref=e784]:
+    - generic [ref=e785]:
+"legal right to work in the country of this position": |-
+      - text: Do you have a legal right to work in the country of this position and the ability to immediately begin the position for which you are specifically applying?
+    - generic [ref=e787]:
+      - generic [ref=e788]:
+        - status
+      - combobox "Do you have a legal right to work in the country of this position and the ability to immediately begin the position for which you are specifically applying?" [ref=e789]
+      - button "Do you have a legal right to work in the country of this position and the ability to immediately begin the position for which you are specifically applying?" [ref=e790] [cursor=pointer]:
+        - generic [ref=e791]: 
+  - generic [ref=e793]:
+    - generic [ref=e794]:
+"require sponsorship for employment visa status": |-
+      - text: Will you now or in the future require sponsorship for employment visa status (e.g., H-1B)?
+    - generic [ref=e796]:
+      - generic [ref=e797]:
+        - status
+      - combobox "Will you now or in the future require sponsorship for employment visa status (e.g., H-1B)?" [ref=e798]
+      - button "Will you now or in the future require sponsorship for employment visa status (e.g., H-1B)?" [ref=e799] [cursor=pointer]:
+        - generic [ref=e800]: 
+  - generic [ref=e803]:
+    - generic [ref=e804]:
+  --
+      - text: Will you now or in the future require sponsorship for employment visa status e.g., H-1B?
+    - radiogroup "Will you now or in the future require sponsorship for employment visa status e.g., H-1B?" [ref=e1105]:
+      - generic [ref=e1107]:
+        - radio "Yes" [ref=e1108]
+        - text: "Yes"

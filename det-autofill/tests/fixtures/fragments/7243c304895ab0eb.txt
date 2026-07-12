@@ -1,0 +1,7 @@
+"Please specify": |-
+      - text: Please specify
+      - generic [ref=e160]: "*"
+    - combobox "Please specify" [ref=e162]:
+      - option [selected]
+  - generic [ref=e163]:
+    - group "Addresses (1)* required." [ref=e164]:

@@ -1,0 +1,11 @@
+"Education": |-
+  - generic [ref=e163]: Education
+  - generic [ref=e165]: Click arrow to expand. Mandatory information inside.
+  - button "" [ref=e167] [cursor=pointer]:
+    - generic [ref=e168]: 
+"Work History": |-
+  - generic "Work History" [ref=e170]:
+    - generic [ref=e171]: Work History
+    - generic [ref=e173]: Click arrow to expand. Mandatory information inside.
+    - button "" [ref=e175] [cursor=pointer]:
+      - generic [ref=e176]: 

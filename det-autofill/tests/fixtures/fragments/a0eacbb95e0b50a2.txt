@@ -1,0 +1,49 @@
+"Username": |-
+  - button "Sign in Don't have an account? Register now Username Password hide/show password sign in Create or reset your password Copyright © 1997-2025. UKG Inc. All rights reserved." [ref=e3]
+  - generic [ref=e4]:
+    - heading "Sign in" [level=1] [ref=e7]
+    - generic [ref=e9]:
+  --
+          - generic: Username
+        - textbox "Username" [ref=e30]:
+          - /placeholder: ""
+      - generic [ref=e40]:
+        - generic [ref=e41]:
+"Password": |-
+                  - button "Sign in Don't have an account? Register now Username Password hide/show password sign in Create or reset your password Copyright © 1997-2025. UKG Inc. All rights reserved." [ref=e3]
+                  - generic [ref=e4]:
+                    - heading "Sign in" [level=1] [ref=e7]
+                    - generic [ref=e9]:
+  --
+                          - generic: Password
+                        - generic [ref=e42]:
+                          - generic [ref=e43]:
+                            - button "hide/show password" [ref=e44] [cursor=pointer]:
+                              - img "visibility-on" [ref=e46]:
+                                - img [ref=e48]
+                            - generic:
+                              - generic: Show Password
+                          - textbox "Password" [ref=e51]:
+                            - /placeholder: ""
+                      - generic [ref=e52]:
+                        - button "sign in" [ref=e54] [cursor=pointer]:
+  --
+                        - button "Create or reset your password" [ref=e58] [cursor=pointer]:
+                          - generic [ref=e59]:
+                            - generic: Create or reset your password
+                  - generic [ref=e65]: Copyright © 1997-2025. UKG Inc. All rights reserved.
+  ```
+"sign in": |-
+  - button "Sign in Don't have an account? Register now Username Password hide/show password sign in Create or reset your password Copyright © 1997-2025. UKG Inc. All rights reserved." [ref=e3]
+  - generic [ref=e4]:
+    - heading "Sign in" [level=1] [ref=e7]
+    - generic [ref=e9]:
+      - generic [ref=e16]: Don't have an account? Register now
+      - generic [ref=e26]:
+  --
+        - button "sign in" [ref=e54] [cursor=pointer]:
+          - generic [ref=e55]:
+            - generic: Sign in
+        - button "Create or reset your password" [ref=e58] [cursor=pointer]:
+          - generic [ref=e59]:
+            - generic: Create or reset your password

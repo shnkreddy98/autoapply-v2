@@ -1,0 +1,6 @@
+"Bachelor's Degree": |-
+  - option "Bachelor's Degree" [ref=e1166]:
+    - generic [ref=e1167]: Bachelor's Degree
+  - option "Master's Degree" [ref=e1168]:
+    - generic [ref=e1169]: Master's Degree
+  - option "Doctorate Degree" [ref=e1170]:

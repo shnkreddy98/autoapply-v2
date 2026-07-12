@@ -1,0 +1,11 @@
+"State/Prov/County": |-
+  - generic "Required" [ref=e152]: State/Prov/County*
+  - generic [ref=e155]:
+    - status [ref=e157]
+    - combobox "State/Prov/County" [ref=e967]
+    - button "State/Prov/County" [ref=e159] [cursor=pointer]:
+      - generic [ref=e160]: 
+  - button "State/Prov/County Show help" [ref=e162] [cursor=pointer]: 
+  - generic "Required" [ref=e163]: Zip/Postal Code*
+  - textbox "Zip/Postal Code" [ref=e164]: "95126"
+  - generic [ref=e165]:

@@ -1,0 +1,4 @@
+"No, I do not/will not require sponsorship": |-
+      - option "No, I do not/will not require sponsorship" [ref=e1914]:
+        - generic [ref=e1915]: No, I do not/will not require sponsorship
+  ```

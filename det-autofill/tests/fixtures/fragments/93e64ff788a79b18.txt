@@ -1,0 +1,67 @@
+"Email Address": |-
+    - generic [ref=e208]: Email Address*
+    - textbox "Email Address" [ref=e211]
+  - generic [ref=e213]:
+    - generic [ref=e215]: Password*
+    - textbox "Password" [ref=e218]
+  --
+      - paragraph [ref=e230]: We appreciate your interest in Wells Fargo and would like to review your qualifications more thoroughly. In order to assess your skills and experience, we need a clear and accurate understanding of your background. Please fill in all information carefully and completely. You must submit a completed application in order to be considered for a position. A resume will not be accepted separately in lieu of a completed application. As part of the application process you must either upload a resume or provide work experience information. Entering your email address and contact phone number is important so you can check the status and receive messages regarding your application.
+      - paragraph [ref=e231]: Wells Fargo is an equal opportunity employer. We recruit, hire, and promote employees based on their individual ability and experience. All qualified applicants will receive consideration for employment without regard to race, color, religion, sex, sexual orientation, gender identity, national origin, disability, status as a protected veteran, or any other legally protected characteristic.
+      - paragraph [ref=e232]:
+        - text: Wells Fargo will provide reasonable accommodation to applicants and employees with disabilities when it is necessary for the performance of the essential functions of a job. Should you need assistance in completing your application or at any stage of the hiring process, refer to the
+"Password": |-
+      - paragraph [ref=e197]: "Password Requirements:"
+      - list [ref=e198]:
+        - listitem [ref=e199]: A numeric character
+        - listitem [ref=e200]: An uppercase character
+  --
+        - generic [ref=e215]: Password*
+        - textbox "Password" [ref=e218]
+      - generic [ref=e219]:
+        - generic [ref=e221]: Verify New Password*
+        - textbox "Verify New Password" [ref=e224]
+      - generic [ref=e227]:
+        - generic [ref=e229]:
+          - paragraph [ref=e230]: We appreciate your interest in Wells Fargo and would like to review your qualifications more thoroughly. In order to assess your skills and experience, we need a clear and accurate understanding of your background. Please fill in all information carefully and completely. You must submit a completed application in order to be considered for a position. A resume will not be accepted separately in lieu of a completed application. As part of the application process you must either upload a resume or provide work experience information. Entering your email address and contact phone number is important so you can check the status and receive messages regarding your application.
+  --
+    - button "Forgot your password?" [ref=e282] [cursor=pointer]
+  - generic:
+    - generic:
+      - generic [ref=e283]: Enter website. This input is for robots only, do not enter if you're human.
+"Sign In": |-
+          - button "Sign In" [ref=e47] [cursor=pointer]:
+            - generic [ref=e52]: Sign In
+        - navigation [ref=e53]:
+          - button "Wells Fargo Careers Home" [ref=e54] [cursor=pointer]
+  - main [ref=e119]:
+  --
+            - generic [ref=e137]: Create Account/Sign In
+          - listitem [ref=e138]:
+            - generic: step 2 of 8
+            - generic [ref=e144]: Autofill with Resume
+  --
+            - button "Sign In" [ref=e280] [cursor=pointer]
+          - button "Forgot your password?" [ref=e282] [cursor=pointer]
+        - generic:
+          - generic:
+"Create Account": |-
+  - Page Title: Create Account
+  ### Snapshot
+  ```yaml
+  - generic [ref=e4]:
+  --
+              - generic [ref=e137]: Create Account/Sign In
+            - listitem [ref=e138]:
+              - generic: step 2 of 8
+              - generic [ref=e144]: Autofill with Resume
+  --
+            - heading "Create Account" [active] [level=3] [ref=e193]
+            - generic [ref=e196]:
+              - paragraph [ref=e197]: "Password Requirements:"
+              - list [ref=e198]:
+  --
+                - button "Create Account" [ref=e277] [cursor=pointer]
+                - button [ref=e278] [cursor=pointer]: Create Account
+            - generic [ref=e279]:
+              - text: Already have an account?
+              - button "Sign In" [ref=e280] [cursor=pointer]

@@ -1,0 +1,10 @@
+"Continue": |-
+            - paragraph [ref=e377]: Choose an option below for uploading a profile or a resume. If you Save and Continue to fill out the online job submission manually, you will have an opportunity to upload a resume/CV later in the submission process.
+            - paragraph [ref=e378]:
+              - generic [ref=e381]:
+                - generic [ref=e382]: Upload either DOC, DOCX, HTML, PDF, or TXT file types (5MB max)
+  --
+        - button "Continue" [ref=e399] [cursor=pointer]
+  - generic [ref=e56]:
+    - heading "Follow Us" [level=4] [ref=e57]
+    - list [ref=e58]:

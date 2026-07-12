@@ -1,0 +1,123 @@
+"Job Board": |-
+  - option "Job Board" [selected]
+  - option "Tech Community"
+  - option "Social Network"
+  - option "HTC Website"
+"LinkedIn": |-
+      - option "LinkedIn" [selected]
+      - option "Monster US"
+      - option "Naukri"
+      - option "Naukri Gulf"
+  --
+  - link "Linkedin" [ref=e173] [cursor=pointer]:
+    - /url: https://www.linkedin.com/company/htc-global-services/
+    - img "Linkedin" [ref=e174]
+  - link "Facebook" [ref=e175] [cursor=pointer]:
+    - /url: https://www.facebook.com/HTCGlobalServicesOfficial
+    - img "Facebook" [ref=e176]
+"US": |-
+    - status
+    - list:
+      - listitem: Please fill out this field.
+  - form "Contact form" [ref=e11]:
+  --
+            - option "Monster US"
+            - option "Naukri"
+            - option "Naukri Gulf"
+            - option "The Ladders"
+  --
+          - option "US"
+      - generic [ref=e54]:
+        - generic [ref=e55]: Are you 18 years or above?*
+        - generic [ref=e57]:
+  --
+        - paragraph [ref=e69]: HTC Global Services is committed to protecting and respecting your privacy, and we will only use your personal information to administer your account for employment based verifications, products and services. From time to time, we would like to contact you about our services and project related work, as well as other content that may be of interest to you.
+        - paragraph [ref=e70]:
+          - text: By filling this form, you provide HTC Global Services, with explicit consent to contact you in connection with your application. Learn more about our data management practices and the purpose for which we collect this data in our Privacy. To read the full policy
+          - link "CLICK HERE" [ref=e71] [cursor=pointer]:
+  --
+      - generic [ref=e87]: Industries
+      - list [ref=e88]:
+        - listitem [ref=e89]:
+          - link "BFSI" [ref=e90] [cursor=pointer]:
+            - /url: /industries/banking-financial-services-insurance-bfsi/
+        - listitem [ref=e91]:
+          - link "Healthcare" [ref=e92] [cursor=pointer]:
+            - /url: /industries/healthcare/
+        - listitem [ref=e93]:
+          - link "Consumer Services" [ref=e94] [cursor=pointer]:
+            - /url: /industries/consumer-services/
+        - listitem [ref=e95]:
+          - link "Automotive & Manufacturing" [ref=e96] [cursor=pointer]:
+            - /url: /industries/automotive-and-manufacturing/
+            - text: Automotive &
+            - text: Manufacturing
+        - listitem [ref=e97]:
+  --
+            - /url: /industries/public-sector/
+    - generic [ref=e99]:
+      - generic [ref=e100]: SERVICES
+      - list [ref=e101]:
+  --
+          - link "Business Process Services" [ref=e113] [cursor=pointer]:
+            - /url: /services/business-process-services/
+        - listitem [ref=e114]:
+          - link "Salesforce" [ref=e115] [cursor=pointer]:
+            - /url: /services/salesforce/
+  --
+          - link "ServiceFocus ITSM" [ref=e122] [cursor=pointer]:
+            - /url: /ip-solutions-products/servicefocus-redefine-your-it-service-delivery/
+        - listitem [ref=e123]:
+          - link "iDoc™ Product Line (IDP)" [ref=e124] [cursor=pointer]:
+            - /url: /ip-solutions-products/idoc-healthcare-data-archive-hda/
+  --
+            - /url: /ip-solutions-products/cmp-nextgen-intelligent-justice-case-management/
+    - generic [ref=e131]:
+      - generic [ref=e132]: ABOUT HTC
+      - list [ref=e133]:
+  --
+            - /url: /about-us/who-we-are/
+        - listitem [ref=e136]:
+          - link "Our Leaders" [ref=e137] [cursor=pointer]:
+            - /url: /about-us/our-leaders/
+        - listitem [ref=e138]:
+          - link "Corporate Social Responsibility" [ref=e139] [cursor=pointer]:
+            - /url: /about-us/corporate-social-responsibility/
+        - listitem [ref=e140]:
+          - link "News & Events" [ref=e141] [cursor=pointer]:
+            - /url: /about-us/news-and-events/
+        - listitem [ref=e142]:
+          - link "Heartfulness" [ref=e143] [cursor=pointer]:
+            - /url: /about-us/heartfulness/
+        - listitem [ref=e144]:
+          - link "Our Partners" [ref=e145] [cursor=pointer]:
+            - /url: /about-us/partners/
+    - generic [ref=e146]:
+      - generic [ref=e147]: INSIGHTS
+      - list [ref=e148]:
+  --
+      - link "CONTACT US" [ref=e165] [cursor=pointer]:
+        - /url: /contact-us/
+      - link "CAREERS" [ref=e167] [cursor=pointer]:
+        - /url: /careers/
+      - link "FOLLOW US" [ref=e169] [cursor=pointer]:
+        - /url: "#"
+      - generic [ref=e170]:
+        - link "X" [ref=e171] [cursor=pointer]:
+  --
+      - link "Terms of use" [ref=e187] [cursor=pointer]:
+        - /url: /terms-of-use/
+      - link "Manage Cookies" [ref=e188] [cursor=pointer]:
+        - /url: javascript:void(0)
+    - generic [ref=e190]: Copyright © 2026 HTC Global Services. All rights reserved.
+"Yes": |-
+    - text: "Yes"
+  - generic [ref=e60]:
+    - radio [ref=e61]
+    - text: "No"
+"agree to the Terms": |-
+          - checkbox "I have read and agree to the Terms & Conditions and Data Privacy Policy. I confirm that the information provided is true, complete, accurate, and I understand that any false or misleading details may result in disqualification or termination of employment. I also consent to the verification of my information through lawful checks." [ref=e79]
+          - text: I have read and agree to the Terms & Conditions and Data Privacy Policy. I confirm that the information provided is true, complete, accurate, and I understand that any false or misleading details may result in disqualification or termination of employment. I also consent to the verification of my information through lawful checks.
+        - button "APPLY NOW" [ref=e81] [cursor=pointer]
+  - generic [ref=e83]:
+    - generic [ref=e85]:

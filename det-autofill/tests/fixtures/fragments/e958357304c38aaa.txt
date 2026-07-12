@@ -1,0 +1,61 @@
+"Email Address": |-
+  - generic "Required" [ref=e51]: "Email Address: *"
+  - 'textbox "Email Address: *" [ref=e52]'
+  - generic "Required" [ref=e53]: "Retype Email Address: *"
+  - 'textbox "Retype Email Address: *" [ref=e54]'
+  - generic "Required" [ref=e55]: "Choose Password: *"
+  - generic [ref=e56]:
+    - 'textbox "Choose Password: *" [ref=e57]'
+"Retype Email Address": |-
+  - generic "Required" [ref=e53]: "Retype Email Address: *"
+  - 'textbox "Retype Email Address: *" [ref=e54]'
+  - generic "Required" [ref=e55]: "Choose Password: *"
+  - generic [ref=e56]:
+    - 'textbox "Choose Password: *" [ref=e57]'
+"Password": |-
+  - generic "Required" [ref=e55]: "Choose Password: *"
+  - generic [ref=e56]:
+    - 'textbox "Choose Password: *" [ref=e57]'
+    - button "Show" [ref=e58] [cursor=pointer]
+  - list [ref=e61]:
+    - listitem [ref=e62]: Password must be at least 8 characters long.
+    - listitem [ref=e63]: Password must not be longer than 20 characters.
+    - listitem [ref=e64]: Password must contain at least one upper case and one lower case letter.
+    - listitem [ref=e65]: Password must contain at least one number or punctuation character.
+    - listitem [ref=e66]: Password must not contain space or unicode characters.
+  - generic "Required" [ref=e67]: "Retype Password: *"
+  - generic [ref=e68]:
+    - 'textbox "Retype Password: *" [ref=e69]'
+    - button "Show" [ref=e70] [cursor=pointer]
+  - generic "Required" [ref=e71]: "First Name: *"
+  - 'textbox "First Name: *" [ref=e72]'
+"Retype Password": |-
+  - generic "Required" [ref=e67]: "Retype Password: *"
+  - generic [ref=e68]:
+    - 'textbox "Retype Password: *" [ref=e69]'
+    - button "Show" [ref=e70] [cursor=pointer]
+  - generic "Required" [ref=e71]: "First Name: *"
+  - 'textbox "First Name: *" [ref=e72]'
+"First Name": |-
+  - generic "Required" [ref=e71]: "First Name: *"
+  - 'textbox "First Name: *" [ref=e72]'
+  - generic "Required" [ref=e73]: "Last Name: *"
+  - 'textbox "Last Name: *" [ref=e74]'
+  - generic "Required" [ref=e76]: Country/Region of Residence:*
+"Last Name": |-
+  - generic "Required" [ref=e73]: "Last Name: *"
+  - 'textbox "Last Name: *" [ref=e74]'
+  - generic "Required" [ref=e76]: Country/Region of Residence:*
+  - combobox "Country/Region of Residence" [ref=e79]:
+    - option "- Select -" [selected]
+"Country/Region of Residence": |-
+  - generic "Required" [ref=e76]: Country/Region of Residence:*
+  - combobox "Country/Region of Residence" [ref=e79]:
+    - option "- Select -" [selected]
+    - option "Afghanistan"
+    - option "Albania"
+"Read and accept the data privacy statement": |-
+            - button "Terms of Use Read and accept the data privacy statement. Required" [ref=e89] [cursor=pointer]: Read and accept the data privacy statement.
+            - button "Create Account" [ref=e94] [cursor=pointer]
+  - contentinfo [ref=e95]:
+    - generic [ref=e98]:

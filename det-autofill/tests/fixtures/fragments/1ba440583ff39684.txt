@@ -1,0 +1,80 @@
+"First Name": |-
+    - generic [ref=f103e117]: First Name*
+    - textbox "First Name" [ref=f103e118]
+  - generic [ref=f103e121]:
+    - generic [ref=f103e122]: Last Name*
+    - textbox "Last Name" [ref=f103e123]
+"Last Name": |-
+    - generic [ref=f103e122]: Last Name*
+    - textbox "Last Name" [ref=f103e123]
+  - generic [ref=f103e126]:
+    - generic [ref=f103e127]: Email*
+    - textbox "Email" [ref=f103e128]
+"Email": |-
+        - paragraph [ref=f103e97]: Interested in building your career at Butterfly Network? Get future opportunities sent straight to your email.
+        - link "Create alert" [ref=f103e443] [cursor=pointer]:
+          - /url: https://my.greenhouse.io/users/sign_in?job_board=butterflynetwork&source=job_alert_post
+  - separator [ref=f103e99]
+  --
+          - generic [ref=f103e127]: Email*
+          - textbox "Email" [ref=f103e128]
+        - group "Phone" [ref=f103e130]:
+          - generic [ref=f103e131]: Phone
+          - generic [ref=f103e134]:
+  --
+            - paragraph [ref=f103e308]: When you apply to a job on this site, the personal data contained in your application will be collected by Butterfly Network, Inc. (“Controller”), which is located at 530 Whitfield Street Guilford CT 06437 and can be contacted by emailing recruiting@butterflynetinc.com. Controller’s data protection officer is Dalini Khemlani, who can be contacted at dpo@butterflynetinc.com. Your personal data will be processed for the purposes of managing Controller’s recruitment related activities, which include setting up and conducting interviews and tests for applicants, evaluating and assessing the results thereto, and as is otherwise needed in the recruitment and hiring processes. Such processing is legally permissible under Art. 6(1)(f) of Regulation (EU) 2016/679 (General Data Protection Regulation) as necessary for the purposes of the legitimate interests pursued by the Controller, which are the solicitation, evaluation, and selection of applicants for employment.
+            - paragraph [ref=f103e309]: Your personal data will be shared with Greenhouse Software, Inc., a cloud services provider located in the United States of America and engaged by Controller to help manage its recruitment and hiring process on Controller’s behalf. Accordingly, if you are located outside of the United States, your personal data will be transferred to the United States once you submit it through this site. Because the European Union Commission has determined that United States data privacy laws do not ensure an adequate level of protection for personal data collected from EU data subjects, the transfer will be subject to appropriate additional safeguards under the standard contractual clauses]. You can obtain a copy of the standard contractual clauses by contacting us at recruiting@butterflynetinc.com.
+            - paragraph [ref=f103e310]: Your personal data will be retained by Controller as long as Controller determines it is necessary to evaluate your application for employment. Under the GDPR, you have the right to request access to your personal data, to request that your personal data be rectified or erased, and to request that processing of your personal data be restricted. You also have to right to data portability. In addition, you may lodge a complaint with an EU supervisory authority.
+            - paragraph [ref=f103e311]:
+"Phone": |-
+  - group "Phone" [ref=f103e130]:
+    - generic [ref=f103e131]: Phone
+    - generic [ref=f103e134]:
+      - generic [ref=f103e135]: Country*
+      - generic [ref=f103e136]:
+  --
+      - generic [ref=f103e151]: Phone*
+      - textbox "Phone" [ref=f103e152]
+  - generic [ref=f103e153]:
+    - generic [ref=f103e155]:
+      - generic [ref=f103e156]: Location (City)*
+"Location (City)": |-
+      - generic [ref=f103e156]: Location (City)*
+      - generic [ref=f103e157]:
+        - log [ref=f103e159]
+        - combobox "Location (City)" [ref=f103e164]
+        - textbox
+    - button "Locate me" [ref=f103e165] [cursor=pointer]
+  - group "Resume/CV*" [ref=f103e167]:
+"Resume/CV": |-
+  - group "Resume/CV*" [ref=f103e167]:
+    - generic [ref=f103e168]: Resume/CV*
+    - generic [ref=f103e170]:
+      - generic [ref=f103e172]:
+        - button "Attach" [ref=f103e173] [cursor=pointer]
+"LinkedIn Profile": |-
+    - generic [ref=f103e248]: LinkedIn Profile*
+    - textbox "LinkedIn Profile" [ref=f103e249]
+  - generic [ref=f103e252]:
+    - generic [ref=f103e253]: Are you currently located in NYC and willing to commute to the office 2-3 days a week? *
+    - textbox "Are you currently located in NYC and willing to commute to the office 2-3 days a week?" [ref=f103e254]
+"visa sponsorship": |-
+  - generic [ref=f103e258]: Will you now or in the future require visa sponsorship for employment at Butterfly Network?*
+  - generic [ref=f103e259]:
+    - log [ref=f103e261]
+    - generic [ref=f103e263]:
+  --
+        - combobox "Will you now or in the future require visa sponsorship for employment at Butterfly Network?" [ref=f103e267]
+      - button "Toggle flyout" [ref=f103e269] [cursor=pointer]:
+        - img [ref=f103e270]
+    - textbox
+"resident of the European Union": |-
+  - generic [ref=f103e275]: Are you currently a resident of the European Union?*
+  - generic [ref=f103e276]:
+    - log [ref=f103e278]
+    - generic [ref=f103e280]:
+  --
+        - combobox "Are you currently a resident of the European Union?" [ref=f103e284]
+      - button "Toggle flyout" [ref=f103e286] [cursor=pointer]:
+        - img [ref=f103e287]
+    - textbox

@@ -1,0 +1,18 @@
+"Yes": |-
+        - button "Yes" [ref=e220] [cursor=pointer]
+        - button "No" [ref=e221] [cursor=pointer]
+  - generic [ref=e222]:
+    - generic [ref=e223]:
+"Describe an analytics project you worked on. What was your role, and what measurable impact did the project have?": |-
+    - generic [ref=e228]: Describe an analytics project you worked on. What was your role, and what measurable impact did the project have?
+    - textbox "Describe an analytics project you worked on. What was your role, and what measurable impact did the project have?" [ref=e230] [cursor=pointer]:
+      - /placeholder: Type here...
+  - generic [ref=e231]:
+    - generic [ref=e232]: Please tell us about how you’ve leveraged AI tools in your work. What impact did they have, and how do you see AI shaping the way you approach your role in the future? If you haven’t used AI before, share how you think about the role it could play in your work.*
+"Please tell us about how you\u2019ve leveraged AI tools in your work. What impact did they have, and how do you see AI shaping the way you approach your role in the future? If you haven\u2019t used AI before, share how you think about the role it could play in your work.*": |-
+        - generic [ref=e232]: Please tell us about how you’ve leveraged AI tools in your work. What impact did they have, and how do you see AI shaping the way you approach your role in the future? If you haven’t used AI before, share how you think about the role it could play in your work.*
+        - paragraph [ref=e234]: At Moxie, we are an AI-enabled company. We use AI to augment our work—not to replace roles, but to free our team from repetitive tasks and create space for deeper thinking, creativity, and impact. We value team members who are curious about and open to leveraging AI in their workflows.
+        - textbox "Please tell us about how you’ve leveraged AI tools in your work. What impact did they have, and how do you see AI shaping the way you approach your role in the future? If you haven’t used AI before, share how you think about the role it could play in your work.*" [ref=e235] [cursor=pointer]:
+          - /placeholder: Type here...
+  - button "Submit Application" [ref=e181] [cursor=pointer]:
+    - text: Submit Application

@@ -1,0 +1,16 @@
+"Apply": |-
+  - 1: [Begin the submission process](https://recruit.hirebridge.com/v3/applicationv2/Jobapplylogin.aspx?cid=7765&jid=731316)
+  ### Page
+  - Page URL: https://jobs.dayforcehcm.com/en-US/twoharbors/Round-Point/jobs/3050?src=LinkedIn
+  - Page Title: Data Engineer | Dayforce Jobs
+  --
+              - button "Apply for Data Engineer" [ref=e102] [cursor=pointer]:
+                - generic [ref=e103]: Apply
+              - generic [ref=e104]:
+                - separator
+              - button "Share" [ref=e106] [cursor=pointer]:
+  --
+                - generic [ref=e220]: Scan this QR code and apply!
+                - link "Download" [ref=e227] [cursor=pointer]:
+                  - /url: "#"
+            - generic [ref=e229]:

@@ -1,0 +1,9 @@
+"Mobile": |-
+      - option "Mobile" [ref=e695]:
+        - generic [ref=e696]: Mobile
+  ```
+"Save and Continue": |-
+          - button "Save and Continue" [ref=e504] [cursor=pointer]
+  - generic [ref=e33]:
+    - heading "Follow Us" [level=4] [ref=e34]
+    - list [ref=e35]:

@@ -1,0 +1,5 @@
+"Continue": |-
+        - button "Continue" [ref=e379] [cursor=pointer]
+  - generic [ref=e40]:
+    - heading "Follow Us" [level=4] [ref=e41]
+    - list [ref=e42]:

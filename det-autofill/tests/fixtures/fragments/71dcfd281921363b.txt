@@ -1,0 +1,7 @@
+"Continue": |-
+  - button "Continue" [ref=e314] [cursor=pointer]:
+    - generic [ref=e316]:
+      - generic: Continue
+  - generic [ref=e317]:
+    - separator [ref=e318]
+    - generic [ref=e319]: or

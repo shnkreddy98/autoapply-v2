@@ -1,0 +1,26 @@
+"Resume": |-
+    - generic [ref=e346]: Resume*
+    - generic [ref=e513]:
+      - generic [ref=e514]:
+        - text: Attach resume as .pdf, .doc, .docx, .odt, .txt, or .rtf (limit 5MB) or
+        - link "Paste resume" [ref=e515] [cursor=pointer]:
+          - /url: "#"
+      - button "Resume*" [ref=e517]
+  - generic [ref=e350]:
+    - generic [ref=e351]: What's your highest level of education completed?*
+    - combobox "What's your highest level of education completed?*" [ref=e352]:
+"Attach resume": |-
+    - text: Attach resume as .pdf, .doc, .docx, .odt, .txt, or .rtf (limit 5MB) or
+    - link "Paste resume" [ref=e515] [cursor=pointer]:
+      - /url: "#"
+  - button "Resume*" [ref=e517]
+"Upload": |-
+        - /url: https://www.cutsforth.com/wp-content/uploads/2026/06/2024-Cutsforth-Notice-to-Employees-Applicants.pdf
+    - paragraph [ref=e312]:
+      - strong [ref=e313]: "California Privacy Notice:"
+      - text: If you are a California resident, please review our California Job Applicant Privacy Policy for details regarding the personal information we collect during the hiring process, how we use it, and your rights under the CCPA. By submitting your application, you acknowledge that you have read and understand our privacy practices.
+  --
+        - /url: https://www.cutsforth.com/wp-content/uploads/2026/06/Cutsforth-LLC-CCPA-Notice-to-Applicants.pdf
+    - paragraph
+  - text:  
+  - generic [ref=e317]:

@@ -1,0 +1,55 @@
+"Street Address (line 1)": |-
+  - listitem [ref=e165]: The field "Street Address (line 1)" is mandatory.
+  - listitem [ref=e166]: The field "Zip/Postal Code" is mandatory.
+  --
+              - img "The field \"Street Address (line 1)\" is mandatory." [ref=e230]
+              - generic "The field Street Address (line 1) is mandatory." [ref=e231]:
+                - text: Street Address (line 1)
+                - generic [ref=e234]: .
+  --
+              - textbox "Street Address (line 1) . Required" [ref=e236]: 100 Example St
+            - generic [ref=e237]:
+"Zip/Postal Code": |-
+  - listitem [ref=e166]: The field "Zip/Postal Code" is mandatory.
+  - listitem [ref=e167]: You must select ALL possible values in the section Place of Residence.
+  --
+            - img "The field \"Zip/Postal Code\" is mandatory." [ref=e251]
+            - generic "The field Zip/Postal Code is mandatory." [ref=e252]:
+              - text: Zip/Postal Code
+              - generic [ref=e255]: .
+  --
+            - textbox "Zip/Postal Code . Required" [active] [ref=e257]: "95126"
+          - group "You must select ALL possible values in the section Place of Residence. Place of Residence . Required" [ref=e259]:
+"Country": |-
+  - generic [ref=e270]: Country
+  - combobox "Country" [ref=e271]:
+    - option "Not Specified"
+"State/Province": |-
+  - generic [ref=e273]: State/Province
+  - combobox "State/Province" [ref=e274]:
+    - option "Not Specified"
+"Primary Number type": (no match)
+"Primary Number": |-
+      - listitem [ref=e168]: The field "Primary Number" is mandatory.
+  - link "Beginning of the main content section." [ref=e169] [cursor=pointer]:
+  --
+                - img "The field \"Primary Number\" is mandatory." [ref=e287]
+                - generic "The field Primary Number is mandatory." [ref=e288]:
+                  - text: Primary Number
+                  - generic [ref=e291]: .
+  --
+                - combobox "Primary Number . Required" [ref=e293]:
+                  - option "Not Specified" [selected]
+"Source Type": |-
+  - generic "The field Source Type is mandatory." [ref=e189]:
+    - text: Source Type
+    - generic [ref=e190]: .
+  --
+  - combobox "Source Type . Required" [ref=e193]:
+    - option "Select One..."
+"Save and Continue": |-
+    - button "Save and Continue" [ref=e157] [cursor=pointer]
+    - button "Save as Draft" [ref=e158] [cursor=pointer]
+  --
+  - button "Save and Continue" [ref=e313] [cursor=pointer]
+  - button "Save as Draft" [ref=e314] [cursor=pointer]

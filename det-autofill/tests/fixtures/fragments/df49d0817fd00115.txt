@@ -1,0 +1,50 @@
+"First Name": |-
+    - generic [ref=e27]: First Name*
+    - textbox "First Name" [ref=e30]
+  - generic [ref=e32]:
+    - generic [ref=e35]: Last Name*
+    - textbox "Last Name" [ref=e38]
+"Last Name": |-
+      - generic [ref=e35]: Last Name*
+      - textbox "Last Name" [ref=e38]
+  - generic [ref=e41]:
+    - generic [ref=e44]: Email Address (Required)*
+    - textbox "Email Address (Required)" [ref=e47]
+"Email Address (Required)": |-
+    - generic [ref=e44]: Email Address (Required)*
+    - textbox "Email Address (Required)" [ref=e47]
+  - generic [ref=e50]:
+    - generic [ref=e53]: Confirm Email Address*
+    - textbox "Confirm Email Address" [ref=e56]
+"Confirm Email Address": |-
+    - generic [ref=e53]: Confirm Email Address*
+    - textbox "Confirm Email Address" [ref=e56]
+  - generic [ref=e59]:
+    - generic [ref=e62]: Password*
+    - textbox "Password" [ref=e65]
+"Password": |-
+    - generic [ref=e62]: Password*
+    - textbox "Password" [ref=e65]
+  - generic [ref=e68]:
+    - generic [ref=e71]: Confirm Password*
+    - textbox "Confirm Password" [ref=e74]
+  - generic [ref=e76]:
+    - text: Dayforce will use the personal information collected on this form to create your account, which will allow you to apply directly with Dayforce's clients using the same credentials, saving you time and making your account more secure. The processing of the personal information for this purpose is subject to
+    - link "Dayforce's Global Privacy Statement" [ref=e77] [cursor=pointer]:
+"Confirm Password": |-
+    - generic [ref=e71]: Confirm Password*
+    - textbox "Confirm Password" [ref=e74]
+  - generic [ref=e76]:
+    - text: Dayforce will use the personal information collected on this form to create your account, which will allow you to apply directly with Dayforce's clients using the same credentials, saving you time and making your account more secure. The processing of the personal information for this purpose is subject to
+    - link "Dayforce's Global Privacy Statement" [ref=e77] [cursor=pointer]:
+"I agree": |-
+    - checkbox "I agree to Dayforce's Global Privacy Statement and to the Terms of Use, I clicked the links above and reviewed these documents." [ref=e85] [cursor=pointer]
+    - generic [ref=e86]: I agree to Dayforce's Global Privacy Statement and to the Terms of Use, I clicked the links above and reviewed these documents.
+  - generic:
+    - generic:
+      - paragraph
+"Next": |-
+    - button "Next" [ref=e90] [cursor=pointer]
+  - generic [ref=e92]:
+    - text: Have an account?
+    - link "Sign In" [ref=e93] [cursor=pointer]:

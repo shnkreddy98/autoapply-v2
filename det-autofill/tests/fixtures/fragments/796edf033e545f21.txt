@@ -1,0 +1,11 @@
+"I accept": |-
+            - checkbox "I accept" [checked] [ref=f109e34]
+            - text: I accept
+          - generic [ref=f109e35]: You must indicate that you have read the privacy notice and consent to the processing of your personal data before you can continue.
+      - button "Next" [disabled] [ref=f109e36]
+  - generic [ref=f109e43]:
+"Next": |-
+      - button "Next" [disabled] [ref=f109e36]
+  - generic [ref=f109e43]:
+    - link "Application FAQs" [ref=f109e44] [cursor=pointer]:
+      - /url: https://icims.help/candidate-faq

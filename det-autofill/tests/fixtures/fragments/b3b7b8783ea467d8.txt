@@ -1,0 +1,6 @@
+"No, I don\u2019t have a disability": |-
+      - option "No, I don’t have a disability, or a history/record of having a disability" [ref=e1683]:
+        - generic [ref=e1684]: No, I don’t have a disability, or a history/record of having a disability
+      - option "Yes, I have a disability, or have a history/record of having a disability" [ref=e1685]:
+        - generic [ref=e1686]: Yes, I have a disability, or have a history/record of having a disability
+  - generic:

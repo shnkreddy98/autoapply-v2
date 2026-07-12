@@ -1,0 +1,108 @@
+"Gender": |-
+  - generic [ref=e489]: "Gender :"
+  - combobox "Gender :" [ref=e491]:
+    - option "Select"
+    - option "Male" [selected]
+    - option "Female"
+"Race": |-
+    - generic [ref=e493]: "Race :"
+    - combobox "Race :" [ref=e495]:
+      - option "Select Race"
+      - option "American Indian or Alaskan Native"
+      - option "Asian" [selected]
+      - option "Black or African American"
+  --
+      - option "Two or more races"
+      - option "White"
+  - generic [ref=e496]:
+    - generic [ref=e497]: "Ethnicity :"
+"Ethnicity": |-
+  - generic [ref=e497]: "Ethnicity :"
+  - combobox "Ethnicity :" [ref=e499]:
+    - option "Select Ethnicity"
+    - option "Hispanic or Latino"
+    - option "Not Hispanic or Latino" [selected]
+    - option "Prefer not to answer"
+"Military spouse": |-
+  - generic [ref=e501]: "Are you currently a military spouse? :"
+  - combobox "Are you currently a military spouse? :" [ref=e503]:
+    - option "Select your answer"
+    - option "N/A"
+    - option "No" [selected]
+"Disability": |-
+    - generic [ref=e505]: "Disability :"
+    - combobox "Disability :" [ref=e507]:
+      - option "Select Disability"
+      - option "No, I Do not Have A Disability, Or A History/Record Of Having A Disability" [selected]
+      - option "Prefer not to answer"
+      - option "Yes, I Have A Disability, Or Have A History/Record Of Having A Disability"
+  - generic [ref=e508]:
+    - generic [ref=e509]: "Disability Note :"
+    - textbox "Disability Note :" [ref=e511]:
+      - /placeholder: Enter Disability Note
+  - generic [ref=e512]:
+    - generic [ref=e513]: "Veteran status :"
+    - generic [ref=e515]:
+"Total experience": |-
+  - generic [ref=e553]: "*Total experience :"
+  - combobox [ref=e555]:
+    - option "Select Year"
+    - option "0"
+"Relevant experience": |-
+  - generic [ref=e559]: "Relevant experience :"
+  - combobox [ref=e561]:
+    - option "Select Year"
+    - option "0"
+"Notice period": |-
+  - generic [ref=e566]: "*Notice period :"
+  - textbox "*Notice period :" [ref=e568]:
+    - /placeholder: Enter Days
+    - text: "14"
+  - generic [ref=e569]: days
+"Primary skills": |-
+  - generic [ref=e582]: "Primary skills :"
+  - list [ref=e584]:
+    - listitem [ref=e585]:
+      - textbox "Enter a skill" [ref=e586]
+"Secondary skills": |-
+  - generic [ref=e588]: "Secondary skills :"
+  - list [ref=e590]:
+    - listitem [ref=e591]:
+      - textbox "Enter skills" [ref=e592]
+"Competency Area": |-
+  - generic [ref=e594]: "*Competency Area :"
+  - combobox "*Competency Area :" [ref=e596]:
+    - option "Select"
+    - option "Business Process Services"
+    - option "Consulting"
+"Current employer": |-
+    - generic [ref=e598]: "*Current employer :"
+    - combobox "*Current employer :" [ref=e600]:
+      - option "Select employer"
+      - option "Accenture"
+      - option "AIG"
+  --
+    - generic [ref=e634]: "*Current employer :"
+    - textbox "*Current employer :" [ref=e636]:
+      - /placeholder: Enter employer name
+  - generic [ref=e601]:
+    - generic [ref=e602]: "Address :"
+"checkbox": |-
+        - checkbox "Disabled Veteran" [ref=e519]
+        - text: Disabled Veteran
+      - generic [ref=e520] [cursor=pointer]:
+        - checkbox "Recently seperated Veteran" [ref=e523]
+        - text: Recently seperated Veteran
+      - generic [ref=e524] [cursor=pointer]:
+        - checkbox "Armed force Services Medal Veteran" [ref=e527]
+        - text: Armed force Services Medal Veteran
+      - generic [ref=e528] [cursor=pointer]:
+        - checkbox "Other protected Veteran" [ref=e531]
+        - text: Other protected Veteran
+  - generic [ref=e532]: Professional Details
+  - generic [ref=e533]:
+  --
+    - checkbox [checked] [ref=e615]
+    - generic [ref=e616]: "*"
+    - text: I hereby submit my application through the career’s website and provide my explicit consent to Mphasis to collect and process my Personal Information, including my name, email address, contact number, professional and experience details, and other related information, for evaluating my candidature for current and future job opportunities with Mphasis.
+    - paragraph [ref=e617]: I understand that Mphasis will use the information provided by me to evaluate my candidature, manage the recruitment process, maintain relevant records, and contact me regarding job openings, application status, interview processes, and other recruitment-related communications.

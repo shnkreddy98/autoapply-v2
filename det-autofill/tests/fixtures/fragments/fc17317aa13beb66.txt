@@ -1,0 +1,4 @@
+"Not declared": |-
+      - option "Not declared" [ref=e2421]:
+        - generic [ref=e2422]: Not declared
+  ```

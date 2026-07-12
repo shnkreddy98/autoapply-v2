@@ -1,0 +1,5 @@
+"I agree to the terms and conditions": |-
+  - checkbox "I agree to the terms and conditions of this site and consent to receive electronic communications including emails and text messages from this organization." [ref=e296]
+  - generic [ref=e297] [cursor=pointer]:
+    - text: I agree to the
+    - link "terms and conditions" [ref=e298]:

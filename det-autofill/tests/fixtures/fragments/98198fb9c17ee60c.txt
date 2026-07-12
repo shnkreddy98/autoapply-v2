@@ -1,0 +1,10 @@
+"Apply Online": |-
+      - button "Apply Online" [ref=e51] [cursor=pointer]
+      - generic [ref=e52]: Job Description - Sr. Data Engineer (006IK)
+      - heading "Job Description" [level=1] [ref=e53]:
+        - generic [ref=e55]: Job Description
+  --
+      - button "Apply Online" [ref=e124] [cursor=pointer]
+  - generic:
+    - generic:
+      - generic:

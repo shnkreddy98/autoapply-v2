@@ -1,0 +1,45 @@
+"Full name \u2731": |-
+      - textbox "Full name ✱" [ref=e45]: Jane Quinn Doe
+  - listitem [ref=e46]:
+    - generic [ref=e47]: Pronouns
+    - list [ref=e49]:
+"Email \u2731": |-
+      - textbox "Email ✱" [ref=e106]: jane.doe@example.com
+  - listitem [ref=e107]:
+    - generic [ref=e108]:
+      - generic [ref=e109]:
+"Phone \u2731": |-
+      - textbox "Phone ✱" [ref=e112]: "5550100199"
+  - listitem [ref=e113]:
+    - generic [ref=e114]:
+      - generic [ref=e115]: Current location
+"Current location": |-
+      - generic [ref=e115]: Current location
+      - textbox "Current location" [ref=e117]: San Jose, CA
+  - listitem [ref=e118]:
+    - generic [ref=e119]:
+      - generic [ref=e120]: Current company
+"Current company": |-
+          - generic [ref=e120]: Current company
+          - textbox "Current company" [ref=e122]: AirFold
+  - generic [ref=e123]:
+    - heading "Links" [level=4] [ref=e124]
+    - list [ref=e125]:
+"LinkedIn URL": |-
+      - generic [ref=e128]: LinkedIn URL
+      - textbox "LinkedIn URL" [ref=e130]: https://linkedin.com/in/janedoe
+  - listitem [ref=e131]:
+    - generic [ref=e132]:
+      - generic [ref=e133]: Twitter URL
+"GitHub URL": |-
+      - generic [ref=e138]: GitHub URL
+      - textbox "GitHub URL" [ref=e140]: https://github.com/shnkreddy98
+  - listitem [ref=e141]:
+    - generic [ref=e142]:
+      - generic [ref=e143]: Portfolio URL
+"Preferred First Name \u2731": (no match)
+"Are you legally authorized to work in the United States? \u2731": (no match)
+"Will you now, or in the future, require sponsorship for employment visa status (i.g. H1-B visa status)? \u2731": (no match)
+"Are you over 18 years of age? \u2731": (no match)
+"Have you ever worked for SugarAI before? \u2731": (no match)
+"Do you have any family members, domestic partners or close personal relationships with a current employee of Sugar? \u2731": (no match)

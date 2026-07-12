@@ -1,0 +1,8 @@
+"Last Name": |-
+    - generic [ref=e284]: Last Name*
+    - textbox "Last Name" [ref=e287]: Doe
+  - generic [ref=e288]:
+    - generic [ref=e289]: Suffix
+    - button "Suffix Select One" [ref=e293]: Select One
+  - generic [ref=e294]:
+    - generic [ref=e295]: I have a preferred name

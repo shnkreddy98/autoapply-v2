@@ -1,0 +1,8 @@
+"Answer the following question with numbers only.": |-
+      - heading "Answer the following question with numbers only." [level=2] [ref=f13e104]
+      - paragraph
+    - generic [ref=f13e12]: When the final character is 7, change only that last character to 6 in 740877.
+    - textbox "Answer the following question with numbers only. When the final character is 7, change only that last character to 6 in 740877." [active] [ref=f13e105]
+  - generic [ref=f13e16]:
+    - alert [ref=f13e17]:
+      - generic [ref=f13e18]: Please try again. ⚠️

@@ -1,0 +1,9 @@
+"LinkedIn Profile URL": |-
+          - generic [ref=e649]: LinkedIn Profile URL
+          - textbox "LinkedIn Profile URL" [ref=e652]
+  - generic [ref=e171]:
+    - button "Back" [ref=e327] [cursor=pointer]
+    - button "Save and Continue" [ref=e328] [cursor=pointer]
+"Work Experience": (no match)
+"Education": (no match)
+"Websites": (no match)

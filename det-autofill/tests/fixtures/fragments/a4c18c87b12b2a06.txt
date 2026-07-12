@@ -1,0 +1,6 @@
+"No": |-
+          - radio "No" [ref=e486] [cursor=pointer]
+          - generic [ref=e487]: "No"
+  - group [ref=e405]:
+    - generic [ref=e407]:
+      - generic [ref=e409]: Country*

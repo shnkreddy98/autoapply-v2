@@ -1,0 +1,20 @@
+"Work Experience 1 Month 01": (no match)
+"Work Experience 1 Year 2025": (no match)
+"I currently work here": |-
+    - generic [ref=e718]: I currently work here
+    - checkbox "I currently work here" [ref=e723] [cursor=pointer]
+  - generic [ref=e724]:
+    - group "From" [ref=e726]:
+      - generic [ref=e729]: From*
+  --
+    - generic [ref=e802]: I currently work here
+    - checkbox "I currently work here" [ref=e807] [cursor=pointer]
+  - generic [ref=e808]:
+    - group "From" [ref=e810]:
+      - generic [ref=e813]: From*
+  --
+    - generic [ref=e886]: I currently work here
+    - checkbox "I currently work here" [ref=e891] [cursor=pointer]
+  - generic [ref=e892]:
+    - group "From" [ref=e894]:
+      - generic [ref=e897]: From*

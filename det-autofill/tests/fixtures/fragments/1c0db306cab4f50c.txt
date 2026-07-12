@@ -1,0 +1,19 @@
+"Field of Study": |-
+    - generic [ref=e880]: Field of Study
+    - generic [ref=e886] [cursor=pointer]:
+      - textbox "Field of Study" [ref=e887]:
+        - /placeholder: Search
+      - generic [ref=e888]: 0 items selected
+  - button "The field will alphabetically return the first 100 results and can also return specified matches." [ref=e892] [cursor=pointer]
+  --
+    - generic [ref=e952]: Field of Study
+    - generic [ref=e958]:
+      - textbox "Field of Study" [active] [ref=e959]:
+        - /placeholder: Search
+        - text: Data Science
+      - generic [ref=e960]: Minimized
+"Save and Continue": |-
+          - button "Save and Continue" [ref=e574] [cursor=pointer]
+  - generic [ref=e56]:
+    - heading "Follow Us" [level=4] [ref=e57]
+    - list [ref=e58]:

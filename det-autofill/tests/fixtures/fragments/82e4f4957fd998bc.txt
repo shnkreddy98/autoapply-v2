@@ -1,0 +1,160 @@
+"Source Type": |-
+  - 'row "Candidate Information Mandatory fields are marked with an asterisk. . Required Please indicate how you heard about this job. Source Type . Required Select One... Please enter all relevant personal information in the fields below. First Name . Required Jane Last Name . Required Doe Middle Name Quinn Suffix (example: Sr, Jr, I, II, III) Street Address (line 1) . Required Address (line 2) City . Required Redwood City Zip/Postal Code . Required Place of Residence . Required Email Address . Required jane.doe@example.com Primary Number . Required Not Specified Cellular Number Home Phone Number 555-010-0199 Work Phone Number" [ref=e163]':
+    - 'cell "Candidate Information Mandatory fields are marked with an asterisk. . Required Please indicate how you heard about this job. Source Type . Required Select One... Please enter all relevant personal information in the fields below. First Name . Required Jane Last Name . Required Doe Middle Name Quinn Suffix (example: Sr, Jr, I, II, III) Street Address (line 1) . Required Address (line 2) City . Required Redwood City Zip/Postal Code . Required Place of Residence . Required Email Address . Required jane.doe@example.com Primary Number . Required Not Specified Cellular Number Home Phone Number 555-010-0199 Work Phone Number" [ref=e164]':
+      - heading "Candidate Information" [level=1] [ref=e165]:
+        - generic [ref=e166]: Candidate Information
+      - generic [ref=e169]:
+  --
+          - generic "The field Source Type is mandatory." [ref=e180]:
+            - text: Source Type
+            - generic [ref=e181]: .
+            - generic [ref=e182]: Required
+          - combobox "Source Type . Required" [ref=e184]:
+            - option "Select One..." [selected]
+            - option "Ad or event ID"
+            - option "Campus - Non Career Fair"
+"First Name": |-
+  - 'row "Candidate Information Mandatory fields are marked with an asterisk. . Required Please indicate how you heard about this job. Source Type . Required Select One... Please enter all relevant personal information in the fields below. First Name . Required Jane Last Name . Required Doe Middle Name Quinn Suffix (example: Sr, Jr, I, II, III) Street Address (line 1) . Required Address (line 2) City . Required Redwood City Zip/Postal Code . Required Place of Residence . Required Email Address . Required jane.doe@example.com Primary Number . Required Not Specified Cellular Number Home Phone Number 555-010-0199 Work Phone Number" [ref=e163]':
+    - 'cell "Candidate Information Mandatory fields are marked with an asterisk. . Required Please indicate how you heard about this job. Source Type . Required Select One... Please enter all relevant personal information in the fields below. First Name . Required Jane Last Name . Required Doe Middle Name Quinn Suffix (example: Sr, Jr, I, II, III) Street Address (line 1) . Required Address (line 2) City . Required Redwood City Zip/Postal Code . Required Place of Residence . Required Email Address . Required jane.doe@example.com Primary Number . Required Not Specified Cellular Number Home Phone Number 555-010-0199 Work Phone Number" [ref=e164]':
+      - heading "Candidate Information" [level=1] [ref=e165]:
+        - generic [ref=e166]: Candidate Information
+      - generic [ref=e169]:
+  --
+              - generic "The field First Name is mandatory." [ref=e194]:
+                - text: First Name
+                - generic [ref=e197]: .
+                - generic [ref=e198]: Required
+              - textbox "First Name . Required" [ref=e199]: Jane
+            - generic [ref=e200]:
+              - generic "The field Last Name is mandatory." [ref=e201]:
+                - text: Last Name
+"Last Name": |-
+  - 'row "Candidate Information Mandatory fields are marked with an asterisk. . Required Please indicate how you heard about this job. Source Type . Required Select One... Please enter all relevant personal information in the fields below. First Name . Required Jane Last Name . Required Doe Middle Name Quinn Suffix (example: Sr, Jr, I, II, III) Street Address (line 1) . Required Address (line 2) City . Required Redwood City Zip/Postal Code . Required Place of Residence . Required Email Address . Required jane.doe@example.com Primary Number . Required Not Specified Cellular Number Home Phone Number 555-010-0199 Work Phone Number" [ref=e163]':
+    - 'cell "Candidate Information Mandatory fields are marked with an asterisk. . Required Please indicate how you heard about this job. Source Type . Required Select One... Please enter all relevant personal information in the fields below. First Name . Required Jane Last Name . Required Doe Middle Name Quinn Suffix (example: Sr, Jr, I, II, III) Street Address (line 1) . Required Address (line 2) City . Required Redwood City Zip/Postal Code . Required Place of Residence . Required Email Address . Required jane.doe@example.com Primary Number . Required Not Specified Cellular Number Home Phone Number 555-010-0199 Work Phone Number" [ref=e164]':
+      - heading "Candidate Information" [level=1] [ref=e165]:
+        - generic [ref=e166]: Candidate Information
+      - generic [ref=e169]:
+  --
+              - generic "The field Last Name is mandatory." [ref=e201]:
+                - text: Last Name
+                - generic [ref=e204]: .
+                - generic [ref=e205]: Required
+              - textbox "Last Name . Required" [ref=e206]: Doe
+          - generic [ref=e207]:
+            - generic [ref=e208]:
+              - generic [ref=e209]: Middle Name
+"Street Address (line 1)": |-
+  - 'row "Candidate Information Mandatory fields are marked with an asterisk. . Required Please indicate how you heard about this job. Source Type . Required Select One... Please enter all relevant personal information in the fields below. First Name . Required Jane Last Name . Required Doe Middle Name Quinn Suffix (example: Sr, Jr, I, II, III) Street Address (line 1) . Required Address (line 2) City . Required Redwood City Zip/Postal Code . Required Place of Residence . Required Email Address . Required jane.doe@example.com Primary Number . Required Not Specified Cellular Number Home Phone Number 555-010-0199 Work Phone Number" [ref=e163]':
+    - 'cell "Candidate Information Mandatory fields are marked with an asterisk. . Required Please indicate how you heard about this job. Source Type . Required Select One... Please enter all relevant personal information in the fields below. First Name . Required Jane Last Name . Required Doe Middle Name Quinn Suffix (example: Sr, Jr, I, II, III) Street Address (line 1) . Required Address (line 2) City . Required Redwood City Zip/Postal Code . Required Place of Residence . Required Email Address . Required jane.doe@example.com Primary Number . Required Not Specified Cellular Number Home Phone Number 555-010-0199 Work Phone Number" [ref=e164]':
+      - heading "Candidate Information" [level=1] [ref=e165]:
+        - generic [ref=e166]: Candidate Information
+      - generic [ref=e169]:
+  --
+              - generic "The field Street Address (line 1) is mandatory." [ref=e220]:
+                - text: Street Address (line 1)
+                - generic [ref=e223]: .
+                - generic [ref=e224]: Required
+              - textbox "Street Address (line 1) . Required" [ref=e225]
+            - generic [ref=e226]:
+              - generic [ref=e227]: Address (line 2)
+              - textbox "Address (line 2)" [ref=e230]
+"City": |-
+  - 'row "Candidate Information Mandatory fields are marked with an asterisk. . Required Please indicate how you heard about this job. Source Type . Required Select One... Please enter all relevant personal information in the fields below. First Name . Required Jane Last Name . Required Doe Middle Name Quinn Suffix (example: Sr, Jr, I, II, III) Street Address (line 1) . Required Address (line 2) City . Required Redwood City Zip/Postal Code . Required Place of Residence . Required Email Address . Required jane.doe@example.com Primary Number . Required Not Specified Cellular Number Home Phone Number 555-010-0199 Work Phone Number" [ref=e163]':
+    - 'cell "Candidate Information Mandatory fields are marked with an asterisk. . Required Please indicate how you heard about this job. Source Type . Required Select One... Please enter all relevant personal information in the fields below. First Name . Required Jane Last Name . Required Doe Middle Name Quinn Suffix (example: Sr, Jr, I, II, III) Street Address (line 1) . Required Address (line 2) City . Required Redwood City Zip/Postal Code . Required Place of Residence . Required Email Address . Required jane.doe@example.com Primary Number . Required Not Specified Cellular Number Home Phone Number 555-010-0199 Work Phone Number" [ref=e164]':
+      - heading "Candidate Information" [level=1] [ref=e165]:
+        - generic [ref=e166]: Candidate Information
+      - generic [ref=e169]:
+  --
+            - generic "The field City is mandatory." [ref=e232]:
+              - text: City
+              - generic [ref=e235]: .
+              - generic [ref=e236]: Required
+            - textbox "City . Required" [ref=e237]: Redwood City
+          - generic [ref=e238]:
+            - generic "The field Zip/Postal Code is mandatory." [ref=e239]:
+              - text: Zip/Postal Code
+  --
+                - option "Holy See (Vatican City State)"
+                - option "Honduras"
+                - option "Hong Kong"
+                - option "Hungary"
+  --
+                - option "Crescent City"
+                - option "Cypress"
+                - option "Daly City"
+                - option "Downey"
+                - option "El Centro"
+                - option "Elk Grove"
+  --
+                - option "Redwood City"
+                - option "Richmond"
+                - option "Riverside"
+                - option "Roseville"
+  --
+                - option "Yuba City"
+          - generic [ref=e263]:
+            - generic "The field Email Address is mandatory." [ref=e264]:
+              - text: Email Address
+"Zip/Postal Code": |-
+  - 'row "Candidate Information Mandatory fields are marked with an asterisk. . Required Please indicate how you heard about this job. Source Type . Required Select One... Please enter all relevant personal information in the fields below. First Name . Required Jane Last Name . Required Doe Middle Name Quinn Suffix (example: Sr, Jr, I, II, III) Street Address (line 1) . Required Address (line 2) City . Required Redwood City Zip/Postal Code . Required Place of Residence . Required Email Address . Required jane.doe@example.com Primary Number . Required Not Specified Cellular Number Home Phone Number 555-010-0199 Work Phone Number" [ref=e163]':
+    - 'cell "Candidate Information Mandatory fields are marked with an asterisk. . Required Please indicate how you heard about this job. Source Type . Required Select One... Please enter all relevant personal information in the fields below. First Name . Required Jane Last Name . Required Doe Middle Name Quinn Suffix (example: Sr, Jr, I, II, III) Street Address (line 1) . Required Address (line 2) City . Required Redwood City Zip/Postal Code . Required Place of Residence . Required Email Address . Required jane.doe@example.com Primary Number . Required Not Specified Cellular Number Home Phone Number 555-010-0199 Work Phone Number" [ref=e164]':
+      - heading "Candidate Information" [level=1] [ref=e165]:
+        - generic [ref=e166]: Candidate Information
+      - generic [ref=e169]:
+  --
+            - generic "The field Zip/Postal Code is mandatory." [ref=e239]:
+              - text: Zip/Postal Code
+              - generic [ref=e242]: .
+              - generic [ref=e243]: Required
+            - textbox "Zip/Postal Code . Required" [ref=e244]
+          - group "Place of Residence . Required" [ref=e246]:
+            - generic "The field Place of Residence is mandatory." [ref=e249]:
+              - text: Place of Residence
+"Country": |-
+  - generic [ref=e255]: Country
+  - combobox "Country" [ref=e256]:
+    - option "Not Specified"
+    - option "United States" [selected]
+    - option "Canada"
+"State/Province": |-
+  - generic [ref=e258]: State/Province
+  - combobox "State/Province" [ref=e259]:
+    - option "Not Specified"
+    - option "Alabama"
+    - option "Alaska"
+"Nearest Metropolitan Area": |-
+  - generic [ref=e261]: Nearest Metropolitan Area
+  - combobox "Nearest Metropolitan Area" [ref=e262]:
+    - option "Not Specified" [selected]
+    - option "Agoura Hills"
+    - option "Anaheim"
+"Email Address": |-
+  - 'row "Candidate Information Mandatory fields are marked with an asterisk. . Required Please indicate how you heard about this job. Source Type . Required Select One... Please enter all relevant personal information in the fields below. First Name . Required Jane Last Name . Required Doe Middle Name Quinn Suffix (example: Sr, Jr, I, II, III) Street Address (line 1) . Required Address (line 2) City . Required Redwood City Zip/Postal Code . Required Place of Residence . Required Email Address . Required jane.doe@example.com Primary Number . Required Not Specified Cellular Number Home Phone Number 555-010-0199 Work Phone Number" [ref=e163]':
+    - 'cell "Candidate Information Mandatory fields are marked with an asterisk. . Required Please indicate how you heard about this job. Source Type . Required Select One... Please enter all relevant personal information in the fields below. First Name . Required Jane Last Name . Required Doe Middle Name Quinn Suffix (example: Sr, Jr, I, II, III) Street Address (line 1) . Required Address (line 2) City . Required Redwood City Zip/Postal Code . Required Place of Residence . Required Email Address . Required jane.doe@example.com Primary Number . Required Not Specified Cellular Number Home Phone Number 555-010-0199 Work Phone Number" [ref=e164]':
+      - heading "Candidate Information" [level=1] [ref=e165]:
+        - generic [ref=e166]: Candidate Information
+      - generic [ref=e169]:
+  --
+            - generic "The field Email Address is mandatory." [ref=e264]:
+              - text: Email Address
+              - generic [ref=e267]: .
+              - generic [ref=e268]: Required
+            - textbox "Email Address . Required" [ref=e269]: jane.doe@example.com
+          - generic [ref=e270]:
+            - generic "The field Primary Number is mandatory." [ref=e271]:
+              - text: Primary Number
+"Primary Number": |-
+  - 'row "Candidate Information Mandatory fields are marked with an asterisk. . Required Please indicate how you heard about this job. Source Type . Required Select One... Please enter all relevant personal information in the fields below. First Name . Required Jane Last Name . Required Doe Middle Name Quinn Suffix (example: Sr, Jr, I, II, III) Street Address (line 1) . Required Address (line 2) City . Required Redwood City Zip/Postal Code . Required Place of Residence . Required Email Address . Required jane.doe@example.com Primary Number . Required Not Specified Cellular Number Home Phone Number 555-010-0199 Work Phone Number" [ref=e163]':
+    - 'cell "Candidate Information Mandatory fields are marked with an asterisk. . Required Please indicate how you heard about this job. Source Type . Required Select One... Please enter all relevant personal information in the fields below. First Name . Required Jane Last Name . Required Doe Middle Name Quinn Suffix (example: Sr, Jr, I, II, III) Street Address (line 1) . Required Address (line 2) City . Required Redwood City Zip/Postal Code . Required Place of Residence . Required Email Address . Required jane.doe@example.com Primary Number . Required Not Specified Cellular Number Home Phone Number 555-010-0199 Work Phone Number" [ref=e164]':
+      - heading "Candidate Information" [level=1] [ref=e165]:
+        - generic [ref=e166]: Candidate Information
+      - generic [ref=e169]:
+  --
+            - generic "The field Primary Number is mandatory." [ref=e271]:
+              - text: Primary Number
+              - generic [ref=e274]: .
+              - generic [ref=e275]: Required
+            - combobox "Primary Number . Required" [ref=e276]:
+              - option "Not Specified" [selected]
+              - option "Home Phone"
+              - option "Work Phone"

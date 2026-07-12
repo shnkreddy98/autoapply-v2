@@ -1,0 +1,6 @@
+"Male": |-
+        - menuitem "Male" [ref=e683] [cursor=pointer]:
+          - generic [ref=e686]: Male
+        - menuitem "Female" [ref=e687] [cursor=pointer]:
+          - generic [ref=e690]: Female
+  ```

@@ -1,0 +1,76 @@
+"School or University": |-
+    - generic [ref=e632]: School or University*
+    - textbox "School or University" [ref=e635]: San Jose State University
+  - generic [ref=e636]:
+    - generic [ref=e638]: Degree*
+    - generic [ref=e639]:
+      - button "Degree Select One Required" [ref=e642]: Select One
+      - paragraph [ref=e801]:
+  --
+    - generic [ref=e674]: School or University*
+    - textbox "School or University" [ref=e677]: Visvesvaraya Technological University
+  - generic [ref=e678]:
+    - generic [ref=e680]: Degree*
+    - generic [ref=e681]:
+      - button "Degree Select One Required" [ref=e684]: Select One
+      - paragraph [ref=e804]:
+"Degree": |-
+          - button "Error Degree" [ref=e792] [cursor=pointer]:
+            - text: Error
+            - generic [ref=e793]: "-"
+            - text: Degree
+          - generic [ref=e794]: The field Degree is required and must have a value.
+      - listitem [ref=e795]:
+        - generic [ref=e796]:
+          - button "Error Degree" [ref=e797] [cursor=pointer]:
+            - text: Error
+            - generic [ref=e798]: "-"
+            - text: Degree
+          - generic [ref=e799]: The field Degree is required and must have a value.
+  - generic [ref=e617]:
+    - group "Education" [ref=e618]:
+      - heading "Education" [level=4] [ref=e619]
+      - group "Education 1" [ref=e620]:
+        - generic [ref=e621]:
+  --
+            - generic [ref=e638]: Degree*
+            - generic [ref=e639]:
+              - button "Degree Select One Required" [ref=e642]: Select One
+              - paragraph [ref=e801]:
+                - generic [ref=e802]: "Error:"
+                - text: The field Degree is required and must have a value.
+          - generic [ref=e643]:
+            - generic [ref=e645]:
+              - generic [ref=e646]: Field of Study
+              - generic [ref=e652] [cursor=pointer]:
+                - textbox "Field of Study" [ref=e653]:
+  --
+            - generic [ref=e680]: Degree*
+            - generic [ref=e681]:
+              - button "Degree Select One Required" [ref=e684]: Select One
+              - paragraph [ref=e804]:
+                - generic [ref=e805]: "Error:"
+                - text: The field Degree is required and must have a value.
+          - generic [ref=e685]:
+            - generic [ref=e687]:
+              - generic [ref=e688]: Field of Study
+              - generic [ref=e694] [cursor=pointer]:
+                - textbox "Field of Study" [ref=e695]:
+"Field of Study": |-
+            - generic [ref=e646]: Field of Study
+            - generic [ref=e652] [cursor=pointer]:
+              - textbox "Field of Study" [ref=e653]:
+                - /placeholder: Search
+              - generic [ref=e654]: 0 items selected
+          - button "The field will alphabetically return the first 100 results and can also return specified matches." [ref=e658] [cursor=pointer]
+    - group "Education 2" [ref=e662]:
+      - generic [ref=e663]:
+  --
+            - generic [ref=e688]: Field of Study
+            - generic [ref=e694] [cursor=pointer]:
+              - textbox "Field of Study" [ref=e695]:
+                - /placeholder: Search
+              - generic [ref=e696]: 0 items selected
+          - button "The field will alphabetically return the first 100 results and can also return specified matches." [ref=e700] [cursor=pointer]
+    - button "Add Another" [ref=e707] [cursor=pointer]
+  - group "Certifications" [ref=e709]:

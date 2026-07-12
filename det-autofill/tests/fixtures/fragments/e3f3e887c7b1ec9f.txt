@@ -1,0 +1,18 @@
+"No": |-
+            - group "Have you previously worked for this organization? If yes, please answer the question below. If No, please continue to the next page." [ref=e327]:
+              - generic [ref=e330]: Have you previously worked for this organization? If yes, please answer the question below. If No, please continue to the next page.*
+              - generic "Have you previously worked for this organization? If yes, please answer the question below. If No, please continue to the next page." [ref=e333]:
+                - generic [ref=e334]:
+                  - radio "Yes" [ref=e336] [cursor=pointer]
+                  - generic [ref=e337]: "Yes"
+  --
+                  - radio "No" [ref=e340] [cursor=pointer]
+                  - generic [ref=e341]: "No"
+          - group [ref=e342]:
+            - generic [ref=e344]:
+              - generic [ref=e346]: Country*
+  --
+  - option "Corporate Website not checked" [selected] [ref=e541]:
+    - generic [ref=e542] [cursor=pointer]:
+      - radio [ref=e547]
+      - generic [ref=e548]: Corporate Website

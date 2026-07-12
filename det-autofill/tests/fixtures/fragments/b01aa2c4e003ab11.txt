@@ -1,0 +1,6 @@
+"Company Website": |-
+  - option "Company Website not checked" [ref=e582]:
+    - generic [ref=e584] [cursor=pointer]: Company Website
+  - option "Contingent Worker not checked" [ref=e589]:
+    - generic [ref=e591] [cursor=pointer]: Contingent Worker
+  - option "Employee Referral not checked" [ref=e596]:

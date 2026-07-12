@@ -1,0 +1,15 @@
+"read and consent to the terms and conditions": |-
+          - button "Error Yes, I have read and consent to the terms and conditions" [ref=e2194] [cursor=pointer]:
+            - text: Error
+            - generic [ref=e2195]: "-"
+            - text: Yes, I have read and consent to the terms and conditions
+          - generic [ref=e2196]: Field and Value required
+  - generic [ref=e2054]:
+    - group "Personal Data Statement" [ref=e2055]:
+  --
+          - generic [ref=e2107]: Yes, I have read and consent to the terms and conditions*
+          - generic [ref=e2108]:
+            - checkbox "Yes, I have read and consent to the terms and conditions" [invalid] [ref=e2112] [cursor=pointer]
+            - paragraph [ref=e2114]:
+              - generic [ref=e2115]: "Error:"
+              - text: Field and Value required

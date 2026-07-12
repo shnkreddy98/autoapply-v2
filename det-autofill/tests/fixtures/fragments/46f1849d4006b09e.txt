@@ -1,0 +1,40 @@
+"work authorization status": |-
+  - generic [ref=e618]: "To be considered for this role, you must be legally authorized to work in the United States without the need for employer sponsorship. Please select your current work authorization status: *"
+  - generic [ref=e619]:
+    - log [ref=e621]
+    - generic [ref=e623]:
+  --
+        - combobox "To be considered for this role, you must be legally authorized to work in the United States without the need for employer sponsorship. Please select your current work authorization status:" [ref=e627]
+      - button "Toggle flyout" [ref=e629] [cursor=pointer]:
+        - img [ref=e630]
+    - textbox
+"why do you want to be a part of our team": |-
+    - generic [ref=e640]: Based on what you know about Livefront right now, why do you want to be a part of our team?*
+    - textbox "Based on what you know about Livefront right now, why do you want to be a part of our team?" [ref=e641]
+  - generic [ref=e644]:
+    - generic [ref=e645]: If you were referred to Livefront, tell us how.*
+    - generic [ref=e646]:
+"If you were referred to Livefront, tell us how": |-
+  - generic [ref=e645]: If you were referred to Livefront, tell us how.*
+  - generic [ref=e646]:
+    - log [ref=e648]
+    - generic [ref=e650]:
+  --
+        - combobox "If you were referred to Livefront, tell us how." [ref=e654]
+      - button "Toggle flyout" [ref=e656] [cursor=pointer]:
+        - img [ref=e657]
+    - textbox
+"If applicable, what is the name of the person who referred you": |-
+    - generic [ref=e662]: If applicable, what is the name of the person who referred you?*
+    - textbox "If applicable, what is the name of the person who referred you?" [ref=e663]
+  - generic [ref=e666]:
+    - generic [ref=e667]: We get really excited about folks with experience at service-based companies (as opposed to SaaS or in-house product teams). Please describe any digital agency experience you have!
+    - textbox "We get really excited about folks with experience at service-based companies (as opposed to SaaS or in-house product teams). Please describe any digital agency experience you have!" [ref=e668]
+"Location (City)": |-
+      - generic [ref=e560]: Location (City)*
+      - generic [ref=e561]:
+        - log [ref=e563]
+        - combobox "Location (City)" [ref=e568]
+        - textbox
+    - button "Locate me" [ref=e569] [cursor=pointer]
+  - group "Resume/CV*" [ref=e571]:

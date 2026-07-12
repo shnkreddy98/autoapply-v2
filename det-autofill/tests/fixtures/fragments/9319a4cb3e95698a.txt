@@ -1,0 +1,17 @@
+"I Accept": |-
+    - paragraph [ref=e380]: Clicking “I Accept” below indicates your consent and authorization for CRH Americas, Inc. (“CRH”) (including any of its subsidiaries) and its designated employees or agents to collect and use the information you submit in considering you for job opportunities at CRH Americas, Inc. (or any of its subsidiaries).
+    - paragraph [ref=e381]: Candidates who do not select “I accept” below indicate that they do not consent to the collection and use of the personal information they submit as described above, do not wish to continue and do not wish to submit their application.
+    - paragraph
+  - paragraph [ref=e383]: I understand that this employment application and any other Company documents are not contracts of employment, and that any individual who is hired may voluntarily leave employment or may be terminated at any time for any reason, other than a reason prohibited by law. I understand that any oral or written statements to the contrary are hereby expressly disavowed by CRH Americas, Inc. (including any of its subsidiaries) and should not be relied upon by any prospective or existing employee. I hereby affirm that I have not relied upon any such statements.
+  - generic [ref=e384]:
+    - paragraph [ref=e385]: "Clicking “I Accept” below indicates your consent and authorization for CRH Americas, Inc. and/or its subsidiaries and their designated employees: (1) to collect and use the information you submit (other than the information contained on the EEO Self Identification Questionnaire) in considering you for job opportunities; and (2) to conduct any investigation allowable by law into the information you provide in this application."
+    - paragraph [ref=e386]: Clicking “I Accept” below further serves as confirmation that the information entered on the "My Resume Profile, Resume, and/or cover letter attachments is complete and accurate. I understand that I must correct any statement that is inaccurate immediately, but no longer than 30 days, after learning of the inaccuracy.
+  - generic "Required" [ref=e387]: Applicant Acknowledgement:*
+  - generic [ref=e390]:
+    - status [ref=e392]: One or more results available. Press Up or Down Arrow Keys to navigate the selection list. Press Alt + Arrow keys to resize the selection list.
+  --
+        - option "I Accept" [ref=e1331] [cursor=pointer]:
+          - menuitem "I Accept" [ref=e1332]
+    - button "Applicant Acknowledgement:" [ref=e394] [cursor=pointer]:
+      - generic [ref=e395]: 
+  - table [ref=e397]:

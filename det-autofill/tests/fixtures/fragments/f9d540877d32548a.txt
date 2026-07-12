@@ -1,0 +1,124 @@
+"MS": |-
+  - Page URL: https://careers-nfiindustries.icims.com/jobs/29459/senior-data-engineer/candidate?from=login&csrf=AF8EDD89B0B489D5&hashed=-625888664&uploadResume=1&uploadResume=1
+  - Page Title: Candidate Profile - Senior Data Engineer
+  - Console: 8 errors, 12 warnings
+  ### Snapshot
+  --
+      - /url: https://careers-nfiindustries.icims.com/jobs/29459/senior-data-engineer/candidate?from=login&csrf=AF8EDD89B0B489D5&hashed=-625888664&uploadResume=1&uploadResume=1#icims_content_iframe
+    - main [ref=e2]:
+      - navigation [ref=e3]:
+        - generic [ref=e4]:
+  --
+                  - /url: "#iCIMS_Header"
+                - text: 
+                - generic [ref=f67e3]:
+                  - generic [ref=f67e7]:
+  --
+                      - /url: https://careers-nfiindustries.icims.com/jobs/29459/senior-data-engineer/login?loginOnly=1&redirect=candidate&in_iframe=1&hashed=-625888664
+                  - generic [ref=f67e12]:
+                    - heading "Senior Data Engineer" [level=1] [ref=f67e15]
+                    - generic [ref=f67e16]:
+  --
+                                    - option "MS" [ref=f67e590] [cursor=pointer]
+                                    - option "PhD" [ref=f67e591] [cursor=pointer]
+                                    - option "MBA" [ref=f67e592] [cursor=pointer]
+                                    - option "MCS" [ref=f67e593] [cursor=pointer]
+  --
+                            - textbox "Description" [ref=f67e459]: "* Orchestrated ELT pipelines using Airflow and Spark, integrating Kafka streams to ingest advertising data with exactly-once semantics. * Accelerated data modeling by deploying dbt for complex SQL transformations, replacing ad-hoc scripts with modular pipelines that reduced time-to-insight by 25%. * Designed real-time processing framework with Kafka Streams and Spark Streaming, providing near real- time insights into campaign performance. * Deployed serverless architecture (Cloud Functions, Cloud Storage) to automate data workflows, reducing manual intervention by 80% and improving reliability. * Engineered ROI optimization algorithms that increased client sales by 34% for global enterprises through data-driven ad spend allocation."
+                        - generic [ref=f67e460]:
+                          - group "Professional Experience (3)* required." [ref=f67e461]:
+                            - generic [ref=f67e463]:
+  --
+                      - /url: https://icims.help/candidate-faq
+                    - paragraph [ref=f67e559]:
+                      - text: Software Powered by iCIMS
+                      - link "www.icims.com" [ref=f67e560] [cursor=pointer]:
+                        - /url: http://www.icims.com/platform_help?utm_source=platform&utm_medium=link&utm_content=page1&utm_campaign=platform%20help
+                - generic [ref=f67e561]:
+                  - button "Close hCaptcha attribution notice" [ref=f67e562] [cursor=pointer]: 
+                  - generic [ref=f67e563]:
+  --
+                    - link "Terms" [ref=f67e565] [cursor=pointer]:
+                      - /url: https://www.hcaptcha.com/terms
+          - generic [ref=e27]:
+            - heading "Join our Talent Community today" [level=2] [ref=e32]
+            - link "Sign Up for Talent Community" [ref=e37] [cursor=pointer]:
+              - /url: https://c-14285-20240603-nfiindustries-jibeapply-com.i.icims.com/talent-community/talentcommunity/form
+              - paragraph [ref=e38]:
+                - strong [ref=e39]: Sign up now
+      - generic [ref=e41]:
+  --
+                - link "Early Career Programs" [ref=e86] [cursor=pointer]:
+                  - /url: /early-career-programs
+              - listitem [ref=e87]:
+                - link "Field Operations" [ref=e88] [cursor=pointer]:
+                  - /url: /field-operations
+"BS": |-
+  - Page URL: https://careers-nfiindustries.icims.com/jobs/29459/senior-data-engineer/candidate?from=login&csrf=AF8EDD89B0B489D5&hashed=-625888664&uploadResume=1&uploadResume=1
+  - Page Title: Candidate Profile - Senior Data Engineer
+  - Console: 8 errors, 12 warnings
+  ### Snapshot
+  --
+      - /url: https://careers-nfiindustries.icims.com/jobs/29459/senior-data-engineer/candidate?from=login&csrf=AF8EDD89B0B489D5&hashed=-625888664&uploadResume=1&uploadResume=1#icims_content_iframe
+    - main [ref=e2]:
+      - navigation [ref=e3]:
+        - generic [ref=e4]:
+  --
+          - link "Search jobs" [ref=e18] [cursor=pointer]:
+            - /url: /jobs
+      - main [ref=e20]:
+        - generic [ref=e21]:
+          - main "Career Portal" [ref=e24]:
+  --
+                      - /url: https://careers-nfiindustries.icims.com/jobs/29459/senior-data-engineer/login?loginOnly=1&redirect=candidate&in_iframe=1&hashed=-625888664
+                  - generic [ref=f67e12]:
+                    - heading "Senior Data Engineer" [level=1] [ref=f67e15]
+                    - generic [ref=f67e16]:
+  --
+                                    - option "BS" [ref=f67e589] [cursor=pointer]
+                                    - option "MS" [ref=f67e590] [cursor=pointer]
+                                    - option "PhD" [ref=f67e591] [cursor=pointer]
+                                    - option "MBA" [ref=f67e592] [cursor=pointer]
+  --
+                  - /url: mailto:nfijobs@nfiindustries.com
+              - listitem [ref=e57]:
+                - link "Site Map" [ref=e58] [cursor=pointer]:
+                  - /url: "#"
+  --
+              - text: 866-NFI-JOBS |
+              - link "866-634-5627" [ref=e62] [cursor=pointer]:
+                - /url: tel:8666345627
+              - link "nfiindustries.com" [ref=e63] [cursor=pointer]:
+  --
+                - link "All Jobs" [ref=e80] [cursor=pointer]:
+                  - /url: /jobs
+              - listitem [ref=e81]:
+                - link "Distribution" [ref=e82] [cursor=pointer]:
+                  - /url: /distribution
+"Major": |-
+    - generic [ref=f67e218]: Major
+    - generic [ref=f67e219]:
+      - generic [ref=f67e220]: Major
+      - option [selected]
+      - combobox "Major" [ref=f67e221] [cursor=pointer]:
+        - generic [ref=f67e222]: — Make a Selection —
+  - generic [ref=f67e225]:
+    - generic [ref=f67e227]: Did You Graduate?
+  --
+    - generic [ref=f67e258]: Major
+    - generic [ref=f67e259]:
+      - generic [ref=f67e260]: Major
+      - option [selected]
+      - combobox "Major" [ref=f67e261] [cursor=pointer]:
+        - generic [ref=f67e262]: — Make a Selection —
+  - generic [ref=f67e265]:
+    - generic [ref=f67e267]: Did You Graduate?
+  --
+      - generic [ref=f67e301]: Major
+      - generic [ref=f67e302]:
+        - generic [ref=f67e303]: Major
+        - option "Computer Science" [selected]
+        - combobox "Major" [ref=f67e304] [cursor=pointer]:
+          - generic [ref=f67e305]: Computer Science
+    - generic [ref=f67e308]:
+      - generic [ref=f67e310]: Did You Graduate?

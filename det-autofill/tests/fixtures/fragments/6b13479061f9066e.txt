@@ -1,0 +1,6 @@
+"Upload from Device": |-
+          - text: Upload from Device
+          - button "Upload from Device" [active] [ref=e169]
+        - button "Upload from Dropbox" [ref=e172] [cursor=pointer]
+        - button "Sign in with Google" [ref=e174] [cursor=pointer]
+  - tab [ref=e177] [cursor=pointer]

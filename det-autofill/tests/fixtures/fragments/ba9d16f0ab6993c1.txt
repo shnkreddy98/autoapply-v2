@@ -1,0 +1,22 @@
+"hCaptcha": |-
+          - button "Close hCaptcha attribution notice" [ref=f109e38] [cursor=pointer]: 
+          - generic [ref=f109e39]:
+            - text: Protected by hCaptcha
+            - link "Privacy" [ref=f109e40] [cursor=pointer]:
+              - /url: https://www.hcaptcha.com/privacy
+            - text: "|"
+            - link "Terms" [ref=f109e41] [cursor=pointer]:
+              - /url: https://www.hcaptcha.com/terms
+        - iframe [active] [ref=f109e50]:
+          - generic [ref=f112e2]:
+            - generic [ref=f112e5]:
+  --
+              - button "About hCaptcha & Accessibility Options" [active] [ref=f112e20] [cursor=pointer]:
+                - img [ref=f112e22]
+                - img [ref=f112e27]
+              - button "Refresh Challenge." [ref=f112e31] [cursor=pointer]:
+  --
+              - button "hCaptcha logo, opens new window with more information" [ref=f112e40] [cursor=pointer]:
+                - img [ref=f112e43]
+  - generic [ref=e63]:
+    - generic [ref=e64]:

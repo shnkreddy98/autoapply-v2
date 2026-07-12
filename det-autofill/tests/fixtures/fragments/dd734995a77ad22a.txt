@@ -1,0 +1,10 @@
+"Which work authorization best describes you:": |-
+  - generic [ref=e324]: "Which work authorization best describes you: *"
+  - generic [ref=e325]:
+    - log [ref=e327]
+    - generic [ref=e329]:
+  --
+        - combobox "Which work authorization best describes you:" [invalid] [ref=e333]
+      - button "Toggle flyout" [ref=e335] [cursor=pointer]:
+        - img [ref=e336]
+    - textbox

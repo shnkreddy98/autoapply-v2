@@ -1,0 +1,5 @@
+"Are you a member of another Federally Recognized Indian Tribe?*": |-
+  - group "Are you a member of another Federally Recognized Indian Tribe?*" [ref=e1711]:
+    - paragraph [ref=e1715]: Are you a member of another Federally Recognized Indian Tribe?*
+    - generic [ref=e1716]:
+      - button "Select One Required" [ref=e1719]: Select One

@@ -1,0 +1,11 @@
+"Please acknowledge your acceptance of the foregoing terms and conditions by checking the box below.": |-
+            - generic [ref=e2136]: Please acknowledge your acceptance of the foregoing terms and conditions by checking the box below.*
+            - checkbox "Please acknowledge your acceptance of the foregoing terms and conditions by checking the box below." [ref=e2141] [cursor=pointer]
+  - generic [ref=e396]:
+    - button "Back" [ref=e573] [cursor=pointer]
+    - button "Save and Continue" [ref=e574] [cursor=pointer]
+"Save and Continue": |-
+          - button "Save and Continue" [ref=e574] [cursor=pointer]
+  - generic [ref=e56]:
+    - heading "Follow Us" [level=4] [ref=e57]
+    - list [ref=e58]:

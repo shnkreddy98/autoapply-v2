@@ -1,0 +1,100 @@
+"School": |-
+    - generic [ref=f94e207]: School
+    - generic [ref=f94e208]:
+      - log [ref=f94e210]
+      - generic [ref=f94e212]:
+  --
+          - combobox "School" [ref=f94e216]
+        - button "Toggle flyout" [ref=f94e218] [cursor=pointer]:
+          - img [ref=f94e219]
+  - generic [ref=f94e222]:
+"Degree": |-
+      - generic [ref=f94e223]: Degree
+      - generic [ref=f94e224]:
+        - log [ref=f94e226]
+        - generic [ref=f94e228]:
+  --
+            - combobox "Degree" [ref=f94e232]
+          - button "Toggle flyout" [ref=f94e234] [cursor=pointer]:
+            - img [ref=f94e235]
+  - button "Add another" [ref=f94e237] [cursor=pointer]
+"Will you now or in the future require visa sponsorship": |-
+  - generic [ref=f94e258]: Will you now or in the future require visa sponsorship for employment at Butterfly Network?*
+  - generic [ref=f94e259]:
+    - generic [ref=f94e260]:
+      - text: option , selected.
+  --
+        - combobox "Will you now or in the future require visa sponsorship for employment at Butterfly Network?" [active] [invalid] [ref=f94e267]
+      - button "Toggle flyout" [ref=f94e269] [cursor=pointer]:
+        - img [ref=f94e270]
+    - textbox
+"resident of the European Union": |-
+  - generic [ref=f94e275]: Are you currently a resident of the European Union?*
+  - generic [ref=f94e276]:
+    - log [ref=f94e278]
+    - generic [ref=f94e280]:
+  --
+        - combobox "Are you currently a resident of the European Union?" [invalid] [ref=f94e284]
+      - button "Toggle flyout" [ref=f94e286] [cursor=pointer]:
+        - img [ref=f94e287]
+    - textbox
+"GDPR Notice for EU Residents": |-
+  - generic [ref=f94e292]: GDPR Notice for EU Residents*
+  - generic [ref=f94e293]:
+    - log [ref=f94e295]
+    - generic [ref=f94e297]:
+  --
+        - combobox "GDPR Notice for EU Residents" [invalid] [ref=f94e301]
+      - button "Toggle flyout" [ref=f94e303] [cursor=pointer]:
+        - img [ref=f94e304]
+    - textbox
+"Gender": |-
+    - emphasis [ref=f94e87]: Butterfly Network is an equal opportunity employer. Regardless of race, traits associated with race, color, ancestry, religion, gender, national origin, sexual orientation, age, citizenship, marital status, disability or Veteran status. All your information will be kept confidential according to EEO guidelines.
+  - paragraph [ref=f94e88]:
+    - emphasis [ref=f94e89]: "Butterfly requires security adherence responsibilities from all employees. These include: adhering to all company security policies and procedures, utilize provided company assets securely, and complete all required security awareness training programs. Safeguarding company data and systems from unauthorized access, modification, or destruction, contributing to the overall security posture of the organization. Immediately reporting any suspected or actual security incidents, including phishing attempts, malware infections, or unauthorized access, following the established incident response procedure"
+  - paragraph [ref=f94e90]: "#LI-KG"
+  --
+      - generic [ref=f94e327]: Gender
+      - generic [ref=f94e328]:
+        - log [ref=f94e330]
+        - generic [ref=f94e332]:
+  --
+            - combobox "Gender" [ref=f94e336]
+          - button "Toggle flyout" [ref=f94e338] [cursor=pointer]:
+            - img [ref=f94e339]
+    - generic [ref=f94e341]:
+"Hispanic/Latino": |-
+    - generic [ref=f94e344]: Are you Hispanic/Latino?
+    - generic [ref=f94e345]:
+      - log [ref=f94e347]
+      - generic [ref=f94e349]:
+  --
+          - combobox "Are you Hispanic/Latino?" [ref=f94e353]
+        - button "Toggle flyout" [ref=f94e355] [cursor=pointer]:
+          - img [ref=f94e356]
+  - link "Race & Ethnicity Definitions" [ref=f94e358] [cursor=pointer]:
+"Veteran Status": |-
+    - emphasis [ref=f94e87]: Butterfly Network is an equal opportunity employer. Regardless of race, traits associated with race, color, ancestry, religion, gender, national origin, sexual orientation, age, citizenship, marital status, disability or Veteran status. All your information will be kept confidential according to EEO guidelines.
+  - paragraph [ref=f94e88]:
+    - emphasis [ref=f94e89]: "Butterfly requires security adherence responsibilities from all employees. These include: adhering to all company security policies and procedures, utilize provided company assets securely, and complete all required security awareness training programs. Safeguarding company data and systems from unauthorized access, modification, or destruction, contributing to the overall security posture of the organization. Immediately reporting any suspected or actual security incidents, including phishing attempts, malware infections, or unauthorized access, following the established incident response procedure"
+  - paragraph [ref=f94e90]: "#LI-KG"
+  --
+      - generic [ref=f94e368]: Veteran Status
+      - generic [ref=f94e369]:
+        - log [ref=f94e371]
+        - generic [ref=f94e373]:
+  --
+            - combobox "Veteran Status" [ref=f94e377]
+          - button "Toggle flyout" [ref=f94e379] [cursor=pointer]:
+            - img [ref=f94e380]
+    - separator [ref=f94e382]
+"Disability Status": |-
+    - generic [ref=f94e425]: Disability Status
+    - generic [ref=f94e426]:
+      - log [ref=f94e428]
+      - generic [ref=f94e430]:
+  --
+          - combobox "Disability Status" [ref=f94e434]
+        - button "Toggle flyout" [ref=f94e436] [cursor=pointer]:
+          - img [ref=f94e437]
+  - paragraph [ref=f94e440]: "PUBLIC BURDEN STATEMENT: According to the Paperwork Reduction Act of 1995 no persons are required to respond to a collection of information unless such collection displays a valid OMB control number. This survey should take about 5 minutes to complete."

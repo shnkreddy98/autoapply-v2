@@ -1,0 +1,5 @@
+"Retrieve hCaptcha Accessibility Cookie": |-
+  - menuitem "Retrieve hCaptcha Accessibility Cookie, 1 of 5" [active] [ref=f5e108] [cursor=pointer]: Accessibility Cookie
+  - menuitem "Display hCaptcha Accessibility Challenge, 2 of 5" [ref=f5e110] [cursor=pointer]: Accessibility Challenge
+  - menuitem "Report Image to hCaptcha, 3 of 5" [ref=f5e112] [cursor=pointer]: Report Image
+  - menuitem "Report Bug to hCaptcha, 4 of 5" [ref=f5e114] [cursor=pointer]: Report Bug

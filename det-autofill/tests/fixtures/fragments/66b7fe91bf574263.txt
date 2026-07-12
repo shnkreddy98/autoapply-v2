@@ -1,0 +1,5 @@
+"San Jose, California, United States": |-
+  - option "San Jose, California, United States" [selected] [ref=e580] [cursor=pointer]
+  - option "San Jose, Camarines Sur, Philippines" [ref=e581] [cursor=pointer]
+  - option "San José, Caldas, Colombia" [ref=e582] [cursor=pointer]
+  - option "San José, Catamarca, Argentina" [ref=e583] [cursor=pointer]

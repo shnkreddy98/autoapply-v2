@@ -1,0 +1,20 @@
+"sponsorship": |-
+  - generic [ref=e200]: Will you now or in the future require sponsorship for employment visa status (e.g., H-1B, etc.)*
+  - generic [ref=e201]:
+    - button "Yes" [ref=e292] [cursor=pointer]
+    - button "No" [ref=e293] [cursor=pointer]
+"interview": |-
+      - paragraph [ref=e39]: The compensation offered for this role will depend on various factors, including the candidate's location, qualifications, work history, and interview performance, and may differ from the stated range.
+  - generic [ref=e40]:
+    - tablist [ref=e41]:
+      - tab "Overview" [ref=e277] [cursor=pointer]
+  --
+          - generic [ref=e205]: Are you available to attend an in-person interview if requested as part of the hiring process?*
+          - generic [ref=e206]:
+            - button "Yes" [ref=e294] [cursor=pointer]
+            - button "No" [ref=e295] [cursor=pointer]
+"background check": |-
+  - generic [ref=e210]: We conduct thorough background checks as part of our hiring process. By selecting “Yes,” you acknowledge and consent to this verification if you advance in the process*
+  - generic [ref=e211]:
+    - button "Yes" [ref=e296] [cursor=pointer]
+    - button "No" [ref=e297] [cursor=pointer]

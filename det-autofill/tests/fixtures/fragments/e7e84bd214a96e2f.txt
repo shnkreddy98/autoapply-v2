@@ -1,0 +1,15 @@
+"Consent": |-
+    - paragraph [ref=e45]: By registering you agree to our Consent Policy
+    - heading "Consent Policy" [level=2] [ref=e46]
+    - paragraph [ref=e47]:
+      - paragraph [ref=e48]:
+        - strong [ref=e50]: FCRA Disclosure and Authorization
+      - paragraph [ref=e51]: I understand that Mutual Bancorp and/or any of its subsidiaries (including but not limited to The Cape Cod Five Cents Savings Bank, Fidelity Co-operative Bank, and Exchange Authority, collectively, the “Company”) will utilize the services of a consumer reporting agency as part of the procedure for processing my application for employment. I also understand that if I am employed by the Company, the Company may obtain further information through subsequent investigations by a consumer reporting agency for purposes related to my employment with the Company. I understand that a consumer reporting agency's investigation may include obtaining information covering up to the last seven (7) years regarding my credit background, character, general reputation, personal characteristics and mode of living, and criminal conviction record (consistent with Massachusetts state law). I understand such information may be obtained by direct or indirect contact with former employers, schools, ﬁnancial institutions, landlords and public agencies or other persons who may have such knowledge. I hereby consent to this investigation and authorize the Company to procure a report on my background as stated above form a consumer reporting agency.
+    - generic [ref=e52]:
+      - button "Consent" [ref=e54] [cursor=pointer]:
+        - generic [ref=e55]:
+          - generic: Consent
+      - link "Do not consent" [ref=e56] [cursor=pointer]:
+        - /url: http://recruiting.ultipro.com/CAP1015CCFC/JobBoard/6f4434b4-0b72-4e52-b60d-afcc1a963060/OpportunityDetail?opportunityId=06415c17-c63b-42cb-b2d3-61edd586fb23&source=LinkedIn
+  - generic [ref=e57]:
+    - heading "Sign In" [level=1] [ref=e58]

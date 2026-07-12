@@ -1,0 +1,33 @@
+"Education (2)": |-
+  - group "Education (2)" [ref=f67e231]:
+    - generic [ref=f67e232]: Education (2)
+    - text: 
+    - generic [ref=f67e233]:
+      - generic [ref=f67e235]: School
+"Degree": |-
+    - generic [ref=f67e209]: Degree
+    - generic [ref=f67e210]:
+      - generic [ref=f67e211]: Degree
+      - option [selected]
+      - combobox "Degree" [ref=f67e212] [cursor=pointer]:
+        - generic [ref=f67e213]: — Make a Selection —
+  - generic [ref=f67e216]:
+    - generic [ref=f67e218]: Major
+  --
+    - generic [ref=f67e249]: Degree
+    - generic [ref=f67e250]:
+      - generic [ref=f67e251]: Degree
+      - option [selected]
+      - combobox "Degree" [ref=f67e252] [cursor=pointer]:
+        - generic [ref=f67e253]: — Make a Selection —
+  - generic [ref=f67e256]:
+    - generic [ref=f67e258]: Major
+  --
+      - generic [ref=f67e292]: Degree
+      - generic [ref=f67e293]:
+        - generic [ref=f67e294]: Degree
+        - option [selected]
+        - combobox "Degree" [ref=f67e295] [cursor=pointer]:
+          - generic [ref=f67e296]: — Make a Selection —
+    - generic [ref=f67e299]:
+      - generic [ref=f67e301]: Major

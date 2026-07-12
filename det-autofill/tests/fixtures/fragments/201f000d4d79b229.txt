@@ -1,0 +1,31 @@
+"No, I do not have a disability": |-
+  - row "Yes, I have a disability, or have had one in the past No, I do not have a disability and have not had one in the past I do not want to answer" [ref=e2301]:
+    - row "Yes, I have a disability, or have had one in the past" [ref=e2302]:
+      - cell "Yes, I have a disability, or have had one in the past" [ref=e2303]:
+        - generic [ref=e2304]:
+  --
+    - row "No, I do not have a disability and have not had one in the past" [ref=e2308]:
+      - cell "No, I do not have a disability and have not had one in the past" [ref=e2309]:
+        - generic [ref=e2310]:
+          - checkbox "No, I do not have a disability and have not had one in the past" [ref=e2312] [cursor=pointer]
+          - generic [ref=e2313] [cursor=pointer]: No, I do not have a disability and have not had one in the past
+    - row "I do not want to answer" [ref=e2314]:
+      - cell "I do not want to answer" [ref=e2315]:
+        - generic [ref=e2316]:
+"Name": |-
+    - generic [ref=e2226]: Name
+    - textbox "Name" [ref=e2229]
+  - generic [ref=e2230]:
+    - generic [ref=e2231]: Employee ID (if applicable)
+    - textbox "Employee ID (if applicable)" [ref=e2234]
+"Date": |-
+          - button "Candidate Home" [ref=e426] [cursor=pointer]
+  - main [ref=e119]:
+    - generic [ref=e120]:
+      - generic [ref=e121]:
+  --
+              - group "Date" [ref=e2236]:
+                - generic [ref=e2238]: Date
+                - generic [ref=e2240]:
+                  - generic [ref=e2241]: current value is MM/DD/YYYY
+                  - group [ref=e2242]:

@@ -1,0 +1,6 @@
+"Job Boards": |-
+      - option "Job Boards not checked" [ref=e697]:
+        - generic [ref=e699] [cursor=pointer]: Job Boards
+      - option "Recruiting/Staffing Agency not checked" [ref=e704]:
+        - generic [ref=e706] [cursor=pointer]: Recruiting/Staffing Agency
+  ```

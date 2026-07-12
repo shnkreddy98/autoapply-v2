@@ -1,0 +1,87 @@
+"What is your country of citizenship?": |-
+  - generic "Select What is your country of citizenship?" [ref=e595]:
+    - generic [ref=e598]:
+      - generic [ref=e600]:
+        - generic [ref=e602]:
+  --
+              - generic [ref=e611]: What is your country of citizenship?
+              - text: "*"
+            - combobox "What is your country of citizenship?" [ref=e614]
+          - img [ref=e618]
+        - status [ref=e620]
+      - generic:
+"Are you a current Supplemental Labor employee?": |-
+    - generic [ref=e632]: Are you a current Supplemental Labor employee?
+    - text: "*"
+  - radiogroup "Are you a current Supplemental Labor employee?" [ref=e633]:
+    - generic:
+      - radio "Yes" [ref=e634]:
+        - generic [ref=e646] [cursor=pointer]: "Yes"
+"Are you a former employee?": |-
+    - generic [ref=e671]: Are you a former employee?
+    - text: "*"
+  - radiogroup "Are you a former employee?" [ref=e672]:
+    - generic:
+      - radio "Yes" [ref=e673]:
+        - generic [ref=e685] [cursor=pointer]: "Yes"
+"Are you a U.S. citizen?": |-
+    - generic [ref=e710]: Are you a U.S. citizen?
+    - text: "*"
+  - radiogroup "Are you a U.S. citizen?" [ref=e711]:
+    - generic:
+      - radio "Yes" [ref=e712]:
+        - generic [ref=e724] [cursor=pointer]: "Yes"
+"Gender": |-
+    - text: Gender, Race and Ethnicity
+    - link "(definitions)" [ref=e772]:
+      - /url: https://smartrecruiters.com/oneclick-ui/resources/html/eeoGeneral?lang=en
+  - text: "*"
+  --
+  - generic "Select Gender" [ref=e776]:
+    - generic [ref=e779]:
+      - generic [ref=e781]:
+        - generic [ref=e783]:
+          - combobox "Gender" [ref=e789]
+          - img [ref=e793]
+        - status [ref=e795]
+      - generic [ref=e796]:
+"Race/Ethnicity": |-
+  - generic "Select Race/Ethnicity" [ref=e798]:
+    - generic [ref=e801]:
+      - generic [ref=e803]:
+        - generic [ref=e805]:
+          - combobox "Race/Ethnicity" [ref=e811]
+          - img [ref=e815]
+        - status [ref=e817]
+      - generic [ref=e818]:
+"No, I do not have a disability": |-
+      - radio "No, I do not have a disability and have not had one in the past." [ref=e846]:
+        - generic [ref=e858] [cursor=pointer]: No, I do not have a disability and have not had one in the past.
+      - radio "I do not want to answer." [ref=e859]:
+        - generic [ref=e871] [cursor=pointer]: I do not want to answer.
+  - generic:
+"Are you a protected veteran?": |-
+      - text: Are you a protected veteran?
+      - link "(definitions)" [ref=e884] [cursor=pointer]:
+        - /url: https://smartrecruiters.com/oneclick-ui/resources/html/ofccpVeterans?lang=en
+    - text: "*"
+  - radiogroup "Are you a protected veteran? (definitions)" [ref=e885]:
+    - generic:
+      - radio "Yes" [ref=e886]:
+        - generic [ref=e898] [cursor=pointer]: "Yes"
+"Select all - by selecting all": |-
+    - checkbox "Select all - by selecting all, you acknowledge the checkboxes below" [ref=e938] [cursor=pointer]
+    - generic [ref=e939]:
+      - generic [ref=e944] [cursor=pointer]: Select all - by selecting all, you acknowledge the checkboxes below
+      - generic:
+        - paragraph
+  - separator [ref=e945]
+"You declare that you have read and understand the job applications privacy notice of LLNL.": |-
+  - checkbox "You declare that you have read and understand the job applications privacy notice of LLNL." [ref=e951] [cursor=pointer]
+  - generic [ref=e952]:
+    - generic [ref=e957] [cursor=pointer]:
+      - generic [ref=e959]:
+        - generic: You declare that you have read and understand the job applications privacy notice of LLNL.
+      - text: "*"
+    - generic:
+      - paragraph

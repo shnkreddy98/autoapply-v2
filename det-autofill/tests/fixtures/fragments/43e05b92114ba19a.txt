@@ -1,0 +1,116 @@
+"Job Title": |-
+    - generic [ref=e864]: Job Title*
+    - textbox "Job Title" [ref=e867]: Founding Engineer
+  - generic [ref=e868]:
+    - generic [ref=e870]: Company*
+    - textbox "Company" [ref=e873]: AirFold
+  --
+    - generic [ref=e948]: Job Title*
+    - textbox "Job Title" [ref=e951]: Data Engineer
+  - generic [ref=e952]:
+    - generic [ref=e954]: Company*
+    - textbox "Company" [ref=e957]: Kantar
+  --
+    - generic [ref=e1032]: Job Title*
+    - textbox "Job Title" [ref=e1035]: Data Engineer
+  - generic [ref=e1036]:
+    - generic [ref=e1038]: Company*
+    - textbox "Company" [ref=e1041]: The Sparks Foundation
+"Company": |-
+                - generic [ref=e870]: Company*
+                - textbox "Company" [ref=e873]: AirFold
+              - generic [ref=e874]:
+                - generic [ref=e875]: Location
+                - textbox "Location" [ref=e878]: San Francisco California
+  --
+                - generic [ref=e954]: Company*
+                - textbox "Company" [ref=e957]: Kantar
+              - generic [ref=e958]:
+                - generic [ref=e959]: Location
+                - textbox "Location" [ref=e962]: Bengaluru India
+  --
+                - generic [ref=e1038]: Company*
+                - textbox "Company" [ref=e1041]: The Sparks Foundation
+              - generic [ref=e1042]:
+                - generic [ref=e1043]: Location
+                - textbox "Location" [ref=e1046]: Bengaluru India
+  --
+      - /url: https://www.linkedin.com/company-beta/1767/
+  - listitem [ref=e81] [cursor=pointer]:
+    - link "Glassdoor" [ref=e82]:
+      - /url: https://www.glassdoor.com/Overview/Working-at-State-Street-EI_IE1911.11,23.htm
+"School or University": |-
+    - generic [ref=e1123]: School or University*
+    - textbox "School or University" [ref=e1126]: San Jose State University
+  - generic [ref=e1127]:
+    - generic [ref=e1129]: Degree*
+    - button "Degree Master's Degree Required" [ref=e1133]: Master's Degree
+  --
+    - generic [ref=e1195]: School or University*
+    - textbox "School or University" [ref=e1198]: Visvesvaraya Technological University
+  - generic [ref=e1199]:
+    - generic [ref=e1201]: Degree*
+    - button "Degree Select One Required" [ref=e1205]: Select One
+"Degree Select One Required": |-
+    - button "Degree Select One Required" [ref=e1205]: Select One
+  - generic [ref=e1206]:
+    - generic [ref=e1208]:
+      - generic [ref=e1209]: Field of Study
+"Type to Add Skills": |-
+      - generic [ref=e1276]: Type to Add Skills*
+      - generic [ref=e1282] [cursor=pointer]:
+        - textbox "Type to Add Skills" [ref=e1283]:
+          - /placeholder: Search
+        - generic [ref=e1284]: 0 items selected
+  - group "Resume/CV" [ref=e1289]:
+"URL": |-
+  - Page URL: https://statestreet.wd1.myworkdayjobs.com/en-US/global/job/Quincy%2C-Massachusetts/Data-Engineer-Senior-Associate_R-793105-1/apply/autofillWithResume
+  ### Snapshot
+  ```yaml
+  - generic [ref=e4]:
+  --
+      - /url: ""
+    - generic "Click 'Accept Cookies' to confirm you are giving consent to cookies being used. LEARN MORE" [ref=e9]:
+      - heading "Click 'Accept Cookies' to confirm you are giving consent to cookies being used. LEARN MORE" [level=1] [ref=e19]:
+        - generic [ref=e22]:
+  --
+            - /url: http://www.statestreet.com/about/careers/regional-privacy-notices.html
+            - generic [ref=e25]: LEARN MORE
+      - generic [ref=e26]:
+        - button "Decline" [ref=e29] [cursor=pointer]
+  --
+          - /url: https://careers.statestreet.com
+          - img "careers home" [ref=e42]
+        - generic [ref=e43]:
+          - heading [level=1]
+  --
+                    - generic [ref=e1354]: URL*
+                    - textbox "URL" [ref=e1357]: https://linkedin.com/in/janedoe
+                - group "Websites 2" [ref=e1358]:
+                  - generic [ref=e1359]:
+                    - heading "Websites 2" [level=5] [ref=e1360]
+  --
+                    - generic [ref=e1370]: URL*
+                    - textbox "URL" [ref=e1373]: https://github.com/shnkreddy98
+                - button "Add Another" [ref=e1377] [cursor=pointer]
+          - generic [ref=e381]:
+            - button "Back" [ref=e568] [cursor=pointer]
+  --
+            - /url: https://www.facebook.com/StateStreetCorp/
+        - listitem [ref=e76] [cursor=pointer]:
+          - link "LinkedIn" [ref=e77]:
+            - /url: https://www.linkedin.com/company-beta/1767/
+        - listitem [ref=e81] [cursor=pointer]:
+          - link "Glassdoor" [ref=e82]:
+            - /url: https://www.glassdoor.com/Overview/Working-at-State-Street-EI_IE1911.11,23.htm
+        - listitem [ref=e87] [cursor=pointer]:
+          - link "YouTube" [ref=e88]:
+            - /url: https://www.youtube.com/channel/UCzU2eZuL65c6C0ZxL4A8KIg
+        - listitem [ref=e94] [cursor=pointer]:
+          - link "X" [ref=e95]:
+            - /url: https://twitter.com/statestreet
+      - link "State Street Privacy Notice" [ref=e100] [cursor=pointer]:
+        - /url: https://careers.statestreet.com/global/en/privacy-notices-and-important-information
+      - generic [ref=e101]:
+        - img [ref=e105]
+        - generic [ref=e125]: © 2026 Workday, Inc. All rights reserved.

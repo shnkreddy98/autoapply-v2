@@ -1,0 +1,5 @@
+"I Accept": |-
+        - button "I Accept" [ref=e88] [cursor=pointer]
+        - button "I Decline" [ref=e89] [cursor=pointer]
+  - generic [ref=e90]:
+    - link "LinkedIn" [ref=e91] [cursor=pointer]:

@@ -1,0 +1,21 @@
+"Please provide your LinkedIn profile": |-
+          - button "Error Please provide your LinkedIn profile" [ref=e1636] [cursor=pointer]:
+            - text: Error
+            - generic [ref=e1637]: "-"
+            - text: Please provide your LinkedIn profile
+          - generic [ref=e1638]: Invalid LinkedIn URL
+  - generic [ref=e707]:
+    - group "Work Experience" [ref=e708]:
+  --
+        - generic [ref=e1176]: Please provide your LinkedIn profile
+        - generic [ref=e1177]:
+          - textbox "Please provide your LinkedIn profile" [invalid] [ref=e1179]: https://linkedin.com/in/janedoe
+          - paragraph [ref=e1642]:
+            - generic [ref=e1643]: "Error:"
+            - text: Invalid LinkedIn URL
+"Education 1 Field of Study": (no match)
+"Save and Continue": |-
+          - button "Save and Continue" [ref=e504] [cursor=pointer]
+  - generic [ref=e33]:
+    - heading "Follow Us" [level=4] [ref=e34]
+    - list [ref=e35]:

@@ -1,0 +1,65 @@
+"5 \u2013 10 years": |-
+      - option "5 – 10 years" [ref=e1440]:
+        - generic [ref=e1441]: 5 – 10 years
+      - option "10+ years" [ref=e1442]:
+        - generic [ref=e1443]: 10+ years
+  ```
+"AWS": |-
+  - row "AWS Azure Google Proprietary Other (not listed) None of the above" [ref=e1328]:
+    - row "AWS" [ref=e1329]:
+      - cell "AWS" [ref=e1330]:
+        - generic [ref=e1331]:
+          - checkbox "AWS" [ref=e1333] [cursor=pointer]
+          - generic [ref=e1334] [cursor=pointer]: AWS
+    - row "Azure" [ref=e1335]:
+      - cell "Azure" [ref=e1336]:
+        - generic [ref=e1337]:
+"Google": |-
+  - row "AWS Azure Google Proprietary Other (not listed) None of the above" [ref=e1328]:
+    - row "AWS" [ref=e1329]:
+      - cell "AWS" [ref=e1330]:
+        - generic [ref=e1331]:
+  --
+    - row "Google" [ref=e1341]:
+      - cell "Google" [ref=e1342]:
+        - generic [ref=e1343]:
+          - checkbox "Google" [ref=e1345] [cursor=pointer]
+          - generic [ref=e1346] [cursor=pointer]: Google
+    - row "Proprietary" [ref=e1347]:
+      - cell "Proprietary" [ref=e1348]:
+        - generic [ref=e1349]:
+"Java": |-
+  - row "Java JavaScript Python C# Scala Other (not listed) None of the above" [ref=e1376]:
+    - row "Java" [ref=e1377]:
+      - cell "Java" [ref=e1378]:
+        - generic [ref=e1379]:
+          - checkbox "Java" [ref=e1381] [cursor=pointer]
+          - generic [ref=e1382] [cursor=pointer]: Java
+    - row "JavaScript" [ref=e1383]:
+      - cell "JavaScript" [ref=e1384]:
+        - generic [ref=e1385]:
+          - checkbox "JavaScript" [ref=e1387] [cursor=pointer]
+          - generic [ref=e1388] [cursor=pointer]: JavaScript
+    - row "Python" [ref=e1389]:
+      - cell "Python" [ref=e1390]:
+        - generic [ref=e1391]:
+"Python": |-
+  - row "Java JavaScript Python C# Scala Other (not listed) None of the above" [ref=e1376]:
+    - row "Java" [ref=e1377]:
+      - cell "Java" [ref=e1378]:
+        - generic [ref=e1379]:
+  --
+    - row "Python" [ref=e1389]:
+      - cell "Python" [ref=e1390]:
+        - generic [ref=e1391]:
+          - checkbox "Python" [ref=e1393] [cursor=pointer]
+          - generic [ref=e1394] [cursor=pointer]: Python
+    - row "C#" [ref=e1395]:
+      - cell "C#" [ref=e1396]:
+        - generic [ref=e1397]:
+"This role requires employees to be physically onsite": |-
+        - group "This role requires employees to be physically onsite, as listed in the job posting. Please confirm if you can work onsite at the listed location.*" [ref=e1420]:
+          - paragraph [ref=e1424]: This role requires employees to be physically onsite, as listed in the job posting. Please confirm if you can work onsite at the listed location.*
+          - button "Select One Required" [ref=e1428]: Select One
+  - generic [ref=e260]:
+    - button "Back" [ref=e378] [cursor=pointer]

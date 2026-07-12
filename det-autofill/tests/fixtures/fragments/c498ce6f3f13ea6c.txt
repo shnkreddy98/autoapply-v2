@@ -1,0 +1,43 @@
+"Primary Skills": |-
+    - generic [ref=e156]: "*Primary Skills"
+    - textbox "Primary Skills" [ref=e158]: Python, SQL, Java, Go, Bash, TypeScript, Spark, PySpark, Apache Kafka, Airflow, dbt, Debezium CDC, AWS, GCP, Azure, Terraform, Kubernetes, Docker, Snowflake, ClickHouse, PostgreSQL, DynamoDB, MySQL
+  - generic [ref=e161]:
+    - generic [ref=e162]: "*Experience (In Years)"
+    - spinbutton "Experience (In Years)" [ref=e164]: "5"
+"Experience (In Years)": |-
+    - generic [ref=e162]: "*Experience (In Years)"
+    - spinbutton "Experience (In Years)" [ref=e164]: "5"
+  - generic [ref=e167]:
+    - generic [ref=e168]: "*LinkedIn"
+    - textbox "LinkedIn" [ref=e170]: https://linkedin.com/in/janedoe
+"LinkedIn": |-
+    - generic [ref=e168]: "*LinkedIn"
+    - textbox "LinkedIn" [ref=e170]: https://linkedin.com/in/janedoe
+  - generic [ref=e171]:
+    - generic [ref=e172]: "*Professional Summary"
+    - textbox "Professional Summary" [ref=e174]: Data Engineer with over 5 years of experience specializing in database administration, schema design, and AI-optimized data architectures. Expert in Oracle PL/SQL, advanced SQL tuning, and DML/DDL operations. Proven ability to design and manage scalable multi-platform database environments while implementing data validation and governance protocols for enterprise-scale systems.
+"Professional Summary": |-
+        - generic [ref=e172]: "*Professional Summary"
+        - textbox "Professional Summary" [ref=e174]: Data Engineer with over 5 years of experience specializing in database administration, schema design, and AI-optimized data architectures. Expert in Oracle PL/SQL, advanced SQL tuning, and DML/DDL operations. Proven ability to design and manage scalable multi-platform database environments while implementing data validation and governance protocols for enterprise-scale systems.
+        - status
+  - generic [ref=e176]:
+    - heading "button icon Highest Education" [level=3] [ref=e177]:
+"Education Level": |-
+  - generic [ref=e193]: "*Education Level"
+  - generic [ref=e197]:
+    - combobox "Education Level" [ref=e198] [cursor=pointer]:
+      - generic [ref=e199]: Select an Option
+    - generic:
+      - generic:
+"University/School Attended": |-
+    - generic [ref=e209]: "*University/School Attended"
+    - textbox "University/School Attended" [ref=e211]: Visvesvaraya Technological University
+  - generic [ref=e214]:
+    - generic [ref=e215]: "*Grad Year"
+    - textbox "Grad Year" [ref=e217]: "2020"
+"Grad Year": |-
+        - generic [ref=e215]: "*Grad Year"
+        - textbox "Grad Year" [ref=e217]: "2020"
+  - generic [ref=e219]:
+    - heading "button icon Job Details" [level=3] [ref=e220]:
+      - button "button icon Job Details" [ref=e221] [cursor=pointer]:

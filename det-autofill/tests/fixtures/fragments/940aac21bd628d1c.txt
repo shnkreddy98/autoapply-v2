@@ -1,0 +1,10 @@
+"No": |-
+      - generic "This website uses cookies and similar technology for performance purposes. By clicking “Accept Cookies” you consent to the use of these cookies." [ref=e9]:
+        - paragraph [ref=e11]: This website uses cookies and similar technology for performance purposes. By clicking “Accept Cookies” you consent to the use of these cookies.
+        - generic [ref=e12]:
+          - button "Decline" [ref=e15] [cursor=pointer]
+          - button "Accept Cookies" [ref=e19] [cursor=pointer]
+  --
+      - option "No" [ref=e684]:
+        - generic [ref=e685]: "No"
+  ```

@@ -1,0 +1,5 @@
+"Next": |-
+      - button "Next" [ref=f4e28] [cursor=pointer]
+  - generic [ref=f4e29]:
+    - link "Application FAQs" [ref=f4e30] [cursor=pointer]:
+      - /url: https://icims.help/candidate-faq

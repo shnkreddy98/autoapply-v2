@@ -1,0 +1,21 @@
+"Apply": |-
+    - button "Apply for Intermediate Data Engineer" [ref=e108] [cursor=pointer]:
+      - generic [ref=e109]: Apply
+    - generic [ref=e110]:
+      - separator
+    - button "Save job Intermediate Data Engineer" [ref=e112] [cursor=pointer]:
+  --
+        - listitem [ref=e158]: Apply solid software engineering practices — version control, code review, testing, and CI/CD — to data workflows.
+        - listitem [ref=e159]: Partner with analysts, platform owners, and business stakeholders to translate requirements into well-structured data solutions.
+        - listitem [ref=e160]: Monitor, troubleshoot, and continuously improve the reliability and performance of data pipelines.
+      - paragraph [ref=e161]
+  --
+        - emphasis [ref=e185]: Submission of resume does not guarantee an interview or transfer. Qualified applicants are encouraged to apply, provided they meet the minimal requirements of the applicable skills required. You must be legally entitled to work in Canada to apply as the employer does not have a Labour Market Impact Assessment (LMIA) that would support a foreign worker. Applications will not be accepted via email or in person. We thank all applicants for their
+        - emphasis [ref=e186]: interest in Career opportunities with Company, however, only those applicants we wish to interview will receive a reply to their application.
+      - paragraph [ref=e187]:
+        - emphasis [ref=e188]: NPC uses AI enabled tools to assist with application management. All hiring decisions are made by people. We do not use AI to screen, assess or select applicants for this posting. NPC is an equal opportunity employer committed to hiring a diverse workforce and sustaining an inclusive culture. NPC does not discriminate on the basis of disability, veteran status or any other basis protected under federal, provincial or local laws. Accommodations are available at any stage of the recruitment process upon request. If you need support, please email humanresources@northland.ca. NPC takes seriously its obligations under the Human Rights Code.
+  --
+      - generic [ref=e233]: Scan this QR code and apply!
+      - link "Download" [ref=e240] [cursor=pointer]:
+        - /url: "#"
+  - generic [ref=e242]:

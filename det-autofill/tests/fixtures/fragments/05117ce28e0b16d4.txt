@@ -1,0 +1,14 @@
+"Addresses (1)": |-
+  - group "Addresses (1)* required." [ref=f67e125]:
+    - generic [ref=f67e127]:
+      - text: Addresses (1)
+      - generic [ref=f67e128]:
+        - text: "*"
+        - generic [ref=f67e129]: required.
+    - generic [ref=f67e130]:
+      - generic [ref=f67e131]:
+        - generic [ref=f67e132]: Type
+        - generic [ref=f67e133]:
+          - text: "*"
+          - generic [ref=f67e134]: required.
+      - combobox "Type" [ref=f67e136]:

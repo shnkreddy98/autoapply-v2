@@ -1,0 +1,6 @@
+"previously employed by Lurie Children's Hospital": |-
+        - group "Were you previously employed by Lurie Children's Hospital of Chicago?*" [ref=e1253]:
+          - paragraph [ref=e1257]: Were you previously employed by Lurie Children's Hospital of Chicago?*
+          - button "Select One Required" [ref=e1261]: Select One
+  - generic [ref=e346]:
+    - button "Back" [ref=e461] [cursor=pointer]

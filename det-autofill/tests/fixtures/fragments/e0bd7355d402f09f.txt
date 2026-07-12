@@ -1,0 +1,44 @@
+"Are you at least 18 years of age?": |-
+  - group "Are you at least 18 years of age?*" [ref=e1192]:
+    - paragraph [ref=e1196]: Are you at least 18 years of age?*
+    - button "Select One Required" [ref=e1200]: Select One
+  - group "Are you bilingual in other languages?*" [ref=e1202]:
+    - paragraph [ref=e1206]: Are you bilingual in other languages?*
+"Are you bilingual in other languages?": |-
+  - group "Are you bilingual in other languages?*" [ref=e1202]:
+    - paragraph [ref=e1206]: Are you bilingual in other languages?*
+    - button "Select One Required" [ref=e1210]: Select One
+  - group "Are you legally authorized to work in the U.S.?*" [ref=e1212]:
+    - paragraph [ref=e1216]: Are you legally authorized to work in the U.S.?*
+"Are you legally authorized to work in the U.S.?": |-
+  - group "Are you legally authorized to work in the U.S.?*" [ref=e1212]:
+    - paragraph [ref=e1216]: Are you legally authorized to work in the U.S.?*
+    - button "Select One Required" [ref=e1220]: Select One
+  - group "Do you now, or will you in the future, require immigration sponsorship for work authorization (e.g., H-1B)? (if hired, verification will be required consistent with federal law.)*" [ref=e1222]:
+    - paragraph [ref=e1226]:
+"immigration sponsorship": |-
+  - group "Do you now, or will you in the future, require immigration sponsorship for work authorization (e.g., H-1B)? (if hired, verification will be required consistent with federal law.)*" [ref=e1222]:
+    - paragraph [ref=e1226]:
+      - generic [ref=e1227]: Do you now, or will you in the future, require immigration sponsorship for work authorization (e.g., H-1B)? (if hired, verification will be required consistent with federal law.)
+      - text: "*"
+    - button "Select One Required" [ref=e1231]: Select One
+  - group "Do you have any relatives employed by this organization?*" [ref=e1233]:
+"relatives employed": |-
+  - group "Do you have any relatives employed by this organization?*" [ref=e1233]:
+    - paragraph [ref=e1237]: Do you have any relatives employed by this organization?*
+    - button "Select One Required" [ref=e1241]: Select One
+  - group "What are your salary expectations for this role?(Hourly rate or Salary Range)*" [ref=e1243]:
+    - paragraph [ref=e1247]:
+"salary expectations": |-
+  - group "What are your salary expectations for this role?(Hourly rate or Salary Range)*" [ref=e1243]:
+    - paragraph [ref=e1247]:
+      - generic [ref=e1248]: What are your salary expectations for this role?(Hourly rate or Salary Range)*
+    - textbox [ref=e1251]
+  - group "Were you previously employed by Lurie Children's Hospital of Chicago?*" [ref=e1253]:
+    - paragraph [ref=e1257]: Were you previously employed by Lurie Children's Hospital of Chicago?*
+"previously employed by Lurie Children's Hospital": |-
+        - group "Were you previously employed by Lurie Children's Hospital of Chicago?*" [ref=e1253]:
+          - paragraph [ref=e1257]: Were you previously employed by Lurie Children's Hospital of Chicago?*
+          - button "Select One Required" [ref=e1261]: Select One
+  - generic [ref=e346]:
+    - button "Back" [ref=e461] [cursor=pointer]

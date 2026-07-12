@@ -1,0 +1,28 @@
+"Full Time": |-
+  - row "Full Time" [ref=e72]:
+    - cell "Full Time" [ref=e73]:
+      - checkbox "Full Time" [ref=e74]
+      - generic [ref=e75] [cursor=pointer]: Full Time
+  - row "Part Time" [ref=e76]:
+    - cell "Part Time" [ref=e77]:
+      - checkbox "Part Time" [ref=e78]
+"legally authorized to work in the United States?": |-
+  - generic [ref=e119]: Are you legally authorized to work in the United States?
+  - table [ref=e121]:
+    - rowgroup [ref=e122]:
+      - row "Yes No" [ref=e123]:
+"require \u201csponsorship": |-
+  - generic [ref=e132]: Will you now or in the future require “sponsorship for an immigration-related employment benefit?"
+  - table [ref=e134]:
+    - rowgroup [ref=e135]:
+      - row "No Yes" [ref=e136]:
+"18 years of age or older?": |-
+  - generic [ref=e145]: Are you 18 years of age or older?
+  - table [ref=e147]:
+    - rowgroup [ref=e148]:
+      - row "Yes No" [ref=e149]:
+"currently working?": |-
+  - generic [ref=e158]: Are you currently working?
+  - table [ref=e160]:
+    - rowgroup [ref=e161]:
+      - row "No Yes" [ref=e162]:

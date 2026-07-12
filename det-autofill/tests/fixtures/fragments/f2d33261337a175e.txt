@@ -1,0 +1,62 @@
+"minimum of 3 years": (no match)
+"Python, SQL": (no match)
+"cloud platforms": (no match)
+"data pipeline": |-
+  - generic [ref=e102]: We’re looking for a skilled and innovative Data Engineer to join our team and help shape the future of how we use data to drive real operational outcomes. In this role, you’ll design and maintain scalable data pipelines, prepare and serve high-quality datasets, and partner with our data science team to support their AI/ML workflows. If you have strong data engineering fundamentals and enjoy research and development, Cutsforth is the organization for you.
+  - generic [ref=e106]: "Key Responsibilities:"
+  - list [ref=e107]:
+    - listitem [ref=e108]:
+      - generic [ref=e111]: Regularly design, develop, and maintain data pipelines that support operational, analytical, and machine learning workloads
+    - listitem [ref=e112]:
+      - generic [ref=e115]: Write clean, efficient, and well-documented Python code for data processing and automation tasks
+    - listitem [ref=e116]:
+      - generic [ref=e119]: Support the integration and monitoring of AI/ML models in production by delivering reliable, well-structured data pipelines
+    - listitem [ref=e120]:
+      - generic [ref=e123]: Communicate technical findings and recommendations clearly to both technical and non-technical stakeholders across teams
+    - listitem [ref=e124]:
+      - generic [ref=e127]: Participate in cross-functional meetings and planning sessions to align data engineering efforts with broader business goals
+    - listitem [ref=e128]:
+      - generic [ref=e131]: Stay current with advancements in data engineering tools, techniques, and industry-specific applications, particularly within power, oil, and gas environments
+    - listitem [ref=e132]:
+      - generic [ref=e135]: Document processes, data models, and systems in a way that supports knowledge sharing and team continuity
+  - generic [ref=e139]: "Required Qualifications:"
+  - list [ref=e140]:
+  --
+      - generic [ref=e152]: 1-4 years of hands-on experience with Databricks for building and managing data pipelines
+    - listitem [ref=e153]:
+      - generic [ref=e156]: 1-2 years of hands-on experience with Apache Spark for distributed data processing
+    - listitem [ref=e157]:
+      - generic [ref=e160]: 1-3 years of experience with Microsoft Azure; equivalent experience with AWS or GCP may substitute
+    - listitem [ref=e161]:
+      - generic [ref=e164]: Strong proficiency in Python for data engineering pipelines
+    - listitem [ref=e165]:
+      - generic [ref=e168]: Strong proficiency in SQL for querying, transforming, and validating large datasets
+    - listitem [ref=e169]:
+      - generic [ref=e172]: Experience with Git and standard version control workflows, including branching, pull requests, and code review
+  --
+      - generic [ref=e176]: Experience designing and managing end-to-end data pipelines (data ingestion to transformation to validation to serving)
+    - listitem [ref=e177]:
+      - generic [ref=e180]: Strong data system design skills, including data modeling and architecting scalable, reliable, and maintainable data systems
+    - listitem [ref=e181]:
+      - generic [ref=e184]: Demonstrated ability to collaborate effectively across cross-functional teams
+    - listitem [ref=e185]:
+      - generic [ref=e188]: Bachelor’s degree in Computer Science, Data Science, Engineering, Mathematics, or a related field
+  - generic [ref=e192]: "Preferred Qualifications:"
+  - list [ref=e193]:
+    - listitem [ref=e194]:
+      - generic [ref=e197]: Master’s degree in a relevant technical discipline
+  --
+      - generic [ref=e393]: Please describe an end to end data pipeline you have built.*
+      - textbox "Please describe an end to end data pipeline you have built.*" [ref=e394]
+    - generic [ref=e395]:
+      - generic [ref=e396]: The following questions are entirely optional.
+      - generic [ref=e397]:
+        - text: To comply with government Equal Employment Opportunity and/or Affirmative Action reporting regulations, we are requesting (but NOT requiring) that you enter this personal data. This information will not be used in connection with any employment decisions, and will be used solely as permitted by state and federal law. Your voluntary cooperation would be appreciated.
+        - link "Learn more" [ref=e398] [cursor=pointer]:
+          - /url: https://www.eeoc.gov/employees-job-applicants
+        - text: .
+    - generic [ref=e402]:
+      - text: Gender
+      - combobox "Gender" [ref=e403]:
+"salary expectation": (no match)
+"Website/Portfolio": (no match)

@@ -1,0 +1,103 @@
+"Are you located in Latin America (LatAm)?": |-
+  - generic [ref=e233]: Are you located in Latin America (LatAm)?*
+  - generic [ref=e234]:
+    - log [ref=e236]
+    - generic [ref=e238]:
+  --
+        - combobox "Are you located in Latin America (LatAm)?" [ref=e242]
+      - button "Toggle flyout" [ref=e244] [cursor=pointer]:
+        - img [ref=e245]
+    - textbox
+"No": |-
+  - Page URL: https://job-boards.greenhouse.io/correlationone/jobs/6102140004
+  - Page Title: Job Application for Senior Data Engineer at Correlation One
+  - Console: 4 errors, 0 warnings
+  ### Snapshot
+  --
+            - /url: https://job-boards.greenhouse.io/correlationone
+            - img [ref=e6]
+            - text: Back to jobs
+          - generic [ref=e10]: New
+  --
+              - listitem [ref=e36]: Create and encourage comprehensive documentation for code, libraries, and components to facilitate collaboration and knowledge sharing within the team
+            - paragraph [ref=e37]:
+              - strong [ref=e38]: "Your expertise:"
+            - list [ref=e39]:
+  --
+                - listitem [ref=e58]: Experience learning and adopting new tools or technologies quickly
+            - paragraph [ref=e59]:
+              - strong [ref=e60]: Where you are
+            - list [ref=e61]:
+  --
+            - paragraph [ref=e73]: The compensation range for this position is specific to location and takes into account the wide range of factors that are considered in making compensation decisions. These factors include (but are not limited to) location, experience, education and skill sets.
+            - paragraph [ref=e74]:
+              - strong [ref=e75]: Correlation One’s Commitment
+            - paragraph [ref=e76]: Correlation One is proud to be an Equal Opportunity Employer and is committed to providing equal opportunity for all employees and applicants. Correlation One provides a work environment free of discrimination and harassment. Employment decisions at Correlation One are based solely on business needs, job requirements and individual qualifications, without regard to race, color, religion or belief, national, social or ethnic origin, sex (including pregnancy), age, sexual orientation, gender identity and/or expression, marital, civil union or domestic partnership status, past or present military service, or any other status protected by the laws or regulations in the locations where we operate. We encourage applicants to bring their unique skills, experiences, and outlook to our work environment.
+  --
+                - /url: https://my.greenhouse.io/users/sign_in?job_board=correlationone&source=job_alert_post
+        - separator [ref=e87]
+        - generic [ref=e88]:
+          - generic [ref=e89]:
+  --
+                - generic [ref=e194]: Do you know anyone at Correlation One? If so, whom? *
+                - textbox "Do you know anyone at Correlation One? If so, whom?" [ref=e195]: "No"
+              - generic [ref=e198]:
+                - generic [ref=e199]: Are you currently a Learner / participant in a Correlation One training program?*
+                - generic [ref=e200]:
+  --
+                      - generic [ref=e425]: "No"
+                      - combobox "Are you currently a Learner / participant in a Correlation One training program?" [ref=e208]
+                    - generic [ref=e209]:
+                      - button "Clear selections" [ref=e427] [cursor=pointer]:
+  --
+                    - text: option No, selected.
+                    - text: 2 results available.Use Up and Down to choose options, press Enter to select the currently focused option, press Escape to exit the menu, press Tab to select the option and exit the menu.
+                  - generic [ref=e221]:
+                    - generic [ref=e222]:
+                      - generic [ref=e434]: "No"
+                      - combobox "Are you a graduate of a previous Correlation One training program?" [expanded] [active] [ref=e225]
+                    - generic [ref=e226]:
+                      - button "Clear selections" [ref=e436] [cursor=pointer]:
+  --
+                    - option "No" [selected] [ref=e442]
+              - generic [ref=e232]:
+                - generic [ref=e233]: Are you located in Latin America (LatAm)?*
+                - generic [ref=e234]:
+  --
+                - paragraph [ref=e261]: For government reporting purposes, we ask candidates to respond to the below self-identification survey. Completion of the form is entirely voluntary. Whatever your decision, it will not be considered in the hiring process or thereafter. Any information that you do provide will be recorded and maintained in a confidential file.
+                - paragraph [ref=e262]: As set forth in Correlation One’s Equal Employment Opportunity policy, we do not discriminate on the basis of any protected group status under any applicable law.
+              - generic [ref=e265]:
+                - generic [ref=e266]: Gender
+                - generic [ref=e267]:
+  --
+                  - generic [ref=e283]: Are you Hispanic/Latino?
+                  - generic [ref=e284]:
+                    - log [ref=e286]
+                    - generic [ref=e288]:
+  --
+                        - combobox "Are you Hispanic/Latino?" [ref=e292]
+                      - button "Toggle flyout" [ref=e294] [cursor=pointer]:
+                        - img [ref=e295]
+                - link "Race & Ethnicity Definitions" [ref=e297] [cursor=pointer]:
+  --
+                  - text: Completing this form is voluntary, and we hope that you will choose to do so. Your answer is confidential. No one who makes hiring decisions will see it. Your decision to complete the form and your answer will not harm you in any way. If you want to learn more about the law or this form, visit the U.S. Department of Labor’s Office of Federal Contract Compliance Programs (OFCCP) website at
+                  - link "www.dol.gov/ofccp" [ref=e334] [cursor=pointer]:
+                    - /url: https://www.dol.gov/ofccp
+                  - text: .
+                - strong [ref=e335]: How do you know if you have a disability?
+                - paragraph [ref=e336]:
+                  - text: A disability is a condition that substantially limits one or more of your “major life activities.” If you have or have ever had such a condition, you are a person with a disability.
+                  - strong [ref=e337]: "Disabilities include, but are not limited to:"
+                - list [ref=e338]:
+                  - listitem [ref=e339]: Alcohol or other substance use disorder (not currently using drugs illegally)
+                  - listitem [ref=e340]: Autoimmune disorder, for example, lupus, fibromyalgia, rheumatoid arthritis, HIV/AIDS
+                  - listitem [ref=e341]: Blind or low vision
+                  - listitem [ref=e342]: Cancer (past or present)
+  --
+              - paragraph [ref=e379]: "PUBLIC BURDEN STATEMENT: According to the Paperwork Reduction Act of 1995 no persons are required to respond to a collection of information unless such collection displays a valid OMB control number. This survey should take about 5 minutes to complete."
+            - separator [ref=e380]
+            - generic [ref=e382]:
+              - paragraph [ref=e384]: "We use Greenhouse’s AI-powered Talent Matching tool to compare your application against our job requirements. For additional information on the AI technology and for jurisdiction-specific rights, please select:"
+              - link "Learn more" [ref=e385] [cursor=pointer]:
+                - /url: http://app4.greenhouse.io/ai_opt_out_request/job_post/6102140004/ai_opt_out
+            - button "Submit application" [ref=e387] [cursor=pointer]

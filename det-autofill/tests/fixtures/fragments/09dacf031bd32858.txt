@@ -1,0 +1,54 @@
+"I identify as one or more of the classifications of protected veterans listed above": |-
+  - row "I identify as one or more of the classifications of protected veterans listed above" [ref=e184]:
+    - cell "I identify as one or more of the classifications of protected veterans listed above" [ref=e185]:
+      - radio "I identify as one or more of the classifications of protected veterans listed above" [ref=e186]
+      - text: I identify as one or more of the classifications of protected veterans listed above
+  - row "I am not a protected veteran" [ref=e187]:
+    - cell "I am not a protected veteran" [ref=e188]:
+      - radio "I am not a protected veteran" [ref=e189]
+"I am not a protected veteran": |-
+  - row "I am not a protected veteran" [ref=e187]:
+    - cell "I am not a protected veteran" [ref=e188]:
+      - radio "I am not a protected veteran" [ref=e189]
+      - text: I am not a protected veteran
+  - row "I decline self-identification" [ref=e190]:
+    - cell "I decline self-identification" [ref=e191]:
+      - radio "I decline self-identification" [ref=e192]
+"I decline self-identification": |-
+          - row "I decline self-identification" [ref=e190]:
+            - cell "I decline self-identification" [ref=e191]:
+              - radio "I decline self-identification" [ref=e192]
+              - text: I decline self-identification
+  - generic [ref=e193]:
+    - list [ref=e196]:
+      - listitem [ref=e197]: Form CC-305
+"Yes, I have a disability, or have had one in the past": |-
+  - row "Yes, I have a disability, or have had one in the past" [ref=e243]:
+    - cell "Yes, I have a disability, or have had one in the past" [ref=e244]:
+      - radio "Yes, I have a disability, or have had one in the past" [ref=e245]
+      - generic [ref=e246]: Yes, I have a disability, or have had one in the past
+  - row "No, I do not have a disability and have not had one in the past" [ref=e247]:
+    - cell "No, I do not have a disability and have not had one in the past" [ref=e248]:
+      - radio "No, I do not have a disability and have not had one in the past" [ref=e249]
+"No, I do not have a disability and have not had one in the past": |-
+  - row "No, I do not have a disability and have not had one in the past" [ref=e247]:
+    - cell "No, I do not have a disability and have not had one in the past" [ref=e248]:
+      - radio "No, I do not have a disability and have not had one in the past" [ref=e249]
+      - generic [ref=e250]: No, I do not have a disability and have not had one in the past
+  - row "I do not want to answer" [ref=e251]:
+    - cell "I do not want to answer" [ref=e252]:
+      - radio "I do not want to answer" [ref=e253]
+"I do not want to answer": |-
+        - row "I do not want to answer" [ref=e251]:
+          - cell "I do not want to answer" [ref=e252]:
+            - radio "I do not want to answer" [ref=e253]
+            - generic [ref=e254]: I do not want to answer
+    - text: Please select a disability status
+  - generic [ref=e257]:
+    - paragraph [ref=e258]
+"I have read the terms of the privacy policy and consent to the processing of my information": |-
+      - checkbox "I have read the terms of the privacy policy and consent to the processing of my information" [checked] [active] [ref=e113]
+      - generic [ref=e114] [cursor=pointer]: I have read the terms of the privacy policy and consent to the processing of my information
+  - generic [ref=e115]:
+    - generic [ref=e116]:
+      - heading "Voluntary Self-Identification" [level=4] [ref=e117]

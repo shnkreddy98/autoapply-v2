@@ -1,0 +1,6 @@
+"I acknowledge DraftKings Personal Data Processing policy.": |-
+          - generic [ref=e707]: I acknowledge DraftKings Personal Data Processing policy.*
+          - checkbox "I acknowledge DraftKings Personal Data Processing policy." [ref=e712] [cursor=pointer]
+  - generic [ref=e171]:
+    - button "Back" [ref=e327] [cursor=pointer]
+    - button "Save and Continue" [ref=e328] [cursor=pointer]

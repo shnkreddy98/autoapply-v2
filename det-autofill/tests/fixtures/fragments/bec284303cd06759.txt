@@ -1,0 +1,6 @@
+"Select file": |-
+                    - button "Select file" [ref=e449]:
+                      - generic [ref=e450]: Select file
+        - button "Continue" [ref=e454] [cursor=pointer]
+  - generic [ref=e60]:
+    - heading "Follow Us" [level=4] [ref=e61]

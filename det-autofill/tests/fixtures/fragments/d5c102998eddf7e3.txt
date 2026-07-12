@@ -1,0 +1,9 @@
+"Mobile Phone*": |-
+    - generic [ref=e38]: "Mobile Phone*:"
+    - textbox [active] [ref=e40]
+    - generic [ref=e41]: "* Please enter 10 digit Mobile Phone."
+  - generic [ref=e42]:
+    - generic [ref=e43]: "Confirm Mobile Phone*:"
+    - textbox [ref=e45]
+  - generic [ref=e47]:
+    - generic [ref=e48]: "First Name*:"

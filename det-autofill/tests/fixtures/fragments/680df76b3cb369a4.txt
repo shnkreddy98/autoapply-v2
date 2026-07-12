@@ -1,0 +1,8 @@
+"Phone Number": |-
+            - generic [ref=e380]: Phone Number*
+            - textbox "Phone Number" [ref=e383]: (555) 010-0199
+          - generic [ref=e384]:
+            - generic [ref=e385]: Phone Extension
+            - textbox "Phone Extension" [ref=e388]
+  - generic [ref=e180]:
+    - button "Back" [ref=e391] [cursor=pointer]

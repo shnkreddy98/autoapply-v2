@@ -1,0 +1,38 @@
+"USA United States": |-
+  - row "USA United States" [ref=e107]:
+    - cell "USA" [ref=e108]:
+      - radio "USA" [ref=e109]
+    - cell "USA" [ref=e110]:
+"Select": |-
+  - Page URL: https://atkcareers.taleo.net/careersection/careersection/common/selector/selector.jsf#ListBegin
+  - Page Title: Selector - Country of Residence
+  ### Snapshot
+  ```yaml
+  - generic [ref=e1]:
+  --
+              - button "Select" [ref=e41] [cursor=pointer]
+              - button "Cancel" [ref=e42] [cursor=pointer]
+            - table [ref=e43]:
+              - rowgroup [ref=e44]:
+                - row "Selector - Country of Residence This page allows you to select an item from the list of available items. Refine by Keyword is United States Refresh Available Entries 1-1 out of 1 << < 1 > >> This page allows you to select an item from the list of available items. 1-1 out of 1 << < 1 > >>" [ref=e45]:
+                  - cell "Selector - Country of Residence This page allows you to select an item from the list of available items. Refine by Keyword is United States Refresh Available Entries 1-1 out of 1 << < 1 > >> This page allows you to select an item from the list of available items. 1-1 out of 1 << < 1 > >>" [ref=e46]:
+                    - heading "Selector - Country of Residence" [level=1] [ref=e47]: Selector - Country of Residence
+                    - generic [ref=e49]: This page allows you to select an item from the list of available items.
+                    - generic [ref=e50]:
+                      - generic [ref=e51]:
+                        - generic [ref=e52]: Refine by
+  --
+                          - option "Keyword" [selected]
+                      - generic [ref=e55]:
+                        - generic [ref=e56]: is
+                        - textbox "is" [ref=e57]: United States
+  --
+                      - table "This page allows you to select an item from the list of available items." [ref=e89]:
+                        - rowgroup [ref=e90]:
+                          - row "Code ↑ Description ↑" [ref=e91]:
+                            - columnheader [ref=e92]
+  --
+              - button "Select" [ref=e142] [cursor=pointer]
+              - button "Cancel" [ref=e143] [cursor=pointer]
+      - generic [ref=e144]:
+        - link "LinkedIn" [ref=e145] [cursor=pointer]:

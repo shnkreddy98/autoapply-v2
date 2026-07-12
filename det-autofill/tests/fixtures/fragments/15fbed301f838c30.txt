@@ -1,0 +1,45 @@
+"Email": |-
+          - generic [ref=e165]: By continuing with social sign-on, you agree to create a candidate account using your [Apple/Google] profile. We will access your name, email address, and public profile information to streamline your application process. You can manage or update your account details anytime. Your data will be handled in accordance with our [Privacy Policy].
+        - button "Sign in with Apple" [ref=e170] [cursor=pointer]:
+          - generic [ref=e171]:
+            - img [ref=e172]
+  --
+          - button "Sign in with email" [ref=e194] [cursor=pointer]
+  - generic [ref=e47]:
+    - heading "Follow Us" [level=4] [ref=e48]
+    - list [ref=e49]:
+"Password": (no match)
+"Sign In": |-
+  - Page Title: Sign In
+  ### Snapshot
+  ```yaml
+  - generic [ref=e4]:
+  --
+          - button "Sign In" [ref=e33] [cursor=pointer]:
+            - generic [ref=e38]: Sign In
+          - navigation [ref=e39]:
+            - button "Search for Jobs" [ref=e40] [cursor=pointer]
+    - main [ref=e83]:
+  --
+              - generic [ref=e101]: Create Account/Sign In
+            - listitem [ref=e102]:
+              - generic: step 2 of 8
+              - generic [ref=e108]: Autofill with Resume
+  --
+          - heading "Sign In" [level=2] [ref=e161]
+          - paragraph [ref=e164]:
+            - generic [ref=e165]: By continuing with social sign-on, you agree to create a candidate account using your [Apple/Google] profile. We will access your name, email address, and public profile information to streamline your application process. You can manage or update your account details anytime. Your data will be handled in accordance with our [Privacy Policy].
+          - button "Sign in with Apple" [ref=e170] [cursor=pointer]:
+            - generic [ref=e171]:
+              - img [ref=e172]
+              - text: Sign in with Apple
+          - button "Sign in with Google" [ref=e180] [cursor=pointer]:
+            - generic [ref=e181]:
+              - img [ref=e183]
+              - text: Sign in with Google
+          - generic [ref=e189]:
+            - generic [ref=e190]: OR
+            - button "Sign in with email" [ref=e194] [cursor=pointer]
+    - generic [ref=e47]:
+      - heading "Follow Us" [level=4] [ref=e48]
+      - list [ref=e49]:

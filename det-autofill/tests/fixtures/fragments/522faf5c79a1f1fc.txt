@@ -1,0 +1,5 @@
+"Submit Application": |-
+          - button "Submit Application" [ref=e194] [cursor=pointer]
+          - link "Privacy Policy" [ref=e196] [cursor=pointer]:
+            - /url: https://www.careerplug.com/privacy/
+  - iframe [ref=e198]:

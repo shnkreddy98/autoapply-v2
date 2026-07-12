@@ -1,0 +1,102 @@
+"First Name": |-
+    - generic [ref=e106]: First Name*
+    - textbox "First Name" [ref=e107]: Jane Quinn
+  - generic [ref=e110]:
+    - generic [ref=e111]: Last Name*
+    - textbox "Last Name" [ref=e112]: Doe
+  --
+    - generic [ref=e116]: Preferred First Name
+    - textbox "Preferred First Name" [ref=e117]
+  - generic [ref=e120]:
+    - generic [ref=e121]: Email*
+    - textbox "Email" [ref=e122]: jane.doe@example.com
+"Last Name": |-
+    - generic [ref=e111]: Last Name*
+    - textbox "Last Name" [ref=e112]: Doe
+  - generic [ref=e115]:
+    - generic [ref=e116]: Preferred First Name
+    - textbox "Preferred First Name" [ref=e117]
+"Email": |-
+    - generic [ref=e121]: Email*
+    - textbox "Email" [ref=e122]: jane.doe@example.com
+  - group "Phone" [ref=e124]:
+    - generic [ref=e125]: Phone
+    - generic [ref=e127]:
+"Phone": |-
+  - group "Phone" [ref=e124]:
+    - generic [ref=e125]: Phone
+    - generic [ref=e127]:
+      - generic [ref=e128]:
+        - generic [ref=e129]: Country*
+  --
+      - generic [ref=e145]: Phone*
+      - textbox "Phone" [ref=e146]: (555) 010-0199
+  - group "Resume/CV*" [ref=e148]:
+    - generic [ref=e149]: Resume/CV*
+    - generic [ref=e290]:
+"Country": |-
+      - generic [ref=e129]: Country*
+      - generic [ref=e130]:
+        - log [ref=e132]
+        - generic [ref=e134]:
+  --
+            - combobox "Country" [invalid] [ref=e137]
+          - button "Toggle flyout" [ref=e139] [cursor=pointer]:
+            - img [ref=e140]
+    - paragraph [ref=e323]: Select a country
+  - generic [ref=e144]:
+    - generic [ref=e145]: Phone*
+    - textbox "Phone" [ref=e146]: (555) 010-0199
+"School": |-
+    - generic [ref=e192]: School
+    - generic [ref=e193]:
+      - log [ref=e195]
+      - generic [ref=e197]:
+  --
+          - combobox "School" [ref=e201]
+        - button "Toggle flyout" [ref=e203] [cursor=pointer]:
+          - img [ref=e204]
+  - generic [ref=e207]:
+"Degree": |-
+  - listitem [ref=e46]: Bachelor's degree in Computer Science, Information Systems, Data Science, or a related field - or equivalent practical experience
+  - listitem [ref=e47]: 1 to 3 years industry experience
+  - listitem [ref=e48]:
+    - text: Basic understanding of and training in
+  --
+    - generic [ref=e208]: Degree
+    - generic [ref=e209]:
+      - log [ref=e211]
+      - generic [ref=e213]:
+  --
+          - combobox "Degree" [ref=e217]
+        - button "Toggle flyout" [ref=e219] [cursor=pointer]:
+          - img [ref=e220]
+  - generic [ref=e223]:
+"Discipline": |-
+      - generic [ref=e224]: Discipline
+      - generic [ref=e225]:
+        - log [ref=e227]
+        - generic [ref=e229]:
+  --
+            - combobox "Discipline" [ref=e233]
+          - button "Toggle flyout" [ref=e235] [cursor=pointer]:
+            - img [ref=e236]
+  - button "Add another" [ref=e238] [cursor=pointer]
+"Security code": |-
+  - generic [ref=e337]: Security code
+  - generic [ref=e338]:
+    - textbox "Security code" [ref=e339]: j
+    - textbox [ref=e340]
+    - textbox [ref=e341]
+    - textbox [ref=e342]
+"Are you a U.S. citizen?": |-
+  - generic [ref=e254]: Are you a U.S. citizen? *
+  - generic [ref=e255]:
+    - log [ref=e257]
+    - generic [ref=e259]:
+  --
+        - combobox "Are you a U.S. citizen?" [ref=e263]
+      - generic [ref=e264]:
+        - button "Clear selections" [ref=e308] [cursor=pointer]:
+          - img [ref=e309]
+"Attach cover letter": (no match)

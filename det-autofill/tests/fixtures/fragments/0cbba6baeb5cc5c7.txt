@@ -1,0 +1,15 @@
+"Apply": |-
+        - text: Apply
+      - generic [ref=e39]:
+        - button " Share" [ref=e40] [cursor=pointer]:
+          - generic [ref=e41]: 
+  --
+  - paragraph [ref=e85]: · Apply machine learning algorithms and statistical models to large datasets to identify trends, patterns, and relationships.
+  - paragraph [ref=e86]: · Collaborate with cross-functional teams to understand business objectives and develop data-driven solutions.
+  - paragraph [ref=e87]: · Design and implement end-to-end machine learning pipelines, from data preprocessing to model training, evaluation, and deployment.
+  - paragraph [ref=e88]: · Stay up-to-date with the latest research and developments in machine learning and artificial intelligence
+  --
+  - paragraph [ref=e96]: · Minimum of 1 year of experience applying machine learning techniques to solve complex data problems.
+  - paragraph [ref=e97]: · Strong knowledge of machine learning algorithms and statistical models, including supervised and unsupervised learning methods.
+  - paragraph [ref=e98]: · Experience with data preprocessing, feature engineering, and data visualization techniques.
+  - paragraph [ref=e99]: · Proficiency in Python programming, and experience working with big data tools such as Spark.

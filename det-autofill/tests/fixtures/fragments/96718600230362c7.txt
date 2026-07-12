@@ -1,0 +1,22 @@
+"Job Details": |-
+  - heading "button icon Job Details" [level=3] [ref=e220]:
+    - button "button icon Job Details" [ref=e221] [cursor=pointer]:
+      - generic [ref=e223]:
+        - img [ref=e225]
+        - generic [ref=e228]: button icon
+      - generic "Job Details" [ref=e229]
+  - generic [ref=e233]:
+    - generic [ref=e254]:
+      - generic [ref=e255]: "*Expected Pay"
+      - spinbutton "Expected Pay" [ref=e257]
+    - generic [ref=e259]:
+      - generic [ref=e260]: "*Availability for new project"
+      - generic [ref=e264]:
+        - combobox "Availability for new project" [ref=e265] [cursor=pointer]:
+          - generic [ref=e266]: Select an Option
+        - generic:
+          - generic:
+            - generic:
+              - generic:
+                - img
+      - status

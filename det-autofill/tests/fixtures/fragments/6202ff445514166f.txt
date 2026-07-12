@@ -1,0 +1,5 @@
+"Prefer not to say": |-
+          - option "Prefer not to say" [ref=e184]
+  - generic [ref=e107]:
+    - generic [ref=e108]:
+      - text: What is your race/ethnicity? *

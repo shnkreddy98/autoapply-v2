@@ -1,0 +1,58 @@
+"Email Address": |-
+    - generic [ref=e241]: Email Address*
+    - textbox "Email Address" [ref=e244]
+  - generic [ref=e246]:
+    - generic [ref=e248]: Password*
+    - textbox "Password" [ref=e251]
+"Password": |-
+      - paragraph [ref=e230]: "Password Requirements:"
+      - list [ref=e231]:
+        - listitem [ref=e232]: A lowercase character
+        - listitem [ref=e233]: A special character
+  --
+        - generic [ref=e248]: Password*
+        - textbox "Password" [ref=e251]
+      - generic [ref=e252]:
+        - generic [ref=e254]: Verify New Password*
+        - textbox "Verify New Password" [ref=e257]
+      - generic [ref=e260]:
+        - generic [ref=e262]:
+          - paragraph [ref=e263]:
+  --
+    - button "Forgot your password?" [ref=e293] [cursor=pointer]
+  - generic:
+    - generic:
+      - generic [ref=e294]: Enter website. This input is for robots only, do not enter if you're human.
+"Verify New Password": |-
+    - generic [ref=e254]: Verify New Password*
+    - textbox "Verify New Password" [ref=e257]
+  - generic [ref=e260]:
+    - generic [ref=e262]:
+      - paragraph [ref=e263]:
+"I agree": |-
+    - checkbox "I agree" [ref=e281] [cursor=pointer]
+    - generic [ref=e282] [cursor=pointer]: I agree
+  - generic [ref=e287]:
+    - button "Create Account" [ref=e288] [cursor=pointer]
+    - button [ref=e289] [cursor=pointer]: Create Account
+"Create Account": |-
+  - Page Title: Create Account
+  ### Snapshot
+  ```yaml
+  - generic [ref=e4]:
+  --
+              - generic [ref=e111]: Create Account/Sign In
+            - listitem [ref=e112]:
+              - generic: step 2 of 8
+              - generic [ref=e118]: Autofill with Resume
+  --
+            - heading "Create Account" [active] [level=3] [ref=e226]
+            - generic [ref=e229]:
+              - paragraph [ref=e230]: "Password Requirements:"
+              - list [ref=e231]:
+  --
+                - button "Create Account" [ref=e288] [cursor=pointer]
+                - button [ref=e289] [cursor=pointer]: Create Account
+            - generic [ref=e290]:
+              - text: Already have an account?
+              - button "Sign In" [ref=e291] [cursor=pointer]

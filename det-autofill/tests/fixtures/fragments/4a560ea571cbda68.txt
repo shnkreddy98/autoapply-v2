@@ -1,0 +1,17 @@
+"Email Address": |-
+    - generic [ref=e404]: Email Address*
+    - textbox "Email Address" [ref=e407]
+  - generic [ref=e409]:
+    - generic [ref=e411]: Password*
+    - textbox "Password" [ref=e414]
+"Password": |-
+          - generic [ref=e411]: Password*
+          - textbox "Password" [ref=e414]
+        - generic [ref=e419]:
+          - button "Submit" [ref=e420] [cursor=pointer]
+          - button [ref=e421] [cursor=pointer]: Sign In
+  --
+      - button "Forgot your password?" [ref=e425] [cursor=pointer]
+  - generic:
+    - generic:
+      - generic [ref=e426]: Enter website. This input is for robots only, do not enter if you're human.

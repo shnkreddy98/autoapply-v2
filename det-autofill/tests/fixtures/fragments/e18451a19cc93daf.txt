@@ -1,0 +1,8 @@
+"Type to Add Skills": |-
+  - generic [ref=e1082]: Type to Add Skills
+  - generic [ref=e1087]:
+    - generic [ref=e1088]:
+      - textbox "Type to Add Skills" [active] [ref=e1089]:
+        - /placeholder: Search
+      - generic [ref=e1090]: Expanded
+    - listbox "items selected" [ref=e1185]:

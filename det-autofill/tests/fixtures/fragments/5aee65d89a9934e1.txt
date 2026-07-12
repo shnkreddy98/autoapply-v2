@@ -1,0 +1,10 @@
+"Apply Online": |-
+        - button "Apply Online" [ref=e156] [cursor=pointer]
+        - button "Add to My Job Cart" [ref=e158] [cursor=pointer]
+      - generic [ref=e159]: Job Description - Sr. Data Engineer (006IK)
+      - heading "Job Description" [level=1] [ref=e160]:
+  --
+        - button "Apply Online" [ref=e231] [cursor=pointer]
+        - button "Add to My Job Cart" [ref=e233] [cursor=pointer]
+  - generic:
+    - generic:

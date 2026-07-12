@@ -1,0 +1,12 @@
+"radio \"Yes\"": |-
+          - radio "Yes" [ref=e517] [cursor=pointer]
+          - generic [ref=e518]: "Yes"
+        - generic [ref=e519]:
+          - radio "No" [ref=e521] [cursor=pointer]
+          - generic [ref=e522]: "No"
+  - group [ref=e523]:
+    - generic [ref=e525]:
+      - generic [ref=e527]: Country*
+      - button "Country United States of America Required" [ref=e531]: United States of America
+  - group "Legal Name" [ref=e533]:
+    - heading "Legal Name" [level=4] [ref=e534]

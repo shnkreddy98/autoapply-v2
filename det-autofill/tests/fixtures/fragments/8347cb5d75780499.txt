@@ -1,0 +1,121 @@
+"Country": |-
+      - generic [ref=e149]: Country*
+      - generic [ref=e150]:
+        - log [ref=e152]
+        - generic [ref=e154]:
+          - combobox "Country" [active] [invalid] [ref=e157]: United States
+          - button "Toggle flyout" [ref=e159] [cursor=pointer]:
+            - img [ref=e160]
+        - textbox
+    - paragraph [ref=e471]: Select a country
+  - generic [ref=e164]:
+    - generic [ref=e165]: Phone*
+    - textbox "Phone" [ref=e167]: (555) 010-0199
+"Location (City)": |-
+      - generic [ref=e171]: Location (City)*
+      - generic [ref=e172]:
+        - log [ref=e174]
+        - combobox "Location (City)" [invalid] [ref=e179]
+        - textbox
+    - paragraph [ref=e472]: Please enter your location
+  - button "Locate me" [ref=e180] [cursor=pointer]
+"Have you ever worked for Microsoft": |-
+  - generic [ref=e224]: Have you ever worked for Microsoft as an employee or vendor? *
+  - generic [ref=e225]:
+    - log [ref=e227]
+    - generic [ref=e229]:
+  --
+        - combobox "Have you ever worked for Microsoft as an employee or vendor?" [invalid] [ref=e233]
+      - button "Toggle flyout" [ref=e235] [cursor=pointer]:
+        - img [ref=e236]
+    - textbox
+"U.S. citizen": |-
+  - generic [ref=e241]: Some roles require U.S. citizenship due to security requirements. Are you a U.S. citizen?*
+  - generic [ref=e242]:
+    - log [ref=e244]
+    - generic [ref=e246]:
+  --
+        - combobox "Some roles require U.S. citizenship due to security requirements. Are you a U.S. citizen?" [invalid] [ref=e250]
+      - button "Toggle flyout" [ref=e252] [cursor=pointer]:
+        - img [ref=e253]
+    - textbox
+"3 years of experience with Power Apps": |-
+  - generic [ref=e258]: Do you have 3 years of experience with Power Apps? *
+  - generic [ref=e259]:
+    - log [ref=e261]
+    - generic [ref=e263]:
+  --
+        - combobox "Do you have 3 years of experience with Power Apps?" [invalid] [ref=e267]
+      - button "Toggle flyout" [ref=e269] [cursor=pointer]:
+        - img [ref=e270]
+    - textbox
+"3 years of experience with Kusto and SQL": |-
+  - generic [ref=e275]: Do you have 3 years of experience with Kusto and SQL?*
+  - generic [ref=e276]:
+    - log [ref=e278]
+    - generic [ref=e280]:
+  --
+        - combobox "Do you have 3 years of experience with Kusto and SQL?" [invalid] [ref=e284]
+      - button "Toggle flyout" [ref=e286] [cursor=pointer]:
+        - img [ref=e287]
+    - textbox
+"3 years of experience with Microsoft Analytics products": |-
+  - generic [ref=e292]: Do you have 3 years of experience with Microsoft Analytics products and ETL processes - Azure Fabric, Azure Synapse, Azure Data Factory, etc.?*
+  - generic [ref=e293]:
+    - log [ref=e295]
+    - generic [ref=e297]:
+  --
+        - combobox "Do you have 3 years of experience with Microsoft Analytics products and ETL processes - Azure Fabric, Azure Synapse, Azure Data Factory, etc.?" [invalid] [ref=e301]
+      - button "Toggle flyout" [ref=e303] [cursor=pointer]:
+        - img [ref=e304]
+    - textbox
+"Gender": |-
+  - paragraph [ref=e91]: Blueprint Technologies, LLC is an equal employment opportunity employer. Qualified applicants are considered without regard to race, color, age, disability, sex, gender identity or expression, orientation, veteran/military status, religion, national origin, ancestry, marital, or familial status, genetic information, citizenship, or any other status protected by law.
+  - paragraph [ref=e92]:
+    - generic [ref=e93]:
+      - text: "If you need assistance or a reasonable accommodation to complete the application process, please reach out to:"
+  --
+      - generic [ref=e315]: Gender
+      - generic [ref=e316]:
+        - log [ref=e318]
+        - generic [ref=e320]:
+  --
+            - combobox "Gender" [ref=e324]
+          - button "Toggle flyout" [ref=e326] [cursor=pointer]:
+            - img [ref=e327]
+    - generic [ref=e329]:
+"Hispanic/Latino": |-
+    - generic [ref=e332]: Are you Hispanic/Latino?
+    - generic [ref=e333]:
+      - log [ref=e335]
+      - generic [ref=e337]:
+  --
+          - combobox "Are you Hispanic/Latino?" [ref=e341]
+        - button "Toggle flyout" [ref=e343] [cursor=pointer]:
+          - img [ref=e344]
+  - link "Race & Ethnicity Definitions" [ref=e346] [cursor=pointer]:
+"Veteran Status": |-
+    - generic [ref=e356]: Veteran Status
+    - generic [ref=e357]:
+      - log [ref=e359]
+      - generic [ref=e361]:
+  --
+          - combobox "Veteran Status" [ref=e365]
+        - button "Toggle flyout" [ref=e367] [cursor=pointer]:
+          - img [ref=e368]
+  - separator [ref=e370]
+"Disability Status": |-
+    - generic [ref=e413]: Disability Status
+    - generic [ref=e414]:
+      - log [ref=e416]
+      - generic [ref=e418]:
+  --
+          - combobox "Disability Status" [ref=e422]
+        - button "Toggle flyout" [ref=e424] [cursor=pointer]:
+          - img [ref=e425]
+  - paragraph [ref=e428]: "PUBLIC BURDEN STATEMENT: According to the Paperwork Reduction Act of 1995 no persons are required to respond to a collection of information unless such collection displays a valid OMB control number. This survey should take about 5 minutes to complete."
+"Submit application": |-
+          - button "Submit application" [ref=e436] [cursor=pointer]
+  - contentinfo [ref=e437]:
+    - generic [ref=e438]:
+      - paragraph [ref=e439]: Powered by

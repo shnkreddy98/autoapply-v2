@@ -1,0 +1,82 @@
+"Education Level": |-
+  - generic "The field Education Level is mandatory." [ref=e509]:
+    - text: Education Level
+    - generic [ref=e512]: .
+    - generic [ref=e513]: Required
+  - combobox "Education Level . Required" [ref=e514]:
+    - option "Not Specified"
+    - option "None"
+    - option "High School Diploma/GED (±11 years)"
+  --
+  - generic "The field Education Level is mandatory." [ref=e545]:
+    - text: Education Level
+    - generic [ref=e548]: .
+    - generic [ref=e549]: Required
+  - combobox "Education Level . Required" [ref=e550]:
+    - option "Not Specified"
+    - option "None"
+    - option "High School Diploma/GED (±11 years)"
+  --
+  - generic "The field Education Level is mandatory." [ref=e585]:
+    - text: Education Level
+    - generic [ref=e588]: .
+    - generic [ref=e589]: Required
+  - combobox "Education Level . Required" [ref=e590]:
+    - option "Not Specified"
+    - option "None"
+    - option "High School Diploma/GED (±11 years)"
+"School Name": |-
+      - generic "The field School Name is mandatory." [ref=e516]:
+        - text: School Name
+        - generic [ref=e519]: .
+        - generic [ref=e520]: Required
+      - textbox "School Name . Required" [ref=e521]
+  - generic [ref=e522]:
+    - generic [ref=e523]: GPA
+    - textbox "GPA" [ref=e526]
+  --
+      - generic "The field School Name is mandatory." [ref=e552]:
+        - text: School Name
+        - generic [ref=e555]: .
+        - generic [ref=e556]: Required
+      - textbox "School Name . Required" [ref=e557]
+  - generic [ref=e558]:
+    - generic [ref=e559]: GPA
+    - textbox "GPA" [ref=e562]
+  --
+      - generic "The field School Name is mandatory." [ref=e592]:
+        - text: School Name
+        - generic [ref=e595]: .
+        - generic [ref=e596]: Required
+      - textbox "School Name . Required" [ref=e597]
+  - generic [ref=e598]:
+    - generic [ref=e599]: GPA
+    - textbox "GPA" [ref=e602]
+"GPA": |-
+      - generic [ref=e523]: GPA
+      - textbox "GPA" [ref=e526]
+  - link "Remove Education" [ref=e528] [cursor=pointer]:
+    - /url: "#"
+    - text: Remove Education
+  --
+      - generic [ref=e559]: GPA
+      - textbox "GPA" [ref=e562]
+  - link "Remove Education" [ref=e564] [cursor=pointer]:
+    - /url: "#"
+    - text: Remove Education
+  --
+      - generic [ref=e599]: GPA
+      - textbox "GPA" [ref=e602]
+  - link "Remove Education" [ref=e604] [cursor=pointer]:
+    - /url: "#"
+    - text: Remove Education
+"Save and Continue": |-
+      - button "Save and Continue" [ref=e159] [cursor=pointer]
+      - button "Save as Draft" [ref=e160] [cursor=pointer]
+      - button "Quit" [ref=e161] [cursor=pointer]
+  - generic [ref=e162]:
+  --
+    - button "Save and Continue" [ref=e782] [cursor=pointer]
+    - button "Save as Draft" [ref=e783] [cursor=pointer]
+    - button "Quit" [ref=e784] [cursor=pointer]
+  - link "Privacy Agreement" [ref=e793] [cursor=pointer]:

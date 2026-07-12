@@ -1,0 +1,8 @@
+"Male": |-
+  - option "Male" [ref=e1620]:
+    - generic [ref=e1621]: Male
+  - option "Female" [ref=e1622]:
+    - generic [ref=e1623]: Female
+  - option "Trans Man" [ref=e1624]:
+    - generic [ref=e1625]: Trans Man
+  - option "Trans Woman" [ref=e1626]:

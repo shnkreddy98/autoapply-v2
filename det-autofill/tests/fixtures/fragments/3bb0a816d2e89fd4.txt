@@ -1,0 +1,20 @@
+"military spouse or domestic partner? Select One": |-
+    - button "Are you a current or former military spouse or domestic partner? Select One" [ref=e2070]: Select One
+  - generic [ref=e2071]:
+    - generic [ref=e2072]: Please select the Race/Ethnicity which most describes how you identify yourself.
+    - button "Please select the Race/Ethnicity which most describes how you identify yourself. Select One" [ref=e2076]: Select One
+"Race/Ethnicity which most describes how you identify yourself. Select One": |-
+    - button "Please select the Race/Ethnicity which most describes how you identify yourself. Select One" [ref=e2076]: Select One
+  - generic [ref=e2077]:
+    - generic [ref=e2078]: Please select your gender.
+    - button "Please select your gender. Select One" [ref=e2082]: Select One
+"select your gender. Select One": |-
+    - button "Please select your gender. Select One" [ref=e2082]: Select One
+  - generic [ref=e2083]:
+    - generic [ref=e2084]: Please select the veteran status which most accurately describes your status.
+    - button "Please select the veteran status which most accurately describes your status. Select One" [ref=e2088]: Select One
+"veteran status which most accurately describes your status. Select One": |-
+        - button "Please select the veteran status which most accurately describes your status. Select One" [ref=e2088]: Select One
+  - group "Terms and Conditions" [ref=e2089]:
+    - heading "Terms and Conditions" [level=4] [ref=e2090]
+    - generic [ref=e2091]:

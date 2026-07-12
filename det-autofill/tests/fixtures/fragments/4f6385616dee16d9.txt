@@ -1,0 +1,105 @@
+"Yes": |-
+    - textbox "Our core working hours are 9:30a-6:30p PT. Some positions offer flexibility, but please let us know if these hours work for your schedule." [ref=e561]: Yes, these hours work for my schedule.
+  - generic [ref=e564]:
+    - generic [ref=e565]: Our company embraces AI tools to drive innovation and productivity. Are you comfortable leveraging AI-powered tools in your role?*
+    - generic [ref=e566]:
+  --
+        - option "Yes" [ref=e718]
+        - option "No" [ref=e719]
+      - textbox
+  - generic [ref=e581]:
+"No": |-
+          - text: • Design, build, and maintain a simple, effective, and scalable data warehouse on Snowflake — with clean models, well-named fields, and documentation that makes the warehouse easy to use by downstream users and systems
+          - text: • Implement and manage data transformation with dbt to ensure reliable, well-tested pipelines
+          - text: • Develop and evolve data models, semantic layers, and metric definitions that support a wide range of business needs while keeping data consistent and accurate across the organization
+          - text: • Own data quality, observability, and testing that protects downstream consumers from broken or misleading data
+  --
+          - text: • Hands-on experience with dbt and Snowflake
+          - text: • Experience with clickstream / event data
+          - text: • Demonstrated ability to design and ship scalable data systems
+          - text: • Comfort using AI tools (Claude Code, Cursor, or similar) as part of your daily workflow
+          - text: • Excellent written communication — clear documentation, well-scoped specs, and the ability to explain technical tradeoffs to non-technical partners
+          - text: "• Strong project ownership: defining requirements as you go, communicating tradeoffs, and delivering results within timelines"
+          - text: • Ability to leverage abstraction to solve complex problems
+          - text: Preferred Qualifications
+  --
+        - paragraph [ref=e371]: The estimated salary range for a new hire in this position is below. Salary may vary depending on job-related factors, including knowledge, skills, experience, and location.
+        - paragraph [ref=e372]: "Total Compensation:"
+        - paragraph [ref=e373]: $160,000 - $190,000 USD
+      - generic [ref=e374]:
+  --
+          - text: Age of Learning, Inc. (the “Company”) is committed to a policy of Equal Employment Opportunity and will not discriminate against an applicant or employee on the basis of race, color, religion, creed, national origin or ancestry, sex, gender expression, age, physical or mental disability, medical condition, pregnancy, veteran or military status, marital status, sexual orientation, gender identity, domestic partner status, genetic information, or any other legally-recognized protected basis under federal, state, or local laws, regulations, or ordinances. Age of Learning, Inc. (the “Company”) will consider qualified applicants with criminal histories pursuant to
+          - link "EEOC requirements" [ref=e386] [cursor=pointer]:
+            - /url: https://www.eeoc.gov/background-checks
+          - text: and state applicable laws, e.g. New York City Fair Chance Act.
+  --
+          - link "Employee/Applicant Privacy Notice" [ref=e389] [cursor=pointer]:
+            - /url: https://www.ageoflearning.com/employee-applicant-privacy-notice/
+        - paragraph [ref=e390]
+        - paragraph [ref=e391]: We may use artificial intelligence (AI) tools to support parts of the hiring process, such as reviewing applications, analyzing resumes, or assessing responses. These tools assist our recruitment team but do not replace human judgment. Final hiring decisions are ultimately made by humans. If you would like more information about how your data is processed, please contact us.
+        - paragraph [ref=e392]
+  - separator [ref=e393]
+  - generic [ref=e394]:
+  --
+        - button "Add another" [ref=e549] [cursor=pointer]
+      - generic [ref=e550]:
+        - separator [ref=e551]
+        - generic [ref=e554]:
+  --
+          - generic [ref=e560]: Our core working hours are 9:30a-6:30p PT. Some positions offer flexibility, but please let us know if these hours work for your schedule.*
+          - textbox "Our core working hours are 9:30a-6:30p PT. Some positions offer flexibility, but please let us know if these hours work for your schedule." [ref=e561]: Yes, these hours work for my schedule.
+        - generic [ref=e564]:
+          - generic [ref=e565]: Our company embraces AI tools to drive innovation and productivity. Are you comfortable leveraging AI-powered tools in your role?*
+          - generic [ref=e566]:
+            - log [ref=e568]: 2 results available.Use Up and Down to choose options, press Enter to select the currently focused option, press Escape to exit the menu, press Tab to select the option and exit the menu.
+            - generic [ref=e570]:
+  --
+                - combobox "Our company embraces AI tools to drive innovation and productivity. Are you comfortable leveraging AI-powered tools in your role?" [expanded] [active] [ref=e574]
+              - button "Toggle flyout" [ref=e576] [cursor=pointer]:
+                - img [ref=e577]
+            - listbox [ref=e717]:
+  --
+              - option "No" [ref=e719]
+            - textbox
+        - generic [ref=e581]:
+          - generic [ref=e582]: Are you legally authorized to work in the United States?*
+  --
+            - generic [ref=e599]: Will you now, or in the future, require work visa sponsorship? *
+            - generic [ref=e600]:
+              - log [ref=e602]
+              - generic [ref=e604]:
+  --
+                  - combobox "Will you now, or in the future, require work visa sponsorship?" [ref=e608]
+                - button "Toggle flyout" [ref=e610] [cursor=pointer]:
+                  - img [ref=e611]
+              - textbox
+"authorized to work in the United States?": |-
+  - generic [ref=e582]: Are you legally authorized to work in the United States?*
+  - generic [ref=e583]:
+    - log [ref=e585]
+    - generic [ref=e587]:
+  --
+        - combobox "Are you legally authorized to work in the United States?" [ref=e591]
+      - button "Toggle flyout" [ref=e593] [cursor=pointer]:
+        - img [ref=e594]
+    - textbox
+"require work visa sponsorship?": |-
+  - generic [ref=e599]: Will you now, or in the future, require work visa sponsorship? *
+  - generic [ref=e600]:
+    - log [ref=e602]
+    - generic [ref=e604]:
+  --
+        - combobox "Will you now, or in the future, require work visa sponsorship?" [ref=e608]
+      - button "Toggle flyout" [ref=e610] [cursor=pointer]:
+        - img [ref=e611]
+    - textbox
+"referred to this position by an existing Age of Learning employee?": |-
+  - generic [ref=e619]: Were you referred to this position by an existing Age of Learning employee? *
+  - generic [ref=e620]:
+    - log [ref=e622]
+    - generic [ref=e624]:
+  --
+        - combobox "Were you referred to this position by an existing Age of Learning employee?" [ref=e628]
+      - button "Toggle flyout" [ref=e630] [cursor=pointer]:
+        - img [ref=e631]
+    - textbox

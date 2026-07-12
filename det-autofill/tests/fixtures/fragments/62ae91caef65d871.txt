@@ -1,0 +1,60 @@
+"Have you worked with us before?*": |-
+  - group "Have you worked with us before?*" [ref=e1671]:
+    - paragraph [ref=e1675]: Have you worked with us before?*
+    - button "Select One Required" [ref=e1679]: Select One
+  - group "Are you at least 21 years of age?*" [ref=e1681]:
+"Are you at least 21 years of age?*": |-
+  - group "Are you at least 21 years of age?*" [ref=e1681]:
+    - paragraph [ref=e1685]: Are you at least 21 years of age?*
+    - button "Select One Required" [ref=e1689]: Select One
+  - group "Are you legally eligible for employment in the United States?*" [ref=e1691]:
+"Are you legally eligible for employment in the United States?*": |-
+  - group "Are you legally eligible for employment in the United States?*" [ref=e1691]:
+    - paragraph [ref=e1695]: Are you legally eligible for employment in the United States?*
+    - button "Select One Required" [ref=e1699]: Select One
+  - group "Are you a Yuhaaviatam of San Manuel Nation Tribal Citizen?*" [ref=e1701]:
+"Are you a Yuhaaviatam of San Manuel Nation Tribal Citizen?*": |-
+  - group "Are you a Yuhaaviatam of San Manuel Nation Tribal Citizen?*" [ref=e1701]:
+    - paragraph [ref=e1705]: Are you a Yuhaaviatam of San Manuel Nation Tribal Citizen?*
+    - button "Select One Required" [ref=e1709]: Select One
+  - group "Are you a member of another Federally Recognized Indian Tribe?*" [ref=e1711]:
+"Are you a member of another Federally Recognized Indian Tribe?*": |-
+  - group "Are you a member of another Federally Recognized Indian Tribe?*" [ref=e1711]:
+    - paragraph [ref=e1715]: Are you a member of another Federally Recognized Indian Tribe?*
+    - button "Select One Required" [ref=e1719]: Select One
+  - group "Are you an eligible Yuhaaviatam of San Manuel Nation Tribal Community Member?*" [ref=e1721]:
+"Are you an eligible Yuhaaviatam of San Manuel Nation Tribal Community Member?*": |-
+  - group "Are you an eligible Yuhaaviatam of San Manuel Nation Tribal Community Member?*" [ref=e1721]:
+    - paragraph [ref=e1725]: Are you an eligible Yuhaaviatam of San Manuel Nation Tribal Community Member?*
+    - button "Select One Required" [ref=e1729]: Select One
+  - group "Do you have any relatives or do you reside with anyone currently working for Yuhaaviatam of San Manuel Nation or Yaamava Resort & Casino?*" [ref=e1731]:
+"Do you have any relatives or do you reside with anyone currently working for Yuhaaviatam of San Manuel Nation or Yaamava Resort & Casino?*": |-
+  - group "Do you have any relatives or do you reside with anyone currently working for Yuhaaviatam of San Manuel Nation or Yaamava Resort & Casino?*" [ref=e1731]:
+    - paragraph [ref=e1735]: Do you have any relatives or do you reside with anyone currently working for Yuhaaviatam of San Manuel Nation or Yaamava Resort & Casino?*
+    - button "Select One Required" [ref=e1739]: Select One
+  - group "What is your desired salary?*" [ref=e1741]:
+"highest level of completed education*": |-
+  - group "Please select your highest level of completed education*" [ref=e1750]:
+    - paragraph [ref=e1754]: Please select your highest level of completed education*
+    - button "Select One Required" [ref=e1758]: Select One
+  - group "Please describe, if applicable, why you left your three most recent jobs? (Company – Position – Reason)*" [ref=e1760]:
+"Are you able to perform the essential functions of the job for which you are applying with or without reasonable accommodation?*": |-
+  - group "Are you able to perform the essential functions of the job for which you are applying with or without reasonable accommodation?*" [ref=e1769]:
+    - paragraph [ref=e1773]: Are you able to perform the essential functions of the job for which you are applying with or without reasonable accommodation?*
+    - button "Select One Required" [ref=e1777]: Select One
+  - group "Yaamava’ Resort & Casino at San Manuel is a smoking facility, employees may be subject to second-hand smoke while performing their duties. Are you willing to work in a smoking environment?*" [ref=e1779]:
+"willing to work in a smoking environment?*": |-
+  - group "Yaamava’ Resort & Casino at San Manuel is a smoking facility, employees may be subject to second-hand smoke while performing their duties. Are you willing to work in a smoking environment?*" [ref=e1779]:
+    - paragraph [ref=e1783]: Yaamava’ Resort & Casino at San Manuel is a smoking facility, employees may be subject to second-hand smoke while performing their duties. Are you willing to work in a smoking environment?*
+    - button "Select One Required" [ref=e1787]: Select One
+  - group "Have you applied for a Gaming License with the San Manuel Gaming Commission in the past 24 months?*" [ref=e1789]:
+"Have you applied for a Gaming License with the San Manuel Gaming Commission in the past 24 months?*": |-
+  - group "Have you applied for a Gaming License with the San Manuel Gaming Commission in the past 24 months?*" [ref=e1789]:
+    - paragraph [ref=e1793]: Have you applied for a Gaming License with the San Manuel Gaming Commission in the past 24 months?*
+    - button "Select One Required" [ref=e1797]: Select One
+  - 'group "I am available to work the following shifts (please check all that apply): *If offered employment, this does not guarantee shift preferences will be accommodated.*" [ref=e1799]':
+"Are you available to work holidays and weekends?*": |-
+          - group "Are you available to work holidays and weekends?*" [ref=e1848]:
+            - paragraph [ref=e1852]: Are you available to work holidays and weekends?*
+            - button "Select One Required" [ref=e1856]: Select One
+  - generic [ref=e326]:

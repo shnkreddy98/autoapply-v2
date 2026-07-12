@@ -1,0 +1,23 @@
+"checkbox": |-
+    - checkbox [ref=e66]
+    - text: "Yes"
+  - generic [ref=e68]:
+    - generic [ref=e69]: "Resume*:"
+  --
+              - checkbox "Military Veteran" [ref=e82]
+              - text: Military Veteran
+          - cell "Military Reserve" [ref=e83]:
+            - generic [ref=e84]:
+              - checkbox "Military Reserve" [ref=e85]
+              - text: Military Reserve
+          - cell "Military (Veteran) Spouse" [ref=e86]:
+            - generic [ref=e87]:
+              - checkbox "Military (Veteran) Spouse" [ref=e88]
+              - text: Military (Veteran) Spouse
+  - generic [ref=e89]:
+    - generic [ref=e90]:
+  --
+          - checkbox "I'm not a robot" [ref=f76e7]
+          - generic [ref=f76e11]: I'm not a robot
+        - generic [ref=f76e15]: reCAPTCHA
+  - generic [ref=e105]:

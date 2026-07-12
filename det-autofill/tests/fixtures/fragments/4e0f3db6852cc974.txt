@@ -1,0 +1,80 @@
+"First Name": |-
+    - generic [ref=e323]: First Name*
+    - textbox "First Name*" [ref=e324]
+  - generic [ref=e325]:
+    - generic [ref=e326]: Last Name*
+    - textbox "Last Name*" [ref=e327]
+"Last Name": |-
+    - generic [ref=e326]: Last Name*
+    - textbox "Last Name*" [ref=e327]
+  - generic [ref=e328]:
+    - generic [ref=e329]: Email Address*
+    - textbox "Email Address*" [ref=e330]
+"Email Address": |-
+    - generic [ref=e329]: Email Address*
+    - textbox "Email Address*" [ref=e330]
+  - generic [ref=e331]:
+    - generic [ref=e332]: Phone*
+    - textbox "Phone*" [ref=e333]
+"Phone": |-
+    - generic [ref=e332]: Phone*
+    - textbox "Phone*" [ref=e333]
+  - generic [ref=e334]:
+    - generic [ref=e335]: Address
+    - generic [ref=e336]:
+"Address": |-
+    - generic [ref=e329]: Email Address*
+    - textbox "Email Address*" [ref=e330]
+  - generic [ref=e331]:
+    - generic [ref=e332]: Phone*
+    - textbox "Phone*" [ref=e333]
+  --
+    - generic [ref=e335]: Address
+    - generic [ref=e336]:
+      - textbox "Address" [ref=e337]
+      - generic [ref=e338]:
+        - textbox "City" [ref=e340]
+        - textbox "State/Province" [ref=e342]
+"City": |-
+        - textbox "City" [ref=e340]
+        - textbox "State/Province" [ref=e342]
+        - textbox "Postal" [ref=e344]
+  - generic [ref=e345]:
+  --
+    - text: Race/Ethnicity
+    - combobox "Race/Ethnicity" [ref=e408]:
+      - option "Decline to answer" [selected]
+      - option "Hispanic or Latino"
+      - option "White, not Hispanic or Latino"
+"State/Province": |-
+        - textbox "State/Province" [ref=e342]
+        - textbox "Postal" [ref=e344]
+  - generic [ref=e345]:
+    - generic [ref=e346]: Resume*
+"Postal": |-
+        - textbox "Postal" [ref=e344]
+  - generic [ref=e345]:
+    - generic [ref=e346]: Resume*
+    - generic [ref=e347]:
+"Resume": |-
+    - generic [ref=e346]: Resume*
+    - generic [ref=e347]:
+      - link "Attach resume" [ref=e348] [cursor=pointer]:
+        - /url: "#"
+      - text: or
+      - link "Paste resume" [ref=e349] [cursor=pointer]:
+        - /url: "#"
+  - generic [ref=e350]:
+    - generic [ref=e351]: What's your highest level of education completed?*
+"education completed": |-
+  - generic [ref=e351]: What's your highest level of education completed?*
+  - combobox "What's your highest level of education completed?*" [ref=e352]:
+    - option "No answer" [selected]
+    - option "GED or Equivalent"
+    - option "High School"
+"LinkedIn Profile URL": |-
+    - generic [ref=e354]: LinkedIn Profile URL:*
+    - textbox "LinkedIn Profile URL:*" [ref=e355]
+  - generic [ref=e356]:
+    - generic [ref=e357]:
+      - text: Are you legally authorized to work in the U.S.?

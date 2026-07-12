@@ -1,0 +1,21 @@
+"What are your salary expectations for this role?": |-
+          - button "Error What are your salary expectations for this role?(Hourly rate or Salary Range)" [ref=e1340] [cursor=pointer]:
+            - text: Error
+            - generic [ref=e1341]: "-"
+            - text: What are your salary expectations for this role?(Hourly rate or Salary Range)
+          - generic [ref=e1342]: The field What are your salary expectations for this role?(Hourly rate or Salary Range) is required and must have a value.
+  - group [ref=e1189]:
+    - generic [ref=e1190]:
+      - group "Are you at least 18 years of age?*" [ref=e1192]:
+  --
+      - group "What are your salary expectations for this role?(Hourly rate or Salary Range)*" [ref=e1243]:
+        - paragraph [ref=e1247]:
+          - generic [ref=e1248]: What are your salary expectations for this role?(Hourly rate or Salary Range)*
+        - generic [ref=e1249]:
+          - textbox [invalid] [ref=e1251]
+          - paragraph [ref=e1344]:
+  --
+            - text: The field What are your salary expectations for this role?(Hourly rate or Salary Range) is required and must have a value.
+      - group "Were you previously employed by Lurie Children's Hospital of Chicago?*" [ref=e1253]:
+        - paragraph [ref=e1257]: Were you previously employed by Lurie Children's Hospital of Chicago?*
+        - button "No Required" [ref=e1321]: "No"

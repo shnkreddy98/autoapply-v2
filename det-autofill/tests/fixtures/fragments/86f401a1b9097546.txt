@@ -1,0 +1,6 @@
+"sponsorship": |-
+  - group "Will you now or in the future require sponsorship for an employment visa (e.g., H-1B visa status)?*" [ref=e1288]:
+    - paragraph [ref=e1292]: Will you now or in the future require sponsorship for an employment visa (e.g., H-1B visa status)?*
+    - button "Select One Required" [ref=e1296]: Select One
+  - group "Are you 18 years of age or older?*" [ref=e1298]:
+    - paragraph [ref=e1302]: Are you 18 years of age or older?*

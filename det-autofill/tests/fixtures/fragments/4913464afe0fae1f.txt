@@ -1,0 +1,6 @@
+"Data Analytics": |-
+              - text: Data Analytics
+            - generic [ref=e1003]: Minimized
+        - button "The field will alphabetically return the first 100 results and can also return specified matches." [ref=e1007] [cursor=pointer]
+  - group "Education 2" [ref=e1011]:
+"Computer Science": (no match)

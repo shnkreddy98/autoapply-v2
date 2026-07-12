@@ -1,0 +1,15 @@
+"1st Location Preference . Required Value": |-
+      - textbox "1st Location Preference . Required Value" [ref=e255]: Boston
+      - button "Search" [ref=e256] [cursor=pointer]:
+        - generic [ref=e259]: Search
+  - group "2nd Location Preference . Required" [ref=e261]:
+"Save and Continue": |-
+          - button "Save and Continue" [ref=e110] [cursor=pointer]
+          - button "Save as Draft" [ref=e111] [cursor=pointer]
+          - button "Quit" [ref=e112] [cursor=pointer]
+      - generic [ref=e113]:
+  --
+        - button "Save and Continue" [ref=e323] [cursor=pointer]
+        - button "Save as Draft" [ref=e324] [cursor=pointer]
+        - button "Quit" [ref=e325] [cursor=pointer]
+  - generic [ref=e327]:

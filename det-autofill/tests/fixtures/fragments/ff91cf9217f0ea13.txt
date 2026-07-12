@@ -1,0 +1,72 @@
+"Education Level": |-
+    - generic "The field Education Level is mandatory." [ref=e514]:
+      - text: Education Level
+      - generic [ref=e517]: .
+      - generic [ref=e518]: Required
+    - combobox "Education Level . Required" [ref=e519]:
+      - option "Not Specified"
+      - option "None"
+      - option "High School Diploma/GED (±11 years)"
+      - option "Associate's Degree/College Diploma (±13 years)"
+      - option "Bachelor's Degree (±16 years)"
+      - option "Master's Degree (±18 years)" [selected]
+      - option "Doctorate Degree (over 19 years)"
+  - generic [ref=e520]:
+    - generic "The field School Name is mandatory." [ref=e521]:
+      - text: School Name
+  --
+    - generic "The field Education Level is mandatory." [ref=e550]:
+      - text: Education Level
+      - generic [ref=e553]: .
+      - generic [ref=e554]: Required
+    - combobox "Education Level . Required" [ref=e555]:
+      - option "Not Specified"
+      - option "None"
+      - option "High School Diploma/GED (±11 years)"
+      - option "Associate's Degree/College Diploma (±13 years)"
+      - option "Bachelor's Degree (±16 years)"
+      - option "Master's Degree (±18 years)"
+      - option "Doctorate Degree (over 19 years)"
+      - option "Technical Diploma (±12 years)" [selected]
+  - generic [ref=e556]:
+    - img "The field \"School Name\" is mandatory." [ref=e558]
+  --
+    - generic "The field Education Level is mandatory." [ref=e592]:
+      - text: Education Level
+      - generic [ref=e595]: .
+      - generic [ref=e596]: Required
+    - combobox "Education Level . Required" [ref=e597]:
+      - option "Not Specified"
+      - option "None"
+      - option "High School Diploma/GED (±11 years)"
+      - option "Associate's Degree/College Diploma (±13 years)"
+      - option "Bachelor's Degree (±16 years)" [selected]
+      - option "Master's Degree (±18 years)"
+      - option "Doctorate Degree (over 19 years)"
+  - generic [ref=e598]:
+    - img "The field \"School Name\" is mandatory." [ref=e600]
+    - generic "The field School Name is mandatory." [ref=e601]:
+"Save and Continue": |-
+          - button "Save and Continue" [ref=e160] [cursor=pointer]
+          - button "Save as Draft" [ref=e161] [cursor=pointer]
+          - button "Quit" [ref=e162] [cursor=pointer]
+      - generic [ref=e163]:
+        - alert [ref=e164]:
+          - heading "Errors occurred on this page, could not proceed. Please correct the errors before proceeding. Beginning of error list." [level=1]:
+            - link "Errors occurred on this page, could not proceed. Please correct the errors before proceeding. Beginning of error list." [ref=e165] [cursor=pointer]:
+              - /url: "#"
+          - list [ref=e166]:
+            - listitem [ref=e167]: The field "School Name" is mandatory.
+        - link "Beginning of the main content section." [ref=e168] [cursor=pointer]:
+  --
+        - button "Save and Continue" [ref=e708] [cursor=pointer]
+        - button "Save as Draft" [ref=e709] [cursor=pointer]
+        - button "Quit" [ref=e710] [cursor=pointer]
+      - link "Privacy Agreement" [ref=e719] [cursor=pointer]:
+        - /url: "#"
+  - generic [ref=e722]:
+    - link "Any personal information you provide is subject to the terms of our Privacy Policy" [ref=e723] [cursor=pointer]:
+      - /url: https://www.weyerhaeuser.com/privacy/privacy-policy
+    - text: .
+    - 'link "California residents: Our California Privacy Notice for Job Applicants details what personal information we collect and for what purposes." [ref=e724] [cursor=pointer]':
+      - /url: https://www.weyerhaeuser.com/privacy/ccpa/job-applicants/

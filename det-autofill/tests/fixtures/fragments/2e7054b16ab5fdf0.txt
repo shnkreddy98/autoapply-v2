@@ -1,0 +1,5 @@
+"Next": |-
+    - button "Next" [ref=e84] [cursor=pointer]
+  - generic [ref=e86]:
+    - text: Have an account?
+    - link "Sign In" [ref=e87] [cursor=pointer]:

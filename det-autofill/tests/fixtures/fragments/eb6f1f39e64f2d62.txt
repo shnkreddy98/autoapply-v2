@@ -1,0 +1,8 @@
+"Profile Information": |-
+    - heading "Profile Information" [level=2]:
+      - button "Profile Information" [active] [ref=e243] [cursor=pointer]:
+        - generic [ref=e244]: 
+        - text: Profile Information
+        - text:  
+  - generic [ref=e334]:
+    - heading "Work Experience" [level=2]:

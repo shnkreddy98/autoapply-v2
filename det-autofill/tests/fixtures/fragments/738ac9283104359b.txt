@@ -1,0 +1,119 @@
+"Are you a current employee": |-
+  - group "Are you a current employee of Yuhaaviatam of San Manuel Nation or Yaamava Resort & Casino?*" [ref=e1661]:
+    - paragraph [ref=e1665]: Are you a current employee of Yuhaaviatam of San Manuel Nation or Yaamava Resort & Casino?*
+    - button "Select One Required" [ref=e1669]: Select One
+  - group "Have you worked with us before?*" [ref=e1671]:
+    - paragraph [ref=e1675]: Have you worked with us before?*
+"Have you worked with us before": |-
+  - group "Have you worked with us before?*" [ref=e1671]:
+    - paragraph [ref=e1675]: Have you worked with us before?*
+    - button "Select One Required" [ref=e1679]: Select One
+  - group "Are you at least 21 years of age?*" [ref=e1681]:
+    - paragraph [ref=e1685]: Are you at least 21 years of age?*
+"Are you at least 21 years of age": |-
+  - group "Are you at least 21 years of age?*" [ref=e1681]:
+    - paragraph [ref=e1685]: Are you at least 21 years of age?*
+    - button "Select One Required" [ref=e1689]: Select One
+  - group "Are you legally eligible for employment in the United States?*" [ref=e1691]:
+    - paragraph [ref=e1695]: Are you legally eligible for employment in the United States?*
+"legally eligible for employment in the United States": |-
+  - group "Are you legally eligible for employment in the United States?*" [ref=e1691]:
+    - paragraph [ref=e1695]: Are you legally eligible for employment in the United States?*
+    - button "Select One Required" [ref=e1699]: Select One
+  - group "Are you a Yuhaaviatam of San Manuel Nation Tribal Citizen?*" [ref=e1701]:
+    - paragraph [ref=e1705]: Are you a Yuhaaviatam of San Manuel Nation Tribal Citizen?*
+"Yuhaaviatam of San Manuel Nation Tribal Citizen": |-
+  - group "Are you a Yuhaaviatam of San Manuel Nation Tribal Citizen?*" [ref=e1701]:
+    - paragraph [ref=e1705]: Are you a Yuhaaviatam of San Manuel Nation Tribal Citizen?*
+    - button "Select One Required" [ref=e1709]: Select One
+  - group "Are you a member of another Federally Recognized Indian Tribe?*" [ref=e1711]:
+    - paragraph [ref=e1715]: Are you a member of another Federally Recognized Indian Tribe?*
+"member of another Federally Recognized Indian Tribe": |-
+  - group "Are you a member of another Federally Recognized Indian Tribe?*" [ref=e1711]:
+    - paragraph [ref=e1715]: Are you a member of another Federally Recognized Indian Tribe?*
+    - button "Select One Required" [ref=e1719]: Select One
+  - group "Are you an eligible Yuhaaviatam of San Manuel Nation Tribal Community Member?*" [ref=e1721]:
+    - paragraph [ref=e1725]: Are you an eligible Yuhaaviatam of San Manuel Nation Tribal Community Member?*
+"Yuhaaviatam of San Manuel Nation Tribal Community Member": |-
+  - group "Are you an eligible Yuhaaviatam of San Manuel Nation Tribal Community Member?*" [ref=e1721]:
+    - paragraph [ref=e1725]: Are you an eligible Yuhaaviatam of San Manuel Nation Tribal Community Member?*
+    - button "Select One Required" [ref=e1729]: Select One
+  - group "Do you have any relatives or do you reside with anyone currently working for Yuhaaviatam of San Manuel Nation or Yaamava Resort & Casino?*" [ref=e1731]:
+    - paragraph [ref=e1735]: Do you have any relatives or do you reside with anyone currently working for Yuhaaviatam of San Manuel Nation or Yaamava Resort & Casino?*
+"relatives or do you reside with anyone currently working": |-
+  - group "Do you have any relatives or do you reside with anyone currently working for Yuhaaviatam of San Manuel Nation or Yaamava Resort & Casino?*" [ref=e1731]:
+    - paragraph [ref=e1735]: Do you have any relatives or do you reside with anyone currently working for Yuhaaviatam of San Manuel Nation or Yaamava Resort & Casino?*
+    - button "Select One Required" [ref=e1739]: Select One
+  - group "What is your desired salary?*" [ref=e1741]:
+    - paragraph [ref=e1745]: What is your desired salary?*
+"desired salary": |-
+  - group "What is your desired salary?*" [ref=e1741]:
+    - paragraph [ref=e1745]: What is your desired salary?*
+    - textbox [ref=e1748]
+  - group "Please select your highest level of completed education*" [ref=e1750]:
+    - paragraph [ref=e1754]: Please select your highest level of completed education*
+"highest level of completed education": |-
+  - group "Please select your highest level of completed education*" [ref=e1750]:
+    - paragraph [ref=e1754]: Please select your highest level of completed education*
+    - button "Select One Required" [ref=e1758]: Select One
+  - group "Please describe, if applicable, why you left your three most recent jobs? (Company – Position – Reason)*" [ref=e1760]:
+    - paragraph [ref=e1764]: Please describe, if applicable, why you left your three most recent jobs? (Company – Position – Reason)*
+"describe, if applicable, why you left your three most recent jobs": |-
+  - group "Please describe, if applicable, why you left your three most recent jobs? (Company – Position – Reason)*" [ref=e1760]:
+    - paragraph [ref=e1764]: Please describe, if applicable, why you left your three most recent jobs? (Company – Position – Reason)*
+    - textbox [ref=e1767]
+  - group "Are you able to perform the essential functions of the job for which you are applying with or without reasonable accommodation?*" [ref=e1769]:
+    - paragraph [ref=e1773]: Are you able to perform the essential functions of the job for which you are applying with or without reasonable accommodation?*
+"perform the essential functions of the job": |-
+  - group "Are you able to perform the essential functions of the job for which you are applying with or without reasonable accommodation?*" [ref=e1769]:
+    - paragraph [ref=e1773]: Are you able to perform the essential functions of the job for which you are applying with or without reasonable accommodation?*
+    - button "Select One Required" [ref=e1777]: Select One
+  - group "Yaamava’ Resort & Casino at San Manuel is a smoking facility, employees may be subject to second-hand smoke while performing their duties. Are you willing to work in a smoking environment?*" [ref=e1779]:
+    - paragraph [ref=e1783]: Yaamava’ Resort & Casino at San Manuel is a smoking facility, employees may be subject to second-hand smoke while performing their duties. Are you willing to work in a smoking environment?*
+"willing to work in a smoking environment": |-
+  - group "Yaamava’ Resort & Casino at San Manuel is a smoking facility, employees may be subject to second-hand smoke while performing their duties. Are you willing to work in a smoking environment?*" [ref=e1779]:
+    - paragraph [ref=e1783]: Yaamava’ Resort & Casino at San Manuel is a smoking facility, employees may be subject to second-hand smoke while performing their duties. Are you willing to work in a smoking environment?*
+    - button "Select One Required" [ref=e1787]: Select One
+  - group "Have you applied for a Gaming License with the San Manuel Gaming Commission in the past 24 months?*" [ref=e1789]:
+    - paragraph [ref=e1793]: Have you applied for a Gaming License with the San Manuel Gaming Commission in the past 24 months?*
+"applied for a Gaming License": |-
+  - group "Have you applied for a Gaming License with the San Manuel Gaming Commission in the past 24 months?*" [ref=e1789]:
+    - paragraph [ref=e1793]: Have you applied for a Gaming License with the San Manuel Gaming Commission in the past 24 months?*
+    - button "Select One Required" [ref=e1797]: Select One
+  - 'group "I am available to work the following shifts (please check all that apply): *If offered employment, this does not guarantee shift preferences will be accommodated.*" [ref=e1799]':
+    - generic [ref=e1802]:
+"Full-Time": |-
+  - row "Full-Time Part-Time Day Swing Graveyard All shifts listed above" [ref=e1810]:
+    - row "Full-Time" [ref=e1811]:
+      - cell "Full-Time" [ref=e1812]:
+        - generic [ref=e1813]:
+          - checkbox "Full-Time" [ref=e1815] [cursor=pointer]
+          - generic [ref=e1816] [cursor=pointer]: Full-Time
+    - row "Part-Time" [ref=e1817]:
+      - cell "Part-Time" [ref=e1818]:
+        - generic [ref=e1819]:
+"All shifts listed above": |-
+        - row "Full-Time Part-Time Day Swing Graveyard All shifts listed above" [ref=e1810]:
+          - row "Full-Time" [ref=e1811]:
+            - cell "Full-Time" [ref=e1812]:
+              - generic [ref=e1813]:
+  --
+          - row "All shifts listed above" [ref=e1841]:
+            - cell "All shifts listed above" [ref=e1842]:
+              - generic [ref=e1843]:
+                - checkbox "All shifts listed above" [ref=e1845] [cursor=pointer]
+                - generic [ref=e1846] [cursor=pointer]: All shifts listed above
+  - group "Are you available to work holidays and weekends?*" [ref=e1848]:
+    - paragraph [ref=e1852]: Are you available to work holidays and weekends?*
+    - button "Select One Required" [ref=e1856]: Select One
+"available to work holidays and weekends": |-
+          - group "Are you available to work holidays and weekends?*" [ref=e1848]:
+            - paragraph [ref=e1852]: Are you available to work holidays and weekends?*
+            - button "Select One Required" [ref=e1856]: Select One
+  - generic [ref=e326]:
+    - button "Back" [ref=e503] [cursor=pointer]
+"Save and Continue": |-
+          - button "Save and Continue" [ref=e504] [cursor=pointer]
+  - generic [ref=e33]:
+    - heading "Follow Us" [level=4] [ref=e34]
+    - list [ref=e35]:

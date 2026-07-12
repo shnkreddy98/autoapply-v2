@@ -1,0 +1,39 @@
+"Email Address": |-
+    - generic [ref=e220]: Email Address*
+    - textbox "Email Address" [ref=e223]
+  - generic [ref=e225]:
+    - generic [ref=e227]: Password*
+    - textbox "Password" [ref=e230]
+"Password": |-
+        - generic [ref=e227]: Password*
+        - textbox "Password" [ref=e230]
+      - generic [ref=e235]:
+        - button "Sign In" [ref=e236] [cursor=pointer]
+        - button [ref=e237] [cursor=pointer]: Sign In
+  --
+    - button "Forgot your password?" [ref=e241] [cursor=pointer]
+  - generic:
+    - generic:
+      - generic [ref=e242]: Enter website. This input is for robots only, do not enter if you're human.
+"Sign In": |-
+  - Page Title: Sign In
+  ### Snapshot
+  ```yaml
+  - generic [ref=e4]:
+  --
+            - button "Sign In" [ref=e27] [cursor=pointer]:
+              - generic [ref=e32]: Sign In
+          - navigation [ref=e33]:
+            - button "Careers Home" [ref=e34] [cursor=pointer]
+            - button "Join Our Talent Community" [ref=e35] [cursor=pointer]
+  --
+            - heading "Sign In" [level=3] [ref=e216]
+            - generic [ref=e217]:
+              - generic [ref=e218]:
+                - generic [ref=e220]: Email Address*
+  --
+                - button "Sign In" [ref=e236] [cursor=pointer]
+                - button [ref=e237] [cursor=pointer]: Sign In
+            - generic [ref=e238]:
+              - text: Don't have an account yet?
+              - button "Create Account" [ref=e239] [cursor=pointer]

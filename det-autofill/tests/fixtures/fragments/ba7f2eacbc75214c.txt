@@ -1,0 +1,5 @@
+"Do you have the right to work in the United States of America? (required)": |-
+  - combobox "Do you have the right to work in the United States of America? (required)" [ref=e114] [cursor=pointer]:
+    - option "Please select"
+    - option "Yes" [selected]
+    - option "No"

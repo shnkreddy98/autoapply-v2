@@ -1,0 +1,44 @@
+"18 years of age or older": |-
+  - generic [ref=e201]: Are you 18 years of age or older?*
+  - combobox "Are you 18 years of age or older?*" [ref=e202]:
+    - option "No answer" [selected]
+    - option "Yes"
+    - option "No"
+"weekends": |-
+  - generic [ref=e216]: Can you work weekends?
+  - combobox "Can you work weekends?" [ref=e217]:
+    - option "No answer" [selected]
+    - option "Yes"
+    - option "No"
+"evenings": |-
+  - generic [ref=e219]: Can you work evenings?
+  - combobox "Can you work evenings?" [ref=e220]:
+    - option "No answer" [selected]
+    - option "Yes"
+    - option "No"
+"felony": |-
+  - generic [ref=e222]: Have you ever been convicted of a felony?*
+  - combobox "Have you ever been convicted of a felony?*" [ref=e223]:
+    - option "No answer" [selected]
+    - option "No"
+    - option "Yes"
+"professional Data Engineering experience.*8+ years": (no match)
+"onsite Monday-Friday.*Yes": (no match)
+"sponsorship.*No": (no match)
+"Greater Houston area.*Not local and no relocation planned": (no match)
+"technical concepts.*Yes": (no match)
+"Azure Databricks in a production environment.*5+ years": (no match)
+"Databricks technologies.*Spark": (no match)
+"Databricks technologies.*PySpark": (no match)
+"Azure services.*Azure Data Factory": (no match)
+"Azure services.*Azure SQL": (no match)
+"AI/ML models.*Yes": (no match)
+"AI-related technologies.*MLflow": (no match)
+"SQL proficiency.*Expert": (no match)
+"million-plus row datasets.*Over 1 billion": (no match)
+"programming languages.*Python": (no match)
+"programming languages.*SQL": (no match)
+"mentored junior Data Engineers.*Frequently": (no match)
+"current role.*Senior Individual Contributor": (no match)
+"industries.*Technology": (no match)
+"start date.*2 weeks from offer date": (no match)

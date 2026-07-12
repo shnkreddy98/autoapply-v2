@@ -1,0 +1,16 @@
+"Verification code": |-
+  - heading "Enter Verification Code" [level=1] [ref=e179]
+  - generic [ref=e181]:
+    - text: We’ve sent your verification code to
+    - strong [ref=e182]: jane.doe@example.com
+  - generic [ref=e183]:
+    - generic [ref=e186]:
+      - generic [ref=e189]: Verification code*
+      - textbox "Verification code" [active] [ref=e192]
+    - generic [ref=e194]:
+      - text: Didn't get it?
+      - button "Resend Code" [ref=e195] [cursor=pointer]
+"Continue": |-
+          - button "Continue" [ref=e199] [cursor=pointer]
+      - img "Powered by Dayforce" [ref=e202]
+  ```

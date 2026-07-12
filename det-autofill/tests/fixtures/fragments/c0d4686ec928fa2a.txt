@@ -1,0 +1,28 @@
+"Mobile Phone*": |-
+    - generic [ref=e38]: "Mobile Phone*:"
+    - textbox [disabled] [ref=e40]
+  - generic [ref=e42]:
+    - generic [ref=e43]: "Confirm Mobile Phone*:"
+    - textbox [disabled] [ref=e45]
+  - generic [ref=e47]:
+    - generic [ref=e48]: "First Name*:"
+"First Name*": |-
+    - generic [ref=e48]: "First Name*:"
+    - textbox [disabled] [ref=e50]
+  - generic [ref=e53]:
+    - generic [ref=e54]: "Last Name*:"
+"Last Name*": |-
+    - generic [ref=e54]: "Last Name*:"
+    - textbox [disabled] [ref=e56]
+  - generic [ref=e59]:
+    - generic [ref=e60]: "ZIP Code*:"
+"ZIP Code*": |-
+    - generic [ref=e60]: "ZIP Code*:"
+    - textbox [disabled] [ref=e62]
+  - generic [ref=e65]:
+    - text: I will need a sponsorship visa from Rose International, now or in the future, to work as a W2 employee.
+"Choose File": |-
+    - button "Choose File" [disabled] [ref=e71]
+  - generic [ref=e73]: "(Max file size allowed: 1 MB)"
+  - generic [ref=e74]:
+    - generic [ref=e75]: "Military Status:"

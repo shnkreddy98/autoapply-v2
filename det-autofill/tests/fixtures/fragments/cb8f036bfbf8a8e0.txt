@@ -1,0 +1,11 @@
+"Apply": |-
+    - button "Apply for Sr Data Engineer" [ref=e105] [cursor=pointer]:
+      - generic [ref=e106]: Apply
+    - generic [ref=e107]:
+      - separator
+    - button "Share" [ref=e109] [cursor=pointer]:
+  --
+      - generic [ref=e367]: Scan this QR code and apply!
+      - link "Download" [ref=e374] [cursor=pointer]:
+        - /url: "#"
+  - generic [ref=e376]:

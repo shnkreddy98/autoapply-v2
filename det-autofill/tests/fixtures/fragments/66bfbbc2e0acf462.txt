@@ -1,0 +1,20 @@
+"Work Experience 1 Job Title": (no match)
+"Work Experience 1 Company": (no match)
+"Work Experience 1 Role Description": (no match)
+"Work Experience 1 current value is 1/2025": (no match)
+"Work Experience 2 Job Title": (no match)
+"Work Experience 2 Company": (no match)
+"Education 1 School or University": (no match)
+"Skills Type to Add Skills": (no match)
+"Linkedin": |-
+            - generic [ref=e1152]: Linkedin
+            - textbox "Linkedin" [ref=e1155]: https://linkedin.com/in/janedoe
+    - generic [ref=e368]:
+      - button "Back" [ref=e567] [cursor=pointer]
+      - button "Save and Continue" [ref=e568] [cursor=pointer]
+  --
+    - link "LinkedIn" [ref=e58]:
+      - /url: https://www.linkedin.com/company/amerisourcebergen/
+  - listitem [ref=e62] [cursor=pointer]:
+    - link "X" [ref=e63]:
+      - /url: https://twitter.com/healthcare_abc?lang=en

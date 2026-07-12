@@ -1,0 +1,5 @@
+"Accept Cookies": |-
+          - button "Accept Cookies" [ref=e183] [cursor=pointer]
+  ```
+  ### Events
+  - New console entries: .playwright-mcp/console-2026-06-30T23-55-38-204Z.log#L27

@@ -1,0 +1,31 @@
+"LinkedIn Profile": |-
+    - generic [ref=f13e169]: LinkedIn Profile*
+    - textbox "LinkedIn Profile" [ref=f13e170]
+  - generic [ref=f13e173]:
+    - generic [ref=f13e174]: Will you require visa sponsorship now or in the near future?*
+    - generic [ref=f13e175]:
+"Will you require visa sponsorship": |-
+  - generic [ref=f13e174]: Will you require visa sponsorship now or in the near future?*
+  - generic [ref=f13e175]:
+    - log [ref=f13e177]
+    - generic [ref=f13e179]:
+  --
+        - combobox "Will you require visa sponsorship now or in the near future?" [ref=f13e183]
+      - button "Toggle flyout" [ref=f13e185] [cursor=pointer]:
+        - img [ref=f13e186]
+    - textbox
+"background investigation": |-
+      - paragraph [ref=f13e71]: "*Employment is contingent upon the satisfactory completion of our pre-employment background investigation and drug test."
+  - generic [ref=f13e72]:
+    - img [ref=f13e73]
+    - generic [ref=f13e75]:
+  --
+        - generic [ref=f13e191]: Employment is contingent upon the satisfactory completion of our pre-employment process. Do you consent to a background investigation and drug test in conjunction with receiving an offer?*
+        - generic [ref=f13e192]:
+          - log [ref=f13e194]
+          - generic [ref=f13e196]:
+  --
+              - combobox "Employment is contingent upon the satisfactory completion of our pre-employment process. Do you consent to a background investigation and drug test in conjunction with receiving an offer?" [ref=f13e200]
+            - button "Toggle flyout" [ref=f13e202] [cursor=pointer]:
+              - img [ref=f13e203]
+          - textbox

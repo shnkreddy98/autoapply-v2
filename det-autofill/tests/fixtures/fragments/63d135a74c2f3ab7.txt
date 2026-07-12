@@ -1,0 +1,122 @@
+"Street Address*": |-
+    - generic [ref=e41]: Street Address*
+    - textbox "Street Address*" [ref=e42]:
+      - /placeholder: ""
+  - generic [ref=e43]:
+    - generic [ref=e44]: City
+"City": |-
+      - generic [ref=e44]: City
+      - textbox "City" [ref=e45]:
+        - /placeholder: ""
+        - text: San Jose
+    - generic [ref=e46]:
+  --
+        - generic [ref=e124]: RACE/ETHNICITY / RAZA/ETNICIDAD*
+        - combobox "RACE/ETHNICITY / RAZA/ETNICIDAD*" [ref=e125]:
+          - option "Select..." [selected]
+          - option "I choose not to disclose"
+          - option "White (not Hispanic or Latino)"
+  --
+    - button "Click To View Race/Ethnicity Definitions Haga clic para ver la raza / origen étnico Definiciones" [ref=e128] [cursor=pointer]:
+      - generic [ref=e129]:
+        - generic [ref=e130]: Click To View Race/Ethnicity Definitions
+        - generic [ref=e131]: Haga clic para ver la raza / origen étnico Definiciones
+  - generic [ref=e133]:
+    - heading "Veteran Status" [level=4] [ref=e134]
+"Country*": (no match)
+"State/Province*": (no match)
+"Zip/Postal Code*": |-
+    - generic [ref=e53]: Zip/Postal Code*
+    - textbox "Zip/Postal Code*" [ref=e54]:
+      - /placeholder: ""
+  - generic [ref=e55]:
+    - generic [ref=e56]: Cell Phone*
+"Cell Phone*": |-
+        - generic [ref=e56]: Cell Phone*
+        - textbox "Cell Phone*" [ref=e57]:
+          - /placeholder: ""
+  - generic [ref=e60]:
+    - heading "Referral Information" [level=4] [ref=e62]
+"How did you hear about us? *": |-
+  - generic [ref=e65]: How did you hear about us? *
+  - combobox "Choose how you heard about us" [ref=e66]:
+    - option "Select..." [selected]
+    - option "**NONE or NOT STATED**"
+"highest education level": |-
+  - generic [ref=e73]: What is the highest education level you have achieved?*
+  - combobox [ref=e74]:
+    - option "Select..." [selected]
+    - option "1 - High School"
+"eligible to work": |-
+  - generic [ref=e77]: Are you eligible to work at the job location/country without restrictions (proof will be required)?*
+  - combobox [ref=e78]:
+    - option "Select..." [selected]
+    - option "Yes"
+"base salary requirement": |-
+    - generic [ref=e81]: What is your base salary requirement?*
+    - textbox [ref=e82]
+    - text: Required
+  - generic [ref=e84]:
+"total compensation expectations": |-
+    - generic [ref=e85]: What are your total compensation expectations (base + bonus)?*
+    - textbox [ref=e86]
+    - text: Required
+  - generic [ref=e88]:
+"Date available to begin work": |-
+    - generic [ref=e89]: Date available to begin work:*
+    - textbox [ref=e90]
+    - text: Required
+  - generic [ref=e92]:
+"referred by a company employee": |-
+  - generic [ref=e93]: Were you referred by a company employee?*
+  - combobox [ref=e94]:
+    - option "Select..." [selected]
+    - option "Yes"
+"previously worked for PRGX": |-
+  - generic [ref=e97]: Have you previously worked for PRGX?*
+  - combobox [ref=e98]:
+    - option "Select..." [selected]
+    - option "Yes"
+"relatives that currently work at PRGX": |-
+  - generic [ref=e101]: Do you have any relatives that currently work at PRGX?*
+  - combobox [ref=e102]:
+    - option "Select..." [selected]
+    - option "Yes"
+"privacy policy checkbox": (no match)
+"GENDER": |-
+  - generic [ref=e121]: GENDER / GÉNERO*
+  - combobox "GENDER / GÉNERO*" [ref=e122]:
+    - option "Select..." [selected]
+    - option "Female"
+    - option "I choose not to disclose"
+"RACE/ETHNICITY": |-
+        - generic [ref=e124]: RACE/ETHNICITY / RAZA/ETNICIDAD*
+        - combobox "RACE/ETHNICITY / RAZA/ETNICIDAD*" [ref=e125]:
+          - option "Select..." [selected]
+          - option "I choose not to disclose"
+          - option "White (not Hispanic or Latino)"
+  --
+    - button "Click To View Race/Ethnicity Definitions Haga clic para ver la raza / origen étnico Definiciones" [ref=e128] [cursor=pointer]:
+      - generic [ref=e129]:
+        - generic [ref=e130]: Click To View Race/Ethnicity Definitions
+        - generic [ref=e131]: Haga clic para ver la raza / origen étnico Definiciones
+  - generic [ref=e133]:
+    - heading "Veteran Status" [level=4] [ref=e134]
+"Veteran Status": |-
+  - paragraph [ref=e118]: Qualified resume submissions are considered for employment without regard to race, religion, sex, national origin, marital status, sexual orientation, veteran status, or disability. Completion of this form is VOLUNTARY and your failure to complete it will NOT preclude you from employment consideration. This information will be kept in a confidential file separate from your resume.
+  - generic [ref=e119]:
+    - generic [ref=e120]:
+      - generic [ref=e121]: GENDER / GÉNERO*
+  --
+  - heading "Veteran Status" [level=4] [ref=e134]
+  - paragraph [ref=e135]: Please check the box next to any of the following items that apply to you. You are considered a "protected veteran" under Section 4212 if you belong to one of the categories of veterans described below
+  - generic [ref=e136]:
+    - generic [ref=e137]:
+"protected veteran radio": (no match)
+"disability radio": (no match)
+"Type Your Full Name Here": |-
+      - strong [ref=e274]: Type Your Full Name Here
+      - textbox "Type Your Full Name Here" [ref=e275]
+  - strong [ref=e277]: Your application has missing or invalid information. Please scroll through the page and correct the fields bordered in red.
+  - generic [ref=e278]:
+    - button "Submit" [disabled]

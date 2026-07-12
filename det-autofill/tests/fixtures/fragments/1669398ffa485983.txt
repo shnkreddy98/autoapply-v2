@@ -1,0 +1,12 @@
+"Can CFS reach out via SMS regarding your application?*": |-
+  - text: Can CFS reach out via SMS regarding your application?*
+  - combobox "Can CFS reach out via SMS regarding your application?*" [ref=e44]:
+    - option "'Yes' to opt in, or 'No' to decline.*"
+    - option "YES" [selected]
+    - option "NO"
+"Your Current State*": |-
+  - text: Your Current State*
+  - combobox "Your Current State*" [ref=e54]:
+    - option "State*"
+    - option "ALABAMA"
+    - option "ALASKA"

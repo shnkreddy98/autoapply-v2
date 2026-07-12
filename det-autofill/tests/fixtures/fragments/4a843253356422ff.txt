@@ -1,0 +1,25 @@
+"School Name . Required": |-
+      - textbox "School Name . Required" [ref=e526]: San Jose State University
+  - generic [ref=e527]:
+    - generic [ref=e528]: GPA
+    - textbox "GPA" [ref=e531]
+  --
+      - textbox "School Name . Required" [ref=e562]: IIIT Bangalore
+  - generic [ref=e563]:
+    - generic [ref=e564]: GPA
+    - textbox "GPA" [ref=e567]
+  --
+      - textbox "School Name . Required" [ref=e604]: Visvesvaraya Technological University
+  - generic [ref=e605]:
+    - generic [ref=e606]: GPA
+    - textbox "GPA" [ref=e609]
+"Save and Continue": |-
+      - button "Save and Continue" [ref=e160] [cursor=pointer]
+      - button "Save as Draft" [ref=e161] [cursor=pointer]
+      - button "Quit" [ref=e162] [cursor=pointer]
+  - generic [ref=e163]:
+  --
+    - button "Save and Continue" [ref=e706] [cursor=pointer]
+    - button "Save as Draft" [ref=e707] [cursor=pointer]
+    - button "Quit" [ref=e708] [cursor=pointer]
+  - link "Privacy Agreement" [ref=e717] [cursor=pointer]:

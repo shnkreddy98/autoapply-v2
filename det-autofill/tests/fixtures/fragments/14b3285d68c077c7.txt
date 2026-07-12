@@ -1,0 +1,11 @@
+"United States of America": |-
+        - option "🇺🇸 +1 United States of America" [ref=e913]:
+          - generic [ref=e915]: 🇺🇸 +1 United States of America
+        - option "🇻🇨 +1 Saint Vincent and the Grenadines" [ref=e916]:
+          - generic [ref=e918]: 🇻🇨 +1 Saint Vincent and the Grenadines
+        - option "🇻🇬 +1 Virgin Islands, British" [ref=e919]:
+  --
+    - generic "United States of America" [ref=e764]
+  - generic:
+    - img:
+      - img

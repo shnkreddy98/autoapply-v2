@@ -1,0 +1,56 @@
+"Job Title": |-
+    - generic [ref=e656]: Job Title*
+    - textbox "Job Title" [ref=e659]: Founding Engineer
+  - generic [ref=e660]:
+    - generic [ref=e662]: Company*
+    - textbox "Company" [ref=e665]: AirFold
+  --
+    - generic [ref=e740]: Job Title*
+    - textbox "Job Title" [ref=e743]: Data Engineer
+  - generic [ref=e744]:
+    - generic [ref=e746]: Company*
+    - textbox "Company" [ref=e749]: Kantar
+  --
+    - generic [ref=e824]: Job Title*
+    - textbox "Job Title" [ref=e827]: Data Engineer
+  - generic [ref=e828]:
+    - generic [ref=e830]: Company*
+    - textbox "Company" [ref=e833]: The Sparks Foundation
+"Company*": |-
+    - generic [ref=e662]: Company*
+    - textbox "Company" [ref=e665]: AirFold
+  - generic [ref=e666]:
+    - generic [ref=e667]: Location
+  --
+    - generic [ref=e746]: Company*
+    - textbox "Company" [ref=e749]: Kantar
+  - generic [ref=e750]:
+    - generic [ref=e751]: Location
+  --
+    - generic [ref=e830]: Company*
+    - textbox "Company" [ref=e833]: The Sparks Foundation
+  - generic [ref=e834]:
+    - generic [ref=e835]: Location
+"School or University": |-
+    - generic [ref=e909]: School or University*
+    - textbox "School or University" [ref=e912]: San Jose State University
+  - generic [ref=e913]:
+    - generic [ref=e915]: Degree*
+    - button "Degree Master's Degree Required" [ref=e919]: Master's Degree
+  --
+    - generic [ref=e981]: School or University*
+    - textbox "School or University" [ref=e984]: Visvesvaraya Technological University
+  - generic [ref=e985]:
+    - generic [ref=e987]: Degree*
+    - button "Degree Select One Required" [ref=e991]: Select One
+"Degree*": |-
+    - generic [ref=e915]: Degree*
+    - button "Degree Master's Degree Required" [ref=e919]: Master's Degree
+  - generic [ref=e920]:
+    - generic [ref=e922]:
+  --
+    - generic [ref=e987]: Degree*
+    - button "Degree Select One Required" [ref=e991]: Select One
+  - generic [ref=e992]:
+    - generic [ref=e994]:
+"LinkedIn URL": (no match)

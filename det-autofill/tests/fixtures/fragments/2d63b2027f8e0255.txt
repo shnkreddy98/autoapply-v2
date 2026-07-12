@@ -1,0 +1,62 @@
+"legally authorized": (no match)
+"Github": (no match)
+"GitHub": (no match)
+"Website": (no match)
+"Gender": |-
+      - text: ". We welcome all qualified applicants and ensure fair consideration for employment without discrimination based on any legally protected characteristics, including, but not limited to: veteran status, uniformed service member status, race, color, religion, sex, sexual orientation, gender identity, age, pregnancy (including childbirth, lactation and related medical conditions), national origin or ancestry, citizenship or immigration status, physical or mental disability, genetic information (including testing and characteristics) or any other category protected by federal, state or local law (collectively, \"protected characteristics\"). Our commitment to equal opportunity employment applies to all persons involved in our operations and prohibits unlawful discrimination by any employee, including supervisors and co-workers."
+  - paragraph [ref=f13e65]:
+    - generic [ref=f13e66]:
+      - text: Qventus participates in the
+      - link "E-Verify" [ref=f13e67] [cursor=pointer]:
+        - /url: https://www.e-verify.gov/
+      - text: program as required by law and is committed to providing reasonable accommodations to individuals with disabilities in compliance with
+      - link "Americans with Disabilities Act (ADA)" [ref=f13e68] [cursor=pointer]:
+        - /url: https://www.ada.gov/resources/disability-rights-guide/
+      - text: . In compliance with the
+      - link "California Consumer Privacy Act (CCPA)" [ref=f13e69] [cursor=pointer]:
+"Ethnicity": (no match)
+"Race": |-
+      - text: ". We welcome all qualified applicants and ensure fair consideration for employment without discrimination based on any legally protected characteristics, including, but not limited to: veteran status, uniformed service member status, race, color, religion, sex, sexual orientation, gender identity, age, pregnancy (including childbirth, lactation and related medical conditions), national origin or ancestry, citizenship or immigration status, physical or mental disability, genetic information (including testing and characteristics) or any other category protected by federal, state or local law (collectively, \"protected characteristics\"). Our commitment to equal opportunity employment applies to all persons involved in our operations and prohibits unlawful discrimination by any employee, including supervisors and co-workers."
+  - paragraph [ref=f13e65]:
+    - generic [ref=f13e66]:
+      - text: Qventus participates in the
+      - link "E-Verify" [ref=f13e67] [cursor=pointer]:
+        - /url: https://www.e-verify.gov/
+      - text: program as required by law and is committed to providing reasonable accommodations to individuals with disabilities in compliance with
+      - link "Americans with Disabilities Act (ADA)" [ref=f13e68] [cursor=pointer]:
+        - /url: https://www.ada.gov/resources/disability-rights-guide/
+      - text: . In compliance with the
+      - link "California Consumer Privacy Act (CCPA)" [ref=f13e69] [cursor=pointer]:
+"Veteran": |-
+      - text: ". We welcome all qualified applicants and ensure fair consideration for employment without discrimination based on any legally protected characteristics, including, but not limited to: veteran status, uniformed service member status, race, color, religion, sex, sexual orientation, gender identity, age, pregnancy (including childbirth, lactation and related medical conditions), national origin or ancestry, citizenship or immigration status, physical or mental disability, genetic information (including testing and characteristics) or any other category protected by federal, state or local law (collectively, \"protected characteristics\"). Our commitment to equal opportunity employment applies to all persons involved in our operations and prohibits unlawful discrimination by any employee, including supervisors and co-workers."
+  - paragraph [ref=f13e65]:
+    - generic [ref=f13e66]:
+      - text: Qventus participates in the
+      - link "E-Verify" [ref=f13e67] [cursor=pointer]:
+        - /url: https://www.e-verify.gov/
+      - text: program as required by law and is committed to providing reasonable accommodations to individuals with disabilities in compliance with
+      - link "Americans with Disabilities Act (ADA)" [ref=f13e68] [cursor=pointer]:
+        - /url: https://www.ada.gov/resources/disability-rights-guide/
+      - text: . In compliance with the
+      - link "California Consumer Privacy Act (CCPA)" [ref=f13e69] [cursor=pointer]:
+"Disability": |-
+            - /url: https://www.ada.gov/resources/disability-rights-guide/#:~:text=The%20ADA%20prohibits%20discrimination%20on%20the%20basis
+          - text: ". We welcome all qualified applicants and ensure fair consideration for employment without discrimination based on any legally protected characteristics, including, but not limited to: veteran status, uniformed service member status, race, color, religion, sex, sexual orientation, gender identity, age, pregnancy (including childbirth, lactation and related medical conditions), national origin or ancestry, citizenship or immigration status, physical or mental disability, genetic information (including testing and characteristics) or any other category protected by federal, state or local law (collectively, \"protected characteristics\"). Our commitment to equal opportunity employment applies to all persons involved in our operations and prohibits unlawful discrimination by any employee, including supervisors and co-workers."
+      - paragraph [ref=f13e65]:
+        - generic [ref=f13e66]:
+          - text: Qventus participates in the
+          - link "E-Verify" [ref=f13e67] [cursor=pointer]:
+            - /url: https://www.e-verify.gov/
+          - text: program as required by law and is committed to providing reasonable accommodations to individuals with disabilities in compliance with
+          - link "Americans with Disabilities Act (ADA)" [ref=f13e68] [cursor=pointer]:
+            - /url: https://www.ada.gov/resources/disability-rights-guide/
+          - text: . In compliance with the
+          - link "California Consumer Privacy Act (CCPA)" [ref=f13e69] [cursor=pointer]:
+            - /url: https://www.oag.ca.gov/privacy/ccpa
+          - text: ", Qventus provides transparency into how applicant data is processed during the application process. Candidate information will be treated in accordance with our candidate privacy notice."
+      - paragraph [ref=f13e70]: "*Benefits and perks are subject to plan documents and may change at the company's discretion."
+      - paragraph [ref=f13e71]: "*Employment is contingent upon the satisfactory completion of our pre-employment background investigation and drug test."
+  - generic [ref=f13e72]:
+    - img [ref=f13e73]
+    - generic [ref=f13e75]:
+      - paragraph [ref=f13e76]: Create a Job Alert

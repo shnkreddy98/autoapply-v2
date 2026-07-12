@@ -1,0 +1,443 @@
+"Title": |-
+  - Page Title: Lead Data Engineer | Apply
+  ### Snapshot
+  ```yaml
+  - generic [ref=e2]:
+  --
+                      - generic [ref=e73]: Title
+                      - combobox "Title" [ref=e74]:
+                        - option "Choose..."
+                        - option "Miss"
+                        - option "Mrs."
+"Address 1": |-
+    - generic [ref=e130]: "*Address 1"
+    - textbox "*Address 1" [ref=e131]: 100 Example St
+  - generic [ref=e134]:
+    - generic [ref=e135]: Address 2
+    - textbox "Address 2" [ref=e136]
+"City": |-
+      - generic [ref=e140]: "*City"
+      - textbox "*City" [ref=e141]: San Jose
+    - generic [ref=e1977]:
+      - generic [ref=e1978]: "*State / Province"
+      - combobox "*State / Province" [ref=e1979]:
+  --
+  - paragraph [ref=e561]: This employer collects information from applicants about their race/ethnicity and/or gender to ensure nondiscrimination in and equal opportunity in hiring practices. If you do not wish to answer any question, please select "I decline to say". Submission of this information is voluntary and refusal to provide it will not subject you to any adverse treatment. The information you provide will be kept confidential and separate from other application materials, and will only be used in ways that are consistent with the law.
+  - generic [ref=e564]:
+    - generic [ref=e565]: "*Gender"
+    - combobox "*Gender" [ref=e566]:
+"State / Province": |-
+  - generic [ref=e1978]: "*State / Province"
+  - combobox "*State / Province" [ref=e1979]:
+    - option "Choose..."
+    - option "Alabama"
+    - option "Alaska"
+"Zip / Postal Code": |-
+        - generic [ref=e144]: "*Zip / Postal Code"
+        - textbox "*Zip / Postal Code" [ref=e145]: "95126"
+  - generic [ref=e150] [cursor=pointer]:
+    - checkbox "Willing to relocate" [checked] [ref=e151]
+    - text: Willing to relocate
+"How did you hear about this opportunity?": |-
+  - generic [ref=e283]: "*How did you hear about this opportunity?"
+  - combobox "*How did you hear about this opportunity?" [ref=e286]:
+    - option "Choose..." [selected]
+    - option "* I am a current Cape Cod 5 employee"
+    - option "* I am a current Fidelity Bank employee"
+"LinkedIn": |-
+  - option "LinkedIn"
+  - option "Local Job Network"
+  - option "Martha's Vineyard CareerFair"
+  - option "Martha's Vineyard Gazette"
+"No": |-
+            - text: If this is not your account, please
+            - button "Sign Out" [ref=e60] [cursor=pointer]
+            - text: to create your own presence and start the application process again.
+          - listitem [ref=e61]: If you need to make changes to your name, please go to the My presence page before submitting your application.
+  --
+              - option "Illinois"
+              - option "Indiana"
+              - option "Iowa"
+              - option "Kansas"
+  --
+              - option "North Carolina"
+              - option "North Dakota"
+              - option "Northern Mariana Islands"
+              - option "Ohio"
+              - option "Oklahoma"
+              - option "Oregon"
+  --
+              - generic [ref=e1629]: Architected multi-cloud platform (AWS/GCP) using Terraform, EKS, and Istio, ensuring high availability for 50+ services and enhancing system resilience. ● Engineered event-driven pipeline (Kafka, Debezium CDC, ClickHouse) processing millions of daily events with sub-second latency and exactly-once semantics. ● Developed 100+ production-grade FastAPI endpoints with robust Auth0/RBAC security, serving as the backbone for scalable client interactions. ● Integrated dbt into the ELT pipeline to standardize transformation logic in Snowflake & ClickHouse, reducing reporting errors by 40% via automated quality tests. ● Implemented scalable K8s infrastructure with Karpenter auto-scaling and FluxCD GitOps, automating continuous delivery for over 60 Helm releases. ● Managed multi-database architecture (PostgreSQL, DynamoDB, ClickHouse), optimizing storage for vector search, caching, and large-scale analytics.
+            - text: "* * * *"
+        - listitem [ref=e1630]:
+          - generic [ref=e1631]:
+  --
+                  - generic [ref=e1708]: Visvesvaraya Technological University
+                  - button "Edit Education Item 3" [ref=e1709] [cursor=pointer]:
+                    - generic [ref=e1710]: 
+              - generic [ref=e1711]: Bachelor of Engineering, Computer Science
+  --
+            - generic [ref=e1863]: Some Knowledge
+        - listitem [ref=e1864]:
+          - generic [ref=e1866]:
+            - strong [ref=e1867]: Apache kafka
+            - generic [ref=e1868]: Some Knowledge
+        - listitem [ref=e1869]:
+          - generic [ref=e1871]:
+            - strong [ref=e1872]: Redis
+            - generic [ref=e1873]: Some Knowledge
+        - listitem [ref=e1874]:
+          - generic [ref=e1876]:
+            - strong [ref=e1877]: Amazon elastic compute cloud
+            - generic [ref=e1878]: Some Knowledge
+        - listitem [ref=e1879]:
+          - generic [ref=e1881]:
+            - strong [ref=e1882]: Docker
+            - generic [ref=e1883]: Some Knowledge
+        - listitem [ref=e1884]:
+          - generic [ref=e1886]:
+            - strong [ref=e1887]: Kubernetes
+            - generic [ref=e1888]: Some Knowledge
+        - listitem [ref=e1889]:
+          - generic [ref=e1891]:
+            - strong [ref=e1892]: Apache spark
+            - generic [ref=e1893]: Some Knowledge
+        - listitem [ref=e1894]:
+          - generic [ref=e1896]:
+            - strong [ref=e1897]: Git
+            - generic [ref=e1898]: Some Knowledge
+        - listitem [ref=e1899]:
+          - generic [ref=e1901]:
+            - strong [ref=e1902]: Pytest
+            - generic [ref=e1903]: Some Knowledge
+        - listitem [ref=e1904]:
+          - generic [ref=e1906]:
+            - strong [ref=e1907]: Shell scripting
+            - generic [ref=e1908]: Some Knowledge
+        - listitem [ref=e1909]:
+          - generic [ref=e1911]:
+            - strong [ref=e1912]: Typescript
+            - generic [ref=e1913]: Some Knowledge
+        - listitem [ref=e1914]:
+          - generic [ref=e1916]:
+            - strong [ref=e1917]: Github
+            - generic [ref=e1918]: Some Knowledge
+        - listitem [ref=e1919]:
+          - generic [ref=e1921]:
+            - strong [ref=e1922]: Java
+            - generic [ref=e1923]: Some Knowledge
+        - listitem [ref=e1924]:
+          - generic [ref=e1926]:
+            - strong [ref=e1927]: Aws certified
+            - generic [ref=e1928]: Some Knowledge
+        - listitem [ref=e1929]:
+          - generic [ref=e1931]:
+            - strong [ref=e1932]: Business requirements
+            - generic [ref=e1933]: Some Knowledge
+        - listitem [ref=e1934]:
+          - generic [ref=e1936]:
+            - strong [ref=e1937]: Semantic
+            - generic [ref=e1938]: Some Knowledge
+        - listitem [ref=e1939]:
+          - generic [ref=e1941]:
+            - strong [ref=e1942]: Translate
+            - generic [ref=e1943]: Some Knowledge
+        - listitem [ref=e1944]:
+          - generic [ref=e1946]:
+            - strong [ref=e1947]: Certifications and licenses found
+            - generic [ref=e1948]: Some Knowledge
+  - region "Behaviors" [ref=e192]:
+    - generic [ref=e193]:
+      - text: 
+  --
+            - radio "No" [ref=e296]
+            - text: "No"
+        - generic [ref=e298]:
+          - generic [ref=e299]: "*When can you start? (MM/DD/YYYY)"
+          - generic [ref=e301]:
+  --
+          - group "*Are you a current employee of Mutual Bancorp and/or any of its subsidiaries (including, but not limited to, The Cape Cod Five Cents Savings Bank, Fidelity Co-operative Bank, and/or Exchange Authority, collectively, the “Company”)?" [ref=e332]:
+            - generic [ref=e333]: "*Are you a current employee of Mutual Bancorp and/or any of its subsidiaries (including, but not limited to, The Cape Cod Five Cents Savings Bank, Fidelity Co-operative Bank, and/or Exchange Authority, collectively, the “Company”)?"
+            - generic [ref=e336] [cursor=pointer]:
+              - radio "Yes" [ref=e337]
+              - text: "Yes"
+  --
+              - radio "No" [ref=e341]
+              - text: "No"
+          - text: "* * *"
+        - generic [ref=e343]:
+          - generic [ref=e345]:
+  --
+              - radio "No" [ref=e363]
+              - text: "No"
+          - text: "* * *"
+        - generic [ref=e365]:
+          - generic [ref=e369]:
+  --
+              - radio "No" [ref=e385]
+              - text: "No"
+          - text: "* * *"
+        - generic [ref=e387]:
+          - generic [ref=e389]:
+            - generic [ref=e390]: "*Do you currently have a relative employed by the Company? If yes, please type their name below. If not applicable, please type N/A:"
+            - textbox "*Do you currently have a relative employed by the Company? If yes, please type their name below. If not applicable, please type N/A:" [ref=e391]
+            - generic [ref=e394]: 4000 characters left
+          - text: "* * *"
+        - generic [ref=e396]:
+  --
+              - radio "No" [ref=e407]
+              - text: "No"
+          - text: "* * *"
+        - generic [ref=e409]:
+          - generic [ref=e411]:
+            - generic [ref=e412]: "*If yes, please describe your duties and any special training. What, if any, awards or honors did you receive? If not applicable, please type N/A:"
+            - textbox "*If yes, please describe your duties and any special training. What, if any, awards or honors did you receive? If not applicable, please type N/A:" [ref=e413]
+            - generic [ref=e416]: 4000 characters left
+          - text: "* * *"
+        - generic [ref=e418]:
+          - 'group "*Instructions: Please read (a) through (d) below and then answer the following questions. You may answer NO if you have any of the following circumstances: (a) A first conviction for any of the following: drunkenness, simple assault, speeding, minor traffic violations, affray, or disturbance of the peace. (b) A felony or misdemeanor conviction(s), which has been annulled or sealed by a court. (c) A juvenile delinquency or child-in-need-of-service complaint(s), which was not transferred to Superior Court for prosecution. (d) An arrest or criminal court appearance that did not result in a conviction. Have you ever been convicted of a felony?" [ref=e420]':
+            - generic [ref=e421]: "*Instructions: Please read (a) through (d) below and then answer the following questions. You may answer NO if you have any of the following circumstances: (a) A first conviction for any of the following: drunkenness, simple assault, speeding, minor traffic violations, affray, or disturbance of the peace. (b) A felony or misdemeanor conviction(s), which has been annulled or sealed by a court. (c) A juvenile delinquency or child-in-need-of-service complaint(s), which was not transferred to Superior Court for prosecution. (d) An arrest or criminal court appearance that did not result in a conviction. Have you ever been convicted of a felony?"
+            - generic [ref=e424] [cursor=pointer]:
+              - radio "Yes" [ref=e425]
+              - text: "Yes"
+  --
+              - radio "No" [ref=e429]
+              - text: "No"
+          - text: "* * *"
+        - generic [ref=e431]:
+          - generic [ref=e433]:
+            - generic [ref=e434]: "*If yes, explain. If not applicable, please type N/A:"
+            - textbox "*If yes, explain. If not applicable, please type N/A:" [ref=e435]
+            - generic [ref=e438]: 4000 characters left
+          - text: "* * *"
+        - generic [ref=e440]:
+          - group "*Have you been convicted of a misdemeanor for which your period of incarceration ended within the past 5 years?" [ref=e442]:
+            - generic [ref=e443]: "*Have you been convicted of a misdemeanor for which your period of incarceration ended within the past 5 years?"
+            - generic [ref=e446] [cursor=pointer]:
+              - radio "Yes" [ref=e447]
+              - text: "Yes"
+  --
+              - radio "No" [ref=e451]
+              - text: "No"
+          - text: "* * *"
+        - generic [ref=e453]:
+          - generic [ref=e455]:
+            - generic [ref=e456]: "*If yes, explain. If not applicable, please type N/A:"
+            - textbox "*If yes, explain. If not applicable, please type N/A:" [ref=e457]
+            - generic [ref=e460]: 4000 characters left
+          - text: "* * *"
+        - generic [ref=e462]:
+          - group "*Have you been convicted of a misdemeanor within the past 5 years?" [ref=e464]:
+            - generic [ref=e465]: "*Have you been convicted of a misdemeanor within the past 5 years?"
+            - generic [ref=e468] [cursor=pointer]:
+              - radio "Yes" [ref=e469]
+              - text: "Yes"
+  --
+              - radio "No" [ref=e473]
+              - text: "No"
+          - text: "* * *"
+        - generic [ref=e475]:
+          - generic [ref=e477]:
+            - generic [ref=e478]: "*If yes, explain. If not applicable, please type N/A:"
+            - textbox "*If yes, explain. If not applicable, please type N/A:" [ref=e479]
+            - generic [ref=e482]: 4000 characters left
+          - text: "* * *"
+        - generic [ref=e484]:
+  --
+            - generic [ref=e487]: "*FCRA Disclosure and Authorization: I understand that the Company will utilize the services of a consumer reporting agency as part of the procedure for processing my application for employment. I also understand that if I am employed by the Company, the Company may obtain further information through subsequent investigations by a consumer reporting agency for purposes related to my employment with the Company. I understand that a consumer reporting agency's investigation may include obtaining information covering up to the last seven (7) years regarding my credit background, character, general reputation, personal characteristics and mode of living, and criminal conviction record (consistent with Massachusetts state law). I understand such information may be obtained by direct or indirect contact with former employers, schools, financial institutions, landlords and public agencies or other persons who may have such knowledge. I hereby consent to this investigation and authorize the Company to procure a report on my background as stated above form a consumer reporting agency."
+            - generic [ref=e490] [cursor=pointer]:
+              - radio "I agree" [ref=e491]
+              - text: I agree
+  --
+              - radio "I do not agree" [ref=e495]
+              - text: I do not agree
+          - text: "* * *"
+        - generic [ref=e497]:
+          - group "*I understand that the Company may perform a CORI check on me regarding my application for employment and as needed during the course of my employment." [ref=e499]:
+  --
+              - radio "I do not agree" [ref=e508]
+              - text: I do not agree
+          - text: "* * *"
+        - generic [ref=e510]:
+          - group "*I have received the FCRA - Disclosure and Authorization notification included within this employment application." [ref=e512]:
+            - generic [ref=e513]: "*I have received the FCRA - Disclosure and Authorization notification included within this employment application."
+            - generic [ref=e516] [cursor=pointer]:
+              - radio "I agree" [ref=e517]
+              - text: I agree
+  --
+              - radio "I do not agree" [ref=e521]
+              - text: I do not agree
+          - text: "* * *"
+        - generic [ref=e523]:
+          - group "*I hereby authorize any former employer, any person, firm, corporation, school, or any government agency to answer any and all questions and to release or provide any information within their knowledge or records. I agree to hold the Company and any former employer, any person, firm, corporation, school, or any government agency or any or all of them harmless and free of any liability for releasing any information (whether fact or opinion) that is within their knowledge or records. I agree that, as with all authorizations in this application, a photocopy or electronic copy of this authorization will have the same authority as the original. The Company is hereby authorized to release to any other firm or person with whom I may seek employment, any and all information concerning my application and/or employment." [ref=e525]:
+            - generic [ref=e526]: "*I hereby authorize any former employer, any person, firm, corporation, school, or any government agency to answer any and all questions and to release or provide any information within their knowledge or records. I agree to hold the Company and any former employer, any person, firm, corporation, school, or any government agency or any or all of them harmless and free of any liability for releasing any information (whether fact or opinion) that is within their knowledge or records. I agree that, as with all authorizations in this application, a photocopy or electronic copy of this authorization will have the same authority as the original. The Company is hereby authorized to release to any other firm or person with whom I may seek employment, any and all information concerning my application and/or employment."
+            - generic [ref=e529] [cursor=pointer]:
+              - radio "I agree" [ref=e530]
+              - text: I agree
+  --
+              - radio "I do not agree" [ref=e534]
+              - text: I do not agree
+          - text: "* * *"
+        - generic [ref=e536]:
+          - group "*I understand and agree that if hired, my employment will be at-will in nature and may be terminated, with or without cause, at any time, by myself or the Company. I also understand that this written statement supersedes any and all oral representations made by agents or representatives of the Company. It is my understanding that this employment application, or the granting of an interview, does not represent a contract of employment or a promise of future benefits." [ref=e538]:
+            - generic [ref=e539]: "*I understand and agree that if hired, my employment will be at-will in nature and may be terminated, with or without cause, at any time, by myself or the Company. I also understand that this written statement supersedes any and all oral representations made by agents or representatives of the Company. It is my understanding that this employment application, or the granting of an interview, does not represent a contract of employment or a promise of future benefits."
+            - generic [ref=e542] [cursor=pointer]:
+              - radio "I agree" [ref=e543]
+              - text: I agree
+  --
+              - radio "I do not agree" [ref=e547]
+              - text: I do not agree
+          - text: "* * *"
+        - generic [ref=e549]:
+          - generic [ref=e551]:
+  --
+        - paragraph [ref=e561]: This employer collects information from applicants about their race/ethnicity and/or gender to ensure nondiscrimination in and equal opportunity in hiring practices. If you do not wish to answer any question, please select "I decline to say". Submission of this information is voluntary and refusal to provide it will not subject you to any adverse treatment. The information you provide will be kept confidential and separate from other application materials, and will only be used in ways that are consistent with the law.
+        - generic [ref=e564]:
+          - generic [ref=e565]: "*Gender"
+          - combobox "*Gender" [ref=e566]:
+  --
+            - option "Hispanic/Latino"
+            - option "Not Hispanic/Latino"
+          - generic [ref=e579] [cursor=pointer]:
+            - checkbox "I decline to say Ethnic Origin" [ref=e580]
+            - text: I decline to say
+  --
+              - paragraph [ref=e590]: Submission of this information is voluntary and refusal to provide it will not subject you to any adverse treatment. The information provided will be used only in ways that are not inconsistent with the Vietnam Era Veterans' Readjustment Assistance Act of 1974, as amended. The information you submit will be kept confidential and separate from other application materials and may only be used in accordance with applicable federal, state, and local laws and regulations.
+            - generic [ref=e593]:
+              - generic [ref=e594]: "*Are you a protected veteran?"
+              - combobox "*Are you a protected veteran?" [ref=e595]:
+  --
+                - option "No"
+              - generic [ref=e597] [cursor=pointer]:
+                - checkbox "I decline to say Are you a protected veteran?" [ref=e598]
+                - text: I decline to say
+  --
+                - text: Completing this form is voluntary, and we hope that you will choose to do so. Your answer is confidential. No one who makes hiring decisions will see it. Your decision to complete the form and your answer will not harm you in any way. If you want to learn more about the law or this form, visit the U.S. Department of Labor’s Office of Federal Contract Compliance Programs (OFCCP) website at
+                - link "www.dol.gov/ofccp" [ref=e630] [cursor=pointer]:
+                  - /url: https://www.dol.gov/ofccp
+                - text: .
+  --
+                  - text: How do you know if you have a disability?
+              - paragraph [ref=e636]: "A disability is a condition that substantially limits one or more of your “major life activities.” If you have or have ever had such a condition, you are a person with a disability. Disabilities include, but are not limited to:"
+              - list [ref=e638]:
+                - listitem [ref=e639]: Alcohol or other substance use disorder (not currently using drugs illegally)
+                - listitem [ref=e640]: Autoimmune disorder, for example, lupus, fibromyalgia, rheumatoid arthritis, HIV/AIDS
+                - listitem [ref=e641]: Blind or low vision
+                - listitem [ref=e642]: Cancer (past or present)
+  --
+                  - radio "No, I do not have a disability and have not had one in the past" [ref=e670] [cursor=pointer]
+                  - text: No, I do not have a disability and have not had one in the past
+                - generic [ref=e672]:
+                  - radio "I do not want to answer" [ref=e673] [cursor=pointer]
+                  - text: I do not want to answer
+            - generic [ref=e674]:
+              - generic [ref=e676]:
+                - strong [ref=e677]: PUBLIC BURDEN STATEMENT
+                - text: ": According to the Paperwork Reduction Act of 1995 no persons are required to respond to a collection of information unless such collection displays a valid OMB number. This survey should take about 5 minutes to complete."
+              - generic [ref=e678]:
+                - heading "For Employer Use Only" [level=4] [ref=e680]
+                - generic [ref=e681]: Employers may modify this section of the form as needed for recordkeeping purposes.
+"Desired salary": |-
+      - generic [ref=e370]: "*What is your desired salary?"
+      - textbox "*What is your desired salary?" [ref=e371]
+      - generic [ref=e372]: Please enter a whole number.
+    - text: "* * *"
+  - generic [ref=e374]:
+"legally eligible for employment": |-
+  - group "*Are you legally eligible for employment in the United States?" [ref=e376]:
+    - generic [ref=e377]: "*Are you legally eligible for employment in the United States?"
+    - generic [ref=e380] [cursor=pointer]:
+      - radio "Yes" [ref=e381]
+      - text: "Yes"
+"Yes": |-
+      - radio "Yes" [ref=e293]
+      - text: "Yes"
+    - text: "*"
+    - generic [ref=e295] [cursor=pointer]:
+      - radio "No" [ref=e296]
+  --
+        - radio "Yes" [ref=e337]
+        - text: "Yes"
+      - generic [ref=e340] [cursor=pointer]:
+        - radio "No" [ref=e341]
+        - text: "No"
+  --
+    - group "*Are you under the age 18? If yes, you will be required to submit a work permit." [ref=e354]:
+      - generic [ref=e355]: "*Are you under the age 18? If yes, you will be required to submit a work permit."
+      - generic [ref=e358] [cursor=pointer]:
+        - radio "Yes" [ref=e359]
+        - text: "Yes"
+      - generic [ref=e362] [cursor=pointer]:
+        - radio "No" [ref=e363]
+        - text: "No"
+  --
+        - radio "Yes" [ref=e381]
+        - text: "Yes"
+      - generic [ref=e384] [cursor=pointer]:
+        - radio "No" [ref=e385]
+        - text: "No"
+  --
+      - generic [ref=e390]: "*Do you currently have a relative employed by the Company? If yes, please type their name below. If not applicable, please type N/A:"
+      - textbox "*Do you currently have a relative employed by the Company? If yes, please type their name below. If not applicable, please type N/A:" [ref=e391]
+      - generic [ref=e394]: 4000 characters left
+    - text: "* * *"
+  - generic [ref=e396]:
+  --
+        - radio "Yes" [ref=e403]
+        - text: "Yes"
+      - generic [ref=e406] [cursor=pointer]:
+        - radio "No" [ref=e407]
+        - text: "No"
+  --
+      - generic [ref=e412]: "*If yes, please describe your duties and any special training. What, if any, awards or honors did you receive? If not applicable, please type N/A:"
+      - textbox "*If yes, please describe your duties and any special training. What, if any, awards or honors did you receive? If not applicable, please type N/A:" [ref=e413]
+      - generic [ref=e416]: 4000 characters left
+    - text: "* * *"
+  - generic [ref=e418]:
+  --
+        - radio "Yes" [ref=e425]
+        - text: "Yes"
+      - generic [ref=e428] [cursor=pointer]:
+        - radio "No" [ref=e429]
+        - text: "No"
+  --
+      - generic [ref=e434]: "*If yes, explain. If not applicable, please type N/A:"
+      - textbox "*If yes, explain. If not applicable, please type N/A:" [ref=e435]
+      - generic [ref=e438]: 4000 characters left
+    - text: "* * *"
+  - generic [ref=e440]:
+  --
+        - radio "Yes" [ref=e447]
+        - text: "Yes"
+      - generic [ref=e450] [cursor=pointer]:
+        - radio "No" [ref=e451]
+        - text: "No"
+  --
+      - generic [ref=e456]: "*If yes, explain. If not applicable, please type N/A:"
+      - textbox "*If yes, explain. If not applicable, please type N/A:" [ref=e457]
+      - generic [ref=e460]: 4000 characters left
+    - text: "* * *"
+  - generic [ref=e462]:
+  --
+        - radio "Yes" [ref=e469]
+        - text: "Yes"
+      - generic [ref=e472] [cursor=pointer]:
+        - radio "No" [ref=e473]
+        - text: "No"
+  --
+      - generic [ref=e478]: "*If yes, explain. If not applicable, please type N/A:"
+      - textbox "*If yes, explain. If not applicable, please type N/A:" [ref=e479]
+      - generic [ref=e482]: 4000 characters left
+    - text: "* * *"
+  - generic [ref=e484]:
+  --
+          - option "Yes"
+          - option "No"
+        - generic [ref=e597] [cursor=pointer]:
+          - checkbox "I decline to say Are you a protected veteran?" [ref=e598]
+  --
+            - radio "Yes, I have a disability, or have had one in the past" [ref=e667] [cursor=pointer]
+            - text: Yes, I have a disability, or have had one in the past
+          - generic [ref=e669]:
+            - radio "No, I do not have a disability and have not had one in the past" [ref=e670] [cursor=pointer]
+            - text: No, I do not have a disability and have not had one in the past

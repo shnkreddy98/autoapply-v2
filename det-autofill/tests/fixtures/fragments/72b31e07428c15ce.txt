@@ -1,0 +1,25 @@
+"Willing to relocate": |-
+        - checkbox "Willing to relocate" [checked] [active] [ref=e811]
+        - text: Willing to relocate
+  - region "Work Experience" [ref=e815]:
+    - generic [ref=e816]:
+      - button "Work Experience" [expanded] [ref=e818] [cursor=pointer]: 
+"How did you hear about this opportunity?": (no match)
+"referred by a current employee?": (no match)
+"When can you start?": (no match)
+"current employee of Mutual Bancorp": (no match)
+"member of a Board or Committee": (no match)
+"under the age 18?": (no match)
+"desired salary?": (no match)
+"legally eligible for employment": (no match)
+"relative employed by the Company?": (no match)
+"Armed Forces/Reserves?": (no match)
+"convicted of a felony?": (no match)
+"misdemeanor for which your period of incarceration ended within the past 5 years?": (no match)
+"convicted of a misdemeanor within the past 5 years?": (no match)
+"FCRA Disclosure and Authorization": (no match)
+"CORI check": (no match)
+"received the FCRA": (no match)
+"authorize any former employer": (no match)
+"employment will be at-will": (no match)
+"By typing my name in the below text box": (no match)

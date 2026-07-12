@@ -1,0 +1,6 @@
+"Autofill with Resume": |-
+  - paragraph [ref=e1541]: We recommend using ‘Autofill with Resume’
+  - button "Autofill with Resume" [ref=e1545] [cursor=pointer]
+  - button "Apply Manually" [ref=e1549] [cursor=pointer]
+  - button "Use My Last Application" [ref=e1554] [cursor=pointer]
+  - iframe [ref=e1558]:

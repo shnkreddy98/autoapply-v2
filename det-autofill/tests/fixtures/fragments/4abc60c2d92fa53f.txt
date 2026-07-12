@@ -1,0 +1,36 @@
+"Major:": |-
+  - group "Major:" [ref=e1591]:
+    - paragraph [ref=e1595]:
+      - generic [ref=e1596]: "Major:"
+    - textbox [ref=e1599]
+  - group "Name of School:" [ref=e1601]:
+    - paragraph [ref=e1605]:
+"Name of School:": |-
+  - group "Name of School:" [ref=e1601]:
+    - paragraph [ref=e1605]:
+      - generic [ref=e1606]: "Name of School:"
+    - textbox [ref=e1609]
+  - group "Location of School (city/state):" [ref=e1611]:
+    - paragraph [ref=e1615]:
+"Location of School (city/state):": |-
+  - group "Location of School (city/state):" [ref=e1611]:
+    - paragraph [ref=e1615]:
+      - generic [ref=e1616]: "Location of School (city/state):"
+    - textbox [ref=e1619]
+  - 'group "How much experience do you have related to the job you are applying for? Please include years and months (example: 2 years, 7 months)*" [ref=e1621]':
+    - paragraph [ref=e1625]:
+"How much experience do you have related to the job you are applying for? Please include years and months (example: 2 years, 7 months)*": |-
+  - 'group "How much experience do you have related to the job you are applying for? Please include years and months (example: 2 years, 7 months)*" [ref=e1621]':
+    - paragraph [ref=e1625]:
+      - generic [ref=e1627]: "How much experience do you have related to the job you are applying for? Please include years and months (example: 2 years, 7 months)*"
+    - textbox [ref=e1630]
+  - group "Do you have any certifications or licenses pertinent to this position?*" [ref=e1632]:
+    - paragraph [ref=e1636]:
+"Do you have any certifications or licenses pertinent to this position?*": |-
+  - group "Do you have any certifications or licenses pertinent to this position?*" [ref=e1632]:
+    - paragraph [ref=e1636]:
+      - generic [ref=e1638]: Do you have any certifications or licenses pertinent to this position?*
+    - button "Select One Required" [ref=e1642]: Select One
+  - 'group "If you are a licensed professional, have you ever had or currently have any license infractions or pending investigations? License infractions include, but are not limited to: Professional misconduct (e.g., incompetence, negligence, substance abuse) Ethical or legal violations (e.g., patient boundary violations, falsifying documents, fraud, practicing without a valid license)*" [ref=e1644]':
+    - generic [ref=e1647]:
+"If you are a licensed professional, have you ever had or currently have any license infractions or pending investigations?*": (no match)

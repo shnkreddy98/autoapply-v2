@@ -1,0 +1,5 @@
+"Submit": |-
+            - button "Submit" [ref=e137] [cursor=pointer]
+            - button "Back" [ref=e138] [cursor=pointer]
+            - button "Cancel" [ref=e139] [cursor=pointer]
+  - list [ref=e140]:

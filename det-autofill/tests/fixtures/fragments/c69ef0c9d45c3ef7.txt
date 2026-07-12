@@ -1,0 +1,11 @@
+"About hCaptcha & Accessibility Options": |-
+  - button "About hCaptcha & Accessibility Options" [active] [ref=f68e20] [cursor=pointer]:
+    - img [ref=f68e22]
+    - img [ref=f68e27]
+  - button "Refresh Challenge." [ref=f68e31] [cursor=pointer]:
+"Refresh Challenge": |-
+  - button "Refresh Challenge." [ref=f68e31] [cursor=pointer]:
+    - img [ref=f68e33]
+    - img [ref=f68e37]
+  - button "hCaptcha logo, opens new window with more information" [ref=f68e40] [cursor=pointer]:
+"Try another challenge": (no match)

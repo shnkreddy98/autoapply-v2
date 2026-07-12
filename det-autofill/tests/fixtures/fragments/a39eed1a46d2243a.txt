@@ -1,0 +1,91 @@
+"Options Expanded": |-
+      - listbox "Options Expanded" [ref=e1305]:
+        - option "Accounting not checked" [selected] [ref=e1306]:
+          - generic [ref=e1307] [cursor=pointer]:
+            - radio [ref=e1312]
+            - generic [ref=e1313]: Accounting
+        - option "Actuarial Science not checked" [ref=e1314]:
+          - generic [ref=e1315] [cursor=pointer]:
+            - radio [ref=e1320]
+            - generic [ref=e1321]: Actuarial Science
+        - option "Advertising not checked" [ref=e1322]:
+          - generic [ref=e1323] [cursor=pointer]:
+            - radio [ref=e1328]
+            - generic [ref=e1329]: Advertising
+        - option "Aerospace Engineering not checked" [ref=e1330]:
+          - generic [ref=e1331] [cursor=pointer]:
+            - radio [ref=e1336]
+            - generic [ref=e1337]: Aerospace Engineering
+        - option "African-American Studies not checked" [ref=e1338]:
+          - generic [ref=e1339] [cursor=pointer]:
+            - radio [ref=e1344]
+            - generic [ref=e1345]: African-American Studies
+        - option "African Languages, Literatures, and Linguistics not checked" [ref=e1346]:
+          - generic [ref=e1347] [cursor=pointer]:
+            - radio [ref=e1352]
+            - generic [ref=e1353]: African Languages, Literatures, and Linguistics
+        - option "African Studies not checked" [ref=e1354]:
+          - generic [ref=e1355] [cursor=pointer]:
+            - radio [ref=e1360]
+            - generic [ref=e1361]: African Studies
+        - option "Agricultural/Biological Engineering and Bioengineering not checked" [ref=e1362]:
+          - generic [ref=e1363] [cursor=pointer]:
+            - radio [ref=e1368]
+            - generic [ref=e1369]: Agricultural/Biological Engineering and Bioengineering
+        - option "Agricultural Business and Management not checked" [ref=e1370]:
+          - generic [ref=e1371] [cursor=pointer]:
+            - radio [ref=e1376]
+            - generic [ref=e1377]: Agricultural Business and Management
+        - option "Agricultural Economics not checked" [ref=e1378]:
+          - generic [ref=e1379] [cursor=pointer]:
+            - radio [ref=e1384]
+            - generic [ref=e1385]: Agricultural Economics
+        - option "Agricultural Education not checked" [ref=e1386]:
+          - generic [ref=e1387] [cursor=pointer]:
+            - radio [ref=e1392]
+            - generic [ref=e1393]: Agricultural Education
+        - option "Agricultural Journalism not checked" [ref=e1394]:
+          - generic [ref=e1395] [cursor=pointer]:
+            - radio [ref=e1400]
+            - generic [ref=e1401]: Agricultural Journalism
+        - option "Agricultural Mechanization not checked" [ref=e1402]:
+          - generic [ref=e1403] [cursor=pointer]:
+            - radio [ref=e1408]
+            - generic [ref=e1409]: Agricultural Mechanization
+        - option "Agricultural Technology Management not checked" [ref=e1410]:
+          - generic [ref=e1411] [cursor=pointer]:
+            - radio [ref=e1416]
+            - generic [ref=e1417]: Agricultural Technology Management
+        - option "Agriculture not checked" [ref=e1418]:
+          - generic [ref=e1419] [cursor=pointer]:
+            - radio [ref=e1424]
+            - generic [ref=e1425]: Agriculture
+        - option "Agronomy and Crop Science not checked" [ref=e1426]:
+          - generic [ref=e1427] [cursor=pointer]:
+            - radio [ref=e1432]
+            - generic [ref=e1433]: Agronomy and Crop Science
+        - option "Air Traffic Control not checked" [ref=e1434]:
+          - generic [ref=e1435] [cursor=pointer]:
+            - radio [ref=e1440]
+            - generic [ref=e1441]: Air Traffic Control
+        - option "American History not checked" [ref=e1442]:
+          - generic [ref=e1443] [cursor=pointer]:
+            - radio [ref=e1448]
+            - generic [ref=e1449]: American History
+        - option "American Literature not checked" [ref=e1450]:
+          - generic [ref=e1451] [cursor=pointer]:
+            - radio [ref=e1456]
+            - generic [ref=e1457]: American Literature
+        - option "American Sign Language not checked" [ref=e1458]:
+          - generic [ref=e1459] [cursor=pointer]:
+            - radio [ref=e1464]
+            - generic [ref=e1465]: American Sign Language
+        - option "American Studies not checked" [ref=e1466]:
+          - generic [ref=e1467] [cursor=pointer]:
+            - radio [ref=e1472]
+            - generic [ref=e1473]: American Studies
+        - option "Anatomy not checked" [ref=e1474]:
+          - generic [ref=e1475] [cursor=pointer]:
+            - radio [ref=e1480]
+            - generic [ref=e1481]: Anatomy
+  ```

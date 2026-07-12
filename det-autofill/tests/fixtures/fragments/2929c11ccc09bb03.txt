@@ -1,0 +1,64 @@
+"No": |-
+        - /url: https://about.nextdoor.com/cs/c/?cta_guid=570bc251-d38c-43c5-af59-fe2b9421c7ee&signature=AAH58kHk3DH3AwiOx2tj906dDbJgaO-QyQ&portal_id=5713048&pageId=188560384925&placement_guid=d9afe76a-5c05-4256-a04a-b5ce6c31ae91&click=f73994e9-6bac-445f-b59b-0487de4ef477&redirect_url=APefjpEaCEl1YzmMlSIpUZMYtMdtnnz_9ZzqIZoxJBIaqucWTH_397PHIqGNNQsH0sCW3Y0W1hQBYgH1KCQDdqYnW-Vd-GFzwb4zjGL9XFawqbihZT35siI&hsutk=1265988f399c42656b99318b03875248&canon=https%3A%2F%2Fabout.nextdoor.com%2Fcareers-list%2F&ts=1782862739181&__hstc=1713326.1265988f399c42656b99318b03875248.1782862740582.1782862740582.1782862740582.1&__hssc=1713326.1.1782862740582&__hsfp=bac977a07c9c6b3a97f171e4b5015545&contentType=standard-page
+  - main [ref=e24]:
+    - generic [ref=e28]:
+      - heading "Careers - Job List" [level=1] [ref=e41]
+  --
+                    - text: "Nextdoor (NYSE: NXDR) is the essential neighborhood network. Neighbors, public agencies, and businesses use Nextdoor to connect around local information that matters in more than 350,000 neighborhoods across 11 countries. Nextdoor builds innovative technology to foster local community, share important news, and create neighborhood connections at scale. Download the app and join the neighborhood at"
+                    - link "nextdoor.com" [ref=f84e334] [cursor=pointer]:
+                      - /url: http://nextdoor.com/
+                      - strong [ref=f84e335]: nextdoor.com
+  --
+                    - listitem [ref=f84e363]: Advanced knowledge of SQL, including writing and optimizing queries in multiple dialects
+                    - listitem [ref=f84e364]: Experience working in the ads or monetization space
+                    - listitem [ref=f84e365]: Experience with Looker (preferred) or another BI/visualization tool
+                    - listitem [ref=f84e366]: Experience working with ETL/ELT pipelines
+                    - listitem [ref=f84e367]: Strong communication skills, both written and verbal
+                    - listitem [ref=f84e368]: Ability to understand, tackle, and solve problems from both technical and business perspectives
+  --
+                  - paragraph [ref=f84e378]: At Nextdoor, we empower our employees to build stronger local communities. To create a platform where all feel welcome, we want our workforce to reflect the diversity of the neighbors we serve. We encourage everyone interested in our mission to apply. We do not discriminate on the basis of race, gender, religion, sexual orientation, age, or any other trait that unfairly targets a group of people. In accordance with the San Francisco Fair Chance Ordinance, we always consider qualified applicants with arrest and conviction records.
+                  - paragraph [ref=f84e379]:
+                    - text: For information about our collection and use of applicants’ personal information, please see Nextdoor's Personnel Privacy Notice, found
+                    - link "here" [ref=f84e380] [cursor=pointer]:
+                      - /url: https://help.nextdoor.com/s/article/Personnel-Privacy-Policy?language=en_US
+                    - text: .
+  --
+                      - paragraph [ref=f84e515]: For government reporting purposes, we ask candidates to respond to the below self-identification survey. Completion of the form is entirely voluntary. Whatever your decision, it will not be considered in the hiring process or thereafter. Any information that you do provide will be recorded and maintained in a confidential file.
+                      - paragraph [ref=f84e516]: As set forth in Nextdoor’s Equal Employment Opportunity policy, we do not discriminate on the basis of any protected group status under any applicable law.
+                    - generic [ref=f84e519]:
+                      - generic [ref=f84e520]: Gender
+                      - generic [ref=f84e521]:
+  --
+                        - generic [ref=f84e537]: Are you Hispanic/Latino?
+                        - generic [ref=f84e538]:
+                          - log [ref=f84e540]: 3 results available.Use Up and Down to choose options, press Enter to select the currently focused option, press Escape to exit the menu, press Tab to select the option and exit the menu.
+                          - generic [ref=f84e542]:
+  --
+                              - combobox "Are you Hispanic/Latino?" [expanded] [active] [ref=f84e546]
+                            - button "Toggle flyout" [ref=f84e548] [cursor=pointer]:
+                              - img [ref=f84e549]
+                          - listbox [ref=f84e1233]:
+  --
+                            - option "No" [ref=f84e1235]
+                            - option "Decline To Self Identify" [ref=f84e1236]
+                      - link "Race & Ethnicity Definitions" [ref=f84e551] [cursor=pointer]:
+                        - /url: https://job-boards.cdn.greenhouse.io/docs/2023/RaceEthnicityDefinitions.pdf
+  --
+                        - text: Completing this form is voluntary, and we hope that you will choose to do so. Your answer is confidential. No one who makes hiring decisions will see it. Your decision to complete the form and your answer will not harm you in any way. If you want to learn more about the law or this form, visit the U.S. Department of Labor’s Office of Federal Contract Compliance Programs (OFCCP) website at
+                        - link "www.dol.gov/ofccp" [ref=f84e588] [cursor=pointer]:
+                          - /url: https://www.dol.gov/ofccp
+                        - text: .
+                      - strong [ref=f84e589]: How do you know if you have a disability?
+                      - paragraph [ref=f84e590]:
+                        - text: A disability is a condition that substantially limits one or more of your “major life activities.” If you have or have ever had such a condition, you are a person with a disability.
+                        - strong [ref=f84e591]: "Disabilities include, but are not limited to:"
+                      - list [ref=f84e592]:
+                        - listitem [ref=f84e593]: Alcohol or other substance use disorder (not currently using drugs illegally)
+                        - listitem [ref=f84e594]: Autoimmune disorder, for example, lupus, fibromyalgia, rheumatoid arthritis, HIV/AIDS
+                        - listitem [ref=f84e595]: Blind or low vision
+                        - listitem [ref=f84e596]: Cancer (past or present)
+  --
+                    - paragraph [ref=f84e633]: "PUBLIC BURDEN STATEMENT: According to the Paperwork Reduction Act of 1995 no persons are required to respond to a collection of information unless such collection displays a valid OMB control number. This survey should take about 5 minutes to complete."
+                  - button "Submit application" [ref=f84e635] [cursor=pointer]
+          - iframe [ref=f84e638]:
+            - generic [ref=f86e6]:

@@ -1,0 +1,117 @@
+"Are you legally able to work in the United States?": |-
+    - text: Are you legally able to work in the United States?
+    - generic [ref=f67e45]: "*"
+  - combobox "Are you legally able to work in the United States?*" [ref=f67e47]:
+    - option "— Make a Selection —" [selected]
+    - option "Yes"
+    - option "No"
+"Are you currently 18 years or older?": |-
+    - text: Are you currently 18 years or older?
+    - generic [ref=f67e51]: "*"
+  - combobox "Are you currently 18 years or older?*" [ref=f67e53]:
+    - option "— Make a Selection —" [selected]
+    - option "Yes"
+    - option "No"
+"Do you have any friends or family members working for NFI?": |-
+    - text: "Do you have any friends or family members working for NFI? For purposes of this question, “family member” means: spouse, partner, mother, father, stepmother, stepfather, son, daughter, stepson, stepdaughter, aunt, uncle, cousin, brother, sister, stepbrother, stepsister."
+    - generic [ref=f67e57]: "*"
+  - 'combobox "Do you have any friends or family members working for NFI? For purposes of this question, “family member” means: spouse, partner, mother, father, stepmother, stepfather, son, daughter, stepson, stepdaughter, aunt, uncle, cousin, brother, sister, stepbrother, stepsister.*" [ref=f67e59]':
+    - option "— Make a Selection —" [selected]
+    - option "Yes"
+    - option "No"
+"If yes, provide name and relationship.": |-
+      - text: If yes, provide name and relationship. (Please say N/A if you answered no.)
+      - generic [ref=f67e63]: "*"
+    - textbox "If yes, provide name and relationship. (Please say N/A if you answered no.)*" [ref=f67e65]
+  - generic [ref=f67e66]:
+    - generic [ref=f67e68]:
+      - text: Have you ever been employed by NFI and/or any of it’s affiliated companies as a full or part-time employee?
+"Have you ever been employed by NFI": |-
+    - text: Have you ever been employed by NFI and/or any of it’s affiliated companies as a full or part-time employee?
+    - generic [ref=f67e69]: "*"
+  - combobox "Have you ever been employed by NFI and/or any of it’s affiliated companies as a full or part-time employee?*" [ref=f67e71]:
+    - option "— Make a Selection —" [selected]
+    - option "Yes"
+    - option "No"
+"please indicate dates of employment and locations worked.": |-
+      - text: If yes, please indicate dates of employment and locations worked. (Please say N/A if you answered no.)
+      - generic [ref=f67e75]: "*"
+    - textbox "If yes, please indicate dates of employment and locations worked. (Please say N/A if you answered no.)*" [ref=f67e77]
+  - generic [ref=f67e78]:
+    - generic [ref=f67e80]:
+      - text: Are you or have you ever been employed by a temporary agency, contractor or through a third-party provider and performed work at NFI?
+"Are you or have you ever been employed by a temporary agency": |-
+    - text: Are you or have you ever been employed by a temporary agency, contractor or through a third-party provider and performed work at NFI?
+    - generic [ref=f67e81]: "*"
+  - combobox "Are you or have you ever been employed by a temporary agency, contractor or through a third-party provider and performed work at NFI?*" [ref=f67e83]:
+    - option "— Make a Selection —" [selected]
+    - option "Yes"
+    - option "No"
+"please indicate your employer, dates of employment and locations worked.": |-
+      - text: If yes, please indicate your employer, dates of employment and locations worked. (Please say N/A if you answered no.)
+      - generic [ref=f67e87]: "*"
+    - textbox "If yes, please indicate your employer, dates of employment and locations worked. (Please say N/A if you answered no.)*" [ref=f67e89]
+  - generic [ref=f67e90]:
+    - generic [ref=f67e92]:
+      - text: Are you prohibited or limited in your performance of any job duties for our company by any restrictive covenants, non-competes, confidentiality agreements or any other contractual obligations? If yes, you'll be asked to provide a copy of the agreement.
+"restrictive covenants": |-
+    - text: Are you prohibited or limited in your performance of any job duties for our company by any restrictive covenants, non-competes, confidentiality agreements or any other contractual obligations? If yes, you'll be asked to provide a copy of the agreement.
+    - generic [ref=f67e93]: "*"
+  - combobox "Are you prohibited or limited in your performance of any job duties for our company by any restrictive covenants, non-competes, confidentiality agreements or any other contractual obligations? If yes, you'll be asked to provide a copy of the agreement.*" [ref=f67e95]:
+    - option "— Make a Selection —" [selected]
+    - option "Yes"
+    - option "No"
+"What is your desired salary?": |-
+      - text: What is your desired salary?
+      - generic [ref=f67e99]: "*"
+    - textbox "What is your desired salary?*" [ref=f67e101]
+  - generic [ref=f67e102]:
+    - generic [ref=f67e104]:
+      - text: I understand that if offered employment, I will, as a condition of employment, be required to submit proof of my identity and legal right to work in the United States on my first day of employment.
+"proof of my identity and legal right to work in the United States": |-
+    - text: I understand that if offered employment, I will, as a condition of employment, be required to submit proof of my identity and legal right to work in the United States on my first day of employment.
+    - generic [ref=f67e105]: "*"
+  - combobox "I understand that if offered employment, I will, as a condition of employment, be required to submit proof of my identity and legal right to work in the United States on my first day of employment.*" [ref=f67e107]:
+    - option "— Make a Selection —" [selected]
+    - option "Yes"
+    - option "No"
+"background check": |-
+    - text: I understand that NFI will request authorization to conduct a background check as a condition of any offer.
+    - generic [ref=f67e111]: "*"
+  - combobox "I understand that NFI will request authorization to conduct a background check as a condition of any offer.*" [ref=f67e113]:
+    - option "— Make a Selection —" [selected]
+    - option "Yes"
+    - option "No"
+"drug screen": |-
+    - text: I understand that if offered employment, I will be asked to submit a drug screen as a condition of hire.
+    - generic [ref=f67e117]: "*"
+  - combobox "I understand that if offered employment, I will be asked to submit a drug screen as a condition of hire.*" [ref=f67e119]:
+    - option "— Make a Selection —" [selected]
+    - option "Yes"
+    - option "No"
+"I hereby certify": |-
+    - checkbox "I hereby certify I hereby certify that I have not knowingly withheld any information that might adversely affect my application. I further certify that I, the undersigned applicant, have personally completed this application. I understand that any omission, misstatement or falsification on this application or on any documents used to secure employment shall be grounds for rejection of this application or for immediate discharge if I am employed, regardless of the time elapsed before discovery.*" [ref=f67e123]
+    - generic [ref=f67e124]:
+      - text: I hereby certify I hereby certify that I have not knowingly withheld any information that might adversely affect my application. I further certify that I, the undersigned applicant, have personally completed this application. I understand that any omission, misstatement or falsification on this application or on any documents used to secure employment shall be grounds for rejection of this application or for immediate discharge if I am employed, regardless of the time elapsed before discovery.
+      - generic [ref=f67e125]: "*"
+  - generic [ref=f67e127]:
+    - button "Finish Later" [ref=f67e128] [cursor=pointer]
+"Submit": |-
+          - text: I understand that if offered employment, I will, as a condition of employment, be required to submit proof of my identity and legal right to work in the United States on my first day of employment.
+          - generic [ref=f67e105]: "*"
+        - combobox "I understand that if offered employment, I will, as a condition of employment, be required to submit proof of my identity and legal right to work in the United States on my first day of employment.*" [ref=f67e107]:
+          - option "— Make a Selection —" [selected]
+          - option "Yes"
+          - option "No"
+  --
+          - text: I understand that if offered employment, I will be asked to submit a drug screen as a condition of hire.
+          - generic [ref=f67e117]: "*"
+        - combobox "I understand that if offered employment, I will be asked to submit a drug screen as a condition of hire.*" [ref=f67e119]:
+          - option "— Make a Selection —" [selected]
+          - option "Yes"
+          - option "No"
+  --
+        - button "Submit" [ref=f67e129] [cursor=pointer]
+  - generic [ref=f67e130]:
+    - link "Application FAQs" [ref=f67e131] [cursor=pointer]:
+      - /url: https://icims.help/candidate-faq

@@ -1,0 +1,13 @@
+"Yes Selection": (no match)
+"Prefer not to say": (no match)
+"Decline to Self-Identify": (no match)
+"I accept and agree to the terms and conditions stated above.": |-
+        - text: I accept and agree to the terms and conditions stated above.
+      - generic [ref=e1010]:
+        - generic [ref=e1011]:
+          - status
+        - combobox "I accept and agree to the terms and conditions stated above." [ref=e1012]
+        - button "I accept and agree to the terms and conditions stated above." [ref=e1013] [cursor=pointer]:
+          - generic [ref=e1014]: 
+  - generic [ref=e1017]:
+    - generic [ref=e1021]:

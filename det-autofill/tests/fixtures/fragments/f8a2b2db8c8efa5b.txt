@@ -1,0 +1,50 @@
+"Resume/CV \u2731 ATTACH RESUME/CV": |-
+        - button "Resume/CV ✱ ATTACH RESUME/CV" [ref=e39]
+  - listitem [ref=e40]:
+    - generic [ref=e41]:
+      - generic [ref=e42]:
+"Full name": |-
+        - text: Full name
+        - generic [ref=e43]: ✱
+      - textbox "Full name ✱" [ref=e45]
+  - listitem [ref=e46]:
+    - generic [ref=e47]: Pronouns
+    - list [ref=e49]:
+"Email": |-
+        - text: Email
+        - generic [ref=e104]: ✱
+      - textbox "Email ✱" [ref=e106]
+  - listitem [ref=e107]:
+    - generic [ref=e108]:
+      - generic [ref=e109]:
+"Phone": |-
+        - text: Phone
+        - generic [ref=e110]: ✱
+      - textbox "Phone ✱" [ref=e112]
+  - listitem [ref=e113]:
+    - generic [ref=e114]:
+      - generic [ref=e115]: Current location
+"Current location": |-
+      - generic [ref=e115]: Current location
+      - textbox "Current location" [ref=e117]
+  - listitem [ref=e118]:
+    - generic [ref=e119]:
+      - generic [ref=e120]: Current company
+"Current company": |-
+          - generic [ref=e120]: Current company
+          - textbox "Current company" [ref=e122]
+  - generic [ref=e123]:
+    - heading "Links" [level=4] [ref=e124]
+    - list [ref=e125]:
+"LinkedIn URL": |-
+      - generic [ref=e128]: LinkedIn URL
+      - textbox "LinkedIn URL" [ref=e130]
+  - listitem [ref=e131]:
+    - generic [ref=e132]:
+      - generic [ref=e133]: Twitter URL
+"GitHub URL": |-
+      - generic [ref=e138]: GitHub URL
+      - textbox "GitHub URL" [ref=e140]
+  - listitem [ref=e141]:
+    - generic [ref=e142]:
+      - generic [ref=e143]: Portfolio URL

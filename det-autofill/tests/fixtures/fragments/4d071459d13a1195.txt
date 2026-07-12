@@ -1,0 +1,6 @@
+"LinkedIn": |-
+    - link "LinkedIn" [ref=e64]:
+      - /url: https://www.linkedin.com/company/wellsfargo
+  - listitem [ref=e68] [cursor=pointer]:
+    - link "Glassdoor" [ref=e69]:
+      - /url: https://www.glassdoor.com/Overview/Working-at-Wells-Fargo-EI_IE8876.11,22.htm

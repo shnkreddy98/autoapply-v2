@@ -1,0 +1,4 @@
+"I do not wish to self-identify": |-
+      - option "I do not wish to self-identify" [ref=e1647]:
+        - generic [ref=e1648]: I do not wish to self-identify
+  ```

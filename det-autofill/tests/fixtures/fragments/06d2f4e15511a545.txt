@@ -1,0 +1,7 @@
+"How did you hear about this job? *": |-
+  - generic "How did you hear about this job?" [ref=e649]: How did you hear about this job? *
+  - generic [ref=e653] [cursor=pointer]:
+    - combobox "How did you hear about this job? *" [ref=e656]
+    - generic:
+      - img:
+        - img

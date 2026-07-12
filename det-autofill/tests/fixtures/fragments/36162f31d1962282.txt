@@ -1,0 +1,6 @@
+"Yes, I am 18 years of age or older": |-
+      - option "Yes, I am 18 years of age or older" [ref=e1955]:
+        - generic [ref=e1956]: Yes, I am 18 years of age or older
+      - option "No, I am not at least 18 years of age" [ref=e1957]:
+        - generic [ref=e1958]: No, I am not at least 18 years of age
+  ```

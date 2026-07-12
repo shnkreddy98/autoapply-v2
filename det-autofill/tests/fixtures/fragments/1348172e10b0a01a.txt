@@ -1,0 +1,6 @@
+"Enter manually": |-
+          - button "Enter manually" [ref=e182] [cursor=pointer]
+          - generic [ref=e183]: Enter manually
+        - paragraph [ref=e184]: "Accepted file types: pdf, doc, docx, txt, rtf"
+  - generic [ref=e185]:
+    - generic [ref=e186]:

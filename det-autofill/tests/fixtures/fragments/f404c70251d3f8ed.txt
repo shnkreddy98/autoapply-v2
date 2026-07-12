@@ -1,0 +1,6 @@
+"Yes, I agree": |-
+        - option "Yes, I agree" [ref=e1236] [cursor=pointer]:
+          - menuitem "Yes, I agree" [ref=e1237]
+    - button "Do you agree to these terms?" [ref=e285] [cursor=pointer]:
+      - generic [ref=e286]: 
+  - generic "Required" [ref=e287]: Gender:*

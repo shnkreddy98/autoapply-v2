@@ -1,0 +1,55 @@
+"current role": |-
+  - generic [ref=e413]: Which best describes your current role?*
+  - generic [ref=e414]:
+    - checkbox "Architect" [ref=e415]
+    - text: Architect
+"industries": |-
+    - listitem [ref=e105]: Healthcare or other highly regulated industries
+  - separator [ref=e106]
+  - heading "The Ideal Candidate" [level=2] [ref=e107]
+  - paragraph [ref=e108]: "We're looking for someone who:"
+  --
+      - generic [ref=e425]: Which industries have you supported?*
+      - generic [ref=e426]:
+        - checkbox "Healthcare" [ref=e427]
+        - text: Healthcare
+"BI platform": |-
+    - generic [ref=e443]: Which BI platforms have you supported?*
+    - textbox "Which BI platforms have you supported?*" [ref=e444]: Power BI, Tableau, Snowflake, dbt-based custom reporting.
+  - generic [ref=e445]:
+    - generic [ref=e446]: If selected, when could you start?*
+    - generic [ref=e447]:
+"when could you start": |-
+  - generic [ref=e446]: If selected, when could you start?*
+  - generic [ref=e447]:
+    - checkbox "Immediately" [ref=e448]
+    - text: Immediately
+"Gender": |-
+  - text: Gender
+  - combobox "Gender" [ref=e463]:
+    - option "Decline to answer" [selected]
+    - option "Female"
+    - option "Male"
+"Race/Ethnicity": |-
+  - text: Race/Ethnicity
+  - combobox "Race/Ethnicity" [ref=e468]:
+    - option "Decline to answer" [selected]
+    - option "Hispanic or Latino"
+    - option "White, not Hispanic or Latino"
+"Veteran status": |-
+  - paragraph [ref=e152]: SynergenX Health Holdings is an Equal Opportunity Employer and makes employment decisions without regard to race, color, religion, sex, national origin, age, disability, genetic information, protected veteran status, or any other status protected under applicable federal, state, or local law.
+  - separator [ref=e153]
+  - paragraph [ref=e154]:
+    - emphasis [ref=e156]:
+  --
+        - strong [ref=e485]: Veteran status
+        - generic [ref=e486]:
+          - generic [ref=e487]:
+            - radio "I IDENTIFY AS ONE OR MORE OF THE CLASSIFICATIONS OF PROTECTED VETERAN LISTED ABOVE" [ref=e488]
+"Self-Identification of Disability": |-
+  - strong [ref=e496]: Voluntary Self-Identification of Disability
+  - generic [ref=e497]:
+    - text: Voluntary Self-Identification of Disability Form CC-305
+    - text: OMB Control Number 1250-0005
+    - text: Expires 05/31/2026
+  - generic [ref=e498]:

@@ -1,0 +1,58 @@
+"Email*": |-
+    - generic [ref=e29]: "Email*:"
+    - textbox [active] [ref=e31]
+  - generic [ref=e33]:
+    - generic [ref=e34]: "Country Code*:"
+"Mobile Phone*": |-
+    - generic [ref=e38]: "Mobile Phone*:"
+    - textbox [disabled] [ref=e40]
+  - generic [ref=e42]:
+    - generic [ref=e43]: "Confirm Mobile Phone*:"
+    - textbox [disabled] [ref=e45]
+  - generic [ref=e47]:
+    - generic [ref=e48]: "First Name*:"
+"Confirm Mobile Phone*": |-
+    - generic [ref=e43]: "Confirm Mobile Phone*:"
+    - textbox [disabled] [ref=e45]
+  - generic [ref=e47]:
+    - generic [ref=e48]: "First Name*:"
+"First Name*": |-
+    - generic [ref=e48]: "First Name*:"
+    - textbox [disabled] [ref=e50]
+  - generic [ref=e53]:
+    - generic [ref=e54]: "Last Name*:"
+"Last Name*": |-
+    - generic [ref=e54]: "Last Name*:"
+    - textbox [disabled] [ref=e56]
+  - generic [ref=e59]:
+    - generic [ref=e60]: "ZIP Code*:"
+"ZIP Code*": |-
+    - generic [ref=e60]: "ZIP Code*:"
+    - textbox [disabled] [ref=e62]
+  - generic [ref=e65]:
+    - text: I will need a sponsorship visa from Rose International, now or in the future, to work as a W2 employee.
+"I will need a sponsorship visa": |-
+    - text: I will need a sponsorship visa from Rose International, now or in the future, to work as a W2 employee.
+    - checkbox [disabled] [ref=e66]
+    - text: "Yes"
+  - generic [ref=e68]:
+"Resume*": |-
+    - generic [ref=e69]: "Resume*:"
+    - button "Choose File" [disabled] [ref=e71]
+  - generic [ref=e73]: "(Max file size allowed: 1 MB)"
+  - generic [ref=e74]:
+"Apply": |-
+  - Page URL: https://www.roseint.com/hotjobs/ApplyJobs.aspx?OpID=503822&RD=L
+  - Page Title: ApplyJobs
+  ### Snapshot
+  ```yaml
+  - generic [ref=e3]:
+  --
+      - generic [ref=e18]: Apply With Rose International
+      - generic:
+        - generic [ref=e19]:
+          - generic [ref=e20]: "Position Title:"
+  --
+            - button "Apply" [ref=e114] [cursor=pointer]
+            - button "Cancel" [ref=e115] [cursor=pointer]
+  ```

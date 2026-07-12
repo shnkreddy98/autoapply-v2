@@ -1,0 +1,10 @@
+"United States of America": |-
+              - option "🇺🇸 +1 United States of America" [ref=e834]:
+                - generic [ref=e836]: 🇺🇸 +1 United States of America
+              - option "🇻🇨 +1 Saint Vincent and the Grenadines" [ref=e837]:
+  --
+          - generic "United States of America" [ref=e472]
+        - generic:
+  --
+  - generic [ref=e665]: AirFold • San Francisco, United States of America
+  - generic [ref=e667]: Sep 2024 - Present

@@ -1,0 +1,58 @@
+"Upload Resume": |-
+    - button "Upload Resume DOC, DOCX, or PDF (Max file size 6MB)." [ref=e38] [cursor=pointer]:
+      - text: Upload Resume
+      - generic [ref=e39]: DOC, DOCX, or PDF (Max file size 6MB).
+    - emphasis [ref=e40]: DOC, DOCX, or PDF (Max file size 6MB).
+  - generic: Please wait while we prefill your application...
+"Address 1": |-
+    - generic [ref=e130]: "*Address 1"
+    - textbox "*Address 1" [ref=e131]
+  - generic [ref=e134]:
+    - generic [ref=e135]: Address 2
+    - textbox "Address 2" [ref=e136]
+"City": |-
+      - generic [ref=e140]: "*City"
+      - textbox "*City" [ref=e141]
+    - text: "*"
+    - generic [ref=e143]:
+      - generic [ref=e144]: "*Zip / Postal Code"
+  --
+  - paragraph [ref=e561]: This employer collects information from applicants about their race/ethnicity and/or gender to ensure nondiscrimination in and equal opportunity in hiring practices. If you do not wish to answer any question, please select "I decline to say". Submission of this information is voluntary and refusal to provide it will not subject you to any adverse treatment. The information you provide will be kept confidential and separate from other application materials, and will only be used in ways that are consistent with the law.
+  - generic [ref=e564]:
+    - generic [ref=e565]: "*Gender"
+    - combobox "*Gender" [ref=e566]:
+"Zip / Postal Code": |-
+        - generic [ref=e144]: "*Zip / Postal Code"
+        - textbox "*Zip / Postal Code" [ref=e145]
+  - generic [ref=e150] [cursor=pointer]:
+    - checkbox "Willing to relocate" [ref=e151]
+    - text: Willing to relocate
+"Desired salary": |-
+      - generic [ref=e370]: "*What is your desired salary?"
+      - textbox "*What is your desired salary?" [ref=e371]
+      - generic [ref=e372]: Please enter a whole number.
+    - text: "* * *"
+  - generic [ref=e374]:
+"Submit": |-
+                  - listitem [ref=e61]: If you need to make changes to your name, please go to the My presence page before submitting your application.
+              - generic [ref=e62]:
+                - generic [ref=e63]: Email
+                - text: jane.doe@example.com
+  --
+                  - group "*Are you under the age 18? If yes, you will be required to submit a work permit." [ref=e354]:
+                    - generic [ref=e355]: "*Are you under the age 18? If yes, you will be required to submit a work permit."
+                    - generic [ref=e358] [cursor=pointer]:
+                      - radio "Yes" [ref=e359]
+                      - text: "Yes"
+  --
+                      - paragraph [ref=e590]: Submission of this information is voluntary and refusal to provide it will not subject you to any adverse treatment. The information provided will be used only in ways that are not inconsistent with the Vietnam Era Veterans' Readjustment Assistance Act of 1974, as amended. The information you submit will be kept confidential and separate from other application materials and may only be used in accordance with applicable federal, state, and local laws and regulations.
+                    - generic [ref=e593]:
+                      - generic [ref=e594]: "*Are you a protected veteran?"
+                      - combobox "*Are you a protected veteran?" [ref=e595]:
+  --
+            - button "Submit" [ref=e688] [cursor=pointer]:
+              - generic [ref=e689]:
+                - generic:  Submit
+            - link "Cancel" [ref=e690] [cursor=pointer]:
+              - /url: /CAP1015CCFC/JobBoard/6f4434b4-0b72-4e52-b60d-afcc1a963060/OpportunityDetail?opportunityId=06415c17-c63b-42cb-b2d3-61edd586fb23
+  - contentinfo [ref=e691]:
