@@ -134,6 +134,8 @@ async def _dispatch(br, f, answer, quirks, fields) -> widgets.FillResult:
             br, f, Answer(answer.key, "text", "Yes" if answer.value else "No")
         )
     if answer.kind == "option" and f.role == "textbox":
+        if quirks.combobox == "click":  # Workday: search box needs an option pick
+            return await widgets.fill_search_multiselect(br, f, answer, quirks)
         text = OPTION_TEXT.get(answer.key)
         if text:
             return await widgets.fill_text(br, f, Answer(answer.key, "text", text))

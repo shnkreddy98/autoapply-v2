@@ -108,10 +108,17 @@ class Browser:
             await self.call("browser_click", element=element or ref, target=ref)
         )
 
-    async def type(self, ref: str, text: str, element: str = "") -> str:
+    async def type(
+        self, ref: str, text: str, element: str = "", slowly: bool = False
+    ) -> str:
+        # slowly=True types per-keystroke — search boxes only react to key events
         return await self._snap_from(
             await self.call(
-                "browser_type", element=element or ref, target=ref, text=text
+                "browser_type",
+                element=element or ref,
+                target=ref,
+                text=text,
+                slowly=slowly,
             )
         )
 

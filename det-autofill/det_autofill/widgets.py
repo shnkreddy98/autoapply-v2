@@ -8,10 +8,11 @@ Answer, act via mcpio.Browser, and report what they did.
 
 from __future__ import annotations
 
+import asyncio
 import re
 from dataclasses import dataclass
 
-from det_autofill.answers import NO, YES, Answer
+from det_autofill.answers import NO, OPTION_TEXT, YES, Answer
 from det_autofill.aria import FormField, parse_snapshot
 from det_autofill.ats import ATSQuirks
 from det_autofill.mcpio import Browser
@@ -22,6 +23,24 @@ class FillResult:
     ok: bool
     note: str
     snapshot: str  # page text after the last action ("" = page untouched)
+
+
+# profiles store 2-letter codes; option lists (Workday "Region") spell them out
+US_STATES = {
+    "AL": "Alabama", "AK": "Alaska", "AZ": "Arizona", "AR": "Arkansas",
+    "CA": "California", "CO": "Colorado", "CT": "Connecticut", "DE": "Delaware",
+    "FL": "Florida", "GA": "Georgia", "HI": "Hawaii", "ID": "Idaho",
+    "IL": "Illinois", "IN": "Indiana", "IA": "Iowa", "KS": "Kansas",
+    "KY": "Kentucky", "LA": "Louisiana", "ME": "Maine", "MD": "Maryland",
+    "MA": "Massachusetts", "MI": "Michigan", "MN": "Minnesota", "MS": "Mississippi",
+    "MO": "Missouri", "MT": "Montana", "NE": "Nebraska", "NV": "Nevada",
+    "NH": "New Hampshire", "NJ": "New Jersey", "NM": "New Mexico", "NY": "New York",
+    "NC": "North Carolina", "ND": "North Dakota", "OH": "Ohio", "OK": "Oklahoma",
+    "OR": "Oregon", "PA": "Pennsylvania", "RI": "Rhode Island", "SC": "South Carolina",
+    "SD": "South Dakota", "TN": "Tennessee", "TX": "Texas", "UT": "Utah",
+    "VT": "Vermont", "VA": "Virginia", "WA": "Washington", "WV": "West Virginia",
+    "WI": "Wisconsin", "WY": "Wyoming", "DC": "District of Columbia",
+}
 
 
 def _pick_option(options: list[str], answer: Answer) -> str | None:
@@ -43,6 +62,9 @@ def _pick_option(options: list[str], answer: Answer) -> str | None:
         val = str(answer.value).strip().lower()
         if not val:
             return None
+        full = US_STATES.get(val.upper())
+        if full:
+            val = full.lower()
         for o in options:
             if val == o.strip().lower():
                 return o
@@ -154,6 +176,47 @@ async def _combobox_click(br: Browser, f: FormField, answer: Answer) -> FillResu
     return FillResult(False, "cascade did not commit", snap)
 
 
+async def fill_search_multiselect(
+    br: Browser, f: FormField, answer: Answer, quirks: ATSQuirks
+) -> FillResult:
+    """Workday multiselect search textbox: typed text does NOT commit — options
+    render async below the box and one must be clicked."""
+    value = OPTION_TEXT.get(answer.key) or _answer_text_for_combobox(f, answer)
+    if not value:
+        return FillResult(False, "no value to type", "")
+    # options already on the page (committed chips like "…press delete to clear
+    # value") are not dropdown choices — only options that APPEAR after typing are
+    base = {x.label for x in parse_snapshot(await br.snapshot()) if x.role == "option"}
+    snap = await br.type(f.ref, value, element=f.label[:60], slowly=True)
+
+    def fresh(s: str) -> list[FormField]:
+        return [
+            x for x in parse_snapshot(s) if x.role == "option" and x.label not in base
+        ]
+
+    for _hop in range(3):  # first pick + category cascade
+        options = fresh(snap)
+        if not options:
+            await asyncio.sleep(2)
+            snap = await br.snapshot()
+            options = fresh(snap)
+        if not options:  # some boxes only open the list on a key navigation
+            snap = await br.press("ArrowDown")
+            await asyncio.sleep(1)
+            snap = await br.snapshot()
+            options = fresh(snap)
+        if not options:
+            return FillResult(False, f"no options after typing {value!r}", snap)
+        pick = _pick_option([o.label for o in options], answer)
+        if pick is None:
+            return FillResult(False, f"no option match ({len(options)} options)", snap)
+        target = next(o for o in options if o.label == pick)
+        snap = await br.click(target.ref, element=pick[:60])
+        if _combobox_value_shown(snap, f.label, pick):
+            return FillResult(True, f"picked {pick!r}", snap)
+    return FillResult(False, "pick did not commit", snap)
+
+
 def _still_expanded(snap: str, label: str) -> bool:
     for line in snap.splitlines():
         if label[:30] in line and "[expanded]" in line:
@@ -189,15 +252,24 @@ async def fill_date(
 
 async def upload_resume(br: Browser, f: FormField, answer: Answer) -> FillResult:
     """Attach control first, then the modal upload. A blank page after the click
-    is EXPECTED (native chooser open) — proceed straight to upload."""
+    is EXPECTED (native chooser open) — proceed straight to upload.
+
+    Verified by the filename appearing in the page afterwards: a direct
+    browser_file_upload can report success without the ATS registering the file
+    (Workday), so an unverified direct path falls through to click-then-upload."""
     path = str(answer.value)
     if not path:
         return FillResult(False, "no resume path", "")
+    fname = path.rsplit("/", 1)[-1].lower()
+    if fname in (await br.snapshot()).lower():
+        return FillResult(True, "already-attached", "")
     try:
         snap = await br.upload([path])  # a chooser may already be armed
-        return FillResult(True, "uploaded (direct)", snap)
+        if fname in snap.lower():
+            return FillResult(True, "uploaded (direct)", snap)
     except Exception:
         pass
     await br.click(f.ref, element=f.label[:60])
     snap = await br.upload([path])
-    return FillResult(True, "uploaded (via attach click)", snap)
+    ok = fname in snap.lower()
+    return FillResult(ok, "uploaded (via attach click)" + ("" if ok else " — file not shown"), snap)

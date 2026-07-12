@@ -101,8 +101,13 @@ def parse_snapshot(text: str) -> list[FormField]:
         tail = (m.group("text") or "").strip()
 
         if role in _TEXTY_ROLES:
-            label_text = tail or name
+            label_text = (tail or name).strip('"')
             if label_text:
+                # visual caption echoing the widget it names (Workday renders
+                # `- radio "Yes"` followed by `- generic: "Yes"`) — not question
+                # text; letting it onto the trail poisons the next sibling's context
+                if fields and fields[-1].label == label_text:
+                    continue
                 # keep only trail entries at shallower indents (ancestors/siblings above)
                 trail = [(i, t) for i, t in trail if i < indent] + [(indent, label_text)]
             continue
@@ -137,6 +142,10 @@ def parse_snapshot(text: str) -> list[FormField]:
         # sometimes appears in the name/tail — normalize:
         if f.checked is None and re.search(r"\bnot checked\b", f"{name} {tail}".lower()):
             f.checked = False
+        # Workday renders empty dropdowns as buttons captioned "Select One" —
+        # they behave as click-open comboboxes, not nav
+        if role == "button" and "select one" in f"{name} {tail}".lower():
+            f.role = "combobox"
         if role == "option":
             # attach to the most recent combobox/listbox field
             for prev in reversed(fields):

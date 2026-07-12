@@ -35,6 +35,13 @@ def normalize(label: str) -> str:
 
 
 RULES: list[Rule] = [
+    # --- traps (must outrank everything) --------------------------------------
+    # Workday anti-bot honeypot: "Enter website. This input is for robots only,
+    # do not enter if you're human." Filling it flags the session.
+    Rule("honeypot", "skip", (r"for robots only", r"do not (enter|fill)")),
+    # Workday multiselect chips ("1 items selected" listbox) — already-committed
+    # values; touching them deletes chips
+    Rule("selected_chips", "skip", (r"^\d* ?items? selected$",)),
     # --- identity -----------------------------------------------------------
     Rule("first_name", "identity", (r"^(legal )?first name", r"\bgiven name\b", r"^preferred first name")),
     Rule("last_name", "identity", (r"^(legal )?last name", r"\bfamily name\b", r"\bsurname\b")),
@@ -127,6 +134,7 @@ RULES: list[Rule] = [
     Rule("worked_here_before", "employment", (
         r"(previously|ever|before).{0,30}(worked|employed)", r"former (employee|associate)",
         r"(currently|have you).{0,20}employed (by|with|at)",
+        r"worked (for|at|with|here).{0,40}before",
     )),
     Rule("referred_by_employee", "employment", (r"referred (to this position )?by", r"know anyone (at|who works)", r"friends or family.{0,20}working")),
     Rule("relatives_employed", "employment", (r"relative|family member",)),
