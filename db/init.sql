@@ -178,6 +178,14 @@ CREATE TABLE user_jobs (
 );
 CREATE INDEX ix_user_jobs_job ON user_jobs(job_id);
 
+-- Brave Search query budget: one row per calendar month, incremented per billed
+-- API request by search/usage.py (also created there via IF NOT EXISTS for
+-- databases predating this file).
+CREATE TABLE IF NOT EXISTS search_api_usage (
+    month   date PRIMARY KEY,
+    queries int  NOT NULL DEFAULT 0
+);
+
 -- ===================== resume files (MinIO artifacts) =====================
 CREATE TABLE resume_assets (
     id           uuid PRIMARY KEY DEFAULT gen_random_uuid(),
