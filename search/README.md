@@ -58,9 +58,19 @@ For Airflow, call the same command in a BashOperator; exit code 2/3 fails the ta
 ## Tests
 
 ```sh
-DB_PORT=25432 uv run pytest tests/
+uv run pytest tests/            # expects postgres on 15432 (docker compose up -d postgres)
 ```
 
-Integration tests need live Postgres with the current `db/init.sql` schema
-(they skip when unreachable). The Brave API is always faked — tests never spend
-queries.
+Integration tests need Postgres with the current `db/init.sql` schema and they
+**TRUNCATE every table** — never point them at a database whose data you care
+about. Safest is a throwaway instance:
+
+```sh
+docker run -d --rm --name search-test-pg -e POSTGRES_USER=admin \
+  -e POSTGRES_PASSWORD=password -e POSTGRES_DB=jobs-db -p 15433:5432 \
+  -v "$PWD/../db/init.sql":/docker-entrypoint-initdb.d/01-init.sql:ro postgres:16-alpine
+DB_PORT=15433 uv run pytest tests/
+docker stop search-test-pg
+```
+
+The Brave API is always faked — tests never spend queries.
