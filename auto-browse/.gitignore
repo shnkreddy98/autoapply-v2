@@ -15,3 +15,6 @@ input/urls.txt
 # recorder corpus + its persistent browser profile (real PII, local only)
 tools/recorder/recordings/
 tools/recorder/.chrome-profile/
+
+# exported tailored resumes (real PII, local only) — tools/export_applications.py
+applications/

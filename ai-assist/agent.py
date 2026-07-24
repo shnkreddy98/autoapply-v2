@@ -59,6 +59,7 @@ class Agent:
         self.result = AgentResult()
         self.running = False
         self.stop_requested = False
+        self.fatal_error: Optional[str] = None
         self.workflow_log: List[str] = []
         self._initial_query: str = ""
 
@@ -97,8 +98,14 @@ class Agent:
                             f"retrying ({attempt + 1}/{max_retries})..."
                         )
                     else:
+                        # 4xx won't fix itself — bad key, bad model, bad payload.
+                        # Flag it so run() aborts instead of looping on it.
                         logger.error(
                             f"API error {response.status_code}: {response.text}"
+                        )
+                        self.fatal_error = (
+                            f"{self.url} returned {response.status_code}: "
+                            f"{response.text[:300]}"
                         )
                         return None
             except (httpx.ReadError, httpx.ConnectError, httpx.ReadTimeout) as e:
@@ -195,6 +202,7 @@ class Agent:
         self.stop_requested = False
         self.running = True
         self.result = AgentResult()
+        self.fatal_error = None
         self._initial_query = query
 
         if not self.messages:
@@ -227,6 +235,12 @@ class Agent:
 
             response = await self._call_llm_with_retry(payload)
             if not response:
+                if self.fatal_error:
+                    logger.error(f"Aborting: {self.fatal_error}")
+                    self.running = False
+                    self.result.success = False
+                    self.result.error = self.fatal_error
+                    return self.result
                 self.messages.append(
                     {"role": "user", "content": "Please continue with the next step."}
                 )

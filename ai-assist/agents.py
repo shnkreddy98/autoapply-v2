@@ -2,9 +2,12 @@ import logging
 
 from agent import Agent
 from env import MODEL
-from models import Resume, TailoredResume
-from prompts import SYSTEM_PROMPT_PARSE, SYSTEM_PROMPT_TAILOR
+from models import QuestionAnswer, Resume, TailoredResume
+from prompts import SYSTEM_PROMPT_ANSWER, SYSTEM_PROMPT_PARSE, SYSTEM_PROMPT_TAILOR
+from textfmt import clean_answer
 from tools import DocumentTools, ReplaceArgs
+
+DEFAULT_MAX_WORDS = 100
 
 logger = logging.getLogger(__name__)
 
@@ -83,6 +86,8 @@ Job description ends here
 Analyze the resume against the job description and create a tailored version using the tools you have available.
 """
         result = await self.run(query, max_iterations=10)
+        if result.output is None:
+            raise RuntimeError(f"tailoring produced no output: {result.error}")
         return result.output
 
 
@@ -114,4 +119,62 @@ Resume ends here
 Parse this resume and extract all fields.
 """
         result = await self.run(query, max_iterations=5)
+        if result.output is None:
+            raise RuntimeError(f"resume parsing produced no output: {result.error}")
         return result.output
+
+
+class ApplicationQuestionAgent(Agent):
+    """
+    Answers a free-text question from a job application form, grounded in the
+    candidate's resume and the job description.
+
+    No tools: one prompt, one structured response. The word cap and the
+    no-em-dash rule are prompted for and then enforced in `clean_answer`,
+    because models routinely overrun both.
+
+    Usage:
+        agent = ApplicationQuestionAgent()
+        answer = await agent.answer(resume_text, jd_text, "Why this role?")
+    """
+
+    def __init__(self, model: str = MODEL):
+        super().__init__(
+            system_prompt=SYSTEM_PROMPT_ANSWER,
+            response_format=QuestionAnswer,
+            model=model,
+            temperature=0.4,
+            max_tokens=1000,
+        )
+
+    async def answer(
+        self,
+        resume_text: str,
+        job_description: str,
+        question: str,
+        max_words: int = DEFAULT_MAX_WORDS,
+    ) -> str:
+        query = f"""Resume starts here
+---
+{resume_text}
+---
+Resume ends here
+
+Job description starts here
+---
+{job_description}
+---
+Job description ends here
+
+Application question starts here
+---
+{question}
+---
+Application question ends here
+
+Answer the application question in at most {max_words} words. Use no em dashes.
+"""
+        result = await self.run(query, max_iterations=3)
+        if result.output is None:
+            raise RuntimeError(f"answering produced no output: {result.error}")
+        return clean_answer(result.output.answer, max_words)

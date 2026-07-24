@@ -112,3 +112,9 @@ def get_gemini_compatible_schema(model: type[BaseModel]) -> dict:
         return node
 
     return resolve(schema)
+
+
+class QuestionAnswer(BaseModel):
+    answer: str = Field(
+        description="First-person answer to the application question, within the stated word limit, containing no em dashes"
+    )

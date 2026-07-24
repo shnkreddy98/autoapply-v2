@@ -6,6 +6,7 @@
     autoapply retry [--all] [--user U]                 # reset today's failed JD fetches + recapture
     autoapply status [JOB] [--user U]                  # pipeline state + scores
     autoapply resume show JOB [--user U] [--out P] [--open]
+    autoapply ask JOB "question" [--words N] [--user U]   # answer -> stdout, count -> stderr
     autoapply apply [JOB ...] [--all] [--today] [--user U] [--model M] [--autosubmit]
                                                        # --all: batch every jd_ready job one by one;
                                                        # --today restricts to jobs added today
@@ -23,6 +24,7 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import json
 import os
 import re
 import subprocess
@@ -334,11 +336,17 @@ def _print_summary(s: dict) -> None:
 def run_tailor_worker() -> int:
     """Drain the tailoring queue via the ai-assist worker (one-shot). Subprocess
     because ai-assist has no build-system; cwd must be ai-assist/ — its env.py
-    loads dev.env relative to CWD."""
+    loads dev.env relative to CWD.
+
+    OPENROUTER_* is stripped: load_dotenv above put *this* package's LLM creds in
+    os.environ, and ai-assist's load_dotenv("dev.env") does not override what is
+    already set — so an inherited key would silently be sent to ai-assist's own
+    LLM_BASE_URL (401 -> every row fails)."""
+    env = {k: v for k, v in os.environ.items() if not k.startswith("OPENROUTER_")}
     proc = subprocess.run(
         ["uv", "run", "python", "worker.py"],
         cwd=AI_ASSIST_DIR,
-        env={**os.environ, "TAILOR_ONCE": "1"},
+        env={**env, "TAILOR_ONCE": "1"},
     )
     return proc.returncode
 
@@ -433,7 +441,8 @@ def cmd_tailor(args) -> int:
             if rc != 0:
                 print(
                     f"tailor worker exited {rc}\n"
-                    "hints: OPENROUTER_API_KEY set (env or ai-assist/dev.env)? "
+                    "hints: OPENROUTER_API_KEY set in ai-assist/dev.env "
+                    "(this package's key is deliberately not inherited)? "
                     "LibreOffice installed (docx->pdf)?",
                     file=sys.stderr,
                 )
@@ -565,6 +574,68 @@ def cmd_resume_show(args) -> int:
     print(path)
     if args.open:
         subprocess.Popen(["xdg-open", path])
+    return 0
+
+
+# ---------------------------------------------------------------------------
+# ask (free-text application questions)
+
+
+def run_answer(user_id: str, job_id: str, question: str, max_words: int) -> dict:
+    """Answer one application question via ai-assist. Subprocess for the same reason
+    as run_tailor_worker: ai-assist has no build-system and its env.py reads dev.env
+    relative to CWD. OPENROUTER_* is stripped for the same reason too — this package's
+    creds/base-url must not leak into ai-assist's own LLM config.
+
+    Returns the parsed JSON reply: {"answer", "word_count"} or {"error"}."""
+    env = {k: v for k, v in os.environ.items() if not k.startswith("OPENROUTER_")}
+    payload = {
+        "user_id": str(user_id),
+        "job_id": str(job_id),
+        "question": question,
+        "max_words": max_words,
+    }
+    proc = subprocess.run(
+        ["uv", "run", "python", "answer_cli.py"],
+        cwd=AI_ASSIST_DIR,
+        env=env,
+        input=json.dumps(payload),
+        capture_output=True,
+        text=True,
+    )
+    line = proc.stdout.strip().splitlines()[-1] if proc.stdout.strip() else ""
+    try:
+        return json.loads(line)
+    except json.JSONDecodeError:
+        return {"error": proc.stderr.strip() or f"ai-assist exited {proc.returncode}"}
+
+
+def cmd_ask(args) -> int:
+    question = args.question
+    if question == "-":
+        question = sys.stdin.read().strip()
+    if not question:
+        raise SystemExit("empty question")
+
+    with _connect() as conn:
+        user_id = resolve_user(conn, args.user)
+        job = resolve_job(conn, args.job)
+        if job["status"] != "jd_ready":
+            raise SystemExit(
+                f"job {_id8(job['job_id'])} is {job['status']}, not jd_ready — "
+                "the JD must be captured first: autoapply tailor"
+            )
+
+    result = run_answer(user_id, job["job_id"], question, args.words)
+    if "error" in result:
+        print(f"ask failed: {result['error']}", file=sys.stderr)
+        return 1
+    print(result["answer"])
+    if not args.quiet:
+        print(
+            f"\n[{result['word_count']}/{args.words} words]",
+            file=sys.stderr,
+        )
     return 0
 
 
@@ -843,6 +914,25 @@ def build_parser() -> argparse.ArgumentParser:
     )
     show.add_argument("--open", action="store_true", help="open with xdg-open")
     show.set_defaults(func=cmd_resume_show)
+
+    ask = sub.add_parser(
+        "ask",
+        help="answer a free-text application question for a job",
+        description="Answers in the candidate's voice from the job's captured JD "
+        "and the user's base resume, via ai-assist (needs OPENROUTER_API_KEY in "
+        "ai-assist/dev.env). Capped at --words, never uses em dashes. The answer "
+        "goes to stdout so it can be piped or copied; the word count goes to stderr.",
+    )
+    ask.add_argument("job", help="job id, id prefix, or URL")
+    ask.add_argument("question", help="the question, or '-' to read it from stdin")
+    ask.add_argument(
+        "--words", type=int, default=100, help="word cap (default 100)"
+    )
+    ask.add_argument("--user", help="user id or email")
+    ask.add_argument(
+        "-q", "--quiet", action="store_true", help="suppress the word-count line"
+    )
+    ask.set_defaults(func=cmd_ask)
 
     profile = sub.add_parser("profile", help="user onboarding + profile inspection")
     profile_sub = profile.add_subparsers(dest="profile_command", required=True)

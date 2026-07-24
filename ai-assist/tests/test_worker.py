@@ -41,7 +41,8 @@ async def test_tailor_success(db, s3, tmp_path):
         pdf = tmp_path / "out.pdf"
         pdf.write_bytes(b"%PDF-1.4 tailored")
         return TailorOutcome(str(pdf), resume_score=65, new_resume_score=82,
-                             job_match_summary="surfaced dbt", cloud="aws")
+                             job_match_summary="surfaced dbt", cloud="aws",
+                             company_name="Acme Corp")
 
     handled = await process_once(db, s3, fake_tailor, str(tmp_path / "scratch"))
     assert handled == tid
@@ -53,6 +54,10 @@ async def test_tailor_success(db, s3, tmp_path):
     assert row["resume_score"] == 65 and row["new_resume_score"] == 82
     assert row["cloud"] == "aws"
     assert row["tailored_asset_id"] is not None
+
+    with db.cursor() as cur:  # employer name backfilled onto the shared job row
+        cur.execute("SELECT company FROM jobs WHERE job_id = %s", (job_id,))
+        assert cur.fetchone()["company"] == "Acme Corp"
 
     tkey = keys.tailored_resume_key(user_id, job_id, "pdf")
     assert s3.get_bytes(tkey) == b"%PDF-1.4 tailored"

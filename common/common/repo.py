@@ -90,6 +90,25 @@ def get_or_create_job(
     return job_id
 
 
+def set_job_company(conn: psycopg.Connection, job_id: str, company: str | None) -> None:
+    """Fill in `jobs.company` if it is still blank. The capture path never learns the
+    employer name (it only has the URL); the tailor agent reads it out of the JD, so
+    the first tailoring of a job backfills it for everyone. Existing values win — a
+    second user's tailoring must not overwrite what is already there.
+
+    Workers connect as the table owner, which is why this UPDATE is allowed: `jobs`
+    has no UPDATE policy (see db/init.sql), so the RLS-bound API role cannot do it."""
+    if not company or not company.strip():
+        return
+    with conn.cursor() as cur:
+        cur.execute(
+            "UPDATE jobs SET company = %s, updated_at = now() "
+            "WHERE job_id = %s AND (company IS NULL OR company = '')",
+            (company.strip(), job_id),
+        )
+    conn.commit()
+
+
 def add_job_for_user(
     conn: psycopg.Connection,
     user_id: str,

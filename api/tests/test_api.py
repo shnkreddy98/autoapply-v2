@@ -190,3 +190,117 @@ def test_mutations_audited(db, client_factory):
     assert "auth.login" in actions
     assert "POST /jobs" in actions
     assert "PUT /profile" in actions
+
+
+# ---------------------------------------------------------------------------
+# /jobs/{id}/answer — proxy to ai-assist (upstream stubbed; no LLM, no network)
+
+
+class _FakeResponse:
+    def __init__(self, status_code, payload=None, text=""):
+        self.status_code = status_code
+        self._payload = payload
+        self.text = text
+        self.headers = {"content-type": "application/json"} if payload is not None else {}
+
+    def json(self):
+        return self._payload
+
+
+def _stub_ai_assist(monkeypatch, response, captured=None):
+    """Replace the httpx client the route builds with one returning `response`."""
+    import httpx
+
+    from api import routes
+
+    class FakeClient:
+        def __init__(self, *a, **kw):
+            pass
+
+        async def __aenter__(self):
+            return self
+
+        async def __aexit__(self, *a):
+            return False
+
+        async def post(self, url, json=None, headers=None):
+            if captured is not None:
+                captured.update(url=url, json=json, headers=headers)
+            if isinstance(response, Exception):
+                raise response
+            return response
+
+    monkeypatch.setattr(routes.httpx, "AsyncClient", FakeClient)
+    return httpx
+
+
+def test_answer_requires_auth(client_factory, monkeypatch):
+    anon = client_factory()
+    r = anon.post(
+        "/jobs/00000000-0000-0000-0000-000000000000/answer", json={"question": "Why?"}
+    )
+    assert r.status_code == 401
+
+
+def test_answer_404s_for_a_job_the_user_does_not_own(db, client_factory, monkeypatch):
+    a = client_factory("a@test.dev")
+    b = client_factory("b@test.dev")
+    job_id = b.post("/jobs", json={"urls": ["https://example.com/jobs/private"]}).json()[0]["job_id"]
+    _stub_ai_assist(monkeypatch, _FakeResponse(200, {"answer": "x", "word_count": 1, "max_words": 100}))
+
+    assert a.post(f"/jobs/{job_id}/answer", json={"question": "Why?"}).status_code == 404
+
+
+def test_answer_forwards_identity_and_returns_upstream_body(client_factory, monkeypatch):
+    c = client_factory("a@test.dev")
+    user_id = _uid(c)
+    job_id = c.post("/jobs", json={"urls": ["https://example.com/jobs/1"]}).json()[0]["job_id"]
+    seen = {}
+    _stub_ai_assist(
+        monkeypatch,
+        _FakeResponse(200, {"answer": "I built it.", "word_count": 3, "max_words": 60}),
+        seen,
+    )
+    monkeypatch.setenv("AI_ASSIST_TOKEN", "tok")
+
+    r = c.post(f"/jobs/{job_id}/answer", json={"question": "Why you?", "max_words": 60})
+    assert r.status_code == 200
+    assert r.json() == {"answer": "I built it.", "word_count": 3, "max_words": 60}
+
+    # the caller never supplies user_id — it comes from the session
+    assert seen["json"] == {
+        "user_id": user_id,
+        "job_id": job_id,
+        "question": "Why you?",
+        "max_words": 60,
+    }
+    assert seen["headers"]["Authorization"] == "Bearer tok"
+
+
+def test_answer_passes_through_upstream_4xx(client_factory, monkeypatch):
+    c = client_factory("a@test.dev")
+    job_id = c.post("/jobs", json={"urls": ["https://example.com/jobs/1"]}).json()[0]["job_id"]
+    _stub_ai_assist(monkeypatch, _FakeResponse(409, {"detail": "no captured JD for this job yet"}))
+
+    r = c.post(f"/jobs/{job_id}/answer", json={"question": "Why?"})
+    assert r.status_code == 409
+    assert "no captured JD" in r.json()["detail"]
+
+
+def test_answer_maps_upstream_5xx_to_502(client_factory, monkeypatch):
+    c = client_factory("a@test.dev")
+    job_id = c.post("/jobs", json={"urls": ["https://example.com/jobs/1"]}).json()[0]["job_id"]
+    _stub_ai_assist(monkeypatch, _FakeResponse(500, None, text="boom"))
+
+    assert c.post(f"/jobs/{job_id}/answer", json={"question": "Why?"}).status_code == 502
+
+
+def test_answer_503_when_ai_assist_is_down(client_factory, monkeypatch):
+    c = client_factory("a@test.dev")
+    job_id = c.post("/jobs", json={"urls": ["https://example.com/jobs/1"]}).json()[0]["job_id"]
+    httpx = _stub_ai_assist(monkeypatch, None)
+    _stub_ai_assist(monkeypatch, httpx.ConnectError("connection refused"))
+
+    r = c.post(f"/jobs/{job_id}/answer", json={"question": "Why?"})
+    assert r.status_code == 503
+    assert "ai-assist unreachable" in r.json()["detail"]

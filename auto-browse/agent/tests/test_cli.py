@@ -1,6 +1,7 @@
 """Unit tests for the autoapply CLI core functions (cli/main.py). DB-backed tests
 use the throwaway jobs_test DB via the shared `db` fixture; skip when infra is down."""
 
+import json
 import subprocess
 import uuid
 
@@ -405,6 +406,8 @@ def test_run_tailor_worker_wiring(monkeypatch):
         ["status", "--today"],
         ["status", "abcd1234"],
         ["resume", "show", "abcd1234", "--out", "/tmp/r.pdf", "--open"],
+        ["ask", "abcd1234", "Why this role?"],
+        ["ask", "abcd1234", "-", "--words", "50", "--user", "u@x.dev", "-q"],
         ["apply", "abcd1234", "https://ex.dev/j/2", "--model", "m"],
         ["apply", "abcd1234", "--autosubmit"],
         ["apply", "--today", "--autosubmit"],
@@ -615,3 +618,97 @@ def test_cmd_continue_guards_and_run(db, monkeypatch):
 def test_parser_rejects_bad_status():
     with pytest.raises(SystemExit):
         cli.build_parser().parse_args(["jobs", "list", "--status", "bogus"])
+
+
+# ---------------------------------------------------------------------------
+# ask
+
+
+def test_run_answer_wiring(monkeypatch):
+    """Subprocess into ai-assist with the request on stdin, and OPENROUTER_* stripped:
+    this package's base-url/key must not leak into ai-assist's own LLM config."""
+    calls = {}
+
+    def fake_run(cmd, **kw):
+        calls["cmd"] = cmd
+        calls["kw"] = kw
+        return subprocess.CompletedProcess(
+            cmd, 0, stdout='{"answer": "I built it.", "word_count": 3}', stderr=""
+        )
+
+    monkeypatch.setenv("OPENROUTER_BASE_URL", "https://pod.runpod.net/v1")
+    monkeypatch.setenv("OPENROUTER_API_KEY", "leaky")
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    out = cli.run_answer("u-1", "j-1", "Why?", 100)
+    assert out == {"answer": "I built it.", "word_count": 3}
+    assert calls["cmd"] == ["uv", "run", "python", "answer_cli.py"]
+    assert str(calls["kw"]["cwd"]).endswith("ai-assist")
+    assert not [k for k in calls["kw"]["env"] if k.startswith("OPENROUTER_")]
+    assert json.loads(calls["kw"]["input"]) == {
+        "user_id": "u-1", "job_id": "j-1", "question": "Why?", "max_words": 100,
+    }
+
+
+def test_run_answer_reports_error_when_ai_assist_prints_nothing(monkeypatch):
+    def fake_run(cmd, **kw):
+        return subprocess.CompletedProcess(cmd, 1, stdout="", stderr="ModuleNotFoundError: qa")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    assert "ModuleNotFoundError" in cli.run_answer("u", "j", "Why?", 100)["error"]
+
+
+def test_run_answer_ignores_log_lines_before_the_json(monkeypatch):
+    """ai-assist logs to stdout; only the last line is the payload."""
+
+    def fake_run(cmd, **kw):
+        return subprocess.CompletedProcess(
+            cmd, 0, stdout='INFO:agent:Iteration 1/3\n{"answer": "Yes.", "word_count": 1}',
+            stderr="",
+        )
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    assert cli.run_answer("u", "j", "Why?", 100)["answer"] == "Yes."
+
+
+def test_ask_requires_jd_ready(db, monkeypatch):
+    uid = _mk_user(db)
+    job_id = repo.add_job_for_user(db, uid, "https://ex.dev/j/ask-pending")
+    monkeypatch.setattr(cli, "_connect", lambda: db)
+    monkeypatch.setattr(cli, "run_answer", lambda *a: pytest.fail("must not reach ai-assist"))
+
+    args = cli.build_parser().parse_args(["ask", str(job_id), "Why?"])
+    with pytest.raises(SystemExit, match="not jd_ready"):
+        cli.cmd_ask(args)
+
+
+def test_ask_prints_answer_to_stdout(db, monkeypatch, capsys):
+    uid = _mk_user(db)
+    job_id = repo.add_job_for_user(db, uid, "https://ex.dev/j/ask-ready")
+    with db.cursor() as cur:
+        cur.execute("UPDATE jobs SET status = 'jd_ready' WHERE job_id = %s", (job_id,))
+    db.commit()
+    monkeypatch.setattr(cli, "_connect", lambda: db)
+    monkeypatch.setattr(
+        cli, "run_answer", lambda *a: {"answer": "I built it.", "word_count": 3}
+    )
+
+    args = cli.build_parser().parse_args(["ask", str(job_id), "Why?"])
+    assert cli.cmd_ask(args) == 0
+    out = capsys.readouterr()
+    assert out.out.strip() == "I built it."     # answer alone on stdout, pipeable
+    assert "3/100 words" in out.err
+
+
+def test_ask_returns_1_on_ai_assist_error(db, monkeypatch, capsys):
+    uid = _mk_user(db)
+    job_id = repo.add_job_for_user(db, uid, "https://ex.dev/j/ask-err")
+    with db.cursor() as cur:
+        cur.execute("UPDATE jobs SET status = 'jd_ready' WHERE job_id = %s", (job_id,))
+    db.commit()
+    monkeypatch.setattr(cli, "_connect", lambda: db)
+    monkeypatch.setattr(cli, "run_answer", lambda *a: {"error": "no captured JD"})
+
+    args = cli.build_parser().parse_args(["ask", str(job_id), "Why?"])
+    assert cli.cmd_ask(args) == 1
+    assert "no captured JD" in capsys.readouterr().err

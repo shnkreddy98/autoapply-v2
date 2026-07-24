@@ -6,9 +6,11 @@ login_password) have no model field and can never serialize."""
 from __future__ import annotations
 
 import functools
+import os
 from datetime import date, datetime
 from uuid import UUID
 
+import httpx
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
 
@@ -18,6 +20,8 @@ from common import repo
 from common import storage as storagemod
 
 router = APIRouter()
+
+_AI_ASSIST_URL = os.getenv("AI_ASSIST_URL", "http://127.0.0.1:8100").rstrip("/")
 
 
 @functools.lru_cache(maxsize=1)
@@ -61,6 +65,17 @@ class TailoringOut(BaseModel):
 class ResumeLink(BaseModel):
     url: str
     expires_in: int
+
+
+class AnswerIn(BaseModel):
+    question: str = Field(min_length=1, max_length=2000)
+    max_words: int = Field(default=100, ge=10, le=1000)
+
+
+class AnswerOut(BaseModel):
+    answer: str
+    word_count: int
+    max_words: int
 
 
 class ApplicationOut(BaseModel):
@@ -240,6 +255,40 @@ def get_resume(job_id: UUID, user: dict = Depends(get_current_user)):
         asset = repo.get_resume_asset(conn, t["tailored_asset_id"])
     expires = 300
     return {"url": _storage().presigned_get(asset["s3_key"], expires), "expires_in": expires}
+
+
+@router.post("/jobs/{job_id}/answer", response_model=AnswerOut)
+async def answer_question(
+    job_id: UUID, body: AnswerIn, user: dict = Depends(get_current_user)
+):
+    """Answer a free-text application question from this job's JD + the user's resume.
+
+    Proxied to the ai-assist service, which owns the LLM config. Ownership is
+    checked here first so a bad job_id never reaches it.
+    """
+    with db.user_conn(user["user_id"]) as conn:
+        _owned_job(conn, user["user_id"], job_id)
+
+    headers = {}
+    if token := os.getenv("AI_ASSIST_TOKEN"):
+        headers["Authorization"] = f"Bearer {token}"
+    payload = {
+        "user_id": str(user["user_id"]),
+        "job_id": str(job_id),
+        "question": body.question,
+        "max_words": body.max_words,
+    }
+    try:
+        async with httpx.AsyncClient(timeout=180.0) as client:
+            r = await client.post(f"{_AI_ASSIST_URL}/answer", json=payload, headers=headers)
+    except httpx.HTTPError as exc:
+        raise HTTPException(503, f"ai-assist unreachable: {exc}") from exc
+    if r.status_code != 200:
+        # 4xx from ai-assist is about this request (no JD captured, no resume);
+        # pass it through. Anything else is an upstream fault, not the caller's.
+        detail = r.json().get("detail", r.text) if r.headers.get("content-type", "").startswith("application/json") else r.text
+        raise HTTPException(r.status_code if 400 <= r.status_code < 500 else 502, detail)
+    return r.json()
 
 
 # ---------------------------------------------------------------------------
