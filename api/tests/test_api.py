@@ -265,7 +265,11 @@ def test_answer_forwards_identity_and_returns_upstream_body(client_factory, monk
 
     r = c.post(f"/jobs/{job_id}/answer", json={"question": "Why you?", "max_words": 60})
     assert r.status_code == 200
-    assert r.json() == {"answer": "I built it.", "word_count": 3, "max_words": 60}
+    # base_label is null here because this stubbed upstream predates it; the field is
+    # optional precisely so an older ai-assist still validates against the model
+    assert r.json() == {
+        "answer": "I built it.", "word_count": 3, "max_words": 60, "base_label": None,
+    }
 
     # the caller never supplies user_id — it comes from the session
     assert seen["json"] == {
@@ -273,8 +277,30 @@ def test_answer_forwards_identity_and_returns_upstream_body(client_factory, monk
         "job_id": job_id,
         "question": "Why you?",
         "max_words": 60,
+        "label": None,  # unset -> ai-assist follows the job's own tailoring base
     }
     assert seen["headers"]["Authorization"] == "Bearer tok"
+
+
+def test_answer_forwards_the_label_and_returns_the_base_used(client_factory, monkeypatch):
+    """The role base has to survive the proxy in both directions, or an API caller
+    cannot pick the resume and cannot tell which one answered."""
+    c = client_factory("labels@test.dev")
+    job_id = c.post("/jobs", json={"urls": ["https://example.com/jobs/lbl"]}).json()[0]["job_id"]
+    seen = {}
+    _stub_ai_assist(
+        monkeypatch,
+        _FakeResponse(
+            200,
+            {"answer": "RAG.", "word_count": 1, "max_words": 100, "base_label": "aiml"},
+        ),
+        seen,
+    )
+
+    r = c.post(f"/jobs/{job_id}/answer", json={"question": "RAG?", "label": "aiml"})
+    assert r.status_code == 200
+    assert seen["json"]["label"] == "aiml"
+    assert r.json()["base_label"] == "aiml"
 
 
 def test_answer_passes_through_upstream_4xx(client_factory, monkeypatch):
