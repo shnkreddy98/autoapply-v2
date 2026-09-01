@@ -42,8 +42,12 @@ def resume_text(conn, storage, user_id: str) -> str:
     Deliberately the base and not the tailored PDF: the tailored artifact is a
     PDF (needs parsing back out) and differs from the base by two replacements,
     so it adds no facts an answer could be grounded in.
+
+    Extraction goes through `utils.docx_text`, the same walk the tailoring path
+    uses. Reading `doc.paragraphs` instead drops every table, which in this resume
+    template is all of the education and every employer/title/date.
     """
-    from docx import Document
+    from utils import docx_text
 
     asset = repo.get_base_asset(conn, user_id)
     if not asset:
@@ -52,8 +56,7 @@ def resume_text(conn, storage, user_id: str) -> str:
     try:
         path = work / "base.docx"
         storage.get_file(asset["s3_key"], str(path))
-        doc = Document(str(path))
-        return "\n".join(p.text for p in doc.paragraphs if p.text.strip())
+        return docx_text(str(path))
     finally:
         shutil.rmtree(work, ignore_errors=True)
 

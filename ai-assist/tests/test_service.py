@@ -11,12 +11,21 @@ import service
 from common import keys, repo
 
 
-def _docx_bytes(tmp_path, lines):
+def _docx_bytes(tmp_path, lines, table_rows=()):
+    """A resume .docx. `table_rows` go into a table, like the real template, which
+    keeps employers, titles, dates and the whole education block in tables."""
     from docx import Document
 
     doc = Document()
     for line in lines:
         doc.add_paragraph(line)
+    if table_rows:
+        table = doc.add_table(rows=0, cols=len(table_rows[0]))
+        for row in table_rows:
+            cells = table.add_row().cells
+            for cell, text in zip(cells, row):
+                cell.text = text
+    tmp_path.mkdir(parents=True, exist_ok=True)
     path = tmp_path / "base.docx"
     doc.save(str(path))
     return path.read_bytes()
@@ -168,3 +177,40 @@ def test_max_words_out_of_range_is_422(db, s3, tmp_path, client, monkeypatch):
         },
     )
     assert r.status_code == 422
+
+
+def test_resume_text_includes_table_content(db, s3, tmp_path, client, monkeypatch):
+    """Education and employment live in tables in the real template. Reading only
+    `doc.paragraphs` dropped them, and the model answered that the resume has no
+    education section — accurately, for the text it was handed."""
+    with db.cursor() as cur:
+        cur.execute(
+            "INSERT INTO users (email) VALUES (%s) RETURNING user_id", ("t@example.com",)
+        )
+        user_id = cur.fetchone()["user_id"]
+    db.commit()
+    key = keys.base_resume_key(user_id, variant="docx")
+    s3.put_bytes(
+        key,
+        _docx_bytes(
+            tmp_path,
+            ["Jane Dev", "Education"],
+            table_rows=[("Master's Degree", "Data Analytics", "San Jose State University")],
+        ),
+    )
+    repo.insert_resume_asset(db, user_id, "base", key, variant="docx")
+    job_id = repo.add_job_for_user(db, user_id, f"https://example.com/jobs/{uuid.uuid4()}")
+    s3.put_bytes(keys.jd_key(job_id), b"# Job\nNeed a degree.", "text/markdown")
+    seen = {}
+    _stub_agent(monkeypatch, seen)
+
+    r = client.post(
+        "/answer",
+        json={"user_id": str(user_id), "job_id": str(job_id), "question": "Degree?"},
+    )
+    assert r.status_code == 200, r.text
+    assert "San Jose State University" in seen["resume"]
+    # order preserved, so the row still reads as sitting under its heading
+    assert seen["resume"].index("Education") < seen["resume"].index("San Jose State")
+
+
