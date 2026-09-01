@@ -42,13 +42,24 @@ def _seed(db, s3, tmp_path, *, with_jd=True, with_resume=True):
         user_id = cur.fetchone()["user_id"]
     db.commit()
     if with_resume:
-        key = keys.base_resume_key(user_id)
+        key = keys.base_resume_key(user_id, variant="docx")
         s3.put_bytes(key, _docx_bytes(tmp_path, ["Jane Dev", "Built dbt pipelines"]))
-        repo.insert_resume_asset(db, user_id, "base", key, variant="default")
+        # variant matters: answering parses the docx, so the pdf base is not a
+        # substitute and the lookup pins the format
+        repo.insert_resume_asset(db, user_id, "base", key, variant="docx")
     job_id = repo.add_job_for_user(db, user_id, f"https://example.com/jobs/{uuid.uuid4()}")
     if with_jd:
         s3.put_bytes(keys.jd_key(job_id), b"# Job\nNeed dbt + Airflow.", "text/markdown")
     return user_id, job_id
+
+
+def _add_labelled_base(db, s3, tmp_path, user_id, label, lines):
+    """A role base resume, as `autoapply resume add --label` would create it."""
+    key = keys.base_resume_key(user_id, variant="docx", ext="docx", label=label)
+    s3.put_bytes(key, _docx_bytes(tmp_path / label, lines))
+    return repo.insert_resume_asset(
+        db, user_id, "base", key, variant="docx", label=label
+    )
 
 
 @pytest.fixture
@@ -103,7 +114,12 @@ def test_max_words_is_forwarded_and_echoed(db, s3, tmp_path, client, monkeypatch
     )
     assert r.status_code == 200
     assert seen["max_words"] == 15
-    assert r.json() == {"answer": "one two three four five.", "word_count": 5, "max_words": 15}
+    assert r.json() == {
+        "answer": "one two three four five.",
+        "word_count": 5,
+        "max_words": 15,
+        "base_label": "default",
+    }
 
 
 def test_answer_rejects_job_the_user_does_not_own(db, s3, tmp_path, client, monkeypatch):
@@ -214,3 +230,115 @@ def test_resume_text_includes_table_content(db, s3, tmp_path, client, monkeypatc
     assert seen["resume"].index("Education") < seen["resume"].index("San Jose State")
 
 
+# ---------------------------------------------------------------------------
+# which base resume grounds the answer
+
+
+def test_answer_follows_the_base_the_job_was_tailored_from(
+    db, s3, tmp_path, client, monkeypatch
+):
+    """The whole point of role bases: an AI/ML posting must be answered from the
+    aiml resume. Answering from the default one made the model deny experience
+    ("no RAG experience") that is only listed on the role base."""
+    user_id, job_id = _seed(db, s3, tmp_path)
+    aiml = _add_labelled_base(
+        db, s3, tmp_path, user_id, "aiml", ["Jane Dev", "Shipped a RAG pipeline"]
+    )
+    repo.enqueue_tailoring(db, user_id, job_id, aiml)
+    seen = {}
+    _stub_agent(monkeypatch, seen)
+
+    r = client.post(
+        "/answer",
+        json={"user_id": str(user_id), "job_id": str(job_id), "question": "RAG?"},
+    )
+    assert r.status_code == 200, r.text
+    assert "RAG pipeline" in seen["resume"]
+    assert "dbt pipelines" not in seen["resume"]
+    assert r.json()["base_label"] == "aiml"
+
+
+def test_explicit_label_overrides_the_job(db, s3, tmp_path, client, monkeypatch):
+    user_id, job_id = _seed(db, s3, tmp_path)
+    aiml = _add_labelled_base(
+        db, s3, tmp_path, user_id, "aiml", ["Jane Dev", "Shipped a RAG pipeline"]
+    )
+    repo.enqueue_tailoring(db, user_id, job_id, aiml)
+    _add_labelled_base(db, s3, tmp_path, user_id, "de", ["Jane Dev", "Owned Airflow DAGs"])
+    seen = {}
+    _stub_agent(monkeypatch, seen)
+
+    r = client.post(
+        "/answer",
+        json={
+            "user_id": str(user_id),
+            "job_id": str(job_id),
+            "question": "Why?",
+            "label": "de",
+        },
+    )
+    assert r.status_code == 200, r.text
+    assert "Airflow DAGs" in seen["resume"]
+    assert r.json()["base_label"] == "de"
+
+
+def test_label_default_forces_the_unlabelled_base(db, s3, tmp_path, client, monkeypatch):
+    user_id, job_id = _seed(db, s3, tmp_path)
+    aiml = _add_labelled_base(
+        db, s3, tmp_path, user_id, "aiml", ["Jane Dev", "Shipped a RAG pipeline"]
+    )
+    repo.enqueue_tailoring(db, user_id, job_id, aiml)
+    seen = {}
+    _stub_agent(monkeypatch, seen)
+
+    r = client.post(
+        "/answer",
+        json={
+            "user_id": str(user_id),
+            "job_id": str(job_id),
+            "question": "Why?",
+            "label": "default",
+        },
+    )
+    assert r.status_code == 200, r.text
+    assert "dbt pipelines" in seen["resume"]
+    assert r.json()["base_label"] == "default"
+
+
+def test_unknown_label_falls_back_to_the_default_base(
+    db, s3, tmp_path, client, monkeypatch
+):
+    """A label with nothing uploaded still answers — from the default base — and
+    says so, rather than 404ing mid-application."""
+    user_id, job_id = _seed(db, s3, tmp_path)
+    seen = {}
+    _stub_agent(monkeypatch, seen)
+
+    r = client.post(
+        "/answer",
+        json={
+            "user_id": str(user_id),
+            "job_id": str(job_id),
+            "question": "Why?",
+            "label": "nosuch",
+        },
+    )
+    assert r.status_code == 200, r.text
+    assert "dbt pipelines" in seen["resume"]
+    assert r.json()["base_label"] == "default"
+
+
+def test_untailored_job_uses_the_default_base(db, s3, tmp_path, client, monkeypatch):
+    """No tailoring row -> nothing to follow -> the default base, as before labels."""
+    user_id, job_id = _seed(db, s3, tmp_path)
+    _add_labelled_base(db, s3, tmp_path, user_id, "aiml", ["Jane Dev", "RAG pipeline"])
+    seen = {}
+    _stub_agent(monkeypatch, seen)
+
+    r = client.post(
+        "/answer",
+        json={"user_id": str(user_id), "job_id": str(job_id), "question": "Why?"},
+    )
+    assert r.status_code == 200, r.text
+    assert "dbt pipelines" in seen["resume"]
+    assert r.json()["base_label"] == "default"

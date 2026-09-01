@@ -59,12 +59,16 @@ class AnswerIn(BaseModel):
     job_id: UUID
     question: str = Field(min_length=1, max_length=2000)
     max_words: int = Field(default=qa.MAX_WORDS_DEFAULT, ge=10, le=MAX_WORDS_LIMIT)
+    # which base resume to answer from; omitted -> the base this job was tailored
+    # from, so a role-specific resume's experience isn't dropped (qa.choose_base_asset)
+    label: str | None = Field(default=None, max_length=64)
 
 
 class AnswerOut(BaseModel):
     answer: str
     word_count: int
     max_words: int
+    base_label: str
 
 
 app = FastAPI(title="ai-assist", description="Internal resume/LLM helpers")
@@ -84,7 +88,9 @@ async def answer(body: AnswerIn) -> AnswerOut:
     try:
         # connection released before the LLM call — it can run for minutes
         with db.get_conn() as conn:
-            resume, jd = qa.load_context(conn, _storage(), user_id, job_id)
+            resume, jd, base_label = qa.load_context(
+                conn, _storage(), user_id, job_id, body.label
+            )
     except qa.NotOwner:
         raise HTTPException(404, "no such job for this user")
     except qa.MissingResume:
@@ -94,7 +100,12 @@ async def answer(body: AnswerIn) -> AnswerOut:
 
     text = await qa.run_agent(resume, jd, body.question, body.max_words)
     log.info(
-        "answered job=%s user=%s words=%s/%s",
-        job_id, user_id, word_count(text), body.max_words,
+        "answered job=%s user=%s words=%s/%s base=%s",
+        job_id, user_id, word_count(text), body.max_words, base_label,
     )
-    return AnswerOut(answer=text, word_count=word_count(text), max_words=body.max_words)
+    return AnswerOut(
+        answer=text,
+        word_count=word_count(text),
+        max_words=body.max_words,
+        base_label=base_label,
+    )

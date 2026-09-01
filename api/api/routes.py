@@ -70,12 +70,17 @@ class ResumeLink(BaseModel):
 class AnswerIn(BaseModel):
     question: str = Field(min_length=1, max_length=2000)
     max_words: int = Field(default=100, ge=10, le=1000)
+    # base resume to answer from; omitted -> the one this job was tailored from
+    label: str | None = Field(default=None, max_length=64)
 
 
 class AnswerOut(BaseModel):
     answer: str
     word_count: int
     max_words: int
+    # which base resume grounded the answer. Optional so an ai-assist that predates
+    # labelled bases still validates against this model.
+    base_label: str | None = None
 
 
 class ApplicationOut(BaseModel):
@@ -277,6 +282,7 @@ async def answer_question(
         "job_id": str(job_id),
         "question": body.question,
         "max_words": body.max_words,
+        "label": body.label,
     }
     try:
         async with httpx.AsyncClient(timeout=180.0) as client:

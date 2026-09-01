@@ -17,6 +17,11 @@ from common import keys, repo
 
 MAX_WORDS_DEFAULT = 100
 
+# Label standing for "the unlabelled default base resume". Callers pass it to force
+# the default when the job's own tailoring used a role base. Same spelling as the
+# export tool's folder for those resumes, so one word means one thing everywhere.
+DEFAULT_LABEL = "default"
+
 
 class NotOwner(Exception):
     """The user does not own this job."""
@@ -36,8 +41,39 @@ def check_owner(conn, user_id: str, job_id: str) -> None:
         raise NotOwner(f"user {user_id} does not own job {job_id}")
 
 
-def resume_text(conn, storage, user_id: str) -> str:
-    """Plain text of the user's base resume .docx.
+def choose_base_asset(
+    conn, user_id: str, job_id: str, label: str | None = None
+) -> tuple[dict, str]:
+    """The base .docx to ground answers in, and the label it came from.
+
+    `label=None` follows the job: whichever base its tailoring was made from
+    (`autoapply tailor --label aiml` -> the aiml base). Without this an answer for
+    an AI/ML posting is written from the default resume and denies experience that
+    is only listed on the role base. `label=DEFAULT_LABEL` forces the unlabelled
+    base; any other value forces that role's base.
+
+    A named label with no base uploaded falls back to the default rather than
+    failing — a grounded-but-generic answer beats no answer, and the returned label
+    tells the caller which one was actually used.
+
+    Pinned to the docx variant because this parses it as a docx; the pdf base is
+    the upload artifact, not a text source.
+    """
+    if label is None:
+        label = repo.base_label_for_job(conn, user_id, job_id)
+    if label == DEFAULT_LABEL:
+        label = None
+    asset = repo.get_base_asset(conn, user_id, variant="docx", label=label)
+    if asset is None and label is not None:
+        asset = repo.get_base_asset(conn, user_id, variant="docx")
+        label = None
+    if asset is None:
+        raise MissingResume(f"no base resume on file for user {user_id}")
+    return asset, label or DEFAULT_LABEL
+
+
+def resume_text(storage, asset: dict) -> str:
+    """Plain text of a base resume .docx asset.
 
     Deliberately the base and not the tailored PDF: the tailored artifact is a
     PDF (needs parsing back out) and differs from the base by two replacements,
@@ -49,9 +85,6 @@ def resume_text(conn, storage, user_id: str) -> str:
     """
     from utils import docx_text
 
-    asset = repo.get_base_asset(conn, user_id)
-    if not asset:
-        raise MissingResume(f"no base resume on file for user {user_id}")
     work = Path(tempfile.mkdtemp(prefix="answer-"))
     try:
         path = work / "base.docx"
@@ -78,12 +111,18 @@ async def run_agent(resume: str, jd: str, question: str, max_words: int) -> str:
     )
 
 
-def load_context(conn, storage, user_id: str, job_id: str) -> tuple[str, str]:
-    """(resume_text, jd_text) for the pair, after an ownership check. Kept separate
-    from `run_agent` so callers can release the connection before the LLM call,
-    which can run for minutes."""
+def load_context(
+    conn, storage, user_id: str, job_id: str, label: str | None = None
+) -> tuple[str, str, str]:
+    """(resume_text, jd_text, base_label) for the pair, after an ownership check.
+
+    Kept separate from `run_agent` so callers can release the connection before the
+    LLM call, which can run for minutes. `label` picks the base resume; see
+    `choose_base_asset`. The returned label is the base actually used, so the caller
+    can report which resume the answer was grounded in."""
     check_owner(conn, user_id, job_id)
-    return resume_text(conn, storage, user_id), jd_text(storage, job_id)
+    asset, used = choose_base_asset(conn, user_id, job_id, label)
+    return resume_text(storage, asset), jd_text(storage, job_id), used
 
 
 async def answer(
@@ -93,7 +132,8 @@ async def answer(
     job_id: str,
     question: str,
     max_words: int = MAX_WORDS_DEFAULT,
+    label: str | None = None,
 ) -> str:
     """Convenience for short-lived callers (the CLI) that hold their own connection."""
-    resume, jd = load_context(conn, storage, user_id, job_id)
+    resume, jd, _ = load_context(conn, storage, user_id, job_id, label)
     return await run_agent(resume, jd, question, max_words)

@@ -721,7 +721,25 @@ def test_run_answer_wiring(monkeypatch):
     assert not [k for k in calls["kw"]["env"] if k.startswith("OPENROUTER_")]
     assert json.loads(calls["kw"]["input"]) == {
         "user_id": "u-1", "job_id": "j-1", "question": "Why?", "max_words": 100,
+        "label": None,   # null -> ai-assist follows the job's own tailoring base
     }
+
+
+def test_run_answer_forwards_the_label(monkeypatch):
+    """--label has to reach ai-assist: it decides which base resume grounds the
+    answer, and the wrong one makes the model deny experience the user has."""
+    calls = {}
+
+    def fake_run(cmd, **kw):
+        calls["kw"] = kw
+        return subprocess.CompletedProcess(
+            cmd, 0, stdout='{"answer": "Yes.", "word_count": 1, "base_label": "aiml"}',
+            stderr="",
+        )
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    assert cli.run_answer("u", "j", "RAG?", 100, "aiml")["base_label"] == "aiml"
+    assert json.loads(calls["kw"]["input"])["label"] == "aiml"
 
 
 def test_run_answer_reports_error_when_ai_assist_prints_nothing(monkeypatch):
@@ -764,7 +782,9 @@ def test_ask_prints_answer_to_stdout(db, monkeypatch, capsys):
     db.commit()
     monkeypatch.setattr(cli, "_connect", lambda: db)
     monkeypatch.setattr(
-        cli, "run_answer", lambda *a: {"answer": "I built it.", "word_count": 3}
+        cli,
+        "run_answer",
+        lambda *a: {"answer": "I built it.", "word_count": 3, "base_label": "default"},
     )
 
     args = cli.build_parser().parse_args(["ask", str(job_id), "Why?"])
@@ -772,6 +792,30 @@ def test_ask_prints_answer_to_stdout(db, monkeypatch, capsys):
     out = capsys.readouterr()
     assert out.out.strip() == "I built it."     # answer alone on stdout, pipeable
     assert "3/100 words" in out.err
+    assert "base: default" in out.err           # never silent about which resume
+
+
+def test_ask_passes_label_through_and_reports_the_base(db, monkeypatch, capsys):
+    uid = _mk_user(db)
+    job_id = repo.add_job_for_user(db, uid, "https://ex.dev/j/ask-label")
+    with db.cursor() as cur:
+        cur.execute("UPDATE jobs SET status = 'jd_ready' WHERE job_id = %s", (job_id,))
+    db.commit()
+    monkeypatch.setattr(cli, "_connect", lambda: db)
+    seen = {}
+
+    def fake_answer(user_id, jid, question, words, label=None):
+        seen["label"] = label
+        return {"answer": "Shipped RAG.", "word_count": 2, "base_label": "aiml"}
+
+    monkeypatch.setattr(cli, "run_answer", fake_answer)
+
+    args = cli.build_parser().parse_args(
+        ["ask", str(job_id), "RAG?", "--label", "aiml"]
+    )
+    assert cli.cmd_ask(args) == 0
+    assert seen["label"] == "aiml"
+    assert "base: aiml" in capsys.readouterr().err
 
 
 def test_ask_returns_1_on_ai_assist_error(db, monkeypatch, capsys):

@@ -123,3 +123,38 @@ def test_fetch_profile(db, seed_user):
     assert p.profile["city"] == "Omaha"
     assert len(p.work_experiences) == 1
     assert p.work_experiences[0]["bullets"] == ["built pipelines", "owned dbt"]
+
+
+def test_base_label_for_job_reports_the_tailoring_source(db, seed_user):
+    """`autoapply ask` follows this to pick the resume it answers from: the base the
+    job was tailored with, not the user's default."""
+    user_id, _ = seed_user
+    aiml = _mk_base(db, user_id, "aiml")
+    job_id = repo.get_or_create_job(db, "https://example.com/jobs/label-lookup")
+    repo.enqueue_tailoring(db, user_id, job_id, aiml)
+    assert repo.base_label_for_job(db, user_id, job_id) == "aiml"
+
+
+def test_base_label_for_job_is_none_without_a_labelled_source(db, seed_user):
+    """No tailoring row, or one on the unlabelled base, both mean 'default base'."""
+    user_id, asset_id = seed_user
+    job_id = repo.get_or_create_job(db, "https://example.com/jobs/label-none")
+    assert repo.base_label_for_job(db, user_id, job_id) is None
+    repo.enqueue_tailoring(db, user_id, job_id, asset_id)
+    assert repo.base_label_for_job(db, user_id, job_id) is None
+
+
+def test_base_label_for_job_is_per_user(db, seed_user):
+    """Two users can tailor the same posting from different bases; the lookup must
+    not leak the other user's label into this user's answers."""
+    user_id, _ = seed_user
+    aiml = _mk_base(db, user_id, "aiml")
+    with db.cursor() as cur:
+        cur.execute(
+            "INSERT INTO users (email) VALUES (%s) RETURNING user_id", ("two@e.co",)
+        )
+        other = cur.fetchone()["user_id"]
+    db.commit()
+    job_id = repo.get_or_create_job(db, "https://example.com/jobs/label-shared")
+    repo.enqueue_tailoring(db, user_id, job_id, aiml)
+    assert repo.base_label_for_job(db, other, job_id) is None

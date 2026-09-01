@@ -355,6 +355,26 @@ def enqueue_tailoring(
     return row_id
 
 
+def base_label_for_job(
+    conn: psycopg.Connection, user_id: str, job_id: str
+) -> str | None:
+    """The label of the base resume this user's tailoring for `job_id` started from.
+
+    Lets later steps (answering application questions) reuse whatever base the job
+    was actually tailored with instead of guessing. Returns None when there is no
+    tailoring row, when it has no base attached, or when that base is the unlabelled
+    default — all of which mean "the default base"."""
+    with conn.cursor() as cur:
+        cur.execute(
+            "SELECT ra.label FROM tailored_resumes t "
+            "JOIN resume_assets ra ON ra.id = t.base_asset_id "
+            "WHERE t.user_id = %s AND t.job_id = %s",
+            (user_id, job_id),
+        )
+        row = cur.fetchone()
+    return row["label"] if row else None
+
+
 def lookup_tailored(conn: psycopg.Connection, user_id: str, job_id: str) -> dict | None:
     with conn.cursor() as cur:
         cur.execute(

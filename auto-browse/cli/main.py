@@ -11,7 +11,11 @@
     autoapply retry [--all] [--user U]                 # reset today's failed JD fetches + recapture
     autoapply status [JOB] [--user U]                  # pipeline state + scores
     autoapply resume show JOB [--user U] [--out P] [--open]
-    autoapply ask JOB "question" [--words N] [--user U]   # answer -> stdout, count -> stderr
+    autoapply resume add FILE.docx --label L [--user U] [--replace]   # add a role base resume
+    autoapply resume bases [--user U]                  # list uploaded base resumes
+    autoapply ask JOB "question" [--words N] [--label L] [--user U]
+                                                       # answer -> stdout, count -> stderr;
+                                                       # base resume follows the job's tailoring label
     autoapply apply [JOB ...] [--all] [--today] [--user U] [--model M] [--autosubmit]
                                                        # --all: batch every jd_ready job one by one;
                                                        # --today restricts to jobs added today
@@ -906,19 +910,30 @@ def cmd_resume_bases(args) -> int:
 # ask (free-text application questions)
 
 
-def run_answer(user_id: str, job_id: str, question: str, max_words: int) -> dict:
+def run_answer(
+    user_id: str,
+    job_id: str,
+    question: str,
+    max_words: int,
+    label: str | None = None,
+) -> dict:
     """Answer one application question via ai-assist. Subprocess for the same reason
     as run_tailor_worker: ai-assist has no build-system and its env.py reads dev.env
     relative to CWD. OPENROUTER_* is stripped for the same reason too — this package's
     creds/base-url must not leak into ai-assist's own LLM config.
 
-    Returns the parsed JSON reply: {"answer", "word_count"} or {"error"}."""
+    `label` picks the base resume to answer from; None lets ai-assist follow the
+    base this job was tailored from.
+
+    Returns the parsed JSON reply: {"answer", "word_count", "base_label"} or
+    {"error"}."""
     env = {k: v for k, v in os.environ.items() if not k.startswith("OPENROUTER_")}
     payload = {
         "user_id": str(user_id),
         "job_id": str(job_id),
         "question": question,
         "max_words": max_words,
+        "label": label,
     }
     proc = subprocess.run(
         ["uv", "run", "python", "answer_cli.py"],
@@ -951,14 +966,18 @@ def cmd_ask(args) -> int:
                 "the JD must be captured first: autoapply tailor"
             )
 
-    result = run_answer(user_id, job["job_id"], question, args.words)
+    result = run_answer(
+        user_id, job["job_id"], question, args.words, getattr(args, "label", None)
+    )
     if "error" in result:
         print(f"ask failed: {result['error']}", file=sys.stderr)
         return 1
     print(result["answer"])
     if not args.quiet:
+        # naming the base makes a wrong-resume answer visible instead of silent
         print(
-            f"\n[{result['word_count']}/{args.words} words]",
+            f"\n[{result['word_count']}/{args.words} words "
+            f"| base: {result.get('base_label', '?')}]",
             file=sys.stderr,
         )
     return 0
@@ -1301,12 +1320,21 @@ def build_parser() -> argparse.ArgumentParser:
         description="Answers in the candidate's voice from the job's captured JD "
         "and the user's base resume, via ai-assist (needs OPENROUTER_API_KEY in "
         "ai-assist/dev.env). Capped at --words, never uses em dashes. The answer "
-        "goes to stdout so it can be piped or copied; the word count goes to stderr.",
+        "goes to stdout so it can be piped or copied; the word count and the base "
+        "resume used go to stderr. By default the base is whichever one the job was "
+        "tailored from (autoapply tailor --label ...), so a role resume's experience "
+        "is not denied; --label overrides it, and --label default forces the "
+        "unlabelled base.",
     )
     ask.add_argument("job", help="job id, id prefix, or URL")
     ask.add_argument("question", help="the question, or '-' to read it from stdin")
     ask.add_argument(
         "--words", type=int, default=100, help="word cap (default 100)"
+    )
+    ask.add_argument(
+        "--label",
+        help="base resume to answer from (default: the one this job was tailored "
+        "from; 'default' forces the unlabelled base)",
     )
     ask.add_argument("--user", help="user id or email")
     ask.add_argument(

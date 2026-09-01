@@ -8,8 +8,11 @@ the process table and off the shell history.
     echo '{"user_id":..., "job_id":..., "question":..., "max_words":100}' \
       | uv run python answer_cli.py
 
-Prints {"answer":..., "word_count":...} on success, {"error":...} with a
-non-zero exit otherwise.
+An optional "label" picks the base resume to answer from; omitted, the job's own
+tailoring decides (see qa.choose_base_asset).
+
+Prints {"answer":..., "word_count":..., "base_label":...} on success,
+{"error":...} with a non-zero exit otherwise.
 """
 
 from __future__ import annotations
@@ -34,8 +37,12 @@ async def _main() -> int:
 
     try:
         with db.connect() as conn:
-            resume, jd = qa.load_context(
-                conn, storagemod.from_env(), req["user_id"], req["job_id"]
+            resume, jd, base_label = qa.load_context(
+                conn,
+                storagemod.from_env(),
+                req["user_id"],
+                req["job_id"],
+                req.get("label"),
             )
     except (qa.NotOwner, qa.MissingResume, qa.MissingJD) as exc:
         print(json.dumps({"error": str(exc)}))
@@ -49,7 +56,11 @@ async def _main() -> int:
         print(json.dumps({"error": str(exc)}))
         return 1
 
-    print(json.dumps({"answer": text, "word_count": word_count(text)}))
+    # base_label goes back so the CLI can say which resume grounded the answer —
+    # a wrong-resume answer is otherwise indistinguishable from a right one.
+    print(json.dumps(
+        {"answer": text, "word_count": word_count(text), "base_label": base_label}
+    ))
     return 0
 
 
