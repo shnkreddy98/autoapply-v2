@@ -198,8 +198,29 @@ def cmd_jobs_add(args) -> int:
         user_id = resolve_user(conn, args.user)
         results = add_jobs(conn, user_id, urls)
     for r in results:
-        dup = f"  (duplicate — already {r['status']})" if r["duplicate"] else ""
-        print(f"{_id8(r['job_id'])}  {r['status']:<12} {r['url']}{dup}")
+        note = ""
+        if r["duplicate"]:
+            note = f"  (duplicate — already {r['status']})"
+        elif r["trimmed"]:
+            note = "  (trimmed to the posting page)"
+        print(f"{_id8(r['job_id'])}  {r['status']:<12} {r['url']}{note}")
+    return 0
+
+
+def cmd_jobs_rm(args) -> int:
+    """Drop jobs from this user's pipeline so a URL can be re-added and retried.
+
+    Removes the user's tailorings and apply records for the job; the shared jobs row
+    itself only goes when no other user owns it."""
+    with _connect() as conn:
+        user_id = resolve_user(conn, args.user)
+        for ref in args.jobs:
+            job = resolve_job(conn, ref)
+            outcome = repo.remove_job_for_user(conn, user_id, job["job_id"])
+            if outcome == "absent":
+                print(f"{_id8(job['job_id'])}  not yours — nothing removed  {job['url']}")
+            else:
+                print(f"{_id8(job['job_id'])}  {outcome:<12} {job['url']}")
     return 0
 
 
@@ -871,6 +892,16 @@ def build_parser() -> argparse.ArgumentParser:
     add.add_argument("--file", help="file with one URL per line (# comments ok)")
     add.add_argument("--user", help="user id or email (default: the only active user)")
     add.set_defaults(func=cmd_jobs_add)
+    rm = jobs_sub.add_parser(
+        "rm",
+        help="remove jobs from your pipeline (so a URL can be re-added)",
+        description="Deletes your tailorings, resume rows and apply records for the "
+        "job. The shared jobs row is deleted only if no other user owns it. Tailored "
+        "files already in object storage are left in place.",
+    )
+    rm.add_argument("jobs", nargs="+", help="job ids, id prefixes, or URLs")
+    rm.add_argument("--user", help="user id or email (default: the only active user)")
+    rm.set_defaults(func=cmd_jobs_rm)
     lst = jobs_sub.add_parser("list", help="list your jobs")
     lst.add_argument("--status", choices=_JOB_STATUSES)
     lst.add_argument("--today", action="store_true", help="only jobs added today")

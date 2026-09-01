@@ -200,6 +200,49 @@ def list_jobs_for_user(
         return cur.fetchall()
 
 
+def remove_job_for_user(conn: psycopg.Connection, user_id: str, job_id: str) -> str:
+    """Drop a user's link to a job and everything that link produced.
+
+    Jobs are globally deduped, so the shared `jobs` row is only deleted once nobody
+    owns it — otherwise another user's pipeline would vanish with it. Returns
+    'deleted' (job row gone), 'unlinked' (other owners remain) or 'absent' (this
+    user never owned it).
+
+    The user's own tailorings/applications are always removed, so re-adding the URL
+    starts clean. Their MinIO objects are left behind: the assets are addressed by
+    key and simply become unreferenced."""
+    with conn.cursor() as cur:
+        cur.execute(
+            "DELETE FROM user_jobs WHERE user_id = %s AND job_id = %s",
+            (user_id, job_id),
+        )
+        if cur.rowcount == 0:
+            # not this user's job — leave the shared row and anyone else's rows alone
+            conn.rollback()
+            return "absent"
+        # per-user rows are not covered by the jobs cascade while the job survives
+        cur.execute(
+            "DELETE FROM applications WHERE user_id = %s AND job_id = %s",
+            (user_id, job_id),
+        )
+        cur.execute(
+            "DELETE FROM tailored_resumes WHERE user_id = %s AND job_id = %s",
+            (user_id, job_id),
+        )
+        cur.execute(
+            "DELETE FROM resume_assets WHERE user_id = %s AND job_id = %s",
+            (user_id, job_id),
+        )
+        cur.execute("SELECT 1 FROM user_jobs WHERE job_id = %s LIMIT 1", (job_id,))
+        if cur.fetchone() is None:
+            cur.execute("DELETE FROM jobs WHERE job_id = %s", (job_id,))
+            outcome = "deleted"
+        else:
+            outcome = "unlinked"
+    conn.commit()
+    return outcome
+
+
 def list_applications(
     conn: psycopg.Connection, user_id: str, job_id: str | None = None
 ) -> list[dict]:

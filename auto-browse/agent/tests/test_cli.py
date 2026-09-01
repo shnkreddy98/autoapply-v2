@@ -154,6 +154,60 @@ def test_parse_url_lines():
 
 
 # ---------------------------------------------------------------------------
+# jobs rm
+
+
+def test_remove_job_deletes_row_when_sole_owner(db):
+    uid = _mk_user(db)
+    job_id = cli.add_jobs(db, uid, ["https://ex.dev/j/gone"])[0]["job_id"]
+    assert repo.remove_job_for_user(db, uid, job_id) == "deleted"
+    with db.cursor() as cur:
+        cur.execute("SELECT 1 FROM jobs WHERE job_id = %s", (job_id,))
+        assert cur.fetchone() is None
+    # re-adding the same URL starts a fresh jd_pending job
+    again = cli.add_jobs(db, uid, ["https://ex.dev/j/gone"])[0]
+    assert again["duplicate"] is False
+    assert again["status"] == "jd_pending"
+
+
+def test_remove_job_keeps_row_for_other_owner(db):
+    uid = _mk_user(db)
+    other = _mk_user(db, "other@test.dev")
+    url = "https://ex.dev/j/shared"
+    job_id = cli.add_jobs(db, uid, [url])[0]["job_id"]
+    cli.add_jobs(db, other, [url])
+    assert repo.remove_job_for_user(db, uid, job_id) == "unlinked"
+    with db.cursor() as cur:
+        cur.execute("SELECT 1 FROM jobs WHERE job_id = %s", (job_id,))
+        assert cur.fetchone() is not None
+    assert repo.job_owner_ids(db, job_id) == [other]
+
+
+def test_remove_job_clears_this_users_tailoring_only(db):
+    uid = _mk_user(db)
+    other = _mk_user(db, "other@test.dev")
+    url = "https://ex.dev/j/shared"
+    job_id = _mk_ready_job(db, uid, url)
+    repo.add_job_for_user(db, other, url, source="manual")
+    repo.enqueue_tailoring(db, uid, job_id)
+    repo.enqueue_tailoring(db, other, job_id)
+    assert repo.remove_job_for_user(db, uid, job_id) == "unlinked"
+    with db.cursor() as cur:
+        cur.execute(
+            "SELECT user_id FROM tailored_resumes WHERE job_id = %s", (job_id,)
+        )
+        assert [r["user_id"] for r in cur.fetchall()] == [other]
+
+
+def test_remove_job_not_owned_is_a_noop(db):
+    uid = _mk_user(db)
+    other = _mk_user(db, "other@test.dev")
+    job_id = cli.add_jobs(db, other, ["https://ex.dev/j/theirs"])[0]["job_id"]
+    assert repo.remove_job_for_user(db, uid, job_id) == "absent"
+    assert repo.job_owner_ids(db, job_id) == [other]
+
+
+# ---------------------------------------------------------------------------
 # tailor: backfill + summary
 
 
@@ -411,6 +465,8 @@ def test_run_tailor_worker_wiring(monkeypatch):
         ["jobs", "list"],
         ["jobs", "list", "--status", "jd_ready"],
         ["jobs", "list", "--today"],
+        ["jobs", "rm", "abcd1234"],
+        ["jobs", "rm", "abcd1234", "https://ex.dev/j/2", "--user", "u@x.dev"],
         ["tailor"],
         ["tailor", "--user", "u@x.dev", "--retry-failed"],
         ["retry"],
