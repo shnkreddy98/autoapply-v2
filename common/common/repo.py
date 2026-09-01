@@ -332,6 +332,24 @@ def insert_resume_asset(
     return asset_id
 
 
+def refresh_resume_asset(
+    conn: psycopg.Connection, asset_id: str, content_type: str | None = None
+) -> None:
+    """Record that an existing asset's object was overwritten with new bytes.
+
+    Used by `resume add --replace`: the storage key is derived from user+label+
+    format, so re-uploading writes the same object and inserting a second row would
+    just duplicate the first. Updating in place keeps one row per label and leaves
+    every tailored_resumes.base_asset_id reference valid."""
+    with conn.cursor() as cur:
+        cur.execute(
+            "UPDATE resume_assets SET created_at = now(), status = 'ready', "
+            "content_type = coalesce(%s, content_type) WHERE id = %s",
+            (content_type, asset_id),
+        )
+    conn.commit()
+
+
 def enqueue_tailoring(
     conn: psycopg.Connection,
     user_id: str,

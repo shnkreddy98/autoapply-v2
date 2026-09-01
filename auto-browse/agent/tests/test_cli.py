@@ -981,6 +981,37 @@ def test_jobs_add_missing_file_is_a_clean_error(db, monkeypatch, tmp_path):
         cli.cmd_jobs_add(args)
 
 
+def test_resume_add_replace_reuses_the_row(db, monkeypatch, tmp_path, capsys):
+    """--replace overwrites one object at a deterministic key, so inserting a second
+    row just stacked identical-looking bases in `resume bases` — one more on every
+    replace — and orphaned the base_asset_id references of earlier tailorings."""
+    uid = _mk_user(db)
+
+    class FakeStorage:
+        def put_file(self, key, path):
+            pass
+
+    class KeepOpen:  # cmd_resume_add closes the connection its `with` opened
+        def __enter__(self_): return db
+        def __exit__(self_, *exc): return False
+
+    monkeypatch.setattr(cli, "_connect", lambda: KeepOpen())
+    monkeypatch.setattr(cli, "_storage", lambda: FakeStorage())
+    docx = tmp_path / "cv.docx"
+    docx.write_bytes(b"PK\x03\x04")
+
+    parser = cli.build_parser()
+    cli.cmd_resume_add(parser.parse_args(["resume", "add", str(docx), "--label", "swe"]))
+    first = capsys.readouterr().out.split("asset ")[1].split()[0]
+    for _ in range(2):
+        cli.cmd_resume_add(
+            parser.parse_args(["resume", "add", str(docx), "--label", "swe", "--replace"])
+        )
+        assert capsys.readouterr().out.split("asset ")[1].split()[0] == first
+
+    assert len([b for b in repo.list_base_assets(db, uid) if b["label"] == "swe"]) == 1
+
+
 # ---------------------------------------------------------------------------
 # duplicate detection at tailor time
 

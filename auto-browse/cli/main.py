@@ -876,19 +876,29 @@ def cmd_resume_add(args) -> int:
             raise SystemExit(
                 f"a base labelled {args.label!r} already exists — pass --replace to overwrite"
             )
-        key = keys.base_resume_key(
-            user_id, variant="docx", ext="docx", label=args.label
-        )
-        _storage().put_file(key, str(path))
-        asset_id = repo.insert_resume_asset(
-            conn,
-            user_id,
-            "base",
-            key,
-            variant="docx",
-            label=args.label,
-            content_type=mimetypes.guess_type(str(path))[0],
-        )
+        content_type = mimetypes.guess_type(str(path))[0]
+        if existing:
+            # Overwrite in place. The key is deterministic, so a second row would
+            # have the same s3_key: two identical-looking bases in `resume bases`,
+            # one more on every --replace. Reusing the row also keeps the
+            # tailored_resumes.base_asset_id references pointing at a live asset.
+            _storage().put_file(existing["s3_key"], str(path))
+            repo.refresh_resume_asset(conn, existing["id"], content_type=content_type)
+            asset_id = existing["id"]
+        else:
+            key = keys.base_resume_key(
+                user_id, variant="docx", ext="docx", label=args.label
+            )
+            _storage().put_file(key, str(path))
+            asset_id = repo.insert_resume_asset(
+                conn,
+                user_id,
+                "base",
+                key,
+                variant="docx",
+                label=args.label,
+                content_type=content_type,
+            )
     print(f"added base '{args.label}' (docx) -> asset {asset_id}")
     print(f"tailor with it:  autoapply tailor --label {args.label}")
     return 0
