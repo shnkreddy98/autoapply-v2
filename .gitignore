@@ -17,3 +17,9 @@ build/
 
 # exported tailored resumes (real PII: name, phone, address) — tools/export_applications.py
 applications/
+
+# knowledge base — real user data + fast-moving notes (see CLAUDE.md)
+kb/
+
+# local agent working agreement — not shared
+CLAUDE.md
