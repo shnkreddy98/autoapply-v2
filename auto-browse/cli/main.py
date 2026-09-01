@@ -2,7 +2,12 @@
 
     autoapply jobs add [URL ...] [--file urls.txt]     # -> jobs table (source=manual)
     autoapply jobs list [--status S]
-    autoapply tailor [--user U] [--retry-failed]       # jd-capture + drain tailor queue
+    autoapply jobs rm JOB [JOB ...] [--user U]         # drop from your pipeline; re-addable
+    autoapply tailor [JOB] [--label L] [--user U] [--retry-failed [--retry-since W]] [--force]
+                                                       # jd-capture + drain tailor queue;
+                                                       # JOB re-tailors one job; --label picks a role base;
+                                                       # already-tailored jobs report as duplicates and are
+                                                       # skipped unless --force
     autoapply retry [--all] [--user U]                 # reset today's failed JD fetches + recapture
     autoapply status [JOB] [--user U]                  # pipeline state + scores
     autoapply resume show JOB [--user U] [--out P] [--open]
@@ -30,7 +35,7 @@ import re
 import subprocess
 import sys
 import uuid
-from datetime import datetime
+from datetime import date, datetime, time, timedelta
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -332,6 +337,77 @@ def backfill_tailoring(conn, user_id: str, label: str | None = None) -> int:
     return len(job_ids)
 
 
+def already_tailored(conn, user_id: str) -> list[dict]:
+    """Jobs this user owns that already have a ready tailoring.
+
+    `backfill_tailoring` skips these (they already have a row), so without this they
+    are invisible — a URL re-added from a later search silently does nothing. Tailor
+    reports them as duplicates instead."""
+    with conn.cursor() as cur:
+        cur.execute(
+            "SELECT j.job_id, j.url, j.company, t.updated_at "
+            "FROM tailored_resumes t "
+            "JOIN jobs j USING (job_id) "
+            "JOIN user_jobs uj ON uj.job_id = j.job_id AND uj.user_id = t.user_id "
+            "WHERE t.user_id = %s AND t.status = 'ready' AND j.status = 'jd_ready' "
+            "ORDER BY t.updated_at DESC",
+            (user_id,),
+        )
+        return cur.fetchall()
+
+
+def print_duplicates(rows: list[dict], limit: int = 10) -> None:
+    """One line per already-tailored job, capped so a big backlog stays readable."""
+    if not rows:
+        return
+    print(f"{len(rows)} duplicate(s) — already tailored, skipping (--force to re-tailor):")
+    for row in rows[:limit]:
+        name = row["company"] or company_hint(row["url"])
+        when = row["updated_at"].astimezone().strftime("%Y-%m-%d")
+        print(f"  {name[:28]:<28} tailored {when}  {row['url'][:60]}")
+    if len(rows) > limit:
+        print(f"  ... +{len(rows) - limit} more")
+
+
+def company_hint(url: str) -> str:
+    """Host as a stand-in name for jobs whose company the worker hasn't filled yet."""
+    from urllib.parse import urlparse
+
+    return urlparse(url).netloc or "?"
+
+
+def requeue_duplicates(conn, user_id: str, rows: list[dict], label: str | None) -> int:
+    """--force: send already-tailored jobs back through the worker from `label`'s base.
+    Costs one model call per job, which is why it is never the default."""
+    base = resolve_base(conn, user_id, label)
+    for row in rows:
+        repo.enqueue_tailoring(conn, user_id, row["job_id"], base["id"] if base else None)
+    with conn.cursor() as cur:
+        cur.execute(
+            "UPDATE tailored_resumes SET status = 'pending', error = NULL "
+            "WHERE user_id = %s AND job_id = ANY(%s)",
+            (user_id, [r["job_id"] for r in rows]),
+        )
+        n = cur.rowcount
+    conn.commit()
+    return n
+
+
+def reenqueue_one(conn, user_id: str, job_id: str, label: str | None) -> None:
+    """Re-tailor a single job from the chosen base: point the row at that base and
+    reset it to pending so the worker redoes it. enqueue_tailoring refreshes
+    base_asset_id on conflict; we also flip status back to pending."""
+    base = resolve_base(conn, user_id, label)
+    repo.enqueue_tailoring(conn, user_id, job_id, base["id"] if base else None)
+    with conn.cursor() as cur:
+        cur.execute(
+            "UPDATE tailored_resumes SET status = 'pending', error = NULL "
+            "WHERE user_id = %s AND job_id = %s",
+            (user_id, job_id),
+        )
+    conn.commit()
+
+
 def tailoring_summary(conn, user_id: str, since: datetime | None = None) -> dict:
     """Counts by status plus a per-job join, scoped to one user; `since` limits
     everything to jobs the user added on/after it (user_jobs.added_at)."""
@@ -469,30 +545,80 @@ def cmd_tailor(args) -> int:
     with _connect() as conn:
         user_id = resolve_user(conn, args.user)
 
+        label = getattr(args, "label", None)
+        if label:
+            # Fail before the expensive JD capture, not after it.
+            resolve_base(conn, user_id, label)
+
         if args.retry_failed:
-            with conn.cursor() as cur:
-                cur.execute(
-                    "UPDATE jobs SET status = 'jd_pending', error = NULL WHERE status = 'failed'"
+            # Default window is today: an older failure was left unretried on
+            # purpose (or is a dud), and every retry is a paid model call.
+            since = parse_since(getattr(args, "retry_since", None))
+            window = "all time" if since is None else f"since {since:%Y-%m-%d}"
+            # JD-capture failures are label-agnostic — a job has one JD — so the
+            # label only scopes the tailoring rows. Both are scoped to this user.
+            n_jobs = reset_failed_jobs(conn, user_id, since)
+            n_rows = reset_failed_tailorings(conn, user_id, since, label)
+            scope = f" on the {label} base" if label else ""
+            print(
+                f"reset {n_jobs} failed job(s), {n_rows} failed tailoring row(s)"
+                f"{scope} ({window})"
+            )
+            if since is not None:
+                older = count_older_failures(conn, user_id, since, label)
+                if older:
+                    print(
+                        f"{older} older failure(s){scope} left alone "
+                        "— add --retry-since all (or a date) to include them"
+                    )
+
+        # Single-job path: re-tailor just this job from the chosen base and drain.
+        if getattr(args, "job", None):
+            job = resolve_job(conn, args.job)
+            if job["status"] != "jd_ready":
+                raise SystemExit(
+                    f"job {_id8(job['job_id'])} is {job['status']}, not jd_ready — "
+                    "capture its JD first: autoapply tailor"
                 )
-                n_jobs = cur.rowcount
-                cur.execute(
-                    "UPDATE tailored_resumes SET status = 'pending', error = NULL "
-                    "WHERE status = 'failed' AND user_id = %s",
-                    (user_id,),
-                )
-                n_rows = cur.rowcount
-            conn.commit()
-            print(f"reset {n_jobs} failed jobs, {n_rows} failed tailoring rows")
+            reenqueue_one(conn, user_id, job["job_id"], label)
+            print(
+                f"re-tailoring {_id8(job['job_id'])} "
+                f"from {label or 'default'} base via ai-assist worker..."
+            )
+            rc = run_tailor_worker()
+            _print_summary(tailoring_summary(conn, user_id))
+            return rc or 0
 
         # Phase 1 — capture JDs for pending jobs (needs playwright+proxy containers).
-        rc = run_jd_capture(conn)
+        # Capture enqueues the tailoring row itself, so it has to be told the label
+        # up front — otherwise the row lands on the default base and phase 2 sees
+        # nothing to do.
+        rc = run_jd_capture(conn, {user_id: label} if label else None)
         if rc:
             return rc
 
         # Phase 2 — make sure every captured job has a tailoring row for this user.
-        n_backfilled = backfill_tailoring(conn, user_id)
+        # Anything already tailored is a duplicate: report it, and only redo the work
+        # when explicitly asked (each redo is a paid model call).
+        dupes = already_tailored(conn, user_id)
+        if dupes and getattr(args, "force", False):
+            n_forced = requeue_duplicates(conn, user_id, dupes, label)
+            print(f"--force: re-queued {n_forced} already-tailored job(s)")
+        else:
+            print_duplicates(dupes)
+
+        n_backfilled = backfill_tailoring(conn, user_id, label)
         if n_backfilled:
-            print(f"enqueued tailoring for {n_backfilled} job(s)")
+            print(
+                f"enqueued tailoring for {n_backfilled} job(s)"
+                + (f" from {label} base" if label else "")
+            )
+        # Rows queued earlier by JD capture or the apply loop still sit on the
+        # default base; move the un-run ones onto the requested role.
+        if label:
+            n_moved = repoint_pending(conn, user_id, label)
+            if n_moved:
+                print(f"switched {n_moved} pending job(s) to the {label} base")
 
         # Phase 3 — drain the tailoring queue.
         with conn.cursor() as cur:
@@ -548,6 +674,84 @@ def count_failed_jobs(conn, user_id: str, since: datetime | None) -> int:
             "JOIN user_jobs uj ON uj.job_id = j.job_id AND uj.user_id = %s "
             f"WHERE j.status = 'failed'{added}",
             params,
+        )
+        return cur.fetchone()["n"]
+
+
+def parse_since(value: str | None) -> datetime | None:
+    """Cut-off for `--retry-failed`, as local-midnight-aligned tz-aware datetime.
+
+    None (the flag not passed) means today, so a retry never silently re-runs
+    failures from previous days that were left alone on purpose — each one costs a
+    model call. 'all' removes the cut-off; otherwise take a local date
+    (YYYY-MM-DD) or a day count ('7d')."""
+    if value is None or value.strip().lower() == "today":
+        return _today_start()
+    v = value.strip().lower()
+    if v == "all":
+        return None
+    if re.fullmatch(r"\d+d", v):
+        return _today_start() - timedelta(days=int(v[:-1]))
+    try:
+        return datetime.combine(date.fromisoformat(v), time.min).astimezone()
+    except ValueError:
+        raise SystemExit(
+            f"--retry-since: expected 'all', 'today', '7d' or YYYY-MM-DD, got {value!r}"
+        )
+
+
+def _failed_tailoring_filter(user_id: str, label: str | None) -> tuple[str, list]:
+    """Shared WHERE fragment for this user's failed tailoring rows.
+
+    With `label`, only rows queued from that role's base match. Matching on the
+    label rather than one asset id keeps a base that was replaced (`resume add
+    --replace`) in scope: its older rows point at the superseded asset. Rows with
+    no base at all belong to no role, so a labelled run leaves them alone."""
+    clauses = ["t.user_id = %s", "t.status = 'failed'"]
+    params: list = [user_id]
+    if label is not None:
+        clauses.append(
+            "t.base_asset_id IN (SELECT id FROM resume_assets WHERE user_id = %s "
+            "AND kind = 'base' AND label = %s)"
+        )
+        params += [user_id, label]
+    return " AND ".join(clauses), params
+
+
+def reset_failed_tailorings(
+    conn, user_id: str, since: datetime | None, label: str | None = None
+) -> int:
+    """Flip this user's failed tailoring rows back to pending so the worker redoes
+    them. Scoped by `since` (when the row failed) and, when given, by the base
+    resume's label — so `--label swe --retry-failed` cannot drag a failed `de` row
+    into the swe batch, where `repoint_pending` would then move it onto the swe
+    base."""
+    where, params = _failed_tailoring_filter(user_id, label)
+    if since is not None:
+        where += " AND t.updated_at >= %s"
+        params.append(since)
+    with conn.cursor() as cur:
+        cur.execute(
+            "UPDATE tailored_resumes t SET status = 'pending', error = NULL, "
+            f"updated_at = now() WHERE {where}",  # noqa: S608 — literals + params
+            params,
+        )
+        n = cur.rowcount
+    conn.commit()
+    return n
+
+
+def count_older_failures(
+    conn, user_id: str, since: datetime, label: str | None = None
+) -> int:
+    """Failed rows the cut-off excluded. Reported so an untouched backlog stays
+    visible instead of looking like it was retried."""
+    where, params = _failed_tailoring_filter(user_id, label)
+    with conn.cursor() as cur:
+        cur.execute(
+            f"SELECT count(*) AS n FROM tailored_resumes t "  # noqa: S608
+            f"WHERE {where} AND t.updated_at < %s",
+            [*params, since],
         )
         return cur.fetchone()["n"]
 
@@ -1010,13 +1214,37 @@ def build_parser() -> argparse.ArgumentParser:
         description="Captures JDs for jd_pending jobs (needs the playwright+proxy "
         "containers), then drains the tailoring queue via the ai-assist worker "
         "(needs OPENROUTER_API_KEY + LibreOffice). Note: the worker drains ALL "
-        "users' rows; --user only scopes the backfill and summary.",
+        "users' rows; --user only scopes the backfill and summary. Pass a JOB to "
+        "re-tailor just that job; --label picks which base resume to tailor from "
+        "(see: autoapply resume add / resume bases). --retry-failed only reaches "
+        "today's failures, and only the ones on --label's base, so an older backlog "
+        "is never silently re-run; --retry-since widens the window.",
+    )
+    tailor.add_argument(
+        "job", nargs="?", help="job id, id prefix, or URL — re-tailor only this job"
+    )
+    tailor.add_argument(
+        "--label", help="role base to tailor from (default: the default base)"
+    )
+    tailor.add_argument(
+        "--force",
+        action="store_true",
+        help="re-tailor jobs reported as duplicates (one paid model call each)",
     )
     tailor.add_argument(
         "--user", help="user id or email (default: the only active user)"
     )
     tailor.add_argument(
-        "--retry-failed", action="store_true", help="reset failed rows and retry them"
+        "--retry-failed",
+        action="store_true",
+        help="reset today's failed jobs + tailoring rows and retry them "
+        "(scoped to --label when given; widen with --retry-since)",
+    )
+    tailor.add_argument(
+        "--retry-since",
+        metavar="WHEN",
+        help="how far back --retry-failed reaches: 'today' (default), 'all', "
+        "a day count like '7d', or a date (YYYY-MM-DD)",
     )
     tailor.set_defaults(func=cmd_tailor)
 

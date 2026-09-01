@@ -477,6 +477,11 @@ def test_run_tailor_worker_wiring(monkeypatch):
         ["resume", "show", "abcd1234", "--out", "/tmp/r.pdf", "--open"],
         ["ask", "abcd1234", "Why this role?"],
         ["ask", "abcd1234", "-", "--words", "50", "--user", "u@x.dev", "-q"],
+        ["tailor", "--label", "swe"],
+        ["tailor", "abcd1234", "--label", "de"],
+        ["resume", "add", "cv.docx", "--label", "swe"],
+        ["resume", "add", "cv.docx", "--label", "swe", "--replace"],
+        ["resume", "bases"],
         ["apply", "abcd1234", "https://ex.dev/j/2", "--model", "m"],
         ["apply", "abcd1234", "--autosubmit"],
         ["apply", "--today", "--autosubmit"],
@@ -920,3 +925,215 @@ def test_resume_add_rejects_the_reserved_default_label(db, monkeypatch, tmp_path
         cli.cmd_resume_add(args)
 
 
+# ---------------------------------------------------------------------------
+# duplicate detection at tailor time
+
+
+def _finish_tailoring(db, uid, job_id):
+    """Mark a job's tailoring ready, as the worker would."""
+    with db.cursor() as cur:
+        cur.execute(
+            "UPDATE tailored_resumes SET status = 'ready' "
+            "WHERE user_id = %s AND job_id = %s",
+            (uid, job_id),
+        )
+    db.commit()
+
+
+def test_already_tailored_finds_duplicates(db):
+    uid = _mk_user(db)
+    done = _mk_ready_job(db, uid, "https://ex.dev/j/done")
+    fresh = _mk_ready_job(db, uid, "https://ex.dev/j/fresh")
+    _mk_base(db, uid, None)
+
+    cli.backfill_tailoring(db, uid)
+    assert cli.already_tailored(db, uid) == []  # both still pending
+
+    _finish_tailoring(db, uid, done)
+    dupes = cli.already_tailored(db, uid)
+    assert [str(r["job_id"]) for r in dupes] == [str(done)]
+    assert str(fresh) not in {str(r["job_id"]) for r in dupes}
+
+
+def test_already_tailored_is_per_user(db):
+    uid = _mk_user(db)
+    other = _mk_user(db, "other@test.dev")
+    job_id = _mk_ready_job(db, other, "https://ex.dev/j/theirs")
+    _mk_base(db, other, None)
+    cli.backfill_tailoring(db, other)
+    _finish_tailoring(db, other, job_id)
+
+    assert cli.already_tailored(db, uid) == []          # not mine
+    assert len(cli.already_tailored(db, other)) == 1
+
+
+def test_print_duplicates_caps_the_list(capsys):
+    from datetime import datetime, timezone
+
+    rows = [
+        {
+            "job_id": uuid.uuid4(),
+            "url": f"https://ex.dev/j/{i}",
+            "company": f"co{i}",
+            "updated_at": datetime(2026, 7, 24, 12, tzinfo=timezone.utc),
+        }
+        for i in range(13)
+    ]
+    cli.print_duplicates(rows, limit=10)
+    out = capsys.readouterr().out
+    assert "13 duplicate(s)" in out
+    assert "... +3 more" in out
+    assert "co0" in out and "co12" not in out
+
+
+def test_print_duplicates_silent_when_none(capsys):
+    cli.print_duplicates([])
+    assert capsys.readouterr().out == ""
+
+
+def test_requeue_duplicates_resets_to_pending(db):
+    uid = _mk_user(db)
+    job_id = _mk_ready_job(db, uid)
+    default = _mk_base(db, uid, None)
+    swe = _mk_base(db, uid, "swe")
+
+    cli.backfill_tailoring(db, uid)
+    _finish_tailoring(db, uid, job_id)
+    dupes = cli.already_tailored(db, uid)
+
+    assert cli.requeue_duplicates(db, uid, dupes, "swe") == 1
+    row = repo.lookup_tailored(db, uid, job_id)
+    assert row["status"] == "pending"
+    assert row["base_asset_id"] == swe          # --force honours --label
+    assert row["base_asset_id"] != default
+
+
+def test_tailor_force_flag_parses():
+    args = cli.build_parser().parse_args(["tailor", "--force", "--label", "de"])
+    assert args.force is True and args.label == "de"
+    assert cli.build_parser().parse_args(["tailor"]).force is False
+
+
+# ---------------------------------------------------------------------------
+# --retry-failed scoping (by label, and by when the row failed)
+
+
+def _fail_tailoring(db, uid, job_id, base_asset_id, days_ago=0):
+    """A failed tailoring row that failed `days_ago` days back."""
+    repo.enqueue_tailoring(db, uid, job_id, base_asset_id)
+    with db.cursor() as cur:
+        cur.execute(
+            "UPDATE tailored_resumes SET status = 'failed', error = 'boom', "
+            "updated_at = now() - (%s || ' days')::interval "
+            "WHERE user_id = %s AND job_id = %s",
+            (days_ago, uid, job_id),
+        )
+    db.commit()
+
+
+def _statuses(db, uid):
+    with db.cursor() as cur:
+        cur.execute(
+            "SELECT j.url, t.status FROM tailored_resumes t JOIN jobs j USING (job_id) "
+            "WHERE t.user_id = %s",
+            (uid,),
+        )
+        return {r["url"].rsplit("/", 1)[-1]: r["status"] for r in cur.fetchall()}
+
+
+def test_parse_since_defaults_to_today(monkeypatch):
+    assert cli.parse_since(None) == cli._today_start()
+    assert cli.parse_since("today") == cli._today_start()
+
+
+def test_parse_since_all_removes_the_cutoff():
+    assert cli.parse_since("all") is None
+
+
+def test_parse_since_accepts_day_counts_and_dates():
+    from datetime import timedelta
+
+    assert cli.parse_since("7d") == cli._today_start() - timedelta(days=7)
+    assert cli.parse_since("2026-08-29").date().isoformat() == "2026-08-29"
+
+
+def test_parse_since_rejects_garbage():
+    with pytest.raises(SystemExit, match="retry-since"):
+        cli.parse_since("last tuesday")
+
+
+def test_retry_failed_only_touches_the_labelled_base(db):
+    """`--label swe --retry-failed` must not drag a failed `de` row into the swe
+    batch — repoint_pending would then move it onto the swe resume."""
+    uid = _mk_user(db)
+    swe, de = _mk_base(db, uid, "swe"), _mk_base(db, uid, "de")
+    swe_job = repo.add_job_for_user(db, uid, "https://ex.dev/j/retry-swe")
+    de_job = repo.add_job_for_user(db, uid, "https://ex.dev/j/retry-de")
+    _fail_tailoring(db, uid, swe_job, swe)
+    _fail_tailoring(db, uid, de_job, de)
+
+    assert cli.reset_failed_tailorings(db, uid, cli._today_start(), "swe") == 1
+    assert _statuses(db, uid) == {"retry-swe": "pending", "retry-de": "failed"}
+
+
+def test_retry_failed_without_a_label_takes_every_base(db):
+    uid = _mk_user(db)
+    swe, de = _mk_base(db, uid, "swe"), _mk_base(db, uid, "de")
+    a = repo.add_job_for_user(db, uid, "https://ex.dev/j/retry-any-1")
+    b = repo.add_job_for_user(db, uid, "https://ex.dev/j/retry-any-2")
+    _fail_tailoring(db, uid, a, swe)
+    _fail_tailoring(db, uid, b, de)
+
+    assert cli.reset_failed_tailorings(db, uid, cli._today_start(), None) == 2
+
+
+def test_retry_failed_leaves_older_failures_alone(db):
+    """Failures from previous days were left unretried on purpose (or are duds);
+    each retry is a paid model call, so the default window is today."""
+    uid = _mk_user(db)
+    swe = _mk_base(db, uid, "swe")
+    today = repo.add_job_for_user(db, uid, "https://ex.dev/j/retry-today")
+    old = repo.add_job_for_user(db, uid, "https://ex.dev/j/retry-old")
+    _fail_tailoring(db, uid, today, swe)
+    _fail_tailoring(db, uid, old, swe, days_ago=3)
+
+    assert cli.reset_failed_tailorings(db, uid, cli._today_start(), "swe") == 1
+    assert _statuses(db, uid) == {"retry-today": "pending", "retry-old": "failed"}
+    assert cli.count_older_failures(db, uid, cli._today_start(), "swe") == 1
+
+
+def test_retry_since_all_includes_old_failures(db):
+    uid = _mk_user(db)
+    swe = _mk_base(db, uid, "swe")
+    old = repo.add_job_for_user(db, uid, "https://ex.dev/j/retry-old-all")
+    _fail_tailoring(db, uid, old, swe, days_ago=30)
+
+    assert cli.reset_failed_tailorings(db, uid, cli.parse_since("all"), "swe") == 1
+
+
+def test_retry_failed_ignores_rows_with_no_base_when_labelled(db):
+    """A row with no base belongs to no role — a labelled retry must skip it rather
+    than adopt it into that role's batch."""
+    uid = _mk_user(db)
+    _mk_base(db, uid, "swe")
+    job = repo.add_job_for_user(db, uid, "https://ex.dev/j/retry-nobase")
+    _fail_tailoring(db, uid, job, None)
+
+    assert cli.reset_failed_tailorings(db, uid, cli._today_start(), "swe") == 0
+    assert cli.reset_failed_tailorings(db, uid, cli._today_start(), None) == 1
+
+
+def test_retry_failed_is_per_user(db):
+    uid, other = _mk_user(db), _mk_user(db, email="other-retry@e.co")
+    swe = _mk_base(db, other, "swe")
+    job = repo.add_job_for_user(db, other, "https://ex.dev/j/retry-other")
+    _fail_tailoring(db, other, job, swe)
+
+    assert cli.reset_failed_tailorings(db, uid, cli._today_start(), "swe") == 0
+
+
+def test_retry_since_flag_parses():
+    args = cli.build_parser().parse_args(
+        ["tailor", "--label", "swe", "--retry-failed", "--retry-since", "7d"]
+    )
+    assert args.retry_failed and args.retry_since == "7d"
