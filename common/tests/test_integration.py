@@ -32,6 +32,47 @@ def test_enqueue_tailoring_unique(db, seed_user):
     assert row["status"] == "pending"
 
 
+def test_enqueue_tailoring_refreshes_base_on_conflict(db, seed_user):
+    """Re-enqueuing with a different base swaps base_asset_id — needed so a per-job
+    re-tailor with a role label actually changes the source resume."""
+    user_id, asset_id = seed_user
+    other = repo.insert_resume_asset(
+        db, user_id, "base", f"users/{user_id}/resumes/base/swe/docx.docx",
+        variant="docx", label="swe",
+    )
+    job_id = repo.get_or_create_job(db, "https://example.com/jobs/rebind")
+    repo.enqueue_tailoring(db, user_id, job_id, asset_id)
+    repo.enqueue_tailoring(db, user_id, job_id, other)
+    assert repo.lookup_tailored(db, user_id, job_id)["base_asset_id"] == other
+
+
+def _mk_base(db, user_id, label, variant="docx"):
+    key = f"users/{user_id}/resumes/base/{label or 'default'}/{variant}.docx"
+    return repo.insert_resume_asset(
+        db, user_id, "base", key, variant=variant, label=label
+    )
+
+
+def test_get_base_asset_label_selection(db, seed_user):
+    """Default selection (label=None) must ignore role bases, and a named label must
+    return exactly that base."""
+    user_id, _ = seed_user
+    default_id = _mk_base(db, user_id, None)
+    swe_id = _mk_base(db, user_id, "swe")
+
+    assert repo.get_base_asset(db, user_id, variant="docx")["id"] == default_id
+    assert repo.get_base_asset(db, user_id, variant="docx", label="swe")["id"] == swe_id
+    assert repo.get_base_asset(db, user_id, variant="docx", label="nope") is None
+
+
+def test_list_base_assets(db, seed_user):
+    user_id, _ = seed_user
+    _mk_base(db, user_id, None)
+    _mk_base(db, user_id, "swe")
+    labels = {b["label"] for b in repo.list_base_assets(db, user_id)}
+    assert {None, "swe"} <= labels
+
+
 def test_claim_pending_skip_locked(db):
     # two pending jobs; two concurrent connections must claim DIFFERENT rows
     repo.get_or_create_job(db, "https://example.com/jobs/a")

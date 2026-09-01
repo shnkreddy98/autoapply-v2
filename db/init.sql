@@ -191,7 +191,8 @@ CREATE TABLE resume_assets (
     id           uuid PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id      uuid NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
     kind         text NOT NULL CHECK (kind IN ('base', 'tailored')),
-    variant      text,                            -- aws/gcp/azu or null
+    variant      text,                            -- file format: 'pdf' / 'docx'
+    label        text,                            -- role/track base: 'swe','de',... ; null = default base
     job_id       uuid REFERENCES jobs(job_id) ON DELETE CASCADE,  -- null for base
     s3_key       text NOT NULL,
     content_type text,

@@ -35,7 +35,7 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-from common import db, queue, repo
+from common import db, keys, queue, repo
 from common import storage as storagemod
 
 HERE = Path(__file__).resolve().parent.parent  # auto-browse/
@@ -278,8 +278,45 @@ def cmd_jobs_list(args) -> int:
 # tailor
 
 
-def backfill_tailoring(conn, user_id: str) -> int:
-    """Enqueue tailoring for owned jd_ready jobs this user has no row for (idempotent)."""
+def resolve_base(conn, user_id: str, label: str | None):
+    """The docx base asset to tailor from. `label` picks a role base; None = default.
+    Raises if a named label has no base uploaded."""
+    base = repo.get_base_asset(conn, user_id, variant="docx", label=label)
+    if base is None and label is not None:
+        raise SystemExit(
+            f"no resume labelled {label!r} for this user — upload one: "
+            f"autoapply resume add <file.docx> --label {label}"
+        )
+    return base
+
+
+def repoint_pending(conn, user_id: str, label: str) -> int:
+    """Point this user's still-pending tailorings at `label`'s base resume.
+
+    Only rows that are on the *unlabelled* base (or none at all) are moved: those
+    were queued by JD capture or the apply loop, which don't know about --label. A
+    row already on some other role's base is left alone, so running `--label de`
+    can't hijack a swe batch that hasn't drained yet. Returns rows moved."""
+    base = resolve_base(conn, user_id, label)
+    if base is None:
+        return 0
+    with conn.cursor() as cur:
+        cur.execute(
+            "UPDATE tailored_resumes SET base_asset_id = %s, updated_at = now() "
+            "WHERE user_id = %s AND status = 'pending' AND base_asset_id IS DISTINCT FROM %s "
+            "AND (base_asset_id IS NULL OR base_asset_id IN ("
+            "  SELECT id FROM resume_assets WHERE user_id = %s AND kind = 'base' "
+            "  AND label IS NULL))",
+            (base["id"], user_id, base["id"], user_id),
+        )
+        n = cur.rowcount
+    conn.commit()
+    return n
+
+
+def backfill_tailoring(conn, user_id: str, label: str | None = None) -> int:
+    """Enqueue tailoring for owned jd_ready jobs this user has no row for (idempotent).
+    `label` chooses which base resume feeds the tailoring (None = default base)."""
     with conn.cursor() as cur:
         cur.execute(
             "SELECT j.job_id FROM jobs j "
@@ -289,9 +326,7 @@ def backfill_tailoring(conn, user_id: str) -> int:
             (user_id, user_id),
         )
         job_ids = [r["job_id"] for r in cur.fetchall()]
-    base = repo.get_base_asset(
-        conn, user_id, variant="docx"
-    )  # tailoring edits the docx
+    base = resolve_base(conn, user_id, label)  # tailoring edits the docx
     for job_id in job_ids:
         repo.enqueue_tailoring(conn, user_id, job_id, base["id"] if base else None)
     return len(job_ids)
@@ -376,9 +411,14 @@ def run_tailor_worker() -> int:
     return proc.returncode
 
 
-def run_jd_capture(conn) -> int:
+def run_jd_capture(conn, base_labels: dict[str, str] | None = None) -> int:
     """Capture JDs for every jd_pending row (needs playwright+proxy containers).
-    Prints one line per job; returns a shell exit code."""
+    Prints one line per job; returns a shell exit code.
+
+    `base_labels` (user_id -> role label) is handed to the capture so the tailoring
+    row it enqueues points at that role's base resume. Capture creates the row, so
+    without this the later label-aware backfill finds nothing to do and --label is
+    silently ignored."""
     with conn.cursor() as cur:
         cur.execute("SELECT count(*) AS n FROM jobs WHERE status = 'jd_pending'")
         n_pending = cur.fetchone()["n"]
@@ -392,7 +432,7 @@ def run_jd_capture(conn) -> int:
         async with jd_capture.proxy_navigator() as navigate:
             while True:
                 job_id = await jd_capture.capture_once(
-                    conn, navigate, storage, worker_id="cli"
+                    conn, navigate, storage, worker_id="cli", base_labels=base_labels
                 )
                 if job_id is None:
                     return
@@ -599,6 +639,62 @@ def cmd_resume_show(args) -> int:
     print(path)
     if args.open:
         subprocess.Popen(["xdg-open", path])
+    return 0
+
+
+def cmd_resume_add(args) -> int:
+    """Upload a role/track base resume (.docx) under a label, for use with
+    `autoapply tailor --label <label>`. docx only — tailoring edits the docx, and the
+    per-job PDF is generated during tailoring."""
+    import mimetypes
+
+    path = Path(args.file)
+    if not path.is_file():
+        raise SystemExit(f"no such file: {path}")
+    if path.suffix.lower() != ".docx":
+        raise SystemExit("resume add takes a .docx (tailoring edits the docx source)")
+    # 'default' already names the unlabelled base (export folders, `ask --label`);
+    # a real label spelled that way would make those two mean different resumes
+    if args.label.strip().lower() == "default":
+        raise SystemExit("'default' is reserved for the unlabelled base — pick another label")
+
+    with _connect() as conn:
+        user_id = resolve_user(conn, args.user)
+        existing = repo.get_base_asset(conn, user_id, variant="docx", label=args.label)
+        if existing and not args.replace:
+            raise SystemExit(
+                f"a base labelled {args.label!r} already exists — pass --replace to overwrite"
+            )
+        key = keys.base_resume_key(
+            user_id, variant="docx", ext="docx", label=args.label
+        )
+        _storage().put_file(key, str(path))
+        asset_id = repo.insert_resume_asset(
+            conn,
+            user_id,
+            "base",
+            key,
+            variant="docx",
+            label=args.label,
+            content_type=mimetypes.guess_type(str(path))[0],
+        )
+    print(f"added base '{args.label}' (docx) -> asset {asset_id}")
+    print(f"tailor with it:  autoapply tailor --label {args.label}")
+    return 0
+
+
+def cmd_resume_bases(args) -> int:
+    """List the user's base resumes so they can see which labels are available."""
+    with _connect() as conn:
+        user_id = resolve_user(conn, args.user)
+        bases = repo.list_base_assets(conn, user_id)
+    if not bases:
+        print("no base resumes (run onboarding, or: autoapply resume add <docx> --label <l>)")
+        return 0
+    for b in bases:
+        label = b["label"] or "(default)"
+        when = b["created_at"].strftime("%Y-%m-%d")
+        print(f"{label:<12} {b['variant'] or '-':<5} {when}  {b['s3_key']}")
     return 0
 
 
@@ -955,6 +1051,21 @@ def build_parser() -> argparse.ArgumentParser:
     )
     show.add_argument("--open", action="store_true", help="open with xdg-open")
     show.set_defaults(func=cmd_resume_show)
+    radd = resume_sub.add_parser(
+        "add",
+        help="add a role/track base resume (.docx) under a label",
+        description="Uploads a .docx base resume tagged with --label. Use it in "
+        "tailoring with `autoapply tailor --label <label>` (or per job). docx only: "
+        "tailoring edits the docx and generates the per-job PDF itself.",
+    )
+    radd.add_argument("file", help="path to the base resume (.docx)")
+    radd.add_argument("--label", required=True, help="role/track tag, e.g. swe, de, devops")
+    radd.add_argument("--replace", action="store_true", help="overwrite an existing base with this label")
+    radd.add_argument("--user", help="user id or email")
+    radd.set_defaults(func=cmd_resume_add)
+    rbases = resume_sub.add_parser("bases", help="list uploaded base resumes")
+    rbases.add_argument("--user", help="user id or email")
+    rbases.set_defaults(func=cmd_resume_bases)
 
     ask = sub.add_parser(
         "ask",

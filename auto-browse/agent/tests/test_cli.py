@@ -781,3 +781,142 @@ def test_ask_returns_1_on_ai_assist_error(db, monkeypatch, capsys):
     args = cli.build_parser().parse_args(["ask", str(job_id), "Why?"])
     assert cli.cmd_ask(args) == 1
     assert "no captured JD" in capsys.readouterr().err
+
+
+# ---------------------------------------------------------------------------
+# role-labelled base resumes
+
+
+def _mk_base(db, uid, label, variant="docx"):
+    key = f"users/{uid}/resumes/base/{label or 'default'}/{variant}.docx"
+    return repo.insert_resume_asset(db, uid, "base", key, variant=variant, label=label)
+
+
+def test_backfill_uses_labelled_base(db):
+    uid = _mk_user(db)
+    job_id = _mk_ready_job(db, uid)
+    _mk_base(db, uid, None)                  # default
+    swe = _mk_base(db, uid, "swe")
+
+    assert cli.backfill_tailoring(db, uid, label="swe") == 1
+    assert repo.lookup_tailored(db, uid, job_id)["base_asset_id"] == swe
+
+
+def test_backfill_default_ignores_role_base(db):
+    uid = _mk_user(db)
+    job_id = _mk_ready_job(db, uid)
+    default = _mk_base(db, uid, None)
+    _mk_base(db, uid, "swe")
+
+    assert cli.backfill_tailoring(db, uid) == 1   # no label
+    assert repo.lookup_tailored(db, uid, job_id)["base_asset_id"] == default
+
+
+def test_backfill_missing_label_errors(db):
+    uid = _mk_user(db)
+    _mk_ready_job(db, uid)
+    _mk_base(db, uid, None)
+    with pytest.raises(SystemExit, match="no resume labelled 'swe'"):
+        cli.backfill_tailoring(db, uid, label="swe")
+
+
+def test_reenqueue_one_resets_and_swaps_base(db):
+    uid = _mk_user(db)
+    job_id = _mk_ready_job(db, uid)
+    default = _mk_base(db, uid, None)
+    de = _mk_base(db, uid, "de")
+
+    cli.backfill_tailoring(db, uid)  # enqueue from default
+    assert repo.lookup_tailored(db, uid, job_id)["base_asset_id"] == default
+
+    # pretend the first tailoring finished
+    with db.cursor() as cur:
+        cur.execute(
+            "UPDATE tailored_resumes SET status = 'ready' WHERE user_id = %s AND job_id = %s",
+            (uid, job_id),
+        )
+    db.commit()
+
+    cli.reenqueue_one(db, uid, job_id, "de")
+    row = repo.lookup_tailored(db, uid, job_id)
+    assert row["base_asset_id"] == de      # base swapped
+    assert row["status"] == "pending"      # reset for the worker
+
+
+def test_cmd_resume_add_inserts_labelled_base(db, monkeypatch, tmp_path, capsys):
+    uid = _mk_user(db)
+    docx = tmp_path / "cv_swe.docx"
+    docx.write_bytes(b"PK\x03\x04 fake docx")
+    put = {}
+
+    class FakeStorage:
+        def put_file(self, key, path):
+            put["key"], put["path"] = key, path
+
+    monkeypatch.setattr(cli, "_connect", lambda: db)
+    monkeypatch.setattr(cli, "_storage", lambda: FakeStorage())
+
+    args = cli.build_parser().parse_args(
+        ["resume", "add", str(docx), "--label", "swe"]
+    )
+    assert cli.cmd_resume_add(args) == 0
+    assert put["key"] == f"users/{uid}/resumes/base/swe/docx.docx"
+    # cmd_resume_add's `with _connect()` closes the (monkeypatched) db connection on
+    # exit, so read the committed row back on a fresh connection.
+    from common import db as dbmod
+
+    with dbmod.connect() as check:
+        base = repo.get_base_asset(check, uid, variant="docx", label="swe")
+    assert base is not None and base["s3_key"] == put["key"]
+
+
+def test_cmd_resume_add_rejects_duplicate_without_replace(db, monkeypatch, tmp_path):
+    uid = _mk_user(db)
+    _mk_base(db, uid, "swe")
+    docx = tmp_path / "cv.docx"
+    docx.write_bytes(b"PK\x03\x04")
+    monkeypatch.setattr(cli, "_connect", lambda: db)
+    monkeypatch.setattr(cli, "_storage", lambda: pytest.fail("must not upload"))
+
+    args = cli.build_parser().parse_args(["resume", "add", str(docx), "--label", "swe"])
+    with pytest.raises(SystemExit, match="already exists"):
+        cli.cmd_resume_add(args)
+
+
+def test_cmd_resume_add_rejects_non_docx(db, monkeypatch, tmp_path):
+    uid = _mk_user(db)
+    pdf = tmp_path / "cv.pdf"
+    pdf.write_bytes(b"%PDF")
+    monkeypatch.setattr(cli, "_connect", lambda: db)
+    args = cli.build_parser().parse_args(["resume", "add", str(pdf), "--label", "swe"])
+    with pytest.raises(SystemExit, match="takes a .docx"):
+        cli.cmd_resume_add(args)
+
+
+def test_cmd_resume_bases_lists_labels(db, monkeypatch, capsys):
+    uid = _mk_user(db)
+    _mk_base(db, uid, None)
+    _mk_base(db, uid, "swe")
+    monkeypatch.setattr(cli, "_connect", lambda: db)
+
+    args = cli.build_parser().parse_args(["resume", "bases"])
+    assert cli.cmd_resume_bases(args) == 0
+    out = capsys.readouterr().out
+    assert "(default)" in out and "swe" in out
+
+
+def test_resume_add_rejects_the_reserved_default_label(db, monkeypatch, tmp_path):
+    """'default' already names the unlabelled base in `ask --label` and the export
+    folders; a real label spelled that way would make one word mean two resumes."""
+    _mk_user(db)
+    monkeypatch.setattr(cli, "_connect", lambda: db)
+    docx = tmp_path / "r.docx"
+    docx.write_bytes(b"PK\x03\x04")
+
+    args = cli.build_parser().parse_args(
+        ["resume", "add", str(docx), "--label", "default"]
+    )
+    with pytest.raises(SystemExit, match="reserved"):
+        cli.cmd_resume_add(args)
+
+

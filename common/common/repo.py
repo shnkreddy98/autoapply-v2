@@ -262,23 +262,45 @@ def list_applications(
 
 
 def get_base_asset(
-    conn: psycopg.Connection, user_id: str, variant: str | None = None
+    conn: psycopg.Connection,
+    user_id: str,
+    variant: str | None = None,
+    label: str | None = None,
 ) -> dict | None:
-    """Newest ready base resume asset for a user (optionally a specific variant)."""
+    """Newest ready base resume asset for a user.
+
+    `variant` filters by file format ('pdf'/'docx'). `label` selects a role/track
+    base: when given, only that label matches; when omitted, only the default base
+    (label IS NULL) matches — so the default path never accidentally picks up a
+    role-specific base."""
+    clauses = ["user_id = %s", "kind = 'base'", "status = 'ready'"]
+    params: list = [user_id]
+    if variant:
+        clauses.append("variant = %s")
+        params.append(variant)
+    if label is None:
+        clauses.append("label IS NULL")
+    else:
+        clauses.append("label = %s")
+        params.append(label)
     with conn.cursor() as cur:
-        if variant:
-            cur.execute(
-                "SELECT * FROM resume_assets WHERE user_id = %s AND kind = 'base' "
-                "AND variant = %s AND status = 'ready' ORDER BY created_at DESC LIMIT 1",
-                (user_id, variant),
-            )
-        else:
-            cur.execute(
-                "SELECT * FROM resume_assets WHERE user_id = %s AND kind = 'base' "
-                "AND status = 'ready' ORDER BY created_at DESC LIMIT 1",
-                (user_id,),
-            )
+        cur.execute(
+            f"SELECT * FROM resume_assets WHERE {' AND '.join(clauses)} "  # noqa: S608 — clauses are literals, values parameterized
+            "ORDER BY created_at DESC LIMIT 1",
+            params,
+        )
         return cur.fetchone()
+
+
+def list_base_assets(conn: psycopg.Connection, user_id: str) -> list[dict]:
+    """All ready base assets for a user, newest first. For `autoapply resume bases`."""
+    with conn.cursor() as cur:
+        cur.execute(
+            "SELECT * FROM resume_assets WHERE user_id = %s AND kind = 'base' "
+            "AND status = 'ready' ORDER BY label NULLS FIRST, variant, created_at DESC",
+            (user_id,),
+        )
+        return cur.fetchall()
 
 
 def get_resume_asset(conn: psycopg.Connection, asset_id: str) -> dict | None:
@@ -294,15 +316,16 @@ def insert_resume_asset(
     s3_key: str,
     *,
     variant: str | None = None,
+    label: str | None = None,
     job_id: str | None = None,
     content_type: str | None = None,
     status: str = "ready",
 ) -> str:
     with conn.cursor() as cur:
         cur.execute(
-            "INSERT INTO resume_assets (user_id, kind, variant, job_id, s3_key, content_type, status) "
-            "VALUES (%s, %s, %s, %s, %s, %s, %s) RETURNING id",
-            (user_id, kind, variant, job_id, s3_key, content_type, status),
+            "INSERT INTO resume_assets (user_id, kind, variant, label, job_id, s3_key, content_type, status) "
+            "VALUES (%s, %s, %s, %s, %s, %s, %s, %s) RETURNING id",
+            (user_id, kind, variant, label, job_id, s3_key, content_type, status),
         )
         asset_id = cur.fetchone()["id"]
     conn.commit()
@@ -315,11 +338,16 @@ def enqueue_tailoring(
     job_id: str,
     base_asset_id: str | None = None,
 ) -> str:
-    """Enqueue a tailoring job (one per user×job). Returns the row id (existing on conflict)."""
+    """Enqueue a tailoring job (one per user×job). Returns the row id (existing on conflict).
+
+    On conflict the base_asset_id is refreshed to the one passed in, so re-enqueuing a
+    job with a different base (e.g. a role-labelled resume) actually switches the source.
+    Status is left untouched here — callers that want a re-tailor reset it explicitly."""
     with conn.cursor() as cur:
         cur.execute(
             "INSERT INTO tailored_resumes (user_id, job_id, base_asset_id) VALUES (%s, %s, %s) "
-            "ON CONFLICT (user_id, job_id) DO UPDATE SET updated_at = now() RETURNING id",
+            "ON CONFLICT (user_id, job_id) DO UPDATE SET "
+            "base_asset_id = EXCLUDED.base_asset_id, updated_at = now() RETURNING id",
             (user_id, job_id, base_asset_id),
         )
         row_id = cur.fetchone()["id"]

@@ -77,15 +77,30 @@ def _reject_reason(text: str) -> str | None:
     return None
 
 
-def _enqueue_for_owners(conn: psycopg.Connection, job_id: str) -> int:
+def _enqueue_for_owners(
+    conn: psycopg.Connection,
+    job_id: str,
+    base_labels: dict[str, str] | None = None,
+) -> int:
     """Queue a tailoring job (user×job) for every owner of the job (user_jobs),
     attaching their current base resume asset if they have one. Owners-only: a
-    job one user added must never fan out to other users' queues."""
+    job one user added must never fan out to other users' queues.
+
+    `base_labels` maps user_id -> role label for the users who asked for one (the
+    caller of `autoapply tailor --label`); every other owner keeps their default
+    base. Without it, capture would enqueue against the default base and the row
+    would already exist by the time the CLI's label-aware backfill ran, silently
+    ignoring --label. A label with no uploaded base falls back to the default
+    rather than enqueuing with no source at all."""
+    labels = base_labels or {}
     n = 0
     for uid in repo.job_owner_ids(conn, job_id):
+        label = labels.get(str(uid))
         base = repo.get_base_asset(
-            conn, uid, variant="docx"
+            conn, uid, variant="docx", label=label
         )  # tailoring edits the docx
+        if base is None and label is not None:
+            base = repo.get_base_asset(conn, uid, variant="docx")
         repo.enqueue_tailoring(conn, uid, job_id, base["id"] if base else None)
         n += 1
     return n
@@ -96,9 +111,13 @@ async def capture_once(
     navigate: Navigator,
     storage: storagemod.Storage,
     worker_id: str = "jd-capture",
+    base_labels: dict[str, str] | None = None,
 ) -> str | None:
     """Claim one pending job, capture its JD, enqueue tailoring. Returns the job_id
-    handled (success or failed), or None if the queue was empty."""
+    handled (success or failed), or None if the queue was empty.
+
+    `base_labels` (user_id -> role label) picks which base resume the enqueued
+    tailoring starts from; see `_enqueue_for_owners`."""
     job = queue.claim_pending(conn, "jobs", worker_id=worker_id)
     if job is None:
         return None
@@ -124,7 +143,7 @@ async def capture_once(
             jd_s3_key=key,
             jd_captured_at=datetime.now(timezone.utc),
         )
-        count = _enqueue_for_owners(conn, job_id)
+        count = _enqueue_for_owners(conn, job_id, base_labels)
         log.info("captured JD job=%s bytes=%d enqueued=%d", job_id, len(jd_text), count)
     except Exception as exc:  # one bad job must not kill the worker
         log.warning("JD capture failed job=%s: %s", job_id, exc)
