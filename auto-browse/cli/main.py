@@ -200,7 +200,10 @@ def add_jobs(conn, user_id: str, urls: list[str]) -> list[dict]:
 def cmd_jobs_add(args) -> int:
     urls = list(args.urls)
     if args.file:
-        urls += parse_url_lines(Path(args.file).read_text())
+        src = Path(args.file)
+        if not src.is_file():  # a typo'd path is a user error, not a crash
+            raise SystemExit(f"no such file: {src}")
+        urls += parse_url_lines(src.read_text())
     if not urls:
         raise SystemExit("no URLs given (pass URLs or --file urls.txt)")
     with _connect() as conn:

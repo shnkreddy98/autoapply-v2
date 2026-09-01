@@ -969,6 +969,18 @@ def test_resume_add_rejects_the_reserved_default_label(db, monkeypatch, tmp_path
         cli.cmd_resume_add(args)
 
 
+def test_jobs_add_missing_file_is_a_clean_error(db, monkeypatch, tmp_path):
+    """A typo'd --file path used to surface as a raw FileNotFoundError traceback;
+    every other bad-input path on this command exits with a one-line message."""
+    _mk_user(db)
+    monkeypatch.setattr(cli, "_connect", lambda: db)
+    args = cli.build_parser().parse_args(
+        ["jobs", "add", "--file", str(tmp_path / "nope.txt")]
+    )
+    with pytest.raises(SystemExit, match="no such file"):
+        cli.cmd_jobs_add(args)
+
+
 # ---------------------------------------------------------------------------
 # duplicate detection at tailor time
 
