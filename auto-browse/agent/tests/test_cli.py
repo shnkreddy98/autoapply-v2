@@ -135,6 +135,19 @@ def test_jobs_list_scoped_to_owner(db):
     assert [r["job_id"] for r in rows] == [mine]
 
 
+def test_add_jobs_stores_posting_url_not_apply_form(db):
+    """An apply-form URL has no JD on it; the stored url is what capture fetches."""
+    uid = _mk_user(db)
+    posting = "https://jobs.ashbyhq.com/ostium/f4b646e5-cec6-4716-af52-ce9fa02ff6e2"
+    r = cli.add_jobs(db, uid, [posting + "/application?utm_source=2JnBOk4N8m"])[0]
+    assert r["trimmed"] is True
+    with db.cursor() as cur:
+        cur.execute("SELECT url FROM jobs WHERE job_id = %s", (r["job_id"],))
+        assert cur.fetchone()["url"] == posting + "?utm_source=2JnBOk4N8m"
+    # and it dedupes against the plain posting URL
+    assert cli.add_jobs(db, uid, [posting])[0]["job_id"] == r["job_id"]
+
+
 def test_parse_url_lines():
     text = "https://a.dev/1\n\n# comment\n  https://b.dev/2  \n"
     assert cli.parse_url_lines(text) == ["https://a.dev/1", "https://b.dev/2"]

@@ -173,12 +173,16 @@ def add_jobs(conn, user_id: str, urls: list[str]) -> list[dict]:
             )
             existing = cur.fetchone()
         job_id = repo.add_job_for_user(conn, user_id, url, source="manual")
+        stored = queue.canonical_url(url)
         out.append(
             {
-                "url": url,
+                "url": stored,
                 "job_id": job_id,
                 "status": existing["status"] if existing else "jd_pending",
                 "duplicate": existing is not None,
+                # apply-form URLs get trimmed to the posting page — say so, otherwise
+                # the printed URL silently differs from what was pasted
+                "trimmed": stored != url.strip(),
             }
         )
     return out
@@ -856,7 +860,13 @@ def build_parser() -> argparse.ArgumentParser:
 
     jobs = sub.add_parser("jobs", help="manage job postings")
     jobs_sub = jobs.add_subparsers(dest="jobs_command", required=True)
-    add = jobs_sub.add_parser("add", help="add job URLs to the pipeline")
+    add = jobs_sub.add_parser(
+        "add",
+        help="add job URLs to the pipeline",
+        description="URLs are stored canonicalized: a trailing apply-form segment "
+        "(/application, /apply, ...) is dropped, because that page carries the form "
+        "and no job description — capturing it would fail.",
+    )
     add.add_argument("urls", nargs="*", help="job posting URLs")
     add.add_argument("--file", help="file with one URL per line (# comments ok)")
     add.add_argument("--user", help="user id or email (default: the only active user)")

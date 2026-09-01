@@ -11,7 +11,7 @@ from __future__ import annotations
 
 import uuid
 from typing import Any
-from urllib.parse import urlsplit, urlunsplit
+from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 import psycopg
 
@@ -80,16 +80,87 @@ def mark(conn: psycopg.Connection, table: str, row_id: str, status: str, **field
     conn.commit()
 
 
+# Query params that are tracking/presentation noise, never posting identity. Anything
+# NOT listed here is kept: on many ATS the job id lives in the query (`?gh_jid=`,
+# `?ShowJob=`, `?opportunityId=`), so dropping the whole query merged distinct
+# postings into one row and silently lost the second. A missed tracker at worst
+# creates a duplicate row, which `autoapply tailor` now reports — the safer failure.
+_TRACKING_PARAMS = {
+    "domain", "iis", "iisn", "lang", "microsite", "mobile", "mode", "height", "width",
+    "ref", "referer", "referrer", "src", "source", "trk", "trackingid",
+    "gh_src", "campaign", "medium", "utm",
+}
+_TRACKING_PREFIXES = ("utm_",)
+
+
+def _keep_param(key: str) -> bool:
+    k = key.lower()
+    return k not in _TRACKING_PARAMS and not k.startswith(_TRACKING_PREFIXES)
+
+
+# Trailing path segments that mean "the application form for the posting above", not
+# a posting of their own. Ashby (`/<org>/<uuid>/application`), Lever/Workday/Workable
+# (`.../apply`) and friends all serve a bare form there — no description, so JD capture
+# gets an empty page and the job fails. Dropping the segment yields the JD page, which
+# is both what the browser should fetch and the right dedupe key: the form URL and the
+# posting URL are the same job.
+_APPLY_SEGMENTS = {"application", "applications", "apply", "apply-now", "application_form"}
+
+
+def _has_identity_query(query: str) -> bool:
+    """True when the query carries a non-tracking param — i.e. the posting id."""
+    return any(_keep_param(k) for k, _ in parse_qsl(query, keep_blank_values=False))
+
+
+def _strip_apply_path(path: str, query: str = "") -> str:
+    """Drop trailing apply-form segments from a URL path (`/a/b/application` -> `/a/b`).
+
+    Loops so stacked suffixes (`/apply/application`) collapse too. Two guards stop it
+    eating real postings: an identity-bearing query means the path is not the id
+    (`/apply?gh_jid=51946` IS the posting on Greenhouse-embedded career sites), and
+    the last remaining segment is never removed, so a board whose postings live under
+    a bare `/apply` can't collapse to the site root."""
+    if _has_identity_query(query):
+        return path
+    segments = [s for s in path.split("/") if s]
+    while len(segments) > 1 and segments[-1].lower() in _APPLY_SEGMENTS:
+        segments.pop()
+    return "/" + "/".join(segments) if segments else "/"
+
+
+def canonical_url(url: str) -> str:
+    """The URL to actually store and fetch: the input with its apply-form suffix
+    removed and a scheme added if missing. Unlike `url_normalize` this preserves host
+    case, www and the query string — it is a real fetchable URL, not a dedupe key."""
+    raw = url.strip()
+    parts = urlsplit(raw if "://" in raw else "https://" + raw)
+    return urlunsplit(parts._replace(path=_strip_apply_path(parts.path, parts.query)))
+
+
 def url_normalize(url: str) -> str:
-    """Canonicalize a job URL for dedupe: force https, drop www / query / fragment,
-    lowercase host, strip trailing slash."""
+    """Canonicalize a job URL for dedupe: force https, drop www, lowercase host,
+    strip trailing slash, drop the apply-form suffix and tracking params (keeping
+    identity-bearing ones), and keep an id-like fragment.
+
+    The fragment is kept only when it contains a digit: SPA job boards route the
+    posting id through it (`/open-positions#/6676421003`), while plain anchors
+    (`#apply`, `#content`) are page furniture and would otherwise split one posting
+    into several rows."""
     raw = url.strip()
     parts = urlsplit(raw if "://" in raw else "https://" + raw)
     host = parts.netloc.lower()
     if host.startswith("www."):
         host = host[4:]
-    path = parts.path.rstrip("/") or "/"
-    return urlunsplit(("https", host, path, "", ""))
+    path = _strip_apply_path(parts.path.rstrip("/") or "/", parts.query)
+    # sorted so param order in the source URL can't produce two keys for one posting
+    kept = sorted(
+        (k, v)
+        for k, v in parse_qsl(parts.query, keep_blank_values=False)
+        if _keep_param(k)
+    )
+    query = urlencode(kept)
+    fragment = parts.fragment if any(c.isdigit() for c in parts.fragment) else ""
+    return urlunsplit(("https", host, path, query, fragment))
 
 
 def job_id_for_url(url: str) -> str:

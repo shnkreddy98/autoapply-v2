@@ -12,7 +12,7 @@ from typing import Any
 import psycopg
 from psycopg.types.json import Jsonb
 
-from common.queue import job_id_for_url, url_normalize
+from common.queue import canonical_url, job_id_for_url, url_normalize
 
 
 @dataclass
@@ -77,13 +77,16 @@ def get_or_create_job(
     the deterministic uuid5-of-URL id so RLS-bound callers can compute it without
     reading rows they don't own (see jobs policies in db/init.sql)."""
     norm = url_normalize(url)
+    # store the canonical form: an apply-form URL has no JD on it, so capturing the
+    # raw input would fail (see queue.canonical_url)
+    fetch_url = canonical_url(url)
     with conn.cursor() as cur:
         cur.execute(
             "INSERT INTO jobs (job_id, url, url_normalized, title, source) "
             "VALUES (%s, %s, %s, %s, %s) "
             "ON CONFLICT (url_normalized) DO UPDATE SET updated_at = now() "
             "RETURNING job_id",
-            (job_id_for_url(url), url, norm, title, source),
+            (job_id_for_url(url), fetch_url, norm, title, source),
         )
         job_id = cur.fetchone()["job_id"]
     conn.commit()
@@ -125,6 +128,7 @@ def add_job_for_user(
     to the deterministic uuid5 id (identical for all rows created by this code)."""
     norm = url_normalize(url)
     job_id = job_id_for_url(url)
+    fetch_url = canonical_url(url)  # apply-form suffix stripped — see queue.canonical_url
     # Plain INSERT + savepoint, NOT ON CONFLICT: under RLS, ON CONFLICT adds the
     # SELECT policy's USING clause as a check on the new row (anti-leak guard),
     # which always fails here — the ownership link doesn't exist yet.
@@ -133,7 +137,7 @@ def add_job_for_user(
             conn.execute(
                 "INSERT INTO jobs (job_id, url, url_normalized, title, source) "
                 "VALUES (%s, %s, %s, %s, %s)",
-                (job_id, url, norm, title, source),
+                (job_id, fetch_url, norm, title, source),
             )
     except psycopg.errors.UniqueViolation:
         pass  # someone owns it already — link below
