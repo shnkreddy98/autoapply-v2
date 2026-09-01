@@ -35,8 +35,11 @@ def db():
     try:
         testdb.ensure_test_db()
         conn = dbmod.connect()
+    except dbmod.NonTestDatabase:
+        raise  # misconfigured DB target must fail loudly, never skip
     except Exception as exc:  # infra down -> skip, don't fail
         pytest.skip(f"postgres unavailable: {exc}")
+    testdb.assert_test_db(conn)  # hard stop if this is not a *_test database
     with conn.cursor() as cur:
         cur.execute(f"TRUNCATE {', '.join(_TABLES)} RESTART IDENTITY CASCADE")
     conn.commit()

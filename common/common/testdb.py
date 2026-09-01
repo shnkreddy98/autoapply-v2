@@ -16,6 +16,26 @@ import psycopg
 _INIT_SQL = Path(__file__).resolve().parents[2] / "db" / "init.sql"
 
 
+# Databases that hold real data. Truncating one of these is unrecoverable without a
+# dump, so the guard below is a hard stop, not a warning.
+_PROTECTED_DBS = {"jobs-db", "jobs", "postgres"}
+
+
+def assert_test_db(conn) -> None:
+    """Abort unless `conn` is on a throwaway test database.
+
+    Call this immediately before any destructive fixture statement. It asks the
+    *server* for the current database rather than trusting DB_NAME, so an inherited
+    env var, a DB_DSN override or a fixture that connects on its own can't quietly
+    aim a TRUNCATE at live data. Anything not named `*_test` is rejected."""
+    current = conn.execute("SELECT current_database() AS name").fetchone()["name"]
+    if current in _PROTECTED_DBS or not current.endswith("_test"):
+        raise RuntimeError(
+            f"refusing to run a destructive test fixture against {current!r} — "
+            "test databases must be named *_test (set TEST_DB_NAME, or fix DB_NAME/DB_DSN)"
+        )
+
+
 def _admin_dsn() -> str:
     """DSN to the maintenance `postgres` DB — used only to CREATE the test DB."""
     return (
