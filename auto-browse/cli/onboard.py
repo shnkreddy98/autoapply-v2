@@ -184,15 +184,24 @@ def parse_resume_llm(text: str, model: str = PARSE_MODEL, client=None) -> Parsed
         {"role": "system", "content": system},
         {"role": "user", "content": f"Resume:\n---\n{text}\n---\nExtract all fields."},
     ]
+    import openai
+
     last_err: Exception | None = None
     for _ in range(2):
-        reply = (
-            client.chat.completions.create(
-                model=model, messages=messages, temperature=0.1
+        try:
+            reply = (
+                client.chat.completions.create(
+                    model=model, messages=messages, temperature=0.1
+                )
+                .choices[0]
+                .message.content
             )
-            .choices[0]
-            .message.content
-        )
+        except openai.APIError as err:
+            # a stopped self-hosted endpoint answers 404; say where, not a traceback
+            raise SystemExit(
+                f"resume parse request failed ({type(err).__name__}: {err}) — "
+                f"model {model!r} at {client.base_url}; check OPENROUTER_BASE_URL/OPENROUTER_MODEL"
+            ) from None
         try:
             return ParsedResume.model_validate(_json_from_reply(reply))
         except (ValidationError, json.JSONDecodeError) as err:
