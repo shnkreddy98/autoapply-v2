@@ -1,0 +1,20 @@
+"Do you have the right to work in the United States of America? (required)": |-
+  - combobox "Do you have the right to work in the United States of America? (required)" [ref=e114] [cursor=pointer]:
+    - option "Please select"
+    - option "Yes" [selected]
+    - option "No"
+"Will you now, or in the future, require sponsorship for employment visa status (e.g. H-1B visa status)? (required)": |-
+  - combobox "Will you now, or in the future, require sponsorship for employment visa status (e.g. H-1B visa status)? (required)" [ref=e120] [cursor=pointer]:
+    - option "Please select" [selected]
+    - option "Yes"
+    - option "No"
+"How many full years of strong data engineering experience do you have, working with large-scale data pipelines and AWS data services? (required)": |-
+  - combobox "How many full years of strong data engineering experience do you have, working with large-scale data pipelines and AWS data services? (required)" [ref=e126] [cursor=pointer]:
+    - option "Please select" [selected]
+    - option "8+ years"
+    - option "4-7 years"
+"How many full years of experience do you have writing complex, production SQL (window functions, CTEs, query optimisation)? (required)": |-
+  - combobox "How many full years of experience do you have writing complex, production SQL (window functions, CTEs, query optimisation)? (required)" [ref=e132] [cursor=pointer]:
+    - option "Please select" [selected]
+    - option "8+ years"
+    - option "4-7 years"

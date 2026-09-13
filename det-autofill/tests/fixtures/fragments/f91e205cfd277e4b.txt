@@ -1,0 +1,7 @@
+"Will you now or in the future require sponsorship for employment visa status?": |-
+  - group "Will you now or in the future require sponsorship for employment visa status?*" [ref=e1491]:
+    - paragraph [ref=e1495]:
+      - generic [ref=e1496]: Will you now or in the future require sponsorship for employment visa status?*
+    - button "Select One Required" [ref=e1500]: Select One
+  - group "Have you ever worked for Corewell Health, Beaumont Health, Spectrum Health, Lakeland Health, or Priority Health in any capacity (including as a permanent or temporary employee, volunteer, independent contractor, staffing agency worker, intern, or through a clinical rotation)?*" [ref=e1502]:
+    - paragraph [ref=e1506]:

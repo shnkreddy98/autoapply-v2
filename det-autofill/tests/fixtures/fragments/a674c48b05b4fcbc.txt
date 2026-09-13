@@ -1,0 +1,24 @@
+"Accept": |-
+      - paragraph [ref=e8]: We use cookies to offer you the best possible website experience. Your cookie preferences will be stored in your browser’s local storage. This includes cookies necessary for the website's operation. Additionally, you can freely decide and change any time whether you accept cookies or choose to opt out of cookies to improve website's performance, as well as cookies used to display content tailored to your interests. Your experience of the site and the services we are able to offer may be impacted if you do not accept all cookies.
+      - button [ref=e144] [cursor=pointer]: Modify Cookie Preferences
+      - generic [ref=e10]:
+        - button [ref=e145] [cursor=pointer]: Reject All Cookies
+        - button [ref=e146] [cursor=pointer]: Accept All Cookies
+  - banner [ref=e13]:
+    - navigation [ref=e147]:
+      - link [ref=e148] [cursor=pointer]:
+  --
+            - generic [ref=e139]: Password accepted
+          - list [ref=e61]:
+            - listitem [ref=e62]: Password must be at least 8 characters long.
+            - listitem [ref=e63]: Password must not be longer than 20 characters.
+  --
+          - button [ref=e175] [cursor=pointer]: Read and accept the data privacy statement.
+          - generic [ref=e177]: Terms of Use is required
+          - button [ref=e178] [cursor=pointer]: Create Account
+  - contentinfo [ref=e95]:
+  --
+        - button "Accept" [ref=e237] [cursor=pointer]
+      - button "Decline" [ref=e241] [cursor=pointer]
+      - button "Print" [ref=e245] [cursor=pointer]
+    - button "Close" [active] [ref=e246] [cursor=pointer]: 

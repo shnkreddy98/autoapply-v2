@@ -1,0 +1,5 @@
+"Create Account": |-
+            - button "Create Account" [ref=e217] [cursor=pointer]
+  - contentinfo [ref=e82]:
+    - contentinfo [ref=e85]:
+      - navigation "Contact Us - EEO is the Law Spanish" [ref=e218]:

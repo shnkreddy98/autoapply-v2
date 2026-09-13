@@ -1,0 +1,21 @@
+"Job Board . Required": |-
+  - row "Job Opportunity Source Tracking Please indicate how you heard about this job. Source Type . Required Job Board Job Board . Required Select One..." [ref=e171]:
+    - cell "Job Opportunity Source Tracking Please indicate how you heard about this job. Source Type . Required Job Board Job Board . Required Select One..." [ref=e172]:
+      - heading "Job Opportunity" [level=1] [ref=e121]:
+        - generic [ref=e122]: Job Opportunity
+      - generic [ref=e125]:
+  --
+            - combobox "Job Board . Required" [ref=e179]:
+              - option "Select One..." [selected]
+              - option "Careerbuilder"
+              - option "Other Job Board"
+"Save and Continue": |-
+          - button "Save and Continue" [ref=e112] [cursor=pointer]
+          - button "Save as Draft" [ref=e113] [cursor=pointer]
+          - button "Quit" [ref=e114] [cursor=pointer]
+      - generic [ref=e115]:
+  --
+        - button "Save and Continue" [ref=e141] [cursor=pointer]
+        - button "Save as Draft" [ref=e142] [cursor=pointer]
+        - button "Quit" [ref=e143] [cursor=pointer]
+  - generic [ref=e145]:

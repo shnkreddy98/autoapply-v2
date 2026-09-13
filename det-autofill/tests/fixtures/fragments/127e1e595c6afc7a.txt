@@ -1,0 +1,23 @@
+"Resume": |-
+  - Page URL: https://cir.wd108.myworkdayjobs.com/en-US/CIR_External_Career_Site/job/Phoenix%2C-AZ/Principal-Data-Engineer_R-2025-151/apply/autofillWithResume?source=LinkedIn
+  - Page Title: Principal Data Engineer
+  ### Snapshot
+  ```yaml
+  --
+              - generic [ref=e107]: Autofill with Resume
+            - listitem [ref=e108]:
+              - generic: step 2 of 7
+              - generic [ref=e114]: My Information
+  --
+            - heading "Autofill with Resume" [active] [level=3] [ref=e152]
+            - generic [ref=e153]: "* Indicates a required field"
+            - generic [ref=e158]:
+              - paragraph [ref=e161]: Please drop in a resume to speed up the application process
+              - paragraph [ref=e162]:
+                - generic [ref=e165]:
+                  - generic [ref=e166]: Upload either DOC, DOCX, HTML, PDF, or TXT file types (5MB max)
+"Upload": |-
+  - generic [ref=e166]: Upload either DOC, DOCX, HTML, PDF, or TXT file types (5MB max)
+  - generic [ref=e169] [cursor=pointer]:
+    - generic [ref=e175]: Drop file here
+    - generic [ref=e176]:

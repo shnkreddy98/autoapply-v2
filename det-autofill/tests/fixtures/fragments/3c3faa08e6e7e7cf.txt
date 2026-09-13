@@ -1,0 +1,6 @@
+"Mobile/Android": |-
+  - option "Mobile/Android" [ref=e832]:
+    - generic [ref=e833]: Mobile/Android
+  - option "Mobile/Apple iOS" [ref=e834]:
+    - generic [ref=e835]: Mobile/Apple iOS
+  - option "Mobile - Other (Non Iphone/Android)" [ref=e836]:

@@ -1,0 +1,29 @@
+"Hispanic or Latino?": |-
+          - button "Error Hispanic or Latino?" [ref=e1570] [cursor=pointer]:
+            - text: Error
+            - generic [ref=e1571]: "-"
+            - text: Hispanic or Latino?
+          - generic [ref=e1572]: The field Hispanic or Latino? is required and must have a value.
+      - listitem [ref=e1573]:
+        - generic [ref=e1574]:
+          - button "Error I Consent" [ref=e1575] [cursor=pointer]:
+            - text: Error
+            - generic [ref=e1576]: "-"
+            - text: I Consent
+          - generic [ref=e1577]: Field and Value required
+  - generic [ref=e1388]:
+  --
+          - generic [ref=e1453]: Hispanic or Latino?*
+          - generic [ref=e1454]:
+            - button "Hispanic or Latino?" [ref=e1457]: Select One
+            - paragraph [ref=e1579]:
+              - generic [ref=e1580]: "Error:"
+              - text: The field Hispanic or Latino? is required and must have a value.
+        - generic [ref=e1458]:
+          - generic [ref=e1460]: Please select your gender.*
+          - button "Please select your gender. Male Required" [ref=e1504]: Male
+        - generic [ref=e1465]:
+          - generic [ref=e1466]: Please select the veteran status which most accurately describes how you identify yourself.
+          - button "Please select the veteran status which most accurately describes how you identify yourself. I DO NOT WISH TO SELF-IDENTIFY" [ref=e1518]: I DO NOT WISH TO SELF-IDENTIFY
+    - group "Terms and Conditions" [ref=e1471]:
+      - heading "Terms and Conditions" [level=4] [ref=e1472]

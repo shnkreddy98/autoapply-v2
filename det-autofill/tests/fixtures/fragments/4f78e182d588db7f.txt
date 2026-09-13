@@ -1,0 +1,6 @@
+"Asian": |-
+  - menuitem "Asian" [ref=e717] [cursor=pointer]:
+    - generic [ref=e720]: Asian
+  - menuitem "Black or African American" [ref=e721] [cursor=pointer]:
+    - generic [ref=e724]: Black or African American
+  - menuitem "Hispanic or Latino" [ref=e725] [cursor=pointer]:

@@ -1,0 +1,6 @@
+"Accessibility Options": |-
+  - button "About hCaptcha & Accessibility Options" [active] [ref=f5e20] [cursor=pointer]:
+    - img [ref=f5e22]
+    - img [ref=f5e27]
+  - button "Refresh Challenge." [ref=f5e31] [cursor=pointer]:
+"Audio": (no match)

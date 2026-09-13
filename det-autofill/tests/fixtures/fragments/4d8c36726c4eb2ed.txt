@@ -1,0 +1,21 @@
+"require \u201csponsorship": |-
+  - generic [ref=e132]: Will you now or in the future require “sponsorship for an immigration-related employment benefit?"
+  - table [ref=e134]:
+    - rowgroup [ref=e135]:
+      - row "No Yes" [ref=e136]:
+        - cell "No" [ref=e137]:
+          - radio "No" [ref=e138]
+"18 years of age or older?": |-
+  - generic [ref=e145]: Are you 18 years of age or older?
+  - table [ref=e147]:
+    - rowgroup [ref=e148]:
+      - row "Yes No" [ref=e149]:
+        - cell "Yes" [ref=e150]:
+          - radio "Yes" [ref=e151]
+"currently working?": |-
+  - generic [ref=e158]: Are you currently working?
+  - table [ref=e160]:
+    - rowgroup [ref=e161]:
+      - row "No Yes" [ref=e162]:
+        - cell "No" [ref=e163]:
+          - radio "No" [ref=e164]

@@ -1,0 +1,58 @@
+"Relevant Files": |-
+  - table "This section displays basic information regarding the files attached to the candidate record. You can delete some or all the files. The \"Relevant Files\" column allows you to select the files relevant to this job submission. Also, please indicate one of the attached documents as your resume for this application." [ref=e204]:
+    - caption [ref=e205]:
+      - generic [ref=e206]:
+        - text: This section displays basic information regarding the files attached to the candidate record.
+  --
+        - text: The "Relevant Files" column allows you to select the files relevant to this job submission.
+        - text: Also, please indicate one of the attached documents as your resume for this application.
+    - rowgroup [ref=e214]:
+      - row "Relevant Files Resume File Name Date Comments Actions" [ref=e215]:
+        - columnheader "Relevant Files" [ref=e216]: Relevant Files
+        - columnheader "Resume" [ref=e218]: Resume
+        - columnheader "File Name" [ref=e220]: File Name
+        - columnheader "Date" [ref=e222]: Date
+"Resume": |-
+    - paragraph [ref=e190]: You can attach resumes and cover letters to the candidate record. Once a file is attached, you can overwrite it by attaching a file with exactly the same name and extension. Other documents, such as writing examples, transcripts, graphic designs, etc., will be requested as needed.
+  - table [ref=e193]:
+    - rowgroup [ref=e194]:
+      - row "Select the file to attach Comments about the file Attach" [ref=e195]:
+  --
+  - table "This section displays basic information regarding the files attached to the candidate record. You can delete some or all the files. The \"Relevant Files\" column allows you to select the files relevant to this job submission. Also, please indicate one of the attached documents as your resume for this application." [ref=e204]:
+    - caption [ref=e205]:
+      - generic [ref=e206]:
+        - text: This section displays basic information regarding the files attached to the candidate record.
+  --
+        - text: Also, please indicate one of the attached documents as your resume for this application.
+    - rowgroup [ref=e214]:
+      - row "Relevant Files Resume File Name Date Comments Actions" [ref=e215]:
+        - columnheader "Relevant Files" [ref=e216]: Relevant Files
+        - columnheader "Resume" [ref=e218]: Resume
+        - columnheader "File Name" [ref=e220]: File Name
+        - columnheader "Date" [ref=e222]: Date
+        - columnheader "Comments" [ref=e224]: Comments
+  --
+      - 'row "Select the file: resume.pdf Document is a resume resume.pdf 6/30/26 This file includes a resume from which basic candidate information has been extracted. Delete" [ref=e229]':
+        - 'cell "Select the file: resume.pdf" [ref=e230]':
+          - 'checkbox "Select the file: resume.pdf" [checked] [ref=e231]'
+        - cell "Document is a resume" [ref=e232]:
+          - checkbox "Document is a resume" [checked] [ref=e233]
+        - cell "resume.pdf" [ref=e234]:
+          - link "resume.pdf" [ref=e235] [cursor=pointer]:
+            - /url: /careersection/viewAttachedFile.jss?attachmentNo=8543569&portalCode=10000&candidateNo=7728833&applicationNo=8578247
+            - text: resume.pdf
+        - cell "6/30/26" [ref=e237]: 6/30/26
+        - cell "This file includes a resume from which basic candidate information has been extracted." [ref=e239]: This file includes a resume from which basic candidate information has been extracted.
+        - cell "Delete" [ref=e241]:
+          - link "Delete" [ref=e242] [cursor=pointer]:
+            - /url: "#"
+"Save and Continue": |-
+      - button "Save and Continue" [ref=e160] [cursor=pointer]
+      - button "Save as Draft" [ref=e161] [cursor=pointer]
+      - button "Quit" [ref=e162] [cursor=pointer]
+  - generic [ref=e163]:
+  --
+    - button "Save and Continue" [ref=e282] [cursor=pointer]
+    - button "Save as Draft" [ref=e283] [cursor=pointer]
+    - button "Quit" [ref=e284] [cursor=pointer]
+  - link "Privacy Agreement" [ref=e293] [cursor=pointer]:

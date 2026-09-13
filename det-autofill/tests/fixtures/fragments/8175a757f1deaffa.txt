@@ -1,0 +1,96 @@
+"referred": |-
+    - generic [ref=e554]: Preferred Name
+    - textbox "Preferred Name Preferred Name" [ref=e555]:
+      - /placeholder: ""
+  - generic [ref=e557]:
+    - generic [ref=e558]: Middle
+"start": (no match)
+"salary": (no match)
+"overtime": (no match)
+"experience": |-
+  - region "Work Experience" [ref=e631]:
+    - generic [ref=e632]:
+      - button "Work Experience" [expanded] [ref=e634] [cursor=pointer]: 
+      - generic [ref=e635]:
+        - heading "Work Experience" [level=2] [ref=e636]
+        - text: 
+        - button "Add Experience" [ref=e639] [cursor=pointer]:
+          - generic [ref=e640]: 
+    - generic [ref=e643]:
+      - form "Work Experience 1" [ref=e644]:
+        - generic [ref=e646]:
+          - button "Delete Work Experience 1" [ref=e648] [cursor=pointer]:
+            - generic "Remove" [ref=e649]: 
+          - generic [ref=e651]:
+            - generic [ref=e654]:
+  --
+      - form "Work Experience 2" [ref=e695]:
+        - generic [ref=e696]:
+          - separator [ref=e697]
+          - generic [ref=e698]:
+            - button "Delete Work Experience 2" [ref=e700] [cursor=pointer]:
+              - generic "Remove" [ref=e701]: 
+            - generic [ref=e703]:
+              - generic [ref=e706]:
+  --
+      - form "Work Experience 3" [ref=e747]:
+        - generic [ref=e748]:
+          - separator [ref=e749]
+          - generic [ref=e750]:
+            - button "Delete Work Experience 3" [ref=e752] [cursor=pointer]:
+              - generic "Remove" [ref=e753]: 
+            - generic [ref=e755]:
+              - generic [ref=e758]:
+"18": |-
+        - generic [ref=e718]:
+          - group [ref=e720]:
+            - generic [ref=e721]: "*From"
+            - generic [ref=e722]:
+  --
+                  - text: "2018"
+          - group [ref=e782]:
+            - generic [ref=e783]: To
+            - generic [ref=e784]:
+  --
+                - combobox "To month" [ref=e918]:
+                  - option "Choose..."
+                  - option "Jan"
+                  - option "Feb"
+  --
+    - generic [ref=e1018]:
+      - strong [ref=e1020]: Sql
+      - generic [ref=e1021]:
+        - paragraph [ref=e1022]: Skill level
+  --
+    - generic [ref=e1180]:
+      - strong [ref=e1182]: Streaming
+      - generic [ref=e1183]:
+        - paragraph [ref=e1184]: Skill level
+        - combobox "Skill level" [ref=e1185]:
+          - option "Not Specified"
+          - option "Novice"
+          - option "Some Knowledge"
+  --
+  - generic [ref=e1186]:
+    - button "Remove Real-time" [ref=e1187] [cursor=pointer]: ×
+    - generic [ref=e1189]:
+      - strong [ref=e1191]: Real-time
+      - generic [ref=e1192]:
+        - paragraph [ref=e1193]: Skill level
+  --
+      - strong [ref=e1218]: Pipeline
+      - generic [ref=e1219]:
+        - paragraph [ref=e1220]: Skill level
+        - combobox "Skill level" [ref=e1221]:
+  --
+      - generic [ref=e1318]:
+        - paragraph [ref=e1319]: Skill level
+        - combobox "Skill level" [ref=e1320]:
+          - option "Not Specified"
+  --
+        - paragraph [ref=e1418]: Skill level
+        - combobox "Skill level" [ref=e1419]:
+          - option "Not Specified"
+          - option "Novice"
+"eligible": (no match)
+"sponsorship": (no match)

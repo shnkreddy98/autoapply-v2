@@ -1,0 +1,10 @@
+"Veteran Status": |-
+    - generic [ref=f84e561]: Veteran Status
+    - generic [ref=f84e562]:
+      - log [ref=f84e564]
+      - generic [ref=f84e566]:
+  --
+          - combobox "Veteran Status" [ref=f84e570]
+        - button "Toggle flyout" [ref=f84e572] [cursor=pointer]:
+          - img [ref=f84e573]
+  - separator [ref=f84e575]

@@ -1,0 +1,50 @@
+"Apply": |-
+            - button "Apply" [ref=e81] [cursor=pointer]:
+              - generic [ref=e83]:
+                - generic: Apply
+            - generic "Share Button" [ref=e87]:
+              - generic [ref=e88]:
+                - button "Share Button" [ref=e89] [cursor=pointer]:
+  --
+            - emphasis [ref=e127]: Employees within a 90-minute radius of our Oak Brook, IL headquarters are required to adhere to the company in-office work guidelines of 4 days per month minimum from 10 am to 2 pm (1 of the 4 days must be a Monday or Friday). This requirement does not apply to support specialist positions.
+          - paragraph [ref=e128]
+          - paragraph [ref=e129]: Don't meet every single requirement? That's okay. At Inspira Financial, we know growth comes from people who are willing to learn, challenge themselves, and aim higher. We value individuals who lead with heart, cultivate trust, and collaborate to win together. If you're energized by meaningful work, continuous development, and being part of a team that turns collective effort into real impact, Inspira Financial could be the right next step in your journey. We look forward to receiving your application.
+          - paragraph [ref=e130]
+  --
+          - text: o Applying rule sets in Information Security best practices and ability to apply information security methodology to operating systems, network, and databases.
+          - text: • Scripting languages such as Powershell, Bash, JS, Python, etc. Experience with Cloud Services Azure (preferred), Google or AWS
+          - text: • Experience with BDR solutions such as Veeam, VMWare Site Recovery, and Azure Backup/Site Recovery
+          - text: • Configure and Support Microsoft 365 Services (Exchange, Intune, Sharepoint, and Teams) Experience with general SQL Server database troubleshooting.
+  --
+            - heading "Apply forCloud Operations Admin (Remote)" [level=3] [ref=e224]:
+              - generic "Apply forCloud Operations Admin (Remote)" [ref=e225] [cursor=pointer]:
+                - link "Cloud Operations Admin (Remote)" [ref=e226]:
+                  - generic [ref=e227]:
+                    - generic: Cloud Operations Admin (Remote)
+  --
+            - button "Apply forCloud Operations Admin (Remote)" [ref=e240] [cursor=pointer]:
+              - generic [ref=e242]:
+                - generic: Apply
+          - generic [ref=e245]:
+            - heading "Apply forCloud Operations Admin (Remote)" [level=3] [ref=e247]:
+              - generic "Apply forCloud Operations Admin (Remote)" [ref=e248] [cursor=pointer]:
+                - link "Cloud Operations Admin (Remote)" [ref=e249]:
+                  - generic [ref=e250]:
+                    - generic: Cloud Operations Admin (Remote)
+  --
+            - button "Apply forCloud Operations Admin (Remote)" [ref=e263] [cursor=pointer]:
+              - generic [ref=e265]:
+                - generic: Apply
+          - generic [ref=e268]:
+            - heading "Apply forAzure DevOps Engineer (Remote)" [level=3] [ref=e270]:
+              - generic "Apply forAzure DevOps Engineer (Remote)" [ref=e271] [cursor=pointer]:
+                - link "Azure DevOps Engineer (Remote)" [ref=e272]:
+                  - generic [ref=e273]:
+                    - generic: Azure DevOps Engineer (Remote)
+  --
+            - button "Apply forAzure DevOps Engineer (Remote)" [ref=e286] [cursor=pointer]:
+              - generic [ref=e288]:
+                - generic: Apply
+    - generic [ref=e175]: undefined
+  - generic [ref=e37]:
+    - generic [ref=e38]:

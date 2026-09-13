@@ -1,0 +1,10 @@
+"Yes, I have read and consent to the terms and conditions*": |-
+            - generic [ref=e1598]: Yes, I have read and consent to the terms and conditions*
+            - checkbox "Yes, I have read and consent to the terms and conditions" [ref=e1603] [cursor=pointer]
+  - generic [ref=e260]:
+    - button "Back" [ref=e378] [cursor=pointer]
+"Save and Continue": |-
+          - button "Save and Continue" [ref=e379] [cursor=pointer]
+  - generic [ref=e30]:
+    - heading "Follow Us" [level=4] [ref=e31]
+    - list [ref=e32]:

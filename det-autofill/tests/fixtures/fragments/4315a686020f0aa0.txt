@@ -1,0 +1,40 @@
+"Clear selections": |-
+  - button "Clear selections" [ref=e427] [cursor=pointer]:
+    - img [ref=e428]
+  - button "Toggle flyout" [ref=e210] [cursor=pointer]:
+    - img [ref=e211]
+  --
+  - button "Clear selections" [ref=e436] [cursor=pointer]:
+    - img [ref=e437]
+  - button "Toggle flyout" [ref=e227] [cursor=pointer]:
+    - img [ref=e228]
+  --
+    - button "Clear selections" [ref=e449] [cursor=pointer]:
+      - img [ref=e450]
+    - button "Toggle flyout" [ref=e244] [cursor=pointer]:
+      - img [ref=e245]
+  --
+  - button "Clear selections" [ref=e459] [cursor=pointer]:
+    - img [ref=e460]
+  - button "Toggle flyout" [ref=e277] [cursor=pointer]:
+    - img [ref=e278]
+  --
+    - button "Clear selections" [ref=e469] [cursor=pointer]:
+      - img [ref=e470]
+    - button "Toggle flyout" [ref=e294] [cursor=pointer]:
+      - img [ref=e295]
+  --
+    - button "Clear selections" [ref=e499] [cursor=pointer]:
+      - img [ref=e500]
+    - button "Toggle flyout" [ref=e485] [cursor=pointer]:
+      - img [ref=e486]
+  --
+  - button "Clear selections" [ref=e509] [cursor=pointer]:
+    - img [ref=e510]
+  - button "Toggle flyout" [ref=e318] [cursor=pointer]:
+    - img [ref=e319]
+  --
+  - button "Clear selections" [ref=e519] [cursor=pointer]:
+    - img [ref=e520]
+  - button "Toggle flyout" [ref=e375] [cursor=pointer]:
+    - img [ref=e376]

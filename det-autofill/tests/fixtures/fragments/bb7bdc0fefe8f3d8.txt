@@ -1,0 +1,7 @@
+"Type to Add Skills": |-
+      - generic [ref=e1276]: Type to Add Skills*
+      - generic [ref=e1282] [cursor=pointer]:
+        - textbox "Type to Add Skills" [ref=e1283]:
+          - /placeholder: Search
+        - generic [ref=e1284]: 0 items selected
+  - group "Resume/CV" [ref=e1289]:

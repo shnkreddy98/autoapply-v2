@@ -1,0 +1,108 @@
+"LinkedIn Profile": |-
+    - generic "LinkedIn Profile" [ref=e772]
+    - textbox "LinkedIn Profile" [ref=e776]
+  - generic [ref=e777]:
+    - generic [ref=e780]:
+      - generic "Home Phone Number" [ref=e782]
+"Position Title *": |-
+    - generic "Position Title" [ref=e1444]: Position Title *
+    - textbox "Position Title *" [ref=e1448]: Data Engineer
+  - generic [ref=e1451]:
+    - generic "Current Job" [ref=e1453]
+    - checkbox "Current Job" [ref=e1459] [cursor=pointer]
+  --
+    - generic "Position Title" [ref=e1588]: Position Title *
+    - textbox "Position Title *" [ref=e1592]: Data Engineer
+  - generic [ref=e1595]:
+    - generic "Current Job" [ref=e1597]
+    - checkbox "Current Job" [ref=e1603] [cursor=pointer]
+  --
+    - generic "Position Title" [ref=e1732]: Position Title *
+    - textbox "Position Title *" [ref=e1736]: Founding Engineer
+  - generic [ref=e1739]:
+    - generic "Current Job" [ref=e1741]
+    - checkbox "Current Job" [checked] [ref=e1747] [cursor=pointer]
+"Employer Name *": |-
+    - generic "Employer Name" [ref=e1466]: Employer Name *
+    - textbox "Employer Name *" [ref=e1470]: The Sparks Foundation
+  - generic [ref=e1471]:
+    - generic [ref=e1474]:
+      - generic "Start Date" [ref=e1476]: Start Date *
+  --
+    - generic "Employer Name" [ref=e1610]: Employer Name *
+    - textbox "Employer Name *" [ref=e1614]: Kantar
+  - generic [ref=e1615]:
+    - generic [ref=e1618]:
+      - generic "Start Date" [ref=e1620]: Start Date *
+  --
+    - generic "Employer Name" [ref=e1754]: Employer Name *
+    - textbox "Employer Name *" [ref=e1758]: AirFold
+  - generic [ref=e1762]:
+    - generic "Start Date" [ref=e1764]: Start Date *
+    - textbox "Start Date *" [ref=e1768]: 2025-01-01
+"Start Date *": |-
+      - generic "Start Date" [ref=e1476]: Start Date *
+      - textbox "Start Date *" [ref=e1480]: 2018-04-01
+    - generic [ref=e1483]:
+      - generic "End Date" [ref=e1485]: End Date *
+      - textbox "End Date *" [ref=e1489]: 2020-03-01
+  --
+      - generic "Start Date" [ref=e1620]: Start Date *
+      - textbox "Start Date *" [ref=e1624]: 2020-04-01
+    - generic [ref=e1627]:
+      - generic "End Date" [ref=e1629]: End Date *
+      - textbox "End Date *" [ref=e1633]: 2022-04-01
+  --
+    - generic "Start Date" [ref=e1764]: Start Date *
+    - textbox "Start Date *" [ref=e1768]: 2025-01-01
+  - generic [ref=e1769]:
+    - generic [ref=e1771]:
+      - generic [ref=e1774]:
+"End Date *": |-
+      - generic "End Date" [ref=e1485]: End Date *
+      - textbox "End Date *" [ref=e1489]: 2020-03-01
+  - generic [ref=e1490]:
+    - generic [ref=e1492]:
+      - generic [ref=e1495]:
+  --
+      - generic "End Date" [ref=e1629]: End Date *
+      - textbox "End Date *" [ref=e1633]: 2022-04-01
+  - generic [ref=e1634]:
+    - generic [ref=e1636]:
+      - generic [ref=e1639]:
+"Reason For Leaving? *": |-
+    - generic "Reason For Leaving?" [ref=e1550]: Reason For Leaving? *
+    - textbox "Reason For Leaving? *" [ref=e1554]
+  - generic [ref=e1557]:
+    - generic "Duties and Responsibilities" [ref=e1559]: Duties and Responsibilities *
+    - textbox "Duties and Responsibilities *" [ref=e1563]: "• Enhanced ETL pipeline performance by 25% through parallel processing techniques and query optimization to support high-volume data generation. • Tuned complex SQL queries and database indexing strategies for PostgreSQL and MySQL, significantly reducing latency for downstream analytical reporting. • Integrated automated data validation scripts to detect schema anomalies and null values, ensuring data integrity and minimizing downstream corruption incidents. • Collaborated with stakeholders to design dimensional data models (Star Schema), facilitating efficient querying and supporting strategic decision-making processes. • Tech Stack: Python, Pandas, PostgreSQL, MySQL, ETL, SQL, Git"
+  --
+    - generic "Reason For Leaving?" [ref=e1694]: Reason For Leaving? *
+    - textbox "Reason For Leaving? *" [ref=e1698]
+  - generic [ref=e1701]:
+    - generic "Duties and Responsibilities" [ref=e1703]: Duties and Responsibilities *
+    - textbox "Duties and Responsibilities *" [ref=e1707]: "• Orchestrated large-scale distributed data processing pipelines using Apache Spark and Airflow, ingesting terabytes of structured and unstructured data streams. • Modernized legacy data models by deploying dbt for SQL transformations, establishing reliable data structures that improved analytical time-to-insight by 25%. • Built fault-tolerant streaming architectures with Kafka and Spark Streaming to deliver near real-time operational intelligence and situational awareness. • Automated data ingestion workflows using AWS Lambda and S3 serverless architecture, reducing manual overhead by 80% while ensuring data durability. • Designed algorithmic optimization models to enhance resource allocation efficiency, driving significant performance improvements for global enterprise clients. • Tech Stack: Apache Spark, Airflow, Kafka, AWS Lambda, S3, dbt, SQL, Python"
+  --
+    - generic "Reason For Leaving?" [ref=e1829]: Reason For Leaving? *
+    - textbox "Reason For Leaving? *" [ref=e1833]
+  - generic [ref=e1836]:
+    - generic "Duties and Responsibilities" [ref=e1838]: Duties and Responsibilities *
+    - textbox "Duties and Responsibilities *" [ref=e1842]: "• Architected secure multi-cloud infrastructure (AWS/GCP) using Terraform and Istio, ensuring high availability and resilience for mission-critical microservices. • Engineered event-driven data ingestion systems using Kafka and Debezium CDC, processing millions of unstructured events with sub-second latency and exactly-once semantics. • Developed modular API frameworks (FastAPI) with robust RBAC security protocols to support secure data access and integration for enterprise-scale applications. • Implemented automated data governance workflows using dbt and Snowflake, creating validatable transformation logic that reduced reporting discrepancies by 40%. • Optimized NoSQL and distributed database performance (DynamoDB, ClickHouse) to handle complex vector search retrieval and large-scale analytical queries. • Tech Stack: AWS, GCP, Terraform, Kubernetes, Kafka, Debezium, ClickHouse, FastAPI, PostgreSQL, DynamoDB"
+"Duties and Responsibilities *": |-
+      - generic "Duties and Responsibilities" [ref=e1559]: Duties and Responsibilities *
+      - textbox "Duties and Responsibilities *" [ref=e1563]: "• Enhanced ETL pipeline performance by 25% through parallel processing techniques and query optimization to support high-volume data generation. • Tuned complex SQL queries and database indexing strategies for PostgreSQL and MySQL, significantly reducing latency for downstream analytical reporting. • Integrated automated data validation scripts to detect schema anomalies and null values, ensuring data integrity and minimizing downstream corruption incidents. • Collaborated with stakeholders to design dimensional data models (Star Schema), facilitating efficient querying and supporting strategic decision-making processes. • Tech Stack: Python, Pandas, PostgreSQL, MySQL, ETL, SQL, Git"
+  - generic [ref=e1564]:
+    - button "Update" [ref=e1571] [cursor=pointer]:
+      - generic [ref=e1572]: Update
+  --
+      - generic "Duties and Responsibilities" [ref=e1703]: Duties and Responsibilities *
+      - textbox "Duties and Responsibilities *" [ref=e1707]: "• Orchestrated large-scale distributed data processing pipelines using Apache Spark and Airflow, ingesting terabytes of structured and unstructured data streams. • Modernized legacy data models by deploying dbt for SQL transformations, establishing reliable data structures that improved analytical time-to-insight by 25%. • Built fault-tolerant streaming architectures with Kafka and Spark Streaming to deliver near real-time operational intelligence and situational awareness. • Automated data ingestion workflows using AWS Lambda and S3 serverless architecture, reducing manual overhead by 80% while ensuring data durability. • Designed algorithmic optimization models to enhance resource allocation efficiency, driving significant performance improvements for global enterprise clients. • Tech Stack: Apache Spark, Airflow, Kafka, AWS Lambda, S3, dbt, SQL, Python"
+  - generic [ref=e1708]:
+    - button "Update" [ref=e1715] [cursor=pointer]:
+      - generic [ref=e1716]: Update
+  --
+      - generic "Duties and Responsibilities" [ref=e1838]: Duties and Responsibilities *
+      - textbox "Duties and Responsibilities *" [ref=e1842]: "• Architected secure multi-cloud infrastructure (AWS/GCP) using Terraform and Istio, ensuring high availability and resilience for mission-critical microservices. • Engineered event-driven data ingestion systems using Kafka and Debezium CDC, processing millions of unstructured events with sub-second latency and exactly-once semantics. • Developed modular API frameworks (FastAPI) with robust RBAC security protocols to support secure data access and integration for enterprise-scale applications. • Implemented automated data governance workflows using dbt and Snowflake, creating validatable transformation logic that reduced reporting discrepancies by 40%. • Optimized NoSQL and distributed database performance (DynamoDB, ClickHouse) to handle complex vector search retrieval and large-scale analytical queries. • Tech Stack: AWS, GCP, Terraform, Kubernetes, Kafka, Debezium, ClickHouse, FastAPI, PostgreSQL, DynamoDB"
+  - generic [ref=e1843]:
+    - button "Update" [ref=e1850] [cursor=pointer]:
+      - generic [ref=e1851]: Update

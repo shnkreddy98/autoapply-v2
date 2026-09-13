@@ -1,0 +1,144 @@
+"School": |-
+      - listitem [ref=e167]: The field "School Name" is mandatory.
+  - link "Beginning of the main content section." [ref=e168] [cursor=pointer]:
+    - /url: "#"
+  - table [ref=e169]:
+    - rowgroup [ref=e170]:
+      - row [ref=e171]:
+        - cell "Experience & Education Mandatory fields are marked with an asterisk. . Required WORK EXPERIENCE If you did not upload a resume, list work experiences below starting with the most recent experience. If you uploaded a resume you can skip this step. Work Experience 1 Work Experience 2 Work Experience 3 Add Work Experience EDUCATION List the educational experiences below, starting with the most recent education. You must specify 1 education entry. Education 1 Education 2 Education 3 Add Education CERTIFICATIONS Start by entering the most relevant certification and continue adding certifications until you have entered all that you feel are important to disclose for this job. Do not list expired certifications. Add Certification" [ref=e172]:
+          - heading "Experience & Education" [level=1] [ref=e173]:
+            - generic [ref=e174]: Experience & Education
+          - generic [ref=e177]:
+            - text: Mandatory fields are marked with an asterisk.
+  --
+                      - option "High School Diploma/GED (±11 years)"
+                      - option "Associate's Degree/College Diploma (±13 years)"
+                      - option "Bachelor's Degree (±16 years)"
+                      - option "Master's Degree (±18 years)" [selected]
+                      - option "Doctorate Degree (over 19 years)"
+                  - generic [ref=e520]:
+                    - generic "The field School Name is mandatory." [ref=e521]:
+                      - text: School Name
+                      - generic [ref=e524]: .
+                      - generic [ref=e525]: Required
+                    - textbox "School Name . Required" [ref=e526]: San Jose State University
+                - generic [ref=e527]:
+                  - generic [ref=e528]: GPA
+                  - textbox "GPA" [ref=e531]
+              - link "Remove Education" [ref=e533] [cursor=pointer]:
+                - /url: "#"
+                - text: Remove Education
+              - generic [ref=e535]: "|"
+              - link "Move Down" [ref=e537] [cursor=pointer]:
+                - /url: "#"
+                - text: Move Down
+  --
+                      - option "High School Diploma/GED (±11 years)"
+                      - option "Associate's Degree/College Diploma (±13 years)"
+                      - option "Bachelor's Degree (±16 years)"
+                      - option "Master's Degree (±18 years)"
+                      - option "Doctorate Degree (over 19 years)"
+                      - option "Technical Diploma (±12 years)" [selected]
+                  - generic [ref=e556]:
+                    - img "The field \"School Name\" is mandatory." [ref=e558]
+                    - generic "The field School Name is mandatory." [ref=e559]:
+                      - text: School Name
+                      - generic [ref=e562]: .
+                      - generic [ref=e563]: Required
+                    - textbox "School Name . Required" [ref=e564]
+                - generic [ref=e565]:
+                  - generic [ref=e566]: GPA
+                  - textbox "GPA" [ref=e569]
+              - link "Remove Education" [ref=e571] [cursor=pointer]:
+                - /url: "#"
+                - text: Remove Education
+              - generic [ref=e573]: "|"
+              - link "Move Up" [ref=e575] [cursor=pointer]:
+                - /url: "#"
+                - text: Move Up
+  --
+                      - option "High School Diploma/GED (±11 years)"
+                      - option "Associate's Degree/College Diploma (±13 years)"
+                      - option "Bachelor's Degree (±16 years)" [selected]
+                      - option "Master's Degree (±18 years)"
+                      - option "Doctorate Degree (over 19 years)"
+                  - generic [ref=e598]:
+                    - img "The field \"School Name\" is mandatory." [ref=e600]
+                    - generic "The field School Name is mandatory." [ref=e601]:
+                      - text: School Name
+                      - generic [ref=e604]: .
+                      - generic [ref=e605]: Required
+                    - textbox "School Name . Required" [ref=e606]
+                - generic [ref=e607]:
+                  - generic [ref=e608]: GPA
+                  - textbox "GPA" [ref=e611]
+              - link "Remove Education" [ref=e613] [cursor=pointer]:
+                - /url: "#"
+                - text: Remove Education
+              - generic [ref=e615]: "|"
+              - link "Move Up" [ref=e617] [cursor=pointer]:
+                - /url: "#"
+                - text: Move Up
+"School Name": |-
+      - listitem [ref=e167]: The field "School Name" is mandatory.
+  - link "Beginning of the main content section." [ref=e168] [cursor=pointer]:
+    - /url: "#"
+  - table [ref=e169]:
+    - rowgroup [ref=e170]:
+      - row [ref=e171]:
+        - cell "Experience & Education Mandatory fields are marked with an asterisk. . Required WORK EXPERIENCE If you did not upload a resume, list work experiences below starting with the most recent experience. If you uploaded a resume you can skip this step. Work Experience 1 Work Experience 2 Work Experience 3 Add Work Experience EDUCATION List the educational experiences below, starting with the most recent education. You must specify 1 education entry. Education 1 Education 2 Education 3 Add Education CERTIFICATIONS Start by entering the most relevant certification and continue adding certifications until you have entered all that you feel are important to disclose for this job. Do not list expired certifications. Add Certification" [ref=e172]:
+          - heading "Experience & Education" [level=1] [ref=e173]:
+            - generic [ref=e174]: Experience & Education
+          - generic [ref=e177]:
+            - text: Mandatory fields are marked with an asterisk.
+  --
+                    - generic "The field School Name is mandatory." [ref=e521]:
+                      - text: School Name
+                      - generic [ref=e524]: .
+                      - generic [ref=e525]: Required
+                    - textbox "School Name . Required" [ref=e526]: San Jose State University
+                - generic [ref=e527]:
+                  - generic [ref=e528]: GPA
+                  - textbox "GPA" [ref=e531]
+              - link "Remove Education" [ref=e533] [cursor=pointer]:
+                - /url: "#"
+                - text: Remove Education
+              - generic [ref=e535]: "|"
+              - link "Move Down" [ref=e537] [cursor=pointer]:
+                - /url: "#"
+                - text: Move Down
+  --
+                    - img "The field \"School Name\" is mandatory." [ref=e558]
+                    - generic "The field School Name is mandatory." [ref=e559]:
+                      - text: School Name
+                      - generic [ref=e562]: .
+                      - generic [ref=e563]: Required
+                    - textbox "School Name . Required" [ref=e564]
+                - generic [ref=e565]:
+                  - generic [ref=e566]: GPA
+                  - textbox "GPA" [ref=e569]
+              - link "Remove Education" [ref=e571] [cursor=pointer]:
+                - /url: "#"
+                - text: Remove Education
+              - generic [ref=e573]: "|"
+              - link "Move Up" [ref=e575] [cursor=pointer]:
+                - /url: "#"
+                - text: Move Up
+  --
+                    - img "The field \"School Name\" is mandatory." [ref=e600]
+                    - generic "The field School Name is mandatory." [ref=e601]:
+                      - text: School Name
+                      - generic [ref=e604]: .
+                      - generic [ref=e605]: Required
+                    - textbox "School Name . Required" [ref=e606]
+                - generic [ref=e607]:
+                  - generic [ref=e608]: GPA
+                  - textbox "GPA" [ref=e611]
+              - link "Remove Education" [ref=e613] [cursor=pointer]:
+                - /url: "#"
+                - text: Remove Education
+              - generic [ref=e615]: "|"
+              - link "Move Up" [ref=e617] [cursor=pointer]:
+                - /url: "#"
+                - text: Move Up
+"Institution": (no match)

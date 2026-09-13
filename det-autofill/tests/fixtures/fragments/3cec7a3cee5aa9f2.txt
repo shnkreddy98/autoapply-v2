@@ -1,0 +1,18 @@
+"What location are you planning to work from?": |-
+      - generic [ref=e281]: What location are you planning to work from?*
+      - generic [ref=e282]:
+        - log [ref=e284]
+        - generic [ref=e286]:
+          - generic [ref=e287]:
+            - generic [ref=e485]: Select...
+            - combobox "What location are you planning to work from?" [active] [invalid] [ref=e290]
+          - button "Toggle flyout" [ref=e292] [cursor=pointer]:
+            - img [ref=e293]
+        - textbox
+    - paragraph [ref=e483]: This field is required.
+  - generic [ref=e297]:
+    - generic [ref=e298]: How many direct reports have you managed and for how long? Describe their career stages and the roles they were in.*
+    - textbox "How many direct reports have you managed and for how long? Describe their career stages and the roles they were in." [ref=e299]: As a Founding Engineer at AirFold, I have mentored and lead 2 junior engineers over the past year. Previously at Kantar, I coordinated with cross-functional teams but did not formalize direct reports. I am eager to transition into a formal management role.
+  - generic [ref=e300]:
+    - generic [ref=e302]:
+      - generic [ref=e303]: Are you legally authorized to work in the United States?*

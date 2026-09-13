@@ -1,0 +1,15 @@
+"Apply now": |-
+  - button "Apply now" [ref=e76] [cursor=pointer]
+  - generic [ref=e80]: Junior Data Engineer
+  - generic [ref=e84]: AMAT
+  - generic [ref=e88]: Atlanta, Georgia, United States
+  --
+    - paragraph [ref=e162]: If you’re up for a rewarding challenge, we invite you to take the first step and apply today! Once you click apply now, you will be brought to our official employment application. Please complete your online profile and it will be sent to the hiring manager. Our system allows you to view and track your status 24 hours a day. Thank you for your interest!
+    - paragraph [ref=e163]
+    - paragraph [ref=e164]: CRH Americas Materials Inc. is an Affirmative Action and Equal Opportunity Employer.
+    - paragraph [ref=e165]
+  --
+  - button "Apply now" [ref=e177] [cursor=pointer]
+  - paragraph [ref=e180]
+  - generic [ref=e184]:
+    - heading "Posting Start Date:" [level=2] [ref=e185]

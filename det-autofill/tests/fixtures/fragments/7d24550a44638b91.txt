@@ -1,0 +1,6 @@
+"Cover Letter": |-
+  - group "Cover Letter*" [ref=e167]:
+    - generic [ref=e168]: Cover Letter*
+    - generic [ref=e170]:
+      - generic [ref=e172]:
+        - button "Attach" [ref=e173] [cursor=pointer]

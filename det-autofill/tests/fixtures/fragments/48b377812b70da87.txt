@@ -1,0 +1,6 @@
+"Are you bilingual in other languages?": |-
+  - group "Are you bilingual in other languages?*" [ref=e1202]:
+    - paragraph [ref=e1206]: Are you bilingual in other languages?*
+    - button "Select One Required" [ref=e1210]: Select One
+  - group "Are you legally authorized to work in the U.S.?*" [ref=e1212]:
+    - paragraph [ref=e1216]: Are you legally authorized to work in the U.S.?*

@@ -1,0 +1,7 @@
+"Apply now": |-
+  - button "Apply now" [ref=e63] [cursor=pointer]:
+    - generic [ref=e64]:
+      - generic: Apply now
+  - iframe [ref=e182]:
+    - main [ref=f94e2]:
+      - button "Apply With LinkedIn" [ref=f94e3] [cursor=pointer]:

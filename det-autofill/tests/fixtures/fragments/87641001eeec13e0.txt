@@ -1,0 +1,50 @@
+"Country": |-
+  - generic [ref=e270]: Country
+  - combobox "Country" [ref=e271]:
+    - option "Not Specified"
+    - option "United States" [selected]
+    - option "Canada"
+    - option "Afghanistan"
+    - option "Åland Islands"
+    - option "Albania"
+    - option "Algeria"
+    - option "American Samoa"
+    - option "Andorra"
+    - option "Angola"
+"State/Province": |-
+  - generic [ref=e273]: State/Province
+  - combobox "State/Province" [ref=e274]:
+    - option "Not Specified"
+    - option "Alabama"
+    - option "Alaska"
+    - option "Arizona"
+    - option "Arkansas"
+    - option "California" [selected]
+    - option "Colorado"
+    - option "Connecticut"
+    - option "Delaware"
+    - option "District of Columbia"
+"Save and Continue": |-
+          - button "Save and Continue" [ref=e157] [cursor=pointer]
+          - button "Save as Draft" [ref=e158] [cursor=pointer]
+          - button "Quit" [ref=e159] [cursor=pointer]
+      - generic [ref=e160]:
+        - alert [ref=e161]:
+          - heading "Errors occurred on this page, could not proceed. Please correct the errors before proceeding. Beginning of error list." [level=1]:
+            - link "Errors occurred on this page, could not proceed. Please correct the errors before proceeding. Beginning of error list." [ref=e162] [cursor=pointer]:
+              - /url: "#"
+          - list [ref=e163]:
+            - listitem [ref=e164]: You must select a value in the field "Sources".
+            - listitem [ref=e165]: The field "Street Address (line 1)" is mandatory.
+  --
+        - button "Save and Continue" [ref=e313] [cursor=pointer]
+        - button "Save as Draft" [ref=e314] [cursor=pointer]
+        - button "Quit" [ref=e315] [cursor=pointer]
+      - link "Privacy Agreement" [ref=e324] [cursor=pointer]:
+        - /url: "#"
+  - generic [ref=e327]:
+    - link "Any personal information you provide is subject to the terms of our Privacy Policy" [ref=e328] [cursor=pointer]:
+      - /url: https://www.weyerhaeuser.com/privacy/privacy-policy
+    - text: .
+    - 'link "California residents: Our California Privacy Notice for Job Applicants details what personal information we collect and for what purposes." [ref=e329] [cursor=pointer]':
+      - /url: https://www.weyerhaeuser.com/privacy/ccpa/job-applicants/

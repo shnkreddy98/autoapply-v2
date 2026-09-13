@@ -1,0 +1,71 @@
+"User Name": |-
+  - 'row "User Name . Required Password (HINT: Aim for 6 to 12 alphanumeric characters with a mix of upper and lower case) . Required Re-enter Password . Required Email Address . Required" [ref=e41]':
+    - 'cell "User Name . Required Password (HINT: Aim for 6 to 12 alphanumeric characters with a mix of upper and lower case) . Required Re-enter Password . Required Email Address . Required" [ref=e42]':
+      - generic "The field User Name is mandatory." [ref=e43]:
+        - text: User Name
+        - generic [ref=e44]: .
+        - generic [ref=e45]: Required
+      - textbox "User Name . Required" [ref=e46]
+      - 'generic "The field Password (HINT: Aim for 6 to 12 alphanumeric characters with a mix of upper and lower case) is mandatory." [ref=e47]':
+        - text: "Password (HINT: Aim for 6 to 12 alphanumeric characters with a mix of upper and lower case)"
+        - generic [ref=e48]: .
+"Password": |-
+  - 'row "User Name . Required Password (HINT: Aim for 6 to 12 alphanumeric characters with a mix of upper and lower case) . Required Re-enter Password . Required Email Address . Required" [ref=e41]':
+    - 'cell "User Name . Required Password (HINT: Aim for 6 to 12 alphanumeric characters with a mix of upper and lower case) . Required Re-enter Password . Required Email Address . Required" [ref=e42]':
+      - generic "The field User Name is mandatory." [ref=e43]:
+        - text: User Name
+        - generic [ref=e44]: .
+  --
+      - 'generic "The field Password (HINT: Aim for 6 to 12 alphanumeric characters with a mix of upper and lower case) is mandatory." [ref=e47]':
+        - text: "Password (HINT: Aim for 6 to 12 alphanumeric characters with a mix of upper and lower case)"
+        - generic [ref=e48]: .
+        - generic [ref=e49]: Required
+      - 'textbox "Password (HINT: Aim for 6 to 12 alphanumeric characters with a mix of upper and lower case) . Required" [ref=e50]'
+      - generic "The field Re-enter Password is mandatory." [ref=e51]:
+        - text: Re-enter Password
+        - generic [ref=e52]: .
+        - generic [ref=e53]: Required
+      - textbox "Re-enter Password . Required" [ref=e54]
+      - generic "The field Email Address is mandatory." [ref=e55]:
+        - text: Email Address
+        - generic [ref=e56]: .
+"Re-enter Password": |-
+  - 'row "User Name . Required Password (HINT: Aim for 6 to 12 alphanumeric characters with a mix of upper and lower case) . Required Re-enter Password . Required Email Address . Required" [ref=e41]':
+    - 'cell "User Name . Required Password (HINT: Aim for 6 to 12 alphanumeric characters with a mix of upper and lower case) . Required Re-enter Password . Required Email Address . Required" [ref=e42]':
+      - generic "The field User Name is mandatory." [ref=e43]:
+        - text: User Name
+        - generic [ref=e44]: .
+  --
+      - generic "The field Re-enter Password is mandatory." [ref=e51]:
+        - text: Re-enter Password
+        - generic [ref=e52]: .
+        - generic [ref=e53]: Required
+      - textbox "Re-enter Password . Required" [ref=e54]
+      - generic "The field Email Address is mandatory." [ref=e55]:
+        - text: Email Address
+        - generic [ref=e56]: .
+"Email Address": |-
+        - 'row "User Name . Required Password (HINT: Aim for 6 to 12 alphanumeric characters with a mix of upper and lower case) . Required Re-enter Password . Required Email Address . Required" [ref=e41]':
+          - 'cell "User Name . Required Password (HINT: Aim for 6 to 12 alphanumeric characters with a mix of upper and lower case) . Required Re-enter Password . Required Email Address . Required" [ref=e42]':
+            - generic "The field User Name is mandatory." [ref=e43]:
+              - text: User Name
+              - generic [ref=e44]: .
+  --
+            - generic "The field Email Address is mandatory." [ref=e55]:
+              - text: Email Address
+              - generic [ref=e56]: .
+              - generic [ref=e57]: Required
+            - textbox "Email Address . Required" [ref=e58]
+        - row [ref=e59]:
+          - cell [ref=e60]
+  - generic [ref=e61]:
+"Register": |-
+            - text: Please take a few moments to register. You will need this information to access your account in the future.
+          - generic "This field is mandatory" [ref=e37]: Mandatory fields are marked with an asterisk.
+          - table [ref=e39]:
+            - rowgroup [ref=e40]:
+  --
+          - button "Register" [ref=e62] [cursor=pointer]
+          - button "Cancel" [ref=e63] [cursor=pointer]
+  - generic [ref=e64]:
+    - link "LinkedIn" [ref=e65] [cursor=pointer]:

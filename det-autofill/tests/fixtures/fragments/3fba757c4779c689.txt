@@ -1,0 +1,379 @@
+"generic": |-
+  - generic [ref=e1]:
+    - banner [ref=e2]:
+      - generic:
+        - link "Skip to main content":
+          - /url: "#skipToMainContent"
+      - generic [ref=e6]:
+        - button "open hamburger menu" [ref=e13] [cursor=pointer]:
+          - img [ref=e15]
+  --
+              - generic [ref=e31]: (0)
+    - main [ref=e32]:
+      - generic [ref=e35]: "-"
+      - generic [ref=e55]:
+        - heading "Data Engineer - 2 Openings (1222)" [level=2] [ref=e58]:
+          - link "Data Engineer - 2 Openings (1222)" [ref=e59] [cursor=pointer]:
+  --
+        - generic [ref=e61]:
+          - group "Upload options" [ref=e63]:
+            - generic [ref=e64]:
+              - generic [ref=e65]: Upload options
+              - generic [ref=e66]: Make completing your job application easier by uploading your resume or CV. Upload either DOC, DOCX, PDF, or TXT file types (1MB max)
+            - generic [ref=e67]:
+              - list [ref=e69]:
+                - listitem "Dropbox" [ref=e70]:
+  --
+              - generic [ref=e75]: OR
+              - button "Upload Resume" [active] [ref=e77] [cursor=pointer]
+          - link "Download jane_doe.pdf" [ref=e374] [cursor=pointer]:
+  --
+        - generic [ref=e78]:
+          - group [ref=e80]:
+            - generic [ref=e81]:
+              - generic [ref=e83]:
+                - generic [ref=e84]:
+                  - text: Email Address
+                  - generic [ref=e375]: "*"
+                - textbox "Email Address" [ref=e85]: jane.doe@example.com
+              - generic [ref=e87]:
+                - generic [ref=e88]:
+                  - text: First Name
+                  - generic [ref=e376]: "*"
+                - textbox "First Name" [ref=e89]: Jane
+              - generic [ref=e91]:
+                - generic [ref=e92]:
+                  - text: Last Name
+                  - generic [ref=e377]: "*"
+                - textbox "Last Name" [ref=e93]: Doe
+              - generic [ref=e95]:
+                - generic [ref=e96]: LinkedIn Profile
+                - textbox "LinkedIn Profile" [ref=e97]
+              - generic [ref=e99]:
+                - generic [ref=e100]: Home Phone Number
+                - textbox "Home Phone Number" [ref=e101]
+              - generic [ref=e103]:
+                - generic [ref=e104]:
+                  - text: Mobile Phone Number
+                  - generic [ref=e378]: "*"
+                - textbox "Mobile Phone Number" [ref=e105]: "5550100199"
+              - generic [ref=e108]:
+                - generic [ref=e109]:
+                  - generic [ref=e110]: Country
+                  - combobox "Country" [ref=e111]:
+                    - option "Select Country" [selected]
+  --
+                - generic [ref=e113]:
+                  - generic [ref=e114]: State/Province
+                  - combobox "State/Province" [ref=e115]:
+                    - option "-" [selected]
+              - generic [ref=e118]:
+                - generic [ref=e119]: Address Line 1
+                - textbox "Address Line 1" [ref=e120]
+              - generic [ref=e122]:
+                - generic [ref=e123]: Address Line 2
+                - textbox "Address Line 2" [ref=e124]
+              - generic [ref=e126]:
+                - generic [ref=e127]: City
+                - textbox "City" [ref=e128]: San Jose
+              - generic [ref=e130]:
+                - generic [ref=e131]: ZIP / Postal Code
+                - textbox "ZIP / Postal Code" [ref=e132]
+              - generic [ref=e134]:
+                - generic [ref=e135]:
+                  - text: How did you hear about this Job?
+                  - generic [ref=e136]: "*"
+                - combobox "How did you hear about this Job?" [disabled] [ref=e137]:
+                  - option "Please Select"
+  --
+              - generic [ref=e139]:
+                - generic [ref=e140]: Are you legally authorized to work in the United States?*
+                - combobox "Are you legally authorized to work in the United States?" [ref=e141]:
+                  - option "Please Select" [selected]
+  --
+              - generic [ref=e143]:
+                - generic [ref=e144]: Have you worked for Blood Cancer United, formerly LLS before?*
+                - combobox "Have you worked for Blood Cancer United, formerly LLS before?" [ref=e145]:
+                  - option "Please Select" [selected]
+  --
+              - generic [ref=e147]:
+                - generic [ref=e148]: Are you at least 18 years old?*
+                - combobox "Are you at least 18 years old?" [ref=e149]:
+                  - option "Please Select" [selected]
+  --
+              - generic [ref=e151]:
+                - generic [ref=e152]: What are your salary requirements?
+                - textbox "What are your salary requirements?" [ref=e153]
+              - generic [ref=e155]:
+                - generic [ref=e156]: Do you have any relatives employed by this organization? If yes, please indicate their name.
+                - textbox "Do you have any relatives employed by this organization? If yes, please indicate their name." [ref=e157]
+              - generic [ref=e159]:
+                - generic [ref=e160]: Have you previously held a temporary or contract assignment with Blood Cancer United, formerly LLS before? If so, please share the department or region.
+                - textbox "Have you previously held a temporary or contract assignment with Blood Cancer United, formerly LLS before? If so, please share the department or region." [ref=e161]
+              - generic [ref=e163]:
+                - generic [ref=e164]: Do you now, or will you in the future, require immigration sponsorship for work authorization (e.g., H-1B)?*
+                - combobox "Do you now, or will you in the future, require immigration sponsorship for work authorization (e.g., H-1B)?" [ref=e165]:
+                  - option "Please Select" [selected]
+  --
+              - generic [ref=e167]:
+                - generic [ref=e168]: Are you a current or past national board member or associated with anyone current or past? If so, please share who.
+                - textbox "Are you a current or past national board member or associated with anyone current or past? If so, please share who." [ref=e169]
+              - generic [ref=e171]:
+                - generic [ref=e172]: Have you volunteered with Blood Cancer United, formerly LLS? (Currently volunteering or previously. If so, please share which location)
+                - textbox "Have you volunteered with Blood Cancer United, formerly LLS? (Currently volunteering or previously. If so, please share which location)" [ref=e173]
+              - generic [ref=e175]:
+                - generic [ref=e176]: All staff and temporary roles will require a background check. If required, you will agree to provide the necessary personal information to complete the background check?*
+                - combobox "All staff and temporary roles will require a background check. If required, you will agree to provide the necessary personal information to complete the background check?" [ref=e177]:
+                  - option "Please Select" [selected]
+  --
+                - generic [ref=e379]:
+                  - group [ref=e382]:
+                    - generic [ref=e383]:
+                      - generic [ref=e384]: Job title*
+                      - textbox "Job title" [ref=e385]: Founding Engineer
+                    - generic [ref=e386]:
+                      - generic [ref=e387]: Company*
+                      - textbox "Company" [ref=e388]: AirFold
+                    - generic [ref=e389]:
+                      - generic [ref=e390]: Location
+                      - textbox "Location" [ref=e391]: San Francisco, California,
+                    - generic [ref=e392]:
+                      - generic [ref=e397]:
+                        - generic "From" [ref=e398]: From*
+                        - textbox [ref=e402]: 01/2025
+                      - generic [ref=e403]:
+                        - checkbox "I currently work here" [checked] [ref=e404]
+                        - generic [ref=e405]: I currently work here
+                    - generic [ref=e406]:
+                      - generic [ref=e407]: Role description
+                      - textbox "Role description" [ref=e408]: "Architected secure multi-cloud infrastructure (AWS/GCP) using Terraform and Istio, ensuring high availability and resilience for mission-critical microservices. Engineered event-driven data ingestion systems using Kafka and Debezium CDC, processing millions of unstructured events with sub-second latency and exactly-once semantics. Developed modular API frameworks (FastAPI) with robust RBAC security protocols to support secure data access and integration for enterprise-scale applications. Implemented automated data governance workflows using dbt and Snowflake, creating validatable transformation logic that reduced reporting discrepancies by 40%. Optimized NoSQL and distributed database performance (DynamoDB, ClickHouse) to handle complex vector search retrieval and large-scale analytical queries. Tech Stack: AWS, GCP, Terraform, Kubernetes, Kafka, Debezium, ClickHouse, FastAPI, PostgreSQL, DynamoDB"
+                  - button "Remove experience" [ref=e410] [cursor=pointer]:
+                    - generic [ref=e411]: "-"
+                - generic [ref=e412]:
+                  - group [ref=e415]:
+                    - generic [ref=e416]:
+                      - generic [ref=e417]: Job title*
+                      - textbox "Job title" [ref=e418]: Data Engineer
+                    - generic [ref=e419]:
+                      - generic [ref=e420]: Company*
+                      - textbox "Company" [ref=e421]: Kantar
+                    - generic [ref=e422]:
+                      - generic [ref=e423]: Location
+                      - textbox "Location" [ref=e424]: Bengaluru, , India
+                    - generic [ref=e425]:
+                      - generic [ref=e426]:
+                        - generic [ref=e430]:
+                          - generic "From" [ref=e431]: From*
+                          - textbox [ref=e435]: 04/2020
+                        - generic [ref=e436]:
+                          - generic "To" [ref=e437]: To*
+                          - textbox [ref=e441]: 04/2022
+                      - generic [ref=e442]:
+                        - checkbox "I currently work here" [ref=e443]
+                        - generic [ref=e444]: I currently work here
+                    - generic [ref=e445]:
+                      - generic [ref=e446]: Role description
+                      - textbox "Role description" [ref=e447]: "Orchestrated large-scale distributed data processing pipelines using Apache Spark and Airflow, ingesting terabytes of structured and unstructured data streams. Modernized legacy data models by deploying dbt for SQL transformations, establishing reliable data structures that improved analytical time-to-insight by 25%. Built fault-tolerant streaming architectures with Kafka and Spark Streaming to deliver near real-time operational intelligence and situational awareness. Automated data ingestion workflows using AWS Lambda and S3 serverless architecture, reducing manual overhead by 80% while ensuring data durability. Designed algorithmic optimization models to enhance resource allocation efficiency, driving significant performance improvements for global enterprise clients. Tech Stack: Apache Spark, Airflow, Kafka, AWS Lambda, S3, dbt, SQL, Python"
+                  - button "Remove experience" [ref=e449] [cursor=pointer]:
+                    - generic [ref=e450]: "-"
+                - generic [ref=e451]:
+                  - group [ref=e454]:
+                    - generic [ref=e455]:
+                      - generic [ref=e456]: Job title*
+                      - textbox "Job title" [ref=e457]: Data Engineer
+                    - generic [ref=e458]:
+                      - generic [ref=e459]: Company*
+                      - textbox "Company" [ref=e460]: The Sparks Foundation
+                    - generic [ref=e461]:
+                      - generic [ref=e462]: Location
+                      - textbox "Location" [ref=e463]: Bengaluru, , India
+                    - generic [ref=e464]:
+                      - generic [ref=e465]:
+                        - generic [ref=e469]:
+                          - generic "From" [ref=e470]: From*
+                          - textbox [ref=e474]: 04/2018
+                        - generic [ref=e475]:
+                          - generic "To" [ref=e476]: To*
+                          - textbox [ref=e480]: 03/2020
+                      - generic [ref=e481]:
+                        - checkbox "I currently work here" [ref=e482]
+                        - generic [ref=e483]: I currently work here
+                    - generic [ref=e484]:
+                      - generic [ref=e485]: Role description
+                      - textbox "Role description" [ref=e486]: "Enhanced ETL pipeline performance by 25% through parallel processing techniques and query optimization to support high-volume data generation. Tuned complex SQL queries and database indexing strategies for PostgreSQL and MySQL, significantly reducing latency for downstream analytical reporting. Integrated automated data validation scripts to detect schema anomalies and null values, ensuring data integrity and minimizing downstream corruption incidents. Collaborated with stakeholders to design dimensional data models (Star Schema), facilitating efficient querying and supporting strategic decision-making processes. Tech Stack: Python, Pandas, PostgreSQL, MySQL, ETL, SQL, Git"
+                  - button "Remove experience" [ref=e488] [cursor=pointer]:
+                    - generic [ref=e489]: "-"
+                - button "Add experience" [ref=e222] [cursor=pointer]:
+                  - generic [ref=e223]: + Add experience
+              - group "Education :" [ref=e226]:
+                - heading "Education :" [level=2] [ref=e227]
+                - generic [ref=e490]:
+                  - group [ref=e493]:
+                    - generic [ref=e494]:
+                      - generic [ref=e496]:
+                        - generic [ref=e497]: School or University*
+                        - textbox "School or University" [ref=e498]: San Jose State University
+                      - generic [ref=e500]:
+                        - generic [ref=e501]: Degree
+                        - textbox "Degree" [ref=e502]
+                      - generic [ref=e504]:
+                        - generic [ref=e505]: Field of study
+                        - textbox "Field of study" [ref=e506]
+                      - generic [ref=e508]:
+                        - generic [ref=e509]: Location
+                        - textbox "Location" [ref=e510]
+                      - generic [ref=e512]:
+                        - generic [ref=e513]:
+                          - generic [ref=e517]:
+                            - generic "From" [ref=e518]: From*
+                            - textbox [ref=e522]: 01/2023
+                          - generic [ref=e523]:
+                            - generic "To Education" [ref=e524]: To Education*
+                            - textbox [ref=e528]: 01/2024
+                        - generic [ref=e529]:
+                          - checkbox "I am currently pursuing" [ref=e530]
+                          - generic [ref=e531]: I am currently pursuing
+                  - button "Remove education" [ref=e533] [cursor=pointer]:
+                    - generic [ref=e534]: "-"
+                - generic [ref=e535]:
+                  - group [ref=e538]:
+                    - generic [ref=e539]:
+                      - generic [ref=e541]:
+                        - generic [ref=e542]: School or University*
+                        - textbox "School or University" [ref=e543]: IIIT Bangalore
+                      - generic [ref=e545]:
+                        - generic [ref=e546]: Degree
+                        - textbox "Degree" [ref=e547]
+                      - generic [ref=e549]:
+                        - generic [ref=e550]: Field of study
+                        - textbox "Field of study" [ref=e551]
+                      - generic [ref=e553]:
+                        - generic [ref=e554]: Location
+                        - textbox "Location" [ref=e555]
+                      - generic [ref=e557]:
+                        - generic [ref=e558]:
+                          - generic [ref=e562]:
+                            - generic "From" [ref=e563]: From*
+                            - textbox [ref=e567]: 11/2020
+                          - generic [ref=e568]:
+                            - generic "To Education" [ref=e569]: To Education*
+                            - textbox [ref=e573]: 01/2021
+                        - generic [ref=e574]:
+                          - checkbox "I am currently pursuing" [ref=e575]
+                          - generic [ref=e576]: I am currently pursuing
+                  - button "Remove education" [ref=e578] [cursor=pointer]:
+                    - generic [ref=e579]: "-"
+                - generic [ref=e580]:
+                  - group [ref=e583]:
+                    - generic [ref=e584]:
+                      - generic [ref=e586]:
+                        - generic [ref=e587]: School or University*
+                        - textbox "School or University" [ref=e588]: Visvesvaraya Technological University
+                      - generic [ref=e590]:
+                        - generic [ref=e591]: Degree
+                        - textbox "Degree" [ref=e592]
+                      - generic [ref=e594]:
+                        - generic [ref=e595]: Field of study
+                        - textbox "Field of study" [ref=e596]
+                      - generic [ref=e598]:
+                        - generic [ref=e599]: Location
+                        - textbox "Location" [ref=e600]
+                      - generic [ref=e602]:
+                        - generic [ref=e603]:
+                          - generic [ref=e607]:
+                            - generic "From" [ref=e608]: From*
+                            - textbox [ref=e612]: 07/2016
+                          - generic [ref=e613]:
+                            - generic "To Education" [ref=e614]: To Education*
+                            - textbox [ref=e618]: 01/2020
+                        - generic [ref=e619]:
+                          - checkbox "I am currently pursuing" [ref=e620]
+                          - generic [ref=e621]: I am currently pursuing
+                  - button "Remove education" [ref=e623] [cursor=pointer]:
+                    - generic [ref=e624]: "-"
+              - group "Skills :" [ref=e278]:
+                - heading "Skills :" [level=2] [ref=e279]
+                - generic [ref=e280]:
+                  - generic [ref=e281]: Separate each skill with a comma.
+                  - textbox "Separate each skill with a comma." [ref=e282]: Airflow, AWS Lambda, S3, Debezium, ClickHouse, PostgreSQL, Kafka, DynamoDB, Apache Spark, SQL, Git, Terraform, GCP, Dbt, Pandas, MySQL, FastAPI, ETL, AWS, Kubernetes, Python, Java, Bash, TypeScript, Spark, PySpark, Apache Kafka, Debezium CDC, Ray Serve, ETL/ELT, Hadoop, Hive, Azure, Docker, Istio, GitOps, Snowflake, Redshift, Redis, Delta Lake, MongoDB, Cassandra, Git/GitHub Actions, Pytest, CI/CD Pipelines, Agile Development, RESTful APIs, NumPy, Data Modeling, Data Governance, Distributed Systems, Data Structuring, Resilience
+              - paragraph [ref=e287]: Cover Letter
+              - generic [ref=e293]:
+                - generic [ref=e294]: Upload either DOC, DOCX, PDF, or TXT file types (1MB max)
+                - list [ref=e296]:
+                  - listitem [ref=e297]:
+                    - generic "Dropbox" [ref=e298] [cursor=pointer]
+                  - listitem [ref=e299]:
+                    - generic "Onedrive" [ref=e300] [cursor=pointer]
+                  - listitem [ref=e301]:
+                    - generic [ref=e302]: Or
+                  - listitem [ref=e303]:
+                    - generic [ref=e306]: Select file
+              - paragraph [ref=e311]: Additional Documents
+              - generic [ref=e317]:
+                - generic [ref=e318]: Upload either DOC, DOCX, PDF, or TXT file types (1MB max)
+                - list [ref=e320]:
+                  - listitem [ref=e321]:
+                    - generic "Dropbox" [ref=e322] [cursor=pointer]
+                  - listitem [ref=e323]:
+                    - generic "Onedrive" [ref=e324] [cursor=pointer]
+                  - listitem [ref=e325]:
+                    - generic [ref=e326]: Or
+                  - listitem [ref=e327]:
+                    - generic [ref=e330]: Select file
+              - paragraph [ref=e335]: Please review the Candidate Acknowledgement statement below and confirm your acceptance using the displayed checkbox. When you're done, click the Submit button to complete your application.
+              - generic [ref=e339] [cursor=pointer]:
+                - checkbox "* I agree to the Candidate Acknowledgement." [ref=e340]
+                - generic [ref=e341]: "*"
+                - paragraph [ref=e343]:
+                  - generic [ref=e344]:
+                    - text: I agree to the
+                    - link "Candidate Acknowledgement." [ref=e345]:
+"button": |-
+        - button "open hamburger menu" [ref=e13] [cursor=pointer]:
+          - img [ref=e15]
+        - link "Company Logo" [ref=e18] [cursor=pointer]:
+  --
+            - button [ref=e49] [cursor=pointer]:
+              - img [ref=e51]
+          - listitem [ref=e24]:
+  --
+                  - button "Dropbox" [ref=e71] [cursor=pointer]
+                - listitem "Onedrive" [ref=e72]:
+                  - button "Microsoft online" [ref=e73] [cursor=pointer]
+              - generic [ref=e75]: OR
+              - button "Upload Resume" [active] [ref=e77] [cursor=pointer]
+          - link "Download jane_doe.pdf" [ref=e374] [cursor=pointer]:
+            - /url: https://careers.bloodcancerunited.org/us/en/fileDownload?dk=applyFileDownload&fileName=jane_doe.pdf&uploadedFileName=shashank_reddy_1222b1r1q4h7k2.pdf
+  --
+                  - button "Remove experience" [ref=e410] [cursor=pointer]:
+                    - generic [ref=e411]: "-"
+                - generic [ref=e412]:
+  --
+                  - button "Remove experience" [ref=e449] [cursor=pointer]:
+                    - generic [ref=e450]: "-"
+                - generic [ref=e451]:
+  --
+                  - button "Remove experience" [ref=e488] [cursor=pointer]:
+                    - generic [ref=e489]: "-"
+                - button "Add experience" [ref=e222] [cursor=pointer]:
+                  - generic [ref=e223]: + Add experience
+              - group "Education :" [ref=e226]:
+  --
+                  - button "Remove education" [ref=e533] [cursor=pointer]:
+                    - generic [ref=e534]: "-"
+                - generic [ref=e535]:
+  --
+                  - button "Remove education" [ref=e578] [cursor=pointer]:
+                    - generic [ref=e579]: "-"
+                - generic [ref=e580]:
+  --
+                  - button "Remove education" [ref=e623] [cursor=pointer]:
+                    - generic [ref=e624]: "-"
+              - group "Skills :" [ref=e278]:
+  --
+              - paragraph [ref=e335]: Please review the Candidate Acknowledgement statement below and confirm your acceptance using the displayed checkbox. When you're done, click the Submit button to complete your application.
+              - generic [ref=e339] [cursor=pointer]:
+                - checkbox "* I agree to the Candidate Acknowledgement." [ref=e340]
+  --
+          - button "Submit" [ref=e371] [cursor=pointer]
+  ```

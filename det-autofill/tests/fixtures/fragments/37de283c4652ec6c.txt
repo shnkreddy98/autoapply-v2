@@ -1,0 +1,155 @@
+"driver's license": |-
+  - generic [ref=e195]: Do you have a valid driver's license?*
+  - combobox "Do you have a valid driver's license?*" [ref=e196]:
+    - option "No answer" [selected]
+    - option "Yes"
+    - option "No"
+"18 years of age or older": |-
+  - generic [ref=e201]: Are you 18 years of age or older?*
+  - combobox "Are you 18 years of age or older?*" [ref=e202]:
+    - option "No answer" [selected]
+    - option "Yes"
+    - option "No"
+"weekends": |-
+  - generic [ref=e216]: Can you work weekends?
+  - combobox "Can you work weekends?" [ref=e217]:
+    - option "No answer" [selected]
+    - option "Yes"
+    - option "No"
+"evenings": |-
+  - generic [ref=e219]: Can you work evenings?
+  - combobox "Can you work evenings?" [ref=e220]:
+    - option "No answer" [selected]
+    - option "Yes"
+    - option "No"
+"felony": |-
+  - generic [ref=e222]: Have you ever been convicted of a felony?*
+  - combobox "Have you ever been convicted of a felony?*" [ref=e223]:
+    - option "No answer" [selected]
+    - option "No"
+    - option "Yes"
+"professional Data Engineering experience": |-
+  - listitem [ref=e76]: 4-6 years of professional Data Engineering experience.
+  - listitem [ref=e77]: Hands-on experience developing production solutions using Azure Databricks.
+  - listitem [ref=e78]: Strong experience with SQL Server and advanced T-SQL development.
+  - listitem [ref=e79]: Strong Python programming experience.
+  --
+    - generic [ref=e228]: How many years of professional Data Engineering experience do you have?*
+    - generic [ref=e229]:
+      - checkbox "Less than 4 years" [ref=e230]
+      - text: Less than 4 years
+"work onsite Monday-Friday": |-
+  - generic [ref=e238]: Are you able to work onsite Monday-Friday at our Houston corporate office (77070)?*
+  - generic [ref=e239]:
+    - checkbox "Yes" [ref=e240]
+    - text: "Yes"
+"sponsorship": |-
+    - listitem [ref=e143]: Must be authorized to work in the United States without current or future employer sponsorship.
+    - listitem [ref=e144]: This position is fully onsite in Houston, Texas.
+    - listitem [ref=e145]: Candidates requiring remote, hybrid, or relocation assistance will not be considered.
+  - separator [ref=e146]
+  --
+      - generic [ref=e244]: If hired today, would you require current or future employer sponsorship to work in the United States?*
+      - generic [ref=e245]:
+        - checkbox "Yes" [ref=e246]
+        - text: "Yes"
+"Greater Houston area": |-
+  - generic [ref=e250]: Are you currently located in the Greater Houston area or planning to relocate before your start date?*
+  - generic [ref=e251]:
+    - checkbox "Currently local" [ref=e252]
+    - text: Currently local
+"technical concepts": |-
+  - generic [ref=e258]: Are you comfortable communicating technical concepts clearly in fluent spoken and written English with business stakeholders and executive leadership?*
+  - generic [ref=e259]:
+    - checkbox "Yes" [ref=e260]
+    - text: "Yes"
+"Azure Databricks in a production environment": |-
+  - generic [ref=e264]: How many years have you worked with Azure Databricks in a production environment?*
+  - generic [ref=e265]:
+    - checkbox "None" [ref=e266]
+    - text: None
+"Databricks technologies": |-
+  - generic [ref=e276]: Which Databricks technologies have you used professionally? (Select all that apply)*
+  - generic [ref=e277]:
+    - checkbox "Spark" [ref=e278]
+    - text: Spark
+"Azure services": |-
+  - generic [ref=e308]: Which Azure services have you used professionally?*
+  - generic [ref=e309]:
+    - checkbox "Azure Data Factory" [ref=e310]
+    - text: Azure Data Factory
+"AI/ML models": |-
+    - checkbox "Yes, built data pipelines supporting AI/ML models" [ref=e336]
+    - text: Yes, built data pipelines supporting AI/ML models
+  - generic [ref=e337]:
+    - checkbox "Assisted with AI projects" [ref=e338]
+    - text: Assisted with AI projects
+"AI-related technologies": |-
+  - generic [ref=e344]: Which AI-related technologies have you used PROFESSIONALLY?*
+  - generic [ref=e345]:
+    - checkbox "Azure AI Services" [ref=e346]
+    - text: Azure AI Services
+"SQL proficiency": |-
+  - generic [ref=e367]: Rate your SQL proficiency.*
+  - generic [ref=e368]:
+    - checkbox "Beginner" [ref=e369]
+    - text: Beginner
+"million-plus row datasets": |-
+  - generic [ref=e375]: Approximately how many million-plus row datasets have you worked with?*
+  - generic [ref=e376]:
+    - checkbox "None" [ref=e377]
+    - text: None
+"programming languages": |-
+  - generic [ref=e387]: Which programming languages do you use professionally?*
+  - generic [ref=e388]:
+    - checkbox "Python" [ref=e389]
+    - text: Python
+"mentored junior Data Engineers": |-
+  - generic [ref=e403]: Have you mentored junior Data Engineers?*
+  - generic [ref=e404]:
+    - checkbox "Frequently" [ref=e405]
+    - text: Frequently
+"current role": |-
+  - generic [ref=e413]: Which best describes your current role?*
+  - generic [ref=e414]:
+    - checkbox "Architect" [ref=e415]
+    - text: Architect
+"industries": |-
+    - listitem [ref=e105]: Healthcare or other highly regulated industries
+  - separator [ref=e106]
+  - heading "The Ideal Candidate" [level=2] [ref=e107]
+  - paragraph [ref=e108]: "We're looking for someone who:"
+  --
+      - generic [ref=e425]: Which industries have you supported?*
+      - generic [ref=e426]:
+        - checkbox "Healthcare" [ref=e427]
+        - text: Healthcare
+"Gender": |-
+  - text: Gender
+  - combobox "Gender" [ref=e463]:
+    - option "Decline to answer" [selected]
+    - option "Female"
+    - option "Male"
+"Race/Ethnicity": |-
+  - text: Race/Ethnicity
+  - combobox "Race/Ethnicity" [ref=e468]:
+    - option "Decline to answer" [selected]
+    - option "Hispanic or Latino"
+    - option "White, not Hispanic or Latino"
+"Veteran status": |-
+  - paragraph [ref=e152]: SynergenX Health Holdings is an Equal Opportunity Employer and makes employment decisions without regard to race, color, religion, sex, national origin, age, disability, genetic information, protected veteran status, or any other status protected under applicable federal, state, or local law.
+  - separator [ref=e153]
+  - paragraph [ref=e154]:
+    - emphasis [ref=e156]:
+  --
+        - strong [ref=e485]: Veteran status
+        - generic [ref=e486]:
+          - generic [ref=e487]:
+            - radio "I IDENTIFY AS ONE OR MORE OF THE CLASSIFICATIONS OF PROTECTED VETERAN LISTED ABOVE" [ref=e488]
+"Self-Identification of Disability": |-
+  - strong [ref=e496]: Voluntary Self-Identification of Disability
+  - generic [ref=e497]:
+    - text: Voluntary Self-Identification of Disability Form CC-305
+    - text: OMB Control Number 1250-0005
+    - text: Expires 05/31/2026
+  - generic [ref=e498]:

@@ -1,0 +1,219 @@
+"8+ years": |-
+      - checkbox "8+ years" [checked] [active] [ref=e236]
+      - text: 8+ years
+  - generic [ref=e237]:
+    - generic [ref=e238]: Are you able to work onsite Monday-Friday at our Houston corporate office (77070)?*
+    - generic [ref=e239]:
+      - checkbox "Yes" [ref=e240]
+      - text: "Yes"
+    - generic [ref=e241]:
+      - checkbox "No" [ref=e242]
+      - text: "No"
+  - generic [ref=e243]:
+    - generic [ref=e244]: If hired today, would you require current or future employer sponsorship to work in the United States?*
+"onsite Monday-Friday": |-
+    - listitem [ref=e122]: Full-time onsite Monday-Friday
+    - listitem [ref=e123]: Local Houston-area candidates are strongly preferred.
+    - listitem [ref=e124]: Candidates must be able to reliably commute to our corporate office each business day.
+    - listitem [ref=e125]: Relocation assistance is not available.
+  - separator [ref=e126]
+  - heading "Compensation & Benefits" [level=2] [ref=e127]
+  - list [ref=e128]:
+    - listitem [ref=e129]: Competitive salary of $130,000-$145,000
+    - listitem [ref=e130]: Medical, Dental, and Vision Insurance
+    - listitem [ref=e131]: Company-paid Life Insurance
+    - listitem [ref=e132]: 401(k) with Company Match
+  --
+      - generic [ref=e238]: Are you able to work onsite Monday-Friday at our Houston corporate office (77070)?*
+      - generic [ref=e239]:
+        - checkbox "Yes" [ref=e240]
+        - text: "Yes"
+      - generic [ref=e241]:
+        - checkbox "No" [ref=e242]
+        - text: "No"
+    - generic [ref=e243]:
+      - generic [ref=e244]: If hired today, would you require current or future employer sponsorship to work in the United States?*
+      - generic [ref=e245]:
+        - checkbox "Yes" [ref=e246]
+"sponsorship": |-
+    - listitem [ref=e143]: Must be authorized to work in the United States without current or future employer sponsorship.
+    - listitem [ref=e144]: This position is fully onsite in Houston, Texas.
+    - listitem [ref=e145]: Candidates requiring remote, hybrid, or relocation assistance will not be considered.
+  - separator [ref=e146]
+  - heading "Why Join SynergenX?" [level=2] [ref=e147]
+  - paragraph [ref=e148]: At SynergenX, your work will have a direct impact on how healthcare data is transformed into meaningful business insights and better patient outcomes. You'll collaborate with experienced technology leaders, work on modern Azure cloud initiatives, help drive AI adoption, and contribute to a growing enterprise data platform that supports operations across multiple states.
+  - paragraph [ref=e149]: If you're looking for an opportunity to build, innovate, mentor, and grow your career in a stable, technology-driven organization, we encourage you to apply.
+  - separator [ref=e150]
+  - heading "Equal Employment Opportunity" [level=2] [ref=e151]
+  - paragraph [ref=e152]: SynergenX Health Holdings is an Equal Opportunity Employer and makes employment decisions without regard to race, color, religion, sex, national origin, age, disability, genetic information, protected veteran status, or any other status protected under applicable federal, state, or local law.
+  - separator [ref=e153]
+  --
+      - generic [ref=e244]: If hired today, would you require current or future employer sponsorship to work in the United States?*
+      - generic [ref=e245]:
+        - checkbox "Yes" [ref=e246]
+        - text: "Yes"
+      - generic [ref=e247]:
+        - checkbox "No" [ref=e248]
+        - text: "No"
+    - generic [ref=e249]:
+      - generic [ref=e250]: Are you currently located in the Greater Houston area or planning to relocate before your start date?*
+      - generic [ref=e251]:
+        - checkbox "Currently local" [ref=e252]
+"Greater Houston area": |-
+    - generic [ref=e250]: Are you currently located in the Greater Houston area or planning to relocate before your start date?*
+    - generic [ref=e251]:
+      - checkbox "Currently local" [ref=e252]
+      - text: Currently local
+    - generic [ref=e253]:
+      - checkbox "Relocating independently before start date" [ref=e254]
+      - text: Relocating independently before start date
+    - generic [ref=e255]:
+      - checkbox "Not local and no relocation planned" [ref=e256]
+      - text: Not local and no relocation planned
+  - generic [ref=e257]:
+"technical concepts": |-
+    - generic [ref=e258]: Are you comfortable communicating technical concepts clearly in fluent spoken and written English with business stakeholders and executive leadership?*
+    - generic [ref=e259]:
+      - checkbox "Yes" [ref=e260]
+      - text: "Yes"
+    - generic [ref=e261]:
+      - checkbox "No" [ref=e262]
+      - text: "No"
+  - generic [ref=e263]:
+    - generic [ref=e264]: How many years have you worked with Azure Databricks in a production environment?*
+    - generic [ref=e265]:
+      - checkbox "None" [ref=e266]
+"ExcelDatabricks in a production environment": (no match)
+"Databricks technologies": |-
+  - generic [ref=e276]: Which Databricks technologies have you used professionally? (Select all that apply)*
+  - generic [ref=e277]:
+    - checkbox "Spark" [ref=e278]
+    - text: Spark
+  - generic [ref=e279]:
+    - checkbox "PySpark" [ref=e280]
+    - text: PySpark
+  - generic [ref=e281]:
+    - checkbox "Delta Lake" [ref=e282]
+    - text: Delta Lake
+  - generic [ref=e283]:
+"Azure services": |-
+  - generic [ref=e308]: Which Azure services have you used professionally?*
+  - generic [ref=e309]:
+    - checkbox "Azure Data Factory" [ref=e310]
+    - text: Azure Data Factory
+  - generic [ref=e311]:
+    - checkbox "Azure SQL" [ref=e312]
+    - text: Azure SQL
+  - generic [ref=e313]:
+    - checkbox "Azure Synapse" [ref=e314]
+    - text: Azure Synapse
+  - generic [ref=e315]:
+"AI/ML models": |-
+      - checkbox "Yes, built data pipelines supporting AI/ML models" [ref=e336]
+      - text: Yes, built data pipelines supporting AI/ML models
+    - generic [ref=e337]:
+      - checkbox "Assisted with AI projects" [ref=e338]
+      - text: Assisted with AI projects
+    - generic [ref=e339]:
+      - checkbox "Familiar with concepts only" [ref=e340]
+      - text: Familiar with concepts only
+    - generic [ref=e341]:
+      - checkbox "No" [ref=e342]
+      - text: "No"
+  - generic [ref=e343]:
+"AI-related technologies": |-
+  - generic [ref=e344]: Which AI-related technologies have you used PROFESSIONALLY?*
+  - generic [ref=e345]:
+    - checkbox "Azure AI Services" [ref=e346]
+    - text: Azure AI Services
+  - generic [ref=e347]:
+    - checkbox "Azure OpenAI" [ref=e348]
+    - text: Azure OpenAI
+  - generic [ref=e349]:
+    - checkbox "Azure Machine Learning" [ref=e350]
+    - text: Azure Machine Learning
+  - generic [ref=e351]:
+"SQL proficiency": |-
+    - generic [ref=e367]: Rate your SQL proficiency.*
+    - generic [ref=e368]:
+      - checkbox "Beginner" [ref=e369]
+      - text: Beginner
+    - generic [ref=e370]:
+      - checkbox "Advanced" [ref=e371]
+      - text: Advanced
+    - generic [ref=e372]:
+      - checkbox "Expert" [ref=e373]
+      - text: Expert
+  - generic [ref=e374]:
+"million-plus row datasets": |-
+  - generic [ref=e375]: Approximately how many million-plus row datasets have you worked with?*
+  - generic [ref=e376]:
+    - checkbox "None" [ref=e377]
+    - text: None
+  - generic [ref=e378]:
+    - checkbox "Under 10 million" [ref=e379]
+    - text: Under 10 million
+  - generic [ref=e380]:
+    - checkbox "10-100 million" [ref=e381]
+    - text: 10-100 million
+  - generic [ref=e382]:
+"programming languages": |-
+  - generic [ref=e387]: Which programming languages do you use professionally?*
+  - generic [ref=e388]:
+    - checkbox "Python" [ref=e389]
+    - text: Python
+  - generic [ref=e390]:
+    - checkbox "SQL" [ref=e391]
+    - text: SQL
+  - generic [ref=e392]:
+    - checkbox "PySpark" [ref=e393]
+    - text: PySpark
+  - generic [ref=e394]:
+"mentored junior Data Engineers": |-
+  - generic [ref=e403]: Have you mentored junior Data Engineers?*
+  - generic [ref=e404]:
+    - checkbox "Frequently" [ref=e405]
+    - text: Frequently
+  - generic [ref=e406]:
+    - checkbox "Occasionally" [ref=e407]
+    - text: Occasionally
+  - generic [ref=e408]:
+    - checkbox "Informally" [ref=e409]
+    - text: Informally
+  - generic [ref=e410]:
+"current role": |-
+  - generic [ref=e413]: Which best describes your current role?*
+  - generic [ref=e414]:
+    - checkbox "Architect" [ref=e415]
+    - text: Architect
+  - generic [ref=e416]:
+    - checkbox "Engineering Manager" [ref=e417]
+    - text: Engineering Manager
+  - generic [ref=e418]:
+    - checkbox "Technical Lead" [ref=e419]
+    - text: Technical Lead
+  - generic [ref=e420]:
+"industries": |-
+    - listitem [ref=e105]: Healthcare or other highly regulated industries
+  - separator [ref=e106]
+  - heading "The Ideal Candidate" [level=2] [ref=e107]
+  - paragraph [ref=e108]: "We're looking for someone who:"
+  - list [ref=e109]:
+    - listitem [ref=e110]: Has strong production experience with Azure Databricks.
+    - listitem [ref=e111]: Enjoys building scalable cloud data platforms.
+    - listitem [ref=e112]: Understands how modern data engineering enables AI and machine learning initiatives.
+    - listitem [ref=e113]: Can independently solve complex technical problems.
+    - listitem [ref=e114]: Takes ownership of projects from design through deployment.
+    - listitem [ref=e115]: Enjoys mentoring less experienced engineers.
+  --
+      - generic [ref=e425]: Which industries have you supported?*
+      - generic [ref=e426]:
+        - checkbox "Healthcare" [ref=e427]
+        - text: Healthcare
+      - generic [ref=e428]:
+        - checkbox "Finance" [ref=e429]
+        - text: Finance
+      - generic [ref=e430]:
+        - checkbox "Energy" [ref=e431]
+        - text: Energy
+      - generic [ref=e432]:

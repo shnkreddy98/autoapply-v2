@@ -1,0 +1,32 @@
+"Highest level of education completed": |-
+  - generic [ref=e351]: What's your highest level of education completed?*
+  - combobox "What's your highest level of education completed?*" [ref=e352]:
+    - option "No answer" [selected]
+    - option "GED or Equivalent"
+    - option "High School"
+    - option "Some College"
+    - option "College - Associates"
+    - option "College - Bachelor of Arts"
+    - option "College - Bachelor of Fine Arts"
+    - option "College - Bachelor of Science"
+    - option "College - Master of Arts"
+    - option "College - Master of Science"
+"minimum of 3 years": (no match)
+"Experience with Python, SQL, and/or Java": (no match)
+"Experience with cloud-based data platforms": (no match)
+"describe a complex data pipeline": (no match)
+"salary expectation": (no match)
+"LinkedIn Profile URL": |-
+    - generic [ref=e354]: LinkedIn Profile URL:*
+    - textbox "LinkedIn Profile URL:*" [active] [ref=e355]: https://www.linkedin.com/in/janedoe
+  - generic [ref=e356]:
+    - generic [ref=e357]:
+      - text: Are you legally authorized to work in the U.S.?
+      - text: "Note: If hired, a Form I-9, Employment Eligibility Verification, must be completed at the start of employment.*"
+    - 'combobox "Are you legally authorized to work in the U.S.? Note: If hired, a Form I-9, Employment Eligibility Verification, must be completed at the start of employment.*" [ref=e358]':
+      - option "-- No answer --"
+      - option "Yes" [selected]
+      - option "No"
+  - generic [ref=e359]:
+    - generic [ref=e360]: Do you or will you in the future require visa sponsorship?*
+"Website/Portfolio URL": (no match)

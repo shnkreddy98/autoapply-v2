@@ -1,0 +1,10 @@
+"\"No\"": |-
+  - paragraph [ref=e195]: Are you legally authorized to work in the country in which this position is located? Answering "No" means that you require sponsorship to work in the country in which this position is located.
+  - generic "Required" [ref=e196]: Legal Authorization to Work:*
+  - generic [ref=e199]:
+    - status [ref=e201]: One or more results available. Press Up or Down Arrow Keys to navigate the selection list. Press Alt + Arrow keys to resize the selection list.
+  --
+  - paragraph [ref=e241]: If you are a recent graduate and/or have yet to acquire employment experience, enter the words "recently graduated" or "no work experience" in the required company name field and "N/A" or "No" for any related required fields. For start date, enter the current date.
+  - generic "Required" [ref=e242]: Most Recent Company/Employer Name:*
+  - textbox "Most Recent Company/Employer Name:" [ref=e243]
+  - generic "Required" [ref=e244]: Most Recent/Current Job Title:*

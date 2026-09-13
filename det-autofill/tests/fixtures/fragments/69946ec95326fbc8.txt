@@ -1,0 +1,5 @@
+"I require employer sponsorship": |-
+        - option "I require employer sponsorship (e.g., H-1B or OPT visa status)" [ref=e837]
+        - option "Other (e.g., Employment Authorization Document holder, TN Visa, etc)" [ref=e838]
+      - textbox
+  - generic [ref=e633]:

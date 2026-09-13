@@ -1,0 +1,53 @@
+"Name": |-
+    - generic [ref=e1523]: Name*
+    - textbox "Name" [ref=e1526]
+  - generic [ref=e1527]:
+    - generic [ref=e1528]: Employee ID (if applicable)
+    - textbox "Employee ID (if applicable)" [ref=e1531]
+"Month": |-
+    - spinbutton "Month" [ref=e1544]
+  - generic [ref=e1545]: /
+  - generic [ref=e1546]:
+    - generic [ref=e1547]: DD
+"Day": |-
+  - Page URL: https://myhrabc.wd5.myworkdayjobs.com/en-US/global/job/Conshohocken%2C-PA/Data-Engineer-III_R2611058/apply/autofillWithResume
+  ### Snapshot
+  ```yaml
+  - generic [ref=e4]:
+  --
+                          - spinbutton "Day" [ref=e1548]
+                        - generic [ref=e1549]: /
+                        - generic [ref=e1550]:
+                          - generic [ref=e1551]: YYYY
+  --
+        - generic [ref=e98]: © 2026 Workday, Inc. All rights reserved.
+  ```
+"Year": |-
+            - spinbutton "Year" [ref=e1552]
+        - button "Calendar" [ref=e1553] [cursor=pointer]
+  - generic [ref=e1558]:
+    - heading "Why are you being asked to complete this form?" [level=4] [ref=e1559]
+  --
+      - text: We are a federal contractor or subcontractor. The law requires us to provide equal employment opportunity to qualified people with disabilities. We have a goal of having at least 7% of our workers as people with disabilities. The law says we must measure our progress towards this goal. To do this, we must ask applicants and employees if they have a disability or have ever had one. People can become disabled, so we need to ask this question at least every five years. Completing this form is voluntary, and we hope that you will choose to do so. Your answer is confidential. No one who makes hiring decisions will see it. Your decision to complete the form and your answer will not harm you in any way. If you want to learn more about the law or this form, visit the U.S. Department of Labor’s Office of Federal Contract Compliance Programs (OFCCP) website at
+      - link "www.dol.gov/ofccp" [ref=e1562] [cursor=pointer]:
+        - /url: https://www.dol.gov/ofccp
+      - text: .
+"No, I do not have a disability and have not had one in the past": |-
+  - row "Yes, I have a disability, or have had one in the past No, I do not have a disability and have not had one in the past I do not want to answer" [ref=e1600]:
+    - row "Yes, I have a disability, or have had one in the past" [ref=e1601]:
+      - cell "Yes, I have a disability, or have had one in the past" [ref=e1602]:
+        - generic [ref=e1603]:
+  --
+    - row "No, I do not have a disability and have not had one in the past" [ref=e1607]:
+      - cell "No, I do not have a disability and have not had one in the past" [ref=e1608]:
+        - generic [ref=e1609]:
+          - checkbox "No, I do not have a disability and have not had one in the past" [ref=e1611] [cursor=pointer]
+          - generic [ref=e1612] [cursor=pointer]: No, I do not have a disability and have not had one in the past
+    - row "I do not want to answer" [ref=e1613]:
+      - cell "I do not want to answer" [ref=e1614]:
+        - generic [ref=e1615]:
+"Save and Continue": |-
+          - button "Save and Continue" [ref=e568] [cursor=pointer]
+  - generic [ref=e41]:
+    - heading "Follow Us" [level=4] [ref=e42]
+    - list [ref=e43]:

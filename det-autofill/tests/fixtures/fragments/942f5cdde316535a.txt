@@ -1,0 +1,71 @@
+"Do you have the legal right to work in the United States?": |-
+          - generic [ref=e1703]: Do you have the legal right to work in the United States?
+        - generic [ref=e1705]:
+          - generic [ref=e1707]:
+            - generic [ref=e1708]: Do you have the legal right to work in the United States?
+            - text: "*"
+          - generic [ref=e1709]:
+            - generic [ref=e1713]:
+  --
+              - generic [ref=e1835]: "'Do you have the legal right to work in the United States?' is required."
+  - listitem [ref=e1726]:
+    - group [ref=e1727]:
+      - generic [ref=e1728]:
+"require sponsorship for employment visa status?": |-
+          - generic [ref=e1729]: Will you now or in the future require sponsorship for employment visa status?
+        - generic [ref=e1731]:
+          - generic [ref=e1733]:
+            - generic [ref=e1734]: Will you now or in the future require sponsorship for employment visa status?
+            - text: "*"
+          - generic [ref=e1735]:
+            - generic [ref=e1739]:
+  --
+              - generic [ref=e1838]: "'Will you now or in the future require sponsorship for employment visa status?' is required."
+  - listitem [ref=e1752]:
+    - generic [ref=e1755]:
+      - generic [ref=e1757]:
+"total target compensation?": |-
+        - generic [ref=e1758]: What is your minimum requirement for total target compensation?
+        - text: "*"
+      - generic [ref=e1759]:
+        - textbox "What is your minimum requirement for total target compensation? *" [invalid] [ref=e1762]
+        - alert [ref=e1840]:
+          - generic [ref=e1841]: "'What is your minimum requirement for total target compensation? ' is required."
+  - listitem [ref=e1763]:
+    - generic [ref=e1766]:
+      - generic [ref=e1768]:
+        - generic [ref=e1769]: What is your desired total target compensation?
+        - text: "*"
+      - generic [ref=e1770]:
+        - textbox "What is your desired total target compensation? *" [invalid] [ref=e1773]
+        - alert [ref=e1843]:
+          - generic [ref=e1844]: "'What is your desired total target compensation?' is required."
+  - listitem [ref=e1774]:
+    - group [ref=e1775]:
+      - generic [ref=e1776]:
+"relatives employed by The Hanover": |-
+          - generic [ref=e1777]: Do you have any close relatives employed by The Hanover and its affiliated companies? (Spouse, Domestic Partner, or Significant Other, Parent/Step Parent, Child/Step Child, Grandchild, Uncle, Aunt, Nephew, Niece, In-Laws (father, mother, son, daughter), Step Relatives and Cousins)
+        - generic [ref=e1779]:
+          - generic [ref=e1781]:
+            - generic [ref=e1782]: Do you have any close relatives employed by The Hanover and its affiliated companies? (Spouse, Domestic Partner, or Significant Other, Parent/Step Parent, Child/Step Child, Grandchild, Uncle, Aunt, Nephew, Niece, In-Laws (father, mother, son, daughter), Step Relatives and Cousins)
+            - text: "*"
+          - generic [ref=e1783]:
+            - generic [ref=e1787]:
+  --
+              - generic [ref=e1847]: "'Do you have any close relatives employed by The Hanover and its affiliated companies? (Spouse, Domestic Partner, or Significant Other, Parent/Step Parent, Child/Step Child, Grandchild, Uncle, Aunt, Nephew, Niece, In-Laws (father, mother, son, daughter), Step Relatives and Cousins)' is required."
+  - listitem [ref=e1800]:
+    - group [ref=e1801]:
+      - generic [ref=e1802]:
+"contractual obligations to your current or past employer(s)": |-
+              - generic [ref=e1803]: Do you have any employment or contractual obligations to your current or past employer(s) (e.g. confidentiality agreement(s), non-solicitation agreement(s)
+            - generic [ref=e1805]:
+              - generic [ref=e1807]:
+                - generic [ref=e1808]: Do you have any employment or contractual obligations to your current or past employer(s) (e.g. confidentiality agreement(s), non-solicitation agreement(s)
+                - text: "*"
+              - generic [ref=e1809]:
+                - generic [ref=e1813]:
+  --
+                  - generic [ref=e1850]: "'Do you have any employment or contractual obligations to your current or past employer(s) (e.g. confidentiality agreement(s), non-solicitation agreement(s)' is required."
+  - generic [ref=e449]:
+    - generic [ref=e450]:
+      - button "Cancel" [ref=e451] [cursor=pointer]:

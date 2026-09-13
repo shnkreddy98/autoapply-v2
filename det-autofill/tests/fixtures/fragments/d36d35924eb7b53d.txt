@@ -1,0 +1,38 @@
+"Upload File": |-
+      - button "Upload file" [ref=e50] [cursor=pointer]
+  - generic [ref=e52]:
+    - generic [ref=e53]:
+      - generic [ref=e54]: Name*
+  --
+        - button "Upload File" [ref=e67] [cursor=pointer]:
+          - img [ref=e68]
+          - generic [ref=e70]: Upload File
+        - paragraph [ref=e71]: or drag and drop here
+    - generic [ref=e72]:
+      - generic [ref=e73]: LinkedIn Profile URL*
+"Name*": |-
+    - generic [ref=e54]: Name*
+    - textbox "Name*" [ref=e56] [cursor=pointer]:
+      - /placeholder: Type here...
+  - generic [ref=e57]:
+    - generic [ref=e58]: Email*
+"Email*": |-
+    - generic [ref=e58]: Email*
+    - textbox "Email*" [ref=e60] [cursor=pointer]:
+      - /placeholder: hello@example.com...
+  - generic [ref=e61]:
+    - generic [ref=e62]: Resume*
+"LinkedIn Profile URL*": |-
+    - generic [ref=e73]: LinkedIn Profile URL*
+    - paragraph [ref=e75]
+    - textbox "LinkedIn Profile URL*" [ref=e77] [cursor=pointer]:
+      - /placeholder: Type here...
+  - generic [ref=e78]:
+    - generic [ref=e79]: Are you legally authorized to work in the United States? *
+"Why are you interested in this role?*": |-
+      - generic [ref=e111]: Why are you interested in this role?*
+      - paragraph [ref=e113]: We're curious what piqued your interest. A few sentences is sufficient.
+      - textbox "Why are you interested in this role?*" [ref=e114] [cursor=pointer]:
+        - /placeholder: Type here...
+  - button "Submit Application" [ref=e115] [cursor=pointer]:
+    - text: Submit Application

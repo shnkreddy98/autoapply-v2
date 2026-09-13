@@ -1,0 +1,6 @@
+"No, I do not have a disability": |-
+    - checkbox "No, I do not have a disability and have not had one in the past" [checked] [ref=e1926]
+    - generic [ref=e1928]: No, I do not have a disability and have not had one in the past
+  - generic [ref=e1929]:
+    - generic:
+      - checkbox "I do not want to answer" [disabled]

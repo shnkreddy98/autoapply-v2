@@ -1,0 +1,27 @@
+"Year": |-
+            - textbox "Year" [ref=e315] [cursor=pointer]:
+              - /placeholder: yyyy
+              - text: "2026"
+        - button "Choose Date" [ref=e318] [cursor=pointer]:
+  --
+  - group "*Have you been convicted of a misdemeanor for which your period of incarceration ended within the past 5 years?" [ref=e442]:
+    - generic [ref=e443]: "*Have you been convicted of a misdemeanor for which your period of incarceration ended within the past 5 years?"
+    - generic [ref=e446] [cursor=pointer]:
+      - radio "Yes" [ref=e447]
+      - text: "Yes"
+  --
+  - group "*Have you been convicted of a misdemeanor within the past 5 years?" [ref=e464]:
+    - generic [ref=e465]: "*Have you been convicted of a misdemeanor within the past 5 years?"
+    - generic [ref=e468] [cursor=pointer]:
+      - radio "Yes" [ref=e469]
+      - text: "Yes"
+  --
+    - generic [ref=e487]: "*FCRA Disclosure and Authorization: I understand that the Company will utilize the services of a consumer reporting agency as part of the procedure for processing my application for employment. I also understand that if I am employed by the Company, the Company may obtain further information through subsequent investigations by a consumer reporting agency for purposes related to my employment with the Company. I understand that a consumer reporting agency's investigation may include obtaining information covering up to the last seven (7) years regarding my credit background, character, general reputation, personal characteristics and mode of living, and criminal conviction record (consistent with Massachusetts state law). I understand such information may be obtained by direct or indirect contact with former employers, schools, financial institutions, landlords and public agencies or other persons who may have such knowledge. I hereby consent to this investigation and authorize the Company to procure a report on my background as stated above form a consumer reporting agency."
+    - generic [ref=e490] [cursor=pointer]:
+      - radio "I agree" [ref=e491]
+      - text: I agree
+  --
+      - paragraph [ref=e628]: We are a federal contractor or subcontractor. The law requires us to provide equal employment opportunity to qualified people with disabilities. We have a goal of having at least 7% of our workers as people with disabilities. The law says we must measure our progress towards this goal. To do this, we must ask applicants and employees if they have a disability or have ever had one. People can become disabled, so we need to ask this question at least every five years.
+      - paragraph [ref=e629]:
+        - text: Completing this form is voluntary, and we hope that you will choose to do so. Your answer is confidential. No one who makes hiring decisions will see it. Your decision to complete the form and your answer will not harm you in any way. If you want to learn more about the law or this form, visit the U.S. Department of Labor’s Office of Federal Contract Compliance Programs (OFCCP) website at
+        - link "www.dol.gov/ofccp" [ref=e630] [cursor=pointer]:

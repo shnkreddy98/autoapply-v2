@@ -1,0 +1,12 @@
+"Phone": |-
+  - group "Phone" [ref=f94e130]:
+    - generic [ref=f94e131]: Phone
+    - generic [ref=f94e134]:
+      - generic [ref=f94e135]: Country*
+      - generic [ref=f94e136]:
+  --
+      - generic [ref=f94e151]: Phone*
+      - textbox "Phone" [ref=f94e152]: (555) 010-0199
+  - generic [ref=f94e153]:
+    - generic [ref=f94e155]:
+      - generic [ref=f94e156]: Location (City)*

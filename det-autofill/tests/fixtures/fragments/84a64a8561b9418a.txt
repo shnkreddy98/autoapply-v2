@@ -1,0 +1,58 @@
+"legally authorized to work in the United States?": |-
+    - generic [ref=e119]: Are you legally authorized to work in the United States?
+    - table [ref=e121]:
+      - rowgroup [ref=e122]:
+        - row "Yes No" [ref=e123]:
+          - cell "Yes" [ref=e124]:
+            - radio "Yes" [ref=e125]
+            - generic [ref=e126] [cursor=pointer]: "Yes"
+          - cell "No" [ref=e127]:
+            - radio "No" [ref=e128]
+            - generic [ref=e129] [cursor=pointer]: "No"
+  - generic [ref=e130]:
+"require \u201csponsorship": |-
+    - generic [ref=e132]: Will you now or in the future require “sponsorship for an immigration-related employment benefit?"
+    - table [ref=e134]:
+      - rowgroup [ref=e135]:
+        - row "No Yes" [ref=e136]:
+          - cell "No" [ref=e137]:
+            - radio "No" [ref=e138]
+            - generic [ref=e139] [cursor=pointer]: "No"
+          - cell "Yes" [ref=e140]:
+            - radio "Yes" [ref=e141]
+            - generic [ref=e142] [cursor=pointer]: "Yes"
+  - generic [ref=e143]:
+"18 years of age or older?": |-
+    - generic [ref=e145]: Are you 18 years of age or older?
+    - table [ref=e147]:
+      - rowgroup [ref=e148]:
+        - row "Yes No" [ref=e149]:
+          - cell "Yes" [ref=e150]:
+            - radio "Yes" [ref=e151]
+            - generic [ref=e152] [cursor=pointer]: "Yes"
+          - cell "No" [ref=e153]:
+            - radio "No" [ref=e154]
+            - generic [ref=e155] [cursor=pointer]: "No"
+  - generic [ref=e156]:
+"currently working?": |-
+    - generic [ref=e158]: Are you currently working?
+    - table [ref=e160]:
+      - rowgroup [ref=e161]:
+        - row "No Yes" [ref=e162]:
+          - cell "No" [ref=e163]:
+            - radio "No" [ref=e164]
+            - generic [ref=e165] [cursor=pointer]: "No"
+          - cell "Yes" [ref=e166]:
+            - radio "Yes" [ref=e167]
+            - generic [ref=e168] [cursor=pointer]: "Yes"
+  - generic [ref=e169]:
+"Save and Complete": |-
+        - button "Save and Complete" [ref=e261] [cursor=pointer]
+        - button "Save and Finish Later" [ref=e262] [cursor=pointer]
+    - link "Powered by AcquireTM Logo AcquireTM Applicant Tracking Software" [ref=e267] [cursor=pointer]:
+      - /url: http://www.acquiretm.com
+      - text: Powered by
+      - img "AcquireTM Logo" [ref=e268]
+      - strong [ref=e269]: AcquireTM
+      - text: Applicant Tracking Software
+  ```

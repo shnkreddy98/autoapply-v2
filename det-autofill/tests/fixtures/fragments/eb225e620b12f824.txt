@@ -1,0 +1,8 @@
+"United States": (no match)
+"San Jose State University": |-
+        - combobox "School" [active] [ref=e201]: San Jose State University
+        - button "Toggle flyout" [ref=e203] [cursor=pointer]:
+          - img [ref=e204]
+  - generic [ref=e207]:
+"Master's Degree": (no match)
+"Data Analytics": (no match)

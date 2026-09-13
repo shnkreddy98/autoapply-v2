@@ -1,0 +1,27 @@
+"I want to upload a resume.": |-
+      - radio "I want to upload a resume." [ref=e203]
+      - text: I want to upload a resume.
+  - generic [ref=e204]:
+    - generic [ref=e205]: Select the resume file to upload
+    - button "Select the resume file to upload" [disabled] [ref=e206]
+"Select the resume file to upload": |-
+  - 'cell "Resume Upload Mandatory fields are marked with an asterisk. . Required Resume Upload You can submit personal and professional information by uploading a resume. The system will automatically extract the relevant information included in the resume and fill out part of the online submission. You can review the extracted information and make the appropriate changes in the next steps. If you do not upload a resume, you will need to fill out the online submission manually. Resume Upload Selection Resume Upload Selection Select the resume file to upload Note: Once the process is completed, please verify the fields containing values automatically extracted from the resume. You may have to manually correct or fill out some of them." [ref=e170]':
+    - heading "Resume Upload" [level=1] [ref=e171]:
+      - generic [ref=e172]: Resume Upload
+    - generic [ref=e177]:
+  --
+        - generic [ref=e205]: Select the resume file to upload
+        - button "Select the resume file to upload" [disabled] [ref=e206]
+        - generic [ref=e207]: "Note: Once the process is completed, please verify the fields containing values automatically extracted from the resume. You may have to manually correct or fill out some of them."
+  - cell "Help Information Uploading a resume To upload a resume, click \"Browse\" and select the relevant file. The system uploads the file and extracts some data included in the resume. File Limitations - Accepted file formats include Word, Excel, plain text, rich text, HTML, and .pdf - You cannot attach a file that exceeds the allocated limit of 100 kilobytes - You can attach a maximum of five files, one at a time - Images or compressed (.zip) files cannot be searched by recruiters - If you are a returning user, you may attach an updated resume or additional files" [ref=e209]:
+    - generic [ref=e210]:
+"Save and Continue": |-
+      - button "Save and Continue" [ref=e162] [cursor=pointer]
+      - button "Save as Draft" [ref=e163] [cursor=pointer]
+      - button "Quit" [ref=e164] [cursor=pointer]
+  - generic [ref=e165]:
+  --
+    - button "Save and Continue" [ref=e242] [cursor=pointer]
+    - button "Save as Draft" [ref=e243] [cursor=pointer]
+    - button "Quit" [ref=e244] [cursor=pointer]
+  - link "Privacy Agreement" [ref=e253] [cursor=pointer]:

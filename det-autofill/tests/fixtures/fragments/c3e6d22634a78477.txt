@@ -1,0 +1,5 @@
+"I am not a protected veteran": |-
+        - option "I am not a protected veteran" [ref=f84e1274]
+        - option "I identify as one or more of the classifications of a protected veteran" [ref=f84e1275]
+        - option "I don't wish to answer" [ref=f84e1276]
+  - separator [ref=f84e575]

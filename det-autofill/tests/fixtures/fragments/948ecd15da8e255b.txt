@@ -1,0 +1,17 @@
+"Expected CTC": |-
+    - generic [ref=e628]: "*Expected CTC :"
+    - combobox [ref=e630]:
+      - option "Currency"
+      - option "Rs. - INR"
+  --
+    - textbox "*Expected CTC :" [ref=e632]:
+      - /placeholder: Enter Amount
+  - generic [ref=e581]:
+    - generic [ref=e582]: "Primary skills :"
+"Resident city": |-
+    - generic [ref=e606]: "*Resident city :"
+    - generic [ref=e607]:
+      - textbox "*Resident city :" [ref=e608]:
+        - /placeholder: Type location
+      - generic [ref=e637]: Please enter your location
+  - generic [ref=e612] [cursor=pointer]:

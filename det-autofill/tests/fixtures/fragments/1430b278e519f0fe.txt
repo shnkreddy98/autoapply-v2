@@ -1,0 +1,6 @@
+"Master's (M.A., M.S., M.B.A.)": |-
+  - option "Master's (M.A., M.S., M.B.A.)" [ref=e1080]:
+    - generic [ref=e1081]: Master's (M.A., M.S., M.B.A.)
+  - option "Juris Doctorate (J.D.)" [ref=e1082]:
+    - generic [ref=e1083]: Juris Doctorate (J.D.)
+  - option "Doctorate (D.B.A., Ed.D., Ph.D.)" [ref=e1084]:

@@ -1,0 +1,47 @@
+"LinkedIn Profile": |-
+    - generic [ref=e206]: LinkedIn Profile
+    - textbox [ref=e210]
+  - generic [ref=e211]:
+    - generic [ref=e214]:
+"Preferred Contact Method": |-
+  - generic [ref=e245]: Preferred Contact Method *
+  - generic [ref=e249] [cursor=pointer]:
+    - combobox [ref=e252]
+    - generic:
+"Address Line 1": |-
+    - generic [ref=e285]: Address Line 1 *
+    - textbox [ref=e289]
+  - generic [ref=e292]:
+    - generic [ref=e294]: Address Line 2
+"Zip / Postal Code": |-
+      - generic [ref=e321]: Zip / Postal Code *
+      - textbox [ref=e325]
+  - generic [ref=e329]:
+    - generic [ref=e331]: How did you hear about this job? *
+"How did you hear about this job?": |-
+  - generic [ref=e331]: How did you hear about this job? *
+  - generic [ref=e335] [cursor=pointer]:
+    - combobox [ref=e338]
+    - generic:
+"I consent to receive SMS messages": |-
+        - text: By selecting the "I consent to receive SMS messages" option and clicking "save", you consent to receive SMS messages at the phone number provided below or any other you designate in connection with your job application. Message and data rates may apply. You can opt out by replying STOP to the last message received from us or visiting the Account Settings. For additional information, please review the
+        - link "Privacy Statement" [ref=e468] [cursor=pointer]:
+          - /url: https://help.dayforce.com/r/documents/all_legal_and_faq+en-US+lightMode+Web
+        - text: .
+  --
+          - radio "I consent to receive SMS messages" [ref=e482]
+          - generic [ref=e484]: I consent to receive SMS messages
+    - button "Save" [ref=e488] [cursor=pointer]:
+      - generic [ref=e489]: Save
+  - generic [ref=e1523]:
+"Save": |-
+        - text: By selecting the "I consent to receive SMS messages" option and clicking "save", you consent to receive SMS messages at the phone number provided below or any other you designate in connection with your job application. Message and data rates may apply. You can opt out by replying STOP to the last message received from us or visiting the Account Settings. For additional information, please review the
+        - link "Privacy Statement" [ref=e468] [cursor=pointer]:
+          - /url: https://help.dayforce.com/r/documents/all_legal_and_faq+en-US+lightMode+Web
+        - text: .
+  --
+    - button "Save" [ref=e488] [cursor=pointer]:
+      - generic [ref=e489]: Save
+  - generic [ref=e1523]:
+    - alert [ref=e1525]:
+      - img "check-circle" [ref=e1526]:

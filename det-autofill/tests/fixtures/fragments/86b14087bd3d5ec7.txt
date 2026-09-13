@@ -1,0 +1,82 @@
+"Job Title": |-
+    - generic [ref=e702]: Job Title*
+    - textbox "Job Title" [ref=e705]: Founding Engineer
+  - generic [ref=e706]:
+    - generic [ref=e708]: Company*
+    - textbox "Company" [ref=e711]: AirFold
+  --
+    - generic [ref=e786]: Job Title*
+    - textbox "Job Title" [ref=e789]: Data Engineer
+  - generic [ref=e790]:
+    - generic [ref=e792]: Company*
+    - textbox "Company" [ref=e795]: Kantar
+  --
+    - generic [ref=e870]: Job Title*
+    - textbox "Job Title" [ref=e873]: Data Engineer
+  - generic [ref=e874]:
+    - generic [ref=e876]: Company*
+    - textbox "Company" [ref=e879]: The Sparks Foundation
+"Company": |-
+                - generic [ref=e708]: Company*
+                - textbox "Company" [ref=e711]: AirFold
+              - generic [ref=e712]:
+                - generic [ref=e713]: Location
+                - textbox "Location" [ref=e716]: San Francisco California
+  --
+                - generic [ref=e792]: Company*
+                - textbox "Company" [ref=e795]: Kantar
+              - generic [ref=e796]:
+                - generic [ref=e797]: Location
+                - textbox "Location" [ref=e800]: Bengaluru India
+  --
+                - generic [ref=e876]: Company*
+                - textbox "Company" [ref=e879]: The Sparks Foundation
+              - generic [ref=e880]:
+                - generic [ref=e881]: Location
+                - textbox "Location" [ref=e884]: Bengaluru India
+  --
+      - /url: https://www.linkedin.com/company/amerisourcebergen/
+  - listitem [ref=e62] [cursor=pointer]:
+    - link "X" [ref=e63]:
+      - /url: https://twitter.com/healthcare_abc?lang=en
+"Role Description": |-
+          - generic [ref=e770]: Role Description
+          - textbox "Role Description" [ref=e773]: Architected enterprise cloud platform (GCP) using Terraform, GKE, and Istio, ensuring high availability for 50+ services and enhancing system resilience. • Engineered event-driven pipeline (Kafka, Debezium CDC, ClickHouse) processing millions of daily events with sub-second latency and exactly-once semantics. • Developed 100+ production-grade FastAPI endpoints with robust Auth0/RBAC security, serving as the backbone for scalable client interactions. • Integrated dbt into the ELT pipeline to standardize transformation logic in BigQuery & ClickHouse, reducing reporting errors by 40% via automated quality tests. • Implemented scalable K8s infrastructure with Karpenter auto-scaling and FluxCD GitOps, automating continuous delivery for over 60 Helm releases. • Managed multi-database architecture (PostgreSQL, Bigtable, ClickHouse), optimizing storage for vector search, caching, and large-scale analytics.
+    - group "Work Experience 2" [ref=e774]:
+      - generic [ref=e775]:
+        - heading "Work Experience 2" [level=5] [ref=e776]
+  --
+          - generic [ref=e854]: Role Description
+          - textbox "Role Description" [ref=e857]: Orchestrated ELT pipelines using Airflow and Spark, integrating Kafka streams to ingest advertising data with exactly-once semantics. • Accelerated data modeling by deploying dbt for complex SQL transformations, replacing ad-hoc scripts with modular pipelines that reduced time-to-insight by 25%. • Designed real-time processing framework with Kafka Streams and Spark Streaming, providing near real- time insights into campaign performance. • Deployed serverless architecture (Cloud Functions, Cloud Storage) to automate data workflows, reducing manual intervention by 80% and improving reliability. • Engineered ROI optimization algorithms that increased client sales by 34% for global enterprises through data-driven ad spend allocation.
+    - group "Work Experience 3" [ref=e858]:
+      - generic [ref=e859]:
+        - heading "Work Experience 3" [level=5] [ref=e860]
+  --
+          - generic [ref=e938]: Role Description
+          - textbox "Role Description" [ref=e941]: Optimized ETL pipeline performance, achieving 25% efficiency improvement through parallel processing and exponential backoff retry logic. • Enhanced PostgreSQL & MySQL query performance by 30% through strategic indexing and execution plan analysis. • Integrated automated data validation scripts using Python and Pandas to detect schema mismatches and null values, reducing downstream data corruption incidents by 40%. • Collaborated with business analysts to design star-schema data models in PostgreSQL, enabling faster generation of daily operational reports and supporting strategic decision-making. • Mentored junior engineers on TDD and code reviews, establishing 80% test coverage targets and improving code maintainability.
+    - button "Add Another" [ref=e945] [cursor=pointer]
+  - group "Education" [ref=e947]:
+    - heading "Education" [level=4] [ref=e948]
+"School or University": |-
+    - generic [ref=e967]: School or University*
+    - textbox "School or University" [ref=e970]: San Jose State University
+  - generic [ref=e971]:
+    - generic [ref=e973]: Degree*
+    - button "Degree Masters Required" [ref=e977]: Masters
+  --
+    - generic [ref=e1009]: School or University*
+    - textbox "School or University" [ref=e1012]: Visvesvaraya Technological University
+  - generic [ref=e1013]:
+    - generic [ref=e1015]: Degree*
+    - button "Degree Select One Required" [ref=e1019]: Select One
+"Skills": |-
+  - group "Skills" [ref=e1072]:
+    - heading "Skills" [level=4] [ref=e1073]
+    - paragraph [ref=e1079]: To enter your skills, type and click "Enter"
+    - generic [ref=e1081]:
+      - generic [ref=e1082]: Type to Add Skills
+      - generic [ref=e1088] [cursor=pointer]:
+        - textbox "Type to Add Skills" [ref=e1089]:
+          - /placeholder: Search
+        - generic [ref=e1090]: 0 items selected
+  - group "Resume/CV/Additional Documents" [ref=e1095]:

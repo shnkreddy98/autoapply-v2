@@ -1,0 +1,11 @@
+"Yes": |-
+                    - button "Yes Required" [ref=e1271]: "Yes"
+                  - group "Are you bilingual in other languages?*" [ref=e1202]:
+                    - paragraph [ref=e1206]: Are you bilingual in other languages?*
+                    - button "No Required" [ref=e1281]: "No"
+  --
+      - option "Yes" [ref=e1287]:
+        - generic [ref=e1288]: "Yes"
+      - option "No" [ref=e1289]:
+        - generic [ref=e1290]: "No"
+  ```

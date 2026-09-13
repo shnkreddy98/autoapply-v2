@@ -1,0 +1,69 @@
+"Country": |-
+      - generic [ref=e308]: Country*
+      - button "Country United States of America Required" [ref=e395]: United States of America
+  - group "Name" [ref=e314]:
+    - heading "Name" [level=4] [ref=e315]
+    - generic [ref=e316]:
+  --
+        - generic [ref=e407]: Country Phone Code*
+        - generic [ref=e412] [cursor=pointer]:
+          - generic:
+            - textbox "Country Phone Code" [ref=e413]:
+              - /placeholder: Search
+            - generic [ref=e414]: 1 item selected, United States of America (+1)
+          - listbox "items selected" [ref=e416]:
+"First Name": |-
+    - generic [ref=e319]: First Name*
+    - textbox "First Name" [ref=e322]: Jane
+  - generic [ref=e323]:
+    - generic [ref=e325]: Last Name*
+    - textbox "Last Name" [ref=e328]: Doe
+"Last Name": |-
+        - generic [ref=e325]: Last Name*
+        - textbox "Last Name" [ref=e328]: Doe
+  - group "Address" [ref=e330]:
+    - heading "Address" [level=4] [ref=e331]
+    - generic [ref=e332]:
+"Address Line 1": |-
+    - generic [ref=e335]: Address Line 1*
+    - textbox "Address Line 1" [ref=e338]
+  - generic [ref=e339]:
+    - generic [ref=e341]: City*
+    - textbox "City" [ref=e344]: San Jose
+"City": |-
+    - generic [ref=e341]: City*
+    - textbox "City" [ref=e344]: San Jose
+  - generic [ref=e345]:
+    - generic [ref=e347]: State*
+    - button "State California Required" [ref=e396]: California
+"State": |-
+      - button "Country United States of America Required" [ref=e395]: United States of America
+  - group "Name" [ref=e314]:
+    - heading "Name" [level=4] [ref=e315]
+    - generic [ref=e316]:
+  --
+        - generic [ref=e347]: State*
+        - button "State California Required" [ref=e396]: California
+      - generic [ref=e352]:
+        - generic [ref=e354]: Postal Code*
+        - textbox "Postal Code" [ref=e357]
+  --
+            - generic [ref=e414]: 1 item selected, United States of America (+1)
+          - listbox "items selected" [ref=e416]:
+            - option "United States of America (+1), press delete to clear value." [ref=e417]:
+              - paragraph [ref=e422]: United States of America (+1)
+      - generic [ref=e426]:
+        - generic [ref=e428]: Phone Number*
+        - textbox "Phone Number" [ref=e431]: (555) 010-0199
+"Postal Code": |-
+        - generic [ref=e354]: Postal Code*
+        - textbox "Postal Code" [ref=e357]
+  - group "Email Address" [ref=e359]:
+    - heading "Email Address" [level=4] [ref=e360]
+    - generic [ref=e363]: jane.doe@example.com
+"Phone Number": |-
+    - generic [ref=e428]: Phone Number*
+    - textbox "Phone Number" [ref=e431]: (555) 010-0199
+  - generic [ref=e432]:
+    - generic [ref=e433]: Phone Extension
+    - textbox "Phone Extension" [ref=e436]

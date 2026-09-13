@@ -1,0 +1,5 @@
+"Apply Now": |-
+    - link "Apply Now" [ref=e67] [cursor=pointer]:
+      - /url: https://www.htcinc.com/apply-now/?jobcode=243475&board=177&board_type=30
+  - generic [ref=e68]:
+    - generic [ref=e69]:

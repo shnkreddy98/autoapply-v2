@@ -1,0 +1,56 @@
+"First Name": |-
+    - generic [ref=e99]: "*First Name"
+    - textbox "*First Name" [ref=e100]
+  - generic [ref=e101]:
+    - generic [ref=e102]: "*Last Name"
+    - textbox "*Last Name" [ref=e103]
+"Last Name": |-
+    - generic [ref=e102]: "*Last Name"
+    - textbox "*Last Name" [ref=e103]
+  - generic [ref=e104]:
+    - generic [ref=e105]: "*Email"
+    - textbox "*Email" [ref=e106]
+"Email": |-
+    - generic [ref=e105]: "*Email"
+    - textbox "*Email" [ref=e106]
+  - generic [ref=e107]:
+    - generic [ref=e108]: "*Password"
+    - textbox "*Password" [ref=e111]
+"Password": |-
+    - generic [ref=e108]: "*Password"
+    - textbox "*Password" [ref=e111]
+    - generic [ref=e112]: "*Confirm Password"
+    - textbox "*Confirm Password" [ref=e113]
+  - generic [ref=e114]:
+    - generic [ref=e115]: "*Primary Phone Number"
+    - textbox "*Primary Phone Number" [ref=e116]
+"Confirm Password": |-
+    - generic [ref=e112]: "*Confirm Password"
+    - textbox "*Confirm Password" [ref=e113]
+  - generic [ref=e114]:
+    - generic [ref=e115]: "*Primary Phone Number"
+    - textbox "*Primary Phone Number" [ref=e116]
+"Primary Phone Number": |-
+    - generic [ref=e115]: "*Primary Phone Number"
+    - textbox "*Primary Phone Number" [ref=e116]
+  - button "Register" [ref=e119] [cursor=pointer]:
+    - generic [ref=e120]:
+      - generic: Register
+"Register": |-
+  - Page URL: https://recruiting.ultipro.com/CAP1015CCFC/JobBoard/6f4434b4-0b72-4e52-b60d-afcc1a963060/Account/Register?redirectUrl=%2FCAP1015CCFC%2FJobBoard%2F6f4434b4-0b72-4e52-b60d-afcc1a963060%2FOpportunityApply%3FopportunityId%3D06415c17-c63b-42cb-b2d3-61edd586fb23&cancelUrl=http%3A%2F%2Frecruiting.ultipro.com%2FCAP1015CCFC%2FJobBoard%2F6f4434b4-0b72-4e52-b60d-afcc1a963060%2FOpportunityDetail%3FopportunityId%3D06415c17-c63b-42cb-b2d3-61edd586fb23%26source%3DLinkedIn
+  - Page Title: Cape Cod Five Cents Savings | Register
+  ### Snapshot
+  ```yaml
+  - generic [ref=e2]:
+  --
+                  - heading "Register" [level=1] [ref=e82]
+                  - generic [ref=e83]: Already have an account?
+                  - link "Sign In" [ref=e84] [cursor=pointer]:
+                    - /url: /CAP1015CCFC/JobBoard/6f4434b4-0b72-4e52-b60d-afcc1a963060/Account/Login?redirectUrl=%2FCAP1015CCFC%2FJobBoard%2F6f4434b4-0b72-4e52-b60d-afcc1a963060%2FOpportunityApply%3FopportunityId%3D06415c17-c63b-42cb-b2d3-61edd586fb23&cancelUrl=http%3A%2F%2Frecruiting.ultipro.com%2FCAP1015CCFC%2FJobBoard%2F6f4434b4-0b72-4e52-b60d-afcc1a963060%2FOpportunityDetail%3FopportunityId%3D06415c17-c63b-42cb-b2d3-61edd586fb23%26source%3DLinkedIn
+  --
+                  - button "Register" [ref=e119] [cursor=pointer]:
+                    - generic [ref=e120]:
+                      - generic: Register
+      - contentinfo [ref=e64]:
+        - link "More about Fidelity Bank This link will open in a new tab" [ref=e69] [cursor=pointer]:
+          - /url: https://www.fidelitybankonline.com/our-story/

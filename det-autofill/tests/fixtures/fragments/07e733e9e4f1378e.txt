@@ -1,0 +1,12 @@
+"Apply": |-
+          - 'link "Apply : Senior Data Engineer" [ref=e210] [cursor=pointer]':
+            - /url: https://careers-amd.icims.com/jobs/87319/login?iis=Job Board&iisn=Linkedin
+            - text: Apply
+          - generic [ref=e213]:
+            - link "Share on Facebook" [ref=e214] [cursor=pointer]:
+              - /url: "javascript:"
+  --
+  - heading "Not ready to apply?" [level=2] [ref=e224]
+  - paragraph [ref=e225]: Let’s stay in touch!
+  - link "Connect With Us" [ref=e226] [cursor=pointer]:
+    - /url: /talent-network/talentcommunity

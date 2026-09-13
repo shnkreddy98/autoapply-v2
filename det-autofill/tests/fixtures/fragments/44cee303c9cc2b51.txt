@@ -1,0 +1,40 @@
+"First Name": |-
+    - generic [ref=e140]: First Name*
+    - textbox "First Name" [ref=e141]: Jane Quinn
+  - generic [ref=e144]:
+    - generic [ref=e145]: Last Name*
+    - textbox "Last Name" [ref=e146]: Doe
+"Last Name": |-
+    - generic [ref=e145]: Last Name*
+    - textbox "Last Name" [ref=e146]: Doe
+  - generic [ref=e149]:
+    - generic [ref=e150]: Email*
+    - textbox "Email" [ref=e151]: jane.doe@example.com
+"Email": |-
+        - paragraph [ref=e114]: Please beware of recent scams to online job seekers. Those applying to our job openings will only be contacted directly from @crunchyroll.com email account.
+    - generic [ref=e115]:
+      - img [ref=e116]
+      - generic [ref=e118]:
+  --
+        - paragraph [ref=e120]: Interested in building your career at Crunchyroll, LLC? Get future opportunities sent straight to your email.
+        - link "Create alert" [ref=e443] [cursor=pointer]:
+          - /url: https://my.greenhouse.io/users/sign_in?job_board=crunchyroll&source=job_alert_post
+  - separator [ref=e122]
+  --
+          - generic [ref=e150]: Email*
+          - textbox "Email" [ref=e151]: jane.doe@example.com
+        - group "Phone" [ref=e153]:
+          - generic [ref=e154]: Phone
+          - generic [ref=e157]:
+"Phone": |-
+  - group "Phone" [ref=e153]:
+    - generic [ref=e154]: Phone
+    - generic [ref=e157]:
+      - generic [ref=e158]: Country*
+      - generic [ref=e159]:
+  --
+      - generic [ref=e174]: Phone*
+      - textbox "Phone" [ref=e175]: +1 555-010-0199
+  - generic [ref=e176]:
+    - generic [ref=e177]:
+      - generic [ref=e178]:

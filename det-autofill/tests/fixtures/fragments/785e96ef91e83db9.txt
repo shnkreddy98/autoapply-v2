@@ -1,0 +1,103 @@
+"legally authorized to work in the United States": |-
+  - row "General Questionnaire Mandatory fields are marked with an asterisk. . Required Questionnaire Please answer the following questions as accurately as possible. 1. Are you legally authorized to work in the United States without sponsorship? . Required 2. Will you now or in the future require sponsorship for U.S. employment visa status (e.g., H-1B status)? . Required 3. Are you legally permitted to work in Canada? . Required 4. Will you now or in the future require sponsorship for Canadian employment visa status (e.g., a work permit)? . Required 5. Would you consider relocating, either now or in the future, if the opportunity arose? . Required 6. Have you ever been employed by Weyerhaeuser or any of its subsidiaries? . Required" [ref=e169]:
+    - cell "General Questionnaire Mandatory fields are marked with an asterisk. . Required Questionnaire Please answer the following questions as accurately as possible. 1. Are you legally authorized to work in the United States without sponsorship? . Required 2. Will you now or in the future require sponsorship for U.S. employment visa status (e.g., H-1B status)? . Required 3. Are you legally permitted to work in Canada? . Required 4. Will you now or in the future require sponsorship for Canadian employment visa status (e.g., a work permit)? . Required 5. Would you consider relocating, either now or in the future, if the opportunity arose? . Required 6. Have you ever been employed by Weyerhaeuser or any of its subsidiaries? . Required" [ref=e170]:
+      - heading "General Questionnaire" [level=1] [ref=e171]:
+        - generic [ref=e172]: General Questionnaire
+      - generic [ref=e175]:
+  --
+          - group "1. Are you legally authorized to work in the United States without sponsorship? . Required" [ref=e188]:
+            - generic "This field is mandatory" [ref=e190]:
+              - generic [ref=e191]: "1."
+              - text: Are you legally authorized to work in the United States without sponsorship?
+              - generic [ref=e194]: .
+              - generic [ref=e195]: Required
+            - generic [ref=e197]:
+"require sponsorship for U.S. employment visa status": |-
+  - row "General Questionnaire Mandatory fields are marked with an asterisk. . Required Questionnaire Please answer the following questions as accurately as possible. 1. Are you legally authorized to work in the United States without sponsorship? . Required 2. Will you now or in the future require sponsorship for U.S. employment visa status (e.g., H-1B status)? . Required 3. Are you legally permitted to work in Canada? . Required 4. Will you now or in the future require sponsorship for Canadian employment visa status (e.g., a work permit)? . Required 5. Would you consider relocating, either now or in the future, if the opportunity arose? . Required 6. Have you ever been employed by Weyerhaeuser or any of its subsidiaries? . Required" [ref=e169]:
+    - cell "General Questionnaire Mandatory fields are marked with an asterisk. . Required Questionnaire Please answer the following questions as accurately as possible. 1. Are you legally authorized to work in the United States without sponsorship? . Required 2. Will you now or in the future require sponsorship for U.S. employment visa status (e.g., H-1B status)? . Required 3. Are you legally permitted to work in Canada? . Required 4. Will you now or in the future require sponsorship for Canadian employment visa status (e.g., a work permit)? . Required 5. Would you consider relocating, either now or in the future, if the opportunity arose? . Required 6. Have you ever been employed by Weyerhaeuser or any of its subsidiaries? . Required" [ref=e170]:
+      - heading "General Questionnaire" [level=1] [ref=e171]:
+        - generic [ref=e172]: General Questionnaire
+      - generic [ref=e175]:
+  --
+          - group "2. Will you now or in the future require sponsorship for U.S. employment visa status (e.g., H-1B status)? . Required" [ref=e203]:
+            - generic "This field is mandatory" [ref=e205]:
+              - generic [ref=e206]: "2."
+              - text: Will you now or in the future require sponsorship for U.S. employment visa status (e.g., H-1B status)?
+              - generic [ref=e209]: .
+              - generic [ref=e210]: Required
+            - generic [ref=e212]:
+"legally permitted to work in Canada": |-
+  - row "General Questionnaire Mandatory fields are marked with an asterisk. . Required Questionnaire Please answer the following questions as accurately as possible. 1. Are you legally authorized to work in the United States without sponsorship? . Required 2. Will you now or in the future require sponsorship for U.S. employment visa status (e.g., H-1B status)? . Required 3. Are you legally permitted to work in Canada? . Required 4. Will you now or in the future require sponsorship for Canadian employment visa status (e.g., a work permit)? . Required 5. Would you consider relocating, either now or in the future, if the opportunity arose? . Required 6. Have you ever been employed by Weyerhaeuser or any of its subsidiaries? . Required" [ref=e169]:
+    - cell "General Questionnaire Mandatory fields are marked with an asterisk. . Required Questionnaire Please answer the following questions as accurately as possible. 1. Are you legally authorized to work in the United States without sponsorship? . Required 2. Will you now or in the future require sponsorship for U.S. employment visa status (e.g., H-1B status)? . Required 3. Are you legally permitted to work in Canada? . Required 4. Will you now or in the future require sponsorship for Canadian employment visa status (e.g., a work permit)? . Required 5. Would you consider relocating, either now or in the future, if the opportunity arose? . Required 6. Have you ever been employed by Weyerhaeuser or any of its subsidiaries? . Required" [ref=e170]:
+      - heading "General Questionnaire" [level=1] [ref=e171]:
+        - generic [ref=e172]: General Questionnaire
+      - generic [ref=e175]:
+  --
+          - group "3. Are you legally permitted to work in Canada? . Required" [ref=e218]:
+            - generic "This field is mandatory" [ref=e220]:
+              - generic [ref=e221]: "3."
+              - text: Are you legally permitted to work in Canada?
+              - generic [ref=e224]: .
+              - generic [ref=e225]: Required
+            - generic [ref=e227]:
+"require sponsorship for Canadian employment visa status": |-
+  - row "General Questionnaire Mandatory fields are marked with an asterisk. . Required Questionnaire Please answer the following questions as accurately as possible. 1. Are you legally authorized to work in the United States without sponsorship? . Required 2. Will you now or in the future require sponsorship for U.S. employment visa status (e.g., H-1B status)? . Required 3. Are you legally permitted to work in Canada? . Required 4. Will you now or in the future require sponsorship for Canadian employment visa status (e.g., a work permit)? . Required 5. Would you consider relocating, either now or in the future, if the opportunity arose? . Required 6. Have you ever been employed by Weyerhaeuser or any of its subsidiaries? . Required" [ref=e169]:
+    - cell "General Questionnaire Mandatory fields are marked with an asterisk. . Required Questionnaire Please answer the following questions as accurately as possible. 1. Are you legally authorized to work in the United States without sponsorship? . Required 2. Will you now or in the future require sponsorship for U.S. employment visa status (e.g., H-1B status)? . Required 3. Are you legally permitted to work in Canada? . Required 4. Will you now or in the future require sponsorship for Canadian employment visa status (e.g., a work permit)? . Required 5. Would you consider relocating, either now or in the future, if the opportunity arose? . Required 6. Have you ever been employed by Weyerhaeuser or any of its subsidiaries? . Required" [ref=e170]:
+      - heading "General Questionnaire" [level=1] [ref=e171]:
+        - generic [ref=e172]: General Questionnaire
+      - generic [ref=e175]:
+  --
+          - group "4. Will you now or in the future require sponsorship for Canadian employment visa status (e.g., a work permit)? . Required" [ref=e233]:
+            - generic "This field is mandatory" [ref=e235]:
+              - generic [ref=e236]: "4."
+              - text: Will you now or in the future require sponsorship for Canadian employment visa status (e.g., a work permit)?
+              - generic [ref=e239]: .
+              - generic [ref=e240]: Required
+            - generic [ref=e242]:
+"consider relocating": |-
+  - row "General Questionnaire Mandatory fields are marked with an asterisk. . Required Questionnaire Please answer the following questions as accurately as possible. 1. Are you legally authorized to work in the United States without sponsorship? . Required 2. Will you now or in the future require sponsorship for U.S. employment visa status (e.g., H-1B status)? . Required 3. Are you legally permitted to work in Canada? . Required 4. Will you now or in the future require sponsorship for Canadian employment visa status (e.g., a work permit)? . Required 5. Would you consider relocating, either now or in the future, if the opportunity arose? . Required 6. Have you ever been employed by Weyerhaeuser or any of its subsidiaries? . Required" [ref=e169]:
+    - cell "General Questionnaire Mandatory fields are marked with an asterisk. . Required Questionnaire Please answer the following questions as accurately as possible. 1. Are you legally authorized to work in the United States without sponsorship? . Required 2. Will you now or in the future require sponsorship for U.S. employment visa status (e.g., H-1B status)? . Required 3. Are you legally permitted to work in Canada? . Required 4. Will you now or in the future require sponsorship for Canadian employment visa status (e.g., a work permit)? . Required 5. Would you consider relocating, either now or in the future, if the opportunity arose? . Required 6. Have you ever been employed by Weyerhaeuser or any of its subsidiaries? . Required" [ref=e170]:
+      - heading "General Questionnaire" [level=1] [ref=e171]:
+        - generic [ref=e172]: General Questionnaire
+      - generic [ref=e175]:
+  --
+          - group "5. Would you consider relocating, either now or in the future, if the opportunity arose? . Required" [ref=e248]:
+            - generic "This field is mandatory" [ref=e250]:
+              - generic [ref=e251]: "5."
+              - text: Would you consider relocating, either now or in the future, if the opportunity arose?
+              - generic [ref=e254]: .
+              - generic [ref=e255]: Required
+            - generic [ref=e257]:
+  --
+              - radio "Yes, I would consider relocating, but only under the right circumstances" [ref=e261]
+              - text: Yes, I would consider relocating, but only under the right circumstances
+            - generic [ref=e263]:
+              - radio "No, I would not consider relocating at this time" [ref=e264]
+              - text: No, I would not consider relocating at this time
+          - group "6. Have you ever been employed by Weyerhaeuser or any of its subsidiaries? . Required" [ref=e266]:
+            - generic "This field is mandatory" [ref=e268]:
+              - generic [ref=e269]: "6."
+"employed by Weyerhaeuser": |-
+  - row "General Questionnaire Mandatory fields are marked with an asterisk. . Required Questionnaire Please answer the following questions as accurately as possible. 1. Are you legally authorized to work in the United States without sponsorship? . Required 2. Will you now or in the future require sponsorship for U.S. employment visa status (e.g., H-1B status)? . Required 3. Are you legally permitted to work in Canada? . Required 4. Will you now or in the future require sponsorship for Canadian employment visa status (e.g., a work permit)? . Required 5. Would you consider relocating, either now or in the future, if the opportunity arose? . Required 6. Have you ever been employed by Weyerhaeuser or any of its subsidiaries? . Required" [ref=e169]:
+    - cell "General Questionnaire Mandatory fields are marked with an asterisk. . Required Questionnaire Please answer the following questions as accurately as possible. 1. Are you legally authorized to work in the United States without sponsorship? . Required 2. Will you now or in the future require sponsorship for U.S. employment visa status (e.g., H-1B status)? . Required 3. Are you legally permitted to work in Canada? . Required 4. Will you now or in the future require sponsorship for Canadian employment visa status (e.g., a work permit)? . Required 5. Would you consider relocating, either now or in the future, if the opportunity arose? . Required 6. Have you ever been employed by Weyerhaeuser or any of its subsidiaries? . Required" [ref=e170]:
+      - heading "General Questionnaire" [level=1] [ref=e171]:
+        - generic [ref=e172]: General Questionnaire
+      - generic [ref=e175]:
+  --
+          - group "6. Have you ever been employed by Weyerhaeuser or any of its subsidiaries? . Required" [ref=e266]:
+            - generic "This field is mandatory" [ref=e268]:
+              - generic [ref=e269]: "6."
+              - text: Have you ever been employed by Weyerhaeuser or any of its subsidiaries?
+              - generic [ref=e272]: .
+              - generic [ref=e273]: Required
+            - generic [ref=e275]:
+"Save and Continue": |-
+      - button "Save and Continue" [ref=e162] [cursor=pointer]
+      - button "Save as Draft" [ref=e163] [cursor=pointer]
+      - button "Quit" [ref=e164] [cursor=pointer]
+  - generic [ref=e165]:
+  --
+    - button "Save and Continue" [ref=e285] [cursor=pointer]
+    - button "Save as Draft" [ref=e286] [cursor=pointer]
+    - button "Quit" [ref=e287] [cursor=pointer]
+  - link "Privacy Agreement" [ref=e296] [cursor=pointer]:

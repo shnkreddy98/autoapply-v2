@@ -1,0 +1,168 @@
+"Month": |-
+    - generic [ref=e231]: Month
+    - combobox "Month" [ref=e232]:
+      - option "Month"
+      - option "Jan" [selected]
+      - option "Feb"
+      - option "Mar"
+  --
+    - generic [ref=e247]: Month
+    - combobox "Month" [ref=e248]:
+      - option "Month"
+      - option "Jan"
+      - option "Feb"
+      - option "Mar"
+  --
+    - generic [ref=e350]: Month
+    - combobox "Month" [ref=e351]:
+      - option "Month"
+      - option "Jan" [selected]
+      - option "Feb"
+      - option "Mar"
+  --
+    - generic [ref=e366]: Month
+    - combobox "Month" [ref=e367]:
+      - option "Month"
+      - option "Jan" [selected]
+      - option "Feb"
+      - option "Mar"
+  --
+    - generic [ref=e473]: Month
+    - combobox "Month" [ref=e474]:
+      - option "Month"
+      - option "Jan" [selected]
+      - option "Feb"
+      - option "Mar"
+  --
+    - generic [ref=e489]: Month
+    - combobox "Month" [ref=e490]:
+      - option "Month"
+      - option "Jan" [selected]
+      - option "Feb"
+      - option "Mar"
+  --
+  - generic [ref=e584]: Month
+  - combobox "Month" [ref=e585]:
+    - option "Month"
+    - option "Jan"
+    - option "Feb"
+    - option "Mar"
+  --
+  - generic [ref=e598]: Month
+  - combobox "Month" [ref=e599]:
+    - option "Month" [selected]
+    - option "Jan"
+    - option "Feb"
+    - option "Mar"
+  --
+  - generic [ref=e687]: Month
+  - combobox "Month" [ref=e688]:
+    - option "Month"
+    - option "Jan"
+    - option "Feb"
+    - option "Mar"
+  --
+  - generic [ref=e701]: Month
+  - combobox "Month" [ref=e702]:
+    - option "Month"
+    - option "Jan"
+    - option "Feb"
+    - option "Mar"
+  --
+  - generic [ref=e794]: Month
+  - combobox "Month" [ref=e795]:
+    - option "Month"
+    - option "Jan"
+    - option "Feb"
+    - option "Mar"
+  --
+  - generic [ref=e808]: Month
+  - combobox "Month" [ref=e809]:
+    - option "Month"
+    - option "Jan"
+    - option "Feb"
+    - option "Mar" [selected]
+"Year": |-
+    - generic [ref=e234]: Year
+    - combobox "Year" [ref=e235]:
+      - option "Year"
+      - option "2049"
+      - option "2048"
+      - option "2047"
+  --
+    - generic [ref=e250]: Year
+    - combobox "Year" [ref=e251]:
+      - option "Year"
+      - option "2049"
+      - option "2048"
+      - option "2047"
+  --
+    - generic [ref=e353]: Year
+    - combobox "Year" [ref=e354]:
+      - option "Year"
+      - option "2049"
+      - option "2048"
+      - option "2047"
+  --
+    - generic [ref=e369]: Year
+    - combobox "Year" [ref=e370]:
+      - option "Year"
+      - option "2049"
+      - option "2048"
+      - option "2047"
+  --
+    - generic [ref=e476]: Year
+    - combobox "Year" [ref=e477]:
+      - option "Year"
+      - option "2049"
+      - option "2048"
+      - option "2047"
+  --
+    - generic [ref=e492]: Year
+    - combobox "Year" [ref=e493]:
+      - option "Year"
+      - option "2049"
+      - option "2048"
+      - option "2047"
+  --
+  - generic [ref=e587]: Year
+  - combobox "Year" [ref=e588]:
+    - option "Year"
+    - option "2049"
+    - option "2048"
+    - option "2047"
+  --
+  - generic [ref=e601]: Year
+  - combobox "Year" [ref=e602]:
+    - option "Year" [selected]
+    - option "2049"
+    - option "2048"
+    - option "2047"
+  --
+  - generic [ref=e690]: Year
+  - combobox "Year" [ref=e691]:
+    - option "Year"
+    - option "2049"
+    - option "2048"
+    - option "2047"
+  --
+  - generic [ref=e704]: Year
+  - combobox "Year" [ref=e705]:
+    - option "Year"
+    - option "2049"
+    - option "2048"
+    - option "2047"
+  --
+  - generic [ref=e797]: Year
+  - combobox "Year" [ref=e798]:
+    - option "Year"
+    - option "2049"
+    - option "2048"
+    - option "2047"
+  --
+  - generic [ref=e811]: Year
+  - combobox "Year" [ref=e812]:
+    - option "Year"
+    - option "2049"
+    - option "2048"
+    - option "2047"

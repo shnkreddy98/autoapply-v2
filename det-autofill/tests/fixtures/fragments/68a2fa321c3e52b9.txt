@@ -1,0 +1,22 @@
+"Apply": |-
+        - button "Apply" [ref=e121] [cursor=pointer]:
+          - generic [ref=e122]: Apply
+    - generic [ref=e123]:
+      - generic [ref=e124]: "Salary Range:"
+      - generic [ref=e125]: $90,000.00 To $100,000.00 Annually
+  --
+      - paragraph [ref=e137]: "AmaWaterways is hiring a Data Analytics Engineer to own the analytics layer of our modern data platform. You will design governed data marts, build the semantic layer that powers our scorecards, and partner directly with Finance, Marketing, Revenue Management, Operations, and Reservations to turn ambiguous business questions into trusted models and dashboards. You will work on top of a Snowflake-native warehouse that is actively being built out, alongside a Senior Data Engineer who owns the ingestion plumbing. You will apply software engineering practices to analytics: version control, dbt tests, CI/CD, and clear documentation. You will also be an AI-native practitioner. Our daily environment is Claude Code, Snowflake Cortex, and dbt Cloud, and we expect you to use them fluently, not curiously."
+      - paragraph [ref=e138]
+      - heading "What You Will Build" [level=1] [ref=e139]
+      - list [ref=e141]:
+  --
+        - listitem [ref=e158]: Apply consistent naming conventions and audit columns across every mart.
+      - paragraph [ref=e159]
+      - paragraph [ref=e160]:
+        - strong [ref=e162]: Semantic layer and metric governance
+  --
+    - button "Apply" [ref=e237] [cursor=pointer]:
+      - generic [ref=e238]: Apply
+  - generic [ref=e240]:
+    - generic [ref=e241]:
+      - generic [ref=e243]: Copyright © 2026, ADP, Inc. All rights reserved.

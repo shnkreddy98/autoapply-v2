@@ -1,0 +1,26 @@
+"Register": |-
+  - Page URL: https://amphenol-icc.acquiretm.com/register_new_clean.aspx
+  - Page Title: Career Center Register
+  ### Snapshot
+  ```yaml
+  - generic [ref=e4]:
+  --
+              - /url: /register_home_clean.aspx
+              - generic [ref=e25]: 
+              - text: Home
+        - list [ref=e26]:
+  --
+              - /url: /registerterms.aspx
+            - text: of this site and
+            - link "consent to receive electronic communications" [ref=e299]:
+              - /url: /ElectronicCommunicationsTerms.html
+  --
+          - button "Register" [ref=e310] [cursor=pointer]
+          - generic [ref=e312]: Check the "I Agree" to continue
+    - link "Powered by AcquireTM Logo AcquireTM Applicant Tracking Software" [ref=e317] [cursor=pointer]:
+      - /url: http://www.acquiretm.com
+"Check the \"I Agree\" to continue": |-
+        - generic [ref=e312]: Check the "I Agree" to continue
+  - link "Powered by AcquireTM Logo AcquireTM Applicant Tracking Software" [ref=e317] [cursor=pointer]:
+    - /url: http://www.acquiretm.com
+    - text: Powered by

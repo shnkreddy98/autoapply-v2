@@ -1,0 +1,5 @@
+"Please select your veteran status: Select One Required": |-
+        - 'button "Please select your veteran status: Select One Required" [ref=e2386]': Select One
+  - group "Terms and Conditions" [ref=e2387]:
+    - heading "Terms and Conditions" [level=4] [ref=e2388]
+    - generic [ref=e2389]:

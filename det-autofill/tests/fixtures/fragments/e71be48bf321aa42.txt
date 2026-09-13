@@ -1,0 +1,11 @@
+"Yes": |-
+                    - button "Yes Required" [ref=e1345]: "Yes"
+                  - group "Will you now or in the future require sponsorship for an employment visa (e.g., H-1B visa status)?*" [ref=e1288]:
+                    - paragraph [ref=e1292]: Will you now or in the future require sponsorship for an employment visa (e.g., H-1B visa status)?*
+                    - button "Select One Required" [expanded] [ref=e1296]: Select One
+  --
+      - option "Yes" [ref=e1351]:
+        - generic [ref=e1352]: "Yes"
+      - option "No" [ref=e1353]:
+        - generic [ref=e1354]: "No"
+  ```

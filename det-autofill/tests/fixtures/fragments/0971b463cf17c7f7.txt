@@ -1,0 +1,16 @@
+"Phone Number": |-
+    - generic [ref=e327] [cursor=pointer]: Phone Number
+    - textbox "Phone Number" [ref=e328]: "5550100199"
+  - generic [ref=e329]:
+    - generic [ref=e330] [cursor=pointer]: Cover Letter *
+    - textbox "Cover Letter *" [ref=e331]:
+"By using this form you agree": |-
+              - checkbox "By using this form you agree with the storage and handling of your data by this website." [ref=e339]
+              - text: By using this form you agree with the storage and handling of your data by this website.
+            - button "Send" [ref=e341] [cursor=pointer]:
+              - generic [ref=e343]: Send
+  ```
+"Send": |-
+            - button "Send" [ref=e341] [cursor=pointer]:
+              - generic [ref=e343]: Send
+  ```

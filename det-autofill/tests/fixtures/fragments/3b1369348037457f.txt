@@ -1,0 +1,35 @@
+"Yes": (no match)
+"No": |-
+    - generic [ref=e1886]: Please review the Candidate Acknowledgement statement below and confirm your acceptance using the displayed checkbox. When you're done, click the Submit button to complete your application.
+    - heading "Candidate Acknowledgement" [level=2] [ref=e1887]
+    - generic [ref=e1889]:
+      - paragraph [ref=e1890]:
+  --
+          - generic [ref=e1911]: integrity of our network, Hanover has established protocols to verify the identity of all candidate
+          - generic [ref=e1913]: s
+          - generic [ref=e1915]: "applying for employment. If you submit an application for employment, you are certifying that:"
+  --
+        - generic [ref=e1932]: Failure to provide truthful information or legitimate identification documentation/information may result in notification to law enforcement and criminal prosecution.
+      - paragraph [ref=e1933]:
+        - generic [ref=e1936]: "Please be advised further:"
+  --
+          - generic [ref=e1941]: Hanover conducts criminal background checks that verify prior employment and education history.
+        - listitem [ref=e1942]:
+          - generic [ref=e1946]: Employment interviews are held with teams of Hanover employees and with the exception of screening interviews, under most circumstances interviews will be conducted via video. Refusal to appear on camera may result in cancellation of the interview and denial of your application.
+        - listitem [ref=e1947]:
+          - generic [ref=e1951]: You may be asked during the interviews for consent to take a screenshot/photograph of you on screen. The Financial Services industry has been the target of recruitment/hiring identity fraud and therefore, Hanover requires a screen shot/photograph in order to confirm candidates match the individuals who are offered employment. Refusal to allow a screenshot may result in denial of your application.
+        - listitem [ref=e1952]:
+          - generic [ref=e1956]: You may be requested to appear at a Hanover location as part of the hiring process. Failure to appear may result in the denial of your application for employment or termination of your employment. Reasonable accommodation will be considered with the appropriate documentation.
+        - listitem [ref=e1957]:
+          - generic [ref=e1961]: It is the expectation at Hanover that you will appear on camera and on screen for meetings under most circumstances. Refusal or failure to turn your camera on or appear on screen may result in the termination of your employment.
+        - listitem [ref=e1962]:
+          - generic [ref=e1966]: Under most circumstances, Hanover will not provide access to its network until your identity and employment eligibility are verified.
+        - listitem [ref=e1967]:
+          - generic [ref=e1971]: You understand that this Candidate Certification is not a contract of employment. You further understand and authorize the investigation of any information contained in your resume or application for employment.
+        - listitem [ref=e1972]:
+          - generic [ref=e1976]: You understand that data provided in connection with this website will be transferred and processed in a data center in the United States of America.
+  --
+      - checkbox "I agree to the Candidate Acknowledgement" [ref=e1987]
+      - generic [ref=e1989]: I agree to the Candidate Acknowledgement
+  - generic [ref=e449]:
+    - generic [ref=e450]:

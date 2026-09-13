@@ -1,0 +1,17 @@
+"spinbutton \"Month\"": |-
+            - spinbutton "Month" [ref=e2246]
+          - generic [ref=e2247]: /
+          - generic [ref=e2248]:
+            - generic [ref=e2249]: DD
+            - spinbutton "Day" [ref=e2250]
+          - generic [ref=e2251]: /
+          - generic [ref=e2252]:
+            - generic [ref=e2253]: YYYY
+            - spinbutton "Year" [ref=e2254]
+        - button "Calendar" [ref=e2255] [cursor=pointer]
+  - generic [ref=e2260]:
+    - heading "Why are you being asked to complete this form?" [level=4] [ref=e2261]
+    - generic [ref=e2263]:
+      - text: We are a federal contractor or subcontractor. The law requires us to provide equal employment opportunity to qualified people with disabilities. We have a goal of having at least 7% of our workers as people with disabilities. The law says we must measure our progress towards this goal. To do this, we must ask applicants and employees if they have a disability or have ever had one. People can become disabled, so we need to ask this question at least every five years. Completing this form is voluntary, and we hope that you will choose to do so. Your answer is confidential. No one who makes hiring decisions will see it. Your decision to complete the form and your answer will not harm you in any way. If you want to learn more about the law or this form, visit the U.S. Department of Labor’s Office of Federal Contract Compliance Programs (OFCCP) website at
+      - link "www.dol.gov/ofccp" [ref=e2264] [cursor=pointer]:
+        - /url: https://www.dol.gov/ofccp

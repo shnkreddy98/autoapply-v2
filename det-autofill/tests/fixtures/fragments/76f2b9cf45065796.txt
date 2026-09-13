@@ -1,0 +1,18 @@
+"Email address": |-
+    - generic [ref=e17]: Email address *
+    - textbox "Email address" [active] [ref=e18]
+  - generic [ref=e20]:
+    - generic [ref=e21]: Password *
+    - textbox "Password" [ref=e22]
+"Password": |-
+          - generic [ref=e21]: Password *
+          - textbox "Password" [ref=e22]
+          - switch "Show password" [ref=e23] [cursor=pointer]
+      - text: • • • • • • •
+    - button "Continue" [ref=e25] [cursor=pointer]
+  - paragraph [ref=e27]:
+"Continue": |-
+    - button "Continue" [ref=e25] [cursor=pointer]
+  - paragraph [ref=e27]:
+    - text: Already have an account?
+    - link "Log in" [ref=e28] [cursor=pointer]:

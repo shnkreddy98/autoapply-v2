@@ -1,0 +1,5 @@
+"Attach resume": |-
+    - text: Attach resume as .pdf, .doc, .docx, .odt, .txt, or .rtf (limit 5MB) or
+    - link "Paste resume" [ref=e575] [cursor=pointer]:
+      - /url: "#"
+  - button "Resume*" [ref=e577]

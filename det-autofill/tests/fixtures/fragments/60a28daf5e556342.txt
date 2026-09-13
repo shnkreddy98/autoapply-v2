@@ -1,0 +1,17 @@
+"Close": |-
+  - button "Close" [active] [ref=e296] [cursor=pointer]
+  - generic [ref=e302]:
+    - img "logo" [ref=e304]
+    - generic [ref=e307]:
+"Sign in with email": |-
+            - button "Sign in with email" [ref=e341] [cursor=pointer]
+  ```
+"email": |-
+            - generic [ref=e312]: By continuing with social sign-on, you agree to create a candidate account using your [Apple/Google] profile. We will access your name, email address, and public profile information to streamline your application process. You can manage or update your account details anytime. Your data will be handled in accordance with our [Privacy Policy].
+          - button "Sign in with Apple" [ref=e317] [cursor=pointer]:
+            - generic [ref=e318]:
+              - img [ref=e319]
+  --
+            - button "Sign in with email" [ref=e341] [cursor=pointer]
+  ```
+"password": (no match)

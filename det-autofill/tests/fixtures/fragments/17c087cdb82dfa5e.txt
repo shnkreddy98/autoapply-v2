@@ -1,0 +1,6 @@
+"B.S.": |-
+  - option "B.S." [ref=e1834]:
+    - generic [ref=e1835]: B.S.
+  - option "B.A." [ref=e1836]:
+    - generic [ref=e1837]: B.A.
+  - option "M.J." [ref=e1838]:

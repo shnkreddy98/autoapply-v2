@@ -1,0 +1,55 @@
+"How Did You Hear About Us?": |-
+      - generic [ref=e466]: How Did You Hear About Us?*
+      - button "How Did You Hear About Us? Select One Required" [ref=e470]: Select One
+  - group [ref=e394]:
+    - group "Have you previously worked for Lurie Children's (including LCPAA, LCPC, LCSF, PFF)?" [ref=e473]:
+      - generic [ref=e476]: Have you previously worked for Lurie Children's (including LCPAA, LCPC, LCSF, PFF)?*
+"No": |-
+          - radio "No" [ref=e486] [cursor=pointer]
+          - generic [ref=e487]: "No"
+  - group [ref=e405]:
+    - generic [ref=e407]:
+      - generic [ref=e409]: Country*
+"First Name": |-
+    - generic [ref=e492]: First Name*
+    - textbox "First Name" [ref=e495]: Jane
+  - generic [ref=e496]:
+    - generic [ref=e498]: Last Name*
+    - textbox "Last Name" [ref=e501]: Doe
+"Last Name": |-
+    - generic [ref=e498]: Last Name*
+    - textbox "Last Name" [ref=e501]: Doe
+  - generic [ref=e502]:
+    - generic [ref=e503]: I have a preferred name
+    - checkbox "I have a preferred name" [ref=e508] [cursor=pointer]
+"City": |-
+    - generic [ref=e521]: City
+    - textbox "City" [ref=e524]: San Jose
+  - generic [ref=e525]:
+    - generic [ref=e526]: State
+    - button "State California" [ref=e530]: California
+"State": |-
+      - button "Country United States of America Required" [ref=e488]: United States of America
+  - group "Legal Name" [ref=e415]:
+    - heading "Legal Name" [level=4] [ref=e416]
+    - generic [ref=e489]:
+  --
+        - generic [ref=e526]: State
+        - button "State California" [ref=e530]: California
+      - generic [ref=e531]:
+        - generic [ref=e532]: Postal Code
+        - textbox "Postal Code" [ref=e535]
+  --
+            - generic [ref=e556]: 1 item selected, United States of America (+1)
+          - listbox "items selected" [ref=e558]:
+            - option "United States of America (+1), press delete to clear value." [ref=e559]:
+              - paragraph [ref=e564]: United States of America (+1)
+      - generic [ref=e568]:
+        - generic [ref=e570]: Phone Number*
+        - textbox "Phone Number" [ref=e573]: (555) 010-0199
+"Phone Number": |-
+    - generic [ref=e570]: Phone Number*
+    - textbox "Phone Number" [ref=e573]: (555) 010-0199
+  - generic [ref=e574]:
+    - generic [ref=e575]: Phone Extension
+    - textbox "Phone Extension" [ref=e578]

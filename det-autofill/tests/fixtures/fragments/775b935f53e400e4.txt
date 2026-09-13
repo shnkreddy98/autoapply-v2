@@ -1,0 +1,5 @@
+"Sign in with email": |-
+          - button "Sign in with email" [ref=e190] [cursor=pointer]
+  - generic [ref=e47]:
+    - heading "Follow Us" [level=4] [ref=e48]
+    - list [ref=e49]:

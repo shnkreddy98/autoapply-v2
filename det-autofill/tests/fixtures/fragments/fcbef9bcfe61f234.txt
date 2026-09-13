@@ -1,0 +1,6 @@
+"This role requires employees to be physically onsite, as listed in the job posting. Please confirm if you can work onsite at the listed location.*": |-
+        - group "This role requires employees to be physically onsite, as listed in the job posting. Please confirm if you can work onsite at the listed location.*" [ref=e1420]:
+          - paragraph [ref=e1424]: This role requires employees to be physically onsite, as listed in the job posting. Please confirm if you can work onsite at the listed location.*
+          - button "Select One Required" [ref=e1428]: Select One
+  - generic [ref=e260]:
+    - button "Back" [ref=e378] [cursor=pointer]

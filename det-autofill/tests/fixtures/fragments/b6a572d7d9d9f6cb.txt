@@ -1,0 +1,15 @@
+"Phone*": |-
+    - textbox "Phone*" [active] [ref=e34]: "+15550100199"
+  - generic [ref=e35]:
+    - generic [ref=e37]:
+      - spinbutton [invalid] [ref=e38]
+"Select Board": |-
+  - option "Select Board"
+  - option "Dice"
+  - option "foundit India"
+  - option "foundit India TPS (Talent Placement Services)"
+"I am authorized to work in?": |-
+  - option "I am authorized to work in?*"
+  - option "India"
+  - option "Asia Pacific"
+  - option "Middle East"

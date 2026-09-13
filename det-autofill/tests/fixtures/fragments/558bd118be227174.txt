@@ -1,0 +1,39 @@
+"No": |-
+                - radio "No" [ref=e400] [cursor=pointer]
+                - generic [ref=e401]: "No"
+        - group [ref=e402]:
+          - generic [ref=e404]:
+            - generic [ref=e406]: Country*
+  --
+      - /url: https://twitter.com/SanManuelCasino?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor
+  - listitem [ref=e41] [cursor=pointer]:
+    - link "LinkedIn" [ref=e42]:
+      - /url: https://www.linkedin.com/company/san-manuel-band-of-mission-indians/
+"Phone Device Type Select One Required": |-
+    - button "Phone Device Type Select One Required" [ref=e468]: Select One
+  - generic [ref=e469]:
+    - generic [ref=e471]: Country Phone Code*
+    - generic [ref=e476] [cursor=pointer]:
+"First Name": |-
+    - generic [ref=e417]: First Name*
+    - textbox "First Name" [ref=e420]: Jane
+  - generic [ref=e421]:
+    - generic [ref=e423]: Last Name*
+    - textbox "Last Name" [ref=e426]: Doe
+"Last Name": |-
+        - generic [ref=e423]: Last Name*
+        - textbox "Last Name" [ref=e426]: Doe
+  - group "Address" [ref=e428]:
+    - heading "Address" [level=4] [ref=e429]
+    - generic [ref=e430]:
+"City": |-
+    - generic [ref=e437]: City
+    - textbox "City" [ref=e440]: San Jose
+  - generic [ref=e441]:
+    - generic [ref=e442]: State
+    - button "State California" [ref=e446]: California
+"Save and Continue": |-
+          - button "Save and Continue" [ref=e504] [cursor=pointer]
+  - generic [ref=e33]:
+    - heading "Follow Us" [level=4] [ref=e34]
+    - list [ref=e35]:

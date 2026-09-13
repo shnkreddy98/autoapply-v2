@@ -1,0 +1,7 @@
+"Retrieve accessibility cookie": |-
+        - link "Retrieve accessibility cookie. Opens in a new tab." [ref=f5e143] [cursor=pointer]:
+          - /url: https://dashboard.hcaptcha.com/signup?type=accessibility&hl=en
+          - text: Retrieve accessibility cookie.
+  - button "Close Modal" [ref=f5e144] [cursor=pointer]:
+    - img [ref=f5e146]
+    - img [ref=f5e149]

@@ -1,0 +1,53 @@
+"User Name": |-
+  - row "User Name . Required Password . Required Forgot your user name? Forgot your password?" [ref=e36]:
+    - cell "User Name . Required Password . Required Forgot your user name? Forgot your password?" [ref=e37]:
+      - generic "The field User Name is mandatory." [ref=e38]:
+        - text: User Name
+        - generic [ref=e39]: .
+        - generic [ref=e40]: Required
+      - textbox "User Name . Required" [active] [ref=e41]
+      - generic "The field Password is mandatory." [ref=e42]:
+        - text: Password
+        - generic [ref=e43]: .
+  --
+        - link "Forgot your user name?" [ref=e48] [cursor=pointer]:
+          - /url: /careersection/iam/accessmanagement/forgotUsername.jsf?redirectionURI=https%3A%2F%2Fatkcareers.taleo.net%2Fcareersection%2Fapplication.jss%3Flang%3Den%26type%3D1%26csNo%3D10000%26portal%3D2101381138%26reqNo%3D147869%26isOnLogoutPage%3Dtrue
+        - link "Forgot your password?" [ref=e50] [cursor=pointer]:
+          - /url: /careersection/iam/accessmanagement/forgotPasswordAccessCode.jsf?redirectionURI=https%3A%2F%2Fatkcareers.taleo.net%2Fcareersection%2Fapplication.jss%3Flang%3Den%26type%3D1%26csNo%3D10000%26portal%3D2101381138%26reqNo%3D147869%26isOnLogoutPage%3Dtrue
+"Password": |-
+        - row "User Name . Required Password . Required Forgot your user name? Forgot your password?" [ref=e36]:
+          - cell "User Name . Required Password . Required Forgot your user name? Forgot your password?" [ref=e37]:
+            - generic "The field User Name is mandatory." [ref=e38]:
+              - text: User Name
+              - generic [ref=e39]: .
+  --
+            - generic "The field Password is mandatory." [ref=e42]:
+              - text: Password
+              - generic [ref=e43]: .
+              - generic [ref=e44]: Required
+            - textbox "Password . Required" [ref=e45]
+            - generic [ref=e46]:
+              - link "Forgot your user name?" [ref=e48] [cursor=pointer]:
+                - /url: /careersection/iam/accessmanagement/forgotUsername.jsf?redirectionURI=https%3A%2F%2Fatkcareers.taleo.net%2Fcareersection%2Fapplication.jss%3Flang%3Den%26type%3D1%26csNo%3D10000%26portal%3D2101381138%26reqNo%3D147869%26isOnLogoutPage%3Dtrue
+              - link "Forgot your password?" [ref=e50] [cursor=pointer]:
+                - /url: /careersection/iam/accessmanagement/forgotPasswordAccessCode.jsf?redirectionURI=https%3A%2F%2Fatkcareers.taleo.net%2Fcareersection%2Fapplication.jss%3Flang%3Den%26type%3D1%26csNo%3D10000%26portal%3D2101381138%26reqNo%3D147869%26isOnLogoutPage%3Dtrue
+        - row [ref=e51]:
+          - cell [ref=e52]
+  - generic [ref=e53]:
+"Login": |-
+  - Page URL: https://atkcareers.taleo.net/careersection/iam/accessmanagement/login.jsf?lang=en&redirectionURI=https%3A%2F%2Fatkcareers.taleo.net%2Fcareersection%2Fapplication.jss%3Flang%3Den%26type%3D1%26csNo%3D10000%26portal%3D2101381138%26reqNo%3D147869%26isOnLogoutPage%3Dtrue&TARGET=https%3A%2F%2Fatkcareers.taleo.net%2Fcareersection%2Fapplication.jss%3Flang%3Den%26type%3D1%26csNo%3D10000%26portal%3D2101381138%26reqNo%3D147869%26isOnLogoutPage%3Dtrue
+  - Page Title: Login
+  ### Snapshot
+  ```yaml
+  - generic [ref=e1]:
+  --
+                - heading "Login" [level=1] [ref=e29]: Login
+                - text: To access your account, please identify yourself by providing the information requested in the fields below, then click "Login". If you are not registered yet, click "New user" and follow the instructions to create an account.
+              - generic [ref=e32]: Mandatory fields are marked with an asterisk.
+              - table [ref=e34]:
+                - rowgroup [ref=e35]:
+  --
+              - button "Login" [ref=e54] [cursor=pointer]
+              - button "New User" [ref=e55] [cursor=pointer]
+      - generic [ref=e56]:
+        - link "LinkedIn" [ref=e57] [cursor=pointer]:

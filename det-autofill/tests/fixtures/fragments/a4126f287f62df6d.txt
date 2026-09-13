@@ -1,0 +1,74 @@
+"Gender": |-
+  - generic [ref=e489]: "Gender :"
+  - combobox "Gender :" [ref=e491]:
+    - option "Select"
+    - option "Male" [selected]
+    - option "Female"
+"Race": |-
+    - generic [ref=e493]: "Race :"
+    - combobox "Race :" [ref=e495]:
+      - option "Select Race"
+      - option "American Indian or Alaskan Native"
+      - option "Asian" [selected]
+      - option "Black or African American"
+  --
+      - option "Two or more races"
+      - option "White"
+  - generic [ref=e496]:
+    - generic [ref=e497]: "Ethnicity :"
+"Ethnicity": |-
+  - generic [ref=e497]: "Ethnicity :"
+  - combobox "Ethnicity :" [ref=e499]:
+    - option "Select Ethnicity"
+    - option "Hispanic or Latino"
+    - option "Not Hispanic or Latino" [selected]
+    - option "Prefer not to answer"
+"Military spouse": |-
+  - generic [ref=e501]: "Are you currently a military spouse? :"
+  - combobox "Are you currently a military spouse? :" [ref=e503]:
+    - option "Select your answer"
+    - option "N/A"
+    - option "No" [selected]
+"Disability": |-
+    - generic [ref=e505]: "Disability :"
+    - combobox "Disability :" [ref=e507]:
+      - option "Select Disability"
+      - option "No, I Do not Have A Disability, Or A History/Record Of Having A Disability" [selected]
+      - option "Prefer not to answer"
+      - option "Yes, I Have A Disability, Or Have A History/Record Of Having A Disability"
+  - generic [ref=e508]:
+    - generic [ref=e509]: "Disability Note :"
+    - textbox "Disability Note :" [ref=e511]:
+      - /placeholder: Enter Disability Note
+  - generic [ref=e512]:
+    - generic [ref=e513]: "Veteran status :"
+    - generic [ref=e515]:
+"Total experience": |-
+  - generic [ref=e553]: "*Total experience :"
+  - combobox [ref=e555]:
+    - option "Select Year"
+    - option "0"
+"Relevant experience": |-
+  - generic [ref=e559]: "Relevant experience :"
+  - combobox [ref=e561]:
+    - option "Select Year"
+    - option "0"
+"Expected CTC Currency": (no match)
+"Expected CTC Amount": (no match)
+"Primary skills": |-
+  - generic [ref=e582]: "Primary skills :"
+  - list [ref=e584]:
+    - listitem [ref=e585]:
+      - textbox "Enter a skill" [ref=e586]
+"Secondary skills": |-
+  - generic [ref=e588]: "Secondary skills :"
+  - list [ref=e590]:
+    - listitem [ref=e591]:
+      - textbox "Enter skills" [ref=e592]
+"Competency Area": |-
+  - generic [ref=e594]: "*Competency Area :"
+  - combobox "*Competency Area :" [ref=e596]:
+    - option "Select"
+    - option "Business Process Services"
+    - option "Consulting"
+"Current employer name": (no match)

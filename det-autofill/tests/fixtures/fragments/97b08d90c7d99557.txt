@@ -1,0 +1,6 @@
+"I am NOT a protected veteran": |-
+  - option "I am NOT a protected veteran" [ref=e1664]:
+    - generic [ref=e1665]: I am NOT a protected veteran
+  - option "I am a protected veteran, but I choose not to self-identify the classifications to which I belong" [ref=e1666]:
+    - generic [ref=e1667]: I am a protected veteran, but I choose not to self-identify the classifications to which I belong
+  - option "Active Duty Wartime or Campaign Badge Veteran" [ref=e1668]:

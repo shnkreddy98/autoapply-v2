@@ -1,0 +1,3 @@
+"Sign in with email": |-
+            - button "Sign in with email" [ref=e399] [cursor=pointer]
+  ```

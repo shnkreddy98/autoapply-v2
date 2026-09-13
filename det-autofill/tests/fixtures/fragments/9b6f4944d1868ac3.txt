@@ -1,0 +1,87 @@
+"Email Address *": |-
+    - generic "Email Address" [ref=e436]: Email Address *
+    - textbox "Email Address *" [ref=e440]: jane.doe@example.com
+  - generic [ref=e443]:
+    - generic "Confirm Email Address" [ref=e445]: Confirm Email Address *
+    - textbox "Confirm Email Address *" [ref=e449]
+  - generic [ref=e452]:
+    - generic "Prefix" [ref=e454]
+    - generic [ref=e458] [cursor=pointer]:
+"Confirm Email Address *": |-
+    - generic "Confirm Email Address" [ref=e445]: Confirm Email Address *
+    - textbox "Confirm Email Address *" [ref=e449]
+  - generic [ref=e452]:
+    - generic "Prefix" [ref=e454]
+    - generic [ref=e458] [cursor=pointer]:
+"First Name *": |-
+    - generic "First Name" [ref=e467]: First Name *
+    - textbox "First Name *" [ref=e471]: Jane
+  - generic [ref=e474]:
+    - generic "Middle Name" [ref=e476]
+    - textbox "Middle Name" [ref=e480]: Quinn
+"Last Name *": |-
+    - generic "Last Name" [ref=e485]: Last Name *
+    - textbox "Last Name *" [ref=e489]: Doe
+  - generic [ref=e492]:
+    - generic "Suffix" [ref=e494]
+    - generic [ref=e498] [cursor=pointer]:
+"LinkedIn Profile": |-
+    - generic "LinkedIn Profile" [ref=e507]
+    - textbox "LinkedIn Profile" [ref=e511]
+  - generic [ref=e512]:
+    - generic [ref=e515]:
+      - generic "Home Phone Number" [ref=e517]
+"Country dialing code": |-
+  - generic "Country dialing code" [ref=e522] [cursor=pointer]:
+    - combobox "Country dialing code" [ref=e525]
+    - generic:
+      - img:
+        - img
+  --
+  - generic "Country dialing code" [ref=e536] [cursor=pointer]:
+    - combobox "Country dialing code" [ref=e539]
+    - generic:
+      - img:
+        - img
+"Mobile Phone Number *": |-
+      - generic "Mobile Phone Number" [ref=e531]: Mobile Phone Number *
+      - generic [ref=e535]:
+        - generic "Country dialing code" [ref=e536] [cursor=pointer]:
+          - combobox "Country dialing code" [ref=e539]
+  --
+        - textbox "Mobile Phone Number *" [ref=e540]: (555) 010-0199
+  - generic [ref=e541]:
+    - generic [ref=e544]:
+      - generic "Fax" [ref=e546]
+"Preferred Contact Method *": |-
+  - generic "Preferred Contact Method" [ref=e564]: Preferred Contact Method *
+  - generic [ref=e568] [cursor=pointer]:
+    - combobox "Preferred Contact Method *" [ref=e571]
+    - generic:
+      - img:
+        - img
+"Address Line 1 *": |-
+    - generic "Address Line 1" [ref=e603]: Address Line 1 *
+    - textbox "Address Line 1 *" [ref=e607]
+  - generic [ref=e610]:
+    - generic "Address Line 2" [ref=e612]
+    - textbox "Address Line 2" [ref=e616]
+"City *": |-
+    - generic "City" [ref=e621]: City *
+    - textbox "City *" [ref=e625]: San Jose
+  - generic [ref=e628]:
+    - generic "County" [ref=e630]
+    - textbox "County" [ref=e634]
+"Zip / Postal Code *": |-
+      - generic "Zip / Postal Code" [ref=e639]: Zip / Postal Code *
+      - textbox "Zip / Postal Code *" [ref=e643]
+  - generic [ref=e647]:
+    - generic "How did you hear about this job?" [ref=e649]: How did you hear about this job? *
+    - generic [ref=e653] [cursor=pointer]:
+"How did you hear about this job? *": |-
+  - generic "How did you hear about this job?" [ref=e649]: How did you hear about this job? *
+  - generic [ref=e653] [cursor=pointer]:
+    - combobox "How did you hear about this job? *" [ref=e656]
+    - generic:
+      - img:
+        - img

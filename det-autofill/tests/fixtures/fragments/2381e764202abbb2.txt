@@ -1,0 +1,13 @@
+"Address 2": |-
+    - generic [ref=f67e146]: Address 2
+    - textbox "Address 2" [ref=f67e148]
+  - generic [ref=f67e149]:
+    - generic [ref=f67e150]:
+      - generic [ref=f67e151]: City
+      - generic [ref=f67e152]:
+        - text: "*"
+        - generic [ref=f67e153]: required.
+    - textbox "City" [ref=f67e155]: San Jose
+  - generic [ref=f67e156]:
+    - generic [ref=f67e157]:
+      - generic [ref=f67e158]: Zip/Postal Code

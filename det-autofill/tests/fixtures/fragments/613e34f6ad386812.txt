@@ -1,0 +1,6 @@
+"Mobile": |-
+  - option "Mobile" [ref=e675]:
+    - generic [ref=e676]: Mobile
+  - option "Pager" [ref=e677]:
+    - generic [ref=e678]: Pager
+  - option "Soft Phone" [ref=e679]:

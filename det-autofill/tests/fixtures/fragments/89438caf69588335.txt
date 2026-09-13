@@ -1,0 +1,42 @@
+"Education Level": |-
+  - generic [ref=e193]: "*Education Level"
+  - generic [ref=e197]:
+    - combobox "Education Level" [ref=e198] [cursor=pointer]:
+      - generic [ref=e199]: Select an Option
+    - generic:
+      - generic:
+"Work Auth": (no match)
+"Expected Pay": |-
+    - generic [ref=e255]: "*Expected Pay"
+    - spinbutton "Expected Pay" [ref=e257]
+  - generic [ref=e259]:
+    - generic [ref=e260]: "*Availability for new project"
+    - generic [ref=e264]:
+"Availability for new project": |-
+  - generic [ref=e260]: "*Availability for new project"
+  - generic [ref=e264]:
+    - combobox "Availability for new project" [ref=e265] [cursor=pointer]:
+      - generic [ref=e266]: Select an Option
+    - generic:
+      - generic:
+"Willing to relocate": |-
+  - generic [ref=e269]: "*Willing to relocate"
+  - generic [ref=e273]:
+    - combobox "Willing to relocate" [ref=e274] [cursor=pointer]:
+      - generic [ref=e275]: Select an Option
+    - generic:
+      - generic:
+"Willing for background check": |-
+  - generic [ref=e278]: "*Willing for background check"
+  - generic [ref=e282]:
+    - combobox "Willing for background check" [ref=e283] [cursor=pointer]:
+      - generic [ref=e284]: Select an Option
+    - generic:
+      - generic:
+"Source": |-
+  - generic [ref=e287]: "*Source"
+  - generic [ref=e291]:
+    - combobox "Source" [ref=e292] [cursor=pointer]:
+      - generic [ref=e293]: Select an Option
+    - generic:
+      - generic:

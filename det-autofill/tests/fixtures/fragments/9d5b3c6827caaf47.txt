@@ -1,0 +1,11 @@
+"Minimum Salary Expectation": |-
+      - group "What is your Minimum Salary Expectation (Annual)?" [ref=e2027]:
+        - paragraph [ref=e2031]: What is your Minimum Salary Expectation (Annual)?
+        - textbox [ref=e2034]
+  - generic [ref=e396]:
+    - button "Back" [ref=e573] [cursor=pointer]
+"Save and Continue": |-
+          - button "Save and Continue" [ref=e574] [cursor=pointer]
+  - generic [ref=e56]:
+    - heading "Follow Us" [level=4] [ref=e57]
+    - list [ref=e58]:

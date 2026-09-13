@@ -1,0 +1,5 @@
+"Accept": |-
+      - button "Accept" [ref=e105] [cursor=pointer]
+      - button "Decline" [ref=e106] [cursor=pointer]
+  - generic [ref=e118]:
+    - link "Any personal information you provide is subject to the terms of our Privacy Policy" [ref=e119] [cursor=pointer]:

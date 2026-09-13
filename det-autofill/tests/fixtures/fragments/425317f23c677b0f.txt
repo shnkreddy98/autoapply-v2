@@ -1,0 +1,5 @@
+"Are you a Yuhaaviatam of San Manuel Nation Tribal Citizen?*": |-
+  - group "Are you a Yuhaaviatam of San Manuel Nation Tribal Citizen?*" [ref=e1701]:
+    - paragraph [ref=e1705]: Are you a Yuhaaviatam of San Manuel Nation Tribal Citizen?*
+    - button "Select One Required" [ref=e1709]: Select One
+  - group "Are you a member of another Federally Recognized Indian Tribe?*" [ref=e1711]:

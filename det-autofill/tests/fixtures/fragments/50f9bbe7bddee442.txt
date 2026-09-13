@@ -1,0 +1,171 @@
+"referred by a current employee?": |-
+  - radiogroup "Were you referred by a current employee?" [ref=e283]:
+    - generic [ref=e284]: Were you referred by a current employee?
+    - generic [ref=e286] [cursor=pointer]:
+      - radio "Yes" [ref=e287]
+      - text: "Yes"
+    - text: "*"
+    - generic [ref=e289] [cursor=pointer]:
+"When can you start?": |-
+  - generic [ref=e293]: "*When can you start? (MM/DD/YYYY)"
+  - generic [ref=e295]:
+    - generic [ref=e296]: When can you start?
+    - generic "When can you start?" [ref=e297]:
+      - generic [ref=e300]:
+        - group "Date Input" [ref=e305]:
+          - generic [ref=e306]:
+            - textbox "Month" [ref=e307] [cursor=pointer]:
+              - /placeholder: mm
+"Staffing/Placement Agency": |-
+      - generic [ref=e327]: "*Were you referred to us by a Staffing/Placement Agency, Headhunter, or Professional Recruiter? If yes, please provide the agency name and date you were in contact with them."
+      - textbox "*Were you referred to us by a Staffing/Placement Agency, Headhunter, or Professional Recruiter? If yes, please provide the agency name and date you were in contact with them." [ref=e328]
+      - generic [ref=e331]: 4000 characters left
+    - text: "* * *"
+  - generic [ref=e333]:
+    - generic [ref=e335]:
+      - generic [ref=e336]: "*Have you ever been employed by NELSON / Windward or any of its' affiliates?"
+"NELSON / Windward or any of its' affiliates?": |-
+      - generic [ref=e336]: "*Have you ever been employed by NELSON / Windward or any of its' affiliates?"
+      - textbox "*Have you ever been employed by NELSON / Windward or any of its' affiliates?" [ref=e337]
+      - generic [ref=e340]: 4000 characters left
+    - text: "* * *"
+  - generic [ref=e342]:
+    - generic [ref=e344]:
+      - generic [ref=e345]: "*If yes, when were you employed?"
+"salary requirements": |-
+      - generic [ref=e354]: "*What are your salary requirements?"
+      - textbox "*What are your salary requirements?" [ref=e355]
+      - generic [ref=e358]: 4000 characters left
+    - text: "* * *"
+  - generic [ref=e360]:
+    - group "*Do you have the ability to work overtime as necessary in order to meet deadlines?" [ref=e362]:
+      - generic [ref=e363]: "*Do you have the ability to work overtime as necessary in order to meet deadlines?"
+"work overtime as necessary": |-
+  - group "*Do you have the ability to work overtime as necessary in order to meet deadlines?" [ref=e362]:
+    - generic [ref=e363]: "*Do you have the ability to work overtime as necessary in order to meet deadlines?"
+    - generic [ref=e366] [cursor=pointer]:
+      - radio "Yes" [ref=e367]
+      - text: "Yes"
+    - generic [ref=e370] [cursor=pointer]:
+      - radio "No" [ref=e371]
+"years experience?": |-
+      - generic [ref=e376]: "*Do you have experience working for a Construction/Interior Designer/Architecture firm? If yes, how many years experience?"
+      - textbox "*Do you have experience working for a Construction/Interior Designer/Architecture firm? If yes, how many years experience?" [ref=e377]
+      - generic [ref=e380]: 4000 characters left
+    - text: "* * *"
+  - generic [ref=e382]:
+    - generic [ref=e384]:
+      - generic [ref=e385]: "*Do you have experience using Deltek Vantage or Deltek Vision? If yes, how many years experience?"
+      - textbox "*Do you have experience using Deltek Vantage or Deltek Vision? If yes, how many years experience?" [ref=e386]
+      - generic [ref=e389]: 4000 characters left
+    - text: "* * *"
+  - generic [ref=e391]:
+    - generic [ref=e393]:
+      - generic [ref=e394]: "*Are you willing to relocate? If so, where?"
+"Deltek Vantage or Deltek Vision?": |-
+      - generic [ref=e385]: "*Do you have experience using Deltek Vantage or Deltek Vision? If yes, how many years experience?"
+      - textbox "*Do you have experience using Deltek Vantage or Deltek Vision? If yes, how many years experience?" [ref=e386]
+      - generic [ref=e389]: 4000 characters left
+    - text: "* * *"
+  - generic [ref=e391]:
+    - generic [ref=e393]:
+      - generic [ref=e394]: "*Are you willing to relocate? If so, where?"
+"willing to relocate?": |-
+      - generic [ref=e394]: "*Are you willing to relocate? If so, where?"
+      - textbox "*Are you willing to relocate? If so, where?" [ref=e395]
+      - generic [ref=e398]: 4000 characters left
+    - text: "* * *"
+  - generic [ref=e400]:
+    - group "*Are you at least 18 years of age?" [ref=e402]:
+      - generic [ref=e403]: "*Are you at least 18 years of age?"
+"18 years of age?": |-
+  - group "*Are you at least 18 years of age?" [ref=e402]:
+    - generic [ref=e403]: "*Are you at least 18 years of age?"
+    - generic [ref=e406] [cursor=pointer]:
+      - radio "Yes" [ref=e407]
+      - text: "Yes"
+    - generic [ref=e410] [cursor=pointer]:
+      - radio "No" [ref=e411]
+"legally eligible to work in the United States?": |-
+  - group "*Are you legally eligible to work in the United States?" [ref=e415]:
+    - generic [ref=e416]: "*Are you legally eligible to work in the United States?"
+    - generic [ref=e419] [cursor=pointer]:
+      - radio "Yes" [ref=e420]
+      - text: "Yes"
+    - generic [ref=e423] [cursor=pointer]:
+      - radio "No" [ref=e424]
+"sponsorship to work in the United States?": |-
+  - group "*Will you require sponsorship to work in the United States?" [ref=e428]:
+    - generic [ref=e429]: "*Will you require sponsorship to work in the United States?"
+    - generic [ref=e432] [cursor=pointer]:
+      - radio "Yes" [ref=e433]
+      - text: "Yes"
+    - generic [ref=e436] [cursor=pointer]:
+      - radio "No" [ref=e437]
+"Gender": |-
+  - paragraph [ref=e442]: This employer collects information from applicants about their race/ethnicity and/or gender to ensure nondiscrimination in and equal opportunity in hiring practices. If you do not wish to answer any question, please select "I decline to say". Submission of this information is voluntary and refusal to provide it will not subject you to any adverse treatment. The information you provide will be kept confidential and separate from other application materials, and will only be used in ways that are consistent with the law.
+  - generic [ref=e445]:
+    - generic [ref=e446]: "*Gender"
+    - combobox "*Gender" [ref=e447]:
+      - option "Choose..." [selected]
+      - option "Male"
+      - option "Female"
+    - generic [ref=e449] [cursor=pointer]:
+      - checkbox "I decline to say Gender" [ref=e450]
+      - text: I decline to say
+      - generic [ref=e451]: Gender
+  - generic [ref=e454]:
+    - generic [ref=e455]: "*Ethnic Origin"
+    - link "More information on Ethnic Origin" [ref=e456] [cursor=pointer]:
+      - /url: "#"
+      - generic [ref=e457]: 
+"Ethnic Origin": |-
+    - generic [ref=e455]: "*Ethnic Origin"
+    - link "More information on Ethnic Origin" [ref=e456] [cursor=pointer]:
+      - /url: "#"
+      - generic [ref=e457]: 
+    - combobox "*Ethnic Origin" [ref=e458]:
+      - option "Choose..." [selected]
+      - option "Hispanic/Latino"
+      - option "Not Hispanic/Latino"
+    - generic [ref=e460] [cursor=pointer]:
+      - checkbox "I decline to say Ethnic Origin" [ref=e461]
+      - text: I decline to say
+      - generic [ref=e462]: Ethnic Origin
+  - text: "*"
+  - generic [ref=e463]:
+    - generic [ref=e465]:
+      - generic [ref=e467]:
+        - heading "Veteran status" [level=4] [ref=e468]
+"protected veteran?": |-
+      - generic [ref=e473]: "*Are you a protected veteran?"
+      - combobox "*Are you a protected veteran?" [ref=e474]:
+        - option "Choose..." [selected]
+        - option "Yes"
+        - option "No"
+      - generic [ref=e476] [cursor=pointer]:
+        - checkbox "I decline to say Are you a protected veteran?" [ref=e477]
+        - text: I decline to say
+        - generic [ref=e478]: Are you a protected veteran?
+  - generic [ref=e481]:
+    - generic [ref=e482]:
+      - heading "Voluntary Self-Identification of Disability" [level=4] [ref=e483]
+      - paragraph [ref=e484]: We ask all candidates to provide the information listed below. Submission of this information is voluntary and refusal to provide it will not subject you to any adverse treatment. The information you provide will be kept confidential and may only be used in accordance with applicable federal, state, and local laws and regulations.
+    - generic [ref=e486]:
+"disability": |-
+              - heading "Voluntary Self-Identification of Disability" [level=4] [ref=e483]
+              - paragraph [ref=e484]: We ask all candidates to provide the information listed below. Submission of this information is voluntary and refusal to provide it will not subject you to any adverse treatment. The information you provide will be kept confidential and may only be used in accordance with applicable federal, state, and local laws and regulations.
+            - generic [ref=e486]:
+              - generic [ref=e487]: "*Please choose one of the options below:"
+              - radiogroup "*Please choose one of the options below:" [ref=e488]:
+                - generic [ref=e490]:
+                  - radio "Yes, I have a disability, or have had one in the past" [ref=e491] [cursor=pointer]
+                  - text: Yes, I have a disability, or have had one in the past
+                - generic [ref=e493]:
+                  - radio "No, I do not have a disability and have not had one in the past" [ref=e494] [cursor=pointer]
+                  - text: No, I do not have a disability and have not had one in the past
+                - generic [ref=e496]:
+                  - radio "I do not want to answer" [ref=e497] [cursor=pointer]
+                  - text: I do not want to answer
+  - generic [ref=e500]: Once you leave this page, you won't be able to edit the information you entered.
+  - generic [ref=e502]:

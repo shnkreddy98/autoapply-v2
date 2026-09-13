@@ -1,0 +1,25 @@
+"For the sole purpose of ensuring compliance with U.S. laws concerning the export of controlled or protected technologies or information": |-
+  - generic [ref=e321]: For the sole purpose of ensuring compliance with U.S. laws concerning the export of controlled or protected technologies or information, I confirm I am one of the following:*
+  - generic [ref=e322]:
+    - log [ref=e324]
+    - generic [ref=e326]:
+  --
+        - combobox "For the sole purpose of ensuring compliance with U.S. laws concerning the export of controlled or protected technologies or information, I confirm I am one of the following:" [ref=e330]
+      - button "Toggle flyout" [ref=e332] [cursor=pointer]:
+        - img [ref=e333]
+    - textbox
+  --
+    - text: As the position you are applying for requires access to export controlled technology, we must ask the following questions for the sole purpose of ensuring compliance with U.S. laws concerning the export of controlled or protected technologies or information, including but not limited to U.S. State Department regulations at 22 C.F.R. Part 120
+    - emphasis [ref=e338]: et seq
+    - text: ., the U.S. Department of Commerce’s Export Administration Regulations found in 15 C.F.R. Part 730
+    - emphasis [ref=e339]: et seq
+"Do you reside in or maintain an established permanent residence in any of the following countries: Cuba, Iran, North Korea, Syria": |-
+  - generic [ref=e355]: "Do you reside in or maintain an established permanent residence in any of the following countries: Cuba, Iran, North Korea, Syria, or the following territories of Ukraine (Luhansk, Donetsk, Crimea)?*"
+  - generic [ref=e356]:
+    - log [ref=e358]
+    - generic [ref=e360]:
+  --
+        - 'combobox "Do you reside in or maintain an established permanent residence in any of the following countries: Cuba, Iran, North Korea, Syria, or the following territories of Ukraine (Luhansk, Donetsk, Crimea)?" [ref=e364]'
+      - button "Toggle flyout" [ref=e366] [cursor=pointer]:
+        - img [ref=e367]
+    - textbox

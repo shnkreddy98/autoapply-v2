@@ -1,0 +1,28 @@
+"Month": |-
+    - spinbutton "Month" [invalid] [ref=e2556]
+  - generic [ref=e2557]: /
+  - generic [ref=e2558]:
+    - generic [ref=e2559]: DD
+"Day": |-
+  - Page URL: https://statestreet.wd1.myworkdayjobs.com/en-US/global/job/Quincy%2C-Massachusetts/Data-Engineer-Senior-Associate_R-793105-1/apply/autofillWithResume
+  ### Snapshot
+  ```yaml
+  - generic [ref=e4]:
+  --
+                            - spinbutton "Day" [invalid] [ref=e2560]
+                          - generic [ref=e2561]: /
+                          - generic [ref=e2562]:
+                            - generic [ref=e2563]: YYYY
+  --
+        - generic [ref=e125]: © 2026 Workday, Inc. All rights reserved.
+  ```
+"Year": |-
+          - spinbutton "Year" [invalid] [ref=e2564]
+      - button "Calendar" [ref=e2565] [cursor=pointer]
+  - paragraph [ref=e2658]:
+    - generic [ref=e2659]: "Error:"
+  --
+  - text: We are a federal contractor or subcontractor. The law requires us to provide equal employment opportunity to qualified people with disabilities. We have a goal of having at least 7% of our workers as people with disabilities. The law says we must measure our progress towards this goal. To do this, we must ask applicants and employees if they have a disability or have ever had one. People can become disabled, so we need to ask this question at least every five years. Completing this form is voluntary, and we hope that you will choose to do so. Your answer is confidential. No one who makes hiring decisions will see it. Your decision to complete the form and your answer will not harm you in any way. If you want to learn more about the law or this form, visit the U.S. Department of Labor’s Office of Federal Contract Compliance Programs (OFCCP) website at
+  - link "www.dol.gov/ofccp" [ref=e2574] [cursor=pointer]:
+    - /url: https://www.dol.gov/ofccp
+  - text: .

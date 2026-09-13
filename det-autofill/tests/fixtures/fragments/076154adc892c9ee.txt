@@ -1,0 +1,45 @@
+"Are you legally able to work in the United States?": |-
+          - generic [ref=e2776]: Are you legally able to work in the United States?
+        - generic [ref=e2778]:
+          - generic [ref=e2780]:
+            - generic [ref=e2781]: Are you legally able to work in the United States?
+            - text: "*"
+          - generic [ref=e2786]:
+            - generic [ref=e2788] [cursor=pointer]:
+              - radio "Yes" [ref=e2790]
+              - generic [ref=e2792]: "Yes"
+            - generic [ref=e2794] [cursor=pointer]:
+              - radio "No" [ref=e2796]
+              - generic [ref=e2798]: "No"
+  - listitem [ref=e2799]:
+    - group [ref=e2800]:
+"Do you now or have you ever worked for us before?": |-
+          - generic [ref=e2802]: Do you now or have you ever worked for us before? If so, when?
+        - generic [ref=e2804]:
+          - generic [ref=e2806]:
+            - generic [ref=e2807]: Do you now or have you ever worked for us before? If so, when?
+            - text: "*"
+          - generic [ref=e2812]:
+            - generic [ref=e2814] [cursor=pointer]:
+              - radio "Yes" [ref=e2816]
+              - generic [ref=e2818]: "Yes"
+            - generic [ref=e2820] [cursor=pointer]:
+              - radio "No" [ref=e2822]
+              - generic [ref=e2824]: "No"
+  - listitem [ref=e2825]:
+    - group [ref=e2826]:
+"Will you now or in the future require sponsorship": |-
+              - generic [ref=e2828]: Will you now or in the future require sponsorship for employment visa status (e.g., H-1B visa status) or an immigration-related employment benefit?
+            - generic [ref=e2830]:
+              - generic [ref=e2832]:
+                - generic [ref=e2833]: Will you now or in the future require sponsorship for employment visa status (e.g., H-1B visa status) or an immigration-related employment benefit?
+                - text: "*"
+              - generic [ref=e2838]:
+                - generic [ref=e2840] [cursor=pointer]:
+                  - radio "Yes" [ref=e2842]
+                  - generic [ref=e2844]: "Yes"
+                - generic [ref=e2846] [cursor=pointer]:
+                  - radio "No" [ref=e2848]
+                  - generic [ref=e2850]: "No"
+  - generic [ref=e632]: WoodmenLife is one of the best places to work in Omaha, with more than 135 years of service rooted in purpose and community. Since 1890, WoodmenLife has been dedicated to helping hardworking Americans secure their families’ financial futures and leave a lasting legacy. As a purpose-driven, not-for-profit life insurance company, our commitment is to our members and the communities they call home.
+  - generic [ref=e635]:

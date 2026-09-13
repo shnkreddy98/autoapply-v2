@@ -1,0 +1,10 @@
+"Get started. Include a resume with your profile.": |-
+    - strong [ref=e60]: Get started. Include a resume with your profile.
+  - generic [ref=e61]:
+    - generic [ref=e62]: Select a file using the browse button then click continue.
+    - text: Otherwise click "Skip" to continue. You can always upload a resume later.
+"Upload and Continue": |-
+  - button "Upload and Continue" [ref=e69] [cursor=pointer]
+  - link "Skip" [ref=e70] [cursor=pointer]:
+    - /url: javascript:__doPostBack('ctl00$ContentPlaceHolder1$ctl00$bSkip','')
+  - paragraph [ref=e71]:

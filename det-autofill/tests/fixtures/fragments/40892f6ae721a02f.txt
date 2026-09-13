@@ -1,0 +1,7 @@
+"No": |-
+                  - radio "No" [ref=e2205]
+                  - generic [ref=e2207]: "No"
+  - generic [ref=e776]: Subway| Franchise World Headquarters, LLC. does not and shall not discriminate on the basis of race (inclusive of ethnic traits historically associated with race, including, but not limited to, hair texture and protective hairstyles), color, religion, gender, gender expression, age, national origin, disability, marital status, sexual orientation, or military status, in any of its activities or operations. These activities include, but are not limited to, hiring and firing of staff, selection of volunteers and vendors, and provision of services. We are committed to providing an inclusive and welcoming environment for all members of our staff, clients, volunteers, subcontractors, vendors, and clients.
+  - generic [ref=e780]:
+    - generic [ref=e781]:
+      - button "Cancel" [ref=e782] [cursor=pointer]:

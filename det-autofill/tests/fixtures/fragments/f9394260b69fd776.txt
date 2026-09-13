@@ -1,0 +1,5 @@
+"Apply : Senior Data Engineer": |-
+  - 'link "Apply : Senior Data Engineer" [ref=e210] [cursor=pointer]':
+    - /url: https://careers-amd.icims.com/jobs/87319/login?iis=Job Board&iisn=Linkedin
+    - text: Apply
+  - generic [ref=e213]:

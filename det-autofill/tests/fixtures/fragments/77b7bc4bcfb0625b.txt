@@ -1,0 +1,21 @@
+"Apply": |-
+    - button "Apply for Data and Analytics - AI Engineer II" [ref=e106] [cursor=pointer]:
+      - generic [ref=e107]: Apply
+    - generic [ref=e108]:
+      - separator
+    - button "Share" [ref=e110] [cursor=pointer]:
+  --
+        - generic [ref=e162]: This position is ideal for someone passionate about applying AI in production environments, solving meaningful business problems, and working across a modern cloud-based ecosystem. You’ll gain exposure to end-to-end AI delivery, collaborate with cross-functional teams, and play a foundational role in scaling AI capabilities across the organization.
+      - paragraph [ref=e164]:
+        - generic [ref=e165]: WoodmenLife offers a supportive, collaborative environment that encourages growth, innovation, and continuous learning.
+      - paragraph [ref=e167]:
+  --
+            - generic [ref=e262]: Apply AIOps/MLOps practices for deployment, monitoring, and lifecycle management
+      - paragraph [ref=e264]:
+        - generic [ref=e265]: Collaboration & Continuous Improvement
+      - list [ref=e267]:
+  --
+      - generic [ref=e474]: Scan this QR code and apply!
+      - link "Download" [ref=e481] [cursor=pointer]:
+        - /url: "#"
+  - generic [ref=e483]:

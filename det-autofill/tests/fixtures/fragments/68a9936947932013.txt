@@ -1,0 +1,7 @@
+"What are your salary expectations for this role?": |-
+  - group "What are your salary expectations for this role?(Hourly rate or Salary Range)*" [ref=e1243]:
+    - paragraph [ref=e1247]:
+      - generic [ref=e1248]: What are your salary expectations for this role?(Hourly rate or Salary Range)*
+    - textbox [ref=e1251]
+  - group "Were you previously employed by Lurie Children's Hospital of Chicago?*" [ref=e1253]:
+    - paragraph [ref=e1257]: Were you previously employed by Lurie Children's Hospital of Chicago?*

@@ -1,0 +1,5 @@
+"Create an account": |-
+  - link "Create an account" [ref=e70] [cursor=pointer]:
+    - /url: /career?company=CHST&site=&lang=en_US&requestParams=Kv6U98hiPp573tKxobp3W3%2bLk2N42m1R0UpCQRCdNFMzSgl66xekFM3oocQwhYLA7KWH27p30pVt%0d%0a9zo7phH0RfUR0RfUYz8QPfQPrRaV1MLswpwzO%2bfM3L1DwhHk%2buJK5IesdL4hXO9IRInky8Pj2vlT%0d%0aHGJ1WNRWhHUh2VIT0twjdD2rw3G0uweTszRK%2bTvrI8Mw7xTjkGD17HD6qxamm28xKdPduX8%2bfX1b%0d%0avzmIAYwjT59jAIaU1AoNN8PhAG4h%2fplP9W3HFUbYYchJQYgU%2bExAOAjUDDGxWSwXtxkyzkoldDWK%0d%0a9PUMfiG0Q4%2f78mMVoVYGf%2bML%2b4pQMsOytESoBStrglkx6UqluFUuFUobnqZc0zCSEbrtkP5rlZT2%0d%0aMhLmR0bMj6XWaJ18P%2bkvS8b9rl%2bZOBTegJJTFZ4%2bmd5MCzRBu8WQ9RsYVTUS1wgFY%2fhXx%2fgDwUeF%0d%0a8Q%3d%3d&login_ns=register&career_ns=job%5fapplication&career_job_req_id=13639&jobPipeline=Direct&clientId=jobs2web&navBarLevel=JOB%5fSEARCH&_s.crb=7yc%2bzM0caDmM6GlGjjo5STcPu%2fJ3vslDqCE68vZfTyk%3d
+  - text: to apply for our career opportunities.
+  - paragraph

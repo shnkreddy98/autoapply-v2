@@ -1,0 +1,6 @@
+"Not Specified (United States of America)": |-
+  - option "Not Specified (United States of America)" [ref=e1619]:
+    - generic [ref=e1620]: Not Specified (United States of America)
+  - option "Two or More Races (United States of America)" [ref=e1621]:
+    - generic [ref=e1622]: Two or More Races (United States of America)
+  - option "White (Not Hispanic or Latino) (United States of America)" [ref=e1623]:

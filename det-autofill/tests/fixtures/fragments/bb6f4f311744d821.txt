@@ -1,0 +1,33 @@
+"Male": |-
+    - paragraph [ref=e12]: We provide equal opportunities to all existing and prospective employees, recognizing that our future is dependent on their work quality, effectiveness and skils base. Amphenol is an "Equal Opportunity Employer" - Minority/Female/Disabled/Veteran/Sexual Orientation/ Gender Identity or National Origin.
+    - heading "Job Opportunities" [level=2] [ref=e13]
+  - iframe [ref=e15]:
+    - generic [active] [ref=f45e1]:
+  --
+              - radio "Male" [ref=e214]
+              - generic [ref=e215] [cursor=pointer]: Male
+          - listitem [ref=e216]:
+            - generic [ref=e217]:
+              - radio "Female" [ref=e218]
+              - generic [ref=e219] [cursor=pointer]: Female
+          - listitem [ref=e220]:
+            - generic [ref=e221]:
+              - radio "Choose not to identify" [ref=e222]
+"Asian": |-
+      - 'radio "Asian: A person having origins in any of the original peoples of the Far East, Southeast Asia, or the Indian subcontinent including, for example, Cambodia, China, India, Japan, Korea, Malaysia, Pakistan, the Philippine Islands, Thailand, and Vietnam." [ref=e242]'
+      - generic [ref=e243] [cursor=pointer]: "Asian: A person having origins in any of the original peoples of the Far East, Southeast Asia, or the Indian subcontinent including, for example, Cambodia, China, India, Japan, Korea, Malaysia, Pakistan, the Philippine Islands, Thailand, and Vietnam."
+  - listitem [ref=e244]:
+    - generic [ref=e245]:
+      - 'radio "Native Hawaiian or Other Pacific Islander: A person having origins in any of the original peoples of Hawaii, Guam, Samoa, or other Pacific Islands" [ref=e246]'
+"I am NOT a protected veteran.": |-
+    - radio "I am NOT a protected veteran." [ref=e283]
+    - generic [ref=e284] [cursor=pointer]: I am NOT a protected veteran.
+  - listitem [ref=e285]:
+    - radio "I do not wish to self-identify." [ref=e286]
+    - generic [ref=e287] [cursor=pointer]: I do not wish to self-identify.
+"I'm not a robot": |-
+  - checkbox "I'm not a robot" [ref=f46e7]
+  - generic [ref=f46e11]: I'm not a robot
+  - generic [ref=f46e13]:
+    - text: reCAPTCHA is changing its terms of service.
+    - link "Take action." [ref=f46e14] [cursor=pointer]:

@@ -1,0 +1,12 @@
+"receive text messages": |-
+      - text: Would you like to receive text messages from USI Insurance Services regarding your job application (e.g., interview scheduling and hiring updates)? *
+      - generic [ref=e400]: Select an option
+    - generic [ref=e401]:
+      - combobox [ref=e402]
+      - combobox "Would you like to receive text messages from USI Insurance Services regarding your job application (e.g., interview scheduling and hiring updates)?" [ref=e405] [cursor=pointer]:
+        - textbox [ref=e406]
+  - generic [ref=e410]:
+    - generic [ref=e411]: If you select "Yes", you consent to receive text messages from USI Insurance Services and its subsidiaries regarding your job application at the phone number you provided.
+    - strong [ref=e413]: Your decision does not affect your ability to apply or be considered for employment.
+    - generic [ref=e414]:
+      - text: Message and data rates may apply. You may reply

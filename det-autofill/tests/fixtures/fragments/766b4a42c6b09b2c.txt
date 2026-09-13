@@ -1,0 +1,19 @@
+"I do not want to answer": |-
+              - row "Yes, I have a disability, or have had one in the past No, I do not have a disability and have not had one in the past I do not want to answer" [ref=e1521]:
+                - row "Yes, I have a disability, or have had one in the past" [ref=e1522]:
+                  - cell "Yes, I have a disability, or have had one in the past" [ref=e1523]:
+                    - generic [ref=e1524]:
+  --
+                - row "I do not want to answer" [ref=e1534]:
+                  - cell "I do not want to answer" [ref=e1535]:
+                    - generic [ref=e1536]:
+                      - checkbox "I do not want to answer" [ref=e1538] [cursor=pointer]
+                      - generic [ref=e1539] [cursor=pointer]: I do not want to answer
+        - generic [ref=e1541]: "PUBLIC BURDEN STATEMENT: According to the Paperwork Reduction Act of 1995 no persons are required to respond to a collection of information unless such collection displays a valid OMB control number. This survey should take about 5 minutes to complete."
+  - generic [ref=e346]:
+    - button "Back" [ref=e461] [cursor=pointer]
+"Save and Continue": |-
+          - button "Save and Continue" [ref=e462] [cursor=pointer]
+  - generic [ref=e47]:
+    - heading "Follow Us" [level=4] [ref=e48]
+    - list [ref=e49]:

@@ -1,0 +1,37 @@
+"Toggle flyout": |-
+              - button "Toggle flyout" [ref=e139] [cursor=pointer]:
+                - img [ref=e140]
+        - paragraph [ref=e323]: Select a country
+      - generic [ref=e144]:
+  --
+            - button "Toggle flyout" [ref=e203] [cursor=pointer]:
+              - img [ref=e204]
+      - generic [ref=e207]:
+        - generic [ref=e208]: Degree
+  --
+            - button "Toggle flyout" [ref=e219] [cursor=pointer]:
+              - img [ref=e220]
+      - generic [ref=e223]:
+        - generic [ref=e224]: Discipline
+  --
+            - button "Toggle flyout" [ref=e235] [cursor=pointer]:
+              - img [ref=e236]
+    - button "Add another" [ref=e238] [cursor=pointer]
+  - generic [ref=e239]:
+  --
+            - button "Toggle flyout" [ref=e265] [cursor=pointer]:
+              - img [ref=e266]
+  - generic [ref=e333]:
+    - separator [ref=e334]
+"Country": |-
+      - generic [ref=e129]: Country*
+      - generic [ref=e130]:
+        - log [ref=e132]
+        - generic [ref=e134]:
+          - combobox "Country" [active] [invalid] [ref=e137]: United States
+          - button "Toggle flyout" [ref=e139] [cursor=pointer]:
+            - img [ref=e140]
+    - paragraph [ref=e323]: Select a country
+  - generic [ref=e144]:
+    - generic [ref=e145]: Phone*
+    - textbox "Phone" [ref=e146]: (555) 010-0199

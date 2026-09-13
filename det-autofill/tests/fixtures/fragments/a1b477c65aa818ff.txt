@@ -1,0 +1,53 @@
+"Email Address": |-
+    - generic [ref=e538]: Email Address*
+    - textbox "Email Address" [ref=e541]
+  - generic [ref=e543]:
+    - generic [ref=e545]: Password*
+    - textbox "Password" [ref=e548]
+"Password": |-
+      - paragraph [ref=e527]: "Password Requirements:"
+      - list [ref=e528]:
+        - listitem [ref=e529]: An uppercase character
+        - listitem [ref=e530]: A numeric character
+  --
+        - generic [ref=e545]: Password*
+        - textbox "Password" [ref=e548]
+      - generic [ref=e549]:
+        - generic [ref=e551]: Verify New Password*
+        - textbox "Verify New Password" [ref=e554]
+      - generic [ref=e557]:
+        - generic [ref=e559]:
+          - paragraph [ref=e560]:
+  --
+    - button "Forgot your password?" [ref=e590] [cursor=pointer]
+  - generic:
+    - generic:
+      - generic [ref=e591]: Enter website. This input is for robots only, do not enter if you're human.
+"Verify New Password": |-
+    - generic [ref=e551]: Verify New Password*
+    - textbox "Verify New Password" [ref=e554]
+  - generic [ref=e557]:
+    - generic [ref=e559]:
+      - paragraph [ref=e560]:
+"I agree": |-
+    - checkbox "I agree" [ref=e578] [cursor=pointer]
+    - generic [ref=e579] [cursor=pointer]: I agree
+  - generic [ref=e584]:
+    - button "Create Account" [ref=e585] [cursor=pointer]
+    - button [ref=e586] [cursor=pointer]: Create Account
+"Create Account": |-
+  - Page Title: Create Account
+  - Console: 0 errors, 1 warnings
+  ### Snapshot
+  ```yaml
+  --
+              - heading "Create Account" [active] [level=3] [ref=e523]
+              - generic [ref=e526]:
+                - paragraph [ref=e527]: "Password Requirements:"
+                - list [ref=e528]:
+  --
+                  - button "Create Account" [ref=e585] [cursor=pointer]
+                  - button [ref=e586] [cursor=pointer]: Create Account
+              - generic [ref=e587]:
+                - text: Already have an account?
+                - button "Sign In" [ref=e588] [cursor=pointer]

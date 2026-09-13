@@ -1,0 +1,5 @@
+"LinkedIn not checked": |-
+  - option "LinkedIn not checked" [ref=e647]:
+    - generic [ref=e648] [cursor=pointer]:
+      - radio [ref=e653]
+      - generic [ref=e654]: LinkedIn

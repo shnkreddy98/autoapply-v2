@@ -1,0 +1,99 @@
+"Do you reside in the European Union/UK or are you an EU/UK citizen?": |-
+  - 'row "Personal Information Personal Information Please enter all relevant personal information in the fields below. Do you reside in the European Union/UK or are you an EU/UK citizen? . Required Not Specified Prefix (Dr.,Miss.,Mr.,Mrs.,Ms.etc.) . Required Legal First Name . Required Jane Last Name . Required Doe Display First Name Display Last Name Address Type Permanent Street Address (line 1) . Required Address (line 2) State/Province Country of Residence . Required Zip/Postal Code . Required Alternate Location: (State/Providence) Alternate Zip Alternate Country Cellular Number (xxx-xxx-xxxx) Email Address . Required jane.doe@example.com 1st Location Preference . Required 2nd Location Preference . Required Industry Preference Not Specified Service Preference Not Specified Are you legally eligible to work in the U.S.? . Required Not Specified Date of Availability . Required" [ref=e117]':
+    - 'cell "Personal Information Personal Information Please enter all relevant personal information in the fields below. Do you reside in the European Union/UK or are you an EU/UK citizen? . Required Not Specified Prefix (Dr.,Miss.,Mr.,Mrs.,Ms.etc.) . Required Legal First Name . Required Jane Last Name . Required Doe Display First Name Display Last Name Address Type Permanent Street Address (line 1) . Required Address (line 2) State/Province Country of Residence . Required Zip/Postal Code . Required Alternate Location: (State/Providence) Alternate Zip Alternate Country Cellular Number (xxx-xxx-xxxx) Email Address . Required jane.doe@example.com 1st Location Preference . Required 2nd Location Preference . Required Industry Preference Not Specified Service Preference Not Specified Are you legally eligible to work in the U.S.? . Required Not Specified Date of Availability . Required" [ref=e118]':
+      - heading "Personal Information" [level=1] [ref=e119]:
+        - generic [ref=e120]: Personal Information
+      - generic [ref=e123]:
+  --
+            - generic "The field Do you reside in the European Union/UK or are you an EU/UK citizen? is mandatory." [ref=e132]:
+              - text: Do you reside in the European Union/UK or are you an EU/UK citizen?
+              - generic [ref=e135]: .
+              - generic [ref=e136]: Required
+            - combobox "Do you reside in the European Union/UK or are you an EU/UK citizen? . Required" [ref=e137]:
+              - option "Not Specified" [selected]
+              - option "Yes"
+              - option "No"
+"Prefix": |-
+  - 'row "Personal Information Personal Information Please enter all relevant personal information in the fields below. Do you reside in the European Union/UK or are you an EU/UK citizen? . Required Not Specified Prefix (Dr.,Miss.,Mr.,Mrs.,Ms.etc.) . Required Legal First Name . Required Jane Last Name . Required Doe Display First Name Display Last Name Address Type Permanent Street Address (line 1) . Required Address (line 2) State/Province Country of Residence . Required Zip/Postal Code . Required Alternate Location: (State/Providence) Alternate Zip Alternate Country Cellular Number (xxx-xxx-xxxx) Email Address . Required jane.doe@example.com 1st Location Preference . Required 2nd Location Preference . Required Industry Preference Not Specified Service Preference Not Specified Are you legally eligible to work in the U.S.? . Required Not Specified Date of Availability . Required" [ref=e117]':
+    - 'cell "Personal Information Personal Information Please enter all relevant personal information in the fields below. Do you reside in the European Union/UK or are you an EU/UK citizen? . Required Not Specified Prefix (Dr.,Miss.,Mr.,Mrs.,Ms.etc.) . Required Legal First Name . Required Jane Last Name . Required Doe Display First Name Display Last Name Address Type Permanent Street Address (line 1) . Required Address (line 2) State/Province Country of Residence . Required Zip/Postal Code . Required Alternate Location: (State/Providence) Alternate Zip Alternate Country Cellular Number (xxx-xxx-xxxx) Email Address . Required jane.doe@example.com 1st Location Preference . Required 2nd Location Preference . Required Industry Preference Not Specified Service Preference Not Specified Are you legally eligible to work in the U.S.? . Required Not Specified Date of Availability . Required" [ref=e118]':
+      - heading "Personal Information" [level=1] [ref=e119]:
+        - generic [ref=e120]: Personal Information
+      - generic [ref=e123]:
+  --
+            - generic "The field Prefix (Dr.,Miss.,Mr.,Mrs.,Ms.etc.) is mandatory." [ref=e139]:
+              - text: Prefix (Dr.,Miss.,Mr.,Mrs.,Ms.etc.)
+              - generic [ref=e142]: .
+              - generic [ref=e143]: Required
+            - textbox "Prefix (Dr.,Miss.,Mr.,Mrs.,Ms.etc.) . Required" [ref=e144]
+          - generic [ref=e145]:
+            - generic "The field Legal First Name is mandatory." [ref=e146]:
+              - text: Legal First Name
+"Legal First Name": |-
+  - 'row "Personal Information Personal Information Please enter all relevant personal information in the fields below. Do you reside in the European Union/UK or are you an EU/UK citizen? . Required Not Specified Prefix (Dr.,Miss.,Mr.,Mrs.,Ms.etc.) . Required Legal First Name . Required Jane Last Name . Required Doe Display First Name Display Last Name Address Type Permanent Street Address (line 1) . Required Address (line 2) State/Province Country of Residence . Required Zip/Postal Code . Required Alternate Location: (State/Providence) Alternate Zip Alternate Country Cellular Number (xxx-xxx-xxxx) Email Address . Required jane.doe@example.com 1st Location Preference . Required 2nd Location Preference . Required Industry Preference Not Specified Service Preference Not Specified Are you legally eligible to work in the U.S.? . Required Not Specified Date of Availability . Required" [ref=e117]':
+    - 'cell "Personal Information Personal Information Please enter all relevant personal information in the fields below. Do you reside in the European Union/UK or are you an EU/UK citizen? . Required Not Specified Prefix (Dr.,Miss.,Mr.,Mrs.,Ms.etc.) . Required Legal First Name . Required Jane Last Name . Required Doe Display First Name Display Last Name Address Type Permanent Street Address (line 1) . Required Address (line 2) State/Province Country of Residence . Required Zip/Postal Code . Required Alternate Location: (State/Providence) Alternate Zip Alternate Country Cellular Number (xxx-xxx-xxxx) Email Address . Required jane.doe@example.com 1st Location Preference . Required 2nd Location Preference . Required Industry Preference Not Specified Service Preference Not Specified Are you legally eligible to work in the U.S.? . Required Not Specified Date of Availability . Required" [ref=e118]':
+      - heading "Personal Information" [level=1] [ref=e119]:
+        - generic [ref=e120]: Personal Information
+      - generic [ref=e123]:
+  --
+            - generic "The field Legal First Name is mandatory." [ref=e146]:
+              - text: Legal First Name
+              - generic [ref=e149]: .
+              - generic [ref=e150]: Required
+            - textbox "Legal First Name . Required" [ref=e151]: Jane
+          - generic [ref=e152]:
+            - generic "The field Last Name is mandatory." [ref=e153]:
+              - text: Last Name
+"Last Name": |-
+  - 'row "Personal Information Personal Information Please enter all relevant personal information in the fields below. Do you reside in the European Union/UK or are you an EU/UK citizen? . Required Not Specified Prefix (Dr.,Miss.,Mr.,Mrs.,Ms.etc.) . Required Legal First Name . Required Jane Last Name . Required Doe Display First Name Display Last Name Address Type Permanent Street Address (line 1) . Required Address (line 2) State/Province Country of Residence . Required Zip/Postal Code . Required Alternate Location: (State/Providence) Alternate Zip Alternate Country Cellular Number (xxx-xxx-xxxx) Email Address . Required jane.doe@example.com 1st Location Preference . Required 2nd Location Preference . Required Industry Preference Not Specified Service Preference Not Specified Are you legally eligible to work in the U.S.? . Required Not Specified Date of Availability . Required" [ref=e117]':
+    - 'cell "Personal Information Personal Information Please enter all relevant personal information in the fields below. Do you reside in the European Union/UK or are you an EU/UK citizen? . Required Not Specified Prefix (Dr.,Miss.,Mr.,Mrs.,Ms.etc.) . Required Legal First Name . Required Jane Last Name . Required Doe Display First Name Display Last Name Address Type Permanent Street Address (line 1) . Required Address (line 2) State/Province Country of Residence . Required Zip/Postal Code . Required Alternate Location: (State/Providence) Alternate Zip Alternate Country Cellular Number (xxx-xxx-xxxx) Email Address . Required jane.doe@example.com 1st Location Preference . Required 2nd Location Preference . Required Industry Preference Not Specified Service Preference Not Specified Are you legally eligible to work in the U.S.? . Required Not Specified Date of Availability . Required" [ref=e118]':
+      - heading "Personal Information" [level=1] [ref=e119]:
+        - generic [ref=e120]: Personal Information
+      - generic [ref=e123]:
+  --
+            - generic "The field Last Name is mandatory." [ref=e153]:
+              - text: Last Name
+              - generic [ref=e156]: .
+              - generic [ref=e157]: Required
+            - textbox "Last Name . Required" [ref=e158]: Doe
+          - generic [ref=e159]:
+            - generic [ref=e160]: Display First Name
+            - textbox "Display First Name" [ref=e163]
+  --
+            - generic [ref=e165]: Display Last Name
+            - textbox "Display Last Name" [ref=e168]
+          - generic [ref=e169]:
+            - generic [ref=e170]: Address Type
+            - combobox "Address Type" [ref=e173]:
+"Street Address (line 1)": |-
+  - 'row "Personal Information Personal Information Please enter all relevant personal information in the fields below. Do you reside in the European Union/UK or are you an EU/UK citizen? . Required Not Specified Prefix (Dr.,Miss.,Mr.,Mrs.,Ms.etc.) . Required Legal First Name . Required Jane Last Name . Required Doe Display First Name Display Last Name Address Type Permanent Street Address (line 1) . Required Address (line 2) State/Province Country of Residence . Required Zip/Postal Code . Required Alternate Location: (State/Providence) Alternate Zip Alternate Country Cellular Number (xxx-xxx-xxxx) Email Address . Required jane.doe@example.com 1st Location Preference . Required 2nd Location Preference . Required Industry Preference Not Specified Service Preference Not Specified Are you legally eligible to work in the U.S.? . Required Not Specified Date of Availability . Required" [ref=e117]':
+    - 'cell "Personal Information Personal Information Please enter all relevant personal information in the fields below. Do you reside in the European Union/UK or are you an EU/UK citizen? . Required Not Specified Prefix (Dr.,Miss.,Mr.,Mrs.,Ms.etc.) . Required Legal First Name . Required Jane Last Name . Required Doe Display First Name Display Last Name Address Type Permanent Street Address (line 1) . Required Address (line 2) State/Province Country of Residence . Required Zip/Postal Code . Required Alternate Location: (State/Providence) Alternate Zip Alternate Country Cellular Number (xxx-xxx-xxxx) Email Address . Required jane.doe@example.com 1st Location Preference . Required 2nd Location Preference . Required Industry Preference Not Specified Service Preference Not Specified Are you legally eligible to work in the U.S.? . Required Not Specified Date of Availability . Required" [ref=e118]':
+      - heading "Personal Information" [level=1] [ref=e119]:
+        - generic [ref=e120]: Personal Information
+      - generic [ref=e123]:
+  --
+            - generic "The field Street Address (line 1) is mandatory." [ref=e175]:
+              - text: Street Address (line 1)
+              - generic [ref=e178]: .
+              - generic [ref=e179]: Required
+            - textbox "Street Address (line 1) . Required" [ref=e180]
+          - generic [ref=e181]:
+            - generic [ref=e182]:
+              - generic [ref=e183]: Address (line 2)
+"Country of Residence": |-
+  - 'row "Personal Information Personal Information Please enter all relevant personal information in the fields below. Do you reside in the European Union/UK or are you an EU/UK citizen? . Required Not Specified Prefix (Dr.,Miss.,Mr.,Mrs.,Ms.etc.) . Required Legal First Name . Required Jane Last Name . Required Doe Display First Name Display Last Name Address Type Permanent Street Address (line 1) . Required Address (line 2) State/Province Country of Residence . Required Zip/Postal Code . Required Alternate Location: (State/Providence) Alternate Zip Alternate Country Cellular Number (xxx-xxx-xxxx) Email Address . Required jane.doe@example.com 1st Location Preference . Required 2nd Location Preference . Required Industry Preference Not Specified Service Preference Not Specified Are you legally eligible to work in the U.S.? . Required Not Specified Date of Availability . Required" [ref=e117]':
+    - 'cell "Personal Information Personal Information Please enter all relevant personal information in the fields below. Do you reside in the European Union/UK or are you an EU/UK citizen? . Required Not Specified Prefix (Dr.,Miss.,Mr.,Mrs.,Ms.etc.) . Required Legal First Name . Required Jane Last Name . Required Doe Display First Name Display Last Name Address Type Permanent Street Address (line 1) . Required Address (line 2) State/Province Country of Residence . Required Zip/Postal Code . Required Alternate Location: (State/Providence) Alternate Zip Alternate Country Cellular Number (xxx-xxx-xxxx) Email Address . Required jane.doe@example.com 1st Location Preference . Required 2nd Location Preference . Required Industry Preference Not Specified Service Preference Not Specified Are you legally eligible to work in the U.S.? . Required Not Specified Date of Availability . Required" [ref=e118]':
+      - heading "Personal Information" [level=1] [ref=e119]:
+        - generic [ref=e120]: Personal Information
+      - generic [ref=e123]:
+  --
+          - group "Country of Residence . Required" [ref=e193]:
+            - generic "The field Country of Residence is mandatory." [ref=e197]:
+              - text: Country of Residence
+              - generic [ref=e200]: .
+              - generic [ref=e201]: Required
+            - generic [ref=e202]: Value
+  --
+              - textbox "Country of Residence . Required Value" [ref=e204]
+              - button "Search" [ref=e205] [cursor=pointer]:
+                - generic [ref=e208]: Search
+          - generic [ref=e209]:

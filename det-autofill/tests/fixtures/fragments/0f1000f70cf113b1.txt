@@ -1,0 +1,174 @@
+"Source Type": |-
+  - 'row "Candidate Information Mandatory fields are marked with an asterisk. . Required Please indicate how you heard about this job. Source Type . Required Job Boards Job Boards . Required LinkedIn Please enter all relevant personal information in the fields below. First Name . Required Jane Quinn Last Name . Required Doe Middle Name Quinn Suffix (example: Sr, Jr, I, II, III) 100 Example St Street Address (line 1) . Required 100 Example St Address (line 2) City . Required San Jose Zip/Postal Code . Required 95126 You must select ALL possible values in the section Place of Residence. Place of Residence . Required Email Address . Required jane.doe@example.com Primary Number . Required Cellular Phone Cellular Number (555) 010-0199 Home Phone Number 555-010-0199 Work Phone Number" [ref=e168]':
+    - 'cell "Candidate Information Mandatory fields are marked with an asterisk. . Required Please indicate how you heard about this job. Source Type . Required Job Boards Job Boards . Required LinkedIn Please enter all relevant personal information in the fields below. First Name . Required Jane Quinn Last Name . Required Doe Middle Name Quinn Suffix (example: Sr, Jr, I, II, III) 100 Example St Street Address (line 1) . Required 100 Example St Address (line 2) City . Required San Jose Zip/Postal Code . Required 95126 You must select ALL possible values in the section Place of Residence. Place of Residence . Required Email Address . Required jane.doe@example.com Primary Number . Required Cellular Phone Cellular Number (555) 010-0199 Home Phone Number 555-010-0199 Work Phone Number" [ref=e169]':
+      - heading "Candidate Information" [level=1] [ref=e170]:
+        - generic [ref=e171]: Candidate Information
+      - generic [ref=e174]:
+  --
+          - generic "The field Source Type is mandatory." [ref=e185]:
+            - text: Source Type
+            - generic [ref=e186]: .
+            - generic [ref=e187]: Required
+          - combobox "Source Type . Required" [ref=e189]:
+            - option "Select One..."
+            - option "Ad or event ID"
+            - option "Campus - Non Career Fair"
+"Job Boards": |-
+  - 'row "Candidate Information Mandatory fields are marked with an asterisk. . Required Please indicate how you heard about this job. Source Type . Required Job Boards Job Boards . Required LinkedIn Please enter all relevant personal information in the fields below. First Name . Required Jane Quinn Last Name . Required Doe Middle Name Quinn Suffix (example: Sr, Jr, I, II, III) 100 Example St Street Address (line 1) . Required 100 Example St Address (line 2) City . Required San Jose Zip/Postal Code . Required 95126 You must select ALL possible values in the section Place of Residence. Place of Residence . Required Email Address . Required jane.doe@example.com Primary Number . Required Cellular Phone Cellular Number (555) 010-0199 Home Phone Number 555-010-0199 Work Phone Number" [ref=e168]':
+    - 'cell "Candidate Information Mandatory fields are marked with an asterisk. . Required Please indicate how you heard about this job. Source Type . Required Job Boards Job Boards . Required LinkedIn Please enter all relevant personal information in the fields below. First Name . Required Jane Quinn Last Name . Required Doe Middle Name Quinn Suffix (example: Sr, Jr, I, II, III) 100 Example St Street Address (line 1) . Required 100 Example St Address (line 2) City . Required San Jose Zip/Postal Code . Required 95126 You must select ALL possible values in the section Place of Residence. Place of Residence . Required Email Address . Required jane.doe@example.com Primary Number . Required Cellular Phone Cellular Number (555) 010-0199 Home Phone Number 555-010-0199 Work Phone Number" [ref=e169]':
+      - heading "Candidate Information" [level=1] [ref=e170]:
+        - generic [ref=e171]: Candidate Information
+      - generic [ref=e174]:
+  --
+            - option "Job Boards" [selected]
+            - option "Military"
+            - option "Newspapers"
+            - option "Professional Associations"
+  --
+              - text: Job Boards
+              - generic [ref=e193]: .
+              - generic [ref=e194]: Required
+            - combobox "Job Boards . Required" [ref=e196]:
+              - option "Select One..."
+              - option "American Society of Safety Engineers"
+              - option "Canadajobs.com"
+"First Name": |-
+  - 'row "Candidate Information Mandatory fields are marked with an asterisk. . Required Please indicate how you heard about this job. Source Type . Required Job Boards Job Boards . Required LinkedIn Please enter all relevant personal information in the fields below. First Name . Required Jane Quinn Last Name . Required Doe Middle Name Quinn Suffix (example: Sr, Jr, I, II, III) 100 Example St Street Address (line 1) . Required 100 Example St Address (line 2) City . Required San Jose Zip/Postal Code . Required 95126 You must select ALL possible values in the section Place of Residence. Place of Residence . Required Email Address . Required jane.doe@example.com Primary Number . Required Cellular Phone Cellular Number (555) 010-0199 Home Phone Number 555-010-0199 Work Phone Number" [ref=e168]':
+    - 'cell "Candidate Information Mandatory fields are marked with an asterisk. . Required Please indicate how you heard about this job. Source Type . Required Job Boards Job Boards . Required LinkedIn Please enter all relevant personal information in the fields below. First Name . Required Jane Quinn Last Name . Required Doe Middle Name Quinn Suffix (example: Sr, Jr, I, II, III) 100 Example St Street Address (line 1) . Required 100 Example St Address (line 2) City . Required San Jose Zip/Postal Code . Required 95126 You must select ALL possible values in the section Place of Residence. Place of Residence . Required Email Address . Required jane.doe@example.com Primary Number . Required Cellular Phone Cellular Number (555) 010-0199 Home Phone Number 555-010-0199 Work Phone Number" [ref=e169]':
+      - heading "Candidate Information" [level=1] [ref=e170]:
+        - generic [ref=e171]: Candidate Information
+      - generic [ref=e174]:
+  --
+              - generic "The field First Name is mandatory." [ref=e206]:
+                - text: First Name
+                - generic [ref=e209]: .
+                - generic [ref=e210]: Required
+              - textbox "First Name . Required" [ref=e211]: Jane Quinn
+            - generic [ref=e212]:
+              - generic "The field Last Name is mandatory." [ref=e213]:
+                - text: Last Name
+"Last Name": |-
+  - 'row "Candidate Information Mandatory fields are marked with an asterisk. . Required Please indicate how you heard about this job. Source Type . Required Job Boards Job Boards . Required LinkedIn Please enter all relevant personal information in the fields below. First Name . Required Jane Quinn Last Name . Required Doe Middle Name Quinn Suffix (example: Sr, Jr, I, II, III) 100 Example St Street Address (line 1) . Required 100 Example St Address (line 2) City . Required San Jose Zip/Postal Code . Required 95126 You must select ALL possible values in the section Place of Residence. Place of Residence . Required Email Address . Required jane.doe@example.com Primary Number . Required Cellular Phone Cellular Number (555) 010-0199 Home Phone Number 555-010-0199 Work Phone Number" [ref=e168]':
+    - 'cell "Candidate Information Mandatory fields are marked with an asterisk. . Required Please indicate how you heard about this job. Source Type . Required Job Boards Job Boards . Required LinkedIn Please enter all relevant personal information in the fields below. First Name . Required Jane Quinn Last Name . Required Doe Middle Name Quinn Suffix (example: Sr, Jr, I, II, III) 100 Example St Street Address (line 1) . Required 100 Example St Address (line 2) City . Required San Jose Zip/Postal Code . Required 95126 You must select ALL possible values in the section Place of Residence. Place of Residence . Required Email Address . Required jane.doe@example.com Primary Number . Required Cellular Phone Cellular Number (555) 010-0199 Home Phone Number 555-010-0199 Work Phone Number" [ref=e169]':
+      - heading "Candidate Information" [level=1] [ref=e170]:
+        - generic [ref=e171]: Candidate Information
+      - generic [ref=e174]:
+  --
+              - generic "The field Last Name is mandatory." [ref=e213]:
+                - text: Last Name
+                - generic [ref=e216]: .
+                - generic [ref=e217]: Required
+              - textbox "Last Name . Required" [ref=e218]: Doe
+          - generic [ref=e219]:
+            - generic [ref=e220]:
+              - generic [ref=e221]: Middle Name
+"Street Address (line 1)": |-
+  - 'row "Candidate Information Mandatory fields are marked with an asterisk. . Required Please indicate how you heard about this job. Source Type . Required Job Boards Job Boards . Required LinkedIn Please enter all relevant personal information in the fields below. First Name . Required Jane Quinn Last Name . Required Doe Middle Name Quinn Suffix (example: Sr, Jr, I, II, III) 100 Example St Street Address (line 1) . Required 100 Example St Address (line 2) City . Required San Jose Zip/Postal Code . Required 95126 You must select ALL possible values in the section Place of Residence. Place of Residence . Required Email Address . Required jane.doe@example.com Primary Number . Required Cellular Phone Cellular Number (555) 010-0199 Home Phone Number 555-010-0199 Work Phone Number" [ref=e168]':
+    - 'cell "Candidate Information Mandatory fields are marked with an asterisk. . Required Please indicate how you heard about this job. Source Type . Required Job Boards Job Boards . Required LinkedIn Please enter all relevant personal information in the fields below. First Name . Required Jane Quinn Last Name . Required Doe Middle Name Quinn Suffix (example: Sr, Jr, I, II, III) 100 Example St Street Address (line 1) . Required 100 Example St Address (line 2) City . Required San Jose Zip/Postal Code . Required 95126 You must select ALL possible values in the section Place of Residence. Place of Residence . Required Email Address . Required jane.doe@example.com Primary Number . Required Cellular Phone Cellular Number (555) 010-0199 Home Phone Number 555-010-0199 Work Phone Number" [ref=e169]':
+      - heading "Candidate Information" [level=1] [ref=e170]:
+        - generic [ref=e171]: Candidate Information
+      - generic [ref=e174]:
+  --
+              - generic "The field Street Address (line 1) is mandatory." [ref=e232]:
+                - text: Street Address (line 1)
+                - generic [ref=e235]: .
+                - generic [ref=e236]: Required
+              - textbox "Street Address (line 1) . Required" [ref=e237]: 100 Example St
+            - generic [ref=e238]:
+              - generic [ref=e239]: Address (line 2)
+              - textbox "Address (line 2)" [ref=e242]
+"City": |-
+  - 'row "Candidate Information Mandatory fields are marked with an asterisk. . Required Please indicate how you heard about this job. Source Type . Required Job Boards Job Boards . Required LinkedIn Please enter all relevant personal information in the fields below. First Name . Required Jane Quinn Last Name . Required Doe Middle Name Quinn Suffix (example: Sr, Jr, I, II, III) 100 Example St Street Address (line 1) . Required 100 Example St Address (line 2) City . Required San Jose Zip/Postal Code . Required 95126 You must select ALL possible values in the section Place of Residence. Place of Residence . Required Email Address . Required jane.doe@example.com Primary Number . Required Cellular Phone Cellular Number (555) 010-0199 Home Phone Number 555-010-0199 Work Phone Number" [ref=e168]':
+    - 'cell "Candidate Information Mandatory fields are marked with an asterisk. . Required Please indicate how you heard about this job. Source Type . Required Job Boards Job Boards . Required LinkedIn Please enter all relevant personal information in the fields below. First Name . Required Jane Quinn Last Name . Required Doe Middle Name Quinn Suffix (example: Sr, Jr, I, II, III) 100 Example St Street Address (line 1) . Required 100 Example St Address (line 2) City . Required San Jose Zip/Postal Code . Required 95126 You must select ALL possible values in the section Place of Residence. Place of Residence . Required Email Address . Required jane.doe@example.com Primary Number . Required Cellular Phone Cellular Number (555) 010-0199 Home Phone Number 555-010-0199 Work Phone Number" [ref=e169]':
+      - heading "Candidate Information" [level=1] [ref=e170]:
+        - generic [ref=e171]: Candidate Information
+      - generic [ref=e174]:
+  --
+            - generic "The field City is mandatory." [ref=e244]:
+              - text: City
+              - generic [ref=e247]: .
+              - generic [ref=e248]: Required
+            - textbox "City . Required" [ref=e249]: San Jose
+          - generic [ref=e250]:
+            - generic "The field Zip/Postal Code is mandatory." [ref=e251]:
+              - text: Zip/Postal Code
+  --
+                - option "Holy See (Vatican City State)"
+                - option "Honduras"
+                - option "Hong Kong"
+                - option "Hungary"
+  --
+                - option "Crescent City"
+                - option "Cypress"
+                - option "Daly City"
+                - option "Downey"
+                - option "El Centro"
+                - option "Elk Grove"
+  --
+                - option "Redwood City"
+                - option "Richmond"
+                - option "Riverside"
+                - option "Roseville"
+  --
+                - option "Yuba City"
+          - generic [ref=e277]:
+            - generic "The field Email Address is mandatory." [ref=e278]:
+              - text: Email Address
+"Zip/Postal Code": |-
+  - 'row "Candidate Information Mandatory fields are marked with an asterisk. . Required Please indicate how you heard about this job. Source Type . Required Job Boards Job Boards . Required LinkedIn Please enter all relevant personal information in the fields below. First Name . Required Jane Quinn Last Name . Required Doe Middle Name Quinn Suffix (example: Sr, Jr, I, II, III) 100 Example St Street Address (line 1) . Required 100 Example St Address (line 2) City . Required San Jose Zip/Postal Code . Required 95126 You must select ALL possible values in the section Place of Residence. Place of Residence . Required Email Address . Required jane.doe@example.com Primary Number . Required Cellular Phone Cellular Number (555) 010-0199 Home Phone Number 555-010-0199 Work Phone Number" [ref=e168]':
+    - 'cell "Candidate Information Mandatory fields are marked with an asterisk. . Required Please indicate how you heard about this job. Source Type . Required Job Boards Job Boards . Required LinkedIn Please enter all relevant personal information in the fields below. First Name . Required Jane Quinn Last Name . Required Doe Middle Name Quinn Suffix (example: Sr, Jr, I, II, III) 100 Example St Street Address (line 1) . Required 100 Example St Address (line 2) City . Required San Jose Zip/Postal Code . Required 95126 You must select ALL possible values in the section Place of Residence. Place of Residence . Required Email Address . Required jane.doe@example.com Primary Number . Required Cellular Phone Cellular Number (555) 010-0199 Home Phone Number 555-010-0199 Work Phone Number" [ref=e169]':
+      - heading "Candidate Information" [level=1] [ref=e170]:
+        - generic [ref=e171]: Candidate Information
+      - generic [ref=e174]:
+  --
+            - generic "The field Zip/Postal Code is mandatory." [ref=e251]:
+              - text: Zip/Postal Code
+              - generic [ref=e254]: .
+              - generic [ref=e255]: Required
+            - textbox "Zip/Postal Code . Required" [ref=e256]: "95126"
+          - group "You must select ALL possible values in the section Place of Residence. Place of Residence . Required" [ref=e258]:
+            - generic [ref=e260]:
+              - img "You must select ALL possible values in the section Place of Residence." [ref=e262]
+"Country": |-
+  - generic [ref=e269]: Country
+  - combobox "Country" [ref=e270]:
+    - option "Not Specified"
+    - option "United States" [selected]
+    - option "Canada"
+"State/Province": |-
+  - generic [ref=e272]: State/Province
+  - combobox "State/Province" [ref=e273]:
+    - option "Not Specified"
+    - option "Alabama"
+    - option "Alaska"
+"Email Address": |-
+  - 'row "Candidate Information Mandatory fields are marked with an asterisk. . Required Please indicate how you heard about this job. Source Type . Required Job Boards Job Boards . Required LinkedIn Please enter all relevant personal information in the fields below. First Name . Required Jane Quinn Last Name . Required Doe Middle Name Quinn Suffix (example: Sr, Jr, I, II, III) 100 Example St Street Address (line 1) . Required 100 Example St Address (line 2) City . Required San Jose Zip/Postal Code . Required 95126 You must select ALL possible values in the section Place of Residence. Place of Residence . Required Email Address . Required jane.doe@example.com Primary Number . Required Cellular Phone Cellular Number (555) 010-0199 Home Phone Number 555-010-0199 Work Phone Number" [ref=e168]':
+    - 'cell "Candidate Information Mandatory fields are marked with an asterisk. . Required Please indicate how you heard about this job. Source Type . Required Job Boards Job Boards . Required LinkedIn Please enter all relevant personal information in the fields below. First Name . Required Jane Quinn Last Name . Required Doe Middle Name Quinn Suffix (example: Sr, Jr, I, II, III) 100 Example St Street Address (line 1) . Required 100 Example St Address (line 2) City . Required San Jose Zip/Postal Code . Required 95126 You must select ALL possible values in the section Place of Residence. Place of Residence . Required Email Address . Required jane.doe@example.com Primary Number . Required Cellular Phone Cellular Number (555) 010-0199 Home Phone Number 555-010-0199 Work Phone Number" [ref=e169]':
+      - heading "Candidate Information" [level=1] [ref=e170]:
+        - generic [ref=e171]: Candidate Information
+      - generic [ref=e174]:
+  --
+            - generic "The field Email Address is mandatory." [ref=e278]:
+              - text: Email Address
+              - generic [ref=e281]: .
+              - generic [ref=e282]: Required
+            - textbox "Email Address . Required" [ref=e283]: jane.doe@example.com
+          - generic [ref=e284]:
+            - generic "The field Primary Number is mandatory." [ref=e285]:
+              - text: Primary Number
+"Primary Number type": (no match)
+"Primary Number": |-
+  - 'row "Candidate Information Mandatory fields are marked with an asterisk. . Required Please indicate how you heard about this job. Source Type . Required Job Boards Job Boards . Required LinkedIn Please enter all relevant personal information in the fields below. First Name . Required Jane Quinn Last Name . Required Doe Middle Name Quinn Suffix (example: Sr, Jr, I, II, III) 100 Example St Street Address (line 1) . Required 100 Example St Address (line 2) City . Required San Jose Zip/Postal Code . Required 95126 You must select ALL possible values in the section Place of Residence. Place of Residence . Required Email Address . Required jane.doe@example.com Primary Number . Required Cellular Phone Cellular Number (555) 010-0199 Home Phone Number 555-010-0199 Work Phone Number" [ref=e168]':
+    - 'cell "Candidate Information Mandatory fields are marked with an asterisk. . Required Please indicate how you heard about this job. Source Type . Required Job Boards Job Boards . Required LinkedIn Please enter all relevant personal information in the fields below. First Name . Required Jane Quinn Last Name . Required Doe Middle Name Quinn Suffix (example: Sr, Jr, I, II, III) 100 Example St Street Address (line 1) . Required 100 Example St Address (line 2) City . Required San Jose Zip/Postal Code . Required 95126 You must select ALL possible values in the section Place of Residence. Place of Residence . Required Email Address . Required jane.doe@example.com Primary Number . Required Cellular Phone Cellular Number (555) 010-0199 Home Phone Number 555-010-0199 Work Phone Number" [ref=e169]':
+      - heading "Candidate Information" [level=1] [ref=e170]:
+        - generic [ref=e171]: Candidate Information
+      - generic [ref=e174]:
+  --
+            - generic "The field Primary Number is mandatory." [ref=e285]:
+              - text: Primary Number
+              - generic [ref=e288]: .
+              - generic [ref=e289]: Required
+            - combobox "Primary Number . Required" [ref=e290]:
+              - option "Not Specified"
+              - option "Home Phone"
+              - option "Work Phone"

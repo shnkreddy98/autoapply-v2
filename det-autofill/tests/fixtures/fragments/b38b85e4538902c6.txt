@@ -1,0 +1,6 @@
+"Autofill with Resume": |-
+        - paragraph [ref=e364]: For the best applicant experience, we encourage you to use the "Autofill with Resume" option to apply.
+        - button "Autofill with Resume" [ref=e368] [cursor=pointer]
+        - button "Apply Manually" [ref=e372] [cursor=pointer]
+        - button "Use My Last Application" [ref=e377] [cursor=pointer]
+  ```

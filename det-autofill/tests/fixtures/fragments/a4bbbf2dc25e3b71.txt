@@ -1,0 +1,13 @@
+"future require sponsorship for employment visa status?": |-
+          - generic [ref=e1729]: Will you now or in the future require sponsorship for employment visa status?
+        - generic [ref=e1731]:
+          - generic [ref=e1733]:
+            - generic [ref=e1734]: Will you now or in the future require sponsorship for employment visa status?
+            - text: "*"
+          - generic [ref=e1735]:
+            - generic [ref=e1739]:
+  --
+              - generic [ref=e1838]: "'Will you now or in the future require sponsorship for employment visa status?' is required."
+  - listitem [ref=e1752]:
+    - generic [ref=e1755]:
+      - generic [ref=e1757]:

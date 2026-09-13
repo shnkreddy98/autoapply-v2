@@ -1,0 +1,60 @@
+"Education (2)": |-
+  - group "Education (2)" [ref=e254]:
+    - generic [ref=e255]: Education (2)
+    - text: 
+    - generic [ref=e256]:
+      - generic [ref=e258]: School
+"Degree": |-
+    - generic [ref=e232]: Degree
+    - generic [ref=e233]:
+      - generic [ref=e234]: Degree
+      - option "MS" [selected]
+      - combobox "Degree" [ref=e235] [cursor=pointer]:
+        - generic [ref=e236]: MS
+  - generic [ref=e239]:
+    - generic [ref=e241]: Major
+  --
+    - generic [ref=e263]: Degree
+    - generic [ref=e264]:
+      - generic [ref=e265]: Degree
+      - option [selected]
+      - combobox "Degree" [ref=e266] [cursor=pointer]:
+        - generic [ref=e267]: — Make a Selection —
+  - generic [ref=e270]:
+    - generic [ref=e272]: Major
+  --
+      - generic [ref=e297]: Degree
+      - generic [ref=e298]:
+        - generic [ref=e299]: Degree
+        - option [selected]
+        - combobox "Degree" [ref=e300] [cursor=pointer]:
+          - generic [ref=e301]: — Make a Selection —
+    - generic [ref=e304]:
+      - generic [ref=e306]: Major
+"Major": |-
+    - generic [ref=e241]: Major
+    - generic [ref=e242]:
+      - generic [ref=e243]: Major
+      - option "Computer Science" [selected]
+      - combobox "Major" [active] [ref=e244] [cursor=pointer]:
+        - generic [ref=e245]: Computer Science
+  - generic [ref=e248]:
+    - generic [ref=e250]: Did You Graduate?
+  --
+    - generic [ref=e272]: Major
+    - generic [ref=e273]:
+      - generic [ref=e274]: Major
+      - option [selected]
+      - combobox "Major" [ref=e275] [cursor=pointer]:
+        - generic [ref=e276]: — Make a Selection —
+  - generic [ref=e279]:
+    - generic [ref=e281]: Did You Graduate?
+  --
+      - generic [ref=e306]: Major
+      - generic [ref=e307]:
+        - generic [ref=e308]: Major
+        - option "Computer Science" [selected]
+        - combobox "Major" [ref=e309] [cursor=pointer]:
+          - generic [ref=e310]: Computer Science
+    - generic [ref=e313]:
+      - generic [ref=e315]: Did You Graduate?

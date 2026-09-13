@@ -1,0 +1,13 @@
+"I wish to identify myself as:*": |-
+        - generic [ref=e1835]: I wish to identify myself as:*
+        - 'button "I wish to identify myself as: Male Required" [ref=e1899]': Male
+      - generic [ref=e1840]:
+        - generic [ref=e1842]: I wish to identify myself as:*
+        - 'button "I wish to identify myself as: Asian / Asian Indian (United States of America) Required" [active] [ref=e1921]': Asian / Asian Indian (United States of America)
+      - generic [ref=e1847]:
+        - generic [ref=e1848]: Please indicate Hispanic/Latino below.
+  --
+        - generic [ref=e1855]: I wish to identify myself as:*
+        - 'button "I wish to identify myself as: Select One Required" [ref=e1859]': Select One
+  - group "Terms and Conditions" [ref=e1860]:
+    - heading "Terms and Conditions" [level=4] [ref=e1861]

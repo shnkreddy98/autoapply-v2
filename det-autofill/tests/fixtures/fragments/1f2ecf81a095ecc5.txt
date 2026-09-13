@@ -1,0 +1,45 @@
+"Apply": |-
+    - button "Apply" [ref=f103e18] [cursor=pointer]
+  - generic [ref=f103e20]:
+    - heading "Staff Sales Analytics Engineer" [level=2] [ref=f103e21]:
+      - strong [ref=f103e22]: Staff Sales Analytics Engineer
+  --
+      - heading "Apply for this job" [level=2] [ref=f103e104]
+      - generic [ref=f103e105]:
+        - paragraph [ref=f103e107]: "*"
+        - paragraph [ref=f103e108]: indicates a required field
+    - button "Quick Apply with MyGreenhouse" [ref=f103e111] [cursor=pointer]
+  - generic [ref=f103e112]:
+    - generic [ref=f103e113]:
+      - generic [ref=f103e116]:
+  --
+          - paragraph [ref=f103e308]: When you apply to a job on this site, the personal data contained in your application will be collected by Butterfly Network, Inc. (“Controller”), which is located at 530 Whitfield Street Guilford CT 06437 and can be contacted by emailing recruiting@butterflynetinc.com. Controller’s data protection officer is Dalini Khemlani, who can be contacted at dpo@butterflynetinc.com. Your personal data will be processed for the purposes of managing Controller’s recruitment related activities, which include setting up and conducting interviews and tests for applicants, evaluating and assessing the results thereto, and as is otherwise needed in the recruitment and hiring processes. Such processing is legally permissible under Art. 6(1)(f) of Regulation (EU) 2016/679 (General Data Protection Regulation) as necessary for the purposes of the legitimate interests pursued by the Controller, which are the solicitation, evaluation, and selection of applicants for employment.
+          - paragraph [ref=f103e309]: Your personal data will be shared with Greenhouse Software, Inc., a cloud services provider located in the United States of America and engaged by Controller to help manage its recruitment and hiring process on Controller’s behalf. Accordingly, if you are located outside of the United States, your personal data will be transferred to the United States once you submit it through this site. Because the European Union Commission has determined that United States data privacy laws do not ensure an adequate level of protection for personal data collected from EU data subjects, the transfer will be subject to appropriate additional safeguards under the standard contractual clauses]. You can obtain a copy of the standard contractual clauses by contacting us at recruiting@butterflynetinc.com.
+          - paragraph [ref=f103e310]: Your personal data will be retained by Controller as long as Controller determines it is necessary to evaluate your application for employment. Under the GDPR, you have the right to request access to your personal data, to request that your personal data be rectified or erased, and to request that processing of your personal data be restricted. You also have to right to data portability. In addition, you may lodge a complaint with an EU supervisory authority.
+          - paragraph [ref=f103e311]:
+"First Name": |-
+    - generic [ref=f103e117]: First Name*
+    - textbox "First Name" [ref=f103e118]
+  - generic [ref=f103e121]:
+    - generic [ref=f103e122]: Last Name*
+    - textbox "Last Name" [ref=f103e123]
+"Resume/CV": |-
+  - group "Resume/CV*" [ref=f103e167]:
+    - generic [ref=f103e168]: Resume/CV*
+    - generic [ref=f103e170]:
+      - generic [ref=f103e172]:
+        - button "Attach" [ref=f103e173] [cursor=pointer]
+"Attach": |-
+    - button "Attach" [ref=f103e173] [cursor=pointer]
+    - generic [ref=f103e174]: Attach
+    - button "Attach" [ref=f103e175]
+  - button "Dropbox" [ref=f103e177] [cursor=pointer]
+  - generic [ref=f103e179]:
+    - button "Enter manually" [ref=f103e180] [cursor=pointer]
+  --
+    - button "Attach" [ref=f103e190] [cursor=pointer]
+    - generic [ref=f103e191]: Attach
+    - button "Attach" [ref=f103e192]
+  - button "Dropbox" [ref=f103e194] [cursor=pointer]
+  - generic [ref=f103e196]:
+    - button "Enter manually" [ref=f103e197] [cursor=pointer]

@@ -1,0 +1,116 @@
+"First Name": |-
+    - generic [ref=f94e117]: First Name*
+    - textbox "First Name" [ref=f94e118]: Jane Quinn
+  - generic [ref=f94e121]:
+    - generic [ref=f94e122]: Last Name*
+    - textbox "Last Name" [ref=f94e123]: Doe
+"Last Name": |-
+    - generic [ref=f94e122]: Last Name*
+    - textbox "Last Name" [ref=f94e123]: Doe
+  - generic [ref=f94e126]:
+    - generic [ref=f94e127]: Email*
+    - textbox "Email" [ref=f94e128]: jane.doe@example.com
+"Email": |-
+        - paragraph [ref=f94e97]: Interested in building your career at Butterfly Network? Get future opportunities sent straight to your email.
+        - link "Create alert" [ref=f94e443] [cursor=pointer]:
+          - /url: https://my.greenhouse.io/users/sign_in?job_board=butterflynetwork&source=job_alert_post
+  - separator [ref=f94e99]
+  --
+          - generic [ref=f94e127]: Email*
+          - textbox "Email" [ref=f94e128]: jane.doe@example.com
+        - group "Phone" [ref=f94e130]:
+          - generic [ref=f94e131]: Phone
+          - generic [ref=f94e134]:
+  --
+            - paragraph [ref=f94e308]: When you apply to a job on this site, the personal data contained in your application will be collected by Butterfly Network, Inc. (“Controller”), which is located at 530 Whitfield Street Guilford CT 06437 and can be contacted by emailing recruiting@butterflynetinc.com. Controller’s data protection officer is Dalini Khemlani, who can be contacted at dpo@butterflynetinc.com. Your personal data will be processed for the purposes of managing Controller’s recruitment related activities, which include setting up and conducting interviews and tests for applicants, evaluating and assessing the results thereto, and as is otherwise needed in the recruitment and hiring processes. Such processing is legally permissible under Art. 6(1)(f) of Regulation (EU) 2016/679 (General Data Protection Regulation) as necessary for the purposes of the legitimate interests pursued by the Controller, which are the solicitation, evaluation, and selection of applicants for employment.
+            - paragraph [ref=f94e309]: Your personal data will be shared with Greenhouse Software, Inc., a cloud services provider located in the United States of America and engaged by Controller to help manage its recruitment and hiring process on Controller’s behalf. Accordingly, if you are located outside of the United States, your personal data will be transferred to the United States once you submit it through this site. Because the European Union Commission has determined that United States data privacy laws do not ensure an adequate level of protection for personal data collected from EU data subjects, the transfer will be subject to appropriate additional safeguards under the standard contractual clauses]. You can obtain a copy of the standard contractual clauses by contacting us at recruiting@butterflynetinc.com.
+            - paragraph [ref=f94e310]: Your personal data will be retained by Controller as long as Controller determines it is necessary to evaluate your application for employment. Under the GDPR, you have the right to request access to your personal data, to request that your personal data be rectified or erased, and to request that processing of your personal data be restricted. You also have to right to data portability. In addition, you may lodge a complaint with an EU supervisory authority.
+            - paragraph [ref=f94e311]:
+"Phone": |-
+  - group "Phone" [ref=f94e130]:
+    - generic [ref=f94e131]: Phone
+    - generic [ref=f94e134]:
+      - generic [ref=f94e135]: Country*
+      - generic [ref=f94e136]:
+  --
+      - generic [ref=f94e151]: Phone*
+      - textbox "Phone" [ref=f94e152]: +1 555-010-0199
+  - generic [ref=f94e153]:
+    - generic [ref=f94e155]:
+      - generic [ref=f94e156]: Location (City)*
+"Location (City)": |-
+      - generic [ref=f94e156]: Location (City)*
+      - generic [ref=f94e157]:
+        - log [ref=f94e159]
+        - combobox "Location (City)" [ref=f94e164]
+        - textbox
+    - button "Locate me" [ref=f94e165] [cursor=pointer]
+  - group "Resume/CV*" [ref=f94e167]:
+"LinkedIn Profile": |-
+    - generic [ref=f94e248]: LinkedIn Profile*
+    - textbox "LinkedIn Profile" [ref=f94e249]: https://www.linkedin.com/in/janedoe
+  - generic [ref=f94e252]:
+    - generic [ref=f94e253]: Are you currently located in NYC and willing to commute to the office 2-3 days a week? *
+    - textbox "Are you currently located in NYC and willing to commute to the office 2-3 days a week?" [ref=f94e254]: No, I am currently based in San Jose, CA, but I am willing to relocate.
+"why you are interested": |-
+    - generic [ref=f94e243]: In 2-4 sentences, describe why you are interested in working at Butterfly Network. *
+    - textbox "In 2-4 sentences, describe why you are interested in working at Butterfly Network." [ref=f94e244]: I am highly interested in Butterfly Network because of your mission to democratize healthcare through accessible imaging. As a Data Engineer with over 5 years of experience building high-throughput data platforms, I am eager to apply my skills in AWS, Spark, and Kafka to help scale the analytics that power such life-saving technology.
+  - generic [ref=f94e247]:
+    - generic [ref=f94e248]: LinkedIn Profile*
+    - textbox "LinkedIn Profile" [ref=f94e249]: https://www.linkedin.com/in/janedoe
+"visa sponsorship": |-
+  - generic [ref=f94e258]: Will you now or in the future require visa sponsorship for employment at Butterfly Network?*
+  - generic [ref=f94e259]:
+    - log [ref=f94e261]: 2 results available.Use Up and Down to choose options, press Enter to select the currently focused option, press Escape to exit the menu, press Tab to select the option and exit the menu.
+    - generic [ref=f94e263]:
+  --
+        - combobox "Will you now or in the future require visa sponsorship for employment at Butterfly Network?" [expanded] [active] [ref=f94e267]
+      - button "Toggle flyout" [ref=f94e269] [cursor=pointer]:
+        - img [ref=f94e270]
+    - listbox [ref=f94e466]:
+"NYC": |-
+    - img "The sitting area of Butterfly Network HQ in NYC" [ref=e73]
+  - generic [ref=e77]:
+    - heading "Driven by purpose." [level=2] [ref=e78]
+    - paragraph [ref=e79]:
+  --
+              - paragraph [ref=f94e79]: Our estimated salary for this role based NYC is between $160,000 - $170,000 + bonus + equity + benefits. Actual pay is determined by multiple factors such as skills, qualifications, experience and market demand.
+              - paragraph [ref=f94e80]:
+                - emphasis [ref=f94e81]: For this role, we are only considering candidates who are legally authorized to work in the United States and who do not now or in the future require sponsorship for employment visa status.
+              - paragraph [ref=f94e82]:
+  --
+                  - generic [ref=f94e253]: Are you currently located in NYC and willing to commute to the office 2-3 days a week? *
+                  - textbox "Are you currently located in NYC and willing to commute to the office 2-3 days a week?" [ref=f94e254]: No, I am currently based in San Jose, CA, but I am willing to relocate.
+                - generic [ref=f94e257]:
+                  - generic [ref=f94e258]: Will you now or in the future require visa sponsorship for employment at Butterfly Network?*
+                  - generic [ref=f94e259]:
+"European Union": |-
+  - generic [ref=f94e275]: Are you currently a resident of the European Union?*
+  - generic [ref=f94e276]:
+    - log [ref=f94e278]
+    - generic [ref=f94e280]:
+  --
+        - combobox "Are you currently a resident of the European Union?" [ref=f94e284]
+      - button "Toggle flyout" [ref=f94e286] [cursor=pointer]:
+        - img [ref=f94e287]
+    - textbox
+  --
+    - paragraph [ref=f94e309]: Your personal data will be shared with Greenhouse Software, Inc., a cloud services provider located in the United States of America and engaged by Controller to help manage its recruitment and hiring process on Controller’s behalf. Accordingly, if you are located outside of the United States, your personal data will be transferred to the United States once you submit it through this site. Because the European Union Commission has determined that United States data privacy laws do not ensure an adequate level of protection for personal data collected from EU data subjects, the transfer will be subject to appropriate additional safeguards under the standard contractual clauses]. You can obtain a copy of the standard contractual clauses by contacting us at recruiting@butterflynetinc.com.
+    - paragraph [ref=f94e310]: Your personal data will be retained by Controller as long as Controller determines it is necessary to evaluate your application for employment. Under the GDPR, you have the right to request access to your personal data, to request that your personal data be rectified or erased, and to request that processing of your personal data be restricted. You also have to right to data portability. In addition, you may lodge a complaint with an EU supervisory authority.
+    - paragraph [ref=f94e311]:
+      - link "Butterfly Network Global Privacy" [ref=f94e312] [cursor=pointer]:
+"GDPR": |-
+  - generic [ref=f94e292]: GDPR Notice for EU Residents*
+  - generic [ref=f94e293]:
+    - log [ref=f94e295]
+    - generic [ref=f94e297]:
+  --
+        - combobox "GDPR Notice for EU Residents" [ref=f94e301]
+      - button "Toggle flyout" [ref=f94e303] [cursor=pointer]:
+        - img [ref=f94e304]
+    - textbox
+  --
+  - paragraph [ref=f94e310]: Your personal data will be retained by Controller as long as Controller determines it is necessary to evaluate your application for employment. Under the GDPR, you have the right to request access to your personal data, to request that your personal data be rectified or erased, and to request that processing of your personal data be restricted. You also have to right to data portability. In addition, you may lodge a complaint with an EU supervisory authority.
+  - paragraph [ref=f94e311]:
+    - link "Butterfly Network Global Privacy" [ref=f94e312] [cursor=pointer]:
+      - /url: https://www.butterflynetwork.com/global-privacy

@@ -1,0 +1,41 @@
+"First Name": |-
+  - textbox "First Name*" [ref=e22]: Jane Quinn
+  - textbox "Middle Name" [ref=e25]
+  - textbox "Last Name*" [ref=e28]: Doe
+  - textbox "Email*" [ref=e31]: jane.doe@example.com
+"Last Name": |-
+    - textbox "Last Name*" [ref=e28]: Doe
+    - textbox "Email*" [ref=e31]: jane.doe@example.com
+    - textbox "Phone*" [ref=e34]: "5550100199"
+  - generic [ref=e35]:
+"Email": |-
+    - textbox "Email*" [ref=e31]: jane.doe@example.com
+    - textbox "Phone*" [ref=e34]: "5550100199"
+  - generic [ref=e35]:
+    - generic [ref=e37]:
+"Phone": |-
+    - textbox "Phone*" [ref=e34]: "5550100199"
+  - generic [ref=e35]:
+    - generic [ref=e37]:
+      - spinbutton [invalid] [ref=e38]
+"City": |-
+  - textbox "City*" [ref=e41]: San Jose
+  - textbox "State*" [ref=e44]: CA
+  - combobox [disabled] [ref=e47]:
+    - option "How did you find this position?*"
+"State": |-
+  - textbox "State*" [ref=e44]: CA
+  - combobox [disabled] [ref=e47]:
+    - option "How did you find this position?*"
+    - option "Internal Job Application"
+  --
+    - option "State Employment Office"
+    - option "Employee Referral"
+    - option "Referral – Non Employee"
+    - option "Other"
+"I have read and agree": |-
+          - checkbox "I have read and agree to the Terms & Conditions and Data Privacy Policy. I confirm that the information provided is true, complete, accurate, and I understand that any false or misleading details may result in disqualification or termination of employment. I also consent to the verification of my information through lawful checks." [ref=e79]
+          - text: I have read and agree to the Terms & Conditions and Data Privacy Policy. I confirm that the information provided is true, complete, accurate, and I understand that any false or misleading details may result in disqualification or termination of employment. I also consent to the verification of my information through lawful checks.
+        - button "APPLY NOW" [ref=e81] [cursor=pointer]
+  - generic [ref=e83]:
+    - generic [ref=e85]:

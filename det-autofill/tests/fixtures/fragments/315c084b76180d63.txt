@@ -1,0 +1,5 @@
+"Start typing...": |-
+      - combobox "Start typing..." [ref=e492] [cursor=pointer]: San Jose, California, United States
+      - button [ref=e493] [cursor=pointer]:
+        - img [ref=e494]
+  - generic [ref=e496]:

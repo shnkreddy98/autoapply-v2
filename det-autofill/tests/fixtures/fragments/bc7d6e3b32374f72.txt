@@ -1,0 +1,23 @@
+"Submit": |-
+                  - listitem [ref=e61]: If you need to make changes to your name, please go to the My presence page before submitting your application.
+              - generic [ref=e62]:
+                - generic [ref=e63]: Email
+                - text: jane.doe@example.com
+  --
+                  - group "*Are you under the age 18? If yes, you will be required to submit a work permit." [ref=e354]:
+                    - generic [ref=e355]: "*Are you under the age 18? If yes, you will be required to submit a work permit."
+                    - generic [ref=e358] [cursor=pointer]:
+                      - radio "Yes" [ref=e359]
+                      - text: "Yes"
+  --
+                      - paragraph [ref=e590]: Submission of this information is voluntary and refusal to provide it will not subject you to any adverse treatment. The information provided will be used only in ways that are not inconsistent with the Vietnam Era Veterans' Readjustment Assistance Act of 1974, as amended. The information you submit will be kept confidential and separate from other application materials and may only be used in accordance with applicable federal, state, and local laws and regulations.
+                    - generic [ref=e593]:
+                      - generic [ref=e594]: "*Are you a protected veteran?"
+                      - combobox "*Are you a protected veteran?" [ref=e595]:
+  --
+            - button "Submit" [ref=e688] [cursor=pointer]:
+              - generic [ref=e689]:
+                - generic:  Submit
+            - link "Cancel" [ref=e690] [cursor=pointer]:
+              - /url: /CAP1015CCFC/JobBoard/6f4434b4-0b72-4e52-b60d-afcc1a963060/OpportunityDetail?opportunityId=06415c17-c63b-42cb-b2d3-61edd586fb23
+  - contentinfo [ref=e691]:

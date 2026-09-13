@@ -1,0 +1,44 @@
+"State": |-
+              - option "United States" [selected]
+              - combobox "Country" [ref=e201] [cursor=pointer]:
+                - generic [ref=e202]: United States
+          - generic [ref=e205]:
+            - generic [ref=e206]:
+              - generic [ref=e207]: State/Province
+              - generic [ref=e208]:
+                - text: "*"
+                - generic [ref=e209]: required.
+  --
+              - combobox "State/Province" [ref=e211] [cursor=pointer]:
+                - generic [ref=e212]: California
+        - button "Add More (Addresses)" [ref=e218] [cursor=pointer]
+  - group [ref=e219]:
+  --
+          - textbox "School" [ref=e229]: San Jose State University
+        - generic [ref=e230]:
+          - generic [ref=e232]: Degree
+          - generic [ref=e233]:
+  --
+          - generic [ref=e343]: State
+          - generic [ref=e344]:
+            - option "California" [selected]
+            - combobox "State" [ref=e345] [cursor=pointer]:
+              - generic [ref=e346]: California
+        - generic [ref=e349]:
+          - generic [ref=e351]: Title
+  --
+          - generic [ref=e409]: State
+          - generic [ref=e410]:
+            - option [selected]
+            - combobox "State" [ref=e411] [cursor=pointer]:
+              - generic [ref=e412]: — Make a Selection —
+        - generic [ref=e415]:
+          - generic [ref=e417]: Title
+  --
+            - generic [ref=e478]: State
+            - generic [ref=e479]:
+              - option [selected]
+              - combobox "State" [ref=e480] [cursor=pointer]:
+                - generic [ref=e481]: — Make a Selection —
+          - generic [ref=e484]:
+            - generic [ref=e486]: Title

@@ -1,0 +1,5 @@
+"No, I do not have a disability and have not had one in the past": |-
+          - option "No, I do not have a disability and have not had one in the past" [ref=e956]
+          - option "I do not want to answer" [ref=e957]
+    - paragraph [ref=e791]: "PUBLIC BURDEN STATEMENT: According to the Paperwork Reduction Act of 1995 no persons are required to respond to a collection of information unless such collection displays a valid OMB control number. This survey should take about 5 minutes to complete."
+  - button "Submit application" [ref=e793] [cursor=pointer]

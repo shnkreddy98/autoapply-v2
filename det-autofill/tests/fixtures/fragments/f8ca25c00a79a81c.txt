@@ -1,0 +1,26 @@
+"Location (City)": |-
+      - generic [ref=f13e139]: Location (City)*
+      - generic [ref=f13e140]:
+        - log [ref=f13e142]
+        - combobox "Location (City)" [ref=f13e147]
+        - textbox
+    - button "Locate me" [ref=f13e148] [cursor=pointer]
+  - group "Resume/CV*" [ref=f13e150]:
+"GitHub Profile": (no match)
+"Will you now or in the future require visa sponsorship": (no match)
+"Are you legally authorized to work in the United States": (no match)
+"gender": |-
+      - text: ". We welcome all qualified applicants and ensure fair consideration for employment without discrimination based on any legally protected characteristics, including, but not limited to: veteran status, uniformed service member status, race, color, religion, sex, sexual orientation, gender identity, age, pregnancy (including childbirth, lactation and related medical conditions), national origin or ancestry, citizenship or immigration status, physical or mental disability, genetic information (including testing and characteristics) or any other category protected by federal, state or local law (collectively, \"protected characteristics\"). Our commitment to equal opportunity employment applies to all persons involved in our operations and prohibits unlawful discrimination by any employee, including supervisors and co-workers."
+  - paragraph [ref=f13e65]:
+    - generic [ref=f13e66]:
+      - text: Qventus participates in the
+"race": |-
+      - text: ". We welcome all qualified applicants and ensure fair consideration for employment without discrimination based on any legally protected characteristics, including, but not limited to: veteran status, uniformed service member status, race, color, religion, sex, sexual orientation, gender identity, age, pregnancy (including childbirth, lactation and related medical conditions), national origin or ancestry, citizenship or immigration status, physical or mental disability, genetic information (including testing and characteristics) or any other category protected by federal, state or local law (collectively, \"protected characteristics\"). Our commitment to equal opportunity employment applies to all persons involved in our operations and prohibits unlawful discrimination by any employee, including supervisors and co-workers."
+  - paragraph [ref=f13e65]:
+    - generic [ref=f13e66]:
+      - text: Qventus participates in the
+"veteran status": |-
+      - text: ". We welcome all qualified applicants and ensure fair consideration for employment without discrimination based on any legally protected characteristics, including, but not limited to: veteran status, uniformed service member status, race, color, religion, sex, sexual orientation, gender identity, age, pregnancy (including childbirth, lactation and related medical conditions), national origin or ancestry, citizenship or immigration status, physical or mental disability, genetic information (including testing and characteristics) or any other category protected by federal, state or local law (collectively, \"protected characteristics\"). Our commitment to equal opportunity employment applies to all persons involved in our operations and prohibits unlawful discrimination by any employee, including supervisors and co-workers."
+  - paragraph [ref=f13e65]:
+    - generic [ref=f13e66]:
+      - text: Qventus participates in the

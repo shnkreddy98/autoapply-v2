@@ -1,0 +1,10 @@
+"Apply": |-
+    - button "Apply" [ref=e41] [cursor=pointer]
+  - generic [ref=e42]:
+    - generic [ref=e43]:
+      - generic [ref=e51]:
+  --
+          - paragraph [ref=e158]: Physical activities that apply to the essential functions of the position are balancing, stooping, kneeling, crouching, reaching, pushing, pulling, lifting, grasping, talking, hearing, and repetitive motions.
+        - listitem [ref=e159]:
+          - paragraph [ref=e160]: Hearing sufficient to hear conversational levels in person, via videoconference and over the telephone.
+        - listitem [ref=e161]:

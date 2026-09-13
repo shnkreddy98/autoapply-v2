@@ -1,0 +1,6 @@
+"I don't wish to answer": |-
+      - option "I don't wish to answer" [ref=e1258] [cursor=pointer]:
+        - menuitem "I don't wish to answer" [ref=e1259]
+      - option "Not Hispanic/Latino" [ref=e1260] [cursor=pointer]:
+        - menuitem "Not Hispanic/Latino" [ref=e1261]
+  - button "Ethnicity" [ref=e861] [cursor=pointer]:

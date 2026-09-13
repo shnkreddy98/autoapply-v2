@@ -1,0 +1,6 @@
+"\"Yes\"": |-
+        - option "Yes" [ref=e1190] [cursor=pointer]:
+          - menuitem "Yes" [ref=e1191]
+    - button "Legal Authorization to Work:" [ref=e203] [cursor=pointer]:
+      - generic [ref=e204]: 
+  - generic [ref=e205]:

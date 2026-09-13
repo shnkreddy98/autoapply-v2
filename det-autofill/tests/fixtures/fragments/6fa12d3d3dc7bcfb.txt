@@ -1,0 +1,43 @@
+"Education": |-
+  - generic [ref=e134]: Education
+  - generic [ref=e136]: Click arrow to expand. Mandatory information inside.
+  - button "" [ref=e138] [cursor=pointer]:
+    - generic [ref=e139]: 
+"Work History": |-
+  - generic "Work History" [ref=e141]:
+    - generic [ref=e142]: Work History
+    - generic [ref=e144]: Click arrow to expand. Mandatory information inside.
+    - button "" [ref=e146] [cursor=pointer]:
+      - generic [ref=e147]: 
+"Password": |-
+    - generic [ref=e192]: To Apply, please set your Password
+    - generic [ref=e194]:
+      - text: "Your password must:"
+      - blockquote [ref=e195]: "- Have at least 8 characters"
+      - blockquote [ref=e196]: "- Have at least one number"
+      - blockquote [ref=e197]: "- Have less than 4 sequential letters"
+  --
+    - generic [ref=e201]: Password *
+    - textbox "Password" [ref=e202]:
+      - /placeholder: ""
+  - generic [ref=e203]:
+    - generic [ref=e204]: Password confirmation *
+    - textbox "Password confirmation" [ref=e205]:
+      - /placeholder: ""
+  - group [ref=e208]:
+    - generic [ref=e209]:
+"Password confirmation": |-
+    - generic [ref=e204]: Password confirmation *
+    - textbox "Password confirmation" [ref=e205]:
+      - /placeholder: ""
+  - group [ref=e208]:
+    - generic [ref=e209]:
+"Would you like to receive text messages": |-
+      - text: Would you like to receive text messages from USI Insurance Services regarding your job application (e.g., interview scheduling and hiring updates)? *
+      - generic [ref=e279]: Select an option
+    - generic [ref=e177]:
+      - combobox [ref=e280]
+      - combobox "Would you like to receive text messages from USI Insurance Services regarding your job application (e.g., interview scheduling and hiring updates)?" [ref=e283] [cursor=pointer]:
+        - textbox [ref=e284]
+  - generic [ref=e184]:
+    - generic [ref=e185]: If you select "Yes", you consent to receive text messages from USI Insurance Services and its subsidiaries regarding your job application at the phone number you provided.

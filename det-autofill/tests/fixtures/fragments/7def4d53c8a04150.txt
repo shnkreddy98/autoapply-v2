@@ -1,0 +1,49 @@
+"Email": |-
+      - text: Email*
+      - textbox "Email*" [ref=e26]:
+        - /placeholder: Email Address*
+  - generic [ref=e27]:
+    - generic [ref=e29]:
+      - text: First Name*
+"First Name": |-
+    - text: First Name*
+    - textbox "First Name*" [ref=e31]
+  - generic [ref=e33]:
+    - text: Last Name*
+    - textbox "Last Name*" [ref=e35]
+"Last Name": |-
+      - text: Last Name*
+      - textbox "Last Name*" [ref=e35]
+  - generic [ref=e36]:
+    - generic [ref=e38]:
+      - text: Primary Phone*
+"Primary Phone": |-
+    - text: Primary Phone*
+    - textbox "Primary Phone*" [ref=e40]:
+      - /placeholder: 1 XXX XXX XXXX*
+  - generic [ref=e42]:
+    - text: Can CFS reach out via SMS regarding your application?*
+"YES": |-
+        - option "'Yes' to opt in, or 'No' to decline.*" [selected]
+        - option "YES"
+        - option "NO"
+  - generic [ref=e45]:
+    - generic [ref=e47]:
+"Your Current City": |-
+    - text: Your Current City*
+    - textbox "Your Current City*" [ref=e49]:
+      - /placeholder: City*
+  - generic [ref=e51]:
+    - text: Your Current State*
+"Your Current State": |-
+  - text: Your Current State*
+  - combobox "Your Current State*" [ref=e54]:
+    - option "State*" [selected]
+    - option "ALABAMA"
+    - option "ALASKA"
+"Your Current Job Title": |-
+                - text: Your Current Job Title*
+                - textbox "Your Current Job Title*" [ref=e58]:
+                  - /placeholder: Title*
+          - button "SUBMIT" [ref=e60] [cursor=pointer]
+  ```

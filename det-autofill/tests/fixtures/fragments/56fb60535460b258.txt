@@ -1,0 +1,19 @@
+"Education 1": |-
+  - group "Education 1" [ref=e1483]:
+    - generic [ref=e1484]:
+      - heading "Education 1" [level=5] [ref=e1485]
+      - button "Delete" [ref=e1486] [cursor=pointer]: Delete
+    - generic [ref=e1492]:
+      - generic [ref=e1493]:
+        - generic [ref=e1495]: School or University*
+        - generic [ref=e1500] [cursor=pointer]:
+          - generic:
+            - textbox "School or University" [ref=e1501]:
+              - /placeholder: Search
+            - generic [ref=e1502]: 1 item selected, San Jose State University
+          - listbox "items selected" [ref=e1504]:
+            - option "San Jose State University, press delete to clear value." [ref=e1505]:
+              - paragraph [ref=e1510]: San Jose State University
+      - generic [ref=e1514]:
+        - generic [ref=e1516]: Degree*
+        - button "Degree Select One Required" [ref=e1520]: Select One

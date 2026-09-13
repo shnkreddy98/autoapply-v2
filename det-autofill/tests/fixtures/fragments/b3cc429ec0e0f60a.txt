@@ -1,0 +1,41 @@
+"San Jose State University (SJSU)": |-
+        - row "San Jose State University (SJSU) University California" [ref=e114]:
+          - cell "San Jose State University (SJSU)" [ref=e115]:
+            - radio "San Jose State University (SJSU)" [ref=e116]
+          - cell "San Jose State University (SJSU)" [ref=e117]:
+            - generic [ref=e118]: San Jose State University (SJSU)
+          - cell "University" [ref=e120]: University
+          - cell "California" [ref=e122]: California
+  - table [ref=e125]:
+"Select": |-
+  - Page Title: Institution Selector
+  ### Snapshot
+  ```yaml
+  - generic [active] [ref=e1]:
+  --
+              - button "Select" [ref=e41] [cursor=pointer]
+              - button "Cancel" [ref=e42] [cursor=pointer]
+            - table [ref=e43]:
+              - rowgroup [ref=e44]:
+                - row "Institution Selector This page allows you to select an institution from the list of available institutions. Refine by Keyword is San Jose State University Refresh Institutions 1-1 out of 1 << < 1 > >> This page allows you to select an institution from the list of available institutions. 1-1 out of 1 << < 1 > >>" [ref=e45]:
+                  - cell "Institution Selector This page allows you to select an institution from the list of available institutions. Refine by Keyword is San Jose State University Refresh Institutions 1-1 out of 1 << < 1 > >> This page allows you to select an institution from the list of available institutions. 1-1 out of 1 << < 1 > >>" [ref=e46]:
+                    - heading "Institution Selector" [level=1] [ref=e47]: Institution Selector
+                    - generic [ref=e49]: This page allows you to select an institution from the list of available institutions.
+                    - generic [ref=e50]:
+                      - generic [ref=e51]:
+                        - generic [ref=e52]: Refine by
+  --
+                          - option "Keyword" [selected]
+                      - generic [ref=e55]:
+                        - generic [ref=e56]: is
+                        - textbox "is" [ref=e57]: San Jose State University
+  --
+                      - table "This page allows you to select an institution from the list of available institutions." [ref=e89]:
+                        - rowgroup [ref=e90]:
+                          - row "Name ↑ Type ↑ Location ↑" [ref=e91]:
+                            - columnheader [ref=e92]
+  --
+              - button "Select" [ref=e151] [cursor=pointer]
+              - button "Cancel" [ref=e152] [cursor=pointer]
+      - generic [ref=e153]:
+        - link "LinkedIn" [ref=e154] [cursor=pointer]:

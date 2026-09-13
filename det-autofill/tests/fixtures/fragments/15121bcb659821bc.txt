@@ -1,0 +1,5 @@
+"Create Account": |-
+            - button "Create Account" [ref=e282] [cursor=pointer]
+  - contentinfo [ref=e95]:
+    - generic [ref=e98]:
+      - list [ref=e99]:

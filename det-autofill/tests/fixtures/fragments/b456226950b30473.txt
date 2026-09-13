@@ -1,0 +1,53 @@
+"Email Address": |-
+    - generic [ref=e358]: Email Address*
+    - textbox "Email Address" [ref=e361]
+  - generic [ref=e363]:
+    - generic [ref=e365]: Password*
+    - textbox "Password" [ref=e368]
+"Password": |-
+      - paragraph [ref=e347]: "Password Requirements:"
+      - list [ref=e348]:
+        - listitem [ref=e349]: A special character
+        - listitem [ref=e350]: A numeric character
+  --
+        - generic [ref=e365]: Password*
+        - textbox "Password" [ref=e368]
+      - generic [ref=e369]:
+        - generic [ref=e371]: Verify New Password*
+        - textbox "Verify New Password" [ref=e374]
+      - generic [ref=e377]:
+        - generic [ref=e379]:
+          - paragraph [ref=e380]:
+  --
+    - button "Forgot your password?" [ref=e410] [cursor=pointer]
+  - generic:
+    - generic:
+      - generic [ref=e411]: Enter website. This input is for robots only, do not enter if you're human.
+"Verify New Password": |-
+    - generic [ref=e371]: Verify New Password*
+    - textbox "Verify New Password" [ref=e374]
+  - generic [ref=e377]:
+    - generic [ref=e379]:
+      - paragraph [ref=e380]:
+"I agree": |-
+    - checkbox "I agree" [ref=e398] [cursor=pointer]
+    - generic [ref=e399] [cursor=pointer]: I agree
+  - generic [ref=e404]:
+    - button "Create Account" [ref=e405] [cursor=pointer]
+    - button [ref=e406] [cursor=pointer]: Create Account
+"Create Account": |-
+  - Page Title: Create Account
+  - Console: 0 errors, 1 warnings
+  ### Snapshot
+  ```yaml
+  --
+              - heading "Create Account" [active] [level=3] [ref=e343]
+              - generic [ref=e346]:
+                - paragraph [ref=e347]: "Password Requirements:"
+                - list [ref=e348]:
+  --
+                  - button "Create Account" [ref=e405] [cursor=pointer]
+                  - button [ref=e406] [cursor=pointer]: Create Account
+              - generic [ref=e407]:
+                - text: Already have an account?
+                - button "Sign In" [ref=e408] [cursor=pointer]

@@ -1,0 +1,6 @@
+"Asian (Not Hispanic or Latino)": |-
+      - radio "Asian (Not Hispanic or Latino) A person having origins in any of the original peoples of the Far East, Southeast Asia, or the Indian Subcontinent, including, for example, Cambodia, China, India, Japan, Korea, Malaysia, Pakistan, the Philippine Islands, Thailand, and Vietnam." [ref=e410]
+      - generic [ref=e411]: Asian (Not Hispanic or Latino)
+      - generic [ref=e412]: A person having origins in any of the original peoples of the Far East, Southeast Asia, or the Indian Subcontinent, including, for example, Cambodia, China, India, Japan, Korea, Malaysia, Pakistan, the Philippine Islands, Thailand, and Vietnam.
+  - listitem [ref=e413]:
+    - generic [ref=e414] [cursor=pointer]:

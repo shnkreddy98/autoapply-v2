@@ -1,0 +1,5 @@
+"2nd Location Preference . Required Value": |-
+      - textbox "2nd Location Preference . Required Value" [ref=e272]: New York
+      - button "Search" [ref=e273] [cursor=pointer]:
+        - generic [ref=e276]: Search
+  - generic [ref=e277]:

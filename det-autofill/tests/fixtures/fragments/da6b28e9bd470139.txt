@@ -1,0 +1,16 @@
+"Apply": |-
+    - button "Apply for Associate Data Engineer / Data Engineer II / Senior Data Engineer (REMOTE)" [ref=e64] [cursor=pointer]:
+      - generic [ref=e65]: Apply
+    - generic [ref=e66]:
+      - separator
+    - button "Save job Associate Data Engineer / Data Engineer II / Senior Data Engineer (REMOTE)" [ref=e68] [cursor=pointer]:
+  --
+        - strong [ref=e154]: "WHAT YOU NEED TO APPLY:"
+      - paragraph [ref=e155]:
+        - strong [ref=e156]
+      - list [ref=e157]:
+  --
+      - generic [ref=e284]: Scan this QR code and apply!
+      - link "Download" [ref=e291] [cursor=pointer]:
+        - /url: "#"
+  - generic [ref=e293]:

@@ -1,0 +1,20 @@
+"Name": |-
+    - generic [ref=e1987]: Name*
+    - textbox "Name" [ref=e2085]: Jane Quinn Doe
+  - generic [ref=e1991]:
+    - generic [ref=e1992]: Employee ID (if applicable)
+    - textbox "Employee ID (if applicable)" [ref=e1995]
+"No, I do not have a disability": |-
+  - row "Yes, I have a disability, or have had one in the past No, I do not have a disability and have not had one in the past I do not want to answer" [ref=e2064]:
+    - row "Yes, I have a disability, or have had one in the past" [ref=e2065]:
+      - cell "Yes, I have a disability, or have had one in the past" [ref=e2066]:
+        - generic [ref=e2067]:
+  --
+    - row "No, I do not have a disability and have not had one in the past" [ref=e2071]:
+      - cell "No, I do not have a disability and have not had one in the past" [ref=e2072]:
+        - generic [ref=e2073]:
+          - checkbox "No, I do not have a disability and have not had one in the past" [checked] [active] [ref=e2075] [cursor=pointer]
+          - generic [ref=e2076] [cursor=pointer]: No, I do not have a disability and have not had one in the past
+    - row "I do not want to answer" [ref=e2077]:
+      - cell "I do not want to answer" [ref=e2078]:
+        - generic [ref=e2079]:

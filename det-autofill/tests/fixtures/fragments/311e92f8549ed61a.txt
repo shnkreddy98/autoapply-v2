@@ -1,0 +1,7 @@
+"Apply now": |-
+      - button "Apply now" [ref=e73] [cursor=pointer]:
+        - generic [ref=e74]:
+          - generic: Apply now
+  - generic [ref=e78]:
+    - generic [ref=e79]:
+      - heading "Posting Details" [level=2] [ref=e80]

@@ -1,0 +1,11 @@
+"Veteran status": |-
+  - text: It is Corewell Health’s policy to offer equal opportunity without regard to race, color, national origin, religion, sex, age, marital status, height, weight, pregnancy, gender identity or expression, sexual orientation, veteran status, or disability. I understand that under Michigan law, if I am disabled and need an accommodation, I must notify Corewell Health in writing within 182 days after I knew or reasonably should have known of the need for accommodation. Failure to timely request an accommodation may result in the loss of legal rights under Michigan law. Corewell Health encourages applications by qualified individuals with disabilities and does not discriminate in its consideration of such applicants.
+  - text: "I understand that Corewell Health participates in the E-Verify program, an Internet-based system that allows businesses to determine the eligibility of their employees to work in the United States. Please click and view the following posters for more information:"
+  - link "E-Verify Participation Poster (English and Spanish)" [ref=e1868] [cursor=pointer]:
+    - /url: https://cdn.phenompeople.com/CareerConnectResources/SPHEUS/documents/E-Verify_Participation_Poster_Eng_Es-1678310995929.pdf
+"Please indicate Hispanic/Latino below.": |-
+    - generic [ref=e1848]: Please indicate Hispanic/Latino below.
+    - button "Please indicate Hispanic/Latino below." [ref=e1852]: Select One
+  - generic [ref=e1853]:
+    - generic [ref=e1855]: I wish to identify myself as:*
+    - 'button "I wish to identify myself as: Select One Required" [expanded] [ref=e1859]': Select One

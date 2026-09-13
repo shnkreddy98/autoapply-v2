@@ -1,0 +1,8 @@
+"Male": |-
+      - option "Male"
+      - option "Female"
+      - option "Opt Out"
+  - generic [ref=f67e50]:
+    - generic [ref=f67e51]:
+      - text: Race
+      - generic [ref=f67e52]: "*"

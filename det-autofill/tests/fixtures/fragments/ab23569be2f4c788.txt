@@ -1,0 +1,16 @@
+"Save and Continue": |-
+          - button "Save and Continue" [ref=e392] [cursor=pointer]
+  - generic [ref=e54]:
+    - heading "Follow Us" [level=4] [ref=e55]
+    - list [ref=e56]:
+"Back": |-
+        - link "Back to Job Posting" [ref=e93] [cursor=pointer]:
+          - generic [ref=e97]: Back to Job Posting
+        - heading "Principal Data Engineer" [level=2] [ref=e98]
+      - generic "Application Progress" [ref=e99]:
+        - list [ref=e100]:
+  --
+          - button "Back" [ref=e391] [cursor=pointer]
+          - button "Save and Continue" [ref=e392] [cursor=pointer]
+  - generic [ref=e54]:
+    - heading "Follow Us" [level=4] [ref=e55]

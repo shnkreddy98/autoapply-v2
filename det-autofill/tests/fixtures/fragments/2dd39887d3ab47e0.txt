@@ -1,0 +1,77 @@
+"Email Address *": |-
+    - generic "Email Address" [ref=e701]: Email Address *
+    - textbox "Email Address *" [ref=e705]: jane.doe@example.com
+  - generic [ref=e708]:
+    - generic "Confirm Email Address" [ref=e710]: Confirm Email Address *
+    - textbox "Confirm Email Address *" [ref=e714]
+  - generic [ref=e717]:
+    - generic "Prefix" [ref=e719]
+    - generic [ref=e723] [cursor=pointer]:
+"Confirm Email Address *": |-
+    - generic "Confirm Email Address" [ref=e710]: Confirm Email Address *
+    - textbox "Confirm Email Address *" [ref=e714]
+  - generic [ref=e717]:
+    - generic "Prefix" [ref=e719]
+    - generic [ref=e723] [cursor=pointer]:
+"First Name *": |-
+    - generic "First Name" [ref=e732]: First Name *
+    - textbox "First Name *" [ref=e736]: Jane
+  - generic [ref=e739]:
+    - generic "Middle Name" [ref=e741]
+    - textbox "Middle Name" [ref=e745]: Quinn
+"Last Name *": |-
+    - generic "Last Name" [ref=e750]: Last Name *
+    - textbox "Last Name *" [ref=e754]: Doe
+  - generic [ref=e757]:
+    - generic "Suffix" [ref=e759]
+    - generic [ref=e763] [cursor=pointer]:
+"Mobile Phone Number *": |-
+      - generic "Mobile Phone Number" [ref=e796]: Mobile Phone Number *
+      - generic [ref=e800]:
+        - generic "Country dialing code" [ref=e801] [cursor=pointer]:
+          - combobox "Country dialing code" [ref=e804]
+  --
+        - textbox "Mobile Phone Number *" [ref=e805]: (555) 010-0199
+  - generic [ref=e806]:
+    - generic [ref=e809]:
+      - generic "Fax" [ref=e811]
+"Preferred Contact Method *": |-
+  - generic "Preferred Contact Method" [ref=e829]: Preferred Contact Method *
+  - generic [ref=e833] [cursor=pointer]:
+    - combobox "Preferred Contact Method *" [ref=e836]
+    - generic:
+      - img:
+        - img
+"State/Province *": |-
+  - generic "State/Province" [ref=e856]: State/Province *
+  - generic [ref=e860] [cursor=pointer]:
+    - generic [ref=e861]:
+      - combobox "State/Province *" [ref=e863]
+      - generic "California" [ref=e1324]
+    - generic:
+      - img:
+"Address Line 1 *": |-
+    - generic "Address Line 1" [ref=e868]: Address Line 1 *
+    - textbox "Address Line 1 *" [ref=e872]
+  - generic [ref=e875]:
+    - generic "Address Line 2" [ref=e877]
+    - textbox "Address Line 2" [ref=e881]
+"City *": |-
+    - generic "City" [ref=e886]: City *
+    - textbox "City *" [ref=e890]: San Jose
+  - generic [ref=e893]:
+    - generic "County" [ref=e895]
+    - textbox "County" [ref=e899]
+"Zip / Postal Code *": |-
+      - generic "Zip / Postal Code" [ref=e904]: Zip / Postal Code *
+      - textbox "Zip / Postal Code *" [ref=e908]
+  - generic [ref=e912]:
+    - generic "How did you hear about this job?" [ref=e914]: How did you hear about this job? *
+    - generic [ref=e918] [cursor=pointer]:
+"How did you hear about this job? *": |-
+  - generic "How did you hear about this job?" [ref=e914]: How did you hear about this job? *
+  - generic [ref=e918] [cursor=pointer]:
+    - combobox "How did you hear about this job? *" [ref=e921]
+    - generic:
+      - img:
+        - img

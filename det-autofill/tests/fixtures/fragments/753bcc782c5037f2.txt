@@ -1,0 +1,87 @@
+"Upload Resume": |-
+    - text: Upload Resume*
+    - generic [ref=e18]:
+      - button "Upload Resume*" [ref=e20] [cursor=pointer]:
+        - generic [ref=e21]: Upload Resume*
+        - button "Upload Resume*" [ref=e22]
+      - generic: x
+  - generic [ref=e24]:
+    - text: Email*
+"Email": |-
+      - text: Email*
+      - textbox "Email*" [ref=e26]:
+        - /placeholder: Email Address*
+  - generic [ref=e27]:
+    - generic [ref=e29]:
+      - text: First Name*
+"First Name": |-
+    - text: First Name*
+    - textbox "First Name*" [ref=e31]
+  - generic [ref=e33]:
+    - text: Last Name*
+    - textbox "Last Name*" [ref=e35]
+"Last Name": |-
+      - text: Last Name*
+      - textbox "Last Name*" [ref=e35]
+  - generic [ref=e36]:
+    - generic [ref=e38]:
+      - text: Primary Phone*
+"Primary Phone": |-
+    - text: Primary Phone*
+    - textbox "Primary Phone*" [ref=e40]:
+      - /placeholder: 1 XXX XXX XXXX*
+  - generic [ref=e42]:
+    - text: Can CFS reach out via SMS regarding your application?*
+"YES": |-
+        - option "'Yes' to opt in, or 'No' to decline.*" [selected]
+        - option "YES"
+        - option "NO"
+  - generic [ref=e45]:
+    - generic [ref=e47]:
+"NO": |-
+  - Page URL: https://pcrecruiter.cfstaffing.com/pcrbin/jobboard.aspx?action=registration&recordid=116965565099256&provider=none&pcr-id=fHR4dC5YGeC4H4gv955cjB4eT1cRWlaotz%2F3m9ofENB5x3orghacDu6XVhXwoCOhkOYUvr18mUcL6JEuTsRagcNl4Rk8G9ANJrTcLEwMB%2BhgbTfTHgwNlbCNZ4oWDobw%2B6rzHeJa73IXAE%2F4jEaRahhuXw2oExJ1zWfUMKEytx8WWa%2BD%2BDtHaHDo%2FNPG9UjbZRjBpxPZd5tin69DLftvIWCGG%2BNtiyjehmyc4tNLHgSpPDdoJ%2BYVRAMWyd6tJOMUsX3D0VLcZiQwkpLc1tGV3i8cOW0%3D
+  - Page Title: Registration Form
+  ### Snapshot
+  ```yaml
+  --
+                  - option "'Yes' to opt in, or 'No' to decline.*" [selected]
+                  - option "YES"
+                  - option "NO"
+            - generic [ref=e45]:
+              - generic [ref=e47]:
+                - text: Your Current City*
+  --
+                  - option "ILLINOIS"
+                  - option "INDIANA"
+                  - option "IOWA"
+                  - option "KANSAS"
+  --
+                  - option "NORTH CAROLINA"
+                  - option "NORTH DAKOTA"
+                  - option "OHIO"
+                  - option "OKLAHOMA"
+                  - option "OREGON"
+  --
+                  - option "US-NORTHERN MARIANA ISLANDS"
+                  - option "US-PALAU"
+                  - option "US-PUERTO RICO"
+              - generic [ref=e56]:
+"Your Current City": |-
+    - text: Your Current City*
+    - textbox "Your Current City*" [ref=e49]:
+      - /placeholder: City*
+  - generic [ref=e51]:
+    - text: Your Current State*
+"State*": |-
+  - text: Your Current State*
+  - combobox "Your Current State*" [ref=e54]:
+    - option "State*" [selected]
+    - option "ALABAMA"
+    - option "ALASKA"
+    - option "ARIZONA"
+"Your Current Job Title": |-
+                - text: Your Current Job Title*
+                - textbox "Your Current Job Title*" [ref=e58]:
+                  - /placeholder: Title*
+          - button "SUBMIT" [ref=e60] [cursor=pointer]
+  ```

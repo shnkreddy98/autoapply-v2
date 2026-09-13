@@ -1,0 +1,19 @@
+"State": |-
+      - button "Country United States of America Required" [ref=e256]: United States of America
+  - group "Legal Name" [ref=e258]:
+    - heading "Legal Name" [level=4] [ref=e259]
+    - generic [ref=e260]:
+  --
+        - generic [ref=e320]: State*
+        - button "State Arizona Required" [active] [ref=e718]: Arizona
+      - generic [ref=e325]:
+        - generic [ref=e327]: Postal Code*
+        - textbox "Postal Code" [ref=e591]: "95126"
+  --
+            - generic [ref=e362]: 1 item selected, United States of America (+1)
+          - listbox "items selected" [ref=e364]:
+            - option "United States of America (+1), press delete to clear value." [ref=e365]:
+              - paragraph [ref=e370]: United States of America (+1)
+      - generic [ref=e374]:
+        - generic [ref=e376]: Phone Number*
+        - textbox "Phone Number" [ref=e592]: "5550100199"

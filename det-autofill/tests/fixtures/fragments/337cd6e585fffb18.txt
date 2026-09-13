@@ -1,0 +1,6 @@
+"Asian (Not Hispanic or Latino)": |-
+  - menuitem "Asian (Not Hispanic or Latino)" [ref=e438] [cursor=pointer]:
+    - generic [ref=e440]: Asian (Not Hispanic or Latino)
+  - menuitem "American Indian or Alaskan Native (Not Hispanic or Latino)" [ref=e441] [cursor=pointer]:
+    - generic [ref=e443]: American Indian or Alaskan Native (Not Hispanic or Latino)
+  - menuitem "Two or more races (Not Hispanic or Latino)" [ref=e444] [cursor=pointer]:

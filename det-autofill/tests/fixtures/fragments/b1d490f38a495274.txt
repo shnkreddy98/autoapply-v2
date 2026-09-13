@@ -1,0 +1,42 @@
+"BS": |-
+  - Page URL: https://careers-nfiindustries.icims.com/jobs/29459/senior-data-engineer/candidate?from=login&csrf=AF8EDD89B0B489D5&hashed=-625888664&uploadResume=1&uploadResume=1
+  - Page Title: Candidate Profile - Senior Data Engineer
+  - Console: 8 errors, 12 warnings
+  ### Snapshot
+  --
+      - /url: https://careers-nfiindustries.icims.com/jobs/29459/senior-data-engineer/candidate?from=login&csrf=AF8EDD89B0B489D5&hashed=-625888664&uploadResume=1&uploadResume=1#icims_content_iframe
+    - main [ref=e2]:
+      - navigation [ref=e3]:
+        - generic [ref=e4]:
+  --
+          - link "Search jobs" [ref=e18] [cursor=pointer]:
+            - /url: /jobs
+      - main [ref=e20]:
+        - generic [ref=e21]:
+          - main "Career Portal" [ref=e24]:
+  --
+                      - /url: https://careers-nfiindustries.icims.com/jobs/29459/senior-data-engineer/login?loginOnly=1&redirect=candidate&in_iframe=1&hashed=-625888664
+                  - generic [ref=f67e12]:
+                    - heading "Senior Data Engineer" [level=1] [ref=f67e15]
+                    - generic [ref=f67e16]:
+  --
+                                      - option "BS" [ref=f67e606] [cursor=pointer]
+                                      - option "MS" [ref=f67e607] [cursor=pointer]
+                                      - option "PhD" [ref=f67e608] [cursor=pointer]
+                                      - option "MBA" [ref=f67e609] [cursor=pointer]
+  --
+                  - /url: mailto:nfijobs@nfiindustries.com
+              - listitem [ref=e57]:
+                - link "Site Map" [ref=e58] [cursor=pointer]:
+                  - /url: "#"
+  --
+              - text: 866-NFI-JOBS |
+              - link "866-634-5627" [ref=e62] [cursor=pointer]:
+                - /url: tel:8666345627
+              - link "nfiindustries.com" [ref=e63] [cursor=pointer]:
+  --
+                - link "All Jobs" [ref=e80] [cursor=pointer]:
+                  - /url: /jobs
+              - listitem [ref=e81]:
+                - link "Distribution" [ref=e82] [cursor=pointer]:
+                  - /url: /distribution

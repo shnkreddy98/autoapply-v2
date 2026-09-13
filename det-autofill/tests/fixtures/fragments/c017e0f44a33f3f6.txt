@@ -1,0 +1,26 @@
+"missing": |-
+  - listitem [ref=e524]: Missing limbs or partially missing limbs
+  - listitem [ref=e525]: Mobility impairment, benefiting from the use of a wheelchair, scooter, walker, leg brace(s) and/or other supports
+  - listitem [ref=e526]: Nervous system condition, for example, migraine headaches, Parkinson’s disease, multiple sclerosis (MS)
+  - listitem [ref=e527]: Neurodivergence, for example, attention-deficit/hyperactivity disorder (ADHD), autism spectrum disorder, dyslexia, dyspraxia, other learning disabilities
+"required": |-
+  - heading "Required Qualifications" [level=2] [ref=e73]
+  - list [ref=e74]:
+    - listitem [ref=e75]: Bachelor's degree in Computer Science, Information Systems, Software Engineering, Data Engineering, or a related technical field.
+    - listitem [ref=e76]: 4-6 years of professional Data Engineering experience.
+  --
+  - generic [ref=e163]: Required*
+  - generic [ref=e165]:
+    - generic [ref=e166]:
+      - generic [ref=e167]: First Name*
+  --
+              - paragraph [ref=e543]: "PUBLIC BURDEN STATEMENT: According to the Paperwork Reduction Act of 1995 no persons are required to respond to a collection of information unless such collection displays a valid OMB control number. This survey should take about 5 minutes to complete."
+              - table [ref=e544]:
+                - rowgroup [ref=e545]:
+                  - row:
+"error": |-
+  - Console: 0 errors, 3 warnings
+  ### Snapshot
+  ```yaml
+  - generic [ref=e1]:
+"alert": (no match)

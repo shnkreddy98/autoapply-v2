@@ -1,0 +1,6 @@
+"California": |-
+  - option "California" [ref=e979] [cursor=pointer]:
+    - menuitem "California" [ref=e980]
+  - option "Colorado" [ref=e981] [cursor=pointer]:
+    - menuitem "Colorado" [ref=e982]
+  - option "Connecticut" [ref=e983] [cursor=pointer]:

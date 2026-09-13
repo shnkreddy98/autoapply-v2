@@ -1,0 +1,48 @@
+"Are you legally authorized to work in the US": |-
+    - generic [ref=e2012]: Are you legally authorized to work in the US for Franchise World Headquarters and accept new employment in the US?
+  - generic [ref=e2014]:
+    - generic [ref=e2016]:
+      - generic [ref=e2017]: Are you legally authorized to work in the US for Franchise World Headquarters and accept new employment in the US?
+      - text: "*"
+    - generic [ref=e2022]:
+      - generic [ref=e2024] [cursor=pointer]:
+"are you willing to relocate?": |-
+    - generic [ref=e2038]: If you are applying for a position outside of your current location, are you willing to relocate?
+  - generic [ref=e2040]:
+    - generic [ref=e2042]:
+      - generic [ref=e2043]: If you are applying for a position outside of your current location, are you willing to relocate?
+      - text: "*"
+    - generic [ref=e2048]:
+      - generic [ref=e2050] [cursor=pointer]:
+"Are you over the age of 18?": |-
+    - generic [ref=e2064]: Are you over the age of 18?
+  - generic [ref=e2066]:
+    - generic [ref=e2068]:
+      - generic [ref=e2069]: Are you over the age of 18?
+      - text: "*"
+    - generic [ref=e2074]:
+      - generic [ref=e2076] [cursor=pointer]:
+"require sponsorship": |-
+    - generic [ref=e2090]: Do you now, or will you in the future, require sponsorship from Franchise World Headquarters in order to obtain, extend, or renew authorization to work in the US?
+  - generic [ref=e2092]:
+    - generic [ref=e2094]:
+      - generic [ref=e2095]: Do you now, or will you in the future, require sponsorship from Franchise World Headquarters in order to obtain, extend, or renew authorization to work in the US?
+      - text: "*"
+    - generic [ref=e2100]:
+      - generic [ref=e2102] [cursor=pointer]:
+"when will you be available to start?": |-
+    - generic [ref=e2119]: If offered the position, when will you be available to start?
+    - text: "*"
+  - generic [ref=e2123] [cursor=pointer]:
+    - combobox "If offered the position, when will you be available to start? *" [ref=e2126]
+    - generic:
+      - img:
+        - img
+"Have you been employed with Franchise World Headquarters in the past?": |-
+    - generic [ref=e2130]: Have you been employed with Franchise World Headquarters in the past?
+  - generic [ref=e2132]:
+    - generic [ref=e2134]:
+      - generic [ref=e2135]: Have you been employed with Franchise World Headquarters in the past?
+      - text: "*"
+    - generic [ref=e2140]:
+      - generic [ref=e2142] [cursor=pointer]:

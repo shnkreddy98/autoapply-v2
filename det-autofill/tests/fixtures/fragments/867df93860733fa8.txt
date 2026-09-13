@@ -1,0 +1,88 @@
+"Resume": |-
+    - generic [ref=e346]: Resume*
+    - generic [ref=e347]:
+      - link "Attach resume" [ref=e348] [cursor=pointer]:
+        - /url: "#"
+      - text: or
+      - link "Paste resume" [ref=e349] [cursor=pointer]:
+        - /url: "#"
+  - generic [ref=e350]:
+    - generic [ref=e351]: What's your highest level of education completed?*
+"Address": |-
+    - generic [ref=e329]: Email Address*
+    - textbox "Email Address*" [ref=e330]: jane.doe@example.com
+  - generic [ref=e331]:
+    - generic [ref=e332]: Phone*
+    - textbox "Phone*" [ref=e333]: "+15550100199"
+  --
+    - generic [ref=e335]: Address
+    - generic [ref=e336]:
+      - textbox "Address" [ref=e337]: 100 Example St
+      - generic [ref=e338]:
+        - textbox "City" [ref=e340]: San Jose
+        - textbox "State/Province" [ref=e342]: CA
+"City": |-
+        - textbox "City" [ref=e340]: San Jose
+        - textbox "State/Province" [ref=e342]: CA
+        - textbox "Postal" [ref=e344]: "95126"
+  - generic [ref=e345]:
+  --
+    - text: Race/Ethnicity
+    - combobox "Race/Ethnicity" [ref=e408]:
+      - option "Decline to answer" [selected]
+      - option "Hispanic or Latino"
+      - option "White, not Hispanic or Latino"
+"State/Province": |-
+        - textbox "State/Province" [ref=e342]: CA
+        - textbox "Postal" [ref=e344]: "95126"
+  - generic [ref=e345]:
+    - generic [ref=e346]: Resume*
+"Postal Code": (no match)
+"authorized to work": |-
+    - text: Are you legally authorized to work in the U.S.?
+    - text: "Note: If hired, a Form I-9, Employment Eligibility Verification, must be completed at the start of employment.*"
+  - 'combobox "Are you legally authorized to work in the U.S.? Note: If hired, a Form I-9, Employment Eligibility Verification, must be completed at the start of employment.*" [ref=e358]':
+    - option "-- No answer --" [selected]
+    - option "Yes"
+    - option "No"
+"sponsorship": |-
+      - text: Visa sponsorship is
+      - generic [ref=e74]: not
+      - text: available for this position.
+  - listitem [ref=e75]:
+  --
+    - generic [ref=e360]: Do you or will you in the future require visa sponsorship?*
+    - combobox "Do you or will you in the future require visa sponsorship?*" [ref=e361]:
+      - option "-- No answer --" [selected]
+      - option "Yes"
+      - option "No"
+"salary": (no match)
+"LinkedIn": |-
+    - generic [ref=e354]: LinkedIn Profile URL:*
+    - textbox "LinkedIn Profile URL:*" [active] [ref=e355]: https://www.linkedin.com/in/janedoe
+  - generic [ref=e356]:
+    - generic [ref=e357]:
+      - text: Are you legally authorized to work in the U.S.?
+"Website": |-
+      - link "View Our Website " [ref=e9] [cursor=pointer]:
+        - /url: https://www.cutsforth.com/
+        - text: View Our Website
+        - generic [ref=e10]: 
+  - generic [ref=e13]:
+    - text: 
+  --
+                  - text: Completing this form is voluntary, and we hope that you will choose to do so. Your answer is confidential. No one who makes hiring decisions will see it. Your decision to complete the form and your answer will not harm you in any way. If you want to learn more about the law or this form, visit the U.S. Department of Labor’s Office of Federal Contract Compliance Programs (OFCCP) website at
+                  - link "www.dol.gov/ofccp" [ref=e443] [cursor=pointer]:
+                    - /url: https://www.dol.gov/ofccp
+                  - text: .
+  --
+      - heading "This website uses cookies and other analytics technologies." [level=3] [ref=e506]
+      - text: By selecting "Allow", you consent to the recording, use and sharing of your website activity by this website and its service providers.
+    - generic [ref=e507]:
+      - button "Allow" [ref=e508] [cursor=pointer]
+      - button "Reject All" [ref=e509] [cursor=pointer]
+"3 years of experience": |-
+    - generic [ref=e160]: 1-3 years of experience with Microsoft Azure; equivalent experience with AWS or GCP may substitute
+  - listitem [ref=e161]:
+    - generic [ref=e164]: Strong proficiency in Python for data engineering pipelines
+  - listitem [ref=e165]:

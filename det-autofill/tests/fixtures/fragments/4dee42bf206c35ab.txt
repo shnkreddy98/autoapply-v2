@@ -1,0 +1,6 @@
+"Sign In": |-
+        - button "Sign In" [ref=e317] [cursor=pointer]:
+          - generic [ref=e38]: Sign In
+        - navigation [ref=e39]:
+          - button "Search for Jobs" [ref=e318] [cursor=pointer]
+  - generic [ref=e44]:

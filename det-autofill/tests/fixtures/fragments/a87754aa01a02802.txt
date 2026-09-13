@@ -1,0 +1,26 @@
+"Country dialling code": |-
+  - generic "Country dialling code" [ref=e547] [cursor=pointer]:
+    - combobox "Country dialling code" [ref=e550]
+    - generic:
+      - img:
+        - img
+  --
+  - generic "Country dialling code" [ref=e561] [cursor=pointer]:
+    - combobox "Country dialling code" [ref=e564]
+    - generic:
+      - img:
+        - img
+"Preferred contact method *": |-
+  - generic "Preferred contact method" [ref=e571]: Preferred contact method *
+  - generic [ref=e575] [cursor=pointer]:
+    - combobox "Preferred contact method *" [ref=e578]
+    - generic:
+      - img:
+        - img
+"How did you hear about this job? *": |-
+  - generic "How did you hear about this job?" [ref=e657]: How did you hear about this job? *
+  - generic [ref=e661] [cursor=pointer]:
+    - combobox "How did you hear about this job? *" [ref=e664]
+    - generic:
+      - img:
+        - img

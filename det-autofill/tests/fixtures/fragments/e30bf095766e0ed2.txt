@@ -1,0 +1,12 @@
+"Close": (no match)
+"Done": (no match)
+"Cancel": |-
+                  - generic [ref=e355]: Cancel
+            - separator [ref=e356]
+          - generic [ref=e357]:
+            - generic [ref=e358]:
+  --
+            - generic [ref=e455]: Cancel
+          - button [ref=e457] [cursor=pointer]:
+            - generic [ref=e458]: Next
+  - contentinfo [ref=e33]:

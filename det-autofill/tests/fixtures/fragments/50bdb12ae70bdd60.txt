@@ -1,0 +1,124 @@
+"Source Type": |-
+  - generic "The field Source Type is mandatory." [ref=e189]:
+    - text: Source Type
+    - generic [ref=e190]: .
+    - generic [ref=e191]: Required
+  - combobox "Source Type . Required" [ref=e193]:
+    - option "Select One..."
+    - option "Ad or event ID"
+    - option "Campus - Non Career Fair"
+"First Name": |-
+    - generic "The field First Name is mandatory." [ref=e203]:
+      - text: First Name
+      - generic [ref=e206]: .
+      - generic [ref=e207]: Required
+    - textbox "First Name . Required" [ref=e208]: Jane Quinn
+  - generic [ref=e209]:
+    - generic "The field Last Name is mandatory." [ref=e210]:
+      - text: Last Name
+"Last Name": |-
+      - generic "The field Last Name is mandatory." [ref=e210]:
+        - text: Last Name
+        - generic [ref=e213]: .
+        - generic [ref=e214]: Required
+      - textbox "Last Name . Required" [ref=e215]: Doe
+  - generic [ref=e216]:
+    - generic [ref=e217]:
+      - generic [ref=e218]: Middle Name
+"Street Address (line 1)": |-
+  - listitem [ref=e165]: The field "Street Address (line 1)" is mandatory.
+  - listitem [ref=e166]: The field "Zip/Postal Code" is mandatory.
+  - listitem [ref=e167]: You must select ALL possible values in the section Place of Residence.
+  - listitem [ref=e168]: The field "Primary Number" is mandatory.
+  --
+              - img "The field \"Street Address (line 1)\" is mandatory." [ref=e230]
+              - generic "The field Street Address (line 1) is mandatory." [ref=e231]:
+                - text: Street Address (line 1)
+                - generic [ref=e234]: .
+                - generic [ref=e235]: Required
+              - textbox "Street Address (line 1) . Required" [ref=e236]
+            - generic [ref=e237]:
+              - generic [ref=e238]: Address (line 2)
+              - textbox "Address (line 2)" [ref=e241]: San Jose
+"City": |-
+    - generic "The field City is mandatory." [ref=e243]:
+      - text: City
+      - generic [ref=e246]: .
+      - generic [ref=e247]: Required
+    - textbox "City . Required" [ref=e248]: "95126"
+  - generic [ref=e249]:
+    - img "The field \"Zip/Postal Code\" is mandatory." [ref=e251]
+    - generic "The field Zip/Postal Code is mandatory." [ref=e252]:
+  --
+        - option "Holy See (Vatican City State)"
+        - option "Honduras"
+        - option "Hong Kong"
+        - option "Hungary"
+  --
+        - option "Crescent City"
+        - option "Cypress"
+        - option "Daly City"
+        - option "Downey"
+        - option "El Centro"
+        - option "Elk Grove"
+  --
+        - option "Redwood City"
+        - option "Richmond"
+        - option "Riverside"
+        - option "Roseville"
+  --
+        - option "Yuba City"
+  - generic [ref=e278]:
+    - generic "The field Email Address is mandatory." [ref=e279]:
+      - text: Email Address
+"Zip/Postal Code": |-
+      - listitem [ref=e166]: The field "Zip/Postal Code" is mandatory.
+      - listitem [ref=e167]: You must select ALL possible values in the section Place of Residence.
+      - listitem [ref=e168]: The field "Primary Number" is mandatory.
+  - link "Beginning of the main content section." [ref=e169] [cursor=pointer]:
+  --
+                - img "The field \"Zip/Postal Code\" is mandatory." [ref=e251]
+                - generic "The field Zip/Postal Code is mandatory." [ref=e252]:
+                  - text: Zip/Postal Code
+                  - generic [ref=e255]: .
+                  - generic [ref=e256]: Required
+                - textbox "Zip/Postal Code . Required" [ref=e257]
+              - group "You must select ALL possible values in the section Place of Residence. Place of Residence . Required" [ref=e259]:
+                - generic [ref=e261]:
+                  - img "You must select ALL possible values in the section Place of Residence." [ref=e263]
+"Country": |-
+  - generic [ref=e270]: Country
+  - combobox "Country" [ref=e271]:
+    - option "Not Specified"
+    - option "United States" [selected]
+    - option "Canada"
+"State/Province": |-
+  - generic [ref=e273]: State/Province
+  - combobox "State/Province" [ref=e274]:
+    - option "Not Specified"
+    - option "Alabama"
+    - option "Alaska"
+"Email Address": |-
+    - generic "The field Email Address is mandatory." [ref=e279]:
+      - text: Email Address
+      - generic [ref=e282]: .
+      - generic [ref=e283]: Required
+    - textbox "Email Address . Required" [ref=e284]: jane.doe@example.com
+  - generic [ref=e285]:
+    - img "The field \"Primary Number\" is mandatory." [ref=e287]
+    - generic "The field Primary Number is mandatory." [ref=e288]:
+"Primary Number": |-
+      - listitem [ref=e168]: The field "Primary Number" is mandatory.
+  - link "Beginning of the main content section." [ref=e169] [cursor=pointer]:
+    - /url: "#"
+  - table [ref=e170]:
+  --
+                - img "The field \"Primary Number\" is mandatory." [ref=e287]
+                - generic "The field Primary Number is mandatory." [ref=e288]:
+                  - text: Primary Number
+                  - generic [ref=e291]: .
+                  - generic [ref=e292]: Required
+                - combobox "Primary Number . Required" [ref=e293]:
+                  - option "Not Specified" [selected]
+                  - option "Home Phone"
+                  - option "Work Phone"

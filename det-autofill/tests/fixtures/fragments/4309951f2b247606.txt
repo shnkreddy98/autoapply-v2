@@ -1,0 +1,10 @@
+"reCAPTCHA": |-
+                - generic [ref=f66e15]: reCAPTCHA
+          - link "Submit Application" [ref=e561] [cursor=pointer]:
+            - /url: "#"
+  - contentinfo [ref=e562]:
+"Submit Application": |-
+          - link "Submit Application" [ref=e561] [cursor=pointer]:
+            - /url: "#"
+  - contentinfo [ref=e562]:
+    - generic [ref=e563]:

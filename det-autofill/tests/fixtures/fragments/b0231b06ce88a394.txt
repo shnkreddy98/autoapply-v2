@@ -1,0 +1,69 @@
+"First Name": |-
+    - generic [ref=e115]: First Name*
+    - textbox "First Name" [ref=e116]
+  - generic [ref=e119]:
+    - generic [ref=e120]: Last Name*
+    - textbox "Last Name" [ref=e121]
+  --
+    - generic [ref=e125]: Preferred First Name
+    - textbox "Preferred First Name" [ref=e126]
+  - generic [ref=e129]:
+    - generic [ref=e130]: Email*
+    - textbox "Email" [ref=e131]
+"Last Name": |-
+    - generic [ref=e120]: Last Name*
+    - textbox "Last Name" [ref=e121]
+  - generic [ref=e124]:
+    - generic [ref=e125]: Preferred First Name
+    - textbox "Preferred First Name" [ref=e126]
+"Email": |-
+        - paragraph [ref=e95]: Interested in building your career at Casa? Get future opportunities sent straight to your email.
+        - link "Create alert" [ref=e241] [cursor=pointer]:
+          - /url: https://my.greenhouse.io/users/sign_in?job_board=casa&source=job_alert_post
+  - separator [ref=e97]
+  --
+          - generic [ref=e130]: Email*
+          - textbox "Email" [ref=e131]
+        - group "Phone" [ref=e133]:
+          - generic [ref=e134]: Phone
+          - generic [ref=e137]:
+"Phone": |-
+  - group "Phone" [ref=e133]:
+    - generic [ref=e134]: Phone
+    - generic [ref=e137]:
+      - generic [ref=e138]: Country
+      - generic [ref=e139]:
+  --
+      - generic [ref=e154]: Phone
+      - textbox "Phone" [ref=e155]
+  - group "Resume/CV*" [ref=e157]:
+    - generic [ref=e158]: Resume/CV*
+    - generic [ref=e160]:
+"Resume": |-
+  - group "Resume/CV*" [ref=e157]:
+    - generic [ref=e158]: Resume/CV*
+    - generic [ref=e160]:
+      - generic [ref=e162]:
+        - button "Attach" [ref=e163] [cursor=pointer]
+"Are you located in the US or Canada?": |-
+  - generic [ref=e199]: Are you located in the US or Canada?*
+  - generic [ref=e200]:
+    - log [ref=e202]
+    - generic [ref=e204]:
+  --
+        - combobox "Are you located in the US or Canada?" [ref=e208]
+      - button "Toggle flyout" [ref=e210] [cursor=pointer]:
+        - img [ref=e211]
+    - textbox
+"How are you empowering people to use AI safely?": |-
+    - generic [ref=e216]: How are you empowering people to use AI safely?*
+    - textbox "How are you empowering people to use AI safely?" [ref=e217]
+  - generic [ref=e220]:
+    - generic [ref=e221]: Tell us about your bitcoin journey*
+    - textbox "Tell us about your bitcoin journey" [ref=e222]
+"Tell us about your bitcoin journey": |-
+              - generic [ref=e221]: Tell us about your bitcoin journey*
+              - textbox "Tell us about your bitcoin journey" [ref=e222]
+          - button "Submit application" [ref=e224] [cursor=pointer]
+  - contentinfo [ref=e225]:
+    - generic [ref=e226]:

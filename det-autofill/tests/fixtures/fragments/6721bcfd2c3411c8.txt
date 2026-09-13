@@ -1,0 +1,22 @@
+"Yes": |-
+                      - button "Yes Required" [ref=e1886]: "Yes"
+                    - group "Are you legally eligible for employment in the United States?*" [ref=e1691]:
+                      - paragraph [ref=e1695]: Are you legally eligible for employment in the United States?*
+                      - button "Yes Required" [ref=e1896]: "Yes"
+                    - group "Do you now or will you in the future require immigration sponsorship for work authorization in the United States (e.g. H-1B Visa)?*" [ref=e1898]:
+                      - paragraph [ref=e1902]: Do you now or will you in the future require immigration sponsorship for work authorization in the United States (e.g. H-1B Visa)?*
+                      - button "No, I do not/will not require sponsorship Required" [ref=e1916]: No, I do not/will not require sponsorship
+  --
+                      - button "Yes Required" [ref=e2269]: "Yes"
+                    - group "Yaamava’ Resort & Casino at San Manuel is a smoking facility, employees may be subject to second-hand smoke while performing their duties. Are you willing to work in a smoking environment?*" [ref=e1779]:
+                      - paragraph [ref=e1783]: Yaamava’ Resort & Casino at San Manuel is a smoking facility, employees may be subject to second-hand smoke while performing their duties. Are you willing to work in a smoking environment?*
+                      - button "Yes Required" [ref=e2300]: "Yes"
+                    - group "Have you applied for a Gaming License with the San Manuel Gaming Commission in the past 24 months?*" [ref=e1789]:
+                      - paragraph [ref=e1793]: Have you applied for a Gaming License with the San Manuel Gaming Commission in the past 24 months?*
+                      - button "No Required" [ref=e2323]: "No"
+  --
+      - option "Yes" [ref=e2332]:
+        - generic [ref=e2333]: "Yes"
+      - option "No" [ref=e2334]:
+        - generic [ref=e2335]: "No"
+  ```

@@ -1,0 +1,84 @@
+"years have you worked with Azure Databricks in a production environment?": |-
+  - generic [ref=e264]: How many years have you worked with Azure Databricks in a production environment?*
+  - generic [ref=e265]:
+    - checkbox "None" [ref=e266]
+    - text: None
+"Databricks technologies have you used professionally?": |-
+  - generic [ref=e276]: Which Databricks technologies have you used professionally? (Select all that apply)*
+  - generic [ref=e277]:
+    - checkbox "Spark" [ref=e278]
+    - text: Spark
+"Azure services have you used professionally?": |-
+  - generic [ref=e308]: Which Azure services have you used professionally?*
+  - generic [ref=e309]:
+    - checkbox "Azure Data Factory" [ref=e310]
+    - text: Azure Data Factory
+"projects supporting Artificial Intelligence or Machine Learning?": |-
+  - generic [ref=e334]: Have you worked on projects supporting Artificial Intelligence or Machine Learning?*
+  - generic [ref=e335]:
+    - checkbox "Yes, built data pipelines supporting AI/ML models" [ref=e336]
+    - text: Yes, built data pipelines supporting AI/ML models
+"AI-related technologies have you used PROFESSIONALLY?": |-
+  - generic [ref=e344]: Which AI-related technologies have you used PROFESSIONALLY?*
+  - generic [ref=e345]:
+    - checkbox "Azure AI Services" [ref=e346]
+    - text: Azure AI Services
+"Describe one project where you built data pipelines supporting AI": |-
+    - generic [ref=e364]: Describe one project where you built data pipelines supporting AI, machine learning, predictive analytics, or advanced reporting. (AI detection software will be used on responses)*
+    - textbox "Describe one project where you built data pipelines supporting AI, machine learning, predictive analytics, or advanced reporting. (AI detection software will be used on responses)*" [ref=e365]
+  - generic [ref=e366]:
+    - generic [ref=e367]: Rate your SQL proficiency.*
+    - generic [ref=e368]:
+"SQL proficiency.": |-
+  - generic [ref=e367]: Rate your SQL proficiency.*
+  - generic [ref=e368]:
+    - checkbox "Beginner" [ref=e369]
+    - text: Beginner
+"million-plus row datasets have you worked with?": |-
+  - generic [ref=e375]: Approximately how many million-plus row datasets have you worked with?*
+  - generic [ref=e376]:
+    - checkbox "None" [ref=e377]
+    - text: None
+"programming languages do you use professionally?": |-
+  - generic [ref=e387]: Which programming languages do you use professionally?*
+  - generic [ref=e388]:
+    - checkbox "Python" [ref=e389]
+    - text: Python
+"mentored junior Data Engineers?": |-
+  - generic [ref=e403]: Have you mentored junior Data Engineers?*
+  - generic [ref=e404]:
+    - checkbox "Frequently" [ref=e405]
+    - text: Frequently
+"best describes your current role?": |-
+  - generic [ref=e413]: Which best describes your current role?*
+  - generic [ref=e414]:
+    - checkbox "Architect" [ref=e415]
+    - text: Architect
+"industries have you supported?": |-
+  - generic [ref=e425]: Which industries have you supported?*
+  - generic [ref=e426]:
+    - checkbox "Healthcare" [ref=e427]
+    - text: Healthcare
+"BI platforms have you supported?": |-
+    - generic [ref=e443]: Which BI platforms have you supported?*
+    - textbox "Which BI platforms have you supported?*" [ref=e444]
+  - generic [ref=e445]:
+    - generic [ref=e446]: If selected, when could you start?*
+    - generic [ref=e447]:
+"start date": |-
+    - generic [ref=e213]: Earliest start date?*
+    - textbox "Earliest start date?*" [ref=e214]: 2026-07-22
+  - generic [ref=e215]:
+    - generic [ref=e216]: Can you work weekends?
+    - combobox "Can you work weekends?" [ref=e217]:
+  --
+    - generic [ref=e250]: Are you currently located in the Greater Houston area or planning to relocate before your start date?*
+    - generic [ref=e251]:
+      - checkbox "Currently local" [ref=e252]
+      - text: Currently local
+  --
+      - checkbox "Relocating independently before start date" [ref=e254]
+      - text: Relocating independently before start date
+    - generic [ref=e255]:
+      - checkbox "Not local and no relocation planned" [ref=e256]
+      - text: Not local and no relocation planned

@@ -1,0 +1,6 @@
+"I AM NOT A PROTECTED VETERAN": |-
+  - option "I AM NOT A PROTECTED VETERAN" [ref=e1314] [cursor=pointer]:
+    - menuitem "I AM NOT A PROTECTED VETERAN" [ref=e1315]
+  - option "I CHOOSE NOT TO SELF-IDENTIFY" [ref=e1316] [cursor=pointer]:
+    - menuitem "I CHOOSE NOT TO SELF-IDENTIFY" [ref=e1317]
+  - option "I IDENTIFY AS ONE OR MORE OF THE CLASSIFICATION OF PROTECTED VETERAN LISTED ABOVE" [ref=e1318] [cursor=pointer]:

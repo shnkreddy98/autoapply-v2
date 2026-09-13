@@ -1,0 +1,7 @@
+"State": |-
+  - generic [ref=e124]: "*State"
+  - generic [ref=e128]:
+    - combobox "State" [ref=e129] [cursor=pointer]:
+      - generic [ref=e130]: Select an Option
+    - generic:
+      - generic:

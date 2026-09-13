@@ -1,0 +1,6 @@
+"I have read and understand the Fetch Rewards Notice at Collection for Employees and Applicants": |-
+      - radio "I have read and understand the Fetch Rewards Notice at Collection for Employees and Applicants, including the section describing the use of AI-assisted tools in recruiting, and I consent to the processing of my personal information as described therein."
+      - generic [ref=e272] [cursor=pointer]: I have read and understand the Fetch Rewards Notice at Collection for Employees and Applicants, including the section describing the use of AI-assisted tools in recruiting, and I consent to the processing of my personal information as described therein.
+  - generic [ref=e273]:
+    - generic [ref=e275]: What is your current title? *
+    - textbox [ref=e278]

@@ -1,0 +1,54 @@
+"Address 1": |-
+    - generic [ref=e602]: "*Address 1"
+    - textbox "*Address 1 *Address 1" [ref=e603]
+  - generic [ref=e606]:
+    - generic [ref=e607]: Address 2
+    - textbox "Address 2 Address 2" [ref=e608]
+"City": |-
+    - generic [ref=e612]: "*City"
+    - textbox "*City *City" [ref=e613]: San Jose
+  - generic [ref=e615]:
+    - generic [ref=e616]: "*State / Province"
+    - combobox "*State / Province *State / Province" [ref=e617]:
+  --
+          - option "City and Regional Planning"
+          - option "Civil Engineering"
+          - option "Clinical Nutrition"
+          - option "Clinical Psychology"
+  --
+          - option "City and Regional Planning"
+          - option "Civil Engineering"
+          - option "Clinical Nutrition"
+          - option "Clinical Psychology"
+  --
+            - option "City and Regional Planning"
+            - option "Civil Engineering"
+            - option "Clinical Nutrition"
+            - option "Clinical Psychology"
+  --
+            - option "City and Regional Planning"
+            - option "Civil Engineering"
+            - option "Clinical Nutrition"
+            - option "Clinical Psychology"
+  --
+            - option "City and Regional Planning"
+            - option "Civil Engineering"
+            - option "Clinical Nutrition"
+            - option "Clinical Psychology"
+  --
+            - option "City and Regional Planning"
+            - option "Civil Engineering"
+            - option "Clinical Nutrition"
+            - option "Clinical Psychology"
+"Zip / Postal Code": |-
+        - generic [ref=e620]: "*Zip / Postal Code"
+        - textbox "*Zip / Postal Code *Zip / Postal Code" [ref=e621]
+  - generic [ref=e626] [cursor=pointer]:
+    - checkbox "Willing to relocate" [ref=e627]
+    - text: Willing to relocate
+"State / Province": |-
+  - generic [ref=e616]: "*State / Province"
+  - combobox "*State / Province *State / Province" [ref=e617]:
+    - option "Choose..."
+    - option "Alabama"
+    - option "Alaska"

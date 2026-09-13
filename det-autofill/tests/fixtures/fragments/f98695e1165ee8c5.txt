@@ -1,0 +1,41 @@
+"San Jose, CA": |-
+        - combobox "Location (City)" [active] [ref=e187]: San Jose, CA
+        - textbox
+    - button "Locate me" [ref=e188] [cursor=pointer]
+  - group "Resume/CV*" [ref=e190]:
+"non-competition agreement": |-
+  - generic [ref=e240]: Are you subject to a non-competition agreement or other agreement that would preclude or restrict your employment with Crunchyroll?*
+  - generic [ref=e241]:
+    - log [ref=e243]
+    - generic [ref=e245]:
+  --
+        - combobox "Are you subject to a non-competition agreement or other agreement that would preclude or restrict your employment with Crunchyroll?" [ref=e249]
+      - button "Toggle flyout" [ref=e251] [cursor=pointer]:
+        - img [ref=e252]
+    - textbox
+"immigration-related support": |-
+  - generic [ref=e257]: Do you currently, or will you in the future, require any immigration-related support or sponsorship from Crunchyroll in order to begin or continue employment with Crunchyroll?*
+  - generic [ref=e258]:
+    - log [ref=e260]
+    - generic [ref=e262]:
+  --
+        - combobox "Do you currently, or will you in the future, require any immigration-related support or sponsorship from Crunchyroll in order to begin or continue employment with Crunchyroll?" [ref=e266]
+      - button "Toggle flyout" [ref=e268] [cursor=pointer]:
+        - img [ref=e269]
+    - textbox
+"willing to work out of our San Francisco office": |-
+  - generic [ref=e279]: Are you able and willing to work out of our San Francisco office 3 days/week? *
+  - generic [ref=e280]:
+    - log [ref=e282]
+    - generic [ref=e284]:
+  --
+        - combobox "Are you able and willing to work out of our San Francisco office 3 days/week?" [ref=e288]
+      - button "Toggle flyout" [ref=e290] [cursor=pointer]:
+        - img [ref=e291]
+    - textbox
+"compensation expectations": |-
+        - generic [ref=e296]: Please give us an idea of your total compensation expectations for this role.
+        - textbox "Please give us an idea of your total compensation expectations for this role." [ref=e297]
+      - paragraph [ref=e300]:
+        - emphasis [ref=e301]: This question is optional and it is a private field. Answers may only be viewed by members of our Talent Attraction team.
+  - generic [ref=e302]:

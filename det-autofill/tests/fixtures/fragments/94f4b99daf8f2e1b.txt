@@ -1,0 +1,5 @@
+"Select One Required": |-
+          - button "Select One Required" [ref=e1244]: Select One
+  - generic [ref=e260]:
+    - button "Back" [ref=e378] [cursor=pointer]
+    - button "Save and Continue" [ref=e379] [cursor=pointer]

@@ -1,0 +1,43 @@
+"Gender": |-
+    - text: Gender
+    - generic [ref=e46]: "*"
+  - combobox "Gender" [ref=e48]:
+    - option "— Make a Selection —" [selected]
+    - option "Male"
+    - option "Female"
+"Race": |-
+    - text: •Hispanic or Latino - A person of Cuban, Mexican, Puerto Rican, South or Central American, or other Spanish culture or origin regardless of race.
+    - text: •White (not Hispanic or Latino) - A person having origins in any of the original peoples of Europe, the Middle East, or North Africa.
+    - text: •Black or African American (not Hispanic or Latino) - A person having origins in any of the black racial groups of Africa.
+    - text: •Native Hawaiian or Other Pacific Islander (not Hispanic or Latino) - A person having origins in any of the peoples of Hawaii, Guam, Samoa, or other Pacific Islands.
+  --
+    - text: "•Two or More Races (not Hispanic or Latino) - A person who identifies with more than one of the following, as defined above: White; Black or African American; Native Hawaiian or Other Pacific Islander; Asian; or American Indian or Alaska Native."
+  - heading "Voluntary Information" [level=2] [ref=e42]
+  - generic [ref=e43]:
+    - generic [ref=e44]:
+  --
+        - text: Race
+        - generic [ref=e51]: "*"
+      - combobox "Race" [ref=e53]:
+        - option "— Make a Selection —" [selected]
+        - option "Hispanic or Latino"
+        - option "American Indian or Alaska Native (Not Hispanic or Latino)"
+  --
+        - option "Two or More Races (Not Hispanic or Latino)"
+        - option "White (Not Hispanic or Latino)"
+        - option "Opt Out"
+    - generic [ref=e54]:
+"Disability": |-
+    - text: Disability
+    - generic [ref=e56]: "*"
+  - combobox "Disability" [ref=e58]:
+    - option "— Make a Selection —" [selected]
+    - option "No"
+    - option "Yes"
+"Veteran": |-
+    - text: Veteran
+    - generic [ref=e61]: "*"
+  - combobox "Veteran" [ref=e63]:
+    - option "— Make a Selection —" [selected]
+    - option "No"
+    - option "Yes"

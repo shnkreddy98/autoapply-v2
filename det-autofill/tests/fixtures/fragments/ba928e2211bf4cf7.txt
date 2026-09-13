@@ -1,0 +1,7 @@
+"Apply": |-
+  - 'link "Apply : Data Engineer" [ref=e98] [cursor=pointer]':
+    - /url: https://careers-marquiscompanies.icims.com/jobs/15432/login
+    - text: Apply
+  - generic [ref=e101]:
+    - link "Share on Facebook" [ref=e102] [cursor=pointer]:
+      - /url: "javascript:"

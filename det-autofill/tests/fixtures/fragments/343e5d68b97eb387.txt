@@ -1,0 +1,54 @@
+"New User": |-
+            - text: If you are a returning user, type in your user name and password and click “Login”. If this is your first time logging into our application system, we invite you to create a user name and password. Click “New User” and follow the instructions to create an account.
+          - generic [ref=e70]: Required fields indicated by red asterisk.
+          - table [ref=e72]:
+            - rowgroup [ref=e73]:
+  --
+          - button "New User" [ref=e101] [cursor=pointer]
+  - generic [ref=e104]:
+    - link "Any personal information you provide is subject to the terms of our Privacy Policy" [ref=e105] [cursor=pointer]:
+      - /url: https://www.weyerhaeuser.com/privacy/privacy-policy
+"User Name": |-
+    - text: If you are a returning user, type in your user name and password and click “Login”. If this is your first time logging into our application system, we invite you to create a user name and password. Click “New User” and follow the instructions to create an account.
+  - generic [ref=e70]: Required fields indicated by red asterisk.
+  - table [ref=e72]:
+    - rowgroup [ref=e73]:
+      - 'row "User Name . Required Password . Required Forgot your user name? Forgot your password? or Sign in with: Use your Yahoo! account information to login" [ref=e74]':
+        - cell "User Name . Required Password . Required Forgot your user name? Forgot your password?" [ref=e75]:
+          - generic "The field User Name is mandatory." [ref=e76]:
+            - text: User Name
+            - generic [ref=e77]: .
+            - generic [ref=e78]: Required
+          - textbox "User Name . Required" [active] [ref=e79]
+          - generic "The field Password is mandatory." [ref=e80]:
+            - text: Password
+            - generic [ref=e81]: .
+  --
+            - link "Forgot your user name?" [ref=e86] [cursor=pointer]:
+              - /url: /careersection/iam/accessmanagement/forgotUsername.jsf?redirectionURI=https%3A%2F%2Fweyerhaeuser.taleo.net%2Fcareersection%2Fapplication.jss%3Flang%3Den%26type%3D1%26csNo%3D10000%26portal%3D640180091%26reqNo%3D463139%26isOnLogoutPage%3Dtrue
+            - link "Forgot your password?" [ref=e88] [cursor=pointer]:
+              - /url: /careersection/iam/accessmanagement/forgotPasswordAccessCode.jsf?redirectionURI=https%3A%2F%2Fweyerhaeuser.taleo.net%2Fcareersection%2Fapplication.jss%3Flang%3Den%26type%3D1%26csNo%3D10000%26portal%3D640180091%26reqNo%3D463139%26isOnLogoutPage%3Dtrue
+"Password": |-
+    - text: If you are a returning user, type in your user name and password and click “Login”. If this is your first time logging into our application system, we invite you to create a user name and password. Click “New User” and follow the instructions to create an account.
+  - generic [ref=e70]: Required fields indicated by red asterisk.
+  - table [ref=e72]:
+    - rowgroup [ref=e73]:
+      - 'row "User Name . Required Password . Required Forgot your user name? Forgot your password? or Sign in with: Use your Yahoo! account information to login" [ref=e74]':
+        - cell "User Name . Required Password . Required Forgot your user name? Forgot your password?" [ref=e75]:
+          - generic "The field User Name is mandatory." [ref=e76]:
+            - text: User Name
+            - generic [ref=e77]: .
+  --
+          - generic "The field Password is mandatory." [ref=e80]:
+            - text: Password
+            - generic [ref=e81]: .
+            - generic [ref=e82]: Required
+          - textbox "Password . Required" [ref=e83]
+          - generic [ref=e84]:
+            - link "Forgot your user name?" [ref=e86] [cursor=pointer]:
+              - /url: /careersection/iam/accessmanagement/forgotUsername.jsf?redirectionURI=https%3A%2F%2Fweyerhaeuser.taleo.net%2Fcareersection%2Fapplication.jss%3Flang%3Den%26type%3D1%26csNo%3D10000%26portal%3D640180091%26reqNo%3D463139%26isOnLogoutPage%3Dtrue
+            - link "Forgot your password?" [ref=e88] [cursor=pointer]:
+              - /url: /careersection/iam/accessmanagement/forgotPasswordAccessCode.jsf?redirectionURI=https%3A%2F%2Fweyerhaeuser.taleo.net%2Fcareersection%2Fapplication.jss%3Flang%3Den%26type%3D1%26csNo%3D10000%26portal%3D640180091%26reqNo%3D463139%26isOnLogoutPage%3Dtrue
+        - 'cell "or Sign in with: Use your Yahoo! account information to login" [ref=e89]':
+          - generic [ref=e90]: "or Sign in with:"
+          - table [ref=e92]:

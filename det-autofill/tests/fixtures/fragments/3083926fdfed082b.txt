@@ -1,0 +1,5 @@
+"Accept Cookies": |-
+        - button "Accept Cookies" [ref=e348] [cursor=pointer]
+  - button "Chat Widget Button" [ref=e349] [cursor=pointer]:
+    - img [ref=e350]
+  - tooltip "Learn more about AMD by chatting with us!" [ref=e352]:

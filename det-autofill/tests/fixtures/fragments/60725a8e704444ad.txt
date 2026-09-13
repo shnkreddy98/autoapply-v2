@@ -1,0 +1,9 @@
+"No, I do not have a disability": |-
+    - radio "No, I do not have a disability and have not had one in the past" [ref=e62]
+    - text: No, I do not have a disability and have not had one in the past
+  - generic [ref=e64]:
+    - radio "I do not want to answer" [ref=e65]
+    - text: I do not want to answer
+"Submit Form & Continue": |-
+    - button "Submit Form & Continue" [ref=e80]
+  ```

@@ -1,0 +1,35 @@
+"8+ years": |-
+      - checkbox "8+ years" [checked] [active] [ref=e236]
+      - text: 8+ years
+  - generic [ref=e237]:
+    - generic [ref=e238]: Are you able to work onsite Monday-Friday at our Houston corporate office (77070)?*
+    - generic [ref=e239]:
+"onsite Monday-Friday.*Yes": (no match)
+"sponsorship.*No": (no match)
+"Not local and no relocation planned": |-
+      - checkbox "Not local and no relocation planned" [ref=e256]
+      - text: Not local and no relocation planned
+  - generic [ref=e257]:
+    - generic [ref=e258]: Are you comfortable communicating technical concepts clearly in fluent spoken and written English with business stakeholders and executive leadership?*
+    - generic [ref=e259]:
+"technical concepts.*Yes": (no match)
+"Azure Databricks in a production environment.*5+ years": (no match)
+"Databricks technologies.*Spark": (no match)
+"Databricks technologies.*PySpark": (no match)
+"Azure services.*Azure Data Factory": (no match)
+"Azure services.*Azure SQL": (no match)
+"Azure services.*Azure Synapse": (no match)
+"Azure services.*Azure Storage (ADLS)": (no match)
+"AI/ML models.*Yes": (no match)
+"AI-related technologies.*Azure AI Services": (no match)
+"AI-related technologies.*MLflow": (no match)
+"SQL proficiency.*Expert": (no match)
+"million-plus row datasets.*Over 1 billion": (no match)
+"programming languages.*Python": (no match)
+"programming languages.*SQL": (no match)
+"mentored junior Data Engineers.*Frequently": (no match)
+"current role.*Individual Contributor": (no match)
+"industries.*Technology": (no match)
+"Gender.*Decline to answer": (no match)
+"Veteran status.*I DON\u2019T WISH TO ANSWER": (no match)
+"Self-Identification of Disability.*I DO NOT WANT TO ANSWER": (no match)

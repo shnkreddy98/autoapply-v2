@@ -1,0 +1,10 @@
+"Apply": |-
+  - 1: [Begin the submission process](https://recruit.hirebridge.com/v3/applicationv2/Jobapplylogin.aspx?cid=7765&jid=731316)
+  ### Page
+  - Page URL: https://jobs.usi.com/Jobs/JobDetail?jobId=32424&src=LinkedIn
+  - Page Title: Sr Data Engineer - Remote- Eastern Time Zone - 32424 - USI Insurance
+  --
+              - link "Apply" [ref=e157] [cursor=pointer]:
+                - /url: https://jobs.usi.com/Jobs/ApplicationMethods?jobId=32424
+            - article [ref=e158]:
+              - heading "Share this job" [level=3] [ref=e161]

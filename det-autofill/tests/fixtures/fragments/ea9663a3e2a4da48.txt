@@ -1,0 +1,25 @@
+"Address 2": |-
+    - generic [ref=f67e146]: Address 2
+    - textbox "Address 2" [ref=f67e148]
+  - generic [ref=f67e149]:
+    - generic [ref=f67e150]:
+      - generic [ref=f67e151]: City
+"Password": |-
+          - generic [ref=f67e545]: Password
+          - generic [ref=f67e546]:
+            - 'textbox "Password: Minimum 8 characters, 1 alphabetic, 1 lowercase, 1 uppercase, 1 numeric, 1 special character(s)" [ref=f67e547]'
+            - text:  
+        - generic [ref=f67e548]:
+          - generic [ref=f67e549]: Password (Re-enter)
+          - generic [ref=f67e550]:
+            - 'textbox "Password (Re-enter): Minimum 8 characters, 1 alphabetic, 1 lowercase, 1 uppercase, 1 numeric, 1 special character(s)" [ref=f67e551]'
+            - text: 
+    - button "Submit Profile" [ref=f67e555] [cursor=pointer]
+  - generic [ref=f67e556]:
+"Password (Re-enter)": |-
+          - generic [ref=f67e549]: Password (Re-enter)
+          - generic [ref=f67e550]:
+            - 'textbox "Password (Re-enter): Minimum 8 characters, 1 alphabetic, 1 lowercase, 1 uppercase, 1 numeric, 1 special character(s)" [ref=f67e551]'
+            - text: 
+    - button "Submit Profile" [ref=f67e555] [cursor=pointer]
+  - generic [ref=f67e556]:

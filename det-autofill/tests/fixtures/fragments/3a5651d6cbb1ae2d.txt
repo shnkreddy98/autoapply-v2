@@ -1,0 +1,28 @@
+"Preferred Contact Method *": |-
+      - generic "Preferred Contact Method" [ref=e829]: Preferred Contact Method *
+      - generic [ref=e833] [cursor=pointer]:
+        - combobox "Preferred Contact Method *" [ref=e836]
+        - generic:
+          - img:
+            - img
+  - generic [ref=e837]:
+    - generic [ref=e839]:
+      - generic [ref=e842]:
+        - generic "Country" [ref=e844]
+        - generic [ref=e848] [cursor=pointer]:
+          - generic [ref=e849]:
+            - combobox "Country" [ref=e851]
+"How did you hear about this job? *": |-
+        - generic "How did you hear about this job?" [ref=e914]: How did you hear about this job? *
+        - generic [ref=e918] [cursor=pointer]:
+          - combobox "How did you hear about this job? *" [ref=e921]
+          - generic:
+            - img:
+              - img
+      - generic [ref=e922]:
+        - button "Update" [ref=e929] [cursor=pointer]:
+          - generic [ref=e930]: Update
+        - button "Cancel" [ref=e937] [cursor=pointer]:
+          - generic [ref=e938]: Cancel
+    - separator [ref=e939]
+  - generic [ref=e940]:

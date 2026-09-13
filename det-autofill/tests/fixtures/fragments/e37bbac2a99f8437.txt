@@ -1,0 +1,15 @@
+"Accept": |-
+            - generic [ref=e112]: Password accepted
+          - list [ref=e105]:
+            - listitem [ref=e106]: Password must be at least 8 characters long.
+            - listitem [ref=e107]: Password must not be longer than 18 characters.
+  --
+          - button [ref=e141] [cursor=pointer]: Read and accept the data privacy statement.
+          - generic [ref=e143]: Terms of Use is required
+          - button [ref=e144] [cursor=pointer]: Create Account
+  - contentinfo [ref=e82]:
+  --
+          - button "Accept" [ref=e179] [cursor=pointer]
+        - button "Decline" [ref=e183] [cursor=pointer]
+        - button "Print" [ref=e187] [cursor=pointer]
+      - button "Close" [active] [ref=e188] [cursor=pointer]: 

@@ -1,0 +1,5 @@
+"Save and Continue": |-
+          - button "Save and Continue" [ref=e289] [cursor=pointer]
+  - generic [ref=e56]:
+    - heading "Follow Us" [level=4] [ref=e57]
+    - list [ref=e58]:

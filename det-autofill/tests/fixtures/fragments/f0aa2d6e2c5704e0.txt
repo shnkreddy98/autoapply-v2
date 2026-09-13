@@ -1,0 +1,44 @@
+"BS": |-
+  - Page URL: https://cir.wd108.myworkdayjobs.com/en-US/CIR_External_Career_Site/job/Phoenix%2C-AZ/Principal-Data-Engineer_R-2025-151/apply/autofillWithResume?source=LinkedIn
+  - Page Title: Principal Data Engineer
+  ### Snapshot
+  ```yaml
+  - generic [ref=e1]:
+    - generic [ref=e4]:
+      - link "Skip to main content" [ref=e5] [cursor=pointer]:
+        - /url: ""
+      - generic "You may choose to display a cookie banner on the external site. You must specify the message in the cookie banner and may add a link to a relevant policy. If you are unfamiliar with these requirements, please seek the advice of legal counsel." [ref=e9]:
+  --
+          - link "search for jobs" [ref=e27] [cursor=pointer]:
+            - /url: /en-US/CIR_External_Career_Site
+            - img "search for jobs" [ref=e28]
+          - generic [ref=e29]:
+            - heading [level=1]
+          - generic [ref=e31]:
+            - generic [ref=e32]:
+              - button "Settings" [ref=e34] [cursor=pointer]:
+                - generic [ref=e39]: Settings
+              - button "jane.doe@example.com" [ref=e42] [cursor=pointer]:
+                - generic [ref=e47]: jane.doe@example.com
+  --
+              - button "Search for Jobs" [ref=e49] [cursor=pointer]
+              - button "Candidate Home" [ref=e50] [cursor=pointer]
+      - main [ref=e89]:
+        - generic [ref=e90]:
+          - generic [ref=e91]:
+            - link "Back to Job Posting" [ref=e93] [cursor=pointer]:
+              - generic [ref=e97]: Back to Job Posting
+            - heading "Principal Data Engineer" [level=2] [ref=e98]
+          - generic "Application Progress" [ref=e99]:
+  --
+      - option "BS" [ref=e892]:
+        - generic [ref=e893]: BS
+      - option "MA" [ref=e894]:
+        - generic [ref=e895]: MA
+      - option "MS" [ref=e896]:
+        - generic [ref=e897]: MS
+      - option "MBA" [ref=e898]:
+        - generic [ref=e899]: MBA
+      - option "PhD" [ref=e900]:
+        - generic [ref=e901]: PhD
+"Bachelor": (no match)

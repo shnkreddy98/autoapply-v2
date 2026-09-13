@@ -1,0 +1,7 @@
+"Gender": |-
+    - text: Gender
+    - generic [ref=f67e47]: "*"
+  - combobox "Gender" [active] [ref=f67e49]:
+    - option "— Make a Selection —"
+    - option "Male" [selected]
+    - option "Female"

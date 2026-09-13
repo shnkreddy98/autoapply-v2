@@ -1,0 +1,26 @@
+"Sign In": |-
+  - Page Title: Sign In
+  - Console: 0 errors, 1 warnings
+  ### Snapshot
+  ```yaml
+  --
+            - button "Sign In" [ref=e220] [cursor=pointer]:
+              - generic [ref=e225]: Sign In
+            - navigation [ref=e26]:
+              - button "Home" [ref=e27] [cursor=pointer]
+              - button "Search for Jobs" [ref=e28] [cursor=pointer]
+  --
+              - heading "Sign In" [level=3] [ref=e301]
+              - generic [ref=e302]:
+                - generic [ref=e303]:
+                  - generic [ref=e305]: Email Address*
+  --
+                  - button [ref=e322] [cursor=pointer]: Sign In
+              - generic [ref=e323]:
+                - text: Don't have an account yet?
+                - button "Create Account" [ref=e324] [cursor=pointer]
+"Submit": |-
+      - button "Submit" [ref=e321] [cursor=pointer]
+      - button [ref=e322] [cursor=pointer]: Sign In
+  - generic [ref=e323]:
+    - text: Don't have an account yet?

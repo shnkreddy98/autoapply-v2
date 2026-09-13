@@ -1,0 +1,45 @@
+"Gender": |-
+  - paragraph [ref=e76]: Correlation One is proud to be an Equal Opportunity Employer and is committed to providing equal opportunity for all employees and applicants. Correlation One provides a work environment free of discrimination and harassment. Employment decisions at Correlation One are based solely on business needs, job requirements and individual qualifications, without regard to race, color, religion or belief, national, social or ethnic origin, sex (including pregnancy), age, sexual orientation, gender identity and/or expression, marital, civil union or domestic partnership status, past or present military service, or any other status protected by the laws or regulations in the locations where we operate. We encourage applicants to bring their unique skills, experiences, and outlook to our work environment.
+  - paragraph [ref=e77]:
+    - text: Correlation One is committed to the full inclusion of all qualified individuals. In keeping with our commitment, Correlation One strives to provide reasonable accommodations for persons with disabilities to enable them to access the hiring process. If you need an accommodation to access the job application or interview process, please contact
+    - link "candidates@correlation-one.com" [ref=e78] [cursor=pointer]:
+  --
+      - generic [ref=e266]: Gender
+      - generic [ref=e267]:
+        - log [ref=e269]
+        - generic [ref=e271]:
+  --
+            - combobox "Gender" [ref=e275]
+          - button "Toggle flyout" [ref=e277] [cursor=pointer]:
+            - img [ref=e278]
+    - generic [ref=e280]:
+"Are you Hispanic/Latino?": |-
+    - generic [ref=e283]: Are you Hispanic/Latino?
+    - generic [ref=e284]:
+      - log [ref=e286]
+      - generic [ref=e288]:
+  --
+          - combobox "Are you Hispanic/Latino?" [ref=e292]
+        - button "Toggle flyout" [ref=e294] [cursor=pointer]:
+          - img [ref=e295]
+  - link "Race & Ethnicity Definitions" [ref=e297] [cursor=pointer]:
+"Veteran Status": |-
+    - generic [ref=e307]: Veteran Status
+    - generic [ref=e308]:
+      - log [ref=e310]
+      - generic [ref=e312]:
+  --
+          - combobox "Veteran Status" [ref=e316]
+        - button "Toggle flyout" [ref=e318] [cursor=pointer]:
+          - img [ref=e319]
+  - separator [ref=e321]
+"Disability Status": |-
+    - generic [ref=e364]: Disability Status
+    - generic [ref=e365]:
+      - log [ref=e367]
+      - generic [ref=e369]:
+  --
+          - combobox "Disability Status" [ref=e373]
+        - button "Toggle flyout" [ref=e375] [cursor=pointer]:
+          - img [ref=e376]
+  - paragraph [ref=e379]: "PUBLIC BURDEN STATEMENT: According to the Paperwork Reduction Act of 1995 no persons are required to respond to a collection of information unless such collection displays a valid OMB control number. This survey should take about 5 minutes to complete."

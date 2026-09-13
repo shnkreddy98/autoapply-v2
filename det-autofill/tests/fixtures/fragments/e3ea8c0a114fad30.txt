@@ -1,0 +1,6 @@
+"Resume/CV": |-
+  - group "Resume/CV*" [ref=e190]:
+    - generic [ref=e191]: Resume/CV*
+    - generic [ref=e193]:
+      - generic [ref=e195]:
+        - button "Attach" [ref=e196] [cursor=pointer]

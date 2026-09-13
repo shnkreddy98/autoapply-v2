@@ -1,0 +1,5 @@
+"Are you able to perform the essential functions of the job for which you are applying with or without reasonable accommodation?*": |-
+  - group "Are you able to perform the essential functions of the job for which you are applying with or without reasonable accommodation?*" [ref=e1769]:
+    - paragraph [ref=e1773]: Are you able to perform the essential functions of the job for which you are applying with or without reasonable accommodation?*
+    - generic [ref=e1774]:
+      - button "Select One Required" [ref=e1777]: Select One

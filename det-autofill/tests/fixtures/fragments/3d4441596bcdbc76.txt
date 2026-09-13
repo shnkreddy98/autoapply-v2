@@ -1,0 +1,7 @@
+"What is your salary expectation for the role you are applying to?*": |-
+  - group "What is your salary expectation for the role you are applying to?*" [ref=e2170]:
+    - paragraph [ref=e2174]: What is your salary expectation for the role you are applying to?*
+    - textbox [ref=e2177]
+  - 'group "Relocation (required): If this position does not include relocation assistance, are you willing to relocate at your own expense to the job location?*" [ref=e2179]':
+    - paragraph [ref=e2183]: "Relocation (required): If this position does not include relocation assistance, are you willing to relocate at your own expense to the job location?*"
+"Relocation (required): If this position does not include relocation assistance, are you willing to relocate at your own expense to the job location?* Select One Required": (no match)

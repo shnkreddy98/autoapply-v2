@@ -1,0 +1,5 @@
+"Resume": |-
+  - generic [ref=e198]: Resume *
+  - generic [active] [ref=e201] [cursor=pointer]:
+    - generic [ref=e202]:
+      - img [ref=e204]

@@ -1,0 +1,6 @@
+"Job Boards": |-
+  - option "Job Boards not checked" [ref=e427]:
+    - generic [ref=e429] [cursor=pointer]: Job Boards
+  - option "Social Media not checked" [ref=e434]:
+    - generic [ref=e436] [cursor=pointer]: Social Media
+  - option "University not checked" [ref=e441]:

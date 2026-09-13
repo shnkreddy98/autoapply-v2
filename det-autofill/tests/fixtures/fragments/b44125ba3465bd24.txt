@@ -1,0 +1,5 @@
+"Degree Select One Required": |-
+    - button "Degree Select One Required" [ref=e1019]: Select One
+  - generic [ref=e1020]:
+    - generic [ref=e1022]:
+      - generic [ref=e1023]: Field of Study

@@ -1,0 +1,10 @@
+"School": |-
+  - generic [ref=f94e207]: School
+  - generic [ref=f94e208]:
+    - log [ref=f94e210]: option San Jose State University, selected.
+    - generic [ref=f94e212]:
+  --
+        - combobox "School" [active] [ref=f94e216]
+      - generic [ref=f94e217]:
+        - button "Clear selections" [ref=f94e697] [cursor=pointer]:
+          - img [ref=f94e698]

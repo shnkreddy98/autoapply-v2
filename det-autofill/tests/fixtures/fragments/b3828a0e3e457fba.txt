@@ -1,0 +1,5 @@
+"Display hCaptcha Accessibility Challenge": |-
+  - menuitem "Display hCaptcha Accessibility Challenge, 2 of 5" [ref=f17e101] [cursor=pointer]: Accessibility Challenge
+  - menuitem "Report Image to hCaptcha, 3 of 5" [ref=f17e103] [cursor=pointer]: Report Image
+  - menuitem "Report Bug to hCaptcha, 4 of 5" [ref=f17e105] [cursor=pointer]: Report Bug
+  - menuitem "Information About hCaptcha, 5 of 5" [ref=f17e107] [cursor=pointer]: Information

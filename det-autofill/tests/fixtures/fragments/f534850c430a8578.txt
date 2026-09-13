@@ -1,0 +1,28 @@
+"Apply": |-
+              - button "Apply" [ref=e836] [cursor=pointer]
+          - generic "Job Posting Description" [ref=e840]:
+            - generic [ref=e842]:
+              - generic [ref=e850]:
+  --
+                  - term [ref=e884]: time left to apply
+                  - definition [ref=e885]: "End Date: July 2, 2026 (1 day left to apply)"
+                - generic [ref=e894]:
+                  - term [ref=e895]: job requisition id
+                  - definition [ref=e896]: R-793105
+  --
+                      - generic [ref=e964]: Translate business requirements into functional and technical specifications; apply skills in data analysis, mapping, and visualization.
+                - list [ref=e966]:
+                  - listitem [ref=e967]:
+                    - paragraph [ref=e968]:
+  --
+                    - term [ref=e1375]: end date and time left to apply
+                    - definition [ref=e1376]: "End Date: July 1, 2026 (20 hours left to apply)"
+                - listitem [ref=e1377]:
+                  - heading "Software Engineering & Development, Senior Associate" [level=3] [ref=e1381]:
+                    - link "Software Engineering & Development, Senior Associate" [ref=e1382] [cursor=pointer]:
+  --
+                    - term [ref=e1426]: end date and time left to apply
+                    - definition [ref=e1427]: "End Date: July 1, 2026 (20 hours left to apply)"
+              - button "View All 9 Jobs" [ref=e1430] [cursor=pointer]:
+                - generic [ref=e1434]: View All 9 Jobs
+  - generic [ref=e750]:

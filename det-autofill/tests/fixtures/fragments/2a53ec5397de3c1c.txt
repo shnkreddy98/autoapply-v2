@@ -1,0 +1,102 @@
+"First Name": |-
+    - generic [ref=e96]: First Name*
+    - textbox "First Name" [ref=e97]
+  - generic [ref=e100]:
+    - generic [ref=e101]: Last Name*
+    - textbox "Last Name" [ref=e102]
+  --
+    - generic [ref=e106]: Preferred First Name
+    - textbox "Preferred First Name" [ref=e107]
+  - generic [ref=e110]:
+    - generic [ref=e111]: Email*
+    - textbox "Email" [ref=e112]
+"Last Name": |-
+    - generic [ref=e101]: Last Name*
+    - textbox "Last Name" [ref=e102]
+  - generic [ref=e105]:
+    - generic [ref=e106]: Preferred First Name
+    - textbox "Preferred First Name" [ref=e107]
+"Email": |-
+        - paragraph [ref=e79]: Interested in building your career at Nearwater Capital? Get future opportunities sent straight to your email.
+        - link "Create alert" [ref=e268] [cursor=pointer]:
+          - /url: https://my.greenhouse.io/users/sign_in?job_board=nearwatercapital&source=job_alert_post
+  - separator [ref=e81]
+  --
+          - generic [ref=e111]: Email*
+          - textbox "Email" [ref=e112]
+        - group "Phone" [ref=e114]:
+          - generic [ref=e115]: Phone
+          - generic [ref=e118]:
+"Phone": |-
+  - group "Phone" [ref=e114]:
+    - generic [ref=e115]: Phone
+    - generic [ref=e118]:
+      - generic [ref=e119]: Country*
+      - generic [ref=e120]:
+  --
+      - generic [ref=e135]: Phone*
+      - textbox "Phone" [ref=e136]
+  - group "Resume/CV*" [ref=e138]:
+    - generic [ref=e139]: Resume/CV*
+    - generic [ref=e141]:
+"Country": |-
+  - generic [ref=e119]: Country*
+  - generic [ref=e120]:
+    - log [ref=e122]
+    - generic [ref=e124]:
+      - combobox "Country" [ref=e127]
+      - button "Toggle flyout" [ref=e129] [cursor=pointer]:
+        - img [ref=e130]
+    - textbox
+"Resume/CV": |-
+  - group "Resume/CV*" [ref=e138]:
+    - generic [ref=e139]: Resume/CV*
+    - generic [ref=e141]:
+      - generic [ref=e143]:
+        - button "Attach" [ref=e144] [cursor=pointer]
+"authorized to work": |-
+  - generic [ref=e180]: Are you authorized to work in the United States?*
+  - generic [ref=e181]:
+    - log [ref=e183]
+    - generic [ref=e185]:
+  --
+        - combobox "Are you authorized to work in the United States?" [ref=e189]
+      - button "Toggle flyout" [ref=e191] [cursor=pointer]:
+        - img [ref=e192]
+    - textbox
+"require sponsorship": |-
+  - generic [ref=e197]: Will you now, or in the future, require sponsorship to work in the United States?*
+  - generic [ref=e198]:
+    - log [ref=e200]
+    - generic [ref=e202]:
+  --
+        - combobox "Will you now, or in the future, require sponsorship to work in the United States?" [ref=e206]
+      - button "Toggle flyout" [ref=e208] [cursor=pointer]:
+        - img [ref=e209]
+    - textbox
+"in-office schedule": |-
+  - generic [ref=e214]: This role is based fully in-office, Monday–Friday. Are you comfortable with a 5-day in-office schedule on an ongoing basis?*
+  - generic [ref=e215]:
+    - log [ref=e217]
+    - generic [ref=e219]:
+  --
+        - combobox "This role is based fully in-office, Monday–Friday. Are you comfortable with a 5-day in-office schedule on an ongoing basis?" [ref=e223]
+      - button "Toggle flyout" [ref=e225] [cursor=pointer]:
+        - img [ref=e226]
+    - textbox
+"experience with and philosophy around using AI": |-
+    - generic [ref=e231]: Briefly tell us about your experience with and philosophy around using AI. *
+    - textbox "Briefly tell us about your experience with and philosophy around using AI." [ref=e232]
+  - generic [ref=e235]:
+    - generic [ref=e236]: Do you have at minimum 3 years of experience within financial services focused on building data pipelines?*
+    - generic [ref=e237]:
+"3 years of experience within financial services": |-
+  - generic [ref=e236]: Do you have at minimum 3 years of experience within financial services focused on building data pipelines?*
+  - generic [ref=e237]:
+    - log [ref=e239]
+    - generic [ref=e241]:
+  --
+        - combobox "Do you have at minimum 3 years of experience within financial services focused on building data pipelines?" [ref=e245]
+      - button "Toggle flyout" [ref=e247] [cursor=pointer]:
+        - img [ref=e248]
+    - textbox

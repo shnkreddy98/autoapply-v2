@@ -1,0 +1,15 @@
+"Yes": |-
+        - button "Yes" [ref=e292] [cursor=pointer]
+        - button "No" [active] [ref=e293] [cursor=pointer]
+    - generic [ref=e204]:
+      - generic [ref=e205]: Are you available to attend an in-person interview if requested as part of the hiring process?*
+  --
+        - button "Yes" [ref=e294] [cursor=pointer]
+        - button "No" [ref=e295] [cursor=pointer]
+    - generic [ref=e209]:
+      - generic [ref=e210]: We conduct thorough background checks as part of our hiring process. By selecting “Yes,” you acknowledge and consent to this verification if you advance in the process*
+      - generic [ref=e211]:
+        - button "Yes" [ref=e296] [cursor=pointer]
+        - button "No" [ref=e297] [cursor=pointer]
+  - generic [ref=e132]:
+    - generic:

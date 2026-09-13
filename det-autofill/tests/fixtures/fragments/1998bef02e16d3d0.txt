@@ -1,0 +1,20 @@
+"currently a resident of the European Union": |-
+  - generic [ref=f94e275]: Are you currently a resident of the European Union?*
+  - generic [ref=f94e276]:
+    - log [ref=f94e278]
+    - generic [ref=f94e280]:
+  --
+        - combobox "Are you currently a resident of the European Union?" [invalid] [ref=f94e284]
+      - button "Toggle flyout" [ref=f94e286] [cursor=pointer]:
+        - img [ref=f94e287]
+    - textbox
+"GDPR Notice for EU Residents": |-
+  - generic [ref=f94e292]: GDPR Notice for EU Residents*
+  - generic [ref=f94e293]:
+    - log [ref=f94e295]
+    - generic [ref=f94e297]:
+  --
+        - combobox "GDPR Notice for EU Residents" [invalid] [ref=f94e301]
+      - button "Toggle flyout" [ref=f94e303] [cursor=pointer]:
+        - img [ref=f94e304]
+    - textbox

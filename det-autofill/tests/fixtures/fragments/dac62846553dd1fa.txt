@@ -1,0 +1,90 @@
+"Select All": |-
+    - button "Select All" [ref=e965] [cursor=pointer]:
+      - generic [ref=e966]: Select All
+  - generic [ref=e967]:
+    - generic [ref=e968]:
+      - heading "Tuesday" [level=3] [ref=e969]:
+        - button "Tuesday" [expanded] [ref=e970] [cursor=pointer]:
+          - generic [ref=e974]: Tuesday
+  --
+    - button "Select All" [ref=e999] [cursor=pointer]:
+      - generic [ref=e1000]: Select All
+  - generic [ref=e1001]:
+    - generic [ref=e1002]:
+      - heading "Wednesday" [level=3] [ref=e1003]:
+        - button "Wednesday" [expanded] [ref=e1004] [cursor=pointer]:
+          - generic [ref=e1008]: Wednesday
+  --
+    - button "Select All" [ref=e1033] [cursor=pointer]:
+      - generic [ref=e1034]: Select All
+  - generic [ref=e1035]:
+    - generic [ref=e1036]:
+      - heading "Thursday" [level=3] [ref=e1037]:
+        - button "Thursday" [expanded] [ref=e1038] [cursor=pointer]:
+          - generic [ref=e1042]: Thursday
+  --
+    - button "Select All" [ref=e1067] [cursor=pointer]:
+      - generic [ref=e1068]: Select All
+  - generic [ref=e1069]:
+    - generic [ref=e1070]:
+      - heading "Friday" [level=3] [ref=e1071]:
+        - button "Friday" [expanded] [ref=e1072] [cursor=pointer]:
+          - generic [ref=e1076]: Friday
+  --
+    - button "Select All" [ref=e1101] [cursor=pointer]:
+      - generic [ref=e1102]: Select All
+  - generic [ref=e1106]:
+    - checkbox "None of these work for me" [ref=e1109] [cursor=pointer]
+    - generic [ref=e1110] [cursor=pointer]: None of these work for me
+  - generic [ref=e1111]:
+    - generic [ref=e1112]: Notes
+"Monday": |-
+  - heading "Monday" [level=3] [ref=e935]:
+    - button "Monday" [expanded] [ref=e936] [cursor=pointer]:
+      - generic [ref=e940]: Monday
+  - group "Monday" [ref=e941]:
+    - generic [ref=e942]:
+      - button "9:00 AM - 12:00 PM" [ref=e945] [cursor=pointer]:
+        - generic [ref=e946]: 9:00 AM - 12:00 PM
+      - button "12:00 PM - 1:00 PM" [ref=e952] [cursor=pointer]:
+        - generic [ref=e953]: 12:00 PM - 1:00 PM
+"Tuesday": |-
+  - heading "Tuesday" [level=3] [ref=e969]:
+    - button "Tuesday" [expanded] [ref=e970] [cursor=pointer]:
+      - generic [ref=e974]: Tuesday
+  - group "Tuesday" [ref=e975]:
+    - generic [ref=e976]:
+      - button "9:00 AM - 12:00 PM" [ref=e979] [cursor=pointer]:
+        - generic [ref=e980]: 9:00 AM - 12:00 PM
+      - button "12:00 PM - 1:00 PM" [ref=e986] [cursor=pointer]:
+        - generic [ref=e987]: 12:00 PM - 1:00 PM
+"Wednesday": |-
+  - heading "Wednesday" [level=3] [ref=e1003]:
+    - button "Wednesday" [expanded] [ref=e1004] [cursor=pointer]:
+      - generic [ref=e1008]: Wednesday
+  - group "Wednesday" [ref=e1009]:
+    - generic [ref=e1010]:
+      - button "9:00 AM - 12:00 PM" [ref=e1013] [cursor=pointer]:
+        - generic [ref=e1014]: 9:00 AM - 12:00 PM
+      - button "12:00 PM - 1:00 PM" [ref=e1020] [cursor=pointer]:
+        - generic [ref=e1021]: 12:00 PM - 1:00 PM
+"Thursday": |-
+  - heading "Thursday" [level=3] [ref=e1037]:
+    - button "Thursday" [expanded] [ref=e1038] [cursor=pointer]:
+      - generic [ref=e1042]: Thursday
+  - group "Thursday" [ref=e1043]:
+    - generic [ref=e1044]:
+      - button "9:00 AM - 12:00 PM" [ref=e1047] [cursor=pointer]:
+        - generic [ref=e1048]: 9:00 AM - 12:00 PM
+      - button "12:00 PM - 1:00 PM" [ref=e1054] [cursor=pointer]:
+        - generic [ref=e1055]: 12:00 PM - 1:00 PM
+"Friday": |-
+  - heading "Friday" [level=3] [ref=e1071]:
+    - button "Friday" [expanded] [ref=e1072] [cursor=pointer]:
+      - generic [ref=e1076]: Friday
+  - group "Friday" [ref=e1077]:
+    - generic [ref=e1078]:
+      - button "9:00 AM - 12:00 PM" [ref=e1081] [cursor=pointer]:
+        - generic [ref=e1082]: 9:00 AM - 12:00 PM
+      - button "12:00 PM - 1:00 PM" [ref=e1088] [cursor=pointer]:
+        - generic [ref=e1089]: 12:00 PM - 1:00 PM

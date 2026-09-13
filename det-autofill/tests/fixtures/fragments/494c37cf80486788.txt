@@ -1,0 +1,14 @@
+"Terms of Use": |-
+    - link "Terms of Use" [ref=e72] [cursor=pointer]:
+      - /url: https://www.dayforce.com/terms
+    - text: .
+  - generic [ref=e76]:
+  --
+      - checkbox "I agree to Dayforce's Global Privacy Statement and to the Terms of Use, I clicked the links above and reviewed these documents." [checked] [ref=e79]
+      - generic:
+        - generic:
+          - img
+    - generic [ref=e80]: I agree to Dayforce's Global Privacy Statement and to the Terms of Use, I clicked the links above and reviewed these documents.
+  - generic:
+    - generic:
+      - paragraph

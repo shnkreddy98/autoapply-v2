@@ -1,0 +1,12 @@
+"Yes": |-
+                  - 'group "Will you now or in the future require sponsorship for employment visa status to work in the country of the position for which you are expressing an interest? (Note: If you are currently on a student visa, temporary work visa, or any other type of temporary work authorization, please select “Yes” to this question).*" [ref=e1882]':
+                    - paragraph [ref=e1886]: "Will you now or in the future require sponsorship for employment visa status to work in the country of the position for which you are expressing an interest? (Note: If you are currently on a student visa, temporary work visa, or any other type of temporary work authorization, please select “Yes” to this question).*"
+                    - button "Select One Required" [ref=e1890]: Select One
+                  - group "Have you ever been an employee of either Northern Trust or any affiliates of Northern Trust?*" [ref=e1892]:
+                    - paragraph [ref=e1896]:
+  --
+      - option "Yes" [ref=e1949]:
+        - generic [ref=e1950]: "Yes"
+      - option "No" [ref=e1951]:
+        - generic [ref=e1952]: "No"
+  ```

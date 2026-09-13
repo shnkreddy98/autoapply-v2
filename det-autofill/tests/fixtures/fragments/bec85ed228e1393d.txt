@@ -1,0 +1,8 @@
+"Indeed": |-
+  - option "Indeed not checked" [ref=e847]:
+    - generic [ref=e848] [cursor=pointer]:
+      - radio [ref=e853]
+      - generic [ref=e854]: Indeed
+  - option "Irish Jobs not checked" [ref=e855]:
+    - generic [ref=e856] [cursor=pointer]:
+      - radio [ref=e861]

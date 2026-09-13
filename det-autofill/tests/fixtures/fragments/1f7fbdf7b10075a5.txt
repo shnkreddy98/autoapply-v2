@@ -1,0 +1,5 @@
+"My profile": |-
+  - link "My profile" [ref=e87] [cursor=pointer]:
+    - /url: https://jobs.usi.com/Jobs/Profile
+  - link "More Open Positions" [ref=e88] [cursor=pointer]:
+    - /url: https://jobs.usi.com/Jobs/OpenPositions

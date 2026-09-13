@@ -1,0 +1,5 @@
+"From Device": |-
+    - button "From Device" [ref=e142] [cursor=pointer]
+    - generic [ref=e143]: Upload CV file
+  - listitem [ref=e144]:
+    - generic [ref=e145]: Upload CV from LinkedIn

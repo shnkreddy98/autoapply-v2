@@ -1,0 +1,7 @@
+"Availability for new project": |-
+  - generic [ref=e260]: "*Availability for new project"
+  - generic [ref=e264]:
+    - combobox "Availability for new project" [ref=e265] [cursor=pointer]:
+      - generic [ref=e266]: Select an Option
+    - generic:
+      - generic:

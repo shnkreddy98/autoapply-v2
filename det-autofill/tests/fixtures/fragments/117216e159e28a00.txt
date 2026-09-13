@@ -1,0 +1,12 @@
+"Upload file": |-
+      - button "Upload file" [ref=e169] [cursor=pointer]
+  - generic [ref=e171]:
+    - generic [ref=e172]:
+      - generic [ref=e173]: Name*
+  --
+        - button "Upload File" [ref=e186] [cursor=pointer]:
+          - img [ref=e187]
+          - generic [ref=e189]: Upload File
+        - paragraph [ref=e190]: or drag and drop here
+    - generic [ref=e191]:
+      - generic [ref=e192]: LinkedIn Profile URL*

@@ -1,0 +1,6 @@
+"I am completing the application and anti-corruption questions on behalf of myself.": |-
+      - option "I am completing the application and anti-corruption questions on behalf of myself." [ref=e2122]:
+        - generic [ref=e2123]: I am completing the application and anti-corruption questions on behalf of myself.
+      - option "I am completing the application and anti-corruption questions on behalf of an applicant and I confirm that I had a conversation with the applicant to complete the anti-corruption questions on their behalf." [ref=e2124]:
+        - generic [ref=e2125]: I am completing the application and anti-corruption questions on behalf of an applicant and I confirm that I had a conversation with the applicant to complete the anti-corruption questions on their behalf.
+  ```

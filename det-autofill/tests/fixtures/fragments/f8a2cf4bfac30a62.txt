@@ -1,0 +1,10 @@
+"Save and Continue": |-
+          - button "Save and Continue" [ref=e111] [cursor=pointer]
+          - button "Save as Draft" [ref=e112] [cursor=pointer]
+      - generic [ref=e113]:
+        - link "Beginning of the main content section." [ref=e114] [cursor=pointer]:
+  --
+        - button "Save and Continue" [ref=e833] [cursor=pointer]
+        - button "Save as Draft" [ref=e834] [cursor=pointer]
+  - generic [ref=e836]:
+    - link "LinkedIn" [ref=e837] [cursor=pointer]:

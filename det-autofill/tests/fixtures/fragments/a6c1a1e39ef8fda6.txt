@@ -1,0 +1,6 @@
+"Are you legally authorized to work in the U.S.?": |-
+  - group "Are you legally authorized to work in the U.S.?*" [ref=e1212]:
+    - paragraph [ref=e1216]: Are you legally authorized to work in the U.S.?*
+    - button "Select One Required" [ref=e1220]: Select One
+  - group "Do you now, or will you in the future, require immigration sponsorship for work authorization (e.g., H-1B)? (if hired, verification will be required consistent with federal law.)*" [ref=e1222]:
+    - paragraph [ref=e1226]:

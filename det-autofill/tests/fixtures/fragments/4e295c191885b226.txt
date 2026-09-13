@@ -1,0 +1,38 @@
+"Education 1": |-
+  - group "Education 1" [ref=e969]:
+    - generic [ref=e970]:
+      - heading "Education 1" [level=5] [ref=e971]
+      - button "Delete" [ref=e972] [cursor=pointer]: Delete
+    - generic [ref=e978]:
+      - generic [ref=e979]:
+        - generic [ref=e981]: School or University*
+        - textbox "School or University" [ref=e984]: San Jose State University
+      - generic [ref=e985]:
+        - generic [ref=e987]: Degree*
+        - button "Degree Masters of Arts or Science or Business Administration Required" [active] [ref=e1199]: Masters of Arts or Science or Business Administration
+      - generic [ref=e992]:
+        - generic [ref=e994]:
+          - generic [ref=e995]: Field of Study
+          - generic [ref=e1001] [cursor=pointer]:
+            - textbox "Field of Study" [ref=e1002]:
+              - /placeholder: Search
+            - generic [ref=e1003]: 0 items selected
+"Education 2": |-
+  - group "Education 2" [ref=e1011]:
+    - generic [ref=e1012]:
+      - heading "Education 2" [level=5] [ref=e1013]
+      - button "Delete" [ref=e1014] [cursor=pointer]: Delete
+    - generic [ref=e1020]:
+      - generic [ref=e1021]:
+        - generic [ref=e1023]: School or University*
+        - textbox "School or University" [ref=e1026]: Visvesvaraya Technological University
+      - generic [ref=e1027]:
+        - generic [ref=e1029]: Degree*
+        - button "Degree Select One Required" [ref=e1033]: Select One
+      - generic [ref=e1034]:
+        - generic [ref=e1036]:
+          - generic [ref=e1037]: Field of Study
+          - generic [ref=e1043] [cursor=pointer]:
+            - textbox "Field of Study" [ref=e1044]:
+              - /placeholder: Search
+            - generic [ref=e1045]: 0 items selected

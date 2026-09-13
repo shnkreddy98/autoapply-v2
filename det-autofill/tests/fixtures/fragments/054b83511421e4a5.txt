@@ -1,0 +1,32 @@
+"Prefer not to say": |-
+      - generic [ref=e100]: Prefer not to say
+    - generic [ref=e101]:
+      - combobox [ref=e102]
+      - combobox "What is your gender identity?" [ref=e105] [cursor=pointer]:
+        - textbox "Prefer not to say" [ref=e191]:
+          - button [ref=e192]
+  - generic [ref=e107]:
+    - generic [ref=e108]:
+  --
+      - generic [ref=e109]: Prefer not to say
+    - generic [ref=e110]:
+      - combobox [ref=e111]
+      - combobox "What is your race/ethnicity?" [ref=e114] [cursor=pointer]:
+        - textbox "Prefer not to say" [ref=e210]:
+          - button [ref=e211]
+  - generic [ref=e116]:
+    - generic [ref=e117]:
+  --
+      - generic [ref=e118]: Prefer not to say
+    - generic [ref=e119]:
+      - combobox [ref=e120]
+      - combobox "Do you identify as Hispanic?" [ref=e123] [cursor=pointer]:
+        - textbox "Prefer not to say" [ref=e222]:
+          - button [ref=e223]
+  - generic [ref=e125]:
+    - generic [ref=e126]:
+  --
+          - option "Prefer not to say" [ref=e227]
+  - group [ref=e135]:
+    - generic [ref=e136]:
+      - button "Submit" [ref=e137] [cursor=pointer]

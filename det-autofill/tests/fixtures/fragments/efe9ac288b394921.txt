@@ -1,0 +1,88 @@
+"Location (City)": |-
+      - generic [ref=e213]: Location (City)*
+      - generic [ref=e214]:
+        - log [ref=e216]
+        - combobox "Location (City)" [ref=e221]
+        - textbox
+    - button "Locate me" [ref=e222] [cursor=pointer]
+  - group "Resume/CV*" [ref=e224]:
+"What location are you planning to work from?": |-
+  - generic [ref=e281]: What location are you planning to work from?*
+  - generic [ref=e282]:
+    - log [ref=e284]
+    - generic [ref=e286]:
+  --
+        - combobox "What location are you planning to work from?" [ref=e290]
+      - button "Toggle flyout" [ref=e292] [cursor=pointer]:
+        - img [ref=e293]
+    - textbox
+"Are you legally authorized to work in the United States?": |-
+  - generic [ref=e303]: Are you legally authorized to work in the United States?*
+  - generic [ref=e304]:
+    - log [ref=e306]
+    - generic [ref=e308]:
+  --
+        - combobox "Are you legally authorized to work in the United States?" [ref=e312]
+      - button "Toggle flyout" [ref=e314] [cursor=pointer]:
+        - img [ref=e315]
+    - textbox
+"Which work authorization best describes you:": |-
+  - generic [ref=e324]: "Which work authorization best describes you: *"
+  - generic [ref=e325]:
+    - log [ref=e327]
+    - generic [ref=e329]:
+  --
+        - combobox "Which work authorization best describes you:" [ref=e333]
+      - button "Toggle flyout" [ref=e335] [cursor=pointer]:
+        - img [ref=e336]
+    - textbox
+"What gender do you identify with?": |-
+    - generic [ref=e358]: What gender do you identify with?
+    - generic [ref=e359]:
+      - log [ref=e361]
+      - generic [ref=e363]:
+  --
+          - combobox "What gender do you identify with?" [ref=e367]
+        - button "Toggle flyout" [ref=e369] [cursor=pointer]:
+          - img [ref=e370]
+  - generic [ref=e373]:
+"What category best describes you?": |-
+    - generic [ref=e374]: What category best describes you?
+    - generic [ref=e375]:
+      - log [ref=e377]
+      - generic [ref=e379]:
+  --
+          - combobox "What category best describes you?" [ref=e383]
+        - button "Toggle flyout" [ref=e385] [cursor=pointer]:
+          - img [ref=e386]
+  - generic [ref=e389]:
+"What age group are you in?": |-
+    - generic [ref=e390]: What age group are you in?
+    - generic [ref=e391]:
+      - log [ref=e393]
+      - generic [ref=e395]:
+  --
+          - combobox "What age group are you in?" [ref=e399]
+        - button "Toggle flyout" [ref=e401] [cursor=pointer]:
+          - img [ref=e402]
+  - generic [ref=e405]:
+"Are you a veteran?": |-
+    - generic [ref=e406]: Are you a veteran?
+    - generic [ref=e407]:
+      - log [ref=e409]
+      - generic [ref=e411]:
+  --
+          - combobox "Are you a veteran?" [ref=e415]
+        - button "Toggle flyout" [ref=e417] [cursor=pointer]:
+          - img [ref=e418]
+  - generic [ref=e421]:
+"Disability status": |-
+      - generic [ref=e422]: Disability status
+      - generic [ref=e423]:
+        - log [ref=e425]
+        - generic [ref=e427]:
+  --
+            - combobox "Disability status" [ref=e431]
+          - button "Toggle flyout" [ref=e433] [cursor=pointer]:
+            - img [ref=e434]
+  - button "Submit application" [ref=e437] [cursor=pointer]

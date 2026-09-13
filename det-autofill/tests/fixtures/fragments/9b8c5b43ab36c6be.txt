@@ -1,0 +1,15 @@
+"Select One Required": |-
+    - button "Select One Required" [ref=e2030]: Select One
+  - group "If yes, what is your relationship with this individual? Enter N/A if not applicable.*" [ref=e2032]:
+    - paragraph [ref=e2036]: If yes, what is your relationship with this individual? Enter N/A if not applicable.*
+    - textbox [ref=e2039]
+  --
+    - button "Select One Required" [ref=e2059]: Select One
+  - group "If yes, what is your relationship with this individual? Enter N/A if not applicable.*" [ref=e2061]:
+    - paragraph [ref=e2065]: If yes, what is your relationship with this individual? Enter N/A if not applicable.*
+    - textbox [ref=e2068]
+  --
+    - button "Select One Required" [ref=e2087]: Select One
+  - group "Enter your name (required) and the name of your agency (if applicable) or N/A.*" [ref=e2089]:
+    - paragraph [ref=e2093]: Enter your name (required) and the name of your agency (if applicable) or N/A.*
+    - textbox [ref=e2096]

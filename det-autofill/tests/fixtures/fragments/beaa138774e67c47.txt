@@ -1,0 +1,6 @@
+"No, I am not a current CRH/Oldcastle employee.": |-
+      - option "No, I am not a current CRH/Oldcastle employee." [ref=e1088] [cursor=pointer]:
+        - menuitem "No, I am not a current CRH/Oldcastle employee." [ref=e1089]
+      - option "Yes, I am a current CRH/Oldcastle employee." [ref=e1090] [cursor=pointer]:
+        - menuitem "Yes, I am a current CRH/Oldcastle employee." [ref=e1091]
+  - button "Are you a current CRH/Oldcastle Employee?" [ref=e180] [cursor=pointer]:

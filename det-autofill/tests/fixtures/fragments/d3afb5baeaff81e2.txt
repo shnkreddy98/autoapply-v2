@@ -1,0 +1,7 @@
+"Apply for this Job": |-
+          - link "Apply for this Job" [ref=e219] [cursor=pointer]:
+            - /url: /clickup/e8c4b937-621a-47c1-b71c-f36073a62ec2/application
+            - button "Apply for this Job" [ref=e220]
+  - contentinfo [ref=e221]:
+    - link "Learn more about Ashby" [ref=e222] [cursor=pointer]:
+      - /url: https://www.ashbyhq.com

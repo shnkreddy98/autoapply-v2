@@ -1,0 +1,6 @@
+"I don\u2019t wish to disclose": |-
+      - option "I don’t wish to disclose" [ref=e1240] [cursor=pointer]:
+        - menuitem "I don’t wish to disclose" [ref=e1241]
+      - option "Male" [ref=e1242] [cursor=pointer]:
+        - menuitem "Male" [ref=e1243]
+  - button "Gender" [ref=e852] [cursor=pointer]:

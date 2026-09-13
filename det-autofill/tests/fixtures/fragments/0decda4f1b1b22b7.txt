@@ -1,0 +1,5 @@
+"States": |-
+  - combobox "States" [ref=e124]:
+    - option "State"
+    - option "Alabama"
+    - option "Alaska"

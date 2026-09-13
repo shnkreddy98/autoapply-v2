@@ -1,0 +1,68 @@
+"Other": |-
+    - text: If you do not find any specific open position now or if you would also be interested in other positions you can fill in (or complete) your profile and save it thus making it available to our recruiters who may contact you in case there is a match to a vacancy with your profile and preferences.
+    - text: Sincerely,
+    - text: Grainger Businesses Recruiting Team
+  - generic [ref=e212]:
+  --
+                - option "Other" [ref=e1181] [cursor=pointer]:
+                  - menuitem "Other" [ref=e1182]
+                - option "P33" [ref=e1183] [cursor=pointer]:
+                  - menuitem "P33" [ref=e1184]
+                - option "Recruit Military" [ref=e1185] [cursor=pointer]:
+  --
+          - text: "If Other, please explain:"
+          - textbox "If Other, please explain:" [ref=e772]
+        - generic [ref=e775]:
+          - generic [ref=e776]:
+            - generic [ref=e777]: "*"
+  --
+                      - paragraph [ref=e839]: Grainger is an Equal Opportunity Employer. All qualified applicants will receive consideration for employment without regard to race, color, religion, sex, sexual orientation, gender identity, national origin, disability, or protected veteran status, or any other protected characteristic under federal, state, or local law. In addition, in some jurisdictions, Grainger is required by law to maintain certain information regarding applicants interested in employment.
+                      - paragraph [ref=e840]: As such, you are invited to voluntarily respond to and provide self-identification information while completing your application for employment.
+                      - paragraph [ref=e841]: If you choose to provide this information, it will be treated confidentially and will be used only for purposes allowed by law.
+                      - paragraph [ref=e842]: If you choose not to disclose self-identifying information, you will not be subject you to any adverse treatment should you become employed by Grainger.
+  --
+                    - paragraph [ref=e844]: It is the policy of Grainger not to discriminate or allow the harassment of employees or applicants on the basis of sex, race, color, religion, national origin, physical or mental disability, and/or protected veteran status with regard to any employment practices, including recruitment, advertising, job application procedures, hiring, upgrading, training, promotion, transfer, compensation, job assignments, benefits and/or other terms, conditions, or privileges of employment, provided the individual is qualified, with or without reasonable accommodations, to perform the essential functions of the job. Grainger will treat qualified individuals without discrimination in all employment practices.
+        - generic [ref=e846]:
+          - generic [ref=e847]:
+            - generic [ref=e848]: "*"
+  --
+                  - cell "Alcohol or other substance use disorder (not currently using drugs illegally) Autoimmune disorder, for example, lupus, fibromyalgia, rheumatoid arthritis, or HIV/AIDS Blind or low vision Cancer (past or present) Cardiovascular or heart disease Celiac disease Cerebral palsy Deaf or serious difficulty hearing Diabetes" [ref=e906]:
+                    - listitem [ref=e907]: Alcohol or other substance use disorder (not currently using drugs illegally)
+                    - listitem [ref=e908]: Autoimmune disorder, for example, lupus, fibromyalgia, rheumatoid arthritis, or HIV/AIDS
+                    - listitem [ref=e909]: Blind or low vision
+                    - listitem [ref=e910]: Cancer (past or present)
+  --
+                  - cell "Disfigurement, for example, disfigurement caused by burns, wounds, accidents, or congenital disorders Epilepsy or other seizure disorder Gastrointestinal disorders, for example, Crohn's Disease, or irritable bowel syndrome Intellectual or developmental disability Mental health conditions, for example, depression, bipolar disorder, anxiety disorder, schizophrenia, PTSD Missing limbs or partially missing limbs Mobility impairment, benefiting from the use of a wheelchair, scooter, walker, leg brace(s) and/or other supports" [ref=e916]:
+                    - listitem [ref=e917]: Disfigurement, for example, disfigurement caused by burns, wounds, accidents, or congenital disorders
+                    - listitem [ref=e918]: Epilepsy or other seizure disorder
+                    - listitem [ref=e919]: Gastrointestinal disorders, for example, Crohn's Disease, or irritable bowel syndrome
+                    - listitem [ref=e920]: Intellectual or developmental disability
+                    - listitem [ref=e921]: Mental health conditions, for example, depression, bipolar disorder, anxiety disorder, schizophrenia, PTSD
+  --
+                    - listitem [ref=e923]: Mobility impairment, benefiting from the use of a wheelchair, scooter, walker, leg brace(s) and/or other supports
+                  - cell "Nervous system condition for example, migraine headaches, Parkinson’s disease, or Multiple sclerosis (MS) Neurodivergence, for example, attention-deficit/hyperactivity disorder (ADHD), autism spectrum disorder, dyslexia, dyspraxia, other learning disabilities Partial or complete paralysis (any cause) Pulmonary or respiratory conditions, for example, tuberculosis, asthma, emphysema Short stature (dwarfism) Traumatic brain injury" [ref=e924]:
+                    - listitem [ref=e925]: Nervous system condition for example, migraine headaches, Parkinson’s disease, or Multiple sclerosis (MS)
+                    - listitem [ref=e926]: Neurodivergence, for example, attention-deficit/hyperactivity disorder (ADHD), autism spectrum disorder, dyslexia, dyspraxia, other learning disabilities
+                    - listitem [ref=e927]: Partial or complete paralysis (any cause)
+                    - listitem [ref=e928]: Pulmonary or respiratory conditions, for example, tuberculosis, asthma, emphysema
+                    - listitem [ref=e929]: Short stature (dwarfism)
+  --
+            - paragraph [ref=e983]: Submission of this information is voluntary and refusal to provide it will not subject you to any adverse treatment. The information provided will be used only in ways that are not inconsistent with VEVRAA as amended. We are an equal opportunity employer. We do not discriminate in hiring or employment against any individual on the basis of race, color, gender, national origin, ancestry, religion, physical or mental disability, age, veteran status, sexual orientation, gender identity or expression, marital status, pregnancy, citizenship, or any other factor protected by anti-discrimination laws.
+        - note [ref=e985]:
+          - table [ref=e989]:
+            - rowgroup [ref=e990]:
+  --
+          - generic [ref=e998]: If I am employed, I understand that my employment is at will employment, meaning that my employment is for no fixed duration and can be terminated by me or Grainger at any time with or without cause or notice. I understand that no representative of Grainger has the authority to make any contrary agreement, and I understand that I may not rely on any other verbal or written agreements or promises that may have been made to me. Further, I represent that I am genuinely interested in working in the position for which I am applying and I am making this application for no other purpose.
+        - note [ref=e1000]:
+          - generic [ref=e1003]: I certify that the information in this application is true and correct to the best of my knowledge and I understand that falsification of this information, or unsatisfactory references, are grounds for rejection or dismissal. I authorize representatives of my past employers, educational institutions, and other references to give Grainger any and all information concerning my previous employment, education, and any other pertinent information they may have, personal or otherwise, and release all parties from all liability for any damage that may result from furnishing this information. I understand that, unless prohibited by law, any job offer will be contingent on my taking a drug urinalysis test at a medical facility designated by the company, and that if a confirmed positive drug screen result is reported to Grainger, I will be ineligible for employment.
+        - generic [ref=e1007]:
+          - generic [ref=e1008]:
+            - generic [ref=e1009]: "*"
+  --
+            - text: "How are you authorized to work in the United States? Options: U.S. Citizen, U.S. Green card holder, U.S. Visa holder type: ___, Other (include details):"
+          - generic [ref=e1041]:
+            - generic [ref=e1042]: "How are you authorized to work in the United States? Options: U.S. Citizen, U.S. Green card holder, U.S. Visa holder type: ___, Other (include details):"
+            - 'textbox "How are you authorized to work in the United States? Options: U.S. Citizen, U.S. Green card holder, U.S. Visa holder type: ___, Other (include details):" [ref=e1044]'
+            - tooltip "Answer size should be 200 characters or less." [ref=e1045]
+        - generic [ref=e1050]:
+          - generic [ref=e1051]:

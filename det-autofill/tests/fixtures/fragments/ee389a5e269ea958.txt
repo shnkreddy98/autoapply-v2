@@ -1,0 +1,7 @@
+"Attach": |-
+    - button "Attach" [ref=e470] [cursor=pointer]
+    - generic [ref=e471]: Attach
+    - button "Attach" [ref=e472]
+  - button "Dropbox" [ref=e474] [cursor=pointer]
+  - button "Google Drive" [ref=e476] [cursor=pointer]
+  - generic [ref=e478]:

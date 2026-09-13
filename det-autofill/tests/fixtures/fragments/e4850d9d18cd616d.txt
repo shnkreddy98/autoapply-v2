@@ -1,0 +1,6 @@
+"I AM NOT A VETERAN": |-
+      - option "I AM NOT A VETERAN" [ref=e2190]:
+        - generic [ref=e2191]: I AM NOT A VETERAN
+      - option "I DO NOT WISH TO SELF-IDENTIFY" [ref=e2192]:
+        - generic [ref=e2193]: I DO NOT WISH TO SELF-IDENTIFY
+  ```

@@ -1,0 +1,10 @@
+"Create one now": |-
+      - paragraph [ref=e175]: You used an incorrect email address or password. If you don't have an account, click create one now
+    - link "Forgot Password?" [ref=e151] [cursor=pointer]:
+      - /url: /globalidentity/account/forgotpassword
+    - button "Sign In" [ref=e155] [cursor=pointer]
+  --
+      - link "Create one now." [ref=e158] [cursor=pointer]:
+        - /url: /globalidentity/account/register
+  - iframe [ref=e178]:
+    - generic [ref=f34e6]:

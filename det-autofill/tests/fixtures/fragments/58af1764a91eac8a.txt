@@ -1,0 +1,41 @@
+"position": |-
+      - option "How did you find this position?*"
+      - option "Internal Job Application"
+      - option "Job Board" [selected]
+      - option "Tech Community"
+  --
+    - paragraph [ref=e73]: I UNDERSTAND THAT BY SUBMITTING THIS INFORMATION BY ELECTRONIC OR WRITTEN APPLICATION, ACCEPTING EMPLOYMENT (IF OFFERED A POSITION), AND STARTING EMPLOYMENT, I DEMONSTRATE MY ACCEPTANCE AND UNDERSTANDING OF THE TERMS AND CONDITIONS OF EMPLOYMENT WITH HTC Global Services AS SET FORTH ABOVE.
+  - generic [ref=e78]:
+    - checkbox "I have read and agree to the Terms & Conditions and Data Privacy Policy. I confirm that the information provided is true, complete, accurate, and I understand that any false or misleading details may result in disqualification or termination of employment. I also consent to the verification of my information through lawful checks." [ref=e79]
+    - text: I have read and agree to the Terms & Conditions and Data Privacy Policy. I confirm that the information provided is true, complete, accurate, and I understand that any false or misleading details may result in disqualification or termination of employment. I also consent to the verification of my information through lawful checks.
+"board": |-
+  - Page URL: https://www.htcinc.com/apply-now/?jobcode=243475&board=177&board_type=30
+  - Page Title: Job Apply - HTC
+  - Console: 4 errors, 4 warnings
+  ### Snapshot
+  --
+                - option "Job Board" [selected]
+                - option "Tech Community"
+                - option "Social Network"
+                - option "HTC Website"
+  --
+                  - option "Select Board"
+                  - option "Dice"
+                  - option "foundit India"
+                  - option "foundit India TPS (Talent Placement Services)"
+"authorized": |-
+  - option "I am authorized to work in?*" [selected]
+  - option "India"
+  - option "Asia Pacific"
+  - option "Middle East"
+"Yes": |-
+    - text: "Yes"
+  - generic [ref=e60]:
+    - radio [ref=e61]
+    - text: "No"
+"agree to the Terms": |-
+          - checkbox "I have read and agree to the Terms & Conditions and Data Privacy Policy. I confirm that the information provided is true, complete, accurate, and I understand that any false or misleading details may result in disqualification or termination of employment. I also consent to the verification of my information through lawful checks." [ref=e79]
+          - text: I have read and agree to the Terms & Conditions and Data Privacy Policy. I confirm that the information provided is true, complete, accurate, and I understand that any false or misleading details may result in disqualification or termination of employment. I also consent to the verification of my information through lawful checks.
+        - button "APPLY NOW" [ref=e81] [cursor=pointer]
+  - generic [ref=e83]:
+    - generic [ref=e85]:

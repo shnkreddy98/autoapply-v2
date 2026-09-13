@@ -1,0 +1,49 @@
+"Cover Letter": |-
+  - group "Cover Letter*" [ref=e167]:
+    - generic [ref=e168]: Cover Letter*
+    - generic [ref=e170]:
+      - generic [ref=e172]:
+        - button "Attach" [ref=e173] [cursor=pointer]
+        - generic [ref=e174]: Attach
+        - button "Attach" [ref=e175]
+      - button "Dropbox" [ref=e177] [cursor=pointer]
+      - button "Google Drive" [ref=e179] [cursor=pointer]
+      - generic [ref=e181]:
+        - button "Enter manually" [active] [ref=e182] [cursor=pointer]
+        - generic [ref=e183]: Enter manually
+"School": |-
+    - generic [ref=e192]: School
+    - generic [ref=e193]:
+      - log [ref=e195]
+      - generic [ref=e197]:
+        - generic [ref=e198]:
+          - generic [ref=e199]: Select...
+          - combobox "School" [ref=e201]
+        - button "Toggle flyout" [ref=e203] [cursor=pointer]:
+          - img [ref=e204]
+  - generic [ref=e207]:
+    - generic [ref=e208]: Degree
+    - generic [ref=e209]:
+      - log [ref=e211]
+      - generic [ref=e213]:
+        - generic [ref=e214]:
+          - generic [ref=e215]: Select...
+          - combobox "Degree" [ref=e217]
+"Are you a U.S. citizen?": |-
+              - generic [ref=e254]: Are you a U.S. citizen? *
+              - generic [ref=e255]:
+                - log [ref=e257]
+                - generic [ref=e259]:
+                  - generic [ref=e260]:
+                    - generic [ref=e261]: Select...
+                    - combobox "Are you a U.S. citizen?" [ref=e263]
+                  - button "Toggle flyout" [ref=e265] [cursor=pointer]:
+                    - img [ref=e266]
+                - textbox
+          - button "Submit application" [ref=e269] [cursor=pointer]
+  - contentinfo [ref=e270]:
+    - generic [ref=e271]:
+      - paragraph [ref=e272]: Powered by
+      - link "Greenhouse logo" [ref=e273] [cursor=pointer]:
+        - /url: https://www.greenhouse.com
+        - img "Greenhouse logo" [ref=e274]

@@ -1,0 +1,6 @@
+"I am able to meet the onsite requirements for the role": |-
+      - option "I am able to meet the onsite requirements for the role" [ref=e1450]:
+        - generic [ref=e1451]: I am able to meet the onsite requirements for the role
+      - option "I am unable to meet the onsite requirements for the role" [ref=e1452]:
+        - generic [ref=e1453]: I am unable to meet the onsite requirements for the role
+  ```

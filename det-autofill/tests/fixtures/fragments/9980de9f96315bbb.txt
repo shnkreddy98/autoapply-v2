@@ -1,0 +1,16 @@
+"Yes": |-
+      - generic [ref=e266]: "Yes"
+    - generic:
+      - generic:
+        - generic:
+  --
+      - generic [ref=e275]: "Yes"
+    - generic:
+      - generic:
+        - generic:
+  --
+      - option "Yes" [ref=e332]:
+        - generic "Yes" [ref=e334]
+      - option "No" [ref=e335]:
+        - generic "No" [ref=e337]
+  - status

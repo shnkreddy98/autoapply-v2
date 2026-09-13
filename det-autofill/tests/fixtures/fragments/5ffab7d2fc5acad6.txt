@@ -1,0 +1,14 @@
+"Prefer not to say": |-
+      - generic [ref=e100]: Prefer not to say
+    - generic [ref=e101]:
+      - combobox [ref=e102]
+      - combobox "What is your gender identity?" [ref=e105] [cursor=pointer]:
+        - textbox "Prefer not to say" [ref=e191]:
+          - button [ref=e192]
+  - generic [ref=e107]:
+    - generic [ref=e108]:
+  --
+          - option "Prefer not to say" [ref=e203]
+  - generic [ref=e116]:
+    - generic [ref=e117]:
+      - text: Do you identify as Hispanic? *

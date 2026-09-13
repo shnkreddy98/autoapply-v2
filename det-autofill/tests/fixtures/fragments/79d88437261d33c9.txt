@@ -1,0 +1,43 @@
+"Source Type": |-
+  - 'row "Candidate Information Mandatory fields are marked with an asterisk. . Required Please indicate how you heard about this job. Source Type . Required Select One... Please enter all relevant personal information in the fields below. First Name . Required Jane Last Name . Required Doe Middle Name Quinn Suffix (example: Sr, Jr, I, II, III) Street Address (line 1) . Required Address (line 2) City . Required Redwood City Zip/Postal Code . Required Place of Residence . Required Email Address . Required jane.doe@example.com Primary Number . Required Not Specified Cellular Number Home Phone Number 555-010-0199 Work Phone Number" [ref=e163]':
+    - 'cell "Candidate Information Mandatory fields are marked with an asterisk. . Required Please indicate how you heard about this job. Source Type . Required Select One... Please enter all relevant personal information in the fields below. First Name . Required Jane Last Name . Required Doe Middle Name Quinn Suffix (example: Sr, Jr, I, II, III) Street Address (line 1) . Required Address (line 2) City . Required Redwood City Zip/Postal Code . Required Place of Residence . Required Email Address . Required jane.doe@example.com Primary Number . Required Not Specified Cellular Number Home Phone Number 555-010-0199 Work Phone Number" [ref=e164]':
+      - heading "Candidate Information" [level=1] [ref=e165]:
+        - generic [ref=e166]: Candidate Information
+      - generic [ref=e169]:
+        - text: Mandatory fields are marked with an asterisk.
+        - generic "This field is mandatory" [ref=e173]:
+          - generic [ref=e174]: .
+          - generic [ref=e175]: Required
+      - generic [ref=e176]:
+        - heading [level=2]
+        - generic [ref=e178]: Please indicate how you heard about this job.
+  --
+          - generic "The field Source Type is mandatory." [ref=e180]:
+            - text: Source Type
+            - generic [ref=e181]: .
+            - generic [ref=e182]: Required
+          - combobox "Source Type . Required" [ref=e184]:
+            - option "Select One..." [selected]
+            - option "Ad or event ID"
+            - option "Campus - Non Career Fair"
+            - option "Career Fair - College"
+            - option "Company Web Site"
+            - option "Direct Sourcing"
+            - option "Job Boards"
+            - option "Military"
+            - option "Newspapers"
+            - option "Professional Associations"
+"State/Province": |-
+  - generic [ref=e258]: State/Province
+  - combobox "State/Province" [ref=e259]:
+    - option "Not Specified"
+    - option "Alabama"
+    - option "Alaska"
+    - option "Arizona"
+    - option "Arkansas"
+    - option "California" [selected]
+    - option "Colorado"
+    - option "Connecticut"
+    - option "Delaware"
+    - option "District of Columbia"
+"Primary Number type": (no match)

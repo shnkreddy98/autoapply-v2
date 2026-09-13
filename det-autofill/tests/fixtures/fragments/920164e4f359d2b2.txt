@@ -1,0 +1,46 @@
+"First Name": |-
+    - generic [ref=e332]: First Name*
+    - textbox "First Name" [ref=e820]: Jane Quinn
+  - generic [ref=e336]:
+    - generic [ref=e337]: Middle Name
+    - textbox "Middle Name" [ref=e340]
+  - generic [ref=e341]:
+    - generic [ref=e343]: Last Name*
+    - generic [ref=e344]:
+      - textbox "Last Name" [active] [invalid] [ref=e346]: Doe
+      - paragraph [ref=e822]:
+        - generic [ref=e823]: "Error:"
+        - text: The field Last Name is required and must have a value.
+"Last Name": |-
+          - button "Error Last Name" [ref=e812] [cursor=pointer]:
+            - text: Error
+            - generic [ref=e813]: "-"
+            - text: Last Name
+          - generic [ref=e814]: The field Last Name is required and must have a value.
+      - listitem [ref=e815]:
+        - generic [ref=e816]:
+          - button "Error Phone Device Type" [ref=e817] [cursor=pointer]:
+            - text: Error
+            - generic [ref=e818]: "-"
+            - text: Phone Device Type
+          - generic [ref=e819]: The field Phone Device Type is required and must have a value.
+  - generic [ref=e191]:
+    - group [ref=e192]:
+      - generic [ref=e291]:
+  --
+          - generic [ref=e343]: Last Name*
+          - generic [ref=e344]:
+            - textbox "Last Name" [active] [invalid] [ref=e346]: Doe
+            - paragraph [ref=e822]:
+              - generic [ref=e823]: "Error:"
+              - text: The field Last Name is required and must have a value.
+        - generic [ref=e347]:
+          - generic [ref=e348]: Suffix
+          - button "Suffix Select One" [ref=e352]: Select One
+        - generic [ref=e353]:
+          - generic [ref=e354]: I have a preferred name
+          - checkbox "I have a preferred name" [ref=e359] [cursor=pointer]
+    - group "Address" [ref=e231]:
+      - heading "Address" [level=4] [ref=e232]
+      - generic [ref=e233]:
+        - generic [ref=e234]:

@@ -1,0 +1,9 @@
+"Are you a current Supplemental Labor employee?": |-
+    - generic [ref=e632]: Are you a current Supplemental Labor employee?
+    - text: "*"
+  - radiogroup "Are you a current Supplemental Labor employee?" [ref=e633]:
+    - generic:
+      - radio "Yes" [ref=e634]:
+        - generic [ref=e646] [cursor=pointer]: "Yes"
+      - radio "No" [checked] [ref=e647]:
+        - generic [ref=e659] [cursor=pointer]: "No"

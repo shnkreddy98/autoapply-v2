@@ -1,0 +1,21 @@
+"Please select your gender. Select One Required": |-
+    - button "Please select your gender. Select One Required" [ref=e1411]: Select One
+  - generic [ref=e1412]:
+    - generic [ref=e1414]: Please select the ethnicity which most accurately describes how you identify yourself.*
+    - button "Please select the ethnicity which most accurately describes how you identify yourself. Select One Required" [ref=e1418]: Select One
+"Please select the ethnicity which most accurately describes how you identify yourself. Select One Required": |-
+    - button "Please select the ethnicity which most accurately describes how you identify yourself. Select One Required" [ref=e1418]: Select One
+  - generic [ref=e1419]:
+    - generic [ref=e1421]: Please select your veteran status.*
+    - button "Please select your veteran status. Select One Required" [ref=e1425]: Select One
+"Please select your veteran status. Select One Required": |-
+        - button "Please select your veteran status. Select One Required" [ref=e1425]: Select One
+  - group "Terms and Conditions" [ref=e1426]:
+    - heading "Terms and Conditions" [level=4] [ref=e1427]
+    - generic [ref=e1428]:
+"I agree to the Terms and Conditions and Voluntary Disclosures": |-
+            - generic [ref=e1436]: I agree to the Terms and Conditions and Voluntary Disclosures*
+            - checkbox "I agree to the Terms and Conditions and Voluntary Disclosures" [ref=e1441] [cursor=pointer]
+  - generic [ref=e368]:
+    - button "Back" [ref=e567] [cursor=pointer]
+    - button "Save and Continue" [ref=e568] [cursor=pointer]

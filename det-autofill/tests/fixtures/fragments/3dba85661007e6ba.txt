@@ -1,0 +1,14 @@
+"Education 1": |-
+  - group "Education 1" [ref=e969]:
+    - generic [ref=e970]:
+      - heading "Education 1" [level=5] [ref=e971]
+      - button "Delete" [ref=e972] [cursor=pointer]: Delete
+    - generic [ref=e978]:
+      - generic [ref=e979]:
+        - generic [ref=e981]: School or University*
+        - textbox "School or University" [ref=e984]: San Jose State University
+      - generic [ref=e985]:
+        - generic [ref=e987]: Degree*
+        - button "Degree Masters of Arts or Science or Business Administration Required" [ref=e1199]: Masters of Arts or Science or Business Administration
+      - generic [ref=e992]:
+        - generic [ref=e994]:

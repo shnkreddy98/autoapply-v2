@@ -1,0 +1,5 @@
+"Apply": |-
+    - button "Apply" [ref=e43] [cursor=pointer]
+  - generic [ref=e44]:
+    - generic [ref=e45]:
+      - generic [ref=e53]:

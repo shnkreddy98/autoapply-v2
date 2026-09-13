@@ -1,0 +1,93 @@
+"No": |-
+                      - button "Error Are you a member of another Federally Recognized Indian Tribe?" [ref=e1945] [cursor=pointer]:
+                        - text: Error
+                        - generic [ref=e1946]: "-"
+                        - text: Are you a member of another Federally Recognized Indian Tribe?
+                      - generic [ref=e1947]: The field Are you a member of another Federally Recognized Indian Tribe? is required and must have a value.
+                  - listitem [ref=e1948]:
+                    - generic [ref=e1949]:
+                      - button "Error Are you an eligible Yuhaaviatam of San Manuel Nation Tribal Community Member?" [ref=e1950] [cursor=pointer]:
+  --
+                      - button "Error Do you have any relatives or do you reside with anyone currently working for Yuhaaviatam of San Manuel Nation or Yaamava Resort & Casino?" [ref=e1955] [cursor=pointer]:
+                        - text: Error
+                        - generic [ref=e1956]: "-"
+                        - text: Do you have any relatives or do you reside with anyone currently working for Yuhaaviatam of San Manuel Nation or Yaamava Resort & Casino?
+                      - generic [ref=e1957]: The field Do you have any relatives or do you reside with anyone currently working for Yuhaaviatam of San Manuel Nation or Yaamava Resort & Casino? is required and must have a value.
+                  - listitem [ref=e1958]:
+                    - generic [ref=e1959]:
+                      - button "Error Please select your highest level of completed education" [ref=e1960] [cursor=pointer]:
+  --
+                      - button "Error Yaamava’ Resort & Casino at San Manuel is a smoking facility, employees may be subject to second-hand smoke while performing their duties. Are you willing to work in a smoking environment?" [ref=e1970] [cursor=pointer]:
+                        - text: Error
+                        - generic [ref=e1971]: "-"
+                        - text: Yaamava’ Resort & Casino at San Manuel is a smoking facility, employees may be subject to second-hand smoke while performing their duties. Are you willing to work in a smoking environment?
+                      - generic [ref=e1972]: The field Yaamava’ Resort & Casino at San Manuel is a smoking facility, employees may be subject to second-hand smoke while performing their duties. Are you willing to work in a smoking environment? is required and must have a value.
+                  - listitem [ref=e1973]:
+                    - generic [ref=e1974]:
+                      - button "Error Have you applied for a Gaming License with the San Manuel Gaming Commission in the past 24 months?" [ref=e1975] [cursor=pointer]:
+  --
+                    - group "Are you a current employee of Yuhaaviatam of San Manuel Nation or Yaamava Resort & Casino?*" [ref=e1661]:
+                      - paragraph [ref=e1665]: Are you a current employee of Yuhaaviatam of San Manuel Nation or Yaamava Resort & Casino?*
+                      - button "No Required" [ref=e1866]: "No"
+                    - group "Have you worked with us before?*" [ref=e1671]:
+                      - paragraph [ref=e1675]: Have you worked with us before?*
+                      - button "No Required" [ref=e1876]: "No"
+                    - group "Are you at least 21 years of age?*" [ref=e1681]:
+                      - paragraph [ref=e1685]: Are you at least 21 years of age?*
+                      - button "Yes Required" [ref=e1886]: "Yes"
+  --
+                    - group "Do you now or will you in the future require immigration sponsorship for work authorization in the United States (e.g. H-1B Visa)?*" [ref=e1898]:
+                      - paragraph [ref=e1902]: Do you now or will you in the future require immigration sponsorship for work authorization in the United States (e.g. H-1B Visa)?*
+                      - button "No, I do not/will not require sponsorship Required" [ref=e1916]: No, I do not/will not require sponsorship
+                    - group "Are you a Yuhaaviatam of San Manuel Nation Tribal Citizen?*" [ref=e1701]:
+                      - paragraph [ref=e1705]: Are you a Yuhaaviatam of San Manuel Nation Tribal Citizen?*
+                      - button "No Required" [ref=e1926]: "No"
+                    - group "Are you a member of another Federally Recognized Indian Tribe?*" [ref=e1711]:
+                      - paragraph [ref=e1715]: Are you a member of another Federally Recognized Indian Tribe?*
+                      - generic [ref=e1716]:
+                        - button "Select One Required" [expanded] [ref=e1719]: Select One
+                        - paragraph [ref=e1984]:
+  --
+                          - text: The field Are you a member of another Federally Recognized Indian Tribe? is required and must have a value.
+                    - group "Are you an eligible Yuhaaviatam of San Manuel Nation Tribal Community Member?*" [ref=e1721]:
+                      - paragraph [ref=e1725]: Are you an eligible Yuhaaviatam of San Manuel Nation Tribal Community Member?*
+                      - generic [ref=e1726]:
+  --
+                    - group "Do you have any relatives or do you reside with anyone currently working for Yuhaaviatam of San Manuel Nation or Yaamava Resort & Casino?*" [ref=e1731]:
+                      - paragraph [ref=e1735]: Do you have any relatives or do you reside with anyone currently working for Yuhaaviatam of San Manuel Nation or Yaamava Resort & Casino?*
+                      - generic [ref=e1736]:
+                        - button "Select One Required" [ref=e1739]: Select One
+                        - paragraph [ref=e1990]:
+  --
+                          - text: The field Do you have any relatives or do you reside with anyone currently working for Yuhaaviatam of San Manuel Nation or Yaamava Resort & Casino? is required and must have a value.
+                    - group "What is your desired salary?*" [ref=e1741]:
+                      - paragraph [ref=e1745]: What is your desired salary?*
+                      - textbox [ref=e1748]: "120000"
+  --
+                    - group "Yaamava’ Resort & Casino at San Manuel is a smoking facility, employees may be subject to second-hand smoke while performing their duties. Are you willing to work in a smoking environment?*" [ref=e1779]:
+                      - paragraph [ref=e1783]: Yaamava’ Resort & Casino at San Manuel is a smoking facility, employees may be subject to second-hand smoke while performing their duties. Are you willing to work in a smoking environment?*
+                      - generic [ref=e1784]:
+                        - button "Select One Required" [ref=e1787]: Select One
+                        - paragraph [ref=e1999]:
+  --
+                          - text: The field Yaamava’ Resort & Casino at San Manuel is a smoking facility, employees may be subject to second-hand smoke while performing their duties. Are you willing to work in a smoking environment? is required and must have a value.
+                    - group "Have you applied for a Gaming License with the San Manuel Gaming Commission in the past 24 months?*" [ref=e1789]:
+                      - paragraph [ref=e1793]: Have you applied for a Gaming License with the San Manuel Gaming Commission in the past 24 months?*
+                      - generic [ref=e1794]:
+  --
+                    - 'group "I am available to work the following shifts (please check all that apply): *If offered employment, this does not guarantee shift preferences will be accommodated.*" [ref=e1799]':
+                      - generic [ref=e1802]:
+                        - paragraph [ref=e1803]: "I am available to work the following shifts (please check all that apply):"
+                        - paragraph [ref=e1804]: "*If offered employment, this does not guarantee shift preferences will be accommodated.*"
+                      - group [ref=e1808]:
+                        - grid "grid" [ref=e1809]:
+                          - row "Full-Time Part-Time Day Swing Graveyard All shifts listed above" [ref=e1810]:
+  --
+              - /url: https://twitter.com/SanManuelCasino?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor
+          - listitem [ref=e41] [cursor=pointer]:
+            - link "LinkedIn" [ref=e42]:
+              - /url: https://www.linkedin.com/company/san-manuel-band-of-mission-indians/
+  --
+      - option "No" [ref=e2014]:
+        - generic [ref=e2015]: "No"
+  ```

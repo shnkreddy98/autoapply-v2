@@ -1,0 +1,11 @@
+"Sign In": |-
+    - button "Sign In" [ref=e42] [cursor=pointer]:
+      - generic [ref=e47]: Sign In
+  - navigation [ref=e48]:
+    - button "northerntrust.com" [ref=e49] [cursor=pointer]
+    - button "Search for Jobs" [ref=e50] [cursor=pointer]
+  --
+      - button "Sign In" [ref=e239] [cursor=pointer]
+    - button "Forgot your password?" [ref=e241] [cursor=pointer]
+  - generic:
+    - generic:

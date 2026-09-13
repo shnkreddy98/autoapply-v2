@@ -1,0 +1,18 @@
+"Address Line 1": |-
+    - generic [ref=e335]: Address Line 1*
+    - textbox "Address Line 1" [ref=e489]: San Jose
+  - generic [ref=e339]:
+    - generic [ref=e341]: City*
+    - textbox "City" [ref=e344]: San Jose
+"Postal Code": |-
+        - generic [ref=e354]: Postal Code*
+        - textbox "Postal Code" [ref=e500]: "95112"
+  - group "Email Address" [ref=e359]:
+    - heading "Email Address" [level=4] [ref=e360]
+    - generic [ref=e363]: jane.doe@example.com
+"Phone Number": |-
+    - generic [ref=e428]: Phone Number*
+    - textbox "Phone Number" [ref=e431]: (555) 010-0199
+  - generic [ref=e432]:
+    - generic [ref=e433]: Phone Extension
+    - textbox "Phone Extension" [ref=e436]

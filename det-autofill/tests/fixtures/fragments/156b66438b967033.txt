@@ -1,0 +1,48 @@
+"No": |-
+                    - button "No Required" [ref=e1668]: "No"
+                  - group "Are you 18 years of age or older?*" [ref=e1480]:
+                    - paragraph [ref=e1484]:
+                      - generic [ref=e1485]: Are you 18 years of age or older?*
+  --
+                  - group "Will you now or in the future require sponsorship for employment visa status?*" [ref=e1491]:
+                    - paragraph [ref=e1495]:
+                      - generic [ref=e1496]: Will you now or in the future require sponsorship for employment visa status?*
+                    - button "Yes Required" [ref=e1688]: "Yes"
+                  - group "Have you ever worked for Corewell Health, Beaumont Health, Spectrum Health, Lakeland Health, or Priority Health in any capacity (including as a permanent or temporary employee, volunteer, independent contractor, staffing agency worker, intern, or through a clinical rotation)?*" [ref=e1502]:
+                    - paragraph [ref=e1506]:
+  --
+                    - button "No Required" [ref=e1698]: "No"
+                  - group "Have you ever been discharged from employment?*" [ref=e1513]:
+                    - paragraph [ref=e1517]:
+                      - generic [ref=e1518]: Have you ever been discharged from employment?*
+                    - button "No Required" [ref=e1708]: "No"
+                  - group "Do you have an employment or other financial relationship with (a) any vendor or supplier with which Corewell Health has or could in the future have a business relationship; or (b) an organization that competes with Corewell Health?*" [ref=e1524]:
+                    - paragraph [ref=e1528]:
+                      - generic [ref=e1529]: Do you have an employment or other financial relationship with (a) any vendor or supplier with which Corewell Health has or could in the future have a business relationship; or (b) an organization that competes with Corewell Health?*
+                    - button "No Required" [ref=e1718]: "No"
+                  - group "Do you have any agreements with another organization that may affect or restrict your employment with Corewell Health?*" [ref=e1535]:
+                    - paragraph [ref=e1539]:
+                      - generic [ref=e1540]: Do you have any agreements with another organization that may affect or restrict your employment with Corewell Health?*
+                    - button "No Required" [ref=e1728]: "No"
+                  - group "Are you currently excluded (voluntarily or involuntarily) from participation as a supplier or provider under Medicare, Medicaid or any other federal or state health care program?*" [ref=e1546]:
+                    - paragraph [ref=e1550]:
+                      - generic [ref=e1551]: Are you currently excluded (voluntarily or involuntarily) from participation as a supplier or provider under Medicare, Medicaid or any other federal or state health care program?*
+                    - button "No Required" [ref=e1738]: "No"
+                  - group "Are you currently under investigation for any alleged conduct which could lead to exclusion as a supplier or provider under Medicare, Medicaid or any other federal or state health care program?*" [ref=e1557]:
+                    - paragraph [ref=e1561]:
+                      - generic [ref=e1562]: Are you currently under investigation for any alleged conduct which could lead to exclusion as a supplier or provider under Medicare, Medicaid or any other federal or state health care program?*
+                    - button "No Required" [ref=e1748]: "No"
+                  - group "Are you currently under sanctions other than exclusions as a supplier or provider under Medicare, Medicaid or any other federal or state health care program?*" [ref=e1568]:
+                    - paragraph [ref=e1572]:
+                      - generic [ref=e1573]: Are you currently under sanctions other than exclusions as a supplier or provider under Medicare, Medicaid or any other federal or state health care program?*
+  --
+                  - 'group "If you are a licensed professional, have you ever had or currently have any license infractions or pending investigations? License infractions include, but are not limited to: Professional misconduct (e.g., incompetence, negligence, substance abuse) Ethical or legal violations (e.g., patient boundary violations, falsifying documents, fraud, practicing without a valid license)*" [ref=e1644]':
+                    - generic [ref=e1647]:
+                      - paragraph [ref=e1648]: "If you are a licensed professional, have you ever had or currently have any license infractions or pending investigations? License infractions include, but are not limited to:"
+                      - list [ref=e1649]:
+                        - listitem [ref=e1650]:
+                          - paragraph [ref=e1651]: Professional misconduct (e.g., incompetence, negligence, substance abuse)
+  --
+      - option "No" [ref=e1756]:
+        - generic [ref=e1757]: "No"
+  ```

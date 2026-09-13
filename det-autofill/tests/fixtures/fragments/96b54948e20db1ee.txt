@@ -1,0 +1,29 @@
+"Upload": |-
+  - generic [ref=e166]: Upload either DOC, DOCX, HTML, PDF, or TXT file types (5MB max)
+  - generic [ref=e169] [cursor=pointer]:
+    - generic [ref=e175]: Drop file here
+    - generic [ref=e176]:
+      - generic [ref=e177]: or
+      - button "Select file" [ref=e178]:
+"Select file": |-
+                    - button "Select file" [ref=e178]:
+                      - generic [ref=e179]: Select file
+        - button "Continue" [ref=e183] [cursor=pointer]
+  - generic [ref=e54]:
+    - heading "Follow Us" [level=4] [ref=e55]
+    - list [ref=e56]:
+      - listitem [ref=e57] [cursor=pointer]:
+"Drop file here": |-
+            - generic [ref=e175]: Drop file here
+            - generic [ref=e176]:
+              - generic [ref=e177]: or
+              - button "Select file" [ref=e178]:
+                - generic [ref=e179]: Select file
+  - button "Continue" [ref=e183] [cursor=pointer]
+"Continue": |-
+        - button "Continue" [ref=e183] [cursor=pointer]
+  - generic [ref=e54]:
+    - heading "Follow Us" [level=4] [ref=e55]
+    - list [ref=e56]:
+      - listitem [ref=e57] [cursor=pointer]:
+        - link "LinkedIn" [ref=e58]:

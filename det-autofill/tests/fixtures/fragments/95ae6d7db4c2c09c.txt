@@ -1,0 +1,45 @@
+"Yes": |-
+        - option "Yes" [ref=e284]
+        - option "No" [ref=e285]
+      - textbox
+  - generic [ref=e196]:
+"No": |-
+      - paragraph [ref=e26]: This is not a maintenance role. We are in early days, with minimal legacy baggage and significant greenfield opportunity ahead. You will be laying the foundation for how this firm handles data for years to come, and you will have real ownership over how that gets built. The right person will thrive in an environment where the architecture is yours to define and the standards are yours to set.
+      - paragraph [ref=e27]
+      - paragraph [ref=e28]:
+        - strong [ref=e29]: What You'll Do
+  --
+        - listitem [ref=e49]: Experience consuming streaming or API-based data; Kafka familiarity is helpful but not a requirement.
+        - listitem [ref=e50]: A genuine appreciation for data quality and governance, including the willingness to define standards and enforce them.
+        - listitem [ref=e51]: Strong business orientation with the ability to understand why the data matters, not just how to move it.
+        - listitem [ref=e52]: Comfort operating independently in an early-stage environment where structure is still being built.
+        - listitem [ref=e53]: Interest in AI-driven development workflows and curiosity about how tooling like Claude can accelerate data work.
+        - listitem [ref=e54]: Familiarity with React or frontend development is a nice-to-have for future dashboard and UI contributions.
+  --
+        - listitem [ref=e62]: You are curious about AI tooling and actively look for ways to use it well. You think about how automation can make your work better, not just faster.
+      - paragraph [ref=e63]:
+        - strong [ref=e64]: What You'll Get
+      - list [ref=e65]:
+  --
+        - listitem [ref=e67]: Significant greenfield scope with no legacy technical debt to inherit.
+        - listitem [ref=e68]: Direct collaboration with senior leadership and the opportunity to see how your work connects to real business outcomes.
+        - listitem [ref=e69]: An environment that actively embraces AI-driven workflows and encourages experimentation.
+    - generic [ref=e70]:
+  --
+      - paragraph [ref=e72]: Nearwater Capital is a rapidly growing and innovative specialty finance company headquartered in New York City with a global presence and client base. Established in 2017, Nearwater has distinguished itself as a leader in delivering thoughtful, solutions-based financing to some of the largest financial institutions and financial services firms in the world.
+      - paragraph [ref=e73]: Nearwater offers an attractive market compensation and benefits package. As a creative, intellectual capital firm, Nearwater is proud to be 100% work from office.
+  - generic [ref=e74]:
+    - img [ref=e75]
+  --
+            - option "No" [ref=e285]
+          - textbox
+      - generic [ref=e196]:
+        - generic [ref=e197]: Will you now, or in the future, require sponsorship to work in the United States?*
+        - generic [ref=e198]:
+          - log [ref=e200]
+          - generic [ref=e202]:
+  --
+              - combobox "Will you now, or in the future, require sponsorship to work in the United States?" [ref=e206]
+            - button "Toggle flyout" [ref=e208] [cursor=pointer]:
+              - img [ref=e209]
+          - textbox

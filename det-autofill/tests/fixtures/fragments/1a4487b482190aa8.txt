@@ -1,0 +1,6 @@
+"Next": |-
+  - button "Next" [ref=e309] [cursor=pointer]:
+    - generic [ref=e311]: Next
+  - link "Privacy Notice, opens in new tab" [ref=e314] [cursor=pointer]:
+    - /url: https://www.llnl.gov/join-our-team/careers/privacy-statement
+    - text: Privacy Notice

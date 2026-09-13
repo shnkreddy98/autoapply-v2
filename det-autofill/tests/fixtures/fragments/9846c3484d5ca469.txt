@@ -1,0 +1,6 @@
+"Enter current or future visa requirements": |-
+          - group "Enter current or future visa requirements, which includes sponsorship of H-1B, TN, E-3 visas or F-1 visas completing curricular practical training (CPT) and optional practical training (OPT).*" [ref=e2011]:
+            - paragraph [ref=e2015]: Enter current or future visa requirements, which includes sponsorship of H-1B, TN, E-3 visas or F-1 visas completing curricular practical training (CPT) and optional practical training (OPT).*
+            - textbox [ref=e2018]
+  - generic [ref=e451]:
+    - button "Back" [ref=e662] [cursor=pointer]

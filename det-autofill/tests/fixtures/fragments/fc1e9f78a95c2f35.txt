@@ -1,0 +1,5 @@
+"Create one now": |-
+        - link "Create one now." [ref=e346] [cursor=pointer]:
+          - /url: "#"
+    - img "Powered by Dayforce" [ref=e348]
+  - alert [ref=e311]: Apply | Dayforce Jobs

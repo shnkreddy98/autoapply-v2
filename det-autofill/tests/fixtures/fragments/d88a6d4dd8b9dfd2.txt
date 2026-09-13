@@ -1,0 +1,23 @@
+"Yes": |-
+  - group "Have you previously worked for this organization? If yes, please answer the question below. If No, please continue to the next page." [ref=e237]:
+    - generic [ref=e240]: Have you previously worked for this organization? If yes, please answer the question below. If No, please continue to the next page.*
+    - generic "Have you previously worked for this organization? If yes, please answer the question below. If No, please continue to the next page." [ref=e243]:
+      - generic [ref=e244]:
+        - radio "Yes" [ref=e246] [cursor=pointer]
+        - generic [ref=e247]: "Yes"
+      - generic [ref=e248]:
+        - radio "No" [ref=e250] [cursor=pointer]
+        - generic [ref=e251]: "No"
+"No": |-
+    - group "Have you previously worked for this organization? If yes, please answer the question below. If No, please continue to the next page." [ref=e237]:
+      - generic [ref=e240]: Have you previously worked for this organization? If yes, please answer the question below. If No, please continue to the next page.*
+      - generic "Have you previously worked for this organization? If yes, please answer the question below. If No, please continue to the next page." [ref=e243]:
+        - generic [ref=e244]:
+          - radio "Yes" [ref=e246] [cursor=pointer]
+          - generic [ref=e247]: "Yes"
+  --
+          - radio "No" [ref=e250] [cursor=pointer]
+          - generic [ref=e251]: "No"
+  - group [ref=e252]:
+    - generic [ref=e254]:
+      - generic [ref=e256]: Country*

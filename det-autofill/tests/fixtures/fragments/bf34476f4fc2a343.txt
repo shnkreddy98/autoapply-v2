@@ -1,0 +1,60 @@
+"First Name": |-
+    - generic [ref=e106]: First Name*
+    - textbox "First Name" [ref=e107]
+  - generic [ref=e110]:
+    - generic [ref=e111]: Last Name*
+    - textbox "Last Name" [ref=e112]
+  --
+    - generic [ref=e116]: Preferred First Name
+    - textbox "Preferred First Name" [ref=e117]
+  - generic [ref=e120]:
+    - generic [ref=e121]: Email*
+    - textbox "Email" [ref=e122]
+"Last Name": |-
+    - generic [ref=e111]: Last Name*
+    - textbox "Last Name" [ref=e112]
+  - generic [ref=e115]:
+    - generic [ref=e116]: Preferred First Name
+    - textbox "Preferred First Name" [ref=e117]
+"Email": |-
+    - generic [ref=e121]: Email*
+    - textbox "Email" [ref=e122]
+  - group "Phone" [ref=e124]:
+    - generic [ref=e125]: Phone
+    - generic [ref=e128]:
+"Phone": |-
+  - group "Phone" [ref=e124]:
+    - generic [ref=e125]: Phone
+    - generic [ref=e128]:
+      - generic [ref=e129]: Country*
+      - generic [ref=e130]:
+  --
+      - generic [ref=e145]: Phone*
+      - textbox "Phone" [ref=e146]
+  - group "Resume/CV*" [ref=e148]:
+    - generic [ref=e149]: Resume/CV*
+    - generic [ref=e151]:
+"Resume/CV": |-
+  - group "Resume/CV*" [ref=e148]:
+    - generic [ref=e149]: Resume/CV*
+    - generic [ref=e151]:
+      - generic [ref=e153]:
+        - button "Attach" [ref=e154] [cursor=pointer]
+"Cover Letter": |-
+  - group "Cover Letter*" [ref=e167]:
+    - generic [ref=e168]: Cover Letter*
+    - generic [ref=e170]:
+      - generic [ref=e172]:
+        - button "Attach" [ref=e173] [cursor=pointer]
+"LinkedIn Profile": |-
+    - generic [ref=e244]: LinkedIn Profile
+    - textbox "LinkedIn Profile" [ref=e245]
+  - generic [ref=e248]:
+    - generic [ref=e249]: Website
+    - textbox "Website" [ref=e250]
+"Website": |-
+    - generic [ref=e249]: Website
+    - textbox "Website" [ref=e250]
+  - generic [ref=e253]:
+    - generic [ref=e254]: Are you a U.S. citizen? *
+    - generic [ref=e255]:

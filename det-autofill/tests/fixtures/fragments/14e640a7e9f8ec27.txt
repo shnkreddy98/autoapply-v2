@@ -1,0 +1,29 @@
+"New password": |-
+      - paragraph [ref=e12]: "Your new password must:"
+      - list [ref=e13]:
+        - listitem [ref=e14]: Have at least 8 characters
+        - listitem [ref=e15]: Have at least one number
+  --
+    - generic [ref=e22]: New password
+    - generic [ref=e23]:
+      - textbox "New password" [ref=e24]
+      - button "Show password" [ref=e25] [cursor=pointer]
+      - status [ref=e26]
+  - generic [ref=e27]:
+    - generic [ref=e28]: Confirm new password
+    - generic [ref=e29]:
+      - textbox "Confirm new password" [ref=e30]
+      - button "Show password" [ref=e31] [cursor=pointer]
+      - status [ref=e32]
+  - button "Next" [disabled]
+"Confirm new password": |-
+    - generic [ref=e28]: Confirm new password
+    - generic [ref=e29]:
+      - textbox "Confirm new password" [ref=e30]
+      - button "Show password" [ref=e31] [cursor=pointer]
+      - status [ref=e32]
+  - button "Next" [disabled]
+"Next": |-
+          - button "Next" [disabled]
+        - paragraph [ref=e34]: Password was last changed on 2026-03-19 17:47:10
+  ```

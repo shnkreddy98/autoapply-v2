@@ -1,0 +1,6 @@
+"Job Board": |-
+  - option "Job Board not checked" [ref=e525]:
+    - generic [ref=e527] [cursor=pointer]: Job Board
+  - option "Job Fair/Hiring Event not checked" [ref=e532]:
+    - generic [ref=e534] [cursor=pointer]: Job Fair/Hiring Event
+  - option "Media not checked" [ref=e539]:

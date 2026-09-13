@@ -1,0 +1,55 @@
+"Highest Education Level *": |-
+  - generic [ref=e288]: Highest Education Level *
+  - combobox "Highest Education Level" [ref=e289]:
+    - option "Select an option"
+    - option "High School Diploma or Equivalent"
+"School Type *": |-
+  - generic [ref=e307]: School Type *
+  - combobox "School Type" [ref=e308]:
+    - option "Select an option" [selected]
+    - option "College"
+"School Name *": |-
+    - generic [ref=e311]: School Name *
+    - textbox "School Name" [ref=e312]:
+      - /placeholder: ""
+  - generic [ref=e314]:
+"Degree Level *": |-
+  - generic [ref=e315]: Degree Level *
+  - combobox "Degree Level" [ref=e316]:
+    - option "Select an option" [selected]
+    - option "High School Diploma or Equivalent"
+"State *": |-
+  - generic [ref=e94]: Home State *
+  - combobox "Home State" [ref=e95]:
+    - option "Select an option"
+    - option "Alabama"
+  --
+        - generic [ref=e319]: State *
+        - textbox "State" [ref=e320]:
+          - /placeholder: ""
+      - generic [ref=e322]:
+"City *": |-
+  - generic [ref=e97]: Home City *
+  - textbox "Home City" [ref=e98]:
+    - /placeholder: ""
+    - text: San Jose
+  --
+        - generic [ref=e323]: City *
+        - textbox "City" [ref=e324]:
+          - /placeholder: ""
+      - generic [ref=e326]:
+"Major *": |-
+    - generic [ref=e327]: Major *
+    - textbox "Major" [ref=e328]:
+      - /placeholder: ""
+  - generic [ref=e330]:
+"Graduated? *": |-
+  - generic [ref=e331]: Graduated? *
+  - combobox "Graduated?" [ref=e332]:
+    - option "Select an option" [selected]
+    - option "No"
+"Next": |-
+                - button "Next" [ref=e210] [cursor=pointer]
+                - button "Cancel" [ref=e211] [cursor=pointer]
+  - contentinfo "Footer" [ref=e212]:
+    - generic [ref=e214]:

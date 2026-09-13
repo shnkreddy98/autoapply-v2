@@ -1,0 +1,30 @@
+"Resume": |-
+    - generic [ref=e346]: Resume*
+    - generic [ref=e347]:
+      - link "Attach resume" [ref=e348] [cursor=pointer]:
+        - /url: "#"
+      - text: or
+      - link "Paste resume" [ref=e349] [cursor=pointer]:
+        - /url: "#"
+  - generic [ref=e350]:
+    - generic [ref=e351]: What's your highest level of education completed?*
+"Authorized to work in the US": (no match)
+"Visa sponsorship": |-
+      - text: Visa sponsorship is
+      - generic [ref=e74]: not
+      - text: available for this position.
+  - listitem [ref=e75]:
+  --
+    - generic [ref=e360]: Do you or will you in the future require visa sponsorship?*
+    - combobox "Do you or will you in the future require visa sponsorship?*" [ref=e361]:
+      - option "-- No answer --" [selected]
+      - option "Yes"
+      - option "No"
+"Salary expectation": (no match)
+"LinkedIn": |-
+    - generic [ref=e354]: LinkedIn Profile URL:*
+    - textbox "LinkedIn Profile URL:*" [active] [ref=e355]: https://www.linkedin.com/in/janedoe
+  - generic [ref=e356]:
+    - generic [ref=e357]:
+      - text: Are you legally authorized to work in the U.S.?
+"Website/Portfolio": (no match)

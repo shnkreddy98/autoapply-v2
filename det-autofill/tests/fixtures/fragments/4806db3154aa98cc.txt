@@ -1,0 +1,16 @@
+"Sign In": |-
+        - button "Sign In" [ref=e19] [cursor=pointer]:
+          - generic [ref=e24]: Sign In
+        - navigation [ref=e25]:
+          - button "Search for Jobs" [ref=e26] [cursor=pointer]
+  - main [ref=e76]:
+  --
+            - generic [ref=e94]: Create Account/Sign In
+          - listitem [ref=e95]:
+            - generic: step 2 of 7
+            - generic [ref=e101]: Autofill with Resume
+  --
+            - button "Sign In" [ref=e183] [cursor=pointer]
+          - button "Forgot your password?" [ref=e185] [cursor=pointer]
+        - generic:
+          - generic:

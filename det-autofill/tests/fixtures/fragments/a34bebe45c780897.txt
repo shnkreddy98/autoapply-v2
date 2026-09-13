@@ -1,0 +1,36 @@
+"Zip/Postal Code": |-
+      - listitem [ref=e166]: The field "Zip/Postal Code" is mandatory.
+      - listitem [ref=e167]: You must select ALL possible values in the section Place of Residence.
+      - listitem [ref=e168]: The field "Primary Number" is mandatory.
+  - link "Beginning of the main content section." [ref=e169] [cursor=pointer]:
+  --
+                - img "The field \"Zip/Postal Code\" is mandatory." [ref=e251]
+                - generic "The field Zip/Postal Code is mandatory." [ref=e252]:
+                  - text: Zip/Postal Code
+                  - generic [ref=e255]: .
+                  - generic [ref=e256]: Required
+                - textbox "Zip/Postal Code . Required" [active] [ref=e257]: "95126"
+              - group "You must select ALL possible values in the section Place of Residence. Place of Residence . Required" [ref=e259]:
+                - generic [ref=e261]:
+                  - img "You must select ALL possible values in the section Place of Residence." [ref=e263]
+"State/Province": |-
+  - generic [ref=e273]: State/Province
+  - combobox "State/Province" [ref=e274]:
+    - option "Not Specified"
+    - option "Alabama"
+    - option "Alaska"
+"Sources": |-
+  - listitem [ref=e164]: You must select a value in the field "Sources".
+  - listitem [ref=e165]: The field "Street Address (line 1)" is mandatory.
+  - listitem [ref=e166]: The field "Zip/Postal Code" is mandatory.
+  - listitem [ref=e167]: You must select ALL possible values in the section Place of Residence.
+"Save and Continue": |-
+      - button "Save and Continue" [ref=e157] [cursor=pointer]
+      - button "Save as Draft" [ref=e158] [cursor=pointer]
+      - button "Quit" [ref=e159] [cursor=pointer]
+  - generic [ref=e160]:
+  --
+    - button "Save and Continue" [ref=e313] [cursor=pointer]
+    - button "Save as Draft" [ref=e314] [cursor=pointer]
+    - button "Quit" [ref=e315] [cursor=pointer]
+  - link "Privacy Agreement" [ref=e324] [cursor=pointer]:

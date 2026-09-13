@@ -1,0 +1,55 @@
+"Home Country": |-
+  - generic [ref=e115]: Home Country *
+  - combobox "Home Country" [ref=e117]:
+    - option "Select a country"
+    - option "Afghanistan"
+    - option "Albania"
+"Home State": |-
+  - generic [ref=e119]: Home State *
+  - combobox "Home State" [ref=e120]:
+    - option "Select an option"
+    - option "Alabama"
+    - option "Alaska"
+"authorized to work": |-
+  - generic [ref=e131]: Are you legally authorized to work in the United States? *
+  - combobox "Are you legally authorized to work in the United States?" [ref=e132]:
+    - option "Select an option"
+    - option "No"
+    - option "Yes" [selected]
+"require sponsorship": |-
+  - generic [ref=e134]: Will you now or in the future require sponsorship for employment visa status (e.g. H-1B status)? *
+  - combobox "Will you now or in the future require sponsorship for employment visa status (e.g. H-1B status)?" [ref=e135]:
+    - option "Select an option"
+    - option "No"
+    - option "Yes" [selected]
+"Salary Expectations": |-
+    - generic [ref=e146]: Salary Expectations *
+    - textbox "Salary Expectations" [ref=e147]:
+      - /placeholder: ""
+      - text: "115000"
+  - generic [ref=e148]:
+"hear about USI": |-
+  - generic [ref=e149]: How did you hear about USI? *
+  - combobox "How did you hear about USI?" [ref=e150]:
+    - option "Select an option"
+    - option "Career Fair"
+    - option "Career/Job Fair"
+"I attest": |-
+    - generic [ref=e387]: I attest that to the best of my knowledge and belief, all information provided above is true and accurate.
+    - generic [ref=e388]:
+      - checkbox "I attest" [ref=e389] [cursor=pointer]
+      - generic [ref=e390] [cursor=pointer]: I attest *
+  - group [ref=e392]:
+    - generic [ref=e393]:
+      - text: I have read and accept the
+"I accept": |-
+      - checkbox "I accept" [ref=e396] [cursor=pointer]
+      - generic [ref=e397] [cursor=pointer]: I accept *
+  - generic [ref=e398]:
+    - generic [ref=e399]:
+      - text: Would you like to receive text messages from USI Insurance Services regarding your job application (e.g., interview scheduling and hiring updates)? *
+"Next": |-
+            - button "Next" [ref=e419] [cursor=pointer]
+            - button "Cancel" [ref=e420] [cursor=pointer]
+  - list [ref=e421]:
+    - listitem [ref=e422]:

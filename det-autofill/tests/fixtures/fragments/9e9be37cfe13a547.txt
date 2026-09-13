@@ -1,0 +1,8 @@
+"Male": |-
+      - menuitem "Male" [active] [ref=e375] [cursor=pointer]:
+        - generic [ref=e377]: Male
+      - menuitem "Female" [ref=e378] [cursor=pointer]:
+        - generic [ref=e380]: Female
+      - menuitem "Decline to self-identify" [ref=e381] [cursor=pointer]:
+        - generic [ref=e383]: Decline to self-identify
+  ```

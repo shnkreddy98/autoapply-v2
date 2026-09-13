@@ -1,0 +1,36 @@
+"What's your highest level of education completed?": |-
+  - generic [ref=e351]: What's your highest level of education completed?*
+  - combobox "What's your highest level of education completed?*" [ref=e352]:
+    - option "No answer" [selected]
+    - option "GED or Equivalent"
+    - option "High School"
+    - option "Some College"
+    - option "College - Associates"
+    - option "College - Bachelor of Arts"
+    - option "College - Bachelor of Fine Arts"
+    - option "College - Bachelor of Science"
+    - option "College - Master of Arts"
+    - option "College - Master of Science"
+    - option "College - Master of Fine Arts"
+    - option "College - Master of Business Administration"
+    - option "College - Doctorate"
+    - option "Medical Doctor"
+    - option "Other"
+"Do you or will you in the future require visa sponsorship?": |-
+    - generic [ref=e360]: Do you or will you in the future require visa sponsorship?*
+    - combobox "Do you or will you in the future require visa sponsorship?*" [ref=e361]:
+      - option "-- No answer --"
+      - option "Yes" [selected]
+      - option "No"
+  - generic [ref=e362]:
+    - generic [ref=e363]: Were you referred by a current employee of Cutsforth or by a recruiter? If yes, please provide their name.*
+    - textbox "Were you referred by a current employee of Cutsforth or by a recruiter? If yes, please provide their name.*" [ref=e364]
+  - generic [ref=e365]:
+    - generic [ref=e366]: Is your primary work location (or residence) in California, New York or Illinois?*
+    - combobox "Is your primary work location (or residence) in California, New York or Illinois?*" [ref=e367]:
+      - option "-- No answer --" [selected]
+      - option "Yes"
+      - option "No"
+  - generic [ref=e368]:
+    - generic [ref=e369]: Are you currently subject to any post-employment restrictions from a former or current employer, such as a non-competition agreement (non-compete), non-solicitation agreement, or confidentiality obligation that could potentially affect your ability to perform the duties of this position? If yes, please provide a brief description. If no, please answer N/A.*
+    - textbox "Are you currently subject to any post-employment restrictions from a former or current employer, such as a non-competition agreement (non-compete), non-solicitation agreement, or confidentiality obligation that could potentially affect your ability to perform the duties of this position? If yes, please provide a brief description. If no, please answer N/A.*" [ref=e370]

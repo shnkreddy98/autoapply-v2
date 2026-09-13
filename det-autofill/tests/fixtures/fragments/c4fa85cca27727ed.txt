@@ -1,0 +1,51 @@
+"Will you now or in the future require sponsorship": |-
+          - generic [ref=e1729]: Will you now or in the future require sponsorship for employment visa status?
+        - generic [ref=e1731]:
+          - generic [ref=e1733]:
+            - generic [ref=e1734]: Will you now or in the future require sponsorship for employment visa status?
+            - text: "*"
+          - generic [ref=e1735]:
+            - generic [ref=e1739]:
+              - generic [ref=e1741] [cursor=pointer]:
+                - radio "Yes" [ref=e1743]
+  --
+              - generic [ref=e1838]: "'Will you now or in the future require sponsorship for employment visa status?' is required."
+  - listitem [ref=e1752]:
+    - generic [ref=e1755]:
+      - generic [ref=e1757]:
+        - generic [ref=e1758]: What is your minimum requirement for total target compensation?
+        - text: "*"
+"close relatives employed by The Hanover": |-
+          - generic [ref=e1777]: Do you have any close relatives employed by The Hanover and its affiliated companies? (Spouse, Domestic Partner, or Significant Other, Parent/Step Parent, Child/Step Child, Grandchild, Uncle, Aunt, Nephew, Niece, In-Laws (father, mother, son, daughter), Step Relatives and Cousins)
+        - generic [ref=e1779]:
+          - generic [ref=e1781]:
+            - generic [ref=e1782]: Do you have any close relatives employed by The Hanover and its affiliated companies? (Spouse, Domestic Partner, or Significant Other, Parent/Step Parent, Child/Step Child, Grandchild, Uncle, Aunt, Nephew, Niece, In-Laws (father, mother, son, daughter), Step Relatives and Cousins)
+            - text: "*"
+          - generic [ref=e1783]:
+            - generic [ref=e1787]:
+              - generic [ref=e1789] [cursor=pointer]:
+                - radio "Yes" [ref=e1791]
+  --
+              - generic [ref=e1847]: "'Do you have any close relatives employed by The Hanover and its affiliated companies? (Spouse, Domestic Partner, or Significant Other, Parent/Step Parent, Child/Step Child, Grandchild, Uncle, Aunt, Nephew, Niece, In-Laws (father, mother, son, daughter), Step Relatives and Cousins)' is required."
+  - listitem [ref=e1800]:
+    - group [ref=e1801]:
+      - generic [ref=e1802]:
+        - generic "[object Object]":
+          - generic [ref=e1803]: Do you have any employment or contractual obligations to your current or past employer(s) (e.g. confidentiality agreement(s), non-solicitation agreement(s)
+"employment or contractual obligations": |-
+              - generic [ref=e1803]: Do you have any employment or contractual obligations to your current or past employer(s) (e.g. confidentiality agreement(s), non-solicitation agreement(s)
+            - generic [ref=e1805]:
+              - generic [ref=e1807]:
+                - generic [ref=e1808]: Do you have any employment or contractual obligations to your current or past employer(s) (e.g. confidentiality agreement(s), non-solicitation agreement(s)
+                - text: "*"
+              - generic [ref=e1809]:
+                - generic [ref=e1813]:
+                  - generic [ref=e1815] [cursor=pointer]:
+                    - radio "Yes" [ref=e1817]
+  --
+                  - generic [ref=e1850]: "'Do you have any employment or contractual obligations to your current or past employer(s) (e.g. confidentiality agreement(s), non-solicitation agreement(s)' is required."
+  - generic [ref=e449]:
+    - generic [ref=e450]:
+      - button "Cancel" [ref=e451] [cursor=pointer]:
+        - generic [ref=e452]: Cancel
+      - button "Previous" [ref=e1610] [cursor=pointer]:

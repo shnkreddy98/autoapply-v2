@@ -1,0 +1,21 @@
+"Field of Study": |-
+    - generic [ref=e995]: Field of Study
+    - generic [ref=e1001]:
+      - textbox "Field of Study" [ref=e1002]:
+        - /placeholder: Search
+        - text: Data Analytics
+      - generic [ref=e1003]: Expanded
+  --
+    - generic [ref=e1037]: Field of Study
+    - generic [ref=e1043] [cursor=pointer]:
+      - textbox "Field of Study" [ref=e1044]:
+        - /placeholder: Search
+      - generic [ref=e1045]: 0 items selected
+  - button "The field will alphabetically return the first 100 results and can also return specified matches." [ref=e1049] [cursor=pointer]
+"Type to Add Skills": |-
+      - generic [ref=e1069]: Type to Add Skills
+      - generic [ref=e1075] [cursor=pointer]:
+        - textbox "Type to Add Skills" [ref=e1076]:
+          - /placeholder: Search
+        - generic [ref=e1077]: 0 items selected
+  - group "Resume/CV" [ref=e1082]:

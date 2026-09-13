@@ -1,0 +1,10 @@
+"Save and Continue": |-
+          - button "Save and Continue" [ref=e109] [cursor=pointer]
+          - button "Save as Draft" [ref=e110] [cursor=pointer]
+          - button "Quit" [ref=e111] [cursor=pointer]
+      - generic [ref=e112]:
+  --
+        - button "Save and Continue" [ref=e185] [cursor=pointer]
+        - button "Save as Draft" [ref=e186] [cursor=pointer]
+        - button "Quit" [ref=e187] [cursor=pointer]
+  - generic [ref=e189]:

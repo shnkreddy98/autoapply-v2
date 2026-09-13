@@ -1,0 +1,10 @@
+"Disability Status": |-
+  - generic [ref=e776]: Disability Status
+  - generic [ref=e777]:
+    - log [ref=e779]: option Yes, I have a disability, or have had one in the past, selected.
+    - generic [ref=e781]:
+  --
+        - combobox "Disability Status" [active] [ref=e785]
+      - generic [ref=e786]:
+        - button "Clear selections" [ref=e949] [cursor=pointer]:
+          - img [ref=e950]

@@ -1,0 +1,11 @@
+"Create one now": |-
+        - link "Create one now." [ref=e300] [cursor=pointer]:
+          - /url: "#"
+    - img "Powered by Dayforce" [ref=e302]
+  - alert [ref=e45]: Apply | Dayforce Jobs
+"Sign In": |-
+  - button "Sign In" [ref=e296] [cursor=pointer]:
+    - generic [ref=e297]: Sign In
+  - generic [ref=e299]:
+    - text: Don't have an account?
+    - link "Create one now." [ref=e300] [cursor=pointer]:

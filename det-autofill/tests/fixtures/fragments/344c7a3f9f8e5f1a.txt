@@ -1,0 +1,50 @@
+"resume": |-
+    - generic [ref=e346]: Resume*
+    - generic [ref=e347]:
+      - link "Attach resume" [ref=e348] [cursor=pointer]:
+        - /url: "#"
+      - text: or
+      - link "Paste resume" [ref=e349] [cursor=pointer]:
+        - /url: "#"
+  - generic [ref=e350]:
+    - generic [ref=e351]: What's your highest level of education completed?*
+"3 years": |-
+    - generic [ref=e160]: 1-3 years of experience with Microsoft Azure; equivalent experience with AWS or GCP may substitute
+  - listitem [ref=e161]:
+    - generic [ref=e164]: Strong proficiency in Python for data engineering pipelines
+  - listitem [ref=e165]:
+"Python": |-
+    - generic [ref=e115]: Write clean, efficient, and well-documented Python code for data processing and automation tasks
+  - listitem [ref=e116]:
+    - generic [ref=e119]: Support the integration and monitoring of AI/ML models in production by delivering reliable, well-structured data pipelines
+  - listitem [ref=e120]:
+  --
+    - generic [ref=e164]: Strong proficiency in Python for data engineering pipelines
+  - listitem [ref=e165]:
+    - generic [ref=e168]: Strong proficiency in SQL for querying, transforming, and validating large datasets
+  - listitem [ref=e169]:
+"salary": (no match)
+"LinkedIn": |-
+    - generic [ref=e354]: LinkedIn Profile URL:*
+    - textbox "LinkedIn Profile URL:*" [active] [ref=e355]: https://www.linkedin.com/in/janedoe
+  - generic [ref=e356]:
+    - generic [ref=e357]:
+      - text: Are you legally authorized to work in the U.S.?
+"Website": |-
+      - link "View Our Website " [ref=e9] [cursor=pointer]:
+        - /url: https://www.cutsforth.com/
+        - text: View Our Website
+        - generic [ref=e10]: 
+  - generic [ref=e13]:
+    - text: 
+  --
+                  - text: Completing this form is voluntary, and we hope that you will choose to do so. Your answer is confidential. No one who makes hiring decisions will see it. Your decision to complete the form and your answer will not harm you in any way. If you want to learn more about the law or this form, visit the U.S. Department of Labor’s Office of Federal Contract Compliance Programs (OFCCP) website at
+                  - link "www.dol.gov/ofccp" [ref=e443] [cursor=pointer]:
+                    - /url: https://www.dol.gov/ofccp
+                  - text: .
+  --
+      - heading "This website uses cookies and other analytics technologies." [level=3] [ref=e506]
+      - text: By selecting "Allow", you consent to the recording, use and sharing of your website activity by this website and its service providers.
+    - generic [ref=e507]:
+      - button "Allow" [ref=e508] [cursor=pointer]
+      - button "Reject All" [ref=e509] [cursor=pointer]

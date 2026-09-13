@@ -1,0 +1,5 @@
+"Computer Science": |-
+          - text: Computer Science
+        - generic [ref=e888]: Expanded
+    - button "The field will alphabetically return the first 100 results and can also return specified matches." [ref=e892] [cursor=pointer]
+  - generic [ref=e896]:

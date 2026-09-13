@@ -1,0 +1,6 @@
+"Your Current State*": |-
+  - text: Your Current State*
+  - combobox "Your Current State*" [ref=e54]:
+    - option "State*"
+    - option "ALABAMA"
+    - option "ALASKA"

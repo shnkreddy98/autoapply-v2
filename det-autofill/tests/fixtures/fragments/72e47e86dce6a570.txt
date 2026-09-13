@@ -1,0 +1,300 @@
+"Country": |-
+      - generic [ref=e47]: Country
+      - combobox "Country" [ref=e48]:
+        - option "Select..."
+        - option "United States" [selected]
+        - option "Afghanistan"
+        - option "Aland Islands"
+        - option "Albania"
+        - option "Algeria"
+        - option "American Samoa"
+        - option "Andorra"
+        - option "Angola"
+        - option "Anguilla"
+  --
+    - generic [ref=e77]: Are you eligible to work at the job location/country without restrictions (proof will be required)?*
+    - combobox [ref=e78]:
+      - option "Select..." [selected]
+      - option "Yes"
+      - option "No"
+  - generic [ref=e80]:
+    - generic [ref=e81]: What is your base salary requirement?
+    - textbox [ref=e82]: "150000"
+    - text: Required
+  - generic [ref=e84]:
+    - generic [ref=e85]: What are your total compensation expectations (base + bonus)?
+"State": |-
+                - option "United States" [selected]
+                - option "Afghanistan"
+                - option "Aland Islands"
+                - option "Albania"
+                - option "Algeria"
+                - option "American Samoa"
+                - option "Andorra"
+                - option "Angola"
+                - option "Anguilla"
+                - option "Antigua And Barbuda"
+                - option "Argentina"
+  --
+                - option "United States Minor Outlying Islands"
+                - option "Uruguay"
+                - option "Uzbekistan"
+                - option "Vanuatu"
+                - option "Venezuela"
+                - option "Vietnam"
+                - option "Wallis And Futuna"
+                - option "Western Sahara"
+                - option "Yemen"
+                - option "Zambia"
+                - option "Zimbabwe"
+  --
+              - generic [ref=e50]: State/Province
+              - combobox "State/Province" [ref=e51]:
+                - option "Select..."
+                - option "Alabama"
+                - option "Alaska"
+                - option "Arizona"
+                - option "Arkansas"
+                - option "California" [selected]
+                - option "Colorado"
+                - option "Connecticut"
+                - option "Delaware"
+                - option "Florida"
+  --
+              - option "**NONE or NOT STATED**"
+              - option "College/Univ. Career Page"
+              - option "Current Contractor"
+              - option "Direct Sourced"
+              - option "Glassdoor"
+              - option "Gov't Agency"
+              - option "Indeed.com"
+              - option "Internal Applicant - Current Employee at PRGX"
+              - option "Internet Job Board"
+              - option "Job Fair"
+              - option "LinkedIn"
+  --
+            - /url: https://www.prgx.com/privacy-statement/
+          - generic [ref=e112]:
+            - checkbox "I have read the terms of the privacy policy and consent to the processing of my information" [ref=e113]
+            - generic [ref=e114] [cursor=pointer]: I have read the terms of the privacy policy and consent to the processing of my information
+        - generic [ref=e115]:
+          - generic [ref=e116]:
+            - heading "Voluntary Self-Identification" [level=4] [ref=e117]
+            - paragraph [ref=e118]: Qualified resume submissions are considered for employment without regard to race, religion, sex, national origin, marital status, sexual orientation, veteran status, or disability. Completion of this form is VOLUNTARY and your failure to complete it will NOT preclude you from employment consideration. This information will be kept in a confidential file separate from your resume.
+            - generic [ref=e119]:
+              - generic [ref=e120]:
+                - generic [ref=e121]: GENDER / GÉNERO*
+  --
+              - listitem [ref=e177]: An Armed forces service medal veteran means a veteran who, while serving on active duty in the U.S. military, ground, naval or air service, participated in a United States military operation for which an Armed Forces service medal was awarded pursuant to Executive Order 12985.
+            - text: Protected veterans may have additional rights under USERRA - the Uniformed Services Employment and Reemployment Rights Act. In particular, if you were absent from employment in order to perform service in the uniformed service, you may be entitled to be reemployed by your employer in the position you would have obtained with reasonable certainty if not for the absence due to service. For more information, call the U.S. Department of Labors Veterans Employment and Training Service (VETS), toll-free, at 1-866-4-USA-DOL.
+            - paragraph [ref=e178]: 2. If you believe you belong to any of the categories of protected veterans listed above, please indicate by checking the appropriate box below. As a Government contractor subject to VEVRAA, we request this information in order to measure the effectiveness of the outreach and positive recruitment efforts we undertake pursuant to VEVRAA.
+          - generic [ref=e181]:
+            - text: Required
+            - table [ref=e182]:
+              - rowgroup [ref=e183]:
+                - row "I identify as one or more of the classifications of protected veterans listed above" [ref=e184]:
+                  - cell "I identify as one or more of the classifications of protected veterans listed above" [ref=e185]:
+                    - radio "I identify as one or more of the classifications of protected veterans listed above" [ref=e186]
+                    - text: I identify as one or more of the classifications of protected veterans listed above
+  --
+              - strong [ref=e260]: "PUBLIC BURDEN STATEMENT:"
+              - text: According to the Paperwork Reduction Act of 1995 no persons are required to respond to a collection of information unless such collection displays a valid OMB control number. This survey should take about 5 minutes to complete.
+          - generic [ref=e262]:
+            - heading "Candidate Acknowledgment" [level=4] [ref=e263]
+            - generic [ref=e265]:
+              - paragraph
+              - paragraph [ref=e266]: The information that I am submitting in this application is true and correct. I understand that in the event of my employment by the Company, I shall be subject to dismissal if any information that I have given in this application is false or misleading or if I have failed to give any information herein requested, regardless of the time elapsed after discovery.
+              - paragraph [ref=e267]: I authorize the Company or its assigns to inquire into my educational, professional and past employment history and references as needed to research my qualifications for this position. I hereby give my consent to any former employer to provide employment-related information about me to the Company and will hold the Company and my former employer harmless from any claim made on the basis that such information about me was provided or that any employment decision was made on the basis of such information.
+              - paragraph [ref=e268]: I understand that nothing in this employment application, the granting of an interview or my subsequent employment with the Company is intended to create an employment contract between myself and the Company under which my employment could be terminated only for cause.
+              - paragraph [ref=e269]: If employed, I will be required to provide original documents which verify my identity and right to work in the United States under the Immigration Reform and Control Act (IRCA) of 1986. The document(s) provided will be used for completion of Form I-9.
+              - paragraph [ref=e270]: By digitally signing below, I acknowledge all of the above.
+              - paragraph
+            - generic [ref=e272]:
+              - strong [ref=e274]: Type Your Full Name Here
+              - textbox "Type Your Full Name Here" [active] [ref=e275]: Jane Quinn Doe
+          - generic [ref=e278]:
+            - button "Submit" [disabled]
+            - button "Cancel" [disabled]
+  - table [ref=e284]:
+    - rowgroup [ref=e285]:
+"consent": |-
+    - heading "CCPA Consent Notice" [level=4] [ref=e105]
+    - paragraph [ref=e108]: Under the California Consumer Privacy Act ("CCPA"), PRGX Global, Inc is required to inform California residents who are our job applicants or prospective talent (together "job applicants") about the categories of personal information we collect about you and the purposes for which we will use this information. Click the link below to view our privacy policy.
+    - link "Click here to read our Privacy Policy" [ref=e110] [cursor=pointer]:
+      - /url: https://www.prgx.com/privacy-statement/
+    - generic [ref=e112]:
+      - checkbox "I have read the terms of the privacy policy and consent to the processing of my information" [ref=e113]
+      - generic [ref=e114] [cursor=pointer]: I have read the terms of the privacy policy and consent to the processing of my information
+  - generic [ref=e115]:
+    - generic [ref=e116]:
+      - heading "Voluntary Self-Identification" [level=4] [ref=e117]
+      - paragraph [ref=e118]: Qualified resume submissions are considered for employment without regard to race, religion, sex, national origin, marital status, sexual orientation, veteran status, or disability. Completion of this form is VOLUNTARY and your failure to complete it will NOT preclude you from employment consideration. This information will be kept in a confidential file separate from your resume.
+      - generic [ref=e119]:
+        - generic [ref=e120]:
+          - generic [ref=e121]: GENDER / GÉNERO*
+          - combobox "GENDER / GÉNERO*" [ref=e122]:
+            - option "Select..." [selected]
+            - option "Female"
+  --
+        - paragraph [ref=e267]: I authorize the Company or its assigns to inquire into my educational, professional and past employment history and references as needed to research my qualifications for this position. I hereby give my consent to any former employer to provide employment-related information about me to the Company and will hold the Company and my former employer harmless from any claim made on the basis that such information about me was provided or that any employment decision was made on the basis of such information.
+        - paragraph [ref=e268]: I understand that nothing in this employment application, the granting of an interview or my subsequent employment with the Company is intended to create an employment contract between myself and the Company under which my employment could be terminated only for cause.
+        - paragraph [ref=e269]: If employed, I will be required to provide original documents which verify my identity and right to work in the United States under the Immigration Reform and Control Act (IRCA) of 1986. The document(s) provided will be used for completion of Form I-9.
+        - paragraph [ref=e270]: By digitally signing below, I acknowledge all of the above.
+        - paragraph
+      - generic [ref=e272]:
+        - strong [ref=e274]: Type Your Full Name Here
+        - textbox "Type Your Full Name Here" [active] [ref=e275]: Jane Quinn Doe
+    - generic [ref=e278]:
+      - button "Submit" [disabled]
+      - button "Cancel" [disabled]
+"veteran": |-
+      - paragraph [ref=e118]: Qualified resume submissions are considered for employment without regard to race, religion, sex, national origin, marital status, sexual orientation, veteran status, or disability. Completion of this form is VOLUNTARY and your failure to complete it will NOT preclude you from employment consideration. This information will be kept in a confidential file separate from your resume.
+      - generic [ref=e119]:
+        - generic [ref=e120]:
+          - generic [ref=e121]: GENDER / GÉNERO*
+          - combobox "GENDER / GÉNERO*" [ref=e122]:
+            - option "Select..." [selected]
+            - option "Female"
+            - option "I choose not to disclose"
+            - option "Male"
+        - generic [ref=e123]:
+          - generic [ref=e124]: RACE/ETHNICITY / RAZA/ETNICIDAD*
+  --
+      - heading "Veteran Status" [level=4] [ref=e134]
+      - paragraph [ref=e135]: Please check the box next to any of the following items that apply to you. You are considered a "protected veteran" under Section 4212 if you belong to one of the categories of veterans described below
+      - generic [ref=e136]:
+        - generic [ref=e137]:
+          - checkbox "I choose not to disclose" [ref=e138]
+          - generic [ref=e139] [cursor=pointer]: I choose not to disclose
+        - generic [ref=e140]:
+          - checkbox "I Am Not A Veteran" [ref=e141]
+          - generic [ref=e142] [cursor=pointer]: I Am Not A Veteran
+        - generic [ref=e143]:
+          - checkbox "Disabled Veteran" [ref=e144]
+          - generic [ref=e145] [cursor=pointer]: Disabled Veteran
+        - generic [ref=e146]:
+          - checkbox "Recently Separated Veteran" [ref=e147]
+          - generic [ref=e148] [cursor=pointer]: Recently Separated Veteran
+        - generic [ref=e149]:
+          - checkbox "Other Protected Veteran" [ref=e150]
+          - generic [ref=e151] [cursor=pointer]: Other Protected Veteran
+        - generic [ref=e152]:
+          - checkbox "Armed Forces Service Medal Veteran" [ref=e153]
+          - generic [ref=e154] [cursor=pointer]: Armed Forces Service Medal Veteran
+      - button "Click To View Veteran Classification Definitions" [ref=e159] [cursor=pointer]
+  - generic [ref=e160]:
+    - heading "Pre-Employment Request for Veteran Classification" [level=4] [ref=e161]
+    - paragraph [ref=e164]: "1. PRGX Global, Inc is a Government contractor subject to the Vietnam Era Veterans Readjustment Assistance Act of 1974, as amended by the Jobs for Veterans Act of 2002, 38 U.S.C. 4212 (VEVRAA), which requires Government contractors to take affirmative action to employ and advance in employment: (1) disabled veterans; (2) recently separated veterans; (3) active duty wartime or campaign badge veterans; and (4) Armed Forces service medal veterans. These classifications are defined as follows:"
+    - generic [ref=e166]:
+      - list [ref=e167]:
+        - listitem [ref=e168]: "A disabled veteran is one of the following: a veteran of the U.S. military, ground, naval or air service who is entitled to compensation (or who but for the receipt of military retired pay would be entitled to compensation) under laws administered by the Secretary of Veterans Affairs; or a person who was discharged or released from active duty because of a service-connected disability."
+        - listitem [ref=e169]: A recently separated veteran means any veteran during the three-year period beginning on the date of such veterans discharge or release from active duty in the U.S. military, ground, naval, or air service.
+        - listitem [ref=e170]: An active duty wartime or campaign badge veteran means a veteran who served on active duty in the U.S. military, ground, naval or air service during a war, or in a campaign or expedition for which a campaign badge has been authorized under the laws administered by the Department of Defense.
+        - list [ref=e171]:
+          - listitem [ref=e172]:
+            - text: "The following periods of war:"
+            - list [ref=e173]:
+              - listitem [ref=e174]: a. Persian Gulf War – August 2, 1990 to present
+              - listitem [ref=e175]: b. Vietnam Era – February 28, 1961 – May7, 1975 for veterans serving in the Republic of Vietnam or August 5, 1964-May 7, 1975 for all other cases; or
+              - listitem [ref=e176]: c. Korean Conflict – June 27, 1950 – January 31, 1955
+        - listitem [ref=e177]: An Armed forces service medal veteran means a veteran who, while serving on active duty in the U.S. military, ground, naval or air service, participated in a United States military operation for which an Armed Forces service medal was awarded pursuant to Executive Order 12985.
+      - text: Protected veterans may have additional rights under USERRA - the Uniformed Services Employment and Reemployment Rights Act. In particular, if you were absent from employment in order to perform service in the uniformed service, you may be entitled to be reemployed by your employer in the position you would have obtained with reasonable certainty if not for the absence due to service. For more information, call the U.S. Department of Labors Veterans Employment and Training Service (VETS), toll-free, at 1-866-4-USA-DOL.
+      - paragraph [ref=e178]: 2. If you believe you belong to any of the categories of protected veterans listed above, please indicate by checking the appropriate box below. As a Government contractor subject to VEVRAA, we request this information in order to measure the effectiveness of the outreach and positive recruitment efforts we undertake pursuant to VEVRAA.
+    - generic [ref=e181]:
+      - text: Required
+      - table [ref=e182]:
+        - rowgroup [ref=e183]:
+          - row "I identify as one or more of the classifications of protected veterans listed above" [ref=e184]:
+            - cell "I identify as one or more of the classifications of protected veterans listed above" [ref=e185]:
+              - radio "I identify as one or more of the classifications of protected veterans listed above" [ref=e186]
+              - text: I identify as one or more of the classifications of protected veterans listed above
+          - row "I am not a protected veteran" [ref=e187]:
+            - cell "I am not a protected veteran" [ref=e188]:
+              - radio "I am not a protected veteran" [ref=e189]
+              - text: I am not a protected veteran
+          - row "I decline self-identification" [ref=e190]:
+            - cell "I decline self-identification" [ref=e191]:
+              - radio "I decline self-identification" [ref=e192]
+              - text: I decline self-identification
+  - generic [ref=e193]:
+    - list [ref=e196]:
+      - listitem [ref=e197]: Form CC-305
+      - listitem [ref=e198]: OMB Control Number 1250-0005
+      - listitem [ref=e199]: Expires 04/30/2026
+    - generic [ref=e200]: Why are you being asked to complete this form?
+"disability": |-
+    - paragraph [ref=e118]: Qualified resume submissions are considered for employment without regard to race, religion, sex, national origin, marital status, sexual orientation, veteran status, or disability. Completion of this form is VOLUNTARY and your failure to complete it will NOT preclude you from employment consideration. This information will be kept in a confidential file separate from your resume.
+    - generic [ref=e119]:
+      - generic [ref=e120]:
+        - generic [ref=e121]: GENDER / GÉNERO*
+        - combobox "GENDER / GÉNERO*" [ref=e122]:
+          - option "Select..." [selected]
+          - option "Female"
+          - option "I choose not to disclose"
+          - option "Male"
+      - generic [ref=e123]:
+        - generic [ref=e124]: RACE/ETHNICITY / RAZA/ETNICIDAD*
+  --
+      - listitem [ref=e168]: "A disabled veteran is one of the following: a veteran of the U.S. military, ground, naval or air service who is entitled to compensation (or who but for the receipt of military retired pay would be entitled to compensation) under laws administered by the Secretary of Veterans Affairs; or a person who was discharged or released from active duty because of a service-connected disability."
+      - listitem [ref=e169]: A recently separated veteran means any veteran during the three-year period beginning on the date of such veterans discharge or release from active duty in the U.S. military, ground, naval, or air service.
+      - listitem [ref=e170]: An active duty wartime or campaign badge veteran means a veteran who served on active duty in the U.S. military, ground, naval or air service during a war, or in a campaign or expedition for which a campaign badge has been authorized under the laws administered by the Department of Defense.
+      - list [ref=e171]:
+        - listitem [ref=e172]:
+          - text: "The following periods of war:"
+          - list [ref=e173]:
+            - listitem [ref=e174]: a. Persian Gulf War – August 2, 1990 to present
+            - listitem [ref=e175]: b. Vietnam Era – February 28, 1961 – May7, 1975 for veterans serving in the Republic of Vietnam or August 5, 1964-May 7, 1975 for all other cases; or
+            - listitem [ref=e176]: c. Korean Conflict – June 27, 1950 – January 31, 1955
+      - listitem [ref=e177]: An Armed forces service medal veteran means a veteran who, while serving on active duty in the U.S. military, ground, naval or air service, participated in a United States military operation for which an Armed Forces service medal was awarded pursuant to Executive Order 12985.
+  --
+    - paragraph [ref=e203]: We are a federal contractor or subcontractor. The law requires us to provide equal employment opportunity to qualified people with disabilities. We have a goal of having at least 7% of our workers as people with disabilities. The law says we must measure our progress towards this goal. To do this, we must ask applicants and employees if they have a disability or have ever had one. People can become disabled, so we need to ask this question at least every five years.
+    - paragraph [ref=e204]: Completing this form is voluntary, and we hope that you will choose to do so. Your answer is confidential. No one who makes hiring decisions will see it. Your decision to complete the form and your answer will not harm you in any way. If you want to learn more about the law or this form, visit the U.S. Department of Labor’s Office of Federal Contract Compliance Programs (OFCCP) website at www.dol.gov/ofccp.
+  - generic [ref=e206]: How do you know if you have a disability?
+  - paragraph [ref=e207]:
+    - text: A disability is a condition that substantially limits one or more of your “major life activities.” If you have or have ever had such a condition, you are a person with a disability.
+    - strong [ref=e208]: "Disabilities include, but are not limited to:"
+  - list [ref=e211]:
+    - listitem [ref=e212]: Alcohol or other substance use • disorder (not currently using drugs illegally)
+    - listitem [ref=e213]: Autoimmune disorder, for example, lupus, fibromyalgia, rheumatoid arthritis, HIV/AIDS
+    - listitem [ref=e214]: Blind or low vision
+    - listitem [ref=e215]: Cancer (past or present)
+    - listitem [ref=e216]: Cardiovascular or heart disease
+    - listitem [ref=e217]: Celiac disease
+    - listitem [ref=e218]: Cerebral palsy
+    - listitem [ref=e219]: Deaf or serious difficulty hearing
+  --
+    - listitem [ref=e225]: Intellectual or developmental disability
+    - listitem [ref=e226]: Mental health conditions, for example, depression, bipolar disorder, anxiety • disorder, schizophrenia, PTSD
+    - listitem [ref=e227]: Missing limbs or partially missing limbs
+    - listitem [ref=e228]: Mobility impairment, benefiting from the use of a wheelchair, scooter, walker, leg brace(s) and/or other supports
+    - listitem [ref=e229]: Nervous system condition, for example, migraine headaches, Parkinson’s disease, multiple sclerosis (MS))
+    - listitem [ref=e230]: Neurodivergence, for example, attention-deficit/hyperactivity disorder (ADHD), autism spectrum disorder, dyslexia, dyspraxia, other learning disabilities
+    - listitem [ref=e231]: Partial or complete paralysis (any cause)
+    - listitem [ref=e232]: Pulmonary or respiratory conditions, for example, tuberculosis, asthma, emphysema
+    - listitem [ref=e233]: Short stature (dwarfism)
+    - listitem [ref=e234]: Traumatic brain injury
+  - group "Please check one of the boxes below:" [ref=e238]:
+  --
+        - row "Yes, I have a disability, or have had one in the past" [ref=e243]:
+          - cell "Yes, I have a disability, or have had one in the past" [ref=e244]:
+            - radio "Yes, I have a disability, or have had one in the past" [ref=e245]
+            - generic [ref=e246]: Yes, I have a disability, or have had one in the past
+        - row "No, I do not have a disability and have not had one in the past" [ref=e247]:
+          - cell "No, I do not have a disability and have not had one in the past" [ref=e248]:
+            - radio "No, I do not have a disability and have not had one in the past" [ref=e249]
+            - generic [ref=e250]: No, I do not have a disability and have not had one in the past
+        - row "I do not want to answer" [ref=e251]:
+          - cell "I do not want to answer" [ref=e252]:
+            - radio "I do not want to answer" [ref=e253]
+            - generic [ref=e254]: I do not want to answer
+    - text: Please select a disability status
+  - generic [ref=e257]:
+    - paragraph [ref=e258]
+    - paragraph [ref=e259]:
+      - strong [ref=e260]: "PUBLIC BURDEN STATEMENT:"
+      - text: According to the Paperwork Reduction Act of 1995 no persons are required to respond to a collection of information unless such collection displays a valid OMB control number. This survey should take about 5 minutes to complete.
+  - generic [ref=e262]:
+    - heading "Candidate Acknowledgment" [level=4] [ref=e263]
+    - generic [ref=e265]:
+      - paragraph
+      - paragraph [ref=e266]: The information that I am submitting in this application is true and correct. I understand that in the event of my employment by the Company, I shall be subject to dismissal if any information that I have given in this application is false or misleading or if I have failed to give any information herein requested, regardless of the time elapsed after discovery.

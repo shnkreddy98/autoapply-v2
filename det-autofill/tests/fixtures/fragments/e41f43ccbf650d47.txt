@@ -1,0 +1,28 @@
+"board or committee": |-
+  - generic [ref=e346]: "*If you are a member of a Board or Committee, please list below."
+  - textbox "*If you are a member of a Board or Committee, please list below." [ref=e347]
+  - generic [ref=e350]: 4000 characters left
+"salary": |-
+  - generic [ref=e370]: "*What is your desired salary?"
+  - textbox "*What is your desired salary?" [ref=e371]
+  - generic [ref=e372]: Please enter a whole number.
+"relative employed by the Company?": |-
+  - generic [ref=e390]: "*Do you currently have a relative employed by the Company? If yes, please type their name below. If not applicable, please type N/A:"
+  - textbox "*Do you currently have a relative employed by the Company? If yes, please type their name below. If not applicable, please type N/A:" [ref=e391]
+  - generic [ref=e394]: 4000 characters left
+"describe your duties and any special training": |-
+  - generic [ref=e412]: "*If yes, please describe your duties and any special training. What, if any, awards or honors did you receive? If not applicable, please type N/A:"
+  - textbox "*If yes, please describe your duties and any special training. What, if any, awards or honors did you receive? If not applicable, please type N/A:" [ref=e413]
+  - generic [ref=e416]: 4000 characters left
+"explain. If not applicable, please type N/A:": |-
+  - generic [ref=e434]: "*If yes, explain. If not applicable, please type N/A:"
+  - textbox "*If yes, explain. If not applicable, please type N/A:" [ref=e435]
+  - generic [ref=e438]: 4000 characters left
+  --
+  - generic [ref=e456]: "*If yes, explain. If not applicable, please type N/A:"
+  - textbox "*If yes, explain. If not applicable, please type N/A:" [ref=e457]
+  - generic [ref=e460]: 4000 characters left
+  --
+  - generic [ref=e478]: "*If yes, explain. If not applicable, please type N/A:"
+  - textbox "*If yes, explain. If not applicable, please type N/A:" [ref=e479]
+  - generic [ref=e482]: 4000 characters left

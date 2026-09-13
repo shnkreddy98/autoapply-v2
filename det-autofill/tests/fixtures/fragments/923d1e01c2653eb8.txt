@@ -1,0 +1,33 @@
+"Dayforce's Global Privacy Statement": |-
+    - link "Dayforce's Global Privacy Statement" [ref=e71] [cursor=pointer]:
+      - /url: https://www.dayforce.com/privacy
+    - text: and
+    - link "Terms of Use" [ref=e72] [cursor=pointer]:
+  --
+      - checkbox "I agree to Dayforce's Global Privacy Statement and to the Terms of Use, I clicked the links above and reviewed these documents." [checked] [ref=e79] [cursor=pointer]
+      - generic [ref=e80]: I agree to Dayforce's Global Privacy Statement and to the Terms of Use, I clicked the links above and reviewed these documents.
+    - paragraph [ref=e107]: You must click on the links to review the policy statement and the terms and conditions, and then click the checkbox to indicate you agree to them.
+  - generic:
+    - generic:
+"Terms of Use": |-
+    - link "Terms of Use" [ref=e72] [cursor=pointer]:
+      - /url: https://www.dayforce.com/terms
+    - text: .
+  - generic [ref=e74]:
+  --
+      - checkbox "I agree to Dayforce's Global Privacy Statement and to the Terms of Use, I clicked the links above and reviewed these documents." [checked] [ref=e79] [cursor=pointer]
+      - generic [ref=e80]: I agree to Dayforce's Global Privacy Statement and to the Terms of Use, I clicked the links above and reviewed these documents.
+    - paragraph [ref=e107]: You must click on the links to review the policy statement and the terms and conditions, and then click the checkbox to indicate you agree to them.
+  - generic:
+    - generic:
+"I agree to Dayforce's Global Privacy Statement": |-
+      - checkbox "I agree to Dayforce's Global Privacy Statement and to the Terms of Use, I clicked the links above and reviewed these documents." [checked] [ref=e79] [cursor=pointer]
+      - generic [ref=e80]: I agree to Dayforce's Global Privacy Statement and to the Terms of Use, I clicked the links above and reviewed these documents.
+    - paragraph [ref=e107]: You must click on the links to review the policy statement and the terms and conditions, and then click the checkbox to indicate you agree to them.
+  - generic:
+    - generic:
+"Next": |-
+    - button "Next" [ref=e84] [cursor=pointer]
+  - generic [ref=e86]:
+    - text: Have an account?
+    - link "Sign In" [ref=e87] [cursor=pointer]:

@@ -1,0 +1,12 @@
+"Sign In": |-
+            - link "Sign In" [ref=e35] [cursor=pointer]:
+              - generic [ref=e36]:
+                - generic: Sign In
+  - main [ref=e37]:
+    - generic [ref=e74]:
+      - generic [ref=e76]:
+  --
+            - link "Sign In" [ref=e84] [cursor=pointer]:
+              - /url: /CAP1015CCFC/JobBoard/6f4434b4-0b72-4e52-b60d-afcc1a963060/Account/Login?redirectUrl=%2FCAP1015CCFC%2FJobBoard%2F6f4434b4-0b72-4e52-b60d-afcc1a963060%2FOpportunityApply%3FopportunityId%3D06415c17-c63b-42cb-b2d3-61edd586fb23&cancelUrl=http%3A%2F%2Frecruiting.ultipro.com%2FCAP1015CCFC%2FJobBoard%2F6f4434b4-0b72-4e52-b60d-afcc1a963060%2FOpportunityDetail%3FopportunityId%3D06415c17-c63b-42cb-b2d3-61edd586fb23%26source%3DLinkedIn
+          - separator [ref=e87]
+          - generic [ref=e88]: Create an account to apply or save for later

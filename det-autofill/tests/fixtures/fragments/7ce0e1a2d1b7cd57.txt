@@ -1,0 +1,57 @@
+"Month": |-
+    - spinbutton "Month" [ref=e737]: "1"
+  - generic [ref=e738]: /
+  - generic [ref=e739]:
+    - generic [ref=e740]: "2025"
+  --
+      - spinbutton "Month" [ref=e821]: "4"
+    - generic [ref=e822]: /
+    - generic [ref=e823]:
+      - generic [ref=e824]: "2020"
+  --
+      - spinbutton "Month" [ref=e843]: "4"
+    - generic [ref=e844]: /
+    - generic [ref=e845]:
+      - generic [ref=e846]: "2022"
+  --
+      - spinbutton "Month" [ref=e905]: "4"
+    - generic [ref=e906]: /
+    - generic [ref=e907]:
+      - generic [ref=e908]: "2018"
+  --
+      - spinbutton "Month" [ref=e927]: "3"
+    - generic [ref=e928]: /
+    - generic [ref=e929]:
+      - generic [ref=e930]: "2020"
+"Year": |-
+            - spinbutton "Year" [ref=e741]: "2025"
+        - button "Calendar" [ref=e742] [cursor=pointer]
+  - generic [ref=e769]:
+    - generic [ref=e770]: Role Description
+  --
+              - spinbutton "Year" [ref=e825]: "2020"
+          - button "Calendar" [ref=e826] [cursor=pointer]
+    - group "To" [ref=e832]:
+      - generic [ref=e835]: To*
+  --
+              - spinbutton "Year" [ref=e847]: "2022"
+          - button "Calendar" [ref=e848] [cursor=pointer]
+  - generic [ref=e853]:
+    - generic [ref=e854]: Role Description
+  --
+              - spinbutton "Year" [ref=e909]: "2018"
+          - button "Calendar" [ref=e910] [cursor=pointer]
+    - group "To" [ref=e916]:
+      - generic [ref=e919]: To*
+  --
+              - spinbutton "Year" [ref=e931]: "2020"
+          - button "Calendar" [ref=e932] [cursor=pointer]
+  - generic [ref=e937]:
+    - generic [ref=e938]: Role Description
+"Type to Add Skills": |-
+      - generic [ref=e1082]: Type to Add Skills
+      - generic [ref=e1088] [cursor=pointer]:
+        - textbox "Type to Add Skills" [ref=e1089]:
+          - /placeholder: Search
+        - generic [ref=e1090]: 0 items selected
+  - group "Resume/CV/Additional Documents" [ref=e1095]:

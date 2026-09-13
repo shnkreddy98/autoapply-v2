@@ -1,0 +1,7 @@
+"Apply for this Job": |-
+          - link "Apply for this Job" [ref=e109] [cursor=pointer]:
+            - /url: /Moxie/cbfbd32b-cbb8-46cb-9417-ae9bee42f747/application?utm_source=1alGrRG0PX
+            - button "Apply for this Job" [ref=e110]
+  - contentinfo [ref=e111]:
+    - link "Learn more about Ashby" [ref=e112] [cursor=pointer]:
+      - /url: https://www.ashbyhq.com

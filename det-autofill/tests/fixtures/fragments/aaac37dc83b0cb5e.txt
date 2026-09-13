@@ -1,0 +1,5 @@
+"Please select your highest level of completed education*": |-
+  - group "Please select your highest level of completed education*" [ref=e1750]:
+    - paragraph [ref=e1754]: Please select your highest level of completed education*
+    - generic [ref=e1755]:
+      - button "Select One Required" [ref=e1758]: Select One

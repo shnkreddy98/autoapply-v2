@@ -1,0 +1,24 @@
+"Please upload your resume": |-
+    - generic [ref=e59]: "Please upload your resume (Max size: 5 MB)"
+    - generic [ref=e62]:
+      - generic [ref=e64] [cursor=pointer]:
+        - generic [ref=e65]: My Computer (Opens new window)
+        - 'button "My Computer (Opens new window) Please upload your resume (Max size: 5 MB)" [ref=e66]'
+        - generic [ref=e67]:
+          - generic [ref=e68]: 
+          - text: 
+  --
+        - 'button "Google Drive (Opens new window) Please upload your resume (Max size: 5 MB)" [ref=e71] [cursor=pointer]':
+          - generic [ref=e73]: 
+          - text: Google Drive 
+      - generic [ref=e74]:
+  --
+        - 'button "Dropbox (Opens new window) Please upload your resume (Max size: 5 MB)" [ref=e76] [cursor=pointer]':
+          - generic [ref=e78]: 
+          - text: Dropbox 
+      - generic [ref=e79]:
+  --
+        - 'button "OneDrive (Opens new window) Please upload your resume (Max size: 5 MB)" [ref=e81] [cursor=pointer]':
+          - generic [ref=e83]: 
+          - text: OneDrive 
+  - generic [ref=e84]:

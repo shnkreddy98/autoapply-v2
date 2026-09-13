@@ -1,0 +1,7 @@
+"Apply for this Job": |-
+          - link "Apply for this Job" [ref=e101] [cursor=pointer]:
+            - /url: /teza-technologies/5835dedb-2ac0-4f3b-838e-53e33e0a2dc8/application
+            - button "Apply for this Job" [ref=e102]
+  - contentinfo [ref=e103]:
+    - link "Learn more about Ashby" [ref=e104] [cursor=pointer]:
+      - /url: https://www.ashbyhq.com

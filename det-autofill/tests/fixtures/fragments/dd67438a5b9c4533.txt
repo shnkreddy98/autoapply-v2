@@ -1,0 +1,5 @@
+"Choose File": |-
+  - button "Choose File" [ref=e118]
+  - generic [ref=e120]:
+    - generic [ref=e121]:
+      - img [ref=e123]

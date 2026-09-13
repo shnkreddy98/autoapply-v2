@@ -1,0 +1,36 @@
+"current CRH/Oldcastle Employee?": |-
+  - generic "Required" [ref=e173]: Are you a current CRH/Oldcastle Employee?*
+  - generic [ref=e176]:
+    - status [ref=e178]
+    - combobox "Are you a current CRH/Oldcastle Employee?" [ref=e179]
+    - button "Are you a current CRH/Oldcastle Employee?" [ref=e180] [cursor=pointer]:
+      - generic [ref=e181]: 
+  - generic "Required" [ref=e182]: How did you learn of this opportunity?*
+  - generic [ref=e185]:
+"learn of this opportunity?": |-
+  - generic "Required" [ref=e182]: How did you learn of this opportunity?*
+  - generic [ref=e185]:
+    - status [ref=e187]
+    - combobox "How did you learn of this opportunity?" [ref=e188]
+    - button "How did you learn of this opportunity?" [ref=e189] [cursor=pointer]:
+      - generic [ref=e190]: 
+  - paragraph [ref=e192]: Please complete the “Referred By” field if you selected (1) other, (2) employee referral, (3) former employee or (4) Union. Provide the referral source details, name of the employee that referred you or the union name/number.
+  - text: "Referred By:"
+"Legal Authorization to Work:": |-
+  - generic "Required" [ref=e196]: Legal Authorization to Work:*
+  - generic [ref=e199]:
+    - status [ref=e201]
+    - combobox "Legal Authorization to Work:" [ref=e202]
+    - button "Legal Authorization to Work:" [ref=e203] [cursor=pointer]:
+      - generic [ref=e204]: 
+  - generic [ref=e205]:
+    - paragraph
+"Highest Education Level Completed:": |-
+  - generic "Required" [ref=e213]: Highest Education Level Completed:*
+  - generic [ref=e216]:
+    - status [ref=e218]
+    - combobox "Highest Education Level Completed:" [ref=e219]
+    - button "Highest Education Level Completed:" [ref=e220] [cursor=pointer]:
+      - generic [ref=e221]: 
+  - table [ref=e223]:
+    - rowgroup [ref=e224]:

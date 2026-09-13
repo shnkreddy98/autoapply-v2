@@ -1,0 +1,11 @@
+"Create Account": |-
+    - generic [ref=e115]: Create Account/Sign In
+  - listitem [ref=e116]:
+    - generic: step 2 of 8
+    - generic [ref=e122]: Autofill with Resume
+"Sign in with email": |-
+          - button "Sign in with email" [ref=e206] [cursor=pointer]
+  - generic [ref=e40]:
+    - heading "Follow Us" [level=4] [ref=e41]
+    - list [ref=e42]:
+"Email Address": (no match)

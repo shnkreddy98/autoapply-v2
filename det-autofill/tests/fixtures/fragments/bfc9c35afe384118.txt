@@ -1,0 +1,8 @@
+"Accept all cookies": |-
+          - text: By clicking “Accept all cookies”, you agree to the storing of cookies on your device to enhance site navigation, analyze site usage, and assist in our marketing efforts which can include sharing with social media, advertising and analytics partners. To manage our use or reject non-essential cookies select the cookie settings button. To learn more about the cookies we use see our Cookie Notice and CHS Global Privacy Notice visit
+          - link "More information about your privacy, opens in a new tab" [ref=e91] [cursor=pointer]:
+            - /url: https://www.chsinc.com/privacy
+            - text: CHS Privacy Center.
+  --
+          - button "Accept all cookies" [ref=e96] [cursor=pointer]
+  ```

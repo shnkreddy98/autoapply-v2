@@ -1,0 +1,6 @@
+"I do not consent to receive SMS messages": |-
+    - radio "I do not consent to receive SMS messages" [checked] [active] [ref=e477]
+    - generic [ref=e479]: I do not consent to receive SMS messages
+  - generic [ref=e480] [cursor=pointer]:
+    - radio "I consent to receive SMS messages" [ref=e482]
+    - generic [ref=e484]: I consent to receive SMS messages

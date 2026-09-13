@@ -1,0 +1,221 @@
+"Source Type": |-
+  - generic "The field Source Type is mandatory." [ref=e189]:
+    - text: Source Type
+    - generic [ref=e190]: .
+    - generic [ref=e191]: Required
+  - combobox "Source Type . Required" [ref=e193]:
+    - option "Select One..."
+    - option "Ad or event ID"
+    - option "Campus - Non Career Fair"
+    - option "Career Fair - College"
+    - option "Company Web Site"
+    - option "Direct Sourcing"
+    - option "Job Boards" [selected]
+    - option "Military"
+    - option "Newspapers"
+    - option "Professional Associations"
+    - option "Radio and TV"
+    - option "Referral"
+    - option "Social Network"
+  - generic [ref=e385]:
+    - generic "This field is mandatory" [ref=e386]:
+      - text: Job Boards
+      - generic [ref=e388]: .
+      - generic [ref=e389]: Required
+    - combobox "Job Boards . Required" [ref=e391]:
+      - option "Select One..." [selected]
+"Street Address (line 1)": |-
+      - listitem [ref=e165]: The field "Street Address (line 1)" is mandatory.
+      - listitem [ref=e166]: The field "Zip/Postal Code" is mandatory.
+      - listitem [ref=e167]: You must select ALL possible values in the section Place of Residence.
+      - listitem [ref=e168]: The field "Primary Number" is mandatory.
+  - link "Beginning of the main content section." [ref=e169] [cursor=pointer]:
+    - /url: "#"
+  - table [ref=e170]:
+    - rowgroup [ref=e171]:
+      - row [ref=e394]:
+        - cell [ref=e395]:
+          - heading "Candidate Information" [level=1] [ref=e174]:
+            - generic [ref=e175]: Candidate Information
+          - generic [ref=e178]:
+            - text: Mandatory fields are marked with an asterisk.
+            - generic "This field is mandatory" [ref=e182]:
+              - generic [ref=e183]: .
+              - generic [ref=e184]: Required
+          - generic [ref=e185]:
+            - heading [level=2]
+            - generic [ref=e187]: Please indicate how you heard about this job.
+            - generic [ref=e188]:
+  --
+                  - img "The field \"Street Address (line 1)\" is mandatory." [ref=e230]
+                  - generic "The field Street Address (line 1) is mandatory." [ref=e231]:
+                    - text: Street Address (line 1)
+                    - generic [ref=e234]: .
+                    - generic [ref=e235]: Required
+                  - textbox "Street Address (line 1) . Required" [ref=e236]: 100 Example St
+                - generic [ref=e237]:
+                  - generic [ref=e238]: Address (line 2)
+                  - textbox "Address (line 2)" [ref=e241]
+              - generic [ref=e242]:
+                - generic "The field City is mandatory." [ref=e243]:
+                  - text: City
+                  - generic [ref=e246]: .
+                  - generic [ref=e247]: Required
+                - textbox "City . Required" [ref=e248]: San Jose
+              - generic [ref=e249]:
+                - img "The field \"Zip/Postal Code\" is mandatory." [ref=e251]
+                - generic "The field Zip/Postal Code is mandatory." [ref=e252]:
+                  - text: Zip/Postal Code
+                  - generic [ref=e255]: .
+                  - generic [ref=e256]: Required
+                - textbox "Zip/Postal Code . Required" [ref=e257]: "95126"
+              - group "You must select ALL possible values in the section Place of Residence. Place of Residence . Required" [ref=e259]:
+                - generic [ref=e261]:
+                  - img "You must select ALL possible values in the section Place of Residence." [ref=e263]
+                  - generic "The field Place of Residence is mandatory." [ref=e264]:
+"Zip/Postal Code": |-
+      - listitem [ref=e166]: The field "Zip/Postal Code" is mandatory.
+      - listitem [ref=e167]: You must select ALL possible values in the section Place of Residence.
+      - listitem [ref=e168]: The field "Primary Number" is mandatory.
+  - link "Beginning of the main content section." [ref=e169] [cursor=pointer]:
+    - /url: "#"
+  - table [ref=e170]:
+    - rowgroup [ref=e171]:
+      - row [ref=e394]:
+        - cell [ref=e395]:
+          - heading "Candidate Information" [level=1] [ref=e174]:
+            - generic [ref=e175]: Candidate Information
+          - generic [ref=e178]:
+            - text: Mandatory fields are marked with an asterisk.
+            - generic "This field is mandatory" [ref=e182]:
+              - generic [ref=e183]: .
+              - generic [ref=e184]: Required
+          - generic [ref=e185]:
+            - heading [level=2]
+            - generic [ref=e187]: Please indicate how you heard about this job.
+            - generic [ref=e188]:
+              - generic "The field Source Type is mandatory." [ref=e189]:
+  --
+                - img "The field \"Zip/Postal Code\" is mandatory." [ref=e251]
+                - generic "The field Zip/Postal Code is mandatory." [ref=e252]:
+                  - text: Zip/Postal Code
+                  - generic [ref=e255]: .
+                  - generic [ref=e256]: Required
+                - textbox "Zip/Postal Code . Required" [ref=e257]: "95126"
+              - group "You must select ALL possible values in the section Place of Residence. Place of Residence . Required" [ref=e259]:
+                - generic [ref=e261]:
+                  - img "You must select ALL possible values in the section Place of Residence." [ref=e263]
+                  - generic "The field Place of Residence is mandatory." [ref=e264]:
+                    - text: Place of Residence
+                    - generic [ref=e267]: .
+                    - generic [ref=e268]: Required
+                - generic [ref=e269]:
+                  - generic [ref=e270]: Country
+                  - combobox "Country" [ref=e271]:
+                    - option "Not Specified"
+                    - option "United States" [selected]
+                    - option "Canada"
+                    - option "Afghanistan"
+                    - option "Åland Islands"
+                    - option "Albania"
+                    - option "Algeria"
+                    - option "American Samoa"
+                    - option "Andorra"
+                    - option "Angola"
+"Place of Residence": |-
+      - listitem [ref=e167]: You must select ALL possible values in the section Place of Residence.
+      - listitem [ref=e168]: The field "Primary Number" is mandatory.
+  - link "Beginning of the main content section." [ref=e169] [cursor=pointer]:
+    - /url: "#"
+  - table [ref=e170]:
+    - rowgroup [ref=e171]:
+      - row [ref=e394]:
+        - cell [ref=e395]:
+          - heading "Candidate Information" [level=1] [ref=e174]:
+            - generic [ref=e175]: Candidate Information
+          - generic [ref=e178]:
+            - text: Mandatory fields are marked with an asterisk.
+            - generic "This field is mandatory" [ref=e182]:
+              - generic [ref=e183]: .
+              - generic [ref=e184]: Required
+          - generic [ref=e185]:
+            - heading [level=2]
+            - generic [ref=e187]: Please indicate how you heard about this job.
+            - generic [ref=e188]:
+              - generic "The field Source Type is mandatory." [ref=e189]:
+                - text: Source Type
+  --
+              - group "You must select ALL possible values in the section Place of Residence. Place of Residence . Required" [ref=e259]:
+                - generic [ref=e261]:
+                  - img "You must select ALL possible values in the section Place of Residence." [ref=e263]
+                  - generic "The field Place of Residence is mandatory." [ref=e264]:
+                    - text: Place of Residence
+                    - generic [ref=e267]: .
+                    - generic [ref=e268]: Required
+                - generic [ref=e269]:
+                  - generic [ref=e270]: Country
+                  - combobox "Country" [ref=e271]:
+                    - option "Not Specified"
+                    - option "United States" [selected]
+                    - option "Canada"
+                    - option "Afghanistan"
+                    - option "Åland Islands"
+                    - option "Albania"
+                    - option "Algeria"
+                    - option "American Samoa"
+                    - option "Andorra"
+                    - option "Angola"
+                    - option "Anguilla"
+                    - option "Antarctica"
+                    - option "Antigua and Barbuda"
+                    - option "Argentina"
+                    - option "Armenia"
+"Primary Number": |-
+            - listitem [ref=e168]: The field "Primary Number" is mandatory.
+        - link "Beginning of the main content section." [ref=e169] [cursor=pointer]:
+          - /url: "#"
+        - table [ref=e170]:
+          - rowgroup [ref=e171]:
+            - row [ref=e394]:
+              - cell [ref=e395]:
+                - heading "Candidate Information" [level=1] [ref=e174]:
+                  - generic [ref=e175]: Candidate Information
+                - generic [ref=e178]:
+                  - text: Mandatory fields are marked with an asterisk.
+                  - generic "This field is mandatory" [ref=e182]:
+                    - generic [ref=e183]: .
+                    - generic [ref=e184]: Required
+                - generic [ref=e185]:
+                  - heading [level=2]
+                  - generic [ref=e187]: Please indicate how you heard about this job.
+                  - generic [ref=e188]:
+                    - generic "The field Source Type is mandatory." [ref=e189]:
+                      - text: Source Type
+                      - generic [ref=e190]: .
+  --
+                      - img "The field \"Primary Number\" is mandatory." [ref=e287]
+                      - generic "The field Primary Number is mandatory." [ref=e288]:
+                        - text: Primary Number
+                        - generic [ref=e291]: .
+                        - generic [ref=e292]: Required
+                      - combobox "Primary Number . Required" [ref=e293]:
+                        - option "Not Specified"
+                        - option "Home Phone"
+                        - option "Work Phone"
+                        - option "Cellular Phone" [selected]
+                    - generic [ref=e294]:
+                      - generic [ref=e295]: Cellular Number
+                      - textbox "Cellular Number" [ref=e298]: (555) 010-0199
+                    - generic [ref=e299]:
+                      - generic [ref=e300]: Home Phone Number
+                      - textbox "Home Phone Number" [ref=e303]: 555-010-0199
+                    - generic [ref=e304]:
+                      - generic [ref=e305]: Work Phone Number
+                      - textbox "Work Phone Number" [ref=e308]
+      - generic [ref=e312]:
+        - button "Save and Continue" [ref=e313] [cursor=pointer]
+        - button "Save as Draft" [ref=e314] [cursor=pointer]
+        - button "Quit" [ref=e315] [cursor=pointer]
+      - link "Privacy Agreement" [ref=e324] [cursor=pointer]:
+        - /url: "#"
+  - generic [ref=e327]:

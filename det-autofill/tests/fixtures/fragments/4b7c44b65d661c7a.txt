@@ -1,0 +1,5 @@
+"Are you available to work holidays and weekends?*": |-
+  - group "Are you available to work holidays and weekends?*" [ref=e1848]:
+    - paragraph [ref=e1852]: Are you available to work holidays and weekends?*
+    - generic [ref=e1853]:
+      - button "Select One Required" [ref=e1856]: Select One

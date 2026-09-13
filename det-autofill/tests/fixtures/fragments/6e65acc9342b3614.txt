@@ -1,0 +1,39 @@
+"Gender": |-
+  - paragraph [ref=e1473]: Nordstrom is subject to certain governmental record keeping and reporting requirements that require Nordstrom to document the race/ethnicity and gender of its employees. In addition to providing race/ethnicity and gender data, Nordstrom also requests applicants and employees to self-identify veteran status to support Nordstrom’s commitment to be an equal opportunity employer and to support its recruiting initiatives.
+  - paragraph [ref=e1474]
+  - paragraph [ref=e1475]: Providing race/ethnicity, gender and veteran status is voluntary and declining to provide this information will not subject you to any adverse treatment. If you are hired and choose not to disclose information regarding race/ethnicity and gender at this time, the federal government requires Nordstrom to determine this information by visual survey. The information obtained will be kept confidential. Access to this information will be limited to members of the Human Resources team and Diversity, Equity, Inclusion and Belonging team. When this information is reported, it will not identify any specific individual.
+  - paragraph [ref=e1476]
+  - paragraph [ref=e1477]:
+    - generic [ref=e1483]: Ethnicity/Race Definition
+  --
+    - generic [ref=e1544]: Gender*
+    - button "Gender Select One Required" [ref=e1548]: Select One
+  - generic [ref=e1549]:
+    - generic [ref=e1550]: Are you a US Military Veteran?
+    - button "Are you a US Military Veteran? Select One" [ref=e1554]: Select One
+"Hispanic or Latino": |-
+      - listitem [ref=e1485]: Hispanic or Latino – A person of Cuban, Mexican, Puerto Rican, South or Central American, or other Spanish culture or origin regardless of race.
+      - listitem [ref=e1486]:
+        - generic [ref=e1493]: White (Not Hispanic or Latino) – A person having origins in any of the original peoples of Europe, the Middle East, or North Africa.
+      - listitem [ref=e1494]:
+        - generic [ref=e1501]: Black or African American (Not Hispanic or Latino) – A person having origins in any of the black racial groups of Africa.
+      - listitem [ref=e1502]:
+        - generic [ref=e1509]: Native Hawaiian or Other Pacific Islander (Not Hispanic or Latino) - A person having origins in any of the peoples of Hawaii, Guam, Samoa, or other Pacific Islands.
+      - listitem [ref=e1510]:
+        - generic [ref=e1517]: Asian (Not Hispanic or Latino) - A person having origins in any of the original peoples of the Far East, Southeast Asia, or the Indian Subcontinent, including, for example, Cambodia, China, India, Japan, Korea, Malaysia, Pakistan, the Philippine Islands, Thailand, and Vietnam.
+      - listitem [ref=e1518]:
+        - generic [ref=e1525]: American Indian or Alaska Native (Not Hispanic or Latino) – A person having origins in any of the original peoples of North or South America (including Central America), and who maintain tribal affiliation or community attachment.
+      - listitem [ref=e1526]:
+        - generic [ref=e1533]: Two or More Races (Not Hispanic or Latino) - All persons who identify with more than one of the above five races.
+  - generic [ref=e1534]:
+    - generic [ref=e1535]:
+      - generic [ref=e1537]: Ethnicity/Race*
+"Race / Ethnicity": (no match)
+"Veteran Status": |-
+  - paragraph [ref=e1473]: Nordstrom is subject to certain governmental record keeping and reporting requirements that require Nordstrom to document the race/ethnicity and gender of its employees. In addition to providing race/ethnicity and gender data, Nordstrom also requests applicants and employees to self-identify veteran status to support Nordstrom’s commitment to be an equal opportunity employer and to support its recruiting initiatives.
+  - paragraph [ref=e1474]
+  - paragraph [ref=e1475]: Providing race/ethnicity, gender and veteran status is voluntary and declining to provide this information will not subject you to any adverse treatment. If you are hired and choose not to disclose information regarding race/ethnicity and gender at this time, the federal government requires Nordstrom to determine this information by visual survey. The information obtained will be kept confidential. Access to this information will be limited to members of the Human Resources team and Diversity, Equity, Inclusion and Belonging team. When this information is reported, it will not identify any specific individual.
+  - paragraph [ref=e1476]
+  - paragraph [ref=e1477]:
+    - generic [ref=e1483]: Ethnicity/Race Definition
+"Disability": (no match)

@@ -1,0 +1,22 @@
+"Are you legally eligible to work in the U.S.?": |-
+  - generic "The field Are you legally eligible to work in the U.S.? is mandatory." [ref=e288]:
+    - text: Are you legally eligible to work in the U.S.?
+    - generic [ref=e291]: .
+    - generic [ref=e292]: Required
+  - combobox "Are you legally eligible to work in the U.S.? . Required" [ref=e293]:
+    - option "Not Specified" [selected]
+    - option "Yes"
+    - option "No"
+"Date of Availability Month": (no match)
+"Date of Availability Day": (no match)
+"Date of Availability Year": (no match)
+"Save and Continue": |-
+          - button "Save and Continue" [ref=e110] [cursor=pointer]
+          - button "Save as Draft" [ref=e111] [cursor=pointer]
+          - button "Quit" [ref=e112] [cursor=pointer]
+      - generic [ref=e113]:
+  --
+        - button "Save and Continue" [ref=e323] [cursor=pointer]
+        - button "Save as Draft" [ref=e324] [cursor=pointer]
+        - button "Quit" [ref=e325] [cursor=pointer]
+  - generic [ref=e327]:

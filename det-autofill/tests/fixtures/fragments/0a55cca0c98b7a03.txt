@@ -1,0 +1,5 @@
+"Are you legally eligible for employment in the United States?*": |-
+  - group "Are you legally eligible for employment in the United States?*" [ref=e1691]:
+    - paragraph [ref=e1695]: Are you legally eligible for employment in the United States?*
+    - button "Select One Required" [ref=e1699]: Select One
+  - group "Are you a Yuhaaviatam of San Manuel Nation Tribal Citizen?*" [ref=e1701]:

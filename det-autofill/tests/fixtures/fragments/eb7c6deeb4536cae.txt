@@ -1,0 +1,15 @@
+"Passcode": |-
+                - strong [ref=e297]: "Passcode:"
+              - generic [ref=e298]:
+                - textbox "Passcode:" [ref=e299]
+                - generic [ref=e300] [cursor=pointer]: Show
+              - button "Continue" [ref=e303] [cursor=pointer]
+              - timer [ref=e304]: You can request for a new passcode in 01:48 minutes.
+  - contentinfo [ref=e95]:
+    - generic [ref=e98]:
+      - list [ref=e99]:
+"Continue": |-
+              - button "Continue" [ref=e303] [cursor=pointer]
+              - timer [ref=e304]: You can request for a new passcode in 01:48 minutes.
+  - contentinfo [ref=e95]:
+    - generic [ref=e98]:

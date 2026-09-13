@@ -1,0 +1,54 @@
+"Do you agree to these terms?": |-
+  - generic "Required" [ref=e278]: Do you agree to these terms?*
+  - generic [ref=e281]:
+    - status [ref=e283]
+    - combobox "Do you agree to these terms?" [ref=e284]
+    - button "Do you agree to these terms?" [ref=e285] [cursor=pointer]:
+      - generic [ref=e286]: 
+  - generic "Required" [ref=e287]: Gender:*
+  - generic [ref=e290]:
+"Gender:": |-
+  - generic "Required" [ref=e287]: Gender:*
+  - generic [ref=e290]:
+    - status [ref=e292]
+    - combobox "Gender:" [ref=e293]
+    - button "Gender:" [ref=e294] [cursor=pointer]:
+      - generic [ref=e295]: 
+  - generic "Required" [ref=e296]: Ethnicity:*
+  - generic [ref=e299]:
+"Ethnicity:": |-
+  - generic "Required" [ref=e296]: Ethnicity:*
+  - generic [ref=e299]:
+    - status [ref=e301]
+    - combobox "Ethnicity:" [ref=e302]
+    - button "Ethnicity:" [ref=e303] [cursor=pointer]:
+      - generic [ref=e304]: 
+  - generic [ref=e305]:
+    - paragraph [ref=e306]: Form
+"Disability Status:": |-
+  - generic "Required" [ref=e353]: Disability Status:*
+  - generic [ref=e356]:
+    - status [ref=e358]
+    - combobox "Disability Status:" [ref=e359]
+    - button "Disability Status:" [ref=e360] [cursor=pointer]:
+      - generic [ref=e361]: 
+  - generic [ref=e362]: VETERANS SELF-IDENTIFICATION
+  - generic [ref=e363]:
+"Veteran Status:": |-
+  - generic "Required" [ref=e369]: Veteran Status:*
+  - generic [ref=e372]:
+    - status [ref=e374]
+    - combobox "Veteran Status:" [ref=e375]
+    - button "Veteran Status:" [ref=e376] [cursor=pointer]:
+      - generic [ref=e377]: 
+  - generic [ref=e378]:
+    - paragraph [ref=e379]: Applicant Acknowledgment
+"Applicant Acknowledgement:": |-
+  - generic "Required" [ref=e387]: Applicant Acknowledgement:*
+  - generic [ref=e390]:
+    - status [ref=e392]
+    - combobox "Applicant Acknowledgement:" [ref=e393]
+    - button "Applicant Acknowledgement:" [ref=e394] [cursor=pointer]:
+      - generic [ref=e395]: 
+  - table [ref=e397]:
+    - rowgroup [ref=e398]:

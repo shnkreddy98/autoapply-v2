@@ -1,0 +1,13 @@
+"Country of residence": |-
+  - generic "Required" [ref=e139]: Country of residence*
+  - generic [ref=e142]:
+    - status [ref=e144]: One or more results available. Press Up or Down Arrow Keys to navigate the selection list. Press Alt + Arrow keys to resize the selection list.
+    - combobox "Country of residence" [expanded] [active] [ref=e145]:
+      - listbox [expanded] [ref=e556]:
+        - option "No Selection" [ref=e557] [cursor=pointer]:
+          - menuitem "No Selection" [ref=e558]
+  --
+    - button "Country of residence" [ref=e146] [cursor=pointer]:
+      - generic [ref=e147]: 
+  - generic "Required" [ref=e148]: Street Address*
+  - textbox "Street Address" [ref=e149]: 100 Example St

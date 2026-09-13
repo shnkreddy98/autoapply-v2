@@ -1,0 +1,8 @@
+"Are you seeking any relocation reimbursement or financial assistance to relocate if offered this role?": |-
+    - text: Are you seeking any relocation reimbursement or financial assistance to relocate if offered this role?
+  - radiogroup "Are you seeking any relocation reimbursement or financial assistance to relocate if offered this role?" [ref=e1122]:
+    - generic [ref=e1124]:
+      - radio "Yes" [ref=e1125]
+      - text: "Yes"
+    - generic [ref=e1128]:
+      - radio "No" [ref=e1129]

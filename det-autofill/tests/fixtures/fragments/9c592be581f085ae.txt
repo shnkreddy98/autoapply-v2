@@ -1,0 +1,10 @@
+"New User": |-
+            - text: To access your account, please identify yourself by providing the information requested in the fields below, then click "Login". If you are not registered yet, click "New user" and follow the instructions to create an account.
+          - generic [ref=e38]: Mandatory fields are marked with an asterisk.
+          - table [ref=e40]:
+            - rowgroup [ref=e41]:
+  --
+          - button "New User" [ref=e61] [cursor=pointer]
+  - generic [ref=e62]:
+    - link "LinkedIn" [ref=e63] [cursor=pointer]:
+      - /url: https://www.linkedin.com/company/kearney

@@ -1,0 +1,19 @@
+"Submit": |-
+          - text: I understand that if offered employment, I will, as a condition of employment, be required to submit proof of my identity and legal right to work in the United States on my first day of employment.
+          - generic [ref=f67e105]: "*"
+        - combobox "I understand that if offered employment, I will, as a condition of employment, be required to submit proof of my identity and legal right to work in the United States on my first day of employment.*" [ref=f67e107]:
+          - option "— Make a Selection —"
+          - option "Yes" [selected]
+          - option "No"
+  --
+          - text: I understand that if offered employment, I will be asked to submit a drug screen as a condition of hire.
+          - generic [ref=f67e117]: "*"
+        - combobox "I understand that if offered employment, I will be asked to submit a drug screen as a condition of hire.*" [ref=f67e119]:
+          - option "— Make a Selection —"
+          - option "Yes" [selected]
+          - option "No"
+  --
+        - button "Submit" [ref=f67e129] [cursor=pointer]
+  - generic [ref=f67e130]:
+    - link "Application FAQs" [ref=f67e131] [cursor=pointer]:
+      - /url: https://icims.help/candidate-faq

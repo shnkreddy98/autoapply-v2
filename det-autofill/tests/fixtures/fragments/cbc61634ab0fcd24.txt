@@ -1,0 +1,15 @@
+"ref=e450": |-
+      - checkbox "I decline to say Gender" [ref=e450]
+      - text: I decline to say
+      - generic [ref=e451]: Gender
+  - generic [ref=e454]:
+"ref=e461": |-
+      - checkbox "I decline to say Ethnic Origin" [ref=e461]
+      - text: I decline to say
+      - generic [ref=e462]: Ethnic Origin
+  - text: "*"
+"ref=e477": |-
+        - checkbox "I decline to say Are you a protected veteran?" [ref=e477]
+        - text: I decline to say
+        - generic [ref=e478]: Are you a protected veteran?
+  - generic [ref=e481]:

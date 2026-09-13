@@ -1,0 +1,18 @@
+"Resume": |-
+    - generic [ref=e189]: Resume*
+    - generic [ref=e260]:
+      - generic [ref=e261]:
+        - text: Attach resume as .pdf, .doc, .docx, .odt, .txt, or .rtf (limit 5MB) or
+        - link "Paste resume" [ref=e262] [cursor=pointer]:
+          - /url: "#"
+      - button "Resume*" [ref=e264]
+  - generic [ref=e193]:
+    - generic [ref=e194]: Cover Letter
+    - textbox "Cover Letter" [ref=e195]
+  - generic [ref=e196]:
+    - generic [ref=e197]: Who referred you to this position? Enter their first and last name here.
+    - textbox "Who referred you to this position? Enter their first and last name here." [ref=e198]
+  - generic [ref=e199]:
+    - generic [ref=e200]: LinkedIn Profile URL:*
+    - textbox "LinkedIn Profile URL:*" [ref=e201]
+  - generic [ref=e202]:

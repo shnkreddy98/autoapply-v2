@@ -1,0 +1,5 @@
+"Autofill with Resume": |-
+        - button "Autofill with Resume" [ref=e373] [cursor=pointer]
+        - button "Apply Manually" [ref=e377] [cursor=pointer]
+        - button "Use My Last Application" [ref=e382] [cursor=pointer]
+  ```

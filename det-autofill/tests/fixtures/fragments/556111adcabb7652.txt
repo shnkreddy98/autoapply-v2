@@ -1,0 +1,71 @@
+"State": |-
+              - option "United States" [selected]
+              - combobox "Country" [ref=e201] [cursor=pointer]:
+                - generic [ref=e202]: United States
+          - generic [ref=e205]:
+            - generic [ref=e206]:
+              - generic [ref=e207]: State/Province
+              - generic [ref=e208]:
+                - text: "*"
+                - generic [ref=e209]: required.
+  --
+              - combobox "State/Province" [ref=e211] [cursor=pointer]:
+                - generic [ref=e212]: California
+        - button "Add More (Addresses)" [ref=e218] [cursor=pointer]
+  - group [ref=e219]:
+  --
+          - textbox "School" [ref=e229]: San Jose State University
+        - generic [ref=e230]:
+          - generic [ref=e232]: Degree
+          - generic [ref=e233]:
+  --
+          - generic [ref=e343]: State
+          - generic [ref=e344]:
+            - option "California" [selected]
+            - combobox "State" [ref=e345] [cursor=pointer]:
+              - generic [ref=e346]: California
+        - generic [ref=e349]:
+          - generic [ref=e351]: Title
+  --
+          - generic [ref=e409]: State
+          - generic [ref=e410]:
+            - option [selected]
+            - combobox "State" [ref=e411] [cursor=pointer]:
+              - generic [ref=e412]: — Make a Selection —
+        - generic [ref=e415]:
+          - generic [ref=e417]: Title
+  --
+            - generic [ref=e478]: State
+            - generic [ref=e479]:
+              - option [selected]
+              - combobox "State" [ref=e480] [cursor=pointer]:
+                - generic [ref=e481]: — Make a Selection —
+          - generic [ref=e484]:
+            - generic [ref=e486]: Title
+"Major": |-
+    - generic [ref=e241]: Major
+    - generic [ref=e242]:
+      - generic [ref=e243]: Major
+      - option [selected]
+      - combobox "Major" [ref=e244] [cursor=pointer]:
+        - generic [ref=e245]: — Make a Selection —
+  - generic [ref=e248]:
+    - generic [ref=e250]: Did You Graduate?
+  --
+    - generic [ref=e272]: Major
+    - generic [ref=e273]:
+      - generic [ref=e274]: Major
+      - option [selected]
+      - combobox "Major" [ref=e275] [cursor=pointer]:
+        - generic [ref=e276]: — Make a Selection —
+  - generic [ref=e279]:
+    - generic [ref=e281]: Did You Graduate?
+  --
+      - generic [ref=e306]: Major
+      - generic [ref=e307]:
+        - generic [ref=e308]: Major
+        - option "Computer Science" [selected]
+        - combobox "Major" [ref=e309] [cursor=pointer]:
+          - generic [ref=e310]: Computer Science
+    - generic [ref=e313]:
+      - generic [ref=e315]: Did You Graduate?

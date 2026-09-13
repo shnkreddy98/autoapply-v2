@@ -1,0 +1,28 @@
+"Month": |-
+    - spinbutton "Month" [ref=e2249]
+  - generic [ref=e2250]: /
+  - generic [ref=e2251]:
+    - generic [ref=e2252]: DD
+"Day": |-
+  - Page URL: https://ntrs.wd1.myworkdayjobs.com/en-US/northerntrust/job/Chicago%2C-IL/Associate-AI-Engineer_R156480/apply/autofillWithResume?src=sns-102&source=APPLICANT_SOURCE-6-210
+  - Page Title: Sign In
+  ### Snapshot
+  ```yaml
+  --
+                          - spinbutton "Day" [ref=e2253]
+                        - generic [ref=e2254]: /
+                        - generic [ref=e2255]:
+                          - generic [ref=e2256]: YYYY
+  --
+        - generic [ref=e107]: © 2026 Workday, Inc. All rights reserved.
+  ```
+"Year": |-
+            - spinbutton "Year" [ref=e2257]
+        - button "Calendar" [ref=e2258] [cursor=pointer]
+  - generic [ref=e2263]:
+    - heading "Why are you being asked to complete this form?" [level=4] [ref=e2264]
+  --
+      - text: We are a federal contractor or subcontractor. The law requires us to provide equal employment opportunity to qualified people with disabilities. We have a goal of having at least 7% of our workers as people with disabilities. The law says we must measure our progress towards this goal. To do this, we must ask applicants and employees if they have a disability or have ever had one. People can become disabled, so we need to ask this question at least every five years. Completing this form is voluntary, and we hope that you will choose to do so. Your answer is confidential. No one who makes hiring decisions will see it. Your decision to complete the form and your answer will not harm you in any way. If you want to learn more about the law or this form, visit the U.S. Department of Labor’s Office of Federal Contract Compliance Programs (OFCCP) website at
+      - link "www.dol.gov/ofccp" [ref=e2267] [cursor=pointer]:
+        - /url: https://www.dol.gov/ofccp
+      - text: .

@@ -1,0 +1,76 @@
+"i am currently working in this role": (no match)
+"Start Date Month": |-
+  - combobox "Start Date Month" [ref=f67e362]:
+    - option
+    - option "Jan"
+    - option "Feb"
+  --
+  - combobox "Start Date Month" [ref=f67e432]:
+    - option
+    - option "Jan"
+    - option "Feb"
+  --
+    - combobox "Start Date Month" [ref=f67e505]:
+      - option
+      - option "Jan" [selected]
+      - option "Feb"
+"Start Date Day": |-
+  - combobox "Start Date Day" [ref=f67e365]:
+    - option
+    - option "1" [selected]
+    - option "2"
+  --
+  - combobox "Start Date Day" [ref=f67e435]:
+    - option
+    - option "1" [selected]
+    - option "2"
+  --
+    - combobox "Start Date Day" [ref=f67e508]:
+      - option
+      - option "1" [selected]
+      - option "2"
+"End Date Month": |-
+  - combobox "End Date Month" [ref=f67e378]:
+    - option
+    - option "Jan"
+    - option "Feb"
+  --
+  - combobox "End Date Month" [ref=f67e448]:
+    - option
+    - option "Jan"
+    - option "Feb"
+  --
+    - combobox "End Date Month" [ref=f67e521]:
+      - option [selected]
+      - option "Jan"
+      - option "Feb"
+"End Date Day": |-
+  - combobox "End Date Day" [ref=f67e381]:
+    - option
+    - option "1" [selected]
+    - option "2"
+  --
+  - combobox "End Date Day" [ref=f67e451]:
+    - option
+    - option "1" [selected]
+    - option "2"
+  --
+    - combobox "End Date Day" [ref=f67e524]:
+      - option [selected]
+      - option "1"
+      - option "2"
+"End Date Year": |-
+        - textbox "End Date Year" [ref=f67e384]: "2020"
+  - generic [ref=f67e385]:
+    - generic [ref=f67e387]: Description
+    - textbox "Description" [ref=f67e389]: "* Optimized ETL pipeline performance, achieving 25% efficiency improvement through parallel processing and exponential backoff retry logic. * Enhanced PostgreSQL & MySQL query performance by 30% through strategic indexing and execution plan analysis. * Integrated automated data validation scripts using Python and Pandas to detect schema mismatches andvalues, reducing downstream data corruption incidents by 40%. * Collaborated with business analysts to design star-schema data models in PostgreSQL, enabling faster generation of daily operational reports and supporting strategic decision-making. * Mentored junior engineers on TDD and code reviews, establishing 80% test coverage targets and improving code maintainability."
+  --
+        - textbox "End Date Year" [ref=f67e454]: "2022"
+  - generic [ref=f67e455]:
+    - generic [ref=f67e457]: Description
+    - textbox "Description" [ref=f67e459]: "* Orchestrated ELT pipelines using Airflow and Spark, integrating Kafka streams to ingest advertising data with exactly-once semantics. * Accelerated data modeling by deploying dbt for complex SQL transformations, replacing ad-hoc scripts with modular pipelines that reduced time-to-insight by 25%. * Designed real-time processing framework with Kafka Streams and Spark Streaming, providing near real- time insights into campaign performance. * Deployed serverless architecture (Cloud Functions, Cloud Storage) to automate data workflows, reducing manual intervention by 80% and improving reliability. * Engineered ROI optimization algorithms that increased client sales by 34% for global enterprises through data-driven ad spend allocation."
+  --
+          - textbox "End Date Year" [ref=f67e527]
+    - generic [ref=f67e528]:
+      - generic [ref=f67e530]: Description
+      - textbox "Description" [ref=f67e532]: "* Architected enterprise cloud platform (GCP) using Terraform, GKE, and Istio, ensuring high availability for 50+ services and enhancing system resilience. * Engineered event-driven pipeline (Kafka, Debezium CDC, ClickHouse) processing millions of daily events with sub-second latency and exactly-once semantics. * Developed 100+ production-grade FastAPI endpoints with robust Auth0/RBAC security, serving as the backbone for scalable client interactions. * Integrated dbt into the ELT pipeline to standardize transformation logic in BigQuery & ClickHouse, reducing reporting errors by 40% via automated quality tests. * Implemented scalable K8s infrastructure with Karpenter auto-scaling and FluxCD GitOps, automating continuous delivery for over 60 Helm releases. * Managed multi-database architecture (PostgreSQL, Bigtable, ClickHouse), optimizing storage for vector search, caching, and large-scale analytics."

@@ -1,0 +1,28 @@
+"LinkedIn": |-
+    - link "LinkedIn" [ref=e72]:
+      - /url: https://www.linkedin.com/company/draftkings-inc-/
+  - listitem [ref=e76] [cursor=pointer]:
+    - link "Glassdoor" [ref=e77]:
+      - /url: https://www.glassdoor.com/Overview/Working-at-DraftKings-EI_IE902154.11,21.htm
+"Glassdoor": |-
+      - link "Glassdoor" [ref=e77]:
+        - /url: https://www.glassdoor.com/Overview/Working-at-DraftKings-EI_IE902154.11,21.htm
+  - link "Terms of Use – DraftKings Careers" [ref=e83] [cursor=pointer]:
+    - /url: https://careers.draftkings.com/media/j0sl2co1/careers-website-terms-of-use.pdf
+  - generic [ref=e84]:
+  --
+  - option "Glassdoor not checked" [ref=e514]:
+    - generic [ref=e515] [cursor=pointer]:
+      - radio [ref=e520]
+      - generic [ref=e521]: Glassdoor
+  - option "Google not checked" [ref=e522]:
+    - generic [ref=e523] [cursor=pointer]:
+      - radio [ref=e528]
+"Indeed": |-
+  - option "Indeed not checked" [ref=e530]:
+    - generic [ref=e531] [cursor=pointer]:
+      - radio [ref=e536]
+      - generic [ref=e537]: Indeed
+  - option "Jobs.bg not checked" [ref=e538]:
+    - generic [ref=e539] [cursor=pointer]:
+      - radio [ref=e544]

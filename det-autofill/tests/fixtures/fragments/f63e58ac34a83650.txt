@@ -1,0 +1,8 @@
+"Answer using digits only for the question below.": |-
+      - heading "Answer using digits only for the question below." [level=2] [ref=f13e101]
+      - paragraph
+    - generic [ref=f13e12]: Replace the last character with 2 only when the ending character is 7 in 391931.
+    - textbox "Answer using digits only for the question below. Replace the last character with 2 only when the ending character is 7 in 391931." [active] [ref=f13e102]
+  - generic [ref=f13e16]:
+    - alert [ref=f13e17]:
+      - generic [ref=f13e18]: Please try again. ⚠️

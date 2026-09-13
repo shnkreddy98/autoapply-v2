@@ -1,0 +1,83 @@
+"School": |-
+    - paragraph [ref=e356]: Age of Learning® is the leading developer of engaging and effective Pre-K through 2nd grade learning resources that help children build a strong foundation for academic success and a lifelong love of learning. The company’s research-based curriculum, developed by education experts, includes the award-winning programs ABCmouse®, Adventure Academy®, as well as the adaptive, personalized school solutions, My Math Academy®, My Reading Academy®, and My Reading Academy Español®. Having served over 55 million children worldwide, Age of Learning is a global leader in efforts to advance equity, access, and opportunity for all children. To learn more about Age of Learning, visit AgeofLearning.com.
+  - generic [ref=e357]:
+    - heading "Summary:" [level=3] [ref=e358]
+    - paragraph [ref=e359]: As a Senior Data Engineer on the Analytics team, you’ll help shape the architecture and long-term direction of our data platform while building and maintaining reliable, scalable data systems that power decision-making across the company. You’ll partner closely with data analysts, product managers, designers, and engineering teams to translate business and product needs into durable technical solutions. In this role, you’ll also mentor teammates, champion data quality and best practices, and help elevate the overall maturity and impact of our data organization.
+  --
+        - generic [ref=e508]: School
+        - generic [ref=e509]:
+          - log [ref=e511]
+          - generic [ref=e513]:
+  --
+              - combobox "School" [ref=e517]
+            - button "Toggle flyout" [ref=e519] [cursor=pointer]:
+              - img [ref=e520]
+      - generic [ref=e523]:
+"Degree": |-
+    - generic [ref=e524]: Degree
+    - generic [ref=e525]:
+      - log [ref=e527]
+      - generic [ref=e529]:
+  --
+          - combobox "Degree" [ref=e533]
+        - button "Toggle flyout" [ref=e535] [cursor=pointer]:
+          - img [ref=e536]
+  - generic [ref=e538]:
+"Start date year": |-
+    - generic [ref=e542]: Start date year
+    - spinbutton "Start date year" [ref=e543]
+  - generic [ref=e546]:
+    - generic [ref=e547]: End date year
+    - spinbutton "End date year" [ref=e548]
+"End date year": |-
+          - generic [ref=e547]: End date year
+          - spinbutton "End date year" [ref=e548]
+    - button "Add another" [ref=e549] [cursor=pointer]
+  - generic [ref=e550]:
+    - separator [ref=e551]
+"comfortable leveraging AI-powered tools": |-
+  - generic [ref=e565]: Our company embraces AI tools to drive innovation and productivity. Are you comfortable leveraging AI-powered tools in your role?*
+  - generic [ref=e566]:
+    - log [ref=e568]
+    - generic [ref=e570]:
+  --
+        - combobox "Our company embraces AI tools to drive innovation and productivity. Are you comfortable leveraging AI-powered tools in your role?" [ref=e574]
+      - button "Toggle flyout" [ref=e576] [cursor=pointer]:
+        - img [ref=e577]
+    - textbox
+"authorized to work in the United States": |-
+  - generic [ref=e582]: Are you legally authorized to work in the United States?*
+  - generic [ref=e583]:
+    - log [ref=e585]
+    - generic [ref=e587]:
+  --
+        - combobox "Are you legally authorized to work in the United States?" [ref=e591]
+      - button "Toggle flyout" [ref=e593] [cursor=pointer]:
+        - img [ref=e594]
+    - textbox
+"require work visa sponsorship": |-
+  - generic [ref=e599]: Will you now, or in the future, require work visa sponsorship? *
+  - generic [ref=e600]:
+    - log [ref=e602]
+    - generic [ref=e604]:
+  --
+        - combobox "Will you now, or in the future, require work visa sponsorship?" [ref=e608]
+      - button "Toggle flyout" [ref=e610] [cursor=pointer]:
+        - img [ref=e611]
+    - textbox
+"referred to this position": |-
+    - generic [ref=e619]: Were you referred to this position by an existing Age of Learning employee? *
+    - generic [ref=e620]:
+      - log [ref=e622]
+      - generic [ref=e624]:
+  --
+          - combobox "Were you referred to this position by an existing Age of Learning employee?" [ref=e628]
+        - button "Toggle flyout" [ref=e630] [cursor=pointer]:
+          - img [ref=e631]
+      - textbox
+  --
+    - generic [ref=e636]: If you were referred to this position, what is the name of the referring employee?
+    - textbox "If you were referred to this position, what is the name of the referring employee?" [ref=e637]
+  - generic [ref=e640]:
+    - generic [ref=e641]: What is your desired salary?*
+    - textbox "What is your desired salary?" [ref=e642]: "150000"

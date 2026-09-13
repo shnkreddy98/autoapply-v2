@@ -1,0 +1,20 @@
+"Username": |-
+    - generic [ref=e98]: Username
+    - textbox "Username" [ref=e100]
+  - generic [ref=e102]:
+    - generic [ref=e103]: Password
+    - textbox "Password" [ref=e105]
+"Password": |-
+          - generic [ref=e103]: Password
+          - textbox "Password" [ref=e105]
+        - button "Log in" [ref=e108] [cursor=pointer]
+        - link "Forgot your password?" [ref=e111] [cursor=pointer]:
+          - /url: https://jobs.usi.com/Jobs/ResetPassword?jobId=32424
+  - generic [ref=e112]:
+    - article [ref=e113]:
+      - heading "First time here?" [level=3] [ref=e117]
+"Log in": |-
+        - button "Log in" [ref=e108] [cursor=pointer]
+        - link "Forgot your password?" [ref=e111] [cursor=pointer]:
+          - /url: https://jobs.usi.com/Jobs/ResetPassword?jobId=32424
+  - generic [ref=e112]:

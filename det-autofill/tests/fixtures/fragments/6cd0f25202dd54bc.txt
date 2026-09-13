@@ -1,0 +1,50 @@
+"Yes": |-
+                            - combobox "Is this current position?" [ref=e348]: "Yes"
+                            - button "Is this current position?" [ref=e349] [cursor=pointer]:
+                              - generic [ref=e350]: 
+                        - generic [ref=e352]:
+  --
+                            - option "Yes" [ref=e1333] [cursor=pointer]:
+                              - menuitem "Yes" [ref=e1334]
+                        - button "Do you have a legal right to work in the country of this position and the ability to immediately begin the position for which you are specifically applying?" [ref=e790] [cursor=pointer]:
+                          - generic [ref=e791]: 
+                    - generic [ref=e793]:
+  --
+                          - radio "Yes" [checked] [ref=e1028]
+                          - text: "Yes"
+                        - generic [ref=e1031]:
+                          - radio "No" [ref=e1032]
+                          - text: "No"
+  --
+                          - radio "Yes" [checked] [ref=e1057]
+                          - text: "Yes"
+                        - generic [ref=e1060]:
+                          - radio "No" [ref=e1061]
+                          - text: "No"
+  --
+                          - radio "Yes" [checked] [ref=e1074]
+                          - text: "Yes"
+                        - generic [ref=e1077]:
+                          - radio "No" [ref=e1078]
+                          - text: "No"
+  --
+                          - radio "Yes" [checked] [ref=e1091]
+                          - text: "Yes"
+                        - generic [ref=e1094]:
+                          - radio "No" [ref=e1095]
+                          - text: "No"
+  --
+                          - radio "Yes" [checked] [ref=e1108]
+                          - text: "Yes"
+                        - generic [ref=e1111]:
+                          - radio "No" [ref=e1112]
+                          - text: "No"
+  --
+                          - radio "Yes" [checked] [ref=e1125]
+                          - text: "Yes"
+                        - generic [ref=e1128]:
+                          - radio "No" [ref=e1129]
+                          - text: "No"
+  --
+      - generic: Yes No   Yes No Yes No   Yes No
+  ```

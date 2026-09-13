@@ -1,0 +1,8 @@
+"Location (City)": |-
+      - generic [ref=e179]: Location (City)*
+      - generic [ref=e180]:
+        - log [ref=e182]
+        - combobox "Location (City)" [ref=e187]
+        - textbox
+    - button "Locate me" [ref=e188] [cursor=pointer]
+  - group "Resume/CV*" [ref=e190]:

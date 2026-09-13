@@ -1,0 +1,13 @@
+"Email Address": |-
+    - generic [ref=e307]: Email Address
+    - textbox "Email Address" [ref=e311]:
+      - /placeholder: ""
+  - button "Continue" [ref=e312] [cursor=pointer]:
+    - generic [ref=e314]:
+"Continue": |-
+  - button "Continue" [ref=e312] [cursor=pointer]:
+    - generic [ref=e314]:
+      - generic: Continue
+  - button "Use phone number" [ref=e316] [cursor=pointer]:
+    - generic [ref=e318]:
+      - generic: Use phone number

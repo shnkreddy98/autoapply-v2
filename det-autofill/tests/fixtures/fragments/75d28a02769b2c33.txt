@@ -1,0 +1,24 @@
+"Phone": |-
+    - generic [ref=e196]: Phone*
+    - textbox "Phone*" [ref=e198] [cursor=pointer]:
+      - /placeholder: Type here...
+  - generic [ref=e199]:
+    - generic [ref=e200]: Cover Letter
+"LinkedIn Profile": |-
+      - generic [ref=e209]: LinkedIn Profile
+      - textbox "LinkedIn Profile" [ref=e211] [cursor=pointer]:
+        - /placeholder: Type here...
+        - text: https://linkedin.com/in/janedoe
+  - button "Submit Application" [ref=e165] [cursor=pointer]:
+"Name": |-
+    - generic [ref=e174]: Name*
+    - textbox "Name*" [ref=e176] [cursor=pointer]:
+      - /placeholder: Type here...
+      - text: Jane Doe
+  - generic [ref=e177]:
+"Email": |-
+    - generic [ref=e178]: Email*
+    - textbox "Email*" [ref=e180] [cursor=pointer]:
+      - /placeholder: hello@example.com...
+      - text: jane.doe@example.com
+  - generic [ref=e181]:

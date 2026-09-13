@@ -1,0 +1,74 @@
+"Email address *": |-
+    - generic "Email address" [ref=e470]: Email address *
+    - textbox "Email address *" [ref=e474]: jane.doe@example.com
+  - generic [ref=e477]:
+    - generic "Prefix" [ref=e479]
+    - generic [ref=e483] [cursor=pointer]:
+"First name *": |-
+    - generic "First name" [ref=e492]: First name *
+    - textbox "First name *" [ref=e496]: Jane
+  - generic [ref=e499]:
+    - generic "Middle name(s)" [ref=e501]
+    - textbox "Middle name(s)" [ref=e505]: Quinn
+"Last name *": |-
+    - generic "Last name" [ref=e510]: Last name *
+    - textbox "Last name *" [ref=e514]: Doe
+  - generic [ref=e517]:
+    - generic "Suffix" [ref=e519]
+    - generic [ref=e523] [cursor=pointer]:
+"LinkedIn profile": |-
+    - generic "LinkedIn profile" [ref=e532]
+    - textbox "LinkedIn profile" [ref=e536]
+  - generic [ref=e537]:
+    - generic [ref=e540]:
+      - generic "Home phone number" [ref=e542]
+"Mobile phone number *": |-
+      - generic "Mobile phone number" [ref=e556]: Mobile phone number *
+      - generic [ref=e560]:
+        - generic "Country dialling code" [ref=e561] [cursor=pointer]:
+          - combobox "Country dialling code" [ref=e564]
+  --
+        - textbox "Mobile phone number *" [ref=e565]: (555) 010-0199
+  - generic [ref=e569]:
+    - generic "Preferred contact method" [ref=e571]: Preferred contact method *
+    - generic [ref=e575] [cursor=pointer]:
+"Preferred contact method *": |-
+  - generic "Preferred contact method" [ref=e571]: Preferred contact method *
+  - generic [ref=e575] [cursor=pointer]:
+    - combobox "Preferred contact method *" [ref=e578]
+    - generic:
+      - img:
+        - img
+"State/Province *": |-
+  - generic "State/Province" [ref=e599]: State/Province *
+  - generic [ref=e603] [cursor=pointer]:
+    - generic [ref=e604]:
+      - combobox "State/Province *" [ref=e606]
+      - generic "California" [ref=e803]
+    - generic:
+      - img:
+"Address Line 1 *": |-
+    - generic "Address Line 1" [ref=e611]: Address Line 1 *
+    - textbox "Address Line 1 *" [ref=e615]
+  - generic [ref=e618]:
+    - generic "Address line 2" [ref=e620]
+    - textbox "Address line 2" [ref=e624]
+"City *": |-
+    - generic "City" [ref=e629]: City *
+    - textbox "City *" [ref=e633]: San Jose
+  - generic [ref=e636]:
+    - generic "County" [ref=e638]
+    - textbox "County" [ref=e642]
+"Postcode *": |-
+      - generic "Postcode" [ref=e647]: Postcode *
+      - textbox "Postcode *" [ref=e651]
+  - generic [ref=e655]:
+    - generic "How did you hear about this job?" [ref=e657]: How did you hear about this job? *
+    - generic [ref=e661] [cursor=pointer]:
+"How did you hear about this job? *": |-
+  - generic "How did you hear about this job?" [ref=e657]: How did you hear about this job? *
+  - generic [ref=e661] [cursor=pointer]:
+    - combobox "How did you hear about this job? *" [ref=e664]
+    - generic:
+      - img:
+        - img

@@ -1,0 +1,10 @@
+"GDPR Notice for EU Residents": |-
+  - generic [ref=f94e292]: GDPR Notice for EU Residents*
+  - generic [ref=f94e293]:
+    - log [ref=f94e295]
+    - generic [ref=f94e297]:
+  --
+        - combobox "GDPR Notice for EU Residents" [invalid] [ref=f94e301]
+      - button "Toggle flyout" [ref=f94e303] [cursor=pointer]:
+        - img [ref=f94e304]
+    - textbox

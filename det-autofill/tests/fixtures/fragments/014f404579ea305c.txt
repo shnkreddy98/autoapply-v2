@@ -1,0 +1,55 @@
+"Gender": |-
+  - paragraph [ref=e105]: We are an equal opportunity employer and value diversity at Crunchyroll. Pursuant to applicable law, we do not discriminate on the basis of race, religion, color, national origin, gender, sexual orientation, age, marital status, veteran status, or disability status.
+  - paragraph [ref=e106]: Crunchyroll, LLC is an independently operated joint venture between US-based Sony Pictures Entertainment, and Japan's Aniplex, a subsidiary of Sony Music Entertainment (Japan) Inc., both subsidiaries of Tokyo-based Sony Group Corporation.
+  - paragraph [ref=e107]:
+    - emphasis [ref=e108]: "Questions about Crunchyroll’s hiring process? Please check out our Hiring FAQs:"
+  --
+    - generic [ref=e311]: Gender
+    - generic [ref=e312]:
+      - log [ref=e314]
+      - generic [ref=e316]:
+  --
+          - combobox "Gender" [ref=e320]
+        - button "Toggle flyout" [ref=e322] [cursor=pointer]:
+          - img [ref=e323]
+  - generic [ref=e325]:
+"Hispanic/Latino": |-
+    - generic [ref=e328]: Are you Hispanic/Latino?
+    - generic [ref=e329]:
+      - log [ref=e331]
+      - generic [ref=e333]:
+  --
+          - combobox "Are you Hispanic/Latino?" [ref=e337]
+        - button "Toggle flyout" [ref=e339] [cursor=pointer]:
+          - img [ref=e340]
+  - link "Race & Ethnicity Definitions" [ref=e342] [cursor=pointer]:
+"Veteran Status": |-
+  - paragraph [ref=e105]: We are an equal opportunity employer and value diversity at Crunchyroll. Pursuant to applicable law, we do not discriminate on the basis of race, religion, color, national origin, gender, sexual orientation, age, marital status, veteran status, or disability status.
+  - paragraph [ref=e106]: Crunchyroll, LLC is an independently operated joint venture between US-based Sony Pictures Entertainment, and Japan's Aniplex, a subsidiary of Sony Music Entertainment (Japan) Inc., both subsidiaries of Tokyo-based Sony Group Corporation.
+  - paragraph [ref=e107]:
+    - emphasis [ref=e108]: "Questions about Crunchyroll’s hiring process? Please check out our Hiring FAQs:"
+  --
+    - generic [ref=e352]: Veteran Status
+    - generic [ref=e353]:
+      - log [ref=e355]
+      - generic [ref=e357]:
+  --
+          - combobox "Veteran Status" [ref=e361]
+        - button "Toggle flyout" [ref=e363] [cursor=pointer]:
+          - img [ref=e364]
+  - separator [ref=e366]
+"Disability Status": |-
+  - paragraph [ref=e105]: We are an equal opportunity employer and value diversity at Crunchyroll. Pursuant to applicable law, we do not discriminate on the basis of race, religion, color, national origin, gender, sexual orientation, age, marital status, veteran status, or disability status.
+  - paragraph [ref=e106]: Crunchyroll, LLC is an independently operated joint venture between US-based Sony Pictures Entertainment, and Japan's Aniplex, a subsidiary of Sony Music Entertainment (Japan) Inc., both subsidiaries of Tokyo-based Sony Group Corporation.
+  - paragraph [ref=e107]:
+    - emphasis [ref=e108]: "Questions about Crunchyroll’s hiring process? Please check out our Hiring FAQs:"
+  --
+    - generic [ref=e409]: Disability Status
+    - generic [ref=e410]:
+      - log [ref=e412]
+      - generic [ref=e414]:
+  --
+          - combobox "Disability Status" [ref=e418]
+        - button "Toggle flyout" [ref=e420] [cursor=pointer]:
+          - img [ref=e421]
+  - paragraph [ref=e424]: "PUBLIC BURDEN STATEMENT: According to the Paperwork Reduction Act of 1995 no persons are required to respond to a collection of information unless such collection displays a valid OMB control number. This survey should take about 5 minutes to complete."

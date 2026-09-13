@@ -1,0 +1,14 @@
+"Import Resume": |-
+      - generic [ref=e117]: Click Import Resume to add this information from your resume. You can also enter the information manually in the fields below.
+      - button [ref=e127] [cursor=pointer]:
+        - img [ref=e129]:
+          - img [ref=e130]
+        - generic [ref=e132]: Import Resume
+    - separator [ref=e133]
+  - generic [ref=e135]:
+    - heading [level=2] [ref=e136]:
+  --
+            - generic [ref=e377]: Import Resume
+      - separator [ref=e378]
+    - generic [ref=e379]:
+      - generic [ref=e380]:

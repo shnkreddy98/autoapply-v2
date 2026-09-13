@@ -1,0 +1,95 @@
+"Title": |-
+  - Page Title: Lead Data Engineer | Apply
+  ### Snapshot
+  ```yaml
+  - generic [ref=e2]:
+  --
+                        - generic [ref=e729]: Title
+                        - combobox "Title Title" [ref=e730]:
+                          - option "Choose..." [selected]
+                          - option "Miss"
+                          - option "Mrs."
+  --
+                              - generic [ref=e839]: "*Job Title"
+                              - textbox "*Job Title" [ref=e840]: Founding Engineer
+                            - generic [ref=e841]:
+                              - generic [ref=e843]:
+                                - generic [ref=e844]: "*Company / Organization"
+  --
+                                - generic [ref=e891]: "*Job Title"
+                                - textbox "*Job Title" [ref=e892]: Data Engineer
+                              - generic [ref=e893]:
+                                - generic [ref=e895]:
+                                  - generic [ref=e896]: "*Company / Organization"
+  --
+                                - generic [ref=e943]: "*Job Title"
+                                - textbox "*Job Title" [ref=e944]: Data Engineer
+                              - generic [ref=e945]:
+                                - generic [ref=e947]:
+                                  - generic [ref=e948]: "*Company / Organization"
+"Country": |-
+  - generic [ref=e780]: "*Country"
+  - combobox "*Country *Country" [ref=e781]:
+    - option "Choose..."
+    - option "Canada"
+    - option "United States" [selected]
+"Address 1": |-
+    - generic [ref=e786]: "*Address 1"
+    - textbox "*Address 1 *Address 1" [ref=e787]
+  - generic [ref=e790]:
+    - generic [ref=e791]: Address 2
+    - textbox "Address 2 Address 2" [ref=e792]
+"City": |-
+    - generic [ref=e796]: "*City"
+    - textbox "*City *City" [ref=e797]: Redwood City
+  - generic [ref=e799]:
+    - generic [ref=e800]: "*State / Province"
+    - combobox "*State / Province *State / Province" [ref=e801]:
+  --
+          - option "City and Regional Planning"
+          - option "Civil Engineering"
+          - option "Clinical Nutrition"
+          - option "Clinical Psychology"
+  --
+          - option "City and Regional Planning"
+          - option "Civil Engineering"
+          - option "Clinical Nutrition"
+          - option "Clinical Psychology"
+  --
+            - option "City and Regional Planning"
+            - option "Civil Engineering"
+            - option "Clinical Nutrition"
+            - option "Clinical Psychology"
+  --
+            - option "City and Regional Planning"
+            - option "Civil Engineering"
+            - option "Clinical Nutrition"
+            - option "Clinical Psychology"
+  --
+            - option "City and Regional Planning"
+            - option "Civil Engineering"
+            - option "Clinical Nutrition"
+            - option "Clinical Psychology"
+  --
+            - option "City and Regional Planning"
+            - option "Civil Engineering"
+            - option "Clinical Nutrition"
+            - option "Clinical Psychology"
+"State / Province": |-
+  - generic [ref=e800]: "*State / Province"
+  - combobox "*State / Province *State / Province" [ref=e801]:
+    - option "Choose..."
+    - option "Alabama"
+    - option "Alaska"
+"Zip / Postal Code": |-
+        - generic [ref=e804]: "*Zip / Postal Code"
+        - textbox "*Zip / Postal Code *Zip / Postal Code" [ref=e805]
+  - generic [ref=e810] [cursor=pointer]:
+    - checkbox "Willing to relocate" [ref=e811]
+    - text: Willing to relocate
+"Primary Phone": |-
+    - generic [ref=e771]: Primary Phone
+    - textbox "Primary Phone Primary Phone" [ref=e772]: +1 555-010-0199
+  - generic [ref=e774]:
+    - generic [ref=e775]: Secondary Phone
+    - textbox "Secondary Phone Secondary Phone" [ref=e776]

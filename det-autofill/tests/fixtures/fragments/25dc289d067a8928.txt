@@ -1,0 +1,130 @@
+"First Name": |-
+    - generic [ref=e408]: First Name*
+    - textbox "First Name" [ref=e409]
+  - generic [ref=e412]:
+    - generic [ref=e413]: Last Name*
+    - textbox "Last Name" [ref=e414]
+  --
+    - generic [ref=e418]: Preferred First Name
+    - textbox "Preferred First Name" [ref=e419]
+  - generic [ref=e422]:
+    - generic [ref=e423]: Email*
+    - textbox "Email" [ref=e424]
+"Last Name": |-
+    - generic [ref=e413]: Last Name*
+    - textbox "Last Name" [ref=e414]
+  - generic [ref=e417]:
+    - generic [ref=e418]: Preferred First Name
+    - textbox "Preferred First Name" [ref=e419]
+"Email": |-
+  - paragraph [ref=e383]: At Age of Learning, we prioritize a safe recruitment process. Communication will come solely from official Age of Learning email addresses, @aofl.com, or our verified LinkedIn Recruiter accounts — be cautious of deviations. We will never request sensitive personal information during the early application stages. Interviews are conducted via phone, in person, or Zoom — never through messaging apps. Job offers are communicated verbally and followed by written documentation via DocuSign. Any requests for personal information will occur through secure channels only.
+  - heading "An Equal Opportunity Employer" [level=3] [ref=e384]
+  - paragraph [ref=e385]:
+    - text: Age of Learning, Inc. (the “Company”) is committed to a policy of Equal Employment Opportunity and will not discriminate against an applicant or employee on the basis of race, color, religion, creed, national origin or ancestry, sex, gender expression, age, physical or mental disability, medical condition, pregnancy, veteran or military status, marital status, sexual orientation, gender identity, domestic partner status, genetic information, or any other legally-recognized protected basis under federal, state, or local laws, regulations, or ordinances. Age of Learning, Inc. (the “Company”) will consider qualified applicants with criminal histories pursuant to
+  --
+    - generic [ref=e423]: Email*
+    - textbox "Email" [ref=e424]
+  - group "Phone" [ref=e426]:
+    - generic [ref=e427]: Phone
+    - generic [ref=e430]:
+"Phone": |-
+  - paragraph [ref=e383]: At Age of Learning, we prioritize a safe recruitment process. Communication will come solely from official Age of Learning email addresses, @aofl.com, or our verified LinkedIn Recruiter accounts — be cautious of deviations. We will never request sensitive personal information during the early application stages. Interviews are conducted via phone, in person, or Zoom — never through messaging apps. Job offers are communicated verbally and followed by written documentation via DocuSign. Any requests for personal information will occur through secure channels only.
+  - heading "An Equal Opportunity Employer" [level=3] [ref=e384]
+  - paragraph [ref=e385]:
+    - text: Age of Learning, Inc. (the “Company”) is committed to a policy of Equal Employment Opportunity and will not discriminate against an applicant or employee on the basis of race, color, religion, creed, national origin or ancestry, sex, gender expression, age, physical or mental disability, medical condition, pregnancy, veteran or military status, marital status, sexual orientation, gender identity, domestic partner status, genetic information, or any other legally-recognized protected basis under federal, state, or local laws, regulations, or ordinances. Age of Learning, Inc. (the “Company”) will consider qualified applicants with criminal histories pursuant to
+  --
+  - group "Phone" [ref=e426]:
+    - generic [ref=e427]: Phone
+    - generic [ref=e430]:
+      - generic [ref=e431]: Country*
+      - generic [ref=e432]:
+  --
+      - generic [ref=e447]: Phone*
+      - textbox "Phone" [ref=e449]
+  - generic [ref=e450]:
+    - generic [ref=e452]:
+      - generic [ref=e453]: Location (City)*
+"Location (City)": |-
+      - generic [ref=e453]: Location (City)*
+      - generic [ref=e454]:
+        - log [ref=e456]
+        - combobox "Location (City)" [ref=e461]
+        - textbox
+    - button "Locate me" [ref=e462] [cursor=pointer]
+  - group "Resume/CV*" [ref=e464]:
+"Resume/CV": |-
+  - group "Resume/CV*" [ref=e464]:
+    - generic [ref=e465]: Resume/CV*
+    - generic [ref=e467]:
+      - generic [ref=e469]:
+        - button "Attach" [ref=e470] [cursor=pointer]
+"LinkedIn Profile": |-
+    - generic [ref=e555]: LinkedIn Profile*
+    - textbox "LinkedIn Profile" [ref=e556]
+  - generic [ref=e559]:
+    - generic [ref=e560]: Our core working hours are 9:30a-6:30p PT. Some positions offer flexibility, but please let us know if these hours work for your schedule.*
+    - textbox "Our core working hours are 9:30a-6:30p PT. Some positions offer flexibility, but please let us know if these hours work for your schedule." [ref=e561]
+"Our core working hours": |-
+    - generic [ref=e560]: Our core working hours are 9:30a-6:30p PT. Some positions offer flexibility, but please let us know if these hours work for your schedule.*
+    - textbox "Our core working hours are 9:30a-6:30p PT. Some positions offer flexibility, but please let us know if these hours work for your schedule." [ref=e561]
+  - generic [ref=e564]:
+    - generic [ref=e565]: Our company embraces AI tools to drive innovation and productivity. Are you comfortable leveraging AI-powered tools in your role?*
+    - generic [ref=e566]:
+"comfortable leveraging AI-powered tools": |-
+  - generic [ref=e565]: Our company embraces AI tools to drive innovation and productivity. Are you comfortable leveraging AI-powered tools in your role?*
+  - generic [ref=e566]:
+    - log [ref=e568]
+    - generic [ref=e570]:
+  --
+        - combobox "Our company embraces AI tools to drive innovation and productivity. Are you comfortable leveraging AI-powered tools in your role?" [ref=e574]
+      - button "Toggle flyout" [ref=e576] [cursor=pointer]:
+        - img [ref=e577]
+    - textbox
+"legally authorized to work in the United States?": |-
+  - generic [ref=e582]: Are you legally authorized to work in the United States?*
+  - generic [ref=e583]:
+    - log [ref=e585]
+    - generic [ref=e587]:
+  --
+        - combobox "Are you legally authorized to work in the United States?" [ref=e591]
+      - button "Toggle flyout" [ref=e593] [cursor=pointer]:
+        - img [ref=e594]
+    - textbox
+"require work visa sponsorship?": |-
+  - generic [ref=e599]: Will you now, or in the future, require work visa sponsorship? *
+  - generic [ref=e600]:
+    - log [ref=e602]
+    - generic [ref=e604]:
+  --
+        - combobox "Will you now, or in the future, require work visa sponsorship?" [ref=e608]
+      - button "Toggle flyout" [ref=e610] [cursor=pointer]:
+        - img [ref=e611]
+    - textbox
+"referred to this position": |-
+    - generic [ref=e619]: Were you referred to this position by an existing Age of Learning employee? *
+    - generic [ref=e620]:
+      - log [ref=e622]
+      - generic [ref=e624]:
+  --
+          - combobox "Were you referred to this position by an existing Age of Learning employee?" [ref=e628]
+        - button "Toggle flyout" [ref=e630] [cursor=pointer]:
+          - img [ref=e631]
+      - textbox
+  --
+    - generic [ref=e636]: If you were referred to this position, what is the name of the referring employee?
+    - textbox "If you were referred to this position, what is the name of the referring employee?" [ref=e637]
+  - generic [ref=e640]:
+    - generic [ref=e641]: What is your desired salary?*
+    - textbox "What is your desired salary?" [ref=e642]
+"desired salary": |-
+    - generic [ref=e641]: What is your desired salary?*
+    - textbox "What is your desired salary?" [ref=e642]
+  - generic [ref=e645]:
+    - generic [ref=e646]: What is the date you are available to start work?*
+    - textbox "What is the date you are available to start work?" [ref=e647]
+"available to start work": |-
+              - generic [ref=e646]: What is the date you are available to start work?*
+              - textbox "What is the date you are available to start work?" [ref=e647]
+          - button "Submit application" [ref=e649] [cursor=pointer]
+  - contentinfo [ref=e650]:
+    - generic [ref=e651]:

@@ -1,0 +1,21 @@
+"Gender \u2013Select\u2013": |-
+  - button "Gender –Select–" [ref=e321] [cursor=pointer]:
+    - generic [ref=e322]:
+      - generic [ref=e323]: –Select–
+      - img [ref=e325]
+"Ethnicity \u2013Select\u2013": |-
+  - button "Ethnicity –Select–" [ref=e334] [cursor=pointer]:
+    - generic [ref=e335]:
+      - generic [ref=e336]: –Select–
+      - img [ref=e338]
+"Disability \u2013Select\u2013": |-
+  - button "Disability –Select–" [ref=e347] [cursor=pointer]:
+    - generic [ref=e348]:
+      - generic [ref=e349]: –Select–
+      - img [ref=e351]
+"Veteran Status": |-
+  - radiogroup "Veteran Status" [ref=e354]:
+    - generic [ref=e358]: Veteran Status
+    - radiogroup [ref=e360]:
+      - generic [ref=e362] [cursor=pointer]:
+        - radio "Decline to Answer" [ref=e364]

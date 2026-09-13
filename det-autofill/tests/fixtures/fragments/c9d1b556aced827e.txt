@@ -1,0 +1,15 @@
+"GPA . Required": |-
+    - textbox "GPA . Required" [ref=e216]
+  - generic [ref=e217]:
+    - generic [ref=e218]: GPA Range
+    - textbox "GPA Range" [ref=e221]
+  --
+    - textbox "GPA . Required" [ref=e335]
+  - generic [ref=e336]:
+    - generic [ref=e337]: GPA Range
+    - textbox "GPA Range" [ref=e340]
+  --
+    - textbox "GPA . Required" [ref=e458]
+  - generic [ref=e459]:
+    - generic [ref=e460]: GPA Range
+    - textbox "GPA Range" [ref=e463]

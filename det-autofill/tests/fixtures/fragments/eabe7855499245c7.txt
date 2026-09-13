@@ -1,0 +1,33 @@
+"First name": |-
+      - generic: First name
+      - text: "*"
+    - textbox "First name" [ref=e60]:
+      - /placeholder: ""
+  - generic [ref=e64]:
+    - generic [ref=e65]:
+"Last name": |-
+      - generic: Last name
+      - text: "*"
+    - textbox "Last name" [ref=e68]:
+      - /placeholder: ""
+  - generic [ref=e72]:
+    - generic [ref=e73]:
+"Phone number": |-
+        - generic: Phone number
+        - text: "*"
+      - textbox "Phone number" [ref=e76]:
+        - /placeholder: ""
+  - generic [ref=e77]:
+    - checkbox [ref=e78]:
+"Consent and Privacy Policy": |-
+          - generic: Consent and Privacy Policy*
+  - generic:
+    - button "Create account" [disabled]:
+      - generic:
+"Create account": |-
+          - button "Create account" [disabled]:
+            - generic:
+              - generic: Create account
+  - contentinfo [ref=e84]:
+    - link "www.nelsonworldwide.com This link will open in a new tab" [ref=e89] [cursor=pointer]:
+      - /url: http://www.nelsonworldwide.com

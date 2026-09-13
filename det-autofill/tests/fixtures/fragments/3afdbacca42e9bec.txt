@@ -1,0 +1,70 @@
+"First Name": |-
+    - generic [ref=e167]: First Name*
+    - textbox "First Name*" [ref=e168]
+  - generic [ref=e169]:
+    - generic [ref=e170]: Last Name*
+    - textbox "Last Name*" [ref=e171]
+"Last Name": |-
+    - generic [ref=e170]: Last Name*
+    - textbox "Last Name*" [ref=e171]
+  - generic [ref=e172]:
+    - generic [ref=e173]: Email Address*
+    - textbox "Email Address*" [ref=e174]
+"Email Address": |-
+    - generic [ref=e173]: Email Address*
+    - textbox "Email Address*" [ref=e174]
+  - generic [ref=e175]:
+    - generic [ref=e176]: Phone*
+    - textbox "Phone*" [ref=e177]
+"Phone": |-
+    - generic [ref=e176]: Phone*
+    - textbox "Phone*" [ref=e177]
+  - generic [ref=e178]:
+    - generic [ref=e179]: Address*
+    - generic [ref=e180]:
+"Address": |-
+    - generic [ref=e173]: Email Address*
+    - textbox "Email Address*" [ref=e174]
+  - generic [ref=e175]:
+    - generic [ref=e176]: Phone*
+    - textbox "Phone*" [ref=e177]
+  --
+    - generic [ref=e179]: Address*
+    - generic [ref=e180]:
+      - textbox "Address*" [ref=e181]:
+        - /placeholder: Address
+      - generic [ref=e182]:
+        - textbox "City" [ref=e184]
+        - textbox "State/Province" [ref=e186]
+"City": |-
+        - textbox "City" [ref=e184]
+        - textbox "State/Province" [ref=e186]
+        - textbox "Postal" [ref=e188]
+  - generic [ref=e189]:
+  --
+    - text: Race/Ethnicity
+    - combobox "Race/Ethnicity" [ref=e468]:
+      - option "Decline to answer" [selected]
+      - option "Hispanic or Latino"
+      - option "White, not Hispanic or Latino"
+"State/Province": |-
+        - textbox "State/Province" [ref=e186]
+        - textbox "Postal" [ref=e188]
+  - generic [ref=e189]:
+    - generic [ref=e190]: Resume*
+"Postal": |-
+        - textbox "Postal" [ref=e188]
+  - generic [ref=e189]:
+    - generic [ref=e190]: Resume*
+    - generic [ref=e191]:
+"Attach resume": |-
+  - link "Attach resume" [ref=e192] [cursor=pointer]:
+    - /url: "#"
+  - text: or
+  - link "Paste resume" [ref=e193] [cursor=pointer]:
+"LinkedIn Profile URL": |-
+    - generic [ref=e204]: LinkedIn Profile URL:*
+    - textbox "LinkedIn Profile URL:*" [ref=e205]
+  - generic [ref=e206]:
+    - generic [ref=e207]: What languages do you speak fluently?*
+    - textbox "What languages do you speak fluently?*" [ref=e208]

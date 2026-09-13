@@ -1,0 +1,25 @@
+"United States": |-
+              - paragraph [ref=e22]: United States
+            - generic [ref=e23]:
+              - heading [level=2] [ref=e219]: Employment Type
+              - paragraph [ref=e25]: Full time
+  --
+                  - generic [ref=e36]: United States
+                  - generic [ref=e37]: Estimated Base Salary $150K – $205K • Offers Equity
+              - paragraph [ref=e39]: The compensation offered for this role will depend on various factors, including the candidate's location, qualifications, work history, and interview performance, and may differ from the stated range.
+          - generic [ref=e40]:
+  --
+                    - combobox "Start typing..." [expanded] [active] [ref=e190] [cursor=pointer]: United States
+                    - button [ref=e191] [cursor=pointer]:
+                      - img [ref=e192]
+                - generic [ref=e194]:
+  --
+          - option "United States" [selected] [ref=e261] [cursor=pointer]
+          - option "US Virgin Islands" [ref=e262] [cursor=pointer]
+          - option "US Virgin Islands" [ref=e263] [cursor=pointer]
+          - option "United States Minor Outlying Islands" [ref=e264] [cursor=pointer]
+          - option "United States Minor Outlying Islands" [ref=e265] [cursor=pointer]
+          - option "Statesboro, Georgia, United States" [ref=e266] [cursor=pointer]
+          - option "Statesville, North Carolina, United States" [ref=e267] [cursor=pointer]
+      - button "Dismiss" [ref=e260]
+  ```

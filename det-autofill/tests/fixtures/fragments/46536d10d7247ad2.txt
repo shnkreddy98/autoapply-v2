@@ -1,0 +1,74 @@
+"Degree": |-
+          - button "Error Degree" [ref=e838] [cursor=pointer]:
+            - text: Error
+            - generic [ref=e839]: "-"
+            - text: Degree
+          - generic [ref=e840]: The field Degree is required and must have a value.
+  - generic [ref=e617]:
+    - group "Education" [ref=e618]:
+      - heading "Education" [level=4] [ref=e619]
+      - group "Education 1" [ref=e620]:
+        - generic [ref=e621]:
+          - heading "Education 1" [level=5] [ref=e622]
+          - button "Delete" [ref=e623] [cursor=pointer]: Delete
+        - generic [ref=e629]:
+  --
+            - generic [ref=e638]: Degree*
+            - button "Degree AS Required" [active] [ref=e841]: AS
+          - generic [ref=e643]:
+            - generic [ref=e645]:
+              - generic [ref=e646]: Field of Study
+              - generic [ref=e652] [cursor=pointer]:
+                - textbox "Field of Study" [ref=e653]:
+                  - /placeholder: Search
+                - generic [ref=e654]: 0 items selected
+            - button "The field will alphabetically return the first 100 results and can also return specified matches." [ref=e658] [cursor=pointer]
+  --
+            - generic [ref=e680]: Degree*
+            - generic [ref=e681]:
+              - button "Degree Select One Required" [ref=e684]: Select One
+              - paragraph [ref=e804]:
+                - generic [ref=e805]: "Error:"
+                - text: The field Degree is required and must have a value.
+          - generic [ref=e685]:
+            - generic [ref=e687]:
+              - generic [ref=e688]: Field of Study
+              - generic [ref=e694] [cursor=pointer]:
+                - textbox "Field of Study" [ref=e695]:
+                  - /placeholder: Search
+                - generic [ref=e696]: 0 items selected
+            - button "The field will alphabetically return the first 100 results and can also return specified matches." [ref=e700] [cursor=pointer]
+"AS": |-
+  - generic "You may choose to display a cookie banner on the external site. You must specify the message in the cookie banner and may add a link to a relevant policy. If you are unfamiliar with these requirements, please seek the advice of legal counsel." [ref=e9]:
+    - paragraph [ref=e11]: You may choose to display a cookie banner on the external site. You must specify the message in the cookie banner and may add a link to a relevant policy. If you are unfamiliar with these requirements, please seek the advice of legal counsel.
+    - generic [ref=e12]:
+      - button "Decline" [ref=e15] [cursor=pointer]
+      - button "Accept Cookies" [ref=e19] [cursor=pointer]
+  - banner [ref=e22]:
+    - generic [ref=e24]:
+      - link "search for jobs" [ref=e27] [cursor=pointer]:
+        - /url: /en-US/CIR_External_Career_Site
+        - img "search for jobs" [ref=e28]
+  --
+                    - button "Degree AS Required" [active] [ref=e841]: AS
+                  - generic [ref=e643]:
+                    - generic [ref=e645]:
+                      - generic [ref=e646]: Field of Study
+                      - generic [ref=e652] [cursor=pointer]:
+                        - textbox "Field of Study" [ref=e653]:
+                          - /placeholder: Search
+                        - generic [ref=e654]: 0 items selected
+                    - button "The field will alphabetically return the first 100 results and can also return specified matches." [ref=e658] [cursor=pointer]
+  --
+                        - generic [ref=e752]: jane_doe.pdf
+                        - generic [ref=e753]: 51.17 KB
+                        - generic [ref=e754]: Successfully Uploaded!
+                      - button "Delete jane_doe.pdf" [ref=e759] [cursor=pointer]
+            - group "Social Network URLs" [ref=e766]:
+              - heading "Social Network URLs" [level=4] [ref=e767]
+              - generic [ref=e769]:
+                - generic [ref=e770]: LinkedIn
+                - textbox "LinkedIn" [ref=e806]: https://www.linkedin.com/in/janedoe
+        - generic [ref=e180]:
+          - button "Back" [ref=e391] [cursor=pointer]
+          - button "Save and Continue" [ref=e392] [cursor=pointer]

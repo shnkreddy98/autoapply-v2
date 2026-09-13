@@ -1,0 +1,10 @@
+"Profile Information": |-
+  - heading "Profile Information" [level=2]:
+    - button "Profile Information" [expanded] [ref=e243] [cursor=pointer]:
+      - generic [ref=e244]: 
+      - text: Profile Information
+      - text:  
+  - group "Profile Information" [ref=e246]:
+    - generic [ref=e247]: Please complete your personal information.
+    - generic [ref=e250]:
+      - generic [ref=e252]:

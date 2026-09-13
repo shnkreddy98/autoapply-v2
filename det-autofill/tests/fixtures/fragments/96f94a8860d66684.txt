@@ -1,0 +1,13 @@
+"Passcode": |-
+        - generic [ref=e371]: Passcode
+        - textbox "Passcode" [ref=e375]:
+          - /placeholder: ""
+      - paragraph [ref=e376]: Don't forget to check all of your inbox folders, including promotional, spam and junk.
+  - link "Resend" [ref=e381] [cursor=pointer]:
+"Next": (no match)
+"Verify": |-
+  - generic [ref=e291]: Verify
+  - generic [ref=e347]:
+    - generic [ref=e348]:
+      - generic [ref=e349]:
+"Continue": (no match)

@@ -1,0 +1,11 @@
+"San Jose, CA": |-
+        - combobox "Location (City)" [active] [ref=f94e164]: San Jose, CA
+        - textbox
+    - button "Locate me" [ref=f94e165] [cursor=pointer]
+  - group "Resume/CV*" [ref=f94e167]:
+  --
+    - textbox "Are you currently located in NYC and willing to commute to the office 2-3 days a week?" [ref=f94e254]: No, I am currently based in San Jose, CA, but I am willing to relocate.
+  - generic [ref=f94e257]:
+    - generic [ref=f94e258]: Will you now or in the future require visa sponsorship for employment at Butterfly Network?*
+    - generic [ref=f94e259]:
+"San Jose, California": (no match)

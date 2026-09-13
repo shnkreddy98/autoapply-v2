@@ -1,0 +1,61 @@
+"Race": |-
+        - generic [ref=e110]: Embrace challenges.
+        - paragraph [ref=e111]: We are disruptors at the forefront of innovation, turning challenges into opportunities for growth. By pushing boundaries, we deliver value to our investors, team, customers, and patients – ultimately, drive sustained progress and transformation in the industry.
+    - generic [ref=e114]:
+      - generic [ref=e115]: Action-oriented achievers
+      - generic [ref=e116]:
+        - generic [ref=e117]: Follow through, every time.
+        - paragraph [ref=e118]: We strive for clarity and get to it quickly, taking action and always following through. Progress is our focus, and we keep moving forward with urgency, accountability, and alignment.
+  - generic [ref=e120]:
+    - button [ref=e121] [cursor=pointer]:
+      - img [ref=e122]
+    - button [ref=e125] [cursor=pointer]:
+  --
+              - listitem [ref=f103e59]: "Growth Champions: We embrace challenges."
+              - listitem [ref=f103e60]: "Action-Oriented Achievers: We follow through, every time."
+            - heading "Location" [level=2] [ref=f103e61]:
+              - strong [ref=f103e62]: Location
+            - paragraph [ref=f103e63]: Butterfly offers a hybrid work model for most positions, with team members spending two or more days a week in the office. While flexibility is key, we value in-person connections that spark creativity and teamwork. Our offices are designed for collaboration, with comfortable workspaces, stocked kitchens, and opportunities to connect with peers.
+            - paragraph [ref=f103e64]: This is a hybrid position and will be based out of our office in New York City, NY.
+            - heading "Benefits and Perks" [level=2] [ref=f103e65]:
+              - strong [ref=f103e66]: Benefits and Perks
+            - list [ref=f103e67]:
+              - listitem [ref=f103e68]: Comprehensive health insurance, encompassing dental and vision coverage, is provided to all our employees. As a health-tech company, we prioritize the well-being of our teams. We also contribute to Health Savings Account (HSA) accounts for all enrolled employees on an annual basis.
+              - listitem [ref=f103e69]: Comprehensive Employee Assistance Program - we provide access to tools and resources to support your emotional health and day-to-day needs.
+  --
+              - emphasis [ref=f103e87]: Butterfly Network is an equal opportunity employer. Regardless of race, traits associated with race, color, ancestry, religion, gender, national origin, sexual orientation, age, citizenship, marital status, disability or Veteran status. All your information will be kept confidential according to EEO guidelines.
+            - paragraph [ref=f103e88]:
+              - emphasis [ref=f103e89]: "Butterfly requires security adherence responsibilities from all employees. These include: adhering to all company security policies and procedures, utilize provided company assets securely, and complete all required security awareness training programs. Safeguarding company data and systems from unauthorized access, modification, or destruction, contributing to the overall security posture of the organization. Immediately reporting any suspected or actual security incidents, including phishing attempts, malware infections, or unauthorized access, following the established incident response procedure"
+            - paragraph [ref=f103e90]: "#LI-KG"
+            - paragraph [ref=f103e91]: "#KG-LI"
+          - generic [ref=f103e92]:
+            - img [ref=f103e93]
+            - generic [ref=f103e95]:
+              - paragraph [ref=f103e96]: Create a Job Alert
+              - paragraph [ref=f103e97]: Interested in building your career at Butterfly Network? Get future opportunities sent straight to your email.
+              - link "Create alert" [ref=f103e443] [cursor=pointer]:
+  --
+                - link "Race & Ethnicity Definitions" [ref=f103e358] [cursor=pointer]:
+                  - /url: https://job-boards.cdn.greenhouse.io/docs/2023/RaceEthnicityDefinitions.pdf
+              - generic [ref=f103e359]:
+                - paragraph [ref=f103e360]: "If you believe you belong to any of the categories of protected veterans listed below, please indicate by making the appropriate selection. As a government contractor subject to the Vietnam Era Veterans Readjustment Assistance Act (VEVRAA), we request this information in order to measure the effectiveness of the outreach and positive recruitment efforts we undertake pursuant to VEVRAA. Classification of protected categories is as follows:"
+                - paragraph [ref=f103e361]: "A \"disabled veteran\" is one of the following: a veteran of the U.S. military, ground, naval or air service who is entitled to compensation (or who but for the receipt of military retired pay would be entitled to compensation) under laws administered by the Secretary of Veterans Affairs; or a person who was discharged or released from active duty because of a service-connected disability."
+                - paragraph [ref=f103e362]: A "recently separated veteran" means any veteran during the three-year period beginning on the date of such veteran's discharge or release from active duty in the U.S. military, ground, naval, or air service.
+                - paragraph [ref=f103e363]: An "active duty wartime or campaign badge veteran" means a veteran who served on active duty in the U.S. military, ground, naval or air service during a war, or in a campaign or expedition for which a campaign badge has been authorized under the laws administered by the Department of Defense.
+                - paragraph [ref=f103e364]: An "Armed forces service medal veteran" means a veteran who, while serving on active duty in the U.S. military, ground, naval or air service, participated in a United States military operation for which an Armed Forces service medal was awarded pursuant to Executive Order 12985.
+              - generic [ref=f103e367]:
+                - generic [ref=f103e368]: Veteran Status
+                - generic [ref=f103e369]:
+                  - log [ref=f103e371]
+  --
+                  - listitem [ref=f103e415]: Mobility impairment, benefiting from the use of a wheelchair, scooter, walker, leg brace(s) and/or other supports
+                  - listitem [ref=f103e416]: Nervous system condition, for example, migraine headaches, Parkinson’s disease, multiple sclerosis (MS)
+                  - listitem [ref=f103e417]: Neurodivergence, for example, attention-deficit/hyperactivity disorder (ADHD), autism spectrum disorder, dyslexia, dyspraxia, other learning disabilities
+                  - listitem [ref=f103e418]: Partial or complete paralysis (any cause)
+                  - listitem [ref=f103e419]: Pulmonary or respiratory conditions, for example, tuberculosis, asthma, emphysema
+                  - listitem [ref=f103e420]: Short stature (dwarfism)
+                  - listitem [ref=f103e421]: Traumatic brain injury
+              - generic [ref=f103e424]:
+                - generic [ref=f103e425]: Disability Status
+                - generic [ref=f103e426]:
+                  - log [ref=f103e428]

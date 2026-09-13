@@ -1,0 +1,25 @@
+"Education (3)": |-
+  - group "Education (3)" [ref=e285]:
+    - generic [ref=e286]: Education (3)
+    - button "Delete Education (3)" [ref=e288] [cursor=pointer]:
+      - generic [ref=e289]: 
+    - generic [ref=e290]:
+      - generic [ref=e292]: School
+"Professional Experience (2)": |-
+  - group "Professional Experience (2)* required." [ref=e392]:
+    - generic [ref=e394]:
+      - text: Professional Experience (2)
+      - generic [ref=e395]:
+        - text: "*"
+        - generic [ref=e396]: required.
+"Professional Experience (3)": |-
+  - group "Professional Experience (3)* required." [ref=e458]:
+    - generic [ref=e460]:
+      - text: Professional Experience (3)
+      - generic [ref=e461]:
+        - text: "*"
+        - generic [ref=e462]: required.
+    - button "Delete Professional Experience (3)" [ref=e464] [cursor=pointer]:
+      - generic [ref=e465]: 
+    - generic [ref=e466]:
+      - generic [ref=e468]: Employer

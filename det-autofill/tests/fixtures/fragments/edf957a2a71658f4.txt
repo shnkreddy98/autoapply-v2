@@ -1,0 +1,10 @@
+"Apply": |-
+    - button "Apply" [ref=e50] [cursor=pointer]
+  - generic [ref=e51]:
+    - generic [ref=e52]:
+      - generic [ref=e60]:
+  --
+        - generic [ref=e143]: Some of the above benefits may not apply to part-time employees scheduled to work less than 20 hours per week.
+      - paragraph [ref=e145]
+      - paragraph [ref=e147]:
+        - generic [ref=e148]: Prudential Financial, Inc. of the United States is not affiliated with Prudential plc. which is headquartered in the United Kingdom.

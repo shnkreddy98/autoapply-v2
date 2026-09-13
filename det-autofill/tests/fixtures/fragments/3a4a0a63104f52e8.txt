@@ -1,0 +1,21 @@
+"Month": |-
+  - generic [ref=e311]: Month
+  - combobox "Month" [ref=e312]:
+    - option "Month" [selected]
+    - option "Jan"
+    - option "Feb"
+    - option "Mar"
+"Day": |-
+  - generic [ref=e314]: Day
+  - combobox "Day" [ref=e315]:
+    - option "Day" [selected]
+    - option "1"
+    - option "2"
+    - option "3"
+"Year": |-
+  - generic [ref=e317]: Year
+  - combobox "Year" [ref=e318]:
+    - option "Year" [selected]
+    - option "2026"
+    - option "2027"
+    - option "2028"

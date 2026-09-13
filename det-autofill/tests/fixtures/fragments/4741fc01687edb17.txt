@@ -1,0 +1,6 @@
+"noncompete": |-
+  - group "Do you currently have a noncompete that may impact this job application?*" [ref=e1308]:
+    - paragraph [ref=e1312]: Do you currently have a noncompete that may impact this job application?*
+    - button "Select One Required" [ref=e1316]: Select One
+  - group "Do you have relatives who work for our company?*" [ref=e1318]:
+    - paragraph [ref=e1322]: Do you have relatives who work for our company?*

@@ -1,0 +1,17 @@
+"Email": |-
+  - generic [ref=f67e11]: Email
+  - textbox "Email" [active] [ref=f67e12]
+  - generic [ref=f67e13]:
+    - generic [ref=f67e14]:
+      - generic [ref=f67e15]:
+"By accepting, I confirm I have read the Notice at Collection for Users of Privacy Policy.": |-
+            - checkbox "By accepting, I confirm I have read the Notice at Collection for Users of Privacy Policy." [ref=f67e26]
+            - text: By accepting, I confirm I have read the Notice at Collection for Users of Privacy Policy.
+          - generic [ref=f67e27]: You must indicate that you have read the privacy notice and consent to the processing of your personal data before you can continue.
+      - button "Next" [disabled] [ref=f67e28]
+  - generic [ref=f67e29]:
+"Next": |-
+      - button "Next" [disabled] [ref=f67e28]
+  - generic [ref=f67e29]:
+    - link "Application FAQs" [ref=f67e30] [cursor=pointer]:
+      - /url: https://icims.help/candidate-faq

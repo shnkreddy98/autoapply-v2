@@ -1,0 +1,12 @@
+"LinkedIn": |-
+    - generic "LinkedIn profile" [ref=e532]
+    - textbox "LinkedIn profile" [ref=e536]: https://www.linkedin.com/in/janedoe
+  - generic [ref=e537]:
+    - generic [ref=e540]:
+      - generic "Home phone number" [ref=e542]
+  --
+          - option "LinkedIn" [ref=e1797]:
+            - generic [ref=e1798]: LinkedIn
+          - option "Other" [ref=e1799]:
+            - generic [ref=e1800]: Other
+          - option "Recruiter" [ref=e1801]:

@@ -1,0 +1,131 @@
+"First Name": |-
+      - text: First Name
+      - generic [ref=f67e69]: "*"
+    - textbox "First Name" [ref=f67e71]: Jane
+  - generic [ref=f67e72]:
+    - generic [ref=f67e73]:
+      - text: Last Name
+"Last Name": |-
+      - text: Last Name
+      - generic [ref=f67e74]: "*"
+    - textbox "Last Name" [ref=f67e76]: Doe
+  - generic [ref=f67e77]:
+    - generic [ref=f67e78]:
+      - text: Email
+"Email": |-
+      - text: Email
+      - generic [ref=f67e79]: "*"
+    - textbox "Email" [ref=f67e81]: jane.doe@example.com
+  - generic [ref=f67e82]:
+    - group "Phones (1)* required." [ref=f67e83]:
+      - generic [ref=f67e85]:
+  --
+    - generic [ref=f67e541]: Email/Login
+    - textbox "Email/Login" [ref=f67e543]: jane.doe@example.com
+  - generic [ref=f67e544]:
+    - generic [ref=f67e545]: Password
+    - generic [ref=f67e546]:
+"Type": |-
+      - generic [ref=f67e90]: Type
+      - generic [ref=f67e91]:
+        - text: "*"
+        - generic [ref=f67e92]: required.
+    - combobox "Type" [ref=f67e94]:
+      - option
+      - option "Mobile" [selected]
+      - option "Home"
+  --
+      - generic [ref=f67e132]: Type
+      - generic [ref=f67e133]:
+        - text: "*"
+        - generic [ref=f67e134]: required.
+    - combobox "Type" [ref=f67e136]:
+      - option
+      - option "Home" [selected]
+  - generic [ref=f67e137]:
+"Number": |-
+          - generic [ref=f67e97]: Number
+          - generic [ref=f67e98]:
+            - text: "*"
+            - generic [ref=f67e99]: required.
+        - textbox "Number" [ref=f67e101]: +1 555 010-0199
+    - button "Add More (Phones)" [ref=f67e105] [cursor=pointer]
+  - generic [ref=f67e106]:
+    - generic [ref=f67e107]:
+"Language Preference": |-
+      - text: Language Preference
+      - generic [ref=f67e108]: "*"
+    - generic [ref=f67e109]:
+      - generic [ref=f67e110]: Language Preference
+      - option [selected]
+      - combobox "Language Preference" [ref=f67e111] [cursor=pointer]:
+        - generic [ref=f67e112]: — Make a Selection —
+  - generic [ref=f67e115]:
+    - generic [ref=f67e116]:
+"Do you consent to receive text message communication during your application process?": |-
+      - text: Do you consent to receive text message communication during your application process?
+      - generic [ref=f67e117]: "*"
+    - generic [ref=f67e118]:
+      - generic [ref=f67e119]: Do you consent to receive text message communication during your application process?
+      - option [selected]
+      - combobox "Do you consent to receive text message communication during your application process?" [ref=f67e120] [cursor=pointer]:
+        - generic [ref=f67e121]: — Make a Selection —
+  - generic [ref=f67e124]:
+    - group "Addresses (1)* required." [ref=f67e125]:
+"Home Address": (no match)
+"City": |-
+        - generic [ref=f67e151]: City
+        - generic [ref=f67e152]:
+          - text: "*"
+          - generic [ref=f67e153]: required.
+      - textbox "City" [ref=f67e155]: San Jose
+    - generic [ref=f67e156]:
+      - generic [ref=f67e157]:
+        - generic [ref=f67e158]: Zip/Postal Code
+  --
+    - generic [ref=f67e335]: City
+    - textbox "City" [ref=f67e337]: Bengaluru
+  - generic [ref=f67e338]:
+    - generic [ref=f67e340]: State
+    - generic [ref=f67e341]:
+  --
+    - generic [ref=f67e405]: City
+    - textbox "City" [ref=f67e407]: Bengaluru
+  - generic [ref=f67e408]:
+    - generic [ref=f67e410]: State
+    - generic [ref=f67e411]:
+  --
+      - generic [ref=f67e478]: City
+      - textbox "City" [ref=f67e480]: San Francisco
+    - generic [ref=f67e481]:
+      - generic [ref=f67e483]: State
+      - generic [ref=f67e484]:
+"Zip/Postal Code": |-
+      - generic [ref=f67e158]: Zip/Postal Code
+      - generic [ref=f67e159]:
+        - text: "*"
+        - generic [ref=f67e160]: required.
+    - textbox "Zip/Postal Code" [ref=f67e162]
+  - generic [ref=f67e163]:
+    - generic [ref=f67e164]:
+      - generic [ref=f67e165]: Country
+"Country": |-
+      - generic [ref=f67e165]: Country
+      - generic [ref=f67e166]:
+        - text: "*"
+        - generic [ref=f67e167]: required.
+  --
+      - combobox "Country" [ref=f67e169] [cursor=pointer]:
+        - generic [ref=f67e170]: United States
+  - generic [ref=f67e173]:
+    - generic [ref=f67e174]:
+"State/Province": |-
+              - generic [ref=f67e175]: State/Province
+              - generic [ref=f67e176]:
+                - text: "*"
+                - generic [ref=f67e177]: required.
+  --
+              - combobox "State/Province" [ref=f67e179] [cursor=pointer]:
+                - generic [ref=f67e180]: California
+        - button "Add More (Addresses)" [ref=f67e186] [cursor=pointer]
+  - group [ref=f67e187]:

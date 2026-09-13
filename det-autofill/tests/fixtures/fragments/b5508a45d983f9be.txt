@@ -1,0 +1,5 @@
+"Yes": |-
+        - option "Yes" [ref=f94e507]
+        - option "No" [ref=f94e508]
+      - textbox
+  - paragraph [ref=f94e474]: This field is required.

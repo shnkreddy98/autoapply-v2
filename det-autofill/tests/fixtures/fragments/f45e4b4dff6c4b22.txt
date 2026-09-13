@@ -1,0 +1,13 @@
+"*First name:": |-
+  - generic [ref=e393]: "*First name:"
+  - generic [ref=e394]:
+    - textbox "*First name:" [active] [ref=e395]:
+      - /placeholder: First name
+      - text: Jane Quinn
+    - generic [ref=e431]: Please enter valid first name
+"Middle name:": |-
+    - generic [ref=e398]: "Middle name:"
+    - textbox "Middle name:" [ref=e400]:
+      - /placeholder: Middle name
+  - generic [ref=e401]:
+    - generic [ref=e402]: "*Last name:"

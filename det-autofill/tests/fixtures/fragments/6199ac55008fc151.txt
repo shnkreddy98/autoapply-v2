@@ -1,0 +1,19 @@
+"Computer Science": |-
+      - option "Computer Science" [selected]
+      - combobox "Major" [ref=e244] [cursor=pointer]:
+        - generic [ref=e245]: Computer Science
+  - generic [ref=e248]:
+    - generic [ref=e250]: Did You Graduate?
+    - combobox "Did You Graduate?" [ref=e252]:
+  --
+            - option "Computer Science" [ref=e623] [cursor=pointer]
+            - option "Electrical Eng." [ref=e624] [cursor=pointer]
+            - option "Electronic Eng." [ref=e625] [cursor=pointer]
+            - option "English" [ref=e626] [cursor=pointer]
+  --
+        - option "Computer Science" [selected]
+        - combobox "Major" [ref=e309] [cursor=pointer]:
+          - generic [ref=e310]: Computer Science
+    - generic [ref=e313]:
+      - generic [ref=e315]: Did You Graduate?
+      - combobox "Did You Graduate?" [ref=e317]:

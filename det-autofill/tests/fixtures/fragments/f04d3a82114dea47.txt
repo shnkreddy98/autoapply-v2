@@ -1,0 +1,78 @@
+"Gender": |-
+      - paragraph [ref=e193]: We are committed to equal employment opportunity for all employees in all matters of employment (such as hiring, promotion, transfer, training, layoff, compensation, fringe benefits and termination), regardless of ethnicity/race, religion, national origin, age, gender, or any other status protected by law.
+    - paragraph
+    - generic [ref=e194]:
+      - paragraph [ref=e195]:
+  --
+    - text: Gender
+    - generic [ref=e223]: .
+    - generic [ref=e224]: Required
+  - combobox "1. Gender . Required" [ref=e226]:
+    - option "Not Specified" [selected]
+    - option "Male"
+    - option "Female"
+"Ethnicity": |-
+      - paragraph [ref=e193]: We are committed to equal employment opportunity for all employees in all matters of employment (such as hiring, promotion, transfer, training, layoff, compensation, fringe benefits and termination), regardless of ethnicity/race, religion, national origin, age, gender, or any other status protected by law.
+    - paragraph
+    - generic [ref=e194]:
+      - paragraph [ref=e195]:
+  --
+    - text: Ethnicity
+    - generic [ref=e231]: .
+    - generic [ref=e232]: Required
+  - combobox "2. Ethnicity . Required" [ref=e234]:
+    - option "Not Specified" [selected]
+    - option "Hispanic or Latino"
+    - option "Not Hispanic or Latino"
+"Race": |-
+      - paragraph [ref=e193]: We are committed to equal employment opportunity for all employees in all matters of employment (such as hiring, promotion, transfer, training, layoff, compensation, fringe benefits and termination), regardless of ethnicity/race, religion, national origin, age, gender, or any other status protected by law.
+    - paragraph
+    - generic [ref=e194]:
+      - paragraph [ref=e195]:
+  --
+        - text: Hispanic means a person of Cuban, Mexican, Puerto Rican, South or Central American or other Spanish culture or origin, regardless of race.
+      - paragraph [ref=e197]
+    - paragraph
+    - generic [ref=e198]:
+  --
+        - strong [ref=e200]: WHAT IS YOUR RACE?
+      - paragraph [ref=e201]:
+        - strong [ref=e202]: "American Indian or Alaskan Native:"
+        - text: A person having origins in any of the original peoples of North and South America (including Central America) and who maintains cultural identification through tribal affiliation or community recognition.
+  --
+        - strong [ref=e211]: "Two or More Races:"
+        - text: All persons who identify with more than one of the above five races.
+      - paragraph [ref=e212]
+    - paragraph
+    - generic [ref=e213]:
+  --
+    - text: Race
+    - generic [ref=e239]: .
+    - generic [ref=e240]: Required
+  - combobox "3. Race . Required" [ref=e242]:
+    - option "Not Specified" [selected]
+    - option "American Indian or Alaska Native"
+    - option "Asian"
+  --
+    - option "Two or More Races"
+    - option "I do not wish to provide this information"
+  - generic "This field is mandatory" [ref=e243]:
+    - generic [ref=e244]: "4."
+"Are you a veteran?": |-
+    - text: Are you a veteran?
+    - generic [ref=e247]: .
+    - generic [ref=e248]: Required
+  - combobox "4. Are you a veteran? . Required" [ref=e250]:
+    - option "Not Specified" [selected]
+    - option "Yes"
+    - option "No"
+"Save and Continue": |-
+      - button "Save and Continue" [ref=e163] [cursor=pointer]
+      - button "Save as Draft" [ref=e164] [cursor=pointer]
+      - button "Quit" [ref=e165] [cursor=pointer]
+  - generic [ref=e166]:
+  --
+    - button "Save and Continue" [ref=e255] [cursor=pointer]
+    - button "Save as Draft" [ref=e256] [cursor=pointer]
+    - button "Quit" [ref=e257] [cursor=pointer]
+  - link "Privacy Agreement" [ref=e266] [cursor=pointer]:

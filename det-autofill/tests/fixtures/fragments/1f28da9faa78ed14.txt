@@ -1,0 +1,20 @@
+"San Jose, California, United States": |-
+  - option "San Jose, California, United States" [selected] [ref=e281] [cursor=pointer]
+  - option "San Jose, Camarines Sur, Philippines" [ref=e282] [cursor=pointer]
+  - option "San José, Caldas, Colombia" [ref=e283] [cursor=pointer]
+  - option "San José, Catamarca, Argentina" [ref=e284] [cursor=pointer]
+"Will you now or in the future require sponsorship": |-
+  - generic [ref=e218]: Will you now or in the future require sponsorship for employment visa status (e.g., H-1B, etc.)*
+  - generic [ref=e219]:
+    - button [ref=e267] [cursor=pointer]: "Yes"
+    - button [ref=e268] [cursor=pointer]: "No"
+"Are you available to attend an in-person interview": |-
+  - generic [ref=e223]: Are you available to attend an in-person interview if requested as part of the hiring process?*
+  - generic [ref=e224]:
+    - button [ref=e269] [cursor=pointer]: "Yes"
+    - button [ref=e270] [cursor=pointer]: "No"
+"We conduct thorough background checks": |-
+  - generic [ref=e228]: We conduct thorough background checks as part of our hiring process. By selecting “Yes,” you acknowledge and consent to this verification if you advance in the process*
+  - generic [ref=e229]:
+    - button [ref=e271] [cursor=pointer]: "Yes"
+    - button [ref=e272] [cursor=pointer]: "No"

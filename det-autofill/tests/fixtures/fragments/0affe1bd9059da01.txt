@@ -1,0 +1,117 @@
+"Job Title*": |-
+    - generic [ref=e722]: Job Title*
+    - textbox "Job Title" [ref=e725]: Founding Engineer
+  - generic [ref=e726]:
+    - generic [ref=e728]: Company*
+    - textbox "Company" [ref=e731]: AirFold
+  - generic [ref=e732]:
+  --
+    - generic [ref=e806]: Job Title*
+    - textbox "Job Title" [ref=e809]: Data Engineer
+  - generic [ref=e810]:
+    - generic [ref=e812]: Company*
+    - textbox "Company" [ref=e815]: Kantar
+  - generic [ref=e816]:
+  --
+    - generic [ref=e890]: Job Title*
+    - textbox "Job Title" [ref=e893]: Data Engineer
+  - generic [ref=e894]:
+    - generic [ref=e896]: Company*
+    - textbox "Company" [ref=e899]: The Sparks Foundation
+  - generic [ref=e900]:
+"Company*": |-
+    - generic [ref=e728]: Company*
+    - textbox "Company" [ref=e731]: AirFold
+  - generic [ref=e732]:
+    - generic [ref=e733]: Location
+    - textbox "Location" [ref=e736]: San Francisco California
+  - generic [ref=e737]:
+  --
+    - generic [ref=e812]: Company*
+    - textbox "Company" [ref=e815]: Kantar
+  - generic [ref=e816]:
+    - generic [ref=e817]: Location
+    - textbox "Location" [ref=e820]: Bengaluru India
+  - generic [ref=e821]:
+  --
+    - generic [ref=e896]: Company*
+    - textbox "Company" [ref=e899]: The Sparks Foundation
+  - generic [ref=e900]:
+    - generic [ref=e901]: Location
+    - textbox "Location" [ref=e904]: Bengaluru India
+  - generic [ref=e905]:
+"School or University*": |-
+    - generic [ref=e981]: School or University*
+    - textbox "School or University" [ref=e984]: San Jose State University
+  - generic [ref=e985]:
+    - generic [ref=e987]: Degree*
+    - button "Degree Masters of Arts or Science or Business Administration Required" [ref=e1199]: Masters of Arts or Science or Business Administration
+  - generic [ref=e992]:
+  --
+    - generic [ref=e1023]: School or University*
+    - textbox "School or University" [ref=e1026]: Visvesvaraya Technological University
+  - generic [ref=e1027]:
+    - generic [ref=e1029]: Degree*
+    - button "Degree Bachelors of Arts or Science Required" [ref=e1219]: Bachelors of Arts or Science
+  - generic [ref=e1034]:
+"Degree*": |-
+    - generic [ref=e987]: Degree*
+    - button "Degree Masters of Arts or Science or Business Administration Required" [ref=e1199]: Masters of Arts or Science or Business Administration
+  - generic [ref=e992]:
+    - generic [ref=e994]:
+      - generic [ref=e995]: Field of Study
+      - generic [ref=e1001]:
+  --
+    - generic [ref=e1029]: Degree*
+    - button "Degree Bachelors of Arts or Science Required" [ref=e1219]: Bachelors of Arts or Science
+  - generic [ref=e1034]:
+    - generic [ref=e1036]:
+      - generic [ref=e1037]: Field of Study
+      - generic [ref=e1043] [cursor=pointer]:
+"Field of Study": |-
+            - generic [ref=e995]: Field of Study
+            - generic [ref=e1001]:
+              - textbox "Field of Study" [ref=e1002]:
+                - /placeholder: Search
+                - text: Data Analytics
+              - generic [ref=e1003]: Expanded
+          - button "The field will alphabetically return the first 100 results and can also return specified matches." [ref=e1007] [cursor=pointer]
+    - group "Education 2" [ref=e1011]:
+  --
+            - generic [ref=e1037]: Field of Study
+            - generic [ref=e1043] [cursor=pointer]:
+              - textbox "Field of Study" [ref=e1044]:
+                - /placeholder: Search
+              - generic [ref=e1045]: 0 items selected
+          - button "The field will alphabetically return the first 100 results and can also return specified matches." [ref=e1049] [cursor=pointer]
+    - button "Add Another" [ref=e1056] [cursor=pointer]
+  - group "Languages" [ref=e1058]:
+"URL*": |-
+        - generic [ref=e1147]: URL*
+        - textbox "URL" [ref=e1150]: https://linkedin.com/in/janedoe
+    - group "Websites 2" [ref=e1151]:
+      - generic [ref=e1152]:
+        - heading "Websites 2" [level=5] [ref=e1153]
+        - button "Delete" [ref=e1154] [cursor=pointer]: Delete
+  --
+        - generic [ref=e1163]: URL*
+        - textbox "URL" [ref=e1166]: https://github.com/shnkreddy98
+    - button "Add Another" [ref=e1170] [cursor=pointer]
+  - group "Social Network URLs" [ref=e1172]:
+    - heading "Social Network URLs" [level=4] [ref=e1173]
+    - generic [ref=e1175]:
+"Please provide your LinkedIn profile": |-
+                - generic [ref=e1176]: Please provide your LinkedIn profile
+                - textbox "Please provide your LinkedIn profile" [ref=e1179]: https://linkedin.com/in/janedoe
+        - generic [ref=e326]:
+          - button "Back" [ref=e503] [cursor=pointer]
+          - button "Save and Continue" [ref=e504] [cursor=pointer]
+  - generic [ref=e33]:
+    - heading "Follow Us" [level=4] [ref=e34]
+"Save and Continue": |-
+          - button "Save and Continue" [ref=e504] [cursor=pointer]
+  - generic [ref=e33]:
+    - heading "Follow Us" [level=4] [ref=e34]
+    - list [ref=e35]:
+      - listitem [ref=e36] [cursor=pointer]:
+        - link "X" [ref=e37]:

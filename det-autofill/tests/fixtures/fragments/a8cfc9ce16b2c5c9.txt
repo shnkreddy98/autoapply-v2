@@ -1,0 +1,17 @@
+"Accept": |-
+      - paragraph [ref=e7]: This website uses cookies to improve your web experience. By clicking Accept, you agree to the use of cookies.
+      - generic [ref=e8]:
+        - button "Deny" [ref=e9] [cursor=pointer]
+        - button "Accept" [ref=e10] [cursor=pointer]
+  - link "SugarAI logo" [ref=e13] [cursor=pointer]:
+    - /url: https://jobs.lever.co/sugarcrm
+    - img "SugarAI logo" [ref=e14]
+"ATTACH RESUME/CV": |-
+      - link "ATTACH RESUME/CV Resume/CV ✱" [ref=e35] [cursor=pointer]:
+        - /url: "#"
+        - img [ref=e36]
+        - generic [ref=e38]: ATTACH RESUME/CV
+        - button "Resume/CV ✱ ATTACH RESUME/CV" [ref=e39]
+  - listitem [ref=e40]:
+    - generic [ref=e41]:
+      - generic [ref=e42]:

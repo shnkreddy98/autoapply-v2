@@ -1,0 +1,105 @@
+"Have you previously worked for our Organization": |-
+  - group "Have you previously worked for our Organization (including all entities such as Charles River, SSGA)?" [ref=e438]:
+    - generic [ref=e441]: Have you previously worked for our Organization (including all entities such as Charles River, SSGA)?*
+    - generic "Have you previously worked for our Organization (including all entities such as Charles River, SSGA)?" [ref=e444]:
+      - generic [ref=e445]:
+        - radio "Yes" [ref=e447] [cursor=pointer]
+        - generic [ref=e448]: "Yes"
+"First Name": |-
+    - generic [ref=e468]: First Name*
+    - textbox "First Name" [ref=e471]: Jane
+  - generic [ref=e472]:
+    - generic [ref=e474]: Last Name*
+    - textbox "Last Name" [ref=e477]: Doe
+"Last Name": |-
+        - generic [ref=e474]: Last Name*
+        - textbox "Last Name" [ref=e477]: Doe
+  - group "Address" [ref=e479]:
+    - heading "Address" [level=4] [ref=e480]
+    - generic [ref=e481]:
+"Address Line 1": |-
+    - generic [ref=e484]: Address Line 1*
+    - textbox "Address Line 1" [ref=e487]
+  - generic [ref=e488]:
+    - generic [ref=e489]: Address Line 2
+    - textbox "Address Line 2" [ref=e492]
+"City": |-
+    - generic [ref=e495]: City*
+    - textbox "City" [ref=e498]: San Jose
+  - generic [ref=e499]:
+    - generic [ref=e501]: State*
+    - button "State California Required" [ref=e505]: California
+"State": |-
+  - Page URL: https://statestreet.wd1.myworkdayjobs.com/en-US/global/job/Quincy%2C-Massachusetts/Data-Engineer-Senior-Associate_R-793105-1/apply/autofillWithResume
+  ### Snapshot
+  ```yaml
+  - generic [ref=e4]:
+  --
+            - /url: http://www.statestreet.com/about/careers/regional-privacy-notices.html
+            - generic [ref=e25]: LEARN MORE
+      - generic [ref=e26]:
+        - button "Decline" [ref=e29] [cursor=pointer]
+  --
+          - /url: https://careers.statestreet.com
+          - img "careers home" [ref=e42]
+        - generic [ref=e43]:
+          - heading [level=1]
+  --
+                  - button "Country United States of America Required" [ref=e461]: United States of America
+              - group "Name" [ref=e463]:
+                - heading "Name" [level=4] [ref=e464]
+                - generic [ref=e465]:
+  --
+                    - generic [ref=e501]: State*
+                    - button "State California Required" [ref=e505]: California
+                  - generic [ref=e506]:
+                    - generic [ref=e508]: Postal Code*
+                    - textbox "Postal Code" [ref=e511]
+  --
+                        - generic [ref=e543]: 1 item selected, United States of America (+1)
+                      - listbox "items selected" [ref=e545]:
+                        - option "United States of America (+1), press delete to clear value." [ref=e546]:
+                          - paragraph [ref=e551]: United States of America (+1)
+                  - generic [ref=e555]:
+                    - generic [ref=e557]: Phone Number*
+                    - textbox "Phone Number" [ref=e560]: (555) 010-0199
+  --
+            - /url: https://www.facebook.com/StateStreetCorp/
+        - listitem [ref=e76] [cursor=pointer]:
+          - link "LinkedIn" [ref=e77]:
+            - /url: https://www.linkedin.com/company-beta/1767/
+  --
+            - /url: https://www.glassdoor.com/Overview/Working-at-State-Street-EI_IE1911.11,23.htm
+        - listitem [ref=e87] [cursor=pointer]:
+          - link "YouTube" [ref=e88]:
+            - /url: https://www.youtube.com/channel/UCzU2eZuL65c6C0ZxL4A8KIg
+  --
+            - /url: https://twitter.com/statestreet
+      - link "State Street Privacy Notice" [ref=e100] [cursor=pointer]:
+        - /url: https://careers.statestreet.com/global/en/privacy-notices-and-important-information
+      - generic [ref=e101]:
+        - img [ref=e105]
+        - generic [ref=e125]: © 2026 Workday, Inc. All rights reserved.
+"Postal Code": |-
+    - generic [ref=e508]: Postal Code*
+    - textbox "Postal Code" [ref=e511]
+  - generic [ref=e512]:
+    - generic [ref=e513]: County
+    - textbox "County" [ref=e516]
+"Phone Device Type": |-
+    - generic [ref=e529]: Phone Device Type*
+    - button "Phone Device Type Select One Required" [ref=e533]: Select One
+  - generic [ref=e534]:
+    - generic [ref=e536]: Country Phone Code*
+    - generic [ref=e541] [cursor=pointer]:
+"Phone Number": |-
+    - generic [ref=e557]: Phone Number*
+    - textbox "Phone Number" [ref=e560]: (555) 010-0199
+  - generic [ref=e561]:
+    - generic [ref=e562]: Phone Extension
+    - textbox "Phone Extension" [ref=e565]
+"Save and Continue": |-
+          - button "Save and Continue" [ref=e569] [cursor=pointer]
+  - generic [ref=e68]:
+    - heading "Follow Us" [level=4] [ref=e69]
+    - list [ref=e70]:

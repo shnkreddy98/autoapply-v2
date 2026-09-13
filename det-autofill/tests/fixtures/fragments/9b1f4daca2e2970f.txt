@@ -1,0 +1,35 @@
+"Veteran Status": |-
+    - emphasis [ref=f103e87]: Butterfly Network is an equal opportunity employer. Regardless of race, traits associated with race, color, ancestry, religion, gender, national origin, sexual orientation, age, citizenship, marital status, disability or Veteran status. All your information will be kept confidential according to EEO guidelines.
+  - paragraph [ref=f103e88]:
+    - emphasis [ref=f103e89]: "Butterfly requires security adherence responsibilities from all employees. These include: adhering to all company security policies and procedures, utilize provided company assets securely, and complete all required security awareness training programs. Safeguarding company data and systems from unauthorized access, modification, or destruction, contributing to the overall security posture of the organization. Immediately reporting any suspected or actual security incidents, including phishing attempts, malware infections, or unauthorized access, following the established incident response procedure"
+  - paragraph [ref=f103e90]: "#LI-KG"
+  --
+      - generic [ref=f103e368]: Veteran Status
+      - generic [ref=f103e369]:
+        - log [ref=f103e371]
+        - generic [ref=f103e373]:
+  --
+            - combobox "Veteran Status" [ref=f103e377]
+          - button "Toggle flyout" [ref=f103e379] [cursor=pointer]:
+            - img [ref=f103e380]
+    - separator [ref=f103e382]
+"Hispanic/Latino": |-
+    - generic [ref=f103e344]: Are you Hispanic/Latino?
+    - generic [ref=f103e345]:
+      - log [ref=f103e347]
+      - generic [ref=f103e349]:
+  --
+          - combobox "Are you Hispanic/Latino?" [ref=f103e353]
+        - button "Toggle flyout" [ref=f103e355] [cursor=pointer]:
+          - img [ref=f103e356]
+  - link "Race & Ethnicity Definitions" [ref=f103e358] [cursor=pointer]:
+"Disability Status": |-
+  - generic [ref=f103e425]: Disability Status
+  - generic [ref=f103e426]:
+    - log [ref=f103e428]: 3 results available.Use Up and Down to choose options, press Enter to select the currently focused option, press Escape to exit the menu, press Tab to select the option and exit the menu.
+    - generic [ref=f103e430]:
+  --
+        - combobox "Disability Status" [expanded] [active] [ref=f103e434]
+      - button "Toggle flyout" [ref=f103e436] [cursor=pointer]:
+        - img [ref=f103e437]
+    - listbox [ref=f103e478]:

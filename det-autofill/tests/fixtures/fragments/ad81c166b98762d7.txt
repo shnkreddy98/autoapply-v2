@@ -1,0 +1,8 @@
+"when will you be available to start?": |-
+    - generic [ref=e2119]: If offered the position, when will you be available to start?
+    - text: "*"
+  - generic [ref=e2123] [cursor=pointer]:
+    - combobox "If offered the position, when will you be available to start? *" [ref=e2126]
+    - generic:
+      - img:
+        - img

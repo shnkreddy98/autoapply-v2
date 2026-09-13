@@ -1,0 +1,5 @@
+"2nd Location Preference . Required Value": |-
+      - textbox "The field \"2nd Location Preference\" is mandatory. 2nd Location Preference . Required Value" [ref=e279]
+      - button "Search" [ref=e280] [cursor=pointer]:
+        - generic [ref=e283]: Search
+  - generic [ref=e284]:

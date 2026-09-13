@@ -1,0 +1,12 @@
+"Address Line 1": |-
+    - generic [ref=e397]: Address Line 1*
+    - textbox "Address Line 1" [ref=e400]
+  - generic [ref=e401]:
+    - generic [ref=e402]: Address Line 2
+    - textbox "Address Line 2" [ref=e405]
+"Postal Code": |-
+    - generic [ref=e421]: Postal Code*
+    - textbox "Postal Code" [ref=e424]
+  - generic [ref=e425]:
+    - generic [ref=e426]: County
+    - textbox "County" [ref=e429]

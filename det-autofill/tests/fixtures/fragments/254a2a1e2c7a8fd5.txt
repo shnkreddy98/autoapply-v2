@@ -1,0 +1,28 @@
+"How many years of experience do you have in Azure, Google Cloud Platform or AWS?*": |-
+    - generic [ref=e387]: How many years of experience do you have in Azure, Google Cloud Platform or AWS?*
+    - combobox "How many years of experience do you have in Azure, Google Cloud Platform or AWS?*" [ref=e388]:
+      - option "-- No answer --"
+      - option "None"
+      - option "1-2"
+      - option "2-3"
+      - option "4+" [selected]
+  - generic [ref=e389]:
+    - generic [ref=e390]: For the question above, is your experience in Azure, GCP or AWS? If the answer above was no experience please enter N/A in the box.*
+    - textbox "For the question above, is your experience in Azure, GCP or AWS? If the answer above was no experience please enter N/A in the box.*" [active] [ref=e391]: AWS, GCP
+  - generic [ref=e392]:
+    - generic [ref=e393]: Please describe an end to end data pipeline you have built.*
+    - textbox "Please describe an end to end data pipeline you have built.*" [ref=e394]
+  - generic [ref=e395]:
+    - generic [ref=e396]: The following questions are entirely optional.
+    - generic [ref=e397]:
+      - text: To comply with government Equal Employment Opportunity and/or Affirmative Action reporting regulations, we are requesting (but NOT requiring) that you enter this personal data. This information will not be used in connection with any employment decisions, and will be used solely as permitted by state and federal law. Your voluntary cooperation would be appreciated.
+      - link "Learn more" [ref=e398] [cursor=pointer]:
+        - /url: https://www.eeoc.gov/employees-job-applicants
+      - text: .
+  - generic [ref=e402]:
+    - text: Gender
+"Minimum of 3 years of experience in data engineering*": (no match)
+"Experience with Python, SQL, and/or Java*": (no match)
+"salary expectation": (no match)
+"Website/Portfolio URL": (no match)
+"Please describe a complex data pipeline": (no match)

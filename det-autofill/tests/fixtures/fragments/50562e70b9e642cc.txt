@@ -1,0 +1,6 @@
+"Masters": |-
+      - option "Masters" [ref=e2204]:
+        - generic [ref=e2205]: Masters
+      - option "Doctorate" [ref=e2206]:
+        - generic [ref=e2207]: Doctorate
+  ```

@@ -1,0 +1,7 @@
+"Fargo or engaged as a contingent resource?": |-
+  - group "Have you previously been employed by Wells Fargo or engaged as a contingent resource?" [ref=e508]:
+    - generic [ref=e511]: Have you previously been employed by Wells Fargo or engaged as a contingent resource?*
+    - generic "Have you previously been employed by Wells Fargo or engaged as a contingent resource?" [ref=e514]:
+      - generic [ref=e515]:
+        - radio "Yes" [ref=e517] [cursor=pointer]
+        - generic [ref=e518]: "Yes"

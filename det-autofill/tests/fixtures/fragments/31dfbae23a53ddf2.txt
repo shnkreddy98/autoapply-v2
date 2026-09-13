@@ -1,0 +1,10 @@
+"Mobile Phone Number *": |-
+      - generic "Mobile Phone Number" [ref=e796]: Mobile Phone Number *
+      - generic [ref=e797]:
+        - generic [ref=e800]:
+          - generic "Country dialing code" [ref=e801] [cursor=pointer]:
+  --
+          - textbox "Mobile Phone Number *" [invalid] [ref=e805]: (555) 010-0199
+        - alert [ref=e1921]:
+          - generic [ref=e1922]: Mobile Phone number is invalid
+  - generic [ref=e806]:

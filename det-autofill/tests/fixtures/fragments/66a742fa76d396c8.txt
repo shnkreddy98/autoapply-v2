@@ -1,0 +1,6 @@
+"Not in the NYC metropolitan area, but willing to relocate": |-
+    - radio "Not in the NYC metropolitan area, but willing to relocate" [ref=e187] [cursor=pointer]
+    - generic [ref=e188]: Not in the NYC metropolitan area, but willing to relocate
+  - generic [ref=e189]:
+    - radio "Not in the NYC metropolitan area, and not willing to relocate" [ref=e192] [cursor=pointer]
+    - generic [ref=e193]: Not in the NYC metropolitan area, and not willing to relocate

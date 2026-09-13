@@ -1,0 +1,47 @@
+"First Name": |-
+      - generic [ref=e281]: Please be advised that the mobile number or email associated with this verification process is intended to be unique to you. Any subsequent use of the same mobile number or email by another user will become associated with the new user and override the first name, last name, work history, education, or skills associated with your profile.
+  - generic [ref=e282]:
+    - generic [ref=e283]:
+      - generic [ref=e284]:
+        - generic [ref=e286]: First Name*
+        - textbox "First Name" [ref=e287]
+        - alert
+      - generic [ref=e288]:
+        - generic [ref=e290]: Last Name*
+"Last Name": |-
+      - generic [ref=e281]: Please be advised that the mobile number or email associated with this verification process is intended to be unique to you. Any subsequent use of the same mobile number or email by another user will become associated with the new user and override the first name, last name, work history, education, or skills associated with your profile.
+  - generic [ref=e282]:
+    - generic [ref=e283]:
+      - generic [ref=e284]:
+  --
+        - generic [ref=e290]: Last Name*
+        - textbox "Last Name" [ref=e291]
+        - alert
+    - generic [ref=e292]:
+      - generic [ref=e294]: Email*
+"Email": |-
+      - generic [ref=e281]: Please be advised that the mobile number or email associated with this verification process is intended to be unique to you. Any subsequent use of the same mobile number or email by another user will become associated with the new user and override the first name, last name, work history, education, or skills associated with your profile.
+  - generic [ref=e282]:
+    - generic [ref=e283]:
+      - generic [ref=e284]:
+  --
+      - generic [ref=e294]: Email*
+      - textbox "Email" [ref=e295]:
+        - /placeholder: ""
+      - alert
+    - generic [ref=e296]:
+"Mobile Number": |-
+      - generic [ref=e281]: Please be advised that the mobile number or email associated with this verification process is intended to be unique to you. Any subsequent use of the same mobile number or email by another user will become associated with the new user and override the first name, last name, work history, education, or skills associated with your profile.
+  - generic [ref=e282]:
+    - generic [ref=e283]:
+      - generic [ref=e284]:
+  --
+      - generic [ref=e298]: Mobile Number*
+      - group [ref=e299]:
+        - generic [ref=e301]:
+          - generic [ref=e303]:
+  --
+          - textbox "Mobile Number" [ref=e311]:
+            - /placeholder: Phone Number
+            - text: "+1"
+      - generic [ref=e312]: Country code was added to the field.

@@ -1,0 +1,26 @@
+"What's your highest level of education completed?": |-
+  - generic [ref=e351]: What's your highest level of education completed?*
+  - combobox "What's your highest level of education completed?*" [ref=e352]:
+    - option "No answer" [selected]
+    - option "GED or Equivalent"
+    - option "High School"
+    - option "Some College"
+    - option "College - Associates"
+    - option "College - Bachelor of Arts"
+    - option "College - Bachelor of Fine Arts"
+    - option "College - Bachelor of Science"
+    - option "College - Master of Arts"
+    - option "College - Master of Science"
+"How many years of experience do you have in Databricks?": |-
+    - generic [ref=e381]: How many years of experience do you have in Databricks?*
+    - combobox "How many years of experience do you have in Databricks?*" [ref=e382]:
+      - option "-- No answer --" [selected]
+      - option "None"
+      - option "1-2"
+      - option "3-4"
+      - option "4+"
+  - generic [ref=e383]:
+    - generic [ref=e384]: How many years of experience do you have in Apache Spark?*
+    - combobox "How many years of experience do you have in Apache Spark?*" [ref=e385]:
+      - option "-- No answer --" [selected]
+      - option "None"

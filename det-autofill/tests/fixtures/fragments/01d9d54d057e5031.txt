@@ -1,0 +1,20 @@
+"Confirm Mobile Phone*": |-
+    - generic [ref=e43]: "Confirm Mobile Phone*:"
+    - textbox [active] [ref=e45]: "5550100199"
+  - generic [ref=e47]:
+    - generic [ref=e48]: "First Name*:"
+"First Name*": |-
+    - generic [ref=e48]: "First Name*:"
+    - textbox [ref=e50]
+  - generic [ref=e53]:
+    - generic [ref=e54]: "Last Name*:"
+"Last Name*": |-
+    - generic [ref=e54]: "Last Name*:"
+    - textbox [ref=e56]
+  - generic [ref=e59]:
+    - generic [ref=e60]: "ZIP Code*:"
+"ZIP Code*": |-
+    - generic [ref=e60]: "ZIP Code*:"
+    - textbox [ref=e62]
+  - generic [ref=e65]:
+    - text: I will need a sponsorship visa from Rose International, now or in the future, to work as a W2 employee.

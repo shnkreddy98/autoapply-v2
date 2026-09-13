@@ -1,0 +1,51 @@
+"Email": |-
+    - generic [ref=e196]: Email Address*
+    - textbox "Email Address" [ref=e199]
+  - generic [ref=e201]:
+    - generic [ref=e203]: Password*
+    - textbox "Password" [ref=e206]
+"Password": |-
+      - paragraph [ref=e185]: "Password Requirements:"
+      - list [ref=e186]:
+        - listitem [ref=e187]: A minimum of 8 characters
+        - listitem [ref=e188]: An alphabetic character
+  --
+        - generic [ref=e203]: Password*
+        - textbox "Password" [ref=e206]
+      - generic [ref=e207]:
+        - generic [ref=e209]: Verify New Password*
+        - textbox "Verify New Password" [ref=e212]
+      - paragraph [ref=e218]:
+        - text: Cencora respects your privacy. By submitting your personal data you expressly agree that Cencora and its third-party vendors may collect, process, and transfer your personal data as described in our
+        - link "Applicant Privacy Statement" [ref=e219] [cursor=pointer]:
+  --
+    - button "Forgot your password?" [ref=e238] [cursor=pointer]
+  - generic:
+    - generic:
+      - generic [ref=e239]: Enter website. This input is for robots only, do not enter if you're human.
+"Sign In": |-
+      - generic [ref=e118]: Create Account/Sign In
+    - listitem [ref=e119]:
+      - generic: step 2 of 8
+      - generic [ref=e125]: Autofill with Resume
+  --
+      - button "Sign In" [ref=e236] [cursor=pointer]
+    - button "Forgot your password?" [ref=e238] [cursor=pointer]
+  - generic:
+    - generic:
+"Create Account": |-
+    - generic [ref=e118]: Create Account/Sign In
+  - listitem [ref=e119]:
+    - generic: step 2 of 8
+    - generic [ref=e125]: Autofill with Resume
+  --
+  - heading "Create Account" [active] [level=3] [ref=e181]
+  - generic [ref=e184]:
+    - paragraph [ref=e185]: "Password Requirements:"
+    - list [ref=e186]:
+  --
+      - button "Create Account" [ref=e233] [cursor=pointer]
+      - button [ref=e234] [cursor=pointer]: Create Account
+  - generic [ref=e235]:
+    - text: Already have an account?
+    - button "Sign In" [ref=e236] [cursor=pointer]

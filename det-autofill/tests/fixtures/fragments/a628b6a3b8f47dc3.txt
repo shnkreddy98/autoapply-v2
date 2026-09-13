@@ -1,0 +1,6 @@
+"Job Board": |-
+  - option "Job Board not checked" [ref=e684]:
+    - generic [ref=e686] [cursor=pointer]: Job Board
+  - option "Military/Veteran Source not checked" [ref=e691]:
+    - generic [ref=e693] [cursor=pointer]: Military/Veteran Source
+  - option "Organizational Affiliation not checked" [ref=e698]:

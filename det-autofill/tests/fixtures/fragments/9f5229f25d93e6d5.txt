@@ -1,0 +1,41 @@
+"International Institute of Information Technology, Bangalore (IIIT-B)": |-
+  - row "International Institute of Information Technology, Bangalore (IIIT-B) College and University Karnataka" [ref=e154]:
+    - cell "International Institute of Information Technology, Bangalore (IIIT-B)" [ref=e155]:
+      - radio "International Institute of Information Technology, Bangalore (IIIT-B)" [ref=e156]
+    - cell "International Institute of Information Technology, Bangalore (IIIT-B)" [ref=e157]:
+      - generic [ref=e158]: International Institute of Information Technology, Bangalore (IIIT-B)
+    - cell "College and University" [ref=e160]: College and University
+    - cell "Karnataka" [ref=e162]: Karnataka
+  - row "International Institute of Information Technology, Hyderabad (IIIT) College and University Telangana" [ref=e164]:
+"Select": |-
+  - Page Title: Institution Selector
+  ### Snapshot
+  ```yaml
+  - generic [active] [ref=e1]:
+  --
+              - button "Select" [ref=e41] [cursor=pointer]
+              - button "Cancel" [ref=e42] [cursor=pointer]
+            - table [ref=e43]:
+              - rowgroup [ref=e44]:
+                - row "Institution Selector This page allows you to select an institution from the list of available institutions. Refine by Keyword is IIIT Refresh Institutions 1-8 out of 8 << < 1 > >> This page allows you to select an institution from the list of available institutions. 1-8 out of 8 << < 1 > >>" [ref=e45]:
+                  - cell "Institution Selector This page allows you to select an institution from the list of available institutions. Refine by Keyword is IIIT Refresh Institutions 1-8 out of 8 << < 1 > >> This page allows you to select an institution from the list of available institutions. 1-8 out of 8 << < 1 > >>" [ref=e46]:
+                    - heading "Institution Selector" [level=1] [ref=e47]: Institution Selector
+                    - generic [ref=e49]: This page allows you to select an institution from the list of available institutions.
+                    - generic [ref=e50]:
+                      - generic [ref=e51]:
+                        - generic [ref=e52]: Refine by
+  --
+                          - option "Keyword" [selected]
+                      - generic [ref=e55]:
+                        - generic [ref=e56]: is
+                        - textbox "is" [ref=e57]: IIIT
+  --
+                      - table "This page allows you to select an institution from the list of available institutions." [ref=e89]:
+                        - rowgroup [ref=e90]:
+                          - row "Name ↑ Type ↑ Location ↑" [ref=e91]:
+                            - columnheader [ref=e92]
+  --
+              - button "Select" [ref=e221] [cursor=pointer]
+              - button "Cancel" [ref=e222] [cursor=pointer]
+      - generic [ref=e223]:
+        - link "LinkedIn" [ref=e224] [cursor=pointer]:

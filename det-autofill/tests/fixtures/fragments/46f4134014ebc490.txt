@@ -1,0 +1,89 @@
+"valid driver's license?": |-
+  - generic [ref=e195]: Do you have a valid driver's license?*
+  - combobox "Do you have a valid driver's license?*" [ref=e196]:
+    - option "No answer" [selected]
+    - option "Yes"
+    - option "No"
+"18 years of age or older?": |-
+  - generic [ref=e201]: Are you 18 years of age or older?*
+  - combobox "Are you 18 years of age or older?*" [ref=e202]:
+    - option "No answer" [selected]
+    - option "Yes"
+    - option "No"
+"languages do you speak fluently?": |-
+    - generic [ref=e207]: What languages do you speak fluently?*
+    - textbox "What languages do you speak fluently?*" [ref=e208]
+  - generic [ref=e209]:
+    - generic [ref=e210]: Desired salary*
+    - textbox "Desired salary*" [ref=e211]
+"Desired salary": |-
+    - generic [ref=e210]: Desired salary*
+    - textbox "Desired salary*" [ref=e211]
+  - generic [ref=e212]:
+    - generic [ref=e213]: Earliest start date?*
+    - textbox "Earliest start date?*" [ref=e214]
+"Earliest start date?": |-
+    - generic [ref=e213]: Earliest start date?*
+    - textbox "Earliest start date?*" [ref=e214]
+  - generic [ref=e215]:
+    - generic [ref=e216]: Can you work weekends?
+    - combobox "Can you work weekends?" [ref=e217]:
+"work weekends?": |-
+  - generic [ref=e216]: Can you work weekends?
+  - combobox "Can you work weekends?" [ref=e217]:
+    - option "No answer" [selected]
+    - option "Yes"
+    - option "No"
+"work evenings?": |-
+  - generic [ref=e219]: Can you work evenings?
+  - combobox "Can you work evenings?" [ref=e220]:
+    - option "No answer" [selected]
+    - option "Yes"
+    - option "No"
+"convicted of a felony?": |-
+  - generic [ref=e222]: Have you ever been convicted of a felony?*
+  - combobox "Have you ever been convicted of a felony?*" [ref=e223]:
+    - option "No answer" [selected]
+    - option "No"
+    - option "Yes"
+"References": |-
+    - generic [ref=e225]: "References: Please enter names and contact information:*"
+    - 'textbox "References: Please enter names and contact information:*" [ref=e226]'
+  - generic [ref=e227]:
+    - generic [ref=e228]: How many years of professional Data Engineering experience do you have?*
+    - generic [ref=e229]:
+"professional Data Engineering experience": |-
+  - listitem [ref=e76]: 4-6 years of professional Data Engineering experience.
+  - listitem [ref=e77]: Hands-on experience developing production solutions using Azure Databricks.
+  - listitem [ref=e78]: Strong experience with SQL Server and advanced T-SQL development.
+  - listitem [ref=e79]: Strong Python programming experience.
+  --
+    - generic [ref=e228]: How many years of professional Data Engineering experience do you have?*
+    - generic [ref=e229]:
+      - checkbox "Less than 4 years" [ref=e230]
+      - text: Less than 4 years
+"work onsite Monday-Friday": |-
+  - generic [ref=e238]: Are you able to work onsite Monday-Friday at our Houston corporate office (77070)?*
+  - generic [ref=e239]:
+    - checkbox "Yes" [ref=e240]
+    - text: "Yes"
+"sponsorship": |-
+    - listitem [ref=e143]: Must be authorized to work in the United States without current or future employer sponsorship.
+    - listitem [ref=e144]: This position is fully onsite in Houston, Texas.
+    - listitem [ref=e145]: Candidates requiring remote, hybrid, or relocation assistance will not be considered.
+  - separator [ref=e146]
+  --
+      - generic [ref=e244]: If hired today, would you require current or future employer sponsorship to work in the United States?*
+      - generic [ref=e245]:
+        - checkbox "Yes" [ref=e246]
+        - text: "Yes"
+"located in the Greater Houston area": |-
+  - generic [ref=e250]: Are you currently located in the Greater Houston area or planning to relocate before your start date?*
+  - generic [ref=e251]:
+    - checkbox "Currently local" [ref=e252]
+    - text: Currently local
+"communicating technical concepts clearly in fluent spoken and written English": |-
+  - generic [ref=e258]: Are you comfortable communicating technical concepts clearly in fluent spoken and written English with business stakeholders and executive leadership?*
+  - generic [ref=e259]:
+    - checkbox "Yes" [ref=e260]
+    - text: "Yes"

@@ -1,0 +1,53 @@
+"No": |-
+  - Page URL: https://job-boards.greenhouse.io/altaresourcetechnologiesinc/jobs/4225005009
+  - Page Title: Job Application for Junior Data Engineer at Alta Resource Technologies, Inc.
+  - Console: 4 errors, 0 warnings
+  ### Snapshot
+  ```yaml
+  --
+        - img "Alta Resource Technologies, Inc. Logo" [ref=e5]
+        - generic [ref=e6]:
+          - link "Back to jobs" [ref=e7] [cursor=pointer]:
+            - /url: https://job-boards.greenhouse.io/altaresourcetechnologiesinc
+            - img [ref=e8]
+            - text: Back to jobs
+          - generic [ref=e12]: New
+  --
+              - paragraph [ref=e25]: Alta Resource Technologies (Alta) is a next generation mining company that uses synthetic biology to separate critical minerals from conventional and unconventional resources, including e-waste. Founded in 2023, the company is expanding its team in Boulder, CO. The exponential growth of new tech industries, as well as the information technology sector, are driving historic growth in mineral demand and stressing existing supply streams. Meeting new demand, diversifying the supply chain, and producing minerals in a more sustainable manner requires the rapid development, deployment and scaling of new technologies. This mineral challenge represents a historic opportunity for technology development and value creation. Alta is proud to be at the vanguard of this mega trend.
+            - generic [ref=e26]:
+              - paragraph [ref=e27]:
+                - strong [ref=e28]: About the Role
+  --
+                - strong [ref=e59]: "Preferred, But Not Required:"
+              - list [ref=e60]:
+                - listitem [ref=e61]: Experience with data quality frameworks and testing (e.g., dbt tests, Great Expectations)
+                - listitem [ref=e62]: Exposure to streaming technologies such as Apache Kafka or Spark Streaming
+                - listitem [ref=e63]: Familiarity with version control (Git) and CI/CD practices for data workflows
+                - listitem [ref=e64]: Knowledge of data cataloging tools or metadata standards (e.g., OpenMetadata, DataHub, Dublin Core)
+                - listitem [ref=e65]: Experience working in Agile/Scrum environments
+              - paragraph [ref=e66]:
+                - strong [ref=e67]: "What We Offer:"
+  --
+                - listitem [ref=e70]: A mission-driven, high-trust team operating at the intersection of innovation, national security, and sustainability.
+                - listitem [ref=e71]:
+                  - text: "Competitive compensation and benefits package:"
+                  - list [ref=e72]:
+  --
+                - emphasis [ref=e83]: Alta Resource Technologies is an equal opportunity employer committed to building a workforce that reflects the diversity of the communities we serve. We believe that varied perspectives, experiences, and backgrounds strengthen our team and drive better outcomes for our clients and partners.
+              - paragraph [ref=e84]:
+                - emphasis [ref=e85]: We welcome and encourage applications from all qualified individuals regardless of race, color, religion, gender, sexual orientation, gender identity, national origin, age, disability, veteran status, or any other characteristic protected by law. Our hiring decisions are based solely on qualifications, merit, and the needs of the business. Alta participates in e-Verify for all positions.
+              - paragraph [ref=e86]:
+                - emphasis [ref=e87]: If you require accommodations at any point in the hiring process, please let your recruiter know.
+              - paragraph [ref=e88]:
+                - emphasis [ref=e89]:
+                  - text: For information about Alta's privacy practices, see our
+  --
+              - button "Add another" [ref=e238] [cursor=pointer]
+            - generic [ref=e239]:
+              - separator [ref=e240]
+              - generic [ref=e243]:
+  --
+                    - option "No" [ref=e305]
+                  - textbox
+            - button "Submit application" [ref=e269] [cursor=pointer]
+    - contentinfo [ref=e270]:

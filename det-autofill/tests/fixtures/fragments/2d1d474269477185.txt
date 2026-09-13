@@ -1,0 +1,12 @@
+"Yes": |-
+    - radio "Yes" [checked] [ref=e1729]
+    - generic [ref=e1731]: "Yes"
+  - generic [ref=e1733] [cursor=pointer]:
+    - radio "No" [ref=e1735]
+    - generic [ref=e1737]: "No"
+"Next": |-
+        - button "Next" [active] [ref=e1751] [cursor=pointer]:
+          - generic [ref=e744]: Next
+  - iframe [ref=e748]:
+    - generic [ref=f115e6]:
+      - text: protected by

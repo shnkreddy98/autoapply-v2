@@ -1,0 +1,10 @@
+"Without Resume": |-
+    - paragraph [ref=e119]: Choose a method from the options below to submit your information. If you'd like to enter it manually, choose "Without Resume."
+  - article [ref=e120]:
+    - list [ref=e122]:
+      - listitem [ref=e123]:
+  --
+        - button "Without Resume" [ref=e127] [cursor=pointer]
+        - generic [ref=e128]: Upload CV later
+      - listitem [ref=e129]:
+        - button "From Device" [ref=e130] [cursor=pointer]

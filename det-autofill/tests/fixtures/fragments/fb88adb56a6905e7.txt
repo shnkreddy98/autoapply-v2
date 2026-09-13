@@ -1,0 +1,16 @@
+"indicate your current U.S. immigration status/visa": |-
+    - generic [ref=e274]: "If you answered yes to the above question, and you are currently located in the U.S., please indicate your current U.S. immigration status/visa and type of sponsorship required (if known):"
+    - textbox "If you answered yes to the above question, and you are currently located in the U.S., please indicate your current U.S. immigration status/visa and type of sponsorship required (if known):" [ref=e275]
+  - generic [ref=e278]:
+    - generic [ref=e279]: Are you able and willing to work out of our San Francisco office 3 days/week? *
+    - generic [ref=e280]:
+"work out of our San Francisco office": |-
+  - generic [ref=e279]: Are you able and willing to work out of our San Francisco office 3 days/week? *
+  - generic [ref=e280]:
+    - log [ref=e282]
+    - generic [ref=e284]:
+  --
+        - combobox "Are you able and willing to work out of our San Francisco office 3 days/week?" [ref=e288]
+      - button "Toggle flyout" [ref=e290] [cursor=pointer]:
+        - img [ref=e291]
+    - textbox

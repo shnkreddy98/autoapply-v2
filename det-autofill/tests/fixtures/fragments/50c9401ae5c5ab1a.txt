@@ -1,0 +1,12 @@
+"Upload": (no match)
+"resume": |-
+  - Page URL: https://spectrumhealth.wd5.myworkdayjobs.com/en-US/corewellhealthcareers/job/Grand-Rapids%2C-MI/Data-Engineer_R216652-1/apply/autofillWithResume
+  - Page Title: Sign In
+  ### Snapshot
+  ```yaml
+  --
+              - generic [ref=e122]: Autofill with Resume
+            - listitem [ref=e123]:
+              - generic: step 3 of 8
+              - generic [ref=e129]: My Information
+"drop": (no match)

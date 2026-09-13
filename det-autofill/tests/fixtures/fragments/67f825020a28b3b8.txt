@@ -1,0 +1,6 @@
+"I am NOT a protected veteran.": |-
+    - radio "I am NOT a protected veteran." [ref=e283]
+    - generic [ref=e284] [cursor=pointer]: I am NOT a protected veteran.
+  - listitem [ref=e285]:
+    - radio "I do not wish to self-identify." [ref=e286]
+    - generic [ref=e287] [cursor=pointer]: I do not wish to self-identify.

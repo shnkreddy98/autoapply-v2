@@ -1,0 +1,13 @@
+"Select One Required": |-
+    - button "Select One Required" [ref=e2158]: Select One
+  - group "Please detail the duration of your notice period?*" [ref=e2160]:
+    - paragraph [ref=e2164]: Please detail the duration of your notice period?*
+    - button "Select One Required" [ref=e2168]: Select One
+  - group "What is your salary expectation for the role you are applying to?*" [ref=e2170]:
+    - paragraph [ref=e2174]: What is your salary expectation for the role you are applying to?*
+    - textbox [ref=e2177]
+  --
+    - button "Select One Required" [ref=e2187]: Select One
+  - group "Please select if you have worked previously for any of the following companies (multi select):" [ref=e2189]:
+    - paragraph [ref=e2193]: "Please select if you have worked previously for any of the following companies (multi select):"
+    - group [ref=e2197]:

@@ -1,0 +1,18 @@
+"Yes": |-
+      - option "Yes" [ref=e1315]:
+        - generic [ref=e1316]: "Yes"
+      - option "No" [ref=e1317]:
+        - generic [ref=e1318]: "No"
+  ```
+"No": |-
+                  - group "Have you ever been convicted of a felony and/or serious misdemeanor?*" [ref=e1281]:
+                    - paragraph [ref=e1285]: Have you ever been convicted of a felony and/or serious misdemeanor?*
+                    - button "Select One Required" [ref=e1289]: Select One
+            - generic [ref=e180]:
+              - button "Back" [ref=e391] [cursor=pointer]
+              - button "Save and Continue" [ref=e392] [cursor=pointer]
+      - generic [ref=e54]:
+  --
+      - option "No" [ref=e1317]:
+        - generic [ref=e1318]: "No"
+  ```

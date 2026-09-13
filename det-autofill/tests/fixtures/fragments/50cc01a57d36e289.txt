@@ -1,0 +1,5 @@
+"Save and continue": |-
+                - button "Save and continue" [ref=e1607] [cursor=pointer]
+                - button "Cancel" [ref=e1608] [cursor=pointer]
+          - text:   * * * * * * * *                       *                         * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *  * *   * 
+  - contentinfo [ref=e691]:

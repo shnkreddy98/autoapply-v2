@@ -1,0 +1,21 @@
+"United States of America": |-
+      - generic [ref=e626]: WoodmenLife Home Office, 1700 Farnam Street, Omaha, Nebraska, United States of America•
+      - generic [ref=e628]: Omaha, NE, USA
+  - generic [ref=e629]:
+    - generic [ref=e639]:
+  --
+                        - option "🇺🇸 +1 United States of America" [ref=e2014]:
+                          - generic [ref=e2016]: 🇺🇸 +1 United States of America
+                        - option "🇻🇨 +1 Saint Vincent and the Grenadines" [ref=e2017]:
+                          - generic [ref=e2019]: 🇻🇨 +1 Saint Vincent and the Grenadines
+                        - option "🇻🇬 +1 Virgin Islands, British" [ref=e2020]:
+  --
+                    - generic "United States of America" [ref=e1323]
+                  - generic:
+                    - img:
+                      - img
+  --
+                    - generic "United States of America" [ref=e1784]
+                  - generic:
+                    - img:
+                      - img

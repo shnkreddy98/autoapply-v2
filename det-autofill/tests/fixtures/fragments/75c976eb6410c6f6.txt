@@ -1,0 +1,24 @@
+"Day": |-
+  - generic [ref=e314]: Day
+  - combobox "Day" [ref=e315]:
+    - option "Day" [selected]
+    - option "1"
+    - option "2"
+    - option "3"
+"Year": |-
+  - generic [ref=e317]: Year
+  - combobox "Year" [ref=e318]:
+    - option "Year" [selected]
+    - option "2026"
+    - option "2027"
+    - option "2028"
+"Save and Continue": |-
+          - button "Save and Continue" [ref=e110] [cursor=pointer]
+          - button "Save as Draft" [ref=e111] [cursor=pointer]
+          - button "Quit" [ref=e112] [cursor=pointer]
+      - generic [ref=e113]:
+  --
+        - button "Save and Continue" [ref=e323] [cursor=pointer]
+        - button "Save as Draft" [ref=e324] [cursor=pointer]
+        - button "Quit" [ref=e325] [cursor=pointer]
+  - generic [ref=e327]:

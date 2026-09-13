@@ -1,0 +1,10 @@
+"Python not checked": |-
+  - option "Python not checked" [selected] [ref=e1419]:
+    - generic [ref=e1420] [cursor=pointer]:
+      - checkbox [ref=e1425]
+      - generic [ref=e1426]: Python
+  --
+  - option "Maya Python not checked" [ref=e1499]:
+    - generic [ref=e1500] [cursor=pointer]:
+      - checkbox [ref=e1505]
+      - generic [ref=e1506]: Maya Python

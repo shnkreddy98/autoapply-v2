@@ -1,0 +1,11 @@
+"San Jose State University": |-
+      - log [ref=f94e210]: 1 result available for search term San Jose State University.Use Up and Down to choose options, press Enter to select the currently focused option, press Escape to exit the menu, press Tab to select the option and exit the menu.
+      - generic [ref=f94e212]:
+        - combobox "School" [expanded] [active] [ref=f94e216]: San Jose State University
+        - button "Toggle flyout" [ref=f94e218] [cursor=pointer]:
+          - img [ref=f94e219]
+      - listbox [ref=f94e588]:
+        - option "San Jose State University" [ref=f94e694]
+  - generic [ref=f94e222]:
+    - generic [ref=f94e223]: Degree
+    - generic [ref=f94e224]:

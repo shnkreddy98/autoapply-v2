@@ -1,0 +1,30 @@
+"Are you legally authorized to work in the United States?": |-
+  - generic [ref=e582]: Are you legally authorized to work in the United States?*
+  - generic [ref=e583]:
+    - log [ref=e585]
+    - generic [ref=e587]:
+  --
+        - combobox "Are you legally authorized to work in the United States?" [ref=e591]
+      - button "Toggle flyout" [ref=e593] [cursor=pointer]:
+        - img [ref=e594]
+    - textbox
+"Will you now, or in the future, require work visa sponsorship?": |-
+  - generic [ref=e599]: Will you now, or in the future, require work visa sponsorship? *
+  - generic [ref=e600]:
+    - log [ref=e602]
+    - generic [ref=e604]:
+  --
+        - combobox "Will you now, or in the future, require work visa sponsorship?" [ref=e608]
+      - button "Toggle flyout" [ref=e610] [cursor=pointer]:
+        - img [ref=e611]
+    - textbox
+"Were you referred to this position by an existing Age of Learning employee?": |-
+  - generic [ref=e619]: Were you referred to this position by an existing Age of Learning employee? *
+  - generic [ref=e620]:
+    - log [ref=e622]
+    - generic [ref=e624]:
+  --
+        - combobox "Were you referred to this position by an existing Age of Learning employee?" [ref=e628]
+      - button "Toggle flyout" [ref=e630] [cursor=pointer]:
+        - img [ref=e631]
+    - textbox

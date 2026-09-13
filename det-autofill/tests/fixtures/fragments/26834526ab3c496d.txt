@@ -1,0 +1,30 @@
+"Email Address": |-
+    - generic [ref=e346]: Email Address*
+    - textbox "Email Address" [active] [ref=e349]: jane.doe@example.com
+  - generic [ref=e351]:
+    - generic [ref=e353]: Password*
+    - textbox "Password" [ref=e356]
+  - generic [ref=e361]:
+    - button "Submit" [ref=e362] [cursor=pointer]
+"Password": |-
+                - generic [ref=e353]: Password*
+                - textbox "Password" [ref=e356]
+              - generic [ref=e361]:
+                - button "Submit" [ref=e362] [cursor=pointer]
+                - button [ref=e363] [cursor=pointer]: Sign In
+            - generic [ref=e364]:
+              - text: Don't have an account yet?
+  --
+            - button "Forgot your password?" [ref=e367] [cursor=pointer]
+        - generic:
+          - generic:
+            - generic [ref=e368]: Enter website. This input is for robots only, do not enter if you're human.
+            - textbox "Enter website. This input is for robots only, do not enter if you're human." [ref=e369]
+  ```
+"Submit": |-
+      - button "Submit" [ref=e362] [cursor=pointer]
+      - button [ref=e363] [cursor=pointer]: Sign In
+  - generic [ref=e364]:
+    - text: Don't have an account yet?
+    - button "Create Account" [ref=e365] [cursor=pointer]
+  - button "Forgot your password?" [ref=e367] [cursor=pointer]

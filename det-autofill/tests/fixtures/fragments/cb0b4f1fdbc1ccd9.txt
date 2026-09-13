@@ -1,0 +1,6 @@
+"I agree to the Candidate acknowledgement": |-
+      - checkbox "I agree to the Candidate acknowledgement" [ref=e2348]
+      - generic [ref=e2350]: I agree to the Candidate acknowledgement
+  - generic [ref=e780]:
+    - generic [ref=e781]:
+      - button "Cancel" [ref=e782] [cursor=pointer]:

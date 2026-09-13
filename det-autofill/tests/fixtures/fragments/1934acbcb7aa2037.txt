@@ -1,0 +1,5 @@
+"Create an account": |-
+  - link "Create an account" [ref=e73] [cursor=pointer]:
+    - /url: /career?company=Grainger&site=&lang=en_US&requestParams=x%2bXH%2byBSc4Hv%2bxCEZcMjNLK6IjV42m1R3UpCQRCeNFNTSom6C3wC8QeF6KIk0AwDQeymi9N4zqRr%0a2%2b5xd0wj6InqIaInqMteILroHVotSKmFXZaZb7%2bf2YdPiFkD2SHeYH7MQuaP0Q5OMYzF356edy5e%0aohCpw7rUGNTRZ22akOSBITvQMpiGB4cwW%2blJwp0Zt1MMq1YwjQ1snbfmrBJVP99hI1R%2f%2f%2fH17P1j%0a964RAZiGDr7CAAwJXwpS3AzGI7iH6Hc9MdQ9W5pQjyHroyEynqt4hkaeWAKulculSnWPIWW1L1DW%0awlDeLgJilygtub573xYhSaFosb%2fdEuqKgqbKneherq0tO6uWYcPXxpBEFlp5y%2bbSxUKlUi5Vq%2bVi%0aoeCQwjYVk1Eou5bMf%2bJxX1%2bHqH6NRVzEhkEnRWbpmvxJq%2bwiz%2bYsPLpowp8bcnOeDXZJipTX7TBk%0a3OdMatJxHRlCpuCvn%2bkX9sWQJQ%3d%3d&login_ns=register&career_ns=job%5fapplication&career_job_req_id=332569&jobPipeline=LinkedIn%20Job%20Postings&clientId=jobs2web&_s.crb=j7H3MI4rupyW4wi2sfLTjBtdBCXlv%2bSVEmbE8iqolK4%3d
+  - text: to apply for our career opportunities.
+  - paragraph

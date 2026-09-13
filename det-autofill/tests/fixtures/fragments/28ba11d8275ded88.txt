@@ -1,0 +1,5 @@
+"San Jose, CA, USA": |-
+        - combobox "Location (City)" [active] [invalid] [ref=e187]: San Jose, CA, USA
+        - textbox
+    - paragraph [ref=e553]: Please enter your location
+  - button "Locate me" [ref=e188] [cursor=pointer]

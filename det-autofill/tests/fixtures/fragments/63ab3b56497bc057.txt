@@ -1,0 +1,5 @@
+"Will you now, or in the future, require sponsorship for employment visa status (e.g. H-1B visa status)? (required)": |-
+  - combobox "Will you now, or in the future, require sponsorship for employment visa status (e.g. H-1B visa status)? (required)" [ref=e120] [cursor=pointer]:
+    - option "Please select"
+    - option "Yes" [selected]
+    - option "No"

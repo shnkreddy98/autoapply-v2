@@ -1,0 +1,15 @@
+"I am not a protected veteran": |-
+        - option "I am not a protected veteran" [ref=e504]
+        - option "I identify as one or more of the classifications of a protected veteran" [ref=e505]
+        - option "I don't wish to answer" [ref=e506]
+  - separator [ref=e321]
+"Disability Status": |-
+    - generic [ref=e364]: Disability Status
+    - generic [ref=e365]:
+      - log [ref=e367]
+      - generic [ref=e369]:
+  --
+          - combobox "Disability Status" [ref=e373]
+        - button "Toggle flyout" [ref=e375] [cursor=pointer]:
+          - img [ref=e376]
+  - paragraph [ref=e379]: "PUBLIC BURDEN STATEMENT: According to the Paperwork Reduction Act of 1995 no persons are required to respond to a collection of information unless such collection displays a valid OMB control number. This survey should take about 5 minutes to complete."

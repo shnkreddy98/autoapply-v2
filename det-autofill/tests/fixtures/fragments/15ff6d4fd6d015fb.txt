@@ -1,0 +1,14 @@
+"Apply for this job": |-
+      - link "Apply for this job" [ref=e41] [cursor=pointer]:
+        - /url: /job/2684071?apply
+        - button "Apply for this job" [ref=e42]
+      - generic [ref=e43]:
+        - generic [ref=e44]:
+          - heading "The Role" [level=2] [ref=e45]
+  --
+      - link "Apply for this job" [ref=e153] [cursor=pointer]:
+        - /url: /job/2684071?apply
+        - button "Apply for this job" [ref=e154]
+  - contentinfo [ref=e155]:
+    - generic [ref=e156]:
+      - generic [ref=e159]:

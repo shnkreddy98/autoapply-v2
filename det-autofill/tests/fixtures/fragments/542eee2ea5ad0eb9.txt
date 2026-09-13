@@ -1,0 +1,34 @@
+"Race": |-
+    - generic [ref=e153]: Fetch is an equal opportunity employer that embraces diversity, inclusion, and respect for all individuals. We do not discriminate on the basis of race, color, religion, gender, gender identity or expression, sexual orientation, age, national origin, marital status, veteran status, disability, or any other characteristic protected by applicable law. Our commitment to inclusivity ensures that everyone is treated with dignity and has the opportunity to succeed based on their talent, skills, and potential.
+    - generic [ref=e155]: Fetch also provides reasonable accommodations to qualified individuals with disabilities or those with sincerely held religious beliefs, as required by law. If you need assistance with the application process or require an accommodation, please contact us at accommodations@fetch.com.
+  - generic [ref=e158]:
+    - generic [ref=e159]:
+  --
+        - generic [ref=e304]: Race
+        - button "Please select" [ref=e396] [cursor=pointer]:
+          - generic [ref=e306]:
+            - text: Please select
+  --
+        - text: Race and ethnicity descriptions
+        - button "Expand" [ref=e397]:
+          - text: Expand
+          - img [ref=e315]
+"Veteran status": |-
+    - generic [ref=e153]: Fetch is an equal opportunity employer that embraces diversity, inclusion, and respect for all individuals. We do not discriminate on the basis of race, color, religion, gender, gender identity or expression, sexual orientation, age, national origin, marital status, veteran status, disability, or any other characteristic protected by applicable law. Our commitment to inclusivity ensures that everyone is treated with dignity and has the opportunity to succeed based on their talent, skills, and potential.
+    - generic [ref=e155]: Fetch also provides reasonable accommodations to qualified individuals with disabilities or those with sincerely held religious beliefs, as required by law. If you need assistance with the application process or require an accommodation, please contact us at accommodations@fetch.com.
+  - generic [ref=e158]:
+    - generic [ref=e159]:
+  --
+      - generic [ref=e318]: Voluntary Self-Identification of Veteran Status
+      - generic [ref=e319]: VEVRAA requires Government contractors to take affirmative action to employ and advance in employment protected veterans. To help us measure the effectiveness of our outreach and recruitment efforts of veterans, we are asking you to tell us if you are a veteran covered by VEVRAA. If you believe that you belong to any of the following categories of protected veterans, please indicate by making the appropriate selection.
+      - generic [ref=e321]:
+        - generic [ref=e322] [cursor=pointer]:
+          - text: Veteran status descriptions
+          - button "Collapse" [ref=e398]:
+            - text: Collapse
+            - img [ref=e325]
+  --
+        - generic [ref=e338]: Veteran status
+        - button "Please select" [ref=e399] [cursor=pointer]:
+          - generic [ref=e340]:
+            - text: Please select

@@ -1,0 +1,36 @@
+"gender identity": |-
+      - text: What is your gender identity? *
+      - generic [ref=e100]: Select an option
+    - generic [ref=e101]:
+      - combobox [ref=e102]
+      - combobox "What is your gender identity?" [ref=e105] [cursor=pointer]:
+        - textbox [ref=e106]
+  - generic [ref=e107]:
+    - generic [ref=e108]:
+"race/ethnicity": |-
+      - text: What is your race/ethnicity? *
+      - generic [ref=e109]: Select an option
+    - generic [ref=e110]:
+      - combobox [ref=e111]
+      - combobox "What is your race/ethnicity?" [ref=e114] [cursor=pointer]:
+        - textbox [ref=e115]
+  - generic [ref=e116]:
+    - generic [ref=e117]:
+"Hispanic": |-
+      - text: Do you identify as Hispanic? *
+      - generic [ref=e118]: Select an option
+    - generic [ref=e119]:
+      - combobox [ref=e120]
+      - combobox "Do you identify as Hispanic?" [ref=e123] [cursor=pointer]:
+        - textbox [ref=e124]
+  - generic [ref=e125]:
+    - generic [ref=e126]:
+"veteran": |-
+      - text: Are you a veteran of the U.S. Armed Forces? *
+      - generic [ref=e127]: Select an option
+    - generic [ref=e128]:
+      - combobox [ref=e129]
+      - combobox "Are you a veteran of the U.S. Armed Forces?" [ref=e132] [cursor=pointer]:
+        - textbox [ref=e133]
+  - group [ref=e135]:
+    - generic [ref=e136]:

@@ -1,0 +1,21 @@
+"Please select the race or ethnicity which most accurately describes how you identify yourself. Select One": |-
+    - button "Please select the race or ethnicity which most accurately describes how you identify yourself. Select One" [ref=e2421]: Select One
+  - generic [ref=e2422]:
+    - generic [ref=e2423]: Please indicate your gender.
+    - button "Please indicate your gender. Select One" [ref=e2427]: Select One
+"Please indicate your gender. Select One": |-
+    - button "Please indicate your gender. Select One" [ref=e2427]: Select One
+  - generic [ref=e2428]:
+    - generic [ref=e2429]: Please indicate your veteran status.
+    - button "Please indicate your veteran status. Select One" [ref=e2433]: Select One
+"Please indicate your veteran status. Select One": |-
+        - button "Please indicate your veteran status. Select One" [ref=e2433]: Select One
+  - group "Terms and Conditions" [ref=e2434]:
+    - heading "Terms and Conditions" [level=4] [ref=e2435]
+    - generic [ref=e2436]:
+"Yes, I have read and consent to the terms and conditions": |-
+            - generic [ref=e2450]: Yes, I have read and consent to the terms and conditions*
+            - checkbox "Yes, I have read and consent to the terms and conditions" [ref=e2455] [cursor=pointer]
+  - generic [ref=e381]:
+    - button "Back" [ref=e568] [cursor=pointer]
+    - button "Save and Continue" [ref=e569] [cursor=pointer]

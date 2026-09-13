@@ -1,0 +1,6 @@
+"I am not a veteran.": |-
+  - option "I am not a veteran." [ref=e2495]:
+    - generic [ref=e2496]: I am not a veteran.
+  - option "I identify as one or more of the classifications of protected veterans listed above." [ref=e2497]:
+    - generic [ref=e2498]: I identify as one or more of the classifications of protected veterans listed above.
+  - option "I identify as a veteran, just not a protected veteran." [ref=e2499]:

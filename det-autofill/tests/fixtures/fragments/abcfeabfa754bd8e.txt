@@ -1,0 +1,28 @@
+"Country of Residence . Required Value": |-
+      - textbox "Country of Residence . Required Value" [ref=e204]: United States
+      - button "Search" [ref=e205] [cursor=pointer]:
+        - generic [ref=e208]: Search
+  - generic [ref=e209]:
+"Search": |-
+    - link "Job Search" [ref=e33] [cursor=pointer]:
+      - /url: "#"
+  - listitem [ref=e34]:
+    - link "My Jobpage" [ref=e35] [cursor=pointer]:
+  --
+                  - button "Search" [ref=e205] [cursor=pointer]:
+                    - generic [ref=e208]: Search
+              - generic [ref=e209]:
+                - generic "The field Zip/Postal Code is mandatory." [ref=e210]:
+                  - text: Zip/Postal Code
+  --
+                  - button "Search" [ref=e256] [cursor=pointer]:
+                    - generic [ref=e259]: Search
+              - group "2nd Location Preference . Required" [ref=e261]:
+                - generic "The field 2nd Location Preference is mandatory." [ref=e265]:
+                  - text: 2nd Location Preference
+  --
+                  - button "Search" [ref=e273] [cursor=pointer]:
+                    - generic [ref=e276]: Search
+              - generic [ref=e277]:
+                - generic [ref=e278]: Industry Preference
+                - combobox "Industry Preference" [ref=e281]:

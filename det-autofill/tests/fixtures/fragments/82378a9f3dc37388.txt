@@ -1,0 +1,28 @@
+"Month": |-
+    - spinbutton "Month" [invalid] [ref=e2008]
+  - generic [ref=e2009]: /
+  - generic [ref=e2010]:
+    - generic [ref=e2011]: DD
+"Day": |-
+  - Page URL: https://spectrumhealth.wd5.myworkdayjobs.com/en-US/corewellhealthcareers/job/Grand-Rapids%2C-MI/Data-Engineer_R216652-1/apply/autofillWithResume
+  - Page Title: Sign In
+  ### Snapshot
+  ```yaml
+  --
+                            - spinbutton "Day" [invalid] [ref=e2012]
+                          - generic [ref=e2013]: /
+                          - generic [ref=e2014]:
+                            - generic [ref=e2015]: YYYY
+  --
+        - generic [ref=e91]: © 2026 Workday, Inc. All rights reserved.
+  ```
+"Year": |-
+          - spinbutton "Year" [invalid] [ref=e2016]
+      - button "Calendar" [ref=e2017] [cursor=pointer]
+  - paragraph [ref=e2108]:
+    - generic [ref=e2109]: "Error:"
+  --
+  - text: We are a federal contractor or subcontractor. The law requires us to provide equal employment opportunity to qualified people with disabilities. We have a goal of having at least 7% of our workers as people with disabilities. The law says we must measure our progress towards this goal. To do this, we must ask applicants and employees if they have a disability or have ever had one. People can become disabled, so we need to ask this question at least every five years. Completing this form is voluntary, and we hope that you will choose to do so. Your answer is confidential. No one who makes hiring decisions will see it. Your decision to complete the form and your answer will not harm you in any way. If you want to learn more about the law or this form, visit the U.S. Department of Labor’s Office of Federal Contract Compliance Programs (OFCCP) website at
+  - link "www.dol.gov/ofccp" [ref=e2026] [cursor=pointer]:
+    - /url: https://www.dol.gov/ofccp
+  - text: .

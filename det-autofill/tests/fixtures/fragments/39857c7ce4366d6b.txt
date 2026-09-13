@@ -1,0 +1,6 @@
+"relatives who work for our company": |-
+  - group "Do you have relatives who work for our company?*" [ref=e1318]:
+    - paragraph [ref=e1322]: Do you have relatives who work for our company?*
+    - button "Select One Required" [ref=e1326]: Select One
+  - group "What is your desired salary range for the position you are applying to?" [ref=e1328]:
+    - paragraph [ref=e1332]: What is your desired salary range for the position you are applying to?

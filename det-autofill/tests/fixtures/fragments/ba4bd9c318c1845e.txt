@@ -1,0 +1,5 @@
+"Are you a protected veteran? (definitions)": |-
+  - radiogroup "Are you a protected veteran? (definitions)" [ref=e885]:
+    - generic:
+      - radio "Yes" [ref=e886]:
+        - generic [ref=e898] [cursor=pointer]: "Yes"

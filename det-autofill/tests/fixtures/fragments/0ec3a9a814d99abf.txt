@@ -1,0 +1,16 @@
+"Create Account": |-
+  - Page Title: Create Account
+  - Console: 0 errors, 1 warnings
+  ### Snapshot
+  ```yaml
+  --
+              - heading "Create Account" [level=3] [ref=e149]
+              - generic [ref=e152]:
+                - paragraph [ref=e153]: "Password Requirements:"
+                - list [ref=e154]:
+  --
+                  - button "Create Account" [ref=e211] [cursor=pointer]
+                  - button [ref=e212] [cursor=pointer]: Create Account
+              - generic [ref=e213]:
+                - text: Already have an account?
+                - button "Sign In" [ref=e214] [cursor=pointer]

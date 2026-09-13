@@ -1,0 +1,31 @@
+"Select One Required": |-
+                - button "Select One Required" [ref=e1309]: Select One
+              - group "Have you held FINRA securities licenses?*" [ref=e1261]:
+                - paragraph [ref=e1265]: Have you held FINRA securities licenses?*
+                - button "Select One Required" [ref=e1269]: Select One
+              - group "Are you a citizen of the United States or an alien authorized for employment in the United States without any restriction to the length of the employment period?*" [ref=e1271]:
+                - paragraph [ref=e1275]: Are you a citizen of the United States or an alien authorized for employment in the United States without any restriction to the length of the employment period?*
+                - button "Select One Required" [ref=e1279]: Select One
+              - group "Have you ever been convicted of a felony and/or serious misdemeanor?*" [ref=e1281]:
+                - paragraph [ref=e1285]: Have you ever been convicted of a felony and/or serious misdemeanor?*
+                - button "Select One Required" [ref=e1289]: Select One
+        - generic [ref=e180]:
+          - button "Back" [ref=e391] [cursor=pointer]
+          - button "Save and Continue" [ref=e392] [cursor=pointer]
+  - generic [ref=e54]:
+    - heading "Follow Us" [level=4] [ref=e55]
+    - list [ref=e56]:
+      - listitem [ref=e57] [cursor=pointer]:
+        - link "LinkedIn" [ref=e58]:
+"Yes": (no match)
+"No": |-
+              - group "Have you ever been convicted of a felony and/or serious misdemeanor?*" [ref=e1281]:
+                - paragraph [ref=e1285]: Have you ever been convicted of a felony and/or serious misdemeanor?*
+                - button "Select One Required" [ref=e1289]: Select One
+        - generic [ref=e180]:
+          - button "Back" [ref=e391] [cursor=pointer]
+          - button "Save and Continue" [ref=e392] [cursor=pointer]
+  - generic [ref=e54]:
+    - heading "Follow Us" [level=4] [ref=e55]
+    - list [ref=e56]:
+      - listitem [ref=e57] [cursor=pointer]:

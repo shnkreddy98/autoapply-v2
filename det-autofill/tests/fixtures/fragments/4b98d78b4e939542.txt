@@ -1,0 +1,6 @@
+"No, I don't have a disability": |-
+        - menuitem "No, I don't have a disability" [ref=e761] [cursor=pointer]:
+          - generic [ref=e764]: No, I don't have a disability
+        - menuitem "Yes, I have a disability (or previously had a disability)" [ref=e765] [cursor=pointer]:
+          - generic [ref=e768]: Yes, I have a disability (or previously had a disability)
+  ```

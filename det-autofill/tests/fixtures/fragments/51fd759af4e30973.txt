@@ -1,0 +1,42 @@
+"Email Address": |-
+    - generic [ref=e300]: Email Address*
+    - textbox "Email Address" [ref=e303]
+  - generic [ref=e305]:
+    - generic [ref=e307]: Password*
+    - textbox "Password" [ref=e310]
+"Password": |-
+      - paragraph [ref=e289]: "Password Requirements:"
+      - list [ref=e290]:
+        - listitem [ref=e291]: An alphabetic character
+        - listitem [ref=e292]: A minimum of 8 characters
+  --
+        - generic [ref=e307]: Password*
+        - textbox "Password" [ref=e310]
+      - generic [ref=e311]:
+        - generic [ref=e313]: Verify New Password*
+        - textbox "Verify New Password" [ref=e316]
+      - generic [ref=e321]:
+        - button "Create Account" [ref=e322] [cursor=pointer]
+        - button [ref=e323] [cursor=pointer]: Create Account
+  --
+    - button "Forgot your password?" [ref=e327] [cursor=pointer]
+  - generic:
+    - generic:
+      - generic [ref=e328]: Enter website. This input is for robots only, do not enter if you're human.
+"Verify New Password": |-
+    - generic [ref=e313]: Verify New Password*
+    - textbox "Verify New Password" [ref=e316]
+  - generic [ref=e321]:
+    - button "Create Account" [ref=e322] [cursor=pointer]
+    - button [ref=e323] [cursor=pointer]: Create Account
+"Create Account": |-
+  - heading "Create Account" [active] [level=3] [ref=e285]
+  - generic [ref=e288]:
+    - paragraph [ref=e289]: "Password Requirements:"
+    - list [ref=e290]:
+  --
+      - button "Create Account" [ref=e322] [cursor=pointer]
+      - button [ref=e323] [cursor=pointer]: Create Account
+  - generic [ref=e324]:
+    - text: Already have an account?
+    - button "Sign In" [ref=e325] [cursor=pointer]

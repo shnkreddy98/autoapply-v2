@@ -1,0 +1,25 @@
+"Please select your gender:*": |-
+    - generic [ref=e2368]: Please select your gender:*
+    - 'button "Please select your gender: Select One Required" [ref=e2372]': Select One
+  - generic [ref=e2373]:
+    - generic [ref=e2375]: Please select your race:*
+"Please select your race:*": |-
+    - generic [ref=e2375]: Please select your race:*
+    - 'button "Please select your race: Select One Required" [ref=e2379]': Select One
+  - generic [ref=e2380]:
+    - generic [ref=e2382]: Please select your veteran status:*
+"Please select your veteran status:*": |-
+        - generic [ref=e2382]: Please select your veteran status:*
+        - 'button "Please select your veteran status: Select One Required" [ref=e2386]': Select One
+  - group "Terms and Conditions" [ref=e2387]:
+    - heading "Terms and Conditions" [level=4] [ref=e2388]
+"Yes, I have read and consent to the terms and conditions*": |-
+            - generic [ref=e2404]: Yes, I have read and consent to the terms and conditions*
+            - checkbox "Yes, I have read and consent to the terms and conditions" [ref=e2409] [cursor=pointer]
+  - generic [ref=e326]:
+    - button "Back" [ref=e503] [cursor=pointer]
+"Save and Continue": |-
+          - button "Save and Continue" [ref=e504] [cursor=pointer]
+  - generic [ref=e33]:
+    - heading "Follow Us" [level=4] [ref=e34]
+    - list [ref=e35]:

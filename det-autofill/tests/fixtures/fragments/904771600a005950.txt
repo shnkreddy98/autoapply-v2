@@ -1,0 +1,23 @@
+"contains": |-
+  - row "Selector - 1st Location Preference This page allows you to select an item from the list of available items. Refine by Keyword contains Americas Refresh Available Entries << < > >> This page allows you to select an item from the list of available items. << < > >>" [ref=e45]:
+    - cell "Selector - 1st Location Preference This page allows you to select an item from the list of available items. Refine by Keyword contains Americas Refresh Available Entries << < > >> This page allows you to select an item from the list of available items. << < > >>" [ref=e46]:
+      - heading "Selector - 1st Location Preference" [level=1] [ref=e47]: Selector - 1st Location Preference
+      - generic [ref=e49]: This page allows you to select an item from the list of available items.
+      - generic [ref=e50]:
+  --
+          - generic [ref=e56]: contains
+          - textbox "contains" [ref=e57]: Americas
+        - button "Refresh" [ref=e58] [cursor=pointer]
+      - generic [ref=e59]:
+        - generic [ref=e60]:
+"Refresh": |-
+  - row "Selector - 1st Location Preference This page allows you to select an item from the list of available items. Refine by Keyword contains Americas Refresh Available Entries << < > >> This page allows you to select an item from the list of available items. << < > >>" [ref=e45]:
+    - cell "Selector - 1st Location Preference This page allows you to select an item from the list of available items. Refine by Keyword contains Americas Refresh Available Entries << < > >> This page allows you to select an item from the list of available items. << < > >>" [ref=e46]:
+      - heading "Selector - 1st Location Preference" [level=1] [ref=e47]: Selector - 1st Location Preference
+      - generic [ref=e49]: This page allows you to select an item from the list of available items.
+      - generic [ref=e50]:
+  --
+        - button "Refresh" [ref=e58] [cursor=pointer]
+      - generic [ref=e59]:
+        - generic [ref=e60]:
+          - link "Available Entries" [active]:

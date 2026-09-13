@@ -1,0 +1,8 @@
+"California": |-
+  - option "California" [ref=e421]:
+    - generic [ref=e422]: California
+  - option "Colorado" [ref=e423]:
+    - generic [ref=e424]: Colorado
+  - option "Connecticut" [ref=e425]:
+    - generic [ref=e426]: Connecticut
+  - option "Delaware" [ref=e427]:

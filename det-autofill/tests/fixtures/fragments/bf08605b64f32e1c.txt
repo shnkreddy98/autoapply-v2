@@ -1,0 +1,15 @@
+"require sponsorship": |-
+          - generic [ref=e2090]: Do you now, or will you in the future, require sponsorship from Franchise World Headquarters in order to obtain, extend, or renew authorization to work in the US?
+        - generic [ref=e2092]:
+          - generic [ref=e2094]:
+            - generic [ref=e2095]: Do you now, or will you in the future, require sponsorship from Franchise World Headquarters in order to obtain, extend, or renew authorization to work in the US?
+            - text: "*"
+          - generic [ref=e2100]:
+            - generic [ref=e2102] [cursor=pointer]:
+              - radio "Yes" [ref=e2104]
+              - generic [ref=e2106]: "Yes"
+            - generic [ref=e2108] [cursor=pointer]:
+              - radio "No" [ref=e2110]
+              - generic [ref=e2112]: "No"
+  - listitem [ref=e2113]:
+    - generic [ref=e2116]:

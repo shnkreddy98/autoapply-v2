@@ -1,0 +1,7 @@
+"How did you hear about us?": |-
+    - text: How did you hear about us?
+    - generic [ref=e155]: "*"
+  - combobox "How did you hear about us?" [ref=e157]:
+    - option "— Make a Selection —" [selected]
+    - option "Agency"
+    - option "Career Fair/Networking Event"

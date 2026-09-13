@@ -1,0 +1,6 @@
+"Upload Resume": |-
+    - button "Upload Resume DOC, DOCX, or PDF (Max file size 6MB)." [ref=e38] [cursor=pointer]:
+      - text: Upload Resume
+      - generic [ref=e39]: DOC, DOCX, or PDF (Max file size 6MB).
+    - emphasis [ref=e40]: DOC, DOCX, or PDF (Max file size 6MB).
+  - generic: Please wait while we prefill your application...

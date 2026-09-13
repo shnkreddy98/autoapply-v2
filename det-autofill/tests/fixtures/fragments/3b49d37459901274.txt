@@ -1,0 +1,5 @@
+"Submit": |-
+        - button "Submit" [ref=e67] [cursor=pointer]
+  - generic [ref=e68]:
+    - link "Application FAQs" [ref=e69] [cursor=pointer]:
+      - /url: https://icims.help/candidate-faq

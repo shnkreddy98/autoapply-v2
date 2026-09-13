@@ -1,0 +1,11 @@
+"Name": |-
+    - generic [ref=e2632]: Name*
+    - textbox "Name" [ref=e2633]: Jane Quinn Doe
+  - generic [ref=e2540]:
+    - generic [ref=e2541]: Employee ID (if applicable)
+    - textbox "Employee ID (if applicable)" [ref=e2544]
+"Save and Continue": |-
+          - button "Save and Continue" [ref=e569] [cursor=pointer]
+  - generic [ref=e68]:
+    - heading "Follow Us" [level=4] [ref=e69]
+    - list [ref=e70]:

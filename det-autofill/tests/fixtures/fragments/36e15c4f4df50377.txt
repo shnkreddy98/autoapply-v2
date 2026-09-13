@@ -1,0 +1,20 @@
+"How did you find this position?": |-
+  - option "How did you find this position?*"
+  - option "Internal Job Application"
+  - option "Job Board" [selected]
+  - option "Tech Community"
+"Select Board": |-
+  - option "Select Board"
+  - option "Dice"
+  - option "foundit India"
+  - option "foundit India TPS (Talent Placement Services)"
+"I am authorized to work in?": |-
+  - option "I am authorized to work in?*" [selected]
+  - option "India"
+  - option "Asia Pacific"
+  - option "Middle East"
+"Are you 18 years or above?": |-
+  - generic [ref=e55]: Are you 18 years or above?*
+  - generic [ref=e57]:
+    - generic [ref=e58]:
+      - radio [ref=e59]

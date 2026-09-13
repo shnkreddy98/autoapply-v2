@@ -1,0 +1,15 @@
+"Submit": |-
+      - button "Submit" [ref=e215] [cursor=pointer]
+      - button [ref=e216] [cursor=pointer]: Sign In
+  - generic [ref=e217]:
+    - text: Don't have an account yet?
+"Create Account": |-
+      - generic [ref=e111]: Create Account/Sign In
+    - listitem [ref=e112]:
+      - generic: step 2 of 8
+      - generic [ref=e118]: Autofill with Resume
+  --
+      - button "Create Account" [ref=e218] [cursor=pointer]
+    - button "Forgot your password?" [ref=e220] [cursor=pointer]
+  - generic:
+    - generic:

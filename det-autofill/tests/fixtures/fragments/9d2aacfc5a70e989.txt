@@ -1,0 +1,10 @@
+"Apply now": |-
+      - link "Apply now »" [ref=e74] [cursor=pointer]:
+        - /url: /talentcommunity/apply/1406304200/?locale=en_US
+    - paragraph [ref=e75]:
+      - strong [ref=e76]: "Date:"
+  --
+    - link "Apply now »" [ref=e184] [cursor=pointer]:
+      - /url: /talentcommunity/apply/1406304200/?locale=en_US
+  - complementary "Find similar jobs" [ref=e186]:
+    - generic [ref=e187]: "Find similar jobs:"

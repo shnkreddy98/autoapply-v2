@@ -1,0 +1,21 @@
+"First name*": |-
+  - generic [ref=e71] [cursor=pointer]: First name*
+  - textbox "First name" [ref=e74]:
+    - /placeholder: ""
+    - text: Jane
+"Confirm your email*": |-
+  - generic [ref=e114] [cursor=pointer]: Confirm your email*
+  - textbox "Confirm your email" [invalid] [ref=e117]:
+    - /placeholder: ""
+  - paragraph [ref=e323]:
+"City*": |-
+  - generic [ref=e365] [cursor=pointer]: City*
+  - textbox "City" [ref=e368]:
+    - /placeholder: ""
+    - text: Redwood City
+"LinkedIn": |-
+  - generic [ref=e228] [cursor=pointer]: LinkedIn
+  - textbox "LinkedIn" [ref=e231]:
+    - /placeholder: ""
+  - generic [ref=e232]:
+    - paragraph

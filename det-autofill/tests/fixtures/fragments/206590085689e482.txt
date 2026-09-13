@@ -1,0 +1,85 @@
+"No": |-
+                - text: Design, scale, and evaluate schemas leveraging AWS-native database services, including Amazon RDS, Aurora (MySQL/PostgreSQL), and NoSQL engines (DynamoDB), ensuring systems adhere strictly to rigorous scalability benchmarks.
+              - listitem [ref=e42]:
+                - strong [ref=e43]: "Database Internals & Systems Analysis:"
+                - text: Execute deep-dive performance forensics into database engine behaviors, memory structures, replication lag, locking mechanisms, and OS/hardware saturation metrics (such as Disk/IO performance) to preemptively address platform degradation.
+  --
+              - listitem [ref=e52]: Bachelor's degree in Computer Science, Information Technology, or a related field.
+              - listitem [ref=e53]: 8+ years of experience in database operations, or a related role with a focus on data platforms, data stores, data operations.
+              - listitem [ref=e54]: Deep experience in AWS RDS, Aurora and NoSQL is a must.
+              - listitem [ref=e55]: Extensive experience with AWS cloud platform and their data-related services.
+              - listitem [ref=e56]: Proficiency in monitoring tools (e.g., Datadog, CloudWatch, DevOps Guru, DB Performance Insights).
+              - listitem [ref=e57]: Proficiency in one or more programming languages (e.g. Python, Java)
+  --
+              - listitem [ref=e61]: Strong understanding of database systems (e.g., SQL, NoSQL) and experience in managing large-scale data infrastructures.
+              - listitem [ref=e62]: Basic knowledge and some hands-on implementation of CI/CD pipelines and DatabaseOps practices.
+              - listitem [ref=e63]: Experience with data governance, compliance, and lifecycle management.
+              - listitem [ref=e64]: Strong problem-solving skills and a proactive approach to identifying and addressing issues.
+              - listitem [ref=e65]: Ability to independently own and execute projects while effectively collaborating with the team to influence and shape the vision of the data engineering organization.
+  --
+            - generic [ref=e89]: The Pay Range for this position is listed. Actual pay will vary based on factors including, but not limited to location, experience, and performance. The range listed is just one component of Crunchyroll’s Total Rewards offerings for employees. Other rewards may include performance bonuses, employer matched retirement savings, time-off programs, and progressive health benefits and perks.
+            - paragraph [ref=e90]: Pay Transparency - San Francisco, CA
+            - paragraph [ref=e91]: $203,400 - $254,200 USD
+          - generic [ref=e92]:
+  --
+            - paragraph [ref=e105]: We are an equal opportunity employer and value diversity at Crunchyroll. Pursuant to applicable law, we do not discriminate on the basis of race, religion, color, national origin, gender, sexual orientation, age, marital status, veteran status, or disability status.
+            - paragraph [ref=e106]: Crunchyroll, LLC is an independently operated joint venture between US-based Sony Pictures Entertainment, and Japan's Aniplex, a subsidiary of Sony Music Entertainment (Japan) Inc., both subsidiaries of Tokyo-based Sony Group Corporation.
+            - paragraph [ref=e107]:
+              - emphasis [ref=e108]: "Questions about Crunchyroll’s hiring process? Please check out our Hiring FAQs:"
+  --
+              - generic [ref=e240]: Are you subject to a non-competition agreement or other agreement that would preclude or restrict your employment with Crunchyroll?*
+              - generic [ref=e241]:
+                - log [ref=e243]
+                - generic [ref=e245]:
+  --
+                    - generic [ref=e469]: "No"
+                    - combobox "Are you subject to a non-competition agreement or other agreement that would preclude or restrict your employment with Crunchyroll?" [ref=e249]
+                  - generic [ref=e250]:
+                    - button "Clear selections" [ref=e471] [cursor=pointer]:
+                      - img [ref=e472]
+  --
+              - generic [ref=e274]: "If you answered yes to the above question, and you are currently located in the U.S., please indicate your current U.S. immigration status/visa and type of sponsorship required (if known):"
+              - textbox "If you answered yes to the above question, and you are currently located in the U.S., please indicate your current U.S. immigration status/visa and type of sponsorship required (if known):" [ref=e275]: H1B sponsorship required
+            - generic [ref=e278]:
+              - generic [ref=e279]: Are you able and willing to work out of our San Francisco office 3 days/week? *
+              - generic [ref=e280]:
+  --
+              - paragraph [ref=e306]: For government reporting purposes, we ask candidates to respond to the below self-identification survey. Completion of the form is entirely voluntary. Whatever your decision, it will not be considered in the hiring process or thereafter. Any information that you do provide will be recorded and maintained in a confidential file.
+              - paragraph [ref=e307]: As set forth in Crunchyroll, LLC’s Equal Employment Opportunity policy, we do not discriminate on the basis of any protected group status under any applicable law.
+            - generic [ref=e310]:
+              - generic [ref=e311]: Gender
+              - generic [ref=e312]:
+  --
+                - generic [ref=e328]: Are you Hispanic/Latino?
+                - generic [ref=e329]:
+                  - log [ref=e331]: 3 results available.Use Up and Down to choose options, press Enter to select the currently focused option, press Escape to exit the menu, press Tab to select the option and exit the menu.
+                  - generic [ref=e333]:
+  --
+                      - combobox "Are you Hispanic/Latino?" [expanded] [active] [ref=e337]
+                    - button "Toggle flyout" [ref=e339] [cursor=pointer]:
+                      - img [ref=e340]
+                  - listbox [ref=e503]:
+  --
+                    - option "No" [ref=e505]
+                    - option "Decline To Self Identify" [ref=e506]
+              - link "Race & Ethnicity Definitions" [ref=e342] [cursor=pointer]:
+                - /url: https://job-boards.cdn.greenhouse.io/docs/2023/RaceEthnicityDefinitions.pdf
+  --
+                - text: Completing this form is voluntary, and we hope that you will choose to do so. Your answer is confidential. No one who makes hiring decisions will see it. Your decision to complete the form and your answer will not harm you in any way. If you want to learn more about the law or this form, visit the U.S. Department of Labor’s Office of Federal Contract Compliance Programs (OFCCP) website at
+                - link "www.dol.gov/ofccp" [ref=e379] [cursor=pointer]:
+                  - /url: https://www.dol.gov/ofccp
+                - text: .
+              - strong [ref=e380]: How do you know if you have a disability?
+              - paragraph [ref=e381]:
+                - text: A disability is a condition that substantially limits one or more of your “major life activities.” If you have or have ever had such a condition, you are a person with a disability.
+                - strong [ref=e382]: "Disabilities include, but are not limited to:"
+              - list [ref=e383]:
+                - listitem [ref=e384]: Alcohol or other substance use disorder (not currently using drugs illegally)
+                - listitem [ref=e385]: Autoimmune disorder, for example, lupus, fibromyalgia, rheumatoid arthritis, HIV/AIDS
+                - listitem [ref=e386]: Blind or low vision
+                - listitem [ref=e387]: Cancer (past or present)
+  --
+            - paragraph [ref=e424]: "PUBLIC BURDEN STATEMENT: According to the Paperwork Reduction Act of 1995 no persons are required to respond to a collection of information unless such collection displays a valid OMB control number. This survey should take about 5 minutes to complete."
+          - button "Submit application" [ref=e426] [cursor=pointer]
+  - contentinfo [ref=e427]:
+    - generic [ref=e428]:

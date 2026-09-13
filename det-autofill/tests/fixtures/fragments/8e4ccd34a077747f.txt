@@ -1,0 +1,52 @@
+"Master's Degree": |-
+    - radio "Master's Degree" [ref=e209]
+    - text: Master's Degree
+  - generic [ref=e211]:
+    - radio "PhD or other doctorate" [ref=e212]
+    - text: PhD or other doctorate
+"Yes": |-
+    - radio "Yes" [ref=e227]
+    - text: "Yes"
+  - generic [ref=e229]:
+    - radio "No" [ref=e230]
+    - text: "No"
+  --
+    - radio "Yes" [ref=e263]
+    - text: "Yes"
+  - generic [ref=e265]:
+    - radio "No" [ref=e266]
+    - text: "No"
+  --
+    - radio "Yes" [ref=e299]
+    - text: "Yes"
+  - generic [ref=e301]:
+    - radio "No" [ref=e302]
+    - text: "No"
+  --
+    - radio "Yes" [ref=e314]
+    - text: "Yes"
+  - generic [ref=e316]:
+    - radio "No" [ref=e317]
+    - text: "No"
+"4-5 years": |-
+    - radio "4-5 years" [ref=e248]
+    - text: 4-5 years
+  - generic [ref=e250]:
+    - radio "6+ years" [ref=e251]
+    - text: 6+ years
+"relocating to the Greater Seattle area": |-
+    - radio "I relocating to the Greater Seattle area" [ref=e281]
+    - text: I relocating to the Greater Seattle area
+  - generic [ref=e283]:
+    - radio "I do not currently reside in the Greater Seattle area but am open to relocating there" [ref=e284]
+    - text: I do not currently reside in the Greater Seattle area but am open to relocating there
+"Save and Continue": |-
+      - button "Save and Continue" [ref=e161] [cursor=pointer]
+      - button "Save as Draft" [ref=e162] [cursor=pointer]
+      - button "Quit" [ref=e163] [cursor=pointer]
+  - generic [ref=e164]:
+  --
+    - button "Save and Continue" [ref=e331] [cursor=pointer]
+    - button "Save as Draft" [ref=e332] [cursor=pointer]
+    - button "Quit" [ref=e333] [cursor=pointer]
+  - link "Privacy Agreement" [ref=e342] [cursor=pointer]:

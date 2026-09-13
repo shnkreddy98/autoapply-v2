@@ -1,0 +1,5 @@
+"Master's Degree": |-
+            - option "Master's Degree" [ref=f94e498]
+            - option "Other" [ref=f94e499]
+    - button "Add another" [ref=f94e237] [cursor=pointer]
+  - generic [ref=f94e238]:

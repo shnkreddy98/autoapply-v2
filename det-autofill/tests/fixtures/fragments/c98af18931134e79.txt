@@ -1,0 +1,6 @@
+"Next": |-
+        - button "Next" [ref=e743] [cursor=pointer]:
+          - generic [ref=e744]: Next
+  - iframe [ref=e748]:
+    - generic [ref=f115e6]:
+      - text: protected by

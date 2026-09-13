@@ -1,0 +1,51 @@
+"Education 1": |-
+  - group "Education 1" [ref=e860]:
+    - heading "Education 1" [level=5] [ref=e862]
+    - generic [ref=e863]:
+      - generic [ref=e864]:
+        - generic [ref=e866]: School or University*
+"Education 2": |-
+  - group "Education 2" [ref=e926]:
+    - generic [ref=e927]:
+      - heading "Education 2" [level=5] [ref=e928]
+      - button "Delete" [ref=e929] [cursor=pointer]: Delete
+    - generic [ref=e935]:
+      - generic [ref=e936]:
+"School or University": |-
+    - generic [ref=e866]: School or University*
+    - textbox "School or University" [ref=e869]: San Jose State University
+  - generic [ref=e870]:
+    - generic [ref=e872]: Degree*
+    - button "Degree Select One Required" [ref=e876]: Select One
+  --
+    - generic [ref=e938]: School or University*
+    - textbox "School or University" [ref=e941]: Visvesvaraya Technological University
+  - generic [ref=e942]:
+    - generic [ref=e944]: Degree*
+    - button "Degree Post-Graduate Diploma Required" [ref=e948]: Post-Graduate Diploma
+"Degree": |-
+    - generic [ref=e872]: Degree*
+    - button "Degree Select One Required" [ref=e876]: Select One
+  - generic [ref=e877]:
+    - generic [ref=e879]:
+      - generic [ref=e880]: Field of Study
+  --
+    - generic [ref=e944]: Degree*
+    - button "Degree Post-Graduate Diploma Required" [ref=e948]: Post-Graduate Diploma
+  - generic [ref=e949]:
+    - generic [ref=e951]:
+      - generic [ref=e952]: Field of Study
+"Field of Study": |-
+    - generic [ref=e880]: Field of Study
+    - generic [ref=e886] [cursor=pointer]:
+      - textbox "Field of Study" [ref=e887]:
+        - /placeholder: Search
+      - generic [ref=e888]: 0 items selected
+  - button "The field will alphabetically return the first 100 results and can also return specified matches." [ref=e892] [cursor=pointer]
+  --
+    - generic [ref=e952]: Field of Study
+    - generic [ref=e958] [cursor=pointer]:
+      - textbox "Field of Study" [ref=e959]:
+        - /placeholder: Search
+      - generic [ref=e960]: 0 items selected
+  - button "The field will alphabetically return the first 100 results and can also return specified matches." [ref=e964] [cursor=pointer]

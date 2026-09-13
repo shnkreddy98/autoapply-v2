@@ -1,0 +1,6 @@
+"Asian / Asian Indian (United States of America)": |-
+  - option "Asian / Asian Indian (United States of America)" [ref=e1907]:
+    - generic [ref=e1908]: Asian / Asian Indian (United States of America)
+  - option "Black or African American (United States of America)" [ref=e1909]:
+    - generic [ref=e1910]: Black or African American (United States of America)
+  - option "Hispanic or Latino (United States of America)" [ref=e1911]:

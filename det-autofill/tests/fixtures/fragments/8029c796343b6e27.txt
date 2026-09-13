@@ -1,0 +1,10 @@
+"Disability Status": |-
+    - generic [ref=f84e618]: Disability Status
+    - generic [ref=f84e619]:
+      - log [ref=f84e621]
+      - generic [ref=f84e623]:
+  --
+          - combobox "Disability Status" [ref=f84e627]
+        - button "Toggle flyout" [ref=f84e629] [cursor=pointer]:
+          - img [ref=f84e630]
+  - paragraph [ref=f84e633]: "PUBLIC BURDEN STATEMENT: According to the Paperwork Reduction Act of 1995 no persons are required to respond to a collection of information unless such collection displays a valid OMB control number. This survey should take about 5 minutes to complete."

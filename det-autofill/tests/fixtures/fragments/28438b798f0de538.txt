@@ -1,0 +1,123 @@
+"Gender": |-
+  - generic [ref=e489]: "Gender :"
+  - combobox "Gender :" [active] [ref=e491]:
+    - option "Select" [selected]
+    - option "Male"
+    - option "Female"
+"Race": |-
+    - generic [ref=e493]: "Race :"
+    - combobox "Race :" [ref=e495]:
+      - option "Select Race" [selected]
+      - option "American Indian or Alaskan Native"
+      - option "Asian"
+      - option "Black or African American"
+  --
+      - option "Two or more races"
+      - option "White"
+  - generic [ref=e496]:
+    - generic [ref=e497]: "Ethnicity :"
+"Ethnicity": |-
+  - generic [ref=e497]: "Ethnicity :"
+  - combobox "Ethnicity :" [ref=e499]:
+    - option "Select Ethnicity" [selected]
+    - option "Hispanic or Latino"
+    - option "Not Hispanic or Latino"
+    - option "Prefer not to answer"
+"Are you currently a military spouse?": |-
+  - generic [ref=e501]: "Are you currently a military spouse? :"
+  - combobox "Are you currently a military spouse? :" [ref=e503]:
+    - option "Select your answer" [selected]
+    - option "N/A"
+    - option "No"
+"Disability": |-
+    - generic [ref=e505]: "Disability :"
+    - combobox "Disability :" [ref=e507]:
+      - option "Select Disability" [selected]
+      - option "No, I Do not Have A Disability, Or A History/Record Of Having A Disability"
+      - option "Prefer not to answer"
+      - option "Yes, I Have A Disability, Or Have A History/Record Of Having A Disability"
+  - generic [ref=e508]:
+    - generic [ref=e509]: "Disability Note :"
+    - textbox "Disability Note :" [ref=e511]:
+      - /placeholder: Enter Disability Note
+  - generic [ref=e512]:
+    - generic [ref=e513]: "Veteran status :"
+    - generic [ref=e515]:
+"*Upload resume": |-
+    - generic [ref=e534]: "*Upload resume :"
+    - generic [ref=e535]:
+      - generic [ref=e538]:
+        - button "*Upload resume :" [ref=e539] [cursor=pointer]
+        - generic [ref=e540]: Browse
+      - text: "(Maximum file size 3 MB, File format: .doc, .docx, .pdf, .rtf)"
+  - generic [ref=e541]:
+"*Have you worked with Mphasis before?": |-
+  - generic [ref=e542]: "*Have you worked with Mphasis before? :"
+  - generic [ref=e543]:
+    - generic [ref=e544] [cursor=pointer]:
+      - radio "No" [ref=e547]
+"*Total experience": |-
+  - generic [ref=e553]: "*Total experience :"
+  - combobox [ref=e555]:
+    - option "Select Year" [selected]
+    - option "0"
+"Relevant experience": |-
+  - generic [ref=e559]: "Relevant experience :"
+  - combobox [ref=e561]:
+    - option "Select Year" [selected]
+    - option "0"
+"*Notice period": |-
+    - generic [ref=e566]: "*Notice period :"
+    - textbox "*Notice period :" [ref=e568]:
+      - /placeholder: Enter Days
+    - generic [ref=e569]: days
+  - generic [ref=e570]:
+"Interested to join Mphasis as": |-
+  - generic [ref=e571]: "Interested to join Mphasis as :"
+  - generic [ref=e572]:
+    - generic [ref=e573] [cursor=pointer]:
+      - radio "Contract" [ref=e576]
+"Primary skills": |-
+  - generic [ref=e582]: "Primary skills :"
+  - list [ref=e584]:
+    - listitem [ref=e585]:
+      - textbox "Enter a skill" [ref=e586]
+"Secondary skills": |-
+  - generic [ref=e588]: "Secondary skills :"
+  - list [ref=e590]:
+    - listitem [ref=e591]:
+      - textbox "Enter skills" [ref=e592]
+"*Competency Area": |-
+  - generic [ref=e594]: "*Competency Area :"
+  - combobox "*Competency Area :" [ref=e596]:
+    - option "Select" [selected]
+    - option "Business Process Services"
+    - option "Consulting"
+"*Current employer": |-
+  - generic [ref=e598]: "*Current employer :"
+  - combobox "*Current employer :" [ref=e600]:
+    - option "Select employer" [selected]
+    - option "Accenture"
+    - option "AIG"
+"Address": |-
+    - generic [ref=e602]: "Address :"
+    - textbox "Address :" [ref=e604]:
+      - /placeholder: ""
+  - generic [ref=e605]:
+    - generic [ref=e606]: "*Resident city :"
+  --
+    - text: I hereby submit my application through the career’s website and provide my explicit consent to Mphasis to collect and process my Personal Information, including my name, email address, contact number, professional and experience details, and other related information, for evaluating my candidature for current and future job opportunities with Mphasis.
+    - paragraph [ref=e617]: I understand that Mphasis will use the information provided by me to evaluate my candidature, manage the recruitment process, maintain relevant records, and contact me regarding job openings, application status, interview processes, and other recruitment-related communications.
+    - paragraph [ref=e618]:
+      - text: I hereby acknowledge that I have read and understood the
+"Resident city": |-
+    - generic [ref=e606]: "*Resident city :"
+    - textbox "*Resident city :" [ref=e608]:
+      - /placeholder: Type location
+  - generic [ref=e612] [cursor=pointer]:
+    - checkbox [ref=e615]
+"I hereby submit my application": |-
+  - text: I hereby submit my application through the career’s website and provide my explicit consent to Mphasis to collect and process my Personal Information, including my name, email address, contact number, professional and experience details, and other related information, for evaluating my candidature for current and future job opportunities with Mphasis.
+  - paragraph [ref=e617]: I understand that Mphasis will use the information provided by me to evaluate my candidature, manage the recruitment process, maintain relevant records, and contact me regarding job openings, application status, interview processes, and other recruitment-related communications.
+  - paragraph [ref=e618]:
+    - text: I hereby acknowledge that I have read and understood the

@@ -1,0 +1,55 @@
+"Gender": |-
+    - text: Planet is committed to building a community where everyone belongs and we invite people from all backgrounds to apply. Planet is an equal opportunity employer, and committed to providing employment opportunities regardless of race, religious creed, color, national origin, ancestry, physical disability, mental disability, medical condition, genetic information, marital status, sex, gender, gender identity, gender expression, pregnancy, childbirth and breastfeeding, age, sexual orientation, military or veteran status, or any other protected classification, in accordance with applicable federal, state, and local laws.
+    - link "Know Your Rights." [ref=e108] [cursor=pointer]:
+      - /url: https://www.eeoc.gov/sites/default/files/2023-06/22-088_EEOC_KnowYourRights6.12.pdf
+  - paragraph [ref=e109]:
+  --
+    - generic [ref=e378]: Gender
+    - generic [ref=e379]:
+      - log [ref=e381]
+      - generic [ref=e383]:
+  --
+          - combobox "Gender" [ref=e387]
+        - button "Toggle flyout" [ref=e389] [cursor=pointer]:
+          - img [ref=e390]
+  - generic [ref=e392]:
+"Are you Hispanic/Latino?": |-
+    - generic [ref=e395]: Are you Hispanic/Latino?
+    - generic [ref=e396]:
+      - log [ref=e398]
+      - generic [ref=e400]:
+  --
+          - combobox "Are you Hispanic/Latino?" [ref=e404]
+        - button "Toggle flyout" [ref=e406] [cursor=pointer]:
+          - img [ref=e407]
+  - link "Race & Ethnicity Definitions" [ref=e409] [cursor=pointer]:
+"Veteran Status": |-
+    - text: Planet is committed to building a community where everyone belongs and we invite people from all backgrounds to apply. Planet is an equal opportunity employer, and committed to providing employment opportunities regardless of race, religious creed, color, national origin, ancestry, physical disability, mental disability, medical condition, genetic information, marital status, sex, gender, gender identity, gender expression, pregnancy, childbirth and breastfeeding, age, sexual orientation, military or veteran status, or any other protected classification, in accordance with applicable federal, state, and local laws.
+    - link "Know Your Rights." [ref=e108] [cursor=pointer]:
+      - /url: https://www.eeoc.gov/sites/default/files/2023-06/22-088_EEOC_KnowYourRights6.12.pdf
+  - paragraph [ref=e109]:
+  --
+    - generic [ref=e419]: Veteran Status
+    - generic [ref=e420]:
+      - log [ref=e422]
+      - generic [ref=e424]:
+  --
+          - combobox "Veteran Status" [ref=e428]
+        - button "Toggle flyout" [ref=e430] [cursor=pointer]:
+          - img [ref=e431]
+  - separator [ref=e433]
+"Disability Status": |-
+    - generic [ref=e476]: Disability Status
+    - generic [ref=e477]:
+      - log [ref=e479]
+      - generic [ref=e481]:
+  --
+          - combobox "Disability Status" [ref=e485]
+        - button "Toggle flyout" [ref=e487] [cursor=pointer]:
+          - img [ref=e488]
+  - paragraph [ref=e491]: "PUBLIC BURDEN STATEMENT: According to the Paperwork Reduction Act of 1995 no persons are required to respond to a collection of information unless such collection displays a valid OMB control number. This survey should take about 5 minutes to complete."
+"Submit application": |-
+          - button "Submit application" [ref=e493] [cursor=pointer]
+  - contentinfo [ref=e494]:
+    - generic [ref=e495]:
+      - paragraph [ref=e496]: Powered by

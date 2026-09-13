@@ -1,0 +1,19 @@
+"E-mail": |-
+      - group "Reset password with your e-mail" [ref=e76]:
+        - generic [ref=e77]: Reset password with your e-mail
+        - generic [ref=e78]:
+          - generic [ref=e79]: E-mail *
+          - textbox "E-mail" [ref=e81]
+        - button "Continue" [ref=e84] [cursor=pointer]
+  - list [ref=e85]:
+    - listitem [ref=e86]:
+"Continue": |-
+      - paragraph [ref=e73]: Enter the email address associated with your account, then click "Continue".
+      - paragraph [ref=e74]: We will email you a link to reset your password.
+      - group "Reset password with your e-mail" [ref=e76]:
+        - generic [ref=e77]: Reset password with your e-mail
+  --
+        - button "Continue" [ref=e84] [cursor=pointer]
+  - list [ref=e85]:
+    - listitem [ref=e86]:
+      - link "Back to login" [ref=e87] [cursor=pointer]:

@@ -1,0 +1,101 @@
+"First Name": |-
+    - generic [ref=e169]: First Name*
+    - textbox "First Name" [ref=e170]
+  - generic [ref=e173]:
+    - generic [ref=e174]: Last Name*
+    - textbox "Last Name" [ref=e175]
+  --
+    - generic [ref=e179]: Preferred First Name
+    - textbox "Preferred First Name" [ref=e180]
+  - generic [ref=e183]:
+    - generic [ref=e184]: Email*
+    - textbox "Email" [ref=e185]
+"Last Name": |-
+    - generic [ref=e174]: Last Name*
+    - textbox "Last Name" [ref=e175]
+  - generic [ref=e178]:
+    - generic [ref=e179]: Preferred First Name
+    - textbox "Preferred First Name" [ref=e180]
+"Email": |-
+    - generic [ref=e184]: Email*
+    - textbox "Email" [ref=e185]
+  - group "Phone" [ref=e187]:
+    - generic [ref=e188]: Phone
+    - generic [ref=e191]:
+"Phone": |-
+  - group "Phone" [ref=e187]:
+    - generic [ref=e188]: Phone
+    - generic [ref=e191]:
+      - generic [ref=e192]: Country*
+      - generic [ref=e193]:
+  --
+      - generic [ref=e208]: Phone*
+      - textbox "Phone" [ref=e209]
+  - generic [ref=e210]:
+    - generic [ref=e212]:
+      - generic [ref=e213]: Location (City)*
+"Country": |-
+  - generic [ref=e192]: Country*
+  - generic [ref=e193]:
+    - log [ref=e195]
+    - generic [ref=e197]:
+      - combobox "Country" [ref=e200]
+      - button "Toggle flyout" [ref=e202] [cursor=pointer]:
+        - img [ref=e203]
+    - textbox
+"Location (City)": |-
+      - generic [ref=e213]: Location (City)*
+      - generic [ref=e214]:
+        - log [ref=e216]
+        - combobox "Location (City)" [ref=e221]
+        - textbox
+    - button "Locate me" [ref=e222] [cursor=pointer]
+  - group "Resume/CV*" [ref=e224]:
+"Resume/CV": |-
+  - group "Resume/CV*" [ref=e224]:
+    - generic [ref=e225]: Resume/CV*
+    - generic [ref=e227]:
+      - generic [ref=e229]:
+        - button "Attach" [ref=e230] [cursor=pointer]
+"LinkedIn Profile": |-
+    - generic [ref=e271]: LinkedIn Profile*
+    - textbox "LinkedIn Profile" [ref=e272]
+  - generic [ref=e275]:
+    - generic [ref=e276]: How did you hear about this job?
+    - textbox "How did you hear about this job?" [ref=e277]
+"What location are you planning to work from?": |-
+  - generic [ref=e281]: What location are you planning to work from?*
+  - generic [ref=e282]:
+    - log [ref=e284]
+    - generic [ref=e286]:
+  --
+        - combobox "What location are you planning to work from?" [ref=e290]
+      - button "Toggle flyout" [ref=e292] [cursor=pointer]:
+        - img [ref=e293]
+    - textbox
+"Are you legally authorized to work in the United States?": |-
+  - generic [ref=e303]: Are you legally authorized to work in the United States?*
+  - generic [ref=e304]:
+    - log [ref=e306]
+    - generic [ref=e308]:
+  --
+        - combobox "Are you legally authorized to work in the United States?" [ref=e312]
+      - button "Toggle flyout" [ref=e314] [cursor=pointer]:
+        - img [ref=e315]
+    - textbox
+"Which work authorization best describes you:": |-
+  - generic [ref=e324]: "Which work authorization best describes you: *"
+  - generic [ref=e325]:
+    - log [ref=e327]
+    - generic [ref=e329]:
+  --
+        - combobox "Which work authorization best describes you:" [ref=e333]
+      - button "Toggle flyout" [ref=e335] [cursor=pointer]:
+        - img [ref=e336]
+    - textbox
+"Desired Salary": |-
+      - generic [ref=e345]: Desired Salary*
+      - textbox "Desired Salary" [ref=e346]
+  - separator [ref=e347]
+  - generic [ref=e348]:
+    - heading "Doximity Candidate Demographics" [level=3] [ref=e349]

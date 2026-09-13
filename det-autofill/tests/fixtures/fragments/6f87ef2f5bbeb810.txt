@@ -1,0 +1,17 @@
+"Upload your resume here to autofill": |-
+      - paragraph [ref=e247]: Upload your resume here to autofill key application fields.
+      - button "Upload file" [ref=e249] [cursor=pointer]
+  - generic [ref=e251]:
+    - generic [ref=e252] [cursor=pointer]:
+"Upload file": |-
+      - button "Upload file" [ref=e249] [cursor=pointer]
+  - generic [ref=e251]:
+    - generic [ref=e252] [cursor=pointer]:
+      - img [ref=e253]
+  --
+        - button "Upload File" [ref=e275] [cursor=pointer]:
+          - img [ref=e276]
+          - generic [ref=e278]: Upload File
+        - paragraph [ref=e279]: or drag and drop here
+    - generic [ref=e280]:
+      - generic [ref=e281]: LinkedIn or Professional Website:*

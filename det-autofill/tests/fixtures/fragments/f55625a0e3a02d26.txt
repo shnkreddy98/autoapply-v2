@@ -1,0 +1,75 @@
+"Are you legally authorized to work in the US": |-
+          - generic [ref=e2012]: Are you legally authorized to work in the US for Franchise World Headquarters and accept new employment in the US?
+        - generic [ref=e2014]:
+          - generic [ref=e2016]:
+            - generic [ref=e2017]: Are you legally authorized to work in the US for Franchise World Headquarters and accept new employment in the US?
+            - text: "*"
+          - generic [ref=e2022]:
+            - generic [ref=e2024] [cursor=pointer]:
+              - radio "Yes" [ref=e2026]
+              - generic [ref=e2028]: "Yes"
+            - generic [ref=e2030] [cursor=pointer]:
+              - radio "No" [ref=e2032]
+              - generic [ref=e2034]: "No"
+  - listitem [ref=e2035]:
+    - group [ref=e2036]:
+"are you willing to relocate?": |-
+          - generic [ref=e2038]: If you are applying for a position outside of your current location, are you willing to relocate?
+        - generic [ref=e2040]:
+          - generic [ref=e2042]:
+            - generic [ref=e2043]: If you are applying for a position outside of your current location, are you willing to relocate?
+            - text: "*"
+          - generic [ref=e2048]:
+            - generic [ref=e2050] [cursor=pointer]:
+              - radio "Yes" [ref=e2052]
+              - generic [ref=e2054]: "Yes"
+            - generic [ref=e2056] [cursor=pointer]:
+              - radio "No" [ref=e2058]
+              - generic [ref=e2060]: "No"
+  - listitem [ref=e2061]:
+    - group [ref=e2062]:
+"Are you over the age of 18?": |-
+          - generic [ref=e2064]: Are you over the age of 18?
+        - generic [ref=e2066]:
+          - generic [ref=e2068]:
+            - generic [ref=e2069]: Are you over the age of 18?
+            - text: "*"
+          - generic [ref=e2074]:
+            - generic [ref=e2076] [cursor=pointer]:
+              - radio "Yes" [ref=e2078]
+              - generic [ref=e2080]: "Yes"
+            - generic [ref=e2082] [cursor=pointer]:
+              - radio "No" [ref=e2084]
+              - generic [ref=e2086]: "No"
+  - listitem [ref=e2087]:
+    - group [ref=e2088]:
+"require sponsorship": |-
+          - generic [ref=e2090]: Do you now, or will you in the future, require sponsorship from Franchise World Headquarters in order to obtain, extend, or renew authorization to work in the US?
+        - generic [ref=e2092]:
+          - generic [ref=e2094]:
+            - generic [ref=e2095]: Do you now, or will you in the future, require sponsorship from Franchise World Headquarters in order to obtain, extend, or renew authorization to work in the US?
+            - text: "*"
+          - generic [ref=e2100]:
+            - generic [ref=e2102] [cursor=pointer]:
+              - radio "Yes" [ref=e2104]
+              - generic [ref=e2106]: "Yes"
+            - generic [ref=e2108] [cursor=pointer]:
+              - radio "No" [ref=e2110]
+              - generic [ref=e2112]: "No"
+  - listitem [ref=e2113]:
+    - generic [ref=e2116]:
+"Have you been employed with Franchise World Headquarters in the past?": |-
+              - generic [ref=e2130]: Have you been employed with Franchise World Headquarters in the past?
+            - generic [ref=e2132]:
+              - generic [ref=e2134]:
+                - generic [ref=e2135]: Have you been employed with Franchise World Headquarters in the past?
+                - text: "*"
+              - generic [ref=e2140]:
+                - generic [ref=e2142] [cursor=pointer]:
+                  - radio "Yes" [ref=e2144]
+                  - generic [ref=e2146]: "Yes"
+                - generic [ref=e2148] [cursor=pointer]:
+                  - radio "No" [ref=e2150]
+                  - generic [ref=e2152]: "No"
+  - generic [ref=e776]: Subway| Franchise World Headquarters, LLC. does not and shall not discriminate on the basis of race (inclusive of ethnic traits historically associated with race, including, but not limited to, hair texture and protective hairstyles), color, religion, gender, gender expression, age, national origin, disability, marital status, sexual orientation, or military status, in any of its activities or operations. These activities include, but are not limited to, hiring and firing of staff, selection of volunteers and vendors, and provision of services. We are committed to providing an inclusive and welcoming environment for all members of our staff, clients, volunteers, subcontractors, vendors, and clients.
+  - generic [ref=e780]:

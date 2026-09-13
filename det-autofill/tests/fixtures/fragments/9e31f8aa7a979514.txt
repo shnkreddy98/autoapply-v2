@@ -1,0 +1,24 @@
+"Upload File": |-
+      - button "Upload file" [ref=e128] [cursor=pointer]
+  - generic [ref=e130]:
+    - generic [ref=e131]:
+      - generic [ref=e132]: Name*
+  --
+        - button "Upload File" [ref=e143] [cursor=pointer]:
+          - img [ref=e144]
+          - generic [ref=e146]: Upload File
+        - paragraph [ref=e147]: or drag and drop here
+    - generic [ref=e148]:
+      - generic [ref=e149]: Phone*
+  --
+        - button "Upload File" [ref=e156] [cursor=pointer]:
+          - img [ref=e157]
+          - generic [ref=e159]: Upload File
+        - paragraph [ref=e160]: or drag and drop here
+    - generic [ref=e161]:
+      - generic [ref=e162]: LinkedIn Profile
+"Upload your resume here to autofill key application fields": |-
+      - paragraph [ref=e126]: Upload your resume here to autofill key application fields.
+      - button "Upload file" [ref=e128] [cursor=pointer]
+  - generic [ref=e130]:
+    - generic [ref=e131]:

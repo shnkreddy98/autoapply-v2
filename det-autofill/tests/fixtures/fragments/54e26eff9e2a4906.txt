@@ -1,0 +1,17 @@
+"Address Line 1": |-
+    - generic [ref=e484]: Address Line 1*
+    - textbox "Address Line 1" [ref=e487]
+  - generic [ref=e488]:
+    - generic [ref=e489]: Address Line 2
+    - textbox "Address Line 2" [ref=e492]
+"Postal Code": |-
+    - generic [ref=e508]: Postal Code*
+    - textbox "Postal Code" [ref=e511]
+  - generic [ref=e512]:
+    - generic [ref=e513]: County
+    - textbox "County" [ref=e516]
+"Phone Device Type Select One Required": |-
+    - button "Phone Device Type Select One Required" [ref=e533]: Select One
+  - generic [ref=e534]:
+    - generic [ref=e536]: Country Phone Code*
+    - generic [ref=e541] [cursor=pointer]:

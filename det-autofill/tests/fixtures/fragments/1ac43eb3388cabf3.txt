@@ -1,0 +1,15 @@
+"ref=e289": |-
+    - generic [ref=e289] [cursor=pointer]:
+      - radio "No" [ref=e290]
+      - text: "No"
+  - generic [ref=e292]:
+"ref=e308": |-
+  - textbox "Day" [ref=e308] [cursor=pointer]:
+    - /placeholder: dd
+    - text: "29"
+  - text: /
+"ref=e309": |-
+      - textbox "Year" [ref=e309] [cursor=pointer]:
+        - /placeholder: yyyy
+        - text: "2026"
+  - button "Choose Date" [ref=e312] [cursor=pointer]:

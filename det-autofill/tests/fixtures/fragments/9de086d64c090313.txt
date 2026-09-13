@@ -1,0 +1,60 @@
+"How Did You Hear About Us?": |-
+        - button "Error How Did You Hear About Us?" [ref=e455] [cursor=pointer]:
+          - text: Error
+          - generic [ref=e456]: "-"
+          - text: How Did You Hear About Us?
+        - generic [ref=e457]: The field How Did You Hear About Us? is required and must have a value.
+    - listitem [ref=e458]:
+      - generic [ref=e459]:
+        - button "Error Address Line 1" [ref=e460] [cursor=pointer]:
+  --
+      - generic [ref=e383]: How Did You Hear About Us?*
+      - generic [ref=e384]:
+        - generic [ref=e389] [cursor=pointer]:
+          - textbox "How Did You Hear About Us?" [invalid] [ref=e390]:
+            - /placeholder: Search
+          - generic [ref=e391]: 0 items selected
+        - paragraph [ref=e469]:
+  --
+          - text: The field How Did You Hear About Us? is required and must have a value.
+  - group [ref=e304]:
+    - generic [ref=e306]:
+      - generic [ref=e308]: Country*
+"Address Line 1": |-
+      - button "Error Address Line 1" [ref=e460] [cursor=pointer]:
+        - text: Error
+        - generic [ref=e461]: "-"
+        - text: Address Line 1
+      - generic [ref=e462]: The field Address Line 1 is required and must have a value.
+  - listitem [ref=e463]:
+    - generic [ref=e464]:
+      - button "Error Postal Code" [ref=e465] [cursor=pointer]:
+  --
+      - generic [ref=e335]: Address Line 1*
+      - generic [ref=e336]:
+        - textbox "Address Line 1" [invalid] [ref=e338]
+        - paragraph [ref=e472]:
+          - generic [ref=e473]: "Error:"
+          - text: The field Address Line 1 is required and must have a value.
+    - generic [ref=e339]:
+      - generic [ref=e341]: City*
+      - textbox "City" [ref=e344]: San Jose
+"Postal Code": |-
+          - button "Error Postal Code" [ref=e465] [cursor=pointer]:
+            - text: Error
+            - generic [ref=e466]: "-"
+            - text: Postal Code
+          - generic [ref=e467]: The field Postal Code is required and must have a value.
+  - generic [ref=e297]:
+    - group [ref=e298]:
+      - generic [ref=e381]:
+  --
+          - generic [ref=e354]: Postal Code*
+          - generic [ref=e355]:
+            - textbox "Postal Code" [invalid] [ref=e357]
+            - paragraph [ref=e475]:
+              - generic [ref=e476]: "Error:"
+              - text: The field Postal Code is required and must have a value.
+    - group "Email Address" [ref=e359]:
+      - heading "Email Address" [level=4] [ref=e360]
+      - generic [ref=e363]: jane.doe@example.com

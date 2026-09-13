@@ -1,0 +1,17 @@
+"Enter the Verification Code": |-
+  - dialog "Enter the Verification Code" [ref=e440]:
+    - heading "Enter the Verification Code" [level=2] [ref=e443]: Enter the Verification Code
+    - button "Close dialog" [ref=e446] [cursor=pointer]:
+      - img [ref=e448]
+    - generic [ref=e451]:
+  --
+          - textbox "Enter the Verification Code" [ref=e468]
+          - alert
+          - button "Verify" [disabled] [ref=e470]:
+            - generic: Verify
+"Verify": |-
+  - button "Verify" [disabled] [ref=e470]:
+    - generic: Verify
+  - alert
+  - generic [ref=e472]: Did not receive code? Resend code in 49 seconds.
+  - generic [ref=e473]:

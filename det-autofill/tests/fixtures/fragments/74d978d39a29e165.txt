@@ -1,0 +1,14 @@
+"Yes": |-
+                    - button "Yes Required" [ref=e1345]: "Yes"
+                  - group "Will you now or in the future require sponsorship for an employment visa (e.g., H-1B visa status)?*" [ref=e1288]:
+                    - paragraph [ref=e1292]: Will you now or in the future require sponsorship for an employment visa (e.g., H-1B visa status)?*
+                    - button "Yes Required" [ref=e1355]: "Yes"
+                  - group "Are you 18 years of age or older?*" [ref=e1298]:
+                    - paragraph [ref=e1302]: Are you 18 years of age or older?*
+                    - button "Select One Required" [expanded] [ref=e1306]: Select One
+  --
+      - option "Yes" [ref=e1361]:
+        - generic [ref=e1362]: "Yes"
+      - option "No" [ref=e1363]:
+        - generic [ref=e1364]: "No"
+  ```

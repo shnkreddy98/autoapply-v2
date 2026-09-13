@@ -1,0 +1,7 @@
+"Country": |-
+  - generic [ref=e110]: Country
+  - combobox "Country" [ref=e111]:
+    - option "Select Country" [selected]
+    - option "Afghanistan"
+    - option "Åland Islands"
+    - option "Albania"

@@ -1,0 +1,92 @@
+"First Name": |-
+    - generic [ref=f13e96]: First Name*
+    - textbox "First Name" [ref=f13e97]
+  - generic [ref=f13e100]:
+    - generic [ref=f13e101]: Last Name*
+    - textbox "Last Name" [ref=f13e102]
+  --
+    - generic [ref=f13e210]: Preferred First Name
+    - textbox "Preferred First Name" [ref=f13e106]
+  - generic [ref=f13e109]:
+    - generic [ref=f13e110]: Email*
+    - textbox "Email" [ref=f13e111]
+"Last Name": |-
+    - generic [ref=f13e101]: Last Name*
+    - textbox "Last Name" [ref=f13e102]
+  - generic [ref=f13e105]:
+    - generic [ref=f13e210]: Preferred First Name
+    - textbox "Preferred First Name" [ref=f13e106]
+"Email": |-
+              - paragraph [ref=f13e77]: Interested in building your career at Qventus? Get future opportunities sent straight to your email.
+              - link "Create alert" [ref=f13e208] [cursor=pointer]:
+                - /url: https://my.greenhouse.io/users/sign_in?job_board=qventus&source=job_alert_post
+        - separator [ref=f13e209]
+  --
+                - generic [ref=f13e110]: Email*
+                - textbox "Email" [ref=f13e111]
+              - group "Phone" [ref=f13e113]:
+                - generic [ref=f13e114]: Phone
+                - generic [ref=f13e117]:
+  --
+            - textbox "Email*" [ref=e178]:
+              - /placeholder: Enter your email*
+            - button "Subscribe >" [ref=e181] [cursor=pointer]
+  - generic [ref=e184]:
+    - paragraph [ref=e189]:
+"Phone": |-
+  - group "Phone" [ref=f13e113]:
+    - generic [ref=f13e114]: Phone
+    - generic [ref=f13e117]:
+      - generic [ref=f13e118]: Country*
+      - generic [ref=f13e119]:
+  --
+      - generic [ref=f13e134]: Phone*
+      - textbox "Phone" [ref=f13e135]
+  - generic [ref=f13e136]:
+    - generic [ref=f13e138]:
+      - generic [ref=f13e139]: Location (City)*
+"Location (City)": |-
+      - generic [ref=f13e139]: Location (City)*
+      - generic [ref=f13e140]:
+        - log [ref=f13e142]
+        - combobox "Location (City)" [ref=f13e147]
+        - textbox
+    - button "Locate me" [ref=f13e148] [cursor=pointer]
+  - group "Resume/CV*" [ref=f13e150]:
+"Resume/CV": |-
+  - group "Resume/CV*" [ref=f13e150]:
+    - generic [ref=f13e151]: Resume/CV*
+    - generic [ref=f13e153]:
+      - generic [ref=f13e155]:
+        - button "Attach" [ref=f13e156] [cursor=pointer]
+"LinkedIn Profile": |-
+    - generic [ref=f13e169]: LinkedIn Profile*
+    - textbox "LinkedIn Profile" [ref=f13e170]
+  - generic [ref=f13e173]:
+    - generic [ref=f13e174]: Will you require visa sponsorship now or in the near future?*
+    - generic [ref=f13e175]:
+"visa sponsorship": |-
+  - generic [ref=f13e174]: Will you require visa sponsorship now or in the near future?*
+  - generic [ref=f13e175]:
+    - log [ref=f13e177]
+    - generic [ref=f13e179]:
+  --
+        - combobox "Will you require visa sponsorship now or in the near future?" [ref=f13e183]
+      - button "Toggle flyout" [ref=f13e185] [cursor=pointer]:
+        - img [ref=f13e186]
+    - textbox
+"background investigation": |-
+      - paragraph [ref=f13e71]: "*Employment is contingent upon the satisfactory completion of our pre-employment background investigation and drug test."
+  - generic [ref=f13e72]:
+    - img [ref=f13e73]
+    - generic [ref=f13e75]:
+  --
+        - generic [ref=f13e191]: Employment is contingent upon the satisfactory completion of our pre-employment process. Do you consent to a background investigation and drug test in conjunction with receiving an offer?*
+        - generic [ref=f13e192]:
+          - log [ref=f13e194]
+          - generic [ref=f13e196]:
+  --
+              - combobox "Employment is contingent upon the satisfactory completion of our pre-employment process. Do you consent to a background investigation and drug test in conjunction with receiving an offer?" [ref=f13e200]
+            - button "Toggle flyout" [ref=f13e202] [cursor=pointer]:
+              - img [ref=f13e203]
+          - textbox

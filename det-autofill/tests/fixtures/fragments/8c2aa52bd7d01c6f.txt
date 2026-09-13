@@ -1,0 +1,88 @@
+"Comp": |-
+          - generic: completed step 1 of 8
+          - generic [ref=e364]: Autofill with Resume
+        - listitem [ref=e127]:
+          - generic: completed step 2 of 8
+          - generic [ref=e365]: My Information
+        - listitem [ref=e133]:
+          - generic: current step 3 of 8
+          - generic [ref=e366]: My Experience
+        - listitem [ref=e139]:
+          - generic: step 4 of 8
+          - generic [ref=e367]: Application Questions 1 of 2
+        - listitem [ref=e145]:
+          - generic: step 5 of 8
+          - generic [ref=e368]: Application Questions 2 of 2
+  --
+                  - generic [ref=e612]: Company*
+                  - textbox "Company" [ref=e615]: AirFold
+                - generic [ref=e616]:
+                  - generic [ref=e617]: Location
+                  - textbox "Location" [ref=e620]: San Francisco California
+                - generic [ref=e621]:
+                  - generic [ref=e622]: I currently work here
+                  - checkbox "I currently work here" [ref=e627] [cursor=pointer]
+                - generic [ref=e628]:
+                  - group "From" [ref=e630]:
+                    - generic [ref=e633]: From*
+                    - generic [ref=e635]:
+  --
+                  - generic [ref=e696]: Company*
+                  - textbox "Company" [ref=e699]: Kantar
+                - generic [ref=e700]:
+                  - generic [ref=e701]: Location
+                  - textbox "Location" [ref=e704]: Bengaluru India
+                - generic [ref=e705]:
+                  - generic [ref=e706]: I currently work here
+                  - checkbox "I currently work here" [ref=e711] [cursor=pointer]
+                - generic [ref=e712]:
+                  - group "From" [ref=e714]:
+                    - generic [ref=e717]: From*
+                    - generic [ref=e719]:
+  --
+                  - textbox "Role Description" [ref=e761]: Orchestrated ELT pipelines using Airflow and Spark, integrating Kafka streams to ingest advertising data with exactly-once semantics. • Accelerated data modeling by deploying dbt for complex SQL transformations, replacing ad-hoc scripts with modular pipelines that reduced time-to-insight by 25%. • Designed real-time processing framework with Kafka Streams and Spark Streaming, providing near real- time insights into campaign performance. • Deployed serverless architecture (Cloud Functions, Cloud Storage) to automate data workflows, reducing manual intervention by 80% and improving reliability. • Engineered ROI optimization algorithms that increased client sales by 34% for global enterprises through data-driven ad spend allocation.
+            - group "Work Experience 3" [ref=e762]:
+              - generic [ref=e763]:
+                - heading "Work Experience 3" [level=5] [ref=e764]
+                - button "Delete" [ref=e765] [cursor=pointer]: Delete
+              - generic [ref=e771]:
+                - generic [ref=e772]:
+                  - generic [ref=e774]: Job Title*
+                  - textbox "Job Title" [ref=e777]: Data Engineer
+                - generic [ref=e778]:
+                  - generic [ref=e780]: Company*
+                  - textbox "Company" [ref=e783]: The Sparks Foundation
+                - generic [ref=e784]:
+                  - generic [ref=e785]: Location
+                  - textbox "Location" [ref=e788]: Bengaluru India
+                - generic [ref=e789]:
+                  - generic [ref=e790]: I currently work here
+                  - checkbox "I currently work here" [ref=e795] [cursor=pointer]
+                - generic [ref=e796]:
+                  - group "From" [ref=e798]:
+                    - generic [ref=e801]: From*
+                    - generic [ref=e803]:
+  --
+                        - text: Computer Science
+                      - generic [ref=e888]: Expanded
+                  - button "The field will alphabetically return the first 100 results and can also return specified matches." [ref=e892] [cursor=pointer]
+                - generic [ref=e896]:
+                  - generic [ref=e897]: Overall Result (GPA)
+                  - textbox "Overall Result (GPA)" [ref=e900]
+                - generic [ref=e901]:
+                  - group "From" [ref=e903]:
+                    - generic [ref=e905]: From
+                    - generic [ref=e907]:
+                      - generic [ref=e908]: current value is 2023
+  --
+        - /url: http://www.linkedin.com/company/northern-trust/
+    - listitem [ref=e71] [cursor=pointer]:
+      - link "Facebook" [ref=e72]:
+        - /url: https://www.facebook.com/ntcareers
+    - listitem [ref=e76] [cursor=pointer]:
+      - link "X" [ref=e77]:
+        - /url: http://www.twitter.com/ntcareers
+  - link "Candidate Privacy Notice" [ref=e82] [cursor=pointer]:
+    - /url: https://www.northerntrust.com/documents/careers/privacy-policy.pdf
+  - generic [ref=e83]:
+    - img [ref=e87]

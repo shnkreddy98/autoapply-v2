@@ -1,0 +1,186 @@
+"Job Title": |-
+    - generic [ref=e727]: Job Title*
+    - textbox "Job Title" [ref=e730]: Founding Engineer
+  - generic [ref=e731]:
+    - generic [ref=e733]: Company*
+    - textbox "Company" [ref=e736]: AirFold
+  - generic [ref=e737]:
+    - generic [ref=e738]: Location
+    - textbox "Location" [ref=e741]: San Francisco California
+  - generic [ref=e742]:
+    - generic [ref=e743]: I currently work here
+    - checkbox "I currently work here" [ref=e748] [cursor=pointer]
+  - generic [ref=e749]:
+  --
+    - generic [ref=e811]: Job Title*
+    - textbox "Job Title" [ref=e814]: Data Engineer
+  - generic [ref=e815]:
+    - generic [ref=e817]: Company*
+    - textbox "Company" [ref=e820]: Kantar
+  - generic [ref=e821]:
+    - generic [ref=e822]: Location
+    - textbox "Location" [ref=e825]: Bengaluru India
+  - generic [ref=e826]:
+    - generic [ref=e827]: I currently work here
+    - checkbox "I currently work here" [ref=e832] [cursor=pointer]
+  - generic [ref=e833]:
+  --
+    - generic [ref=e895]: Job Title*
+    - textbox "Job Title" [ref=e898]: Data Engineer
+  - generic [ref=e899]:
+    - generic [ref=e901]: Company*
+    - textbox "Company" [ref=e904]: The Sparks Foundation
+  - generic [ref=e905]:
+    - generic [ref=e906]: Location
+    - textbox "Location" [ref=e909]: Bengaluru India
+  - generic [ref=e910]:
+    - generic [ref=e911]: I currently work here
+    - checkbox "I currently work here" [ref=e916] [cursor=pointer]
+  - generic [ref=e917]:
+"Company": |-
+                  - generic [ref=e733]: Company*
+                  - textbox "Company" [ref=e736]: AirFold
+                - generic [ref=e737]:
+                  - generic [ref=e738]: Location
+                  - textbox "Location" [ref=e741]: San Francisco California
+                - generic [ref=e742]:
+                  - generic [ref=e743]: I currently work here
+                  - checkbox "I currently work here" [ref=e748] [cursor=pointer]
+                - generic [ref=e749]:
+                  - group "From" [ref=e751]:
+                    - generic [ref=e754]: From*
+                    - generic [ref=e756]:
+  --
+                  - generic [ref=e817]: Company*
+                  - textbox "Company" [ref=e820]: Kantar
+                - generic [ref=e821]:
+                  - generic [ref=e822]: Location
+                  - textbox "Location" [ref=e825]: Bengaluru India
+                - generic [ref=e826]:
+                  - generic [ref=e827]: I currently work here
+                  - checkbox "I currently work here" [ref=e832] [cursor=pointer]
+                - generic [ref=e833]:
+                  - group "From" [ref=e835]:
+                    - generic [ref=e838]: From*
+                    - generic [ref=e840]:
+  --
+                  - generic [ref=e901]: Company*
+                  - textbox "Company" [ref=e904]: The Sparks Foundation
+                - generic [ref=e905]:
+                  - generic [ref=e906]: Location
+                  - textbox "Location" [ref=e909]: Bengaluru India
+                - generic [ref=e910]:
+                  - generic [ref=e911]: I currently work here
+                  - checkbox "I currently work here" [ref=e916] [cursor=pointer]
+                - generic [ref=e917]:
+                  - group "From" [ref=e919]:
+                    - generic [ref=e922]: From*
+                    - generic [ref=e924]:
+  --
+        - /url: https://www.linkedin.com/company/nordstrom/mycompany/
+    - listitem [ref=e38] [cursor=pointer]:
+      - link "Facebook" [ref=e39]:
+        - /url: https://www.facebook.com/Nordstrom/
+    - listitem [ref=e43] [cursor=pointer]:
+      - link "X" [ref=e44]:
+        - /url: https://twitter.com/nordstromnow?lang=en
+  - link "Nordstrom Careers Privacy Policy" [ref=e49] [cursor=pointer]:
+    - /url: https://careers.nordstrom.com/pdfs/Nordstrom_Careers_Privacy_Policy.pdf
+  - generic [ref=e50]:
+    - img [ref=e54]
+"Role Description": |-
+          - generic [ref=e795]: Role Description
+          - textbox "Role Description" [ref=e798]: "Architected secure multi-cloud infrastructure (AWS/GCP) using Terraform and Istio, ensuring high availability and resilience for mission-critical microservices. * Engineered event-driven data ingestion systems using Kafka and Debezium CDC, processing millions of unstructured events with sub-second latency and exactly-once semantics. * Developed modular API frameworks (FastAPI) with robust RBAC security protocols to support secure data access and integration for enterprise-scale applications. * Implemented automated data governance workflows using dbt and Snowflake, creating validatable transformation logic that reduced reporting discrepancies by 40%. * Optimized NoSQL and distributed database performance (DynamoDB, ClickHouse) to handle complex vector search retrieval and large-scale analytical queries. * Tech Stack: AWS, GCP, Terraform, Kubernetes, Kafka, Debezium, ClickHouse, FastAPI, PostgreSQL, DynamoDB"
+    - group "Work Experience 2" [ref=e799]:
+      - generic [ref=e800]:
+        - heading "Work Experience 2" [level=5] [ref=e801]
+        - button "Delete" [ref=e802] [cursor=pointer]: Delete
+      - generic [ref=e808]:
+        - generic [ref=e809]:
+          - generic [ref=e811]: Job Title*
+          - textbox "Job Title" [ref=e814]: Data Engineer
+        - generic [ref=e815]:
+          - generic [ref=e817]: Company*
+  --
+          - generic [ref=e879]: Role Description
+          - textbox "Role Description" [ref=e882]: "Orchestrated large-scale distributed data processing pipelines using Apache Spark and Airflow, ingesting terabytes of structured and unstructured data streams. * Modernized legacy data models by deploying dbt for SQL transformations, establishing reliable data structures that improved analytical time-to-insight by 25%. * Built fault-tolerant streaming architectures with Kafka and Spark Streaming to deliver near real-time operational intelligence and situational awareness. * Automated data ingestion workflows using AWS Lambda and S3 serverless architecture, reducing manual overhead by 80% while ensuring data durability. * Established dbt-driven data quality frameworks with automated testing and documentation, ensuring data integrity across 360-degree customer and product views while enabling self-service analytics for business stakeholders. * Tech Stack: Apache Spark, Airflow, Kafka, AWS Lambda, S3, dbt, SQL, Python"
+    - group "Work Experience 3" [ref=e883]:
+      - generic [ref=e884]:
+        - heading "Work Experience 3" [level=5] [ref=e885]
+        - button "Delete" [ref=e886] [cursor=pointer]: Delete
+      - generic [ref=e892]:
+        - generic [ref=e893]:
+          - generic [ref=e895]: Job Title*
+          - textbox "Job Title" [ref=e898]: Data Engineer
+        - generic [ref=e899]:
+          - generic [ref=e901]: Company*
+  --
+          - generic [ref=e963]: Role Description
+          - textbox "Role Description" [ref=e966]: Enhanced ETL pipeline performance by 25% through parallel processing techniques and query optimization to support high-volume data generation. * Tuned complex SQL queries and database indexing strategies for PostgreSQL and MySQL, significantly reducing latency for downstream analytical reporting. * Integrated automated data validation scripts to detect schema anomalies and null values, ensuring data integrity and minimizing downstream corruption incidents. * Collaborated with stakeholders to design dimensional data models (Star Schema), facilitating efficient querying and supporting strategic decision-making processes.
+    - button "Add Another" [ref=e970] [cursor=pointer]
+  - group "Education" [ref=e972]:
+    - heading "Education" [level=4] [ref=e973]
+    - group "Education 1" [ref=e974]:
+      - generic [ref=e975]:
+        - heading "Education 1" [level=5] [ref=e976]
+        - button "Delete" [ref=e977] [cursor=pointer]: Delete
+      - generic [ref=e983]:
+        - generic [ref=e984]:
+          - generic [ref=e986]: School or University*
+"School or University": |-
+    - generic [ref=e986]: School or University*
+    - textbox "School or University" [ref=e989]: San Jose State University
+  - generic [ref=e990]:
+    - generic [ref=e992]: Degree*
+    - button "Degree Master's Degree Required" [ref=e996]: Master's Degree
+  - generic [ref=e997]:
+    - generic [ref=e999]:
+      - generic [ref=e1000]: Field of Study
+      - generic [ref=e1006] [cursor=pointer]:
+        - textbox "Field of Study" [ref=e1007]:
+          - /placeholder: Search
+        - generic [ref=e1008]: 0 items selected
+  --
+    - generic [ref=e1028]: School or University*
+    - textbox "School or University" [ref=e1031]: Visvesvaraya Technological University
+  - generic [ref=e1032]:
+    - generic [ref=e1034]: Degree*
+    - button "Degree Select One Required" [ref=e1038]: Select One
+  - generic [ref=e1039]:
+    - generic [ref=e1041]:
+      - generic [ref=e1042]: Field of Study
+      - generic [ref=e1048] [cursor=pointer]:
+        - textbox "Field of Study" [ref=e1049]:
+          - /placeholder: Search
+        - generic [ref=e1050]: 0 items selected
+"Degree Required": |-
+        - button "Degree Master's Degree Required" [ref=e996]: Master's Degree
+      - generic [ref=e997]:
+        - generic [ref=e999]:
+          - generic [ref=e1000]: Field of Study
+          - generic [ref=e1006] [cursor=pointer]:
+            - textbox "Field of Study" [ref=e1007]:
+              - /placeholder: Search
+            - generic [ref=e1008]: 0 items selected
+        - button "The field will alphabetically return the first 100 results and can also return specified matches." [ref=e1012] [cursor=pointer]
+  - group "Education 2" [ref=e1016]:
+    - generic [ref=e1017]:
+"URL*": |-
+                  - generic [ref=e1127]: URL*
+                  - textbox "URL" [ref=e1130]: https://linkedin.com/in/janedoe
+              - group "Websites 2" [ref=e1131]:
+                - generic [ref=e1132]:
+                  - heading "Websites 2" [level=5] [ref=e1133]
+                  - button "Delete" [ref=e1134] [cursor=pointer]: Delete
+                - generic [ref=e1141]:
+                  - generic [ref=e1143]: URL*
+                  - textbox "URL" [ref=e1146]: https://github.com/shnkreddy98
+              - button "Add Another" [ref=e1150] [cursor=pointer]
+        - generic [ref=e260]:
+          - button "Back" [ref=e378] [cursor=pointer]
+          - button "Save and Continue" [ref=e379] [cursor=pointer]
+  - generic [ref=e30]:
+    - heading "Follow Us" [level=4] [ref=e31]
+    - list [ref=e32]:
+      - listitem [ref=e33] [cursor=pointer]:
+        - link "LinkedIn" [ref=e34]:

@@ -1,0 +1,7 @@
+"SMS preferences dropdown": (no match)
+"YES": |-
+        - option "'Yes' to opt in, or 'No' to decline.*" [selected]
+        - option "YES"
+        - option "NO"
+  - generic [ref=e45]:
+    - generic [ref=e47]:

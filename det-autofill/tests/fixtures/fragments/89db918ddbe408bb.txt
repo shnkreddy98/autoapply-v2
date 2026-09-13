@@ -1,0 +1,6 @@
+"Upload Your Resume": |-
+      - generic [ref=e194]: Upload Your Resume (Please upload a Word or PDF document.)
+    - button "Upload Your Resume (Please upload a Word or PDF document.)" [ref=e196]
+  - generic [ref=e204]:
+    - generic [ref=e205]:
+      - generic [ref=e206]: Equal Employment Opportunity

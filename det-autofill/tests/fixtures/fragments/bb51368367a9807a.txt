@@ -1,0 +1,9 @@
+"Apply Online": |-
+      - button "Apply Online" [ref=e9] [cursor=pointer]
+    - generic [ref=e10]:
+      - table [ref=e12]:
+        - rowgroup [ref=e13]:
+  --
+        - button "Apply Online" [ref=e38] [cursor=pointer]
+        - button "Back to Jobs" [ref=e39] [cursor=pointer]
+  ```

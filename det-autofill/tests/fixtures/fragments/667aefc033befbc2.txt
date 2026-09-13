@@ -1,0 +1,16 @@
+"I choose not to respond": |-
+      - strong [ref=e277]: If you are not willing to share this information, please select "I choose not to respond" below.
+      - text: Please be assured that you will not be subjected to any adverse treatment if you do not provide the information requested. In the event you do provide the information requested, the information will be processed and maintained separately from your employment application forms and, if you are hired, from your personnel file. The information obtained may only be used in accordance with the provisions of applicable laws, executive orders, and regulations, including those that require the information to be summarized and reported to the government for civil rights enforcement. When reported, data will not identify any specific individual.
+  - generic "Required" [ref=e278]: Do you agree to these terms?*
+  - generic [ref=e281]:
+  --
+    - combobox "Gender:" [expanded] [ref=e293]: I choose not to respond
+    - button "Gender:" [ref=e294] [cursor=pointer]:
+      - generic [ref=e295]: 
+  - generic "Required" [ref=e296]: Ethnicity:*
+  --
+        - option "I choose not to respond" [ref=e1276] [cursor=pointer]:
+          - menuitem "I choose not to respond" [ref=e1277]
+        - option "Native Hawaiian or Pacific Islander (Not Hispanic or Latino)" [ref=e1278] [cursor=pointer]:
+          - menuitem "Native Hawaiian or Pacific Islander (Not Hispanic or Latino)" [ref=e1279]
+        - option "Two or More Races (Not Hispanic or Latino)" [ref=e1280] [cursor=pointer]:

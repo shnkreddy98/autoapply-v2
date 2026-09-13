@@ -1,0 +1,5 @@
+"Forgot your password?": |-
+        - link "Forgot your password?" [ref=e88] [cursor=pointer]:
+          - /url: https://jobs.usi.com/Jobs/ResetPassword?jobId=32424
+  - generic [ref=e89]:
+    - article [ref=e90]:

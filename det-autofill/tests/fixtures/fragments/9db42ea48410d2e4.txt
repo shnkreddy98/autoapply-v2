@@ -1,0 +1,7 @@
+"Are you 18 years of age or older?": |-
+  - group "Are you 18 years of age or older?*" [ref=e1480]:
+    - paragraph [ref=e1484]:
+      - generic [ref=e1485]: Are you 18 years of age or older?*
+    - button "Select One Required" [ref=e1489]: Select One
+  - group "Will you now or in the future require sponsorship for employment visa status?*" [ref=e1491]:
+    - paragraph [ref=e1495]:

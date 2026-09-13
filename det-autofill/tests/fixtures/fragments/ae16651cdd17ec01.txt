@@ -1,0 +1,7 @@
+"Are you legally authorized to work in the country where this job is located?": |-
+      - group "Are you legally authorized to work in the country where this job is located?*" [ref=e667]:
+        - paragraph [ref=e671]:
+          - generic [ref=e672]: Are you legally authorized to work in the country where this job is located?*
+        - button "Select One Required" [ref=e676]: Select One
+  - generic [ref=e171]:
+    - button "Back" [ref=e327] [cursor=pointer]

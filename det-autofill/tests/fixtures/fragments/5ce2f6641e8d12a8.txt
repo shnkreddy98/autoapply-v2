@@ -1,0 +1,47 @@
+"Name*": |-
+    - generic [ref=e1444]: Name*
+    - textbox "Name" [ref=e1447]
+  - generic [ref=e1448]:
+    - generic [ref=e1449]: Employee ID (if applicable)
+"Month": |-
+    - spinbutton "Month" [ref=e1465]
+  - generic [ref=e1466]: /
+  - generic [ref=e1467]:
+    - generic [ref=e1468]: DD
+"Day": |-
+  - Page URL: https://luriechildrens.wd1.myworkdayjobs.com/en-US/externalportal/job/Streeterville%2C-Chicago%2C-IL/Data-Engineer-IV_JR2026-1973-1/apply/autofillWithResume?source=LinkedIn
+  - Page Title: Sign In
+  - Console: 1 errors, 0 warnings
+  ### Snapshot
+  --
+                          - spinbutton "Day" [ref=e1469]
+                        - generic [ref=e1470]: /
+                        - generic [ref=e1471]:
+                          - generic [ref=e1472]: YYYY
+  --
+        - generic [ref=e96]: © 2026 Workday, Inc. All rights reserved.
+  ```
+"Year": |-
+            - spinbutton "Year" [ref=e1473]
+        - button "Calendar" [ref=e1474] [cursor=pointer]
+  - generic [ref=e1479]:
+    - heading "Why are you being asked to complete this form?" [level=4] [ref=e1480]
+  --
+      - text: We are a federal contractor or subcontractor. The law requires us to provide equal employment opportunity to qualified people with disabilities. We have a goal of having at least 7% of our workers as people with disabilities. The law says we must measure our progress towards this goal. To do this, we must ask applicants and employees if they have a disability or have ever had one. People can become disabled, so we need to ask this question at least every five years. Completing this form is voluntary, and we hope that you will choose to do so. Your answer is confidential. No one who makes hiring decisions will see it. Your decision to complete the form and your answer will not harm you in any way. If you want to learn more about the law or this form, visit the U.S. Department of Labor’s Office of Federal Contract Compliance Programs (OFCCP) website at
+      - link "www.dol.gov/ofccp" [ref=e1483] [cursor=pointer]:
+        - /url: https://www.dol.gov/ofccp
+      - text: .
+"I do not want to answer": |-
+              - row "Yes, I have a disability, or have had one in the past No, I do not have a disability and have not had one in the past I do not want to answer" [ref=e1521]:
+                - row "Yes, I have a disability, or have had one in the past" [ref=e1522]:
+                  - cell "Yes, I have a disability, or have had one in the past" [ref=e1523]:
+                    - generic [ref=e1524]:
+  --
+                - row "I do not want to answer" [ref=e1534]:
+                  - cell "I do not want to answer" [ref=e1535]:
+                    - generic [ref=e1536]:
+                      - checkbox "I do not want to answer" [ref=e1538] [cursor=pointer]
+                      - generic [ref=e1539] [cursor=pointer]: I do not want to answer
+        - generic [ref=e1541]: "PUBLIC BURDEN STATEMENT: According to the Paperwork Reduction Act of 1995 no persons are required to respond to a collection of information unless such collection displays a valid OMB control number. This survey should take about 5 minutes to complete."
+  - generic [ref=e346]:
+    - button "Back" [ref=e461] [cursor=pointer]

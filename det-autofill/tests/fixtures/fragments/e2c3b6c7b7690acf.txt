@@ -1,0 +1,33 @@
+"Are you a relative of a current Public Official? Select One Required": (no match)
+"If yes, what is your relationship with this individual? Enter N/A if not applicable.*": |-
+  - group "If yes, what is your relationship with this individual? Enter N/A if not applicable.*" [ref=e2032]:
+    - paragraph [ref=e2036]: If yes, what is your relationship with this individual? Enter N/A if not applicable.*
+    - textbox [ref=e2039]
+  - group "If yes, please list the institution name and level of the individual. Enter N/A if not applicable.*" [ref=e2041]:
+    - paragraph [ref=e2045]: If yes, please list the institution name and level of the individual. Enter N/A if not applicable.*
+  --
+  - group "If yes, what is your relationship with this individual? Enter N/A if not applicable.*" [ref=e2061]:
+    - paragraph [ref=e2065]: If yes, what is your relationship with this individual? Enter N/A if not applicable.*
+    - textbox [ref=e2068]
+  - group "If yes, please list the institution name and level of the individual. Enter N/A if not applicable.*" [ref=e2070]:
+    - paragraph [ref=e2074]: If yes, please list the institution name and level of the individual. Enter N/A if not applicable.*
+"If yes, please list the institution name and level of the individual. Enter N/A if not applicable.*": |-
+  - group "If yes, please list the institution name and level of the individual. Enter N/A if not applicable.*" [ref=e2041]:
+    - paragraph [ref=e2045]: If yes, please list the institution name and level of the individual. Enter N/A if not applicable.*
+    - textbox [ref=e2048]
+  - group "Are you a relative of a current senior level person or senior commercial person for a company other than State Street? (e.g. Chief Executive Officer, Chief Financial Officer, Senior Investment Officer)*" [ref=e2050]:
+    - paragraph [ref=e2054]:
+  --
+  - group "If yes, please list the institution name and level of the individual. Enter N/A if not applicable.*" [ref=e2070]:
+    - paragraph [ref=e2074]: If yes, please list the institution name and level of the individual. Enter N/A if not applicable.*
+    - textbox [ref=e2077]
+  - group "Please select one of the below options:*" [ref=e2079]:
+    - paragraph [ref=e2083]: Please select one of the below options:*
+"Are you a relative of a current senior level person or senior commercial person for a company other than State Street? Select One Required": (no match)
+"Please select one of the below options: Select One Required": (no match)
+"Enter your name (required) and the name of your agency (if applicable) or N/A.*": |-
+        - group "Enter your name (required) and the name of your agency (if applicable) or N/A.*" [ref=e2089]:
+          - paragraph [ref=e2093]: Enter your name (required) and the name of your agency (if applicable) or N/A.*
+          - textbox [ref=e2096]
+  - generic [ref=e381]:
+    - button "Back" [ref=e568] [cursor=pointer]

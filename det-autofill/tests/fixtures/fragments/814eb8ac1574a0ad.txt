@@ -1,0 +1,6 @@
+"View My Applications": |-
+      - link "View My Applications" [ref=e264] [cursor=pointer]:
+        - generic [ref=e265]: View My Applications
+  - generic [ref=e41]:
+    - link "Career Site Privacy Notice" [ref=e43] [cursor=pointer]:
+      - /url: https://jobs.prudential.com/us-en/policies/privacy

@@ -1,0 +1,14 @@
+"Pay Type": |-
+  - generic [ref=e663]: "*Pay Type"
+  - generic [ref=e667]:
+    - combobox "Pay Type" [ref=e668] [cursor=pointer]:
+      - generic [ref=e669]: Select an Option
+    - generic:
+      - generic:
+"Work Auth": |-
+  - generic [ref=e672]: "*Work Auth"
+  - generic [ref=e676]:
+    - combobox "Work Auth" [ref=e677] [cursor=pointer]:
+      - generic [ref=e678]: Select an Option
+    - generic:
+      - generic:

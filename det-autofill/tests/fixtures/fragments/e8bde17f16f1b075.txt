@@ -1,0 +1,28 @@
+"When can you start?": |-
+  - generic [ref=e299]: "*When can you start? (MM/DD/YYYY)"
+  - generic [ref=e301]:
+    - generic [ref=e302]: When can you start?
+    - generic "When can you start?" [ref=e303]:
+      - generic [ref=e306]:
+        - group "Date Input" [ref=e311]:
+          - generic [ref=e312]:
+            - textbox "Month" [ref=e313] [cursor=pointer]:
+              - /placeholder: mm
+              - text: "06"
+            - text: /
+            - textbox "Day" [ref=e314] [cursor=pointer]:
+              - /placeholder: dd
+              - text: "30"
+"By typing my name in the below text box": |-
+        - generic [ref=e552]: "*By typing my name in the below text box, I certify that the information I provided on this application is true, accurate, and complete. I also understand that any false statements, or withholding of information, may result in disqualification of employment, or if discovered after employment begins, disciplinary action up to and including termination of my employment."
+        - textbox "*By typing my name in the below text box, I certify that the information I provided on this application is true, accurate, and complete. I also understand that any false statements, or withholding of information, may result in disqualification of employment, or if discovered after employment begins, disciplinary action up to and including termination of my employment." [ref=e553]
+        - generic [ref=e556]: 4000 characters left
+      - text: "* * *"
+    - separator [ref=e557]
+  - generic [ref=e559]:
+    - heading "Voluntary Self-Identification Survey" [level=3] [ref=e560]
+    - paragraph [ref=e561]: This employer collects information from applicants about their race/ethnicity and/or gender to ensure nondiscrimination in and equal opportunity in hiring practices. If you do not wish to answer any question, please select "I decline to say". Submission of this information is voluntary and refusal to provide it will not subject you to any adverse treatment. The information you provide will be kept confidential and separate from other application materials, and will only be used in ways that are consistent with the law.
+    - generic [ref=e564]:
+      - generic [ref=e565]: "*Gender"
+      - combobox "*Gender" [ref=e566]:
+        - option "Choose..." [selected]

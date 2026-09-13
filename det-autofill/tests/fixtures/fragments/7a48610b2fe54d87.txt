@@ -1,0 +1,42 @@
+"Work Experience 1": |-
+  - group "Work Experience 1" [ref=e710]:
+    - generic [ref=e711]:
+      - heading "Work Experience 1" [level=5] [ref=e712]
+      - button "Delete" [ref=e713] [cursor=pointer]: Delete
+    - generic [ref=e719]:
+      - generic [ref=e720]:
+        - generic [ref=e722]: Job Title*
+        - textbox "Job Title" [ref=e725]: Founding Engineer
+      - generic [ref=e726]:
+        - generic [ref=e728]: Company*
+        - textbox "Company" [ref=e731]: AirFold
+      - generic [ref=e732]:
+        - generic [ref=e733]: Location
+"Work Experience 2": |-
+  - group "Work Experience 2" [ref=e794]:
+    - generic [ref=e795]:
+      - heading "Work Experience 2" [level=5] [ref=e796]
+      - button "Delete" [ref=e797] [cursor=pointer]: Delete
+    - generic [ref=e803]:
+      - generic [ref=e804]:
+        - generic [ref=e806]: Job Title*
+        - textbox "Job Title" [ref=e809]: Data Engineer
+      - generic [ref=e810]:
+        - generic [ref=e812]: Company*
+        - textbox "Company" [ref=e815]: Kantar
+      - generic [ref=e816]:
+        - generic [ref=e817]: Location
+"Work Experience 3": |-
+  - group "Work Experience 3" [ref=e878]:
+    - generic [ref=e879]:
+      - heading "Work Experience 3" [level=5] [ref=e880]
+      - button "Delete" [ref=e881] [cursor=pointer]: Delete
+    - generic [ref=e887]:
+      - generic [ref=e888]:
+        - generic [ref=e890]: Job Title*
+        - textbox "Job Title" [ref=e893]: Data Engineer
+      - generic [ref=e894]:
+        - generic [ref=e896]: Company*
+        - textbox "Company" [ref=e899]: The Sparks Foundation
+      - generic [ref=e900]:
+        - generic [ref=e901]: Location

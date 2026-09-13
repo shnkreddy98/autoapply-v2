@@ -1,0 +1,63 @@
+"SQL not checked": |-
+  - option "Toad Sql not checked" [selected] [ref=e1555]:
+    - generic [ref=e1556] [cursor=pointer]:
+      - checkbox [ref=e1561]
+      - generic [ref=e1562]: Toad Sql
+  --
+  - option "Teradata SQL not checked" [ref=e1587]:
+    - generic [ref=e1588] [cursor=pointer]:
+      - checkbox [ref=e1593]
+      - generic [ref=e1594]: Teradata SQL
+  - option "Spark SQL not checked" [ref=e1595]:
+    - generic [ref=e1596] [cursor=pointer]:
+      - checkbox [ref=e1601]
+      - generic [ref=e1602]: Spark SQL
+  - option "Oracle SQL not checked" [ref=e1603]:
+    - generic [ref=e1604] [cursor=pointer]:
+      - checkbox [ref=e1609]
+      - generic [ref=e1610]: Oracle SQL
+  - option "PROC SQL not checked" [ref=e1611]:
+    - generic [ref=e1612] [cursor=pointer]:
+      - checkbox [ref=e1617]
+      - generic [ref=e1618]: PROC SQL
+  --
+  - option "Informix SQL not checked" [ref=e1643]:
+    - generic [ref=e1644] [cursor=pointer]:
+      - checkbox [ref=e1649]
+      - generic [ref=e1650]: Informix SQL
+  - option "SAS SQL not checked" [ref=e1651]:
+    - generic [ref=e1652] [cursor=pointer]:
+      - checkbox [ref=e1657]
+      - generic [ref=e1658]: SAS SQL
+  - option "Open SQL not checked" [ref=e1659]:
+    - generic [ref=e1660] [cursor=pointer]:
+      - checkbox [ref=e1665]
+      - generic [ref=e1666]: Open SQL
+  - option "Hive SQL not checked" [ref=e1667]:
+    - generic [ref=e1668] [cursor=pointer]:
+      - checkbox [ref=e1673]
+      - generic [ref=e1674]: Hive SQL
+  --
+  - option "SQL not checked" [ref=e1683]:
+    - generic [ref=e1684] [cursor=pointer]:
+      - checkbox [ref=e1689]
+      - generic [ref=e1690]: SQL
+  - option "ANSI SQL not checked" [ref=e1691]:
+    - generic [ref=e1692] [cursor=pointer]:
+      - checkbox [ref=e1697]
+      - generic [ref=e1698]: ANSI SQL
+  --
+  - option "Sql Tsql not checked" [ref=e1715]:
+    - generic [ref=e1716] [cursor=pointer]:
+      - checkbox [ref=e1721]
+      - generic [ref=e1722]: Sql Tsql
+  --
+  - option "Rapid SQL not checked" [ref=e1731]:
+    - generic [ref=e1732] [cursor=pointer]:
+      - checkbox [ref=e1737]
+      - generic [ref=e1738]: Rapid SQL
+"Spark SQL not checked": |-
+  - option "Spark SQL not checked" [ref=e1595]:
+    - generic [ref=e1596] [cursor=pointer]:
+      - checkbox [ref=e1601]
+      - generic [ref=e1602]: Spark SQL

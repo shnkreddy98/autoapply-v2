@@ -1,0 +1,88 @@
+"LinkedIn": |-
+  - option "LinkedIn" [selected]
+  - option "Local Job Network"
+  - option "Martha's Vineyard CareerFair"
+  - option "Martha's Vineyard Gazette"
+"referred by a current employee?": |-
+  - radiogroup "Were you referred by a current employee?" [ref=e289]:
+    - generic [ref=e290]: Were you referred by a current employee?
+    - generic [ref=e292] [cursor=pointer]:
+      - radio "Yes" [ref=e293]
+      - text: "Yes"
+"current employee of Mutual Bancorp": |-
+  - group "*Are you a current employee of Mutual Bancorp and/or any of its subsidiaries (including, but not limited to, The Cape Cod Five Cents Savings Bank, Fidelity Co-operative Bank, and/or Exchange Authority, collectively, the “Company”)?" [ref=e332]:
+    - generic [ref=e333]: "*Are you a current employee of Mutual Bancorp and/or any of its subsidiaries (including, but not limited to, The Cape Cod Five Cents Savings Bank, Fidelity Co-operative Bank, and/or Exchange Authority, collectively, the “Company”)?"
+    - generic [ref=e336] [cursor=pointer]:
+      - radio "Yes" [ref=e337]
+      - text: "Yes"
+"under the age 18?": |-
+  - group "*Are you under the age 18? If yes, you will be required to submit a work permit." [ref=e354]:
+    - generic [ref=e355]: "*Are you under the age 18? If yes, you will be required to submit a work permit."
+    - generic [ref=e358] [cursor=pointer]:
+      - radio "Yes" [ref=e359]
+      - text: "Yes"
+"legally eligible for employment in the United States?": |-
+  - group "*Are you legally eligible for employment in the United States?" [ref=e376]:
+    - generic [ref=e377]: "*Are you legally eligible for employment in the United States?"
+    - generic [ref=e380] [cursor=pointer]:
+      - radio "Yes" [ref=e381]
+      - text: "Yes"
+"Have you ever served in the Armed Forces/Reserves?": |-
+  - group "*Have you ever served in the Armed Forces/Reserves?" [ref=e398]:
+    - generic [ref=e399]: "*Have you ever served in the Armed Forces/Reserves?"
+    - generic [ref=e402] [cursor=pointer]:
+      - radio "Yes" [ref=e403]
+      - text: "Yes"
+"Have you ever been convicted of a felony?": |-
+  - 'group "*Instructions: Please read (a) through (d) below and then answer the following questions. You may answer NO if you have any of the following circumstances: (a) A first conviction for any of the following: drunkenness, simple assault, speeding, minor traffic violations, affray, or disturbance of the peace. (b) A felony or misdemeanor conviction(s), which has been annulled or sealed by a court. (c) A juvenile delinquency or child-in-need-of-service complaint(s), which was not transferred to Superior Court for prosecution. (d) An arrest or criminal court appearance that did not result in a conviction. Have you ever been convicted of a felony?" [ref=e420]':
+    - generic [ref=e421]: "*Instructions: Please read (a) through (d) below and then answer the following questions. You may answer NO if you have any of the following circumstances: (a) A first conviction for any of the following: drunkenness, simple assault, speeding, minor traffic violations, affray, or disturbance of the peace. (b) A felony or misdemeanor conviction(s), which has been annulled or sealed by a court. (c) A juvenile delinquency or child-in-need-of-service complaint(s), which was not transferred to Superior Court for prosecution. (d) An arrest or criminal court appearance that did not result in a conviction. Have you ever been convicted of a felony?"
+    - generic [ref=e424] [cursor=pointer]:
+      - radio "Yes" [ref=e425]
+      - text: "Yes"
+"misdemeanor for which your period of incarceration ended within the past 5 years?": |-
+  - group "*Have you been convicted of a misdemeanor for which your period of incarceration ended within the past 5 years?" [ref=e442]:
+    - generic [ref=e443]: "*Have you been convicted of a misdemeanor for which your period of incarceration ended within the past 5 years?"
+    - generic [ref=e446] [cursor=pointer]:
+      - radio "Yes" [ref=e447]
+      - text: "Yes"
+"convicted of a misdemeanor within the past 5 years?": |-
+  - group "*Have you been convicted of a misdemeanor within the past 5 years?" [ref=e464]:
+    - generic [ref=e465]: "*Have you been convicted of a misdemeanor within the past 5 years?"
+    - generic [ref=e468] [cursor=pointer]:
+      - radio "Yes" [ref=e469]
+      - text: "Yes"
+"FCRA Disclosure and Authorization: I understand that the Company": |-
+  - generic [ref=e487]: "*FCRA Disclosure and Authorization: I understand that the Company will utilize the services of a consumer reporting agency as part of the procedure for processing my application for employment. I also understand that if I am employed by the Company, the Company may obtain further information through subsequent investigations by a consumer reporting agency for purposes related to my employment with the Company. I understand that a consumer reporting agency's investigation may include obtaining information covering up to the last seven (7) years regarding my credit background, character, general reputation, personal characteristics and mode of living, and criminal conviction record (consistent with Massachusetts state law). I understand such information may be obtained by direct or indirect contact with former employers, schools, financial institutions, landlords and public agencies or other persons who may have such knowledge. I hereby consent to this investigation and authorize the Company to procure a report on my background as stated above form a consumer reporting agency."
+  - generic [ref=e490] [cursor=pointer]:
+    - radio "I agree" [ref=e491]
+    - text: I agree
+"I understand that the Company may perform a CORI check on me": |-
+  - group "*I understand that the Company may perform a CORI check on me regarding my application for employment and as needed during the course of my employment." [ref=e499]:
+    - generic [ref=e500]: "*I understand that the Company may perform a CORI check on me regarding my application for employment and as needed during the course of my employment."
+    - generic [ref=e503] [cursor=pointer]:
+      - radio "I agree" [ref=e504]
+      - text: I agree
+"I have received the FCRA - Disclosure and Authorization notification": |-
+  - group "*I have received the FCRA - Disclosure and Authorization notification included within this employment application." [ref=e512]:
+    - generic [ref=e513]: "*I have received the FCRA - Disclosure and Authorization notification included within this employment application."
+    - generic [ref=e516] [cursor=pointer]:
+      - radio "I agree" [ref=e517]
+      - text: I agree
+"I hereby authorize any former employer": |-
+  - group "*I hereby authorize any former employer, any person, firm, corporation, school, or any government agency to answer any and all questions and to release or provide any information within their knowledge or records. I agree to hold the Company and any former employer, any person, firm, corporation, school, or any government agency or any or all of them harmless and free of any liability for releasing any information (whether fact or opinion) that is within their knowledge or records. I agree that, as with all authorizations in this application, a photocopy or electronic copy of this authorization will have the same authority as the original. The Company is hereby authorized to release to any other firm or person with whom I may seek employment, any and all information concerning my application and/or employment." [ref=e525]:
+    - generic [ref=e526]: "*I hereby authorize any former employer, any person, firm, corporation, school, or any government agency to answer any and all questions and to release or provide any information within their knowledge or records. I agree to hold the Company and any former employer, any person, firm, corporation, school, or any government agency or any or all of them harmless and free of any liability for releasing any information (whether fact or opinion) that is within their knowledge or records. I agree that, as with all authorizations in this application, a photocopy or electronic copy of this authorization will have the same authority as the original. The Company is hereby authorized to release to any other firm or person with whom I may seek employment, any and all information concerning my application and/or employment."
+    - generic [ref=e529] [cursor=pointer]:
+      - radio "I agree" [ref=e530]
+      - text: I agree
+"I understand and agree that if hired, my employment will be at-will": |-
+  - group "*I understand and agree that if hired, my employment will be at-will in nature and may be terminated, with or without cause, at any time, by myself or the Company. I also understand that this written statement supersedes any and all oral representations made by agents or representatives of the Company. It is my understanding that this employment application, or the granting of an interview, does not represent a contract of employment or a promise of future benefits." [ref=e538]:
+    - generic [ref=e539]: "*I understand and agree that if hired, my employment will be at-will in nature and may be terminated, with or without cause, at any time, by myself or the Company. I also understand that this written statement supersedes any and all oral representations made by agents or representatives of the Company. It is my understanding that this employment application, or the granting of an interview, does not represent a contract of employment or a promise of future benefits."
+    - generic [ref=e542] [cursor=pointer]:
+      - radio "I agree" [ref=e543]
+      - text: I agree
+"By typing my name in the below text box": |-
+      - generic [ref=e552]: "*By typing my name in the below text box, I certify that the information I provided on this application is true, accurate, and complete. I also understand that any false statements, or withholding of information, may result in disqualification of employment, or if discovered after employment begins, disciplinary action up to and including termination of my employment."
+      - textbox "*By typing my name in the below text box, I certify that the information I provided on this application is true, accurate, and complete. I also understand that any false statements, or withholding of information, may result in disqualification of employment, or if discovered after employment begins, disciplinary action up to and including termination of my employment." [ref=e553]
+      - generic [ref=e556]: 4000 characters left
+    - text: "* * *"
+  - separator [ref=e557]

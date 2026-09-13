@@ -1,0 +1,11 @@
+"Yes": |-
+                    - button "Yes Required" [ref=e2281]: "Yes"
+                  - group "Do you now, or will you in the future, require the sponsorship of an employer in order to have valid work authorization?*" [ref=e2150]:
+                    - paragraph [ref=e2154]: Do you now, or will you in the future, require the sponsorship of an employer in order to have valid work authorization?*
+                    - button "Select One Required" [expanded] [ref=e2158]: Select One
+  --
+      - option "Yes" [ref=e2287]:
+        - generic [ref=e2288]: "Yes"
+      - option "No" [ref=e2289]:
+        - generic [ref=e2290]: "No"
+  ```

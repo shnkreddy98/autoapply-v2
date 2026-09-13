@@ -1,0 +1,12 @@
+"Country dialing code": |-
+  - generic "Country dialing code" [ref=e787] [cursor=pointer]:
+    - combobox "Country dialing code" [ref=e790]
+    - generic:
+      - img:
+        - img
+  --
+    - generic "Country dialing code" [ref=e801] [cursor=pointer]:
+      - combobox "Country dialing code" [ref=e804]
+      - generic:
+        - img:
+          - img

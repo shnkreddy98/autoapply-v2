@@ -1,0 +1,7 @@
+"Are you legally able to work in the United States?": |-
+    - text: Are you legally able to work in the United States?
+    - generic [ref=f67e45]: "*"
+  - combobox "Are you legally able to work in the United States?*" [ref=f67e47]:
+    - option "— Make a Selection —"
+    - option "Yes" [selected]
+    - option "No"

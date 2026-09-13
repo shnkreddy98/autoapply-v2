@@ -1,0 +1,5 @@
+"Have you applied for a Gaming License with the San Manuel Gaming Commission in the past 24 months?*": |-
+  - group "Have you applied for a Gaming License with the San Manuel Gaming Commission in the past 24 months?*" [ref=e1789]:
+    - paragraph [ref=e1793]: Have you applied for a Gaming License with the San Manuel Gaming Commission in the past 24 months?*
+    - generic [ref=e1794]:
+      - button "Select One Required" [ref=e1797]: Select One

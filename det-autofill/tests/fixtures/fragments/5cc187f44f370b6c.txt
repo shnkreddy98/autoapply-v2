@@ -1,0 +1,41 @@
+"Country": |-
+      - generic [ref=e167]: Country*
+      - generic [ref=e168]:
+        - log [ref=e170]
+        - generic [ref=e172]:
+  --
+            - combobox "Country" [invalid] [ref=e175]
+          - button "Toggle flyout" [ref=e177] [cursor=pointer]:
+            - img [ref=e178]
+    - paragraph [ref=e521]: Select a country
+  - generic [ref=e182]:
+    - generic [ref=e183]: Phone*
+    - textbox "Phone" [active] [ref=e184]: (555) 010-0199
+"Location (City)": |-
+      - generic [ref=e188]: Location (City)*
+      - generic [ref=e189]:
+        - log [ref=e191]
+        - combobox "Location (City)" [invalid] [ref=e196]
+        - textbox
+    - paragraph [ref=e522]: Please enter your location
+  - button "Locate me" [ref=e197] [cursor=pointer]
+"Attach": |-
+    - button "Attach" [ref=e205] [cursor=pointer]
+    - generic [ref=e206]: Attach
+    - button "Attach" [ref=e207]
+  - button "Dropbox" [ref=e209] [cursor=pointer]
+  - button "Google Drive" [ref=e211] [cursor=pointer]
+  - generic [ref=e213]:
+  --
+    - button "Attach" [ref=e224] [cursor=pointer]
+    - generic [ref=e225]: Attach
+    - button "Attach" [ref=e226]
+  - button "Dropbox" [ref=e228] [cursor=pointer]
+  - button "Google Drive" [ref=e230] [cursor=pointer]
+  - generic [ref=e232]:
+"LinkedIn Profile": |-
+    - generic [ref=e241]: LinkedIn Profile
+    - textbox "LinkedIn Profile" [ref=e242]
+  - generic [ref=e245]:
+    - generic [ref=e246]: Website
+    - textbox "Website" [ref=e247]

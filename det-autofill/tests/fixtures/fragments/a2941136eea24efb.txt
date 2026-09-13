@@ -1,0 +1,68 @@
+"Delete": |-
+            - button "Delete" [ref=e728] [cursor=pointer]: Delete
+          - generic [ref=e734]:
+            - generic [ref=e735]:
+              - generic [ref=e737]: Job Title*
+  --
+            - button "Delete" [ref=e812] [cursor=pointer]: Delete
+          - generic [ref=e818]:
+            - generic [ref=e819]:
+              - generic [ref=e821]: Job Title*
+  --
+            - button "Delete" [ref=e896] [cursor=pointer]: Delete
+          - generic [ref=e902]:
+            - generic [ref=e903]:
+              - generic [ref=e905]: Job Title*
+  --
+            - button "Delete" [ref=e980] [cursor=pointer]: Delete
+          - generic [ref=e986]:
+            - generic [ref=e987]:
+              - generic [ref=e989]: Job Title*
+  --
+            - button "Delete" [ref=e1064] [cursor=pointer]: Delete
+          - generic [ref=e1070]:
+            - generic [ref=e1071]:
+              - generic [ref=e1073]: Job Title*
+  --
+            - button "Delete" [ref=e1148] [cursor=pointer]: Delete
+          - generic [ref=e1154]:
+            - generic [ref=e1155]:
+              - generic [ref=e1157]: Job Title*
+  --
+                - option "Database Administration (Suggested), press delete to clear value." [ref=e1306]:
+                  - paragraph [ref=e1311]: Database Administration (Suggested)
+                - option "Enterprise Data (Suggested), press delete to clear value." [ref=e1312]:
+                  - paragraph [ref=e1317]: Enterprise Data (Suggested)
+                - option "PostgreSQL (Suggested), press delete to clear value." [ref=e1318]:
+                  - paragraph [ref=e1323]: PostgreSQL (Suggested)
+                - option "Structured Query Language (SQL) (Suggested), press delete to clear value." [ref=e1324]:
+                  - paragraph [ref=e1329]: Structured Query Language (SQL) (Suggested)
+                - option "ETL Pipelines (Suggested), press delete to clear value." [ref=e1330]:
+                  - paragraph [ref=e1335]: ETL Pipelines (Suggested)
+                - option "Data Modeling (Suggested), press delete to clear value." [ref=e1336]:
+                  - paragraph [ref=e1341]: Data Modeling (Suggested)
+                - option "Python (Programming Language) (Suggested), press delete to clear value." [ref=e1342]:
+                  - paragraph [ref=e1347]: Python (Programming Language) (Suggested)
+                - option "Design (Suggested), press delete to clear value." [ref=e1348]:
+                  - paragraph [ref=e1353]: Design (Suggested)
+                - option "MySQL (Suggested), press delete to clear value." [ref=e1354]:
+                  - paragraph [ref=e1359]: MySQL (Suggested)
+                - option "Database Architecture (Suggested), press delete to clear value." [ref=e1360]:
+                  - paragraph [ref=e1365]: Database Architecture (Suggested)
+                - option "Business (Suggested), press delete to clear value." [ref=e1366]:
+                  - paragraph [ref=e1371]: Business (Suggested)
+                - option "Java (Programming Language) (Suggested), press delete to clear value." [ref=e1372]:
+                  - paragraph [ref=e1377]: Java (Programming Language) (Suggested)
+                - option "Data Warehousing (DW) (Suggested), press delete to clear value." [ref=e1378]:
+                  - paragraph [ref=e1383]: Data Warehousing (DW) (Suggested)
+                - option "Data Query (Suggested), press delete to clear value." [ref=e1384]:
+                  - paragraph [ref=e1389]: Data Query (Suggested)
+                - option "Data Solutions (Suggested), press delete to clear value." [ref=e1390]:
+                  - paragraph [ref=e1395]: Data Solutions (Suggested)
+      - group "Resume/CV" [ref=e1400]:
+        - heading "Resume/CV" [level=4] [ref=e1401]
+  --
+                - button "Delete resume.pdf" [ref=e1442] [cursor=pointer]
+  - generic [ref=e376]:
+    - button "Back" [ref=e568] [cursor=pointer]
+    - button "Save and Continue" [ref=e569] [cursor=pointer]

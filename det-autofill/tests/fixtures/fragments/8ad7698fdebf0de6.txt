@@ -1,0 +1,5 @@
+"1st Location Preference . Required Value": |-
+      - textbox "No items correspond to the specified criteria. Please select other criteria. No items correspond to the specified criteria. Please select other criteria. 1st Location Preference . Required Value" [ref=e262]: San Jose, CA
+      - button "Search" [ref=e263] [cursor=pointer]:
+        - generic [ref=e266]: Search
+  - group "2nd Location Preference . Required" [ref=e268]:

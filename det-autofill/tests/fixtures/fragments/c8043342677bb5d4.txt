@@ -1,0 +1,6 @@
+"Not a Veteran": |-
+    - radio "Not a Veteran" [ref=e370]
+    - generic [ref=e372]: Not a Veteran
+  - generic [ref=e374] [cursor=pointer]:
+    - radio "Veteran" [ref=e376]
+    - generic [ref=e378]: Veteran

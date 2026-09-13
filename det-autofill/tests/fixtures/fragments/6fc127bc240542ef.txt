@@ -1,0 +1,33 @@
+"LinkedIn": |-
+  - Page URL: https://cir.wd108.myworkdayjobs.com/en-US/CIR_External_Career_Site/job/Phoenix%2C-AZ/Principal-Data-Engineer_R-2025-151/apply/autofillWithResume?source=LinkedIn
+  - Page Title: Principal Data Engineer
+  ### Snapshot
+  ```yaml
+  - generic [ref=e4]:
+    - link "Skip to main content" [ref=e5] [cursor=pointer]:
+      - /url: ""
+    - generic "You may choose to display a cookie banner on the external site. You must specify the message in the cookie banner and may add a link to a relevant policy. If you are unfamiliar with these requirements, please seek the advice of legal counsel." [ref=e9]:
+      - paragraph [ref=e11]: You may choose to display a cookie banner on the external site. You must specify the message in the cookie banner and may add a link to a relevant policy. If you are unfamiliar with these requirements, please seek the advice of legal counsel.
+      - generic [ref=e12]:
+        - button "Decline" [ref=e15] [cursor=pointer]
+  --
+                      - text: LinkedIn
+                    - generic [ref=e301]: Minimized
+              - group [ref=e198]:
+                - group "Have you previously worked for this organization? If yes, please answer the question below. If No, please continue to the next page." [ref=e307]:
+                  - generic [ref=e310]: Have you previously worked for this organization? If yes, please answer the question below. If No, please continue to the next page.*
+                  - generic "Have you previously worked for this organization? If yes, please answer the question below. If No, please continue to the next page." [ref=e313]:
+                    - generic [ref=e314]:
+                      - radio "Yes" [ref=e316] [cursor=pointer]
+                      - generic [ref=e317]: "Yes"
+                    - generic [ref=e318]:
+                      - radio "No" [ref=e320] [cursor=pointer]
+  --
+          - link "LinkedIn" [ref=e60]:
+            - /url: https://www.linkedin.com/company/cambridge-investment-research/posts/?feedView=all
+      - link "Cambridge Investment Research Privacy Policy" [ref=e65] [cursor=pointer]:
+        - /url: https://www.joincambridge.com/legal/privacy/privacy-policy/
+      - generic [ref=e66]:
+        - img [ref=e70]
+        - generic [ref=e90]: © 2026 Workday, Inc. All rights reserved.
+  ```

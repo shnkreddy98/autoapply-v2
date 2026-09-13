@@ -1,0 +1,45 @@
+"No": |-
+              - /url: http://www.statestreet.com/about/careers/regional-privacy-notices.html
+              - generic [ref=e25]: LEARN MORE
+        - generic [ref=e26]:
+          - button "Decline" [ref=e29] [cursor=pointer]
+  --
+                        - text: "Individuals in a broad spectrum of entities, roles and responsibilities, including, but not limited to:"
+                      - list [ref=e2007]:
+                        - listitem [ref=e2008]: any officer or employee of any government, department, agency, or instrumentality of a government, whether national, regional, or local;
+                        - listitem [ref=e2009]: any officer or employee of a public international or supranational organization such as the United Nations or World Bank;
+  --
+                        - text: "The terms Senior Level Person or Senior Commercial Person typically refers to high-ranking executives in an organization. These individuals may hold a c-level or c-suite position or any other high-ranking position that has influence and power over decision making. Examples include, but are not limited to:"
+                      - list [ref=e2019]:
+                        - listitem [ref=e2020]: Chief Executive Officer (CEO)
+                        - listitem [ref=e2021]: Chief Information Officer (CIO)
+  --
+                  - group "If yes, what is your relationship with this individual? Enter N/A if not applicable.*" [ref=e2032]:
+                    - paragraph [ref=e2036]: If yes, what is your relationship with this individual? Enter N/A if not applicable.*
+                    - textbox [ref=e2039]
+                  - group "If yes, please list the institution name and level of the individual. Enter N/A if not applicable.*" [ref=e2041]:
+                    - paragraph [ref=e2045]: If yes, please list the institution name and level of the individual. Enter N/A if not applicable.*
+                    - textbox [ref=e2048]
+                  - group "Are you a relative of a current senior level person or senior commercial person for a company other than State Street? (e.g. Chief Executive Officer, Chief Financial Officer, Senior Investment Officer)*" [ref=e2050]:
+                    - paragraph [ref=e2054]:
+  --
+                  - group "If yes, what is your relationship with this individual? Enter N/A if not applicable.*" [ref=e2061]:
+                    - paragraph [ref=e2065]: If yes, what is your relationship with this individual? Enter N/A if not applicable.*
+                    - textbox [ref=e2068]
+                  - group "If yes, please list the institution name and level of the individual. Enter N/A if not applicable.*" [ref=e2070]:
+                    - paragraph [ref=e2074]: If yes, please list the institution name and level of the individual. Enter N/A if not applicable.*
+                    - textbox [ref=e2077]
+                  - group "Please select one of the below options:*" [ref=e2079]:
+                    - paragraph [ref=e2083]: Please select one of the below options:*
+  --
+        - link "State Street Privacy Notice" [ref=e100] [cursor=pointer]:
+          - /url: https://careers.statestreet.com/global/en/privacy-notices-and-important-information
+        - generic [ref=e101]:
+          - img [ref=e105]
+          - generic [ref=e125]: © 2026 Workday, Inc. All rights reserved.
+  --
+      - option "No" [ref=e2102]:
+        - generic [ref=e2103]: "No"
+      - option "Yes" [ref=e2104]:
+        - generic [ref=e2105]: "Yes"
+  ```

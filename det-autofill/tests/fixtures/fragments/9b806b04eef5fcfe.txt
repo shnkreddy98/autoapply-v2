@@ -1,0 +1,20 @@
+"Location": |-
+      - heading "Location" [level=2] [ref=e272]
+      - paragraph [ref=e22]: United States
+    - generic [ref=e23]:
+      - heading "Employment Type" [level=2] [ref=e273]
+  --
+      - heading "Location Type" [level=2] [ref=e274]
+      - paragraph [ref=e28]: Remote
+    - generic [ref=e29]:
+      - heading "Department" [level=2] [ref=e275]
+  --
+      - paragraph [ref=e39]: The compensation offered for this role will depend on various factors, including the candidate's location, qualifications, work history, and interview performance, and may differ from the stated range.
+  - generic [ref=e40]:
+    - tablist [ref=e41]:
+      - tab "Overview" [ref=e277] [cursor=pointer]
+  --
+          - generic [ref=e188]: Location*
+          - generic [ref=e189]:
+            - combobox "Start typing..." [ref=e190] [cursor=pointer]: United States
+            - button [ref=e191] [cursor=pointer]:

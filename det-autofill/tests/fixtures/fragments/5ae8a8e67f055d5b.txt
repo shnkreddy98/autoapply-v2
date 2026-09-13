@@ -1,0 +1,137 @@
+"Allow": |-
+      - text: By selecting "Allow", you consent to the recording, use and sharing of your website activity by this website and its service providers.
+    - generic [ref=e211]:
+      - button "Allow" [ref=e212] [cursor=pointer]
+      - button "Reject All" [ref=e213] [cursor=pointer]
+  - link "Powered by JazzHr" [ref=e215] [cursor=pointer]:
+    - /url: https://info.jazzhr.com/job-seekers.html
+"First Name": |-
+    - generic [ref=e149]: First Name*
+    - textbox "First Name*" [ref=e150]
+  - generic [ref=e151]:
+    - generic [ref=e152]: Last Name*
+    - textbox "Last Name*" [ref=e153]
+"Last Name": |-
+    - generic [ref=e152]: Last Name*
+    - textbox "Last Name*" [ref=e153]
+  - generic [ref=e154]:
+    - generic [ref=e155]: Email Address*
+    - textbox "Email Address*" [ref=e156]
+"Email Address": |-
+    - generic [ref=e155]: Email Address*
+    - textbox "Email Address*" [ref=e156]
+  - generic [ref=e157]:
+    - generic [ref=e158]: Phone*
+    - textbox "Phone*" [ref=e159]
+"Phone": |-
+    - generic [ref=e158]: Phone*
+    - textbox "Phone*" [ref=e159]
+  - generic [ref=e160]:
+    - generic [ref=e161]: Address*
+    - generic [ref=e162]:
+"Address": |-
+    - generic [ref=e155]: Email Address*
+    - textbox "Email Address*" [ref=e156]
+  - generic [ref=e157]:
+    - generic [ref=e158]: Phone*
+    - textbox "Phone*" [ref=e159]
+  --
+    - generic [ref=e161]: Address*
+    - generic [ref=e162]:
+      - textbox "Address*" [ref=e163]:
+        - /placeholder: Address
+      - generic [ref=e164]:
+        - textbox "City" [ref=e166]
+        - textbox "State/Province" [ref=e168]
+"City": |-
+        - textbox "City" [ref=e166]
+        - textbox "State/Province" [ref=e168]
+        - textbox "Postal" [ref=e170]
+  - generic [ref=e171]:
+"State/Province": |-
+        - textbox "State/Province" [ref=e168]
+        - textbox "Postal" [ref=e170]
+  - generic [ref=e171]:
+    - generic [ref=e172]: Resume*
+"Postal": |-
+        - textbox "Postal" [ref=e170]
+  - generic [ref=e171]:
+    - generic [ref=e172]: Resume*
+    - generic [ref=e173]:
+"Resume": |-
+    - generic [ref=e172]: Resume*
+    - generic [ref=e173]:
+      - link "Attach resume" [ref=e174] [cursor=pointer]:
+        - /url: "#"
+      - text: or
+      - link "Paste resume" [ref=e175] [cursor=pointer]:
+        - /url: "#"
+  - generic [ref=e176]:
+    - generic [ref=e177]: This position requires significant overlap with U.S. Mountain Time business hours, including evening or overnight schedules. Are you able to meet this requirement?*
+"U.S. Mountain Time": |-
+  - generic [ref=e177]: This position requires significant overlap with U.S. Mountain Time business hours, including evening or overnight schedules. Are you able to meet this requirement?*
+  - combobox "This position requires significant overlap with U.S. Mountain Time business hours, including evening or overnight schedules. Are you able to meet this requirement?*" [ref=e178]:
+    - option "-- No answer --" [selected]
+    - option "Yes"
+    - option "No"
+"2 years of experience": |-
+  - generic [ref=e180]: Do you have at least 2 years of experience as a Data Engineer, MarTech Developer, or similar role?*
+  - combobox "Do you have at least 2 years of experience as a Data Engineer, MarTech Developer, or similar role?*" [ref=e181]:
+    - option "-- No answer --" [selected]
+    - option "Yes"
+    - option "No"
+"ETL/ELT data pipelines": |-
+    - generic [ref=e83]: Experience designing, building, and optimizing end-to-end ETL/ELT data pipelines.
+  - listitem [ref=e84]:
+    - generic [ref=e86]: Experience developing and maintaining REST APIs, webhooks, and third-party system integrations.
+  - listitem [ref=e87]:
+  --
+    - generic [ref=e183]: Do you have experience designing, building, and optimizing end-to-end ETL/ELT data pipelines?*
+    - combobox "Do you have experience designing, building, and optimizing end-to-end ETL/ELT data pipelines?*" [ref=e184]:
+      - option "-- No answer --" [selected]
+      - option "Yes"
+      - option "No"
+"BigQuery": |-
+    - generic [ref=e64]: Data Warehouse Performance – Optimize data storage and retrieval performance across platforms such as BigQuery, Snowflake, or Azure Synapse to improve query efficiency, scalability, and data accessibility.
+  - listitem [ref=e65]:
+    - generic [ref=e67]: Business Intelligence Reporting – Create and maintain Power BI and other business intelligence dashboards that provide accurate, timely reporting and actionable insights for stakeholders.
+  - listitem [ref=e68]:
+  --
+    - generic [ref=e92]: Experience working with Google BigQuery, Data Lake environments, or similar cloud-based data platforms.
+  - listitem [ref=e93]:
+    - generic [ref=e95]: Experience creating reports and dashboards using Power BI, Tableau, or similar business intelligence tools.
+  - listitem [ref=e96]:
+  --
+    - generic [ref=e186]: Do you have experience working with Google BigQuery, Data Lake environments, or similar cloud-based data platforms?*
+    - combobox "Do you have experience working with Google BigQuery, Data Lake environments, or similar cloud-based data platforms?*" [ref=e187]:
+      - option "-- No answer --" [selected]
+      - option "Yes"
+      - option "No"
+"REST APIs": |-
+    - generic [ref=e86]: Experience developing and maintaining REST APIs, webhooks, and third-party system integrations.
+  - listitem [ref=e87]:
+    - generic [ref=e89]: Knowledge of data modeling, data architecture, and data integration best practices.
+  - listitem [ref=e90]:
+  --
+    - generic [ref=e189]: Do you have experience developing and maintaining REST APIs, webhooks, and third-party system integrations?*
+    - combobox "Do you have experience developing and maintaining REST APIs, webhooks, and third-party system integrations?*" [ref=e190]:
+      - option "-- No answer --" [selected]
+      - option "Yes"
+      - option "No"
+"Philippines": |-
+  - generic [ref=e192]: Are you currently located in the Philippines?*
+  - combobox "Are you currently located in the Philippines?*" [ref=e193]:
+    - option "-- No answer --" [selected]
+    - option "Yes"
+    - option "No"
+"I'm not a robot": |-
+          - checkbox "I'm not a robot" [ref=f141e7]
+          - generic [ref=f141e11]: I'm not a robot
+        - generic [ref=f141e15]: reCAPTCHA
+  - generic [ref=e202]:
+    - checkbox "I consent to receive SMS/text messages regarding my job application with Spartan Investment Group. These messages may include updates on my application status, interview invitations, reminders, and other information directly related to this job application. Message frequency will vary. Message and data rates may apply. Reply HELP for help or STOP to cancel." [ref=e203]
+"Submit Application": |-
+          - link "Submit Application" [ref=e205] [cursor=pointer]:
+            - /url: "#"
+  - contentinfo [ref=e206]:
+    - generic [ref=e207]:

@@ -1,0 +1,5 @@
+"San Jose, California, United States": |-
+  - option "San Jose, California, United States" [ref=e565]
+  - option "San José, Costa Rica" [ref=e567]
+  - option "San Jose del Monte, Bulacan, Philippines" [ref=e568]
+  - option "San Jose, Mindoro Occidental, Philippines" [ref=e569]

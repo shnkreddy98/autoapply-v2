@@ -1,0 +1,90 @@
+"First Name": |-
+    - generic [ref=e85]: First Name*
+    - textbox "First Name*" [ref=e87]
+  - generic [ref=e89]:
+    - generic [ref=e91]: Last Name*
+    - textbox "Last Name*" [ref=e93]
+"Last Name": |-
+      - generic [ref=e91]: Last Name*
+      - textbox "Last Name*" [ref=e93]
+  - generic [ref=e94]:
+    - generic [ref=e96]: Email*
+    - textbox "Email*" [ref=e98]
+"Email": |-
+  - link "Share via email" [ref=e22] [cursor=pointer]:
+    - /url: mailto:?subject=Magnus%20Management%20Group%20LLC%20is%20hiring%21&body=Data%20Engineer%20-%20DC%20-%20Washington%20DC%2020001%0AApply%20here%3A%20https%3A%2F%2Fmagnus-management-group-llc.careerplug.com%2Fj%2F031nmcf
+  - link "Share on Nextdoor":
+    - /url: https://nextdoor.com/sharekit/?body=I+have+an+opening+for%3A+Data+Engineer+-+DC+-+Washington+DC+20001.+Apply+here%3A+https%3A%2F%2Fmagnus-management-group-llc.careerplug.com%2Fj%2F031nmcg&source=careerplug
+  --
+      - generic [ref=e96]: Email*
+      - textbox "Email*" [ref=e98]
+    - generic [ref=e99]:
+      - generic [ref=e101]: Phone*
+      - textbox "Phone*" [ref=e103]
+"Phone": |-
+    - generic [ref=e101]: Phone*
+    - textbox "Phone*" [ref=e103]
+  - generic [ref=e104]:
+    - checkbox "Get faster updates with texting! Message and data rates may apply. Message frequency varies. Reply STOP to opt out. Reply HELP for help. See our User Terms of Service and Privacy Policy for details." [ref=e105]
+    - generic [ref=e106]:
+"Address": |-
+  - textbox "Address" [ref=e116]
+  - textbox "City" [ref=e119]
+  - generic [ref=e120]:
+    - combobox "States" [ref=e124]:
+"City": |-
+  - textbox "City" [ref=e119]
+  - generic [ref=e120]:
+    - combobox "States" [ref=e124]:
+      - option "State" [selected]
+"State": |-
+  - combobox "States" [ref=e124]:
+    - option "State" [selected]
+    - option "Alabama"
+    - option "Alaska"
+    - option "American Samoa"
+"ZIP Code": |-
+      - textbox "ZIP Code" [ref=e128]
+  - generic [ref=e129]:
+    - generic [ref=e130]: Resume/CV *
+    - group [ref=e131]:
+"Resume/CV": |-
+  - generic [ref=e130]: Resume/CV *
+  - group [ref=e131]:
+    - generic [ref=e133]:
+      - generic "Attach file (.pdf, .doc, .docx, .rtf, .txt)" [ref=e135]:
+"Upload File": |-
+    - generic [ref=e140] [cursor=pointer]: Upload File
+    - button "Upload File" [ref=e141]
+  - generic [ref=e142]: Or
+  - link "Type/Paste Text" [ref=e144] [cursor=pointer]:
+    - /url: "#resume_text_input"
+  --
+    - generic [ref=e159] [cursor=pointer]: Upload File
+    - button "Upload File" [ref=e160]
+  - generic [ref=e161]: Or
+  - link "Type/Paste Text" [ref=e163] [cursor=pointer]:
+    - /url: "#cover_letter_input"
+"Recent Job Title": |-
+    - generic [ref=e169]: Recent Job Title
+    - textbox "Recent Job Title" [ref=e171]
+  - generic [ref=e172]:
+    - generic [ref=e174]: Recent Employer
+    - textbox "Recent Employer" [ref=e176]
+"Recent Employer": |-
+      - generic [ref=e174]: Recent Employer
+      - textbox "Recent Employer" [ref=e176]
+  - group [ref=e177]:
+    - generic [ref=e178]:
+      - generic [ref=e180]: Do you have recent federal contracting experience?*
+"Do you have recent federal contracting experience?": |-
+  - generic [ref=e180]: Do you have recent federal contracting experience?*
+  - combobox "Do you have recent federal contracting experience?*" [ref=e182]:
+    - option [selected]
+    - option "Yes"
+    - option "No"
+"Submit Application": |-
+          - button "Submit Application" [ref=e194] [cursor=pointer]
+          - link "Privacy Policy" [ref=e196] [cursor=pointer]:
+            - /url: https://www.careerplug.com/privacy/
+  - iframe [ref=e198]:

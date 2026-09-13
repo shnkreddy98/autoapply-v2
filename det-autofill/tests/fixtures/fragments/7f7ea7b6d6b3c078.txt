@@ -1,0 +1,26 @@
+"Are you a current Supplemental Labor employee?": |-
+    - generic [ref=e632]: Are you a current Supplemental Labor employee?
+    - text: "*"
+  - radiogroup "Are you a current Supplemental Labor employee?" [ref=e633]:
+    - generic:
+      - radio "Yes" [ref=e634]:
+        - generic [ref=e646] [cursor=pointer]: "Yes"
+"Are you a former employee?": |-
+    - generic [ref=e671]: Are you a former employee?
+    - text: "*"
+  - radiogroup "Are you a former employee?" [ref=e672]:
+    - generic:
+      - radio "Yes" [ref=e673]:
+        - generic [ref=e685] [cursor=pointer]: "Yes"
+"Are you a U.S. citizen?": |-
+    - generic [ref=e710]: Are you a U.S. citizen?
+    - text: "*"
+  - radiogroup "Are you a U.S. citizen?" [ref=e711]:
+    - generic:
+      - radio "Yes" [ref=e712]:
+        - generic [ref=e724] [cursor=pointer]: "Yes"
+"Are you a protected veteran? (definitions)": |-
+  - radiogroup "Are you a protected veteran? (definitions)" [ref=e885]:
+    - generic:
+      - radio "Yes" [ref=e886]:
+        - generic [ref=e898] [cursor=pointer]: "Yes"

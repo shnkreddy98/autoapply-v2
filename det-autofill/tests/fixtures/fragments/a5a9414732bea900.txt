@@ -1,0 +1,147 @@
+"Employer": |-
+      - generic [ref=f67e328]: Employer
+      - generic [ref=f67e329]:
+        - text: "*"
+        - generic [ref=f67e330]: required.
+    - textbox "Employer" [ref=f67e332]: The Sparks Foundation
+  - generic [ref=f67e333]:
+    - generic [ref=f67e335]: City
+    - textbox "City" [ref=f67e337]: Bengaluru
+  --
+      - generic [ref=f67e398]: Employer
+      - generic [ref=f67e399]:
+        - text: "*"
+        - generic [ref=f67e400]: required.
+    - textbox "Employer" [ref=f67e402]: Kantar
+  - generic [ref=f67e403]:
+    - generic [ref=f67e405]: City
+    - textbox "City" [ref=f67e407]: Bengaluru
+  --
+        - generic [ref=f67e471]: Employer
+        - generic [ref=f67e472]:
+          - text: "*"
+          - generic [ref=f67e473]: required.
+      - textbox "Employer" [ref=f67e475]: AirFold
+    - generic [ref=f67e476]:
+      - generic [ref=f67e478]: City
+      - textbox "City" [ref=f67e480]: San Francisco
+"Title": |-
+  - Page Title: Candidate Profile - Senior Data Engineer
+  - Console: 8 errors, 11 warnings
+  ### Snapshot
+  ```yaml
+  --
+                              - generic [ref=f67e348]: Title
+                              - generic [ref=f67e349]:
+                                - text: "*"
+                                - generic [ref=f67e350]: required.
+                            - textbox "Title" [ref=f67e352]: Data Engineer
+                          - group "Start Date" [ref=f67e353]:
+                            - generic [ref=f67e354]:
+                              - generic [ref=f67e355]: Start Date
+  --
+                              - generic [ref=f67e418]: Title
+                              - generic [ref=f67e419]:
+                                - text: "*"
+                                - generic [ref=f67e420]: required.
+                            - textbox "Title" [ref=f67e422]: Data Engineer
+                          - group "Start Date" [ref=f67e423]:
+                            - generic [ref=f67e424]:
+                              - generic [ref=f67e425]: Start Date
+  --
+                                - generic [ref=f67e491]: Title
+                                - generic [ref=f67e492]:
+                                  - text: "*"
+                                  - generic [ref=f67e493]: required.
+                              - textbox "Title" [ref=f67e495]: Founding Engineer
+                            - group "Start Date" [ref=f67e496]:
+                              - generic [ref=f67e497]:
+                                - generic [ref=f67e498]: Start Date
+"City": |-
+        - generic [ref=f67e151]: City
+        - generic [ref=f67e152]:
+          - text: "*"
+          - generic [ref=f67e153]: required.
+      - textbox "City" [ref=f67e155]: San Jose
+    - generic [ref=f67e156]:
+      - generic [ref=f67e157]:
+        - generic [ref=f67e158]: Zip/Postal Code
+  --
+    - generic [ref=f67e335]: City
+    - textbox "City" [ref=f67e337]: Bengaluru
+  - generic [ref=f67e338]:
+    - generic [ref=f67e340]: State
+    - generic [ref=f67e341]:
+  --
+    - generic [ref=f67e405]: City
+    - textbox "City" [ref=f67e407]: Bengaluru
+  - generic [ref=f67e408]:
+    - generic [ref=f67e410]: State
+    - generic [ref=f67e411]:
+  --
+      - generic [ref=f67e478]: City
+      - textbox "City" [ref=f67e480]: San Francisco
+    - generic [ref=f67e481]:
+      - generic [ref=f67e483]: State
+      - generic [ref=f67e484]:
+"State": |-
+              - option "United States" [selected]
+              - combobox "Country" [ref=f67e169] [cursor=pointer]:
+                - generic [ref=f67e170]: United States
+          - generic [ref=f67e173]:
+            - generic [ref=f67e174]:
+              - generic [ref=f67e175]: State/Province
+              - generic [ref=f67e176]:
+                - text: "*"
+                - generic [ref=f67e177]: required.
+  --
+              - combobox "State/Province" [ref=f67e179] [cursor=pointer]:
+                - generic [ref=f67e180]: California
+        - button "Add More (Addresses)" [ref=f67e186] [cursor=pointer]
+  - group [ref=f67e187]:
+  --
+            - option "San Jose State University" [selected]
+            - combobox "School" [ref=f67e238] [cursor=pointer]:
+              - generic [ref=f67e239]: San Jose State University
+        - generic [ref=f67e242]:
+          - generic [ref=f67e244]: Other School
+          - textbox "Other School" [ref=f67e246]
+  --
+          - generic [ref=f67e340]: State
+          - generic [ref=f67e341]:
+            - option [selected]
+            - combobox "State" [ref=f67e342] [cursor=pointer]:
+              - generic [ref=f67e343]: — Make a Selection —
+        - generic [ref=f67e346]:
+          - generic [ref=f67e347]:
+  --
+          - generic [ref=f67e410]: State
+          - generic [ref=f67e411]:
+            - option [selected]
+            - combobox "State" [ref=f67e412] [cursor=pointer]:
+              - generic [ref=f67e413]: — Make a Selection —
+        - generic [ref=f67e416]:
+          - generic [ref=f67e417]:
+  --
+            - generic [ref=f67e483]: State
+            - generic [ref=f67e484]:
+              - option "California" [selected]
+              - combobox "State" [ref=f67e485] [cursor=pointer]:
+                - generic [ref=f67e486]: California
+          - generic [ref=f67e489]:
+            - generic [ref=f67e490]:
+"Start Date Year": |-
+        - textbox "Start Date Year" [ref=f67e368]: "2018"
+  - group "End Date" [ref=f67e369]:
+    - generic [ref=f67e370]:
+      - generic [ref=f67e371]: End Date
+  --
+        - textbox "Start Date Year" [ref=f67e438]: "2020"
+  - group "End Date" [ref=f67e439]:
+    - generic [ref=f67e440]:
+      - generic [ref=f67e441]: End Date
+  --
+          - textbox "Start Date Year" [ref=f67e511]: "2025"
+    - group "End Date" [ref=f67e512]:
+      - generic [ref=f67e513]:
+        - generic [ref=f67e514]: End Date

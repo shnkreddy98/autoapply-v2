@@ -1,0 +1,61 @@
+"First Name": |-
+    - generic [ref=e515]: First Name*
+    - textbox "First Name" [ref=e516]
+  - generic [ref=e519]:
+    - generic [ref=e520]: Last Name*
+    - textbox "Last Name" [ref=e521]
+  --
+    - generic [ref=e525]: Preferred First Name
+    - textbox "Preferred First Name" [ref=e526]
+  - generic [ref=e529]:
+    - generic [ref=e530]: Email*
+    - textbox "Email" [ref=e531]
+"Last Name": |-
+    - generic [ref=e520]: Last Name*
+    - textbox "Last Name" [ref=e521]
+  - generic [ref=e524]:
+    - generic [ref=e525]: Preferred First Name
+    - textbox "Preferred First Name" [ref=e526]
+"Email": |-
+    - generic [ref=e530]: Email*
+    - textbox "Email" [ref=e531]
+  - group "Phone" [ref=e533]:
+    - generic [ref=e534]: Phone
+    - generic [ref=e537]:
+"Phone": |-
+    - generic [ref=e494]: Our hiring process moves quickly and consists of several stages for candidates who capture our attention with their initial submission, sometimes including but not limited to a short preliminary phone interview, a series of video interviews, and a short take-home exercise, which you'll have up to a week to complete.
+    - generic [ref=e496]: Compensation is $120,000 - $145,000
+    - heading "Additional information" [level=2] [ref=e498]
+    - generic [ref=e499]: We go out of our way to evaluate all employees and job applicants equally based on merit, competence, and qualifications. We encourage candidates from all backgrounds to apply and consider all qualified applicants. Don't worry, every application will be reviewed by a human.
+  --
+  - group "Phone" [ref=e533]:
+    - generic [ref=e534]: Phone
+    - generic [ref=e537]:
+      - generic [ref=e538]: Country*
+      - generic [ref=e539]:
+  --
+      - generic [ref=e554]: Phone*
+      - textbox "Phone" [ref=e556]
+  - generic [ref=e557]:
+    - generic [ref=e559]:
+      - generic [ref=e560]: Location (City)*
+"Location (City)": |-
+      - generic [ref=e560]: Location (City)*
+      - generic [ref=e561]:
+        - log [ref=e563]
+        - combobox "Location (City)" [ref=e568]
+        - textbox
+    - button "Locate me" [ref=e569] [cursor=pointer]
+  - group "Resume/CV*" [ref=e571]:
+"LinkedIn Profile": |-
+    - generic [ref=e613]: LinkedIn Profile*
+    - textbox "LinkedIn Profile" [ref=e614]
+  - generic [ref=e615]:
+    - generic [ref=e617]:
+      - generic [ref=e618]: "To be considered for this role, you must be legally authorized to work in the United States without the need for employer sponsorship. Please select your current work authorization status: *"
+"Resume/CV": |-
+  - group "Resume/CV*" [ref=e571]:
+    - generic [ref=e572]: Resume/CV*
+    - generic [ref=e574]:
+      - generic [ref=e576]:
+        - button "Attach" [ref=e577] [cursor=pointer]

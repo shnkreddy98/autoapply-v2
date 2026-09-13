@@ -1,0 +1,17 @@
+"No": |-
+                    - button "No Required" [ref=e1281]: "No"
+                  - group "Are you legally authorized to work in the U.S.?*" [ref=e1212]:
+                    - paragraph [ref=e1216]: Are you legally authorized to work in the U.S.?*
+                    - button "Yes Required" [ref=e1291]: "Yes"
+                  - group "Do you now, or will you in the future, require immigration sponsorship for work authorization (e.g., H-1B)? (if hired, verification will be required consistent with federal law.)*" [ref=e1222]:
+                    - paragraph [ref=e1226]:
+                      - generic [ref=e1227]: Do you now, or will you in the future, require immigration sponsorship for work authorization (e.g., H-1B)? (if hired, verification will be required consistent with federal law.)
+                      - text: "*"
+                    - button "No Required" [ref=e1301]: "No"
+                  - group "Do you have any relatives employed by this organization?*" [ref=e1233]:
+                    - paragraph [ref=e1237]: Do you have any relatives employed by this organization?*
+                    - button "Select One Required" [expanded] [ref=e1241]: Select One
+  --
+      - option "No" [ref=e1309]:
+        - generic [ref=e1310]: "No"
+  ```

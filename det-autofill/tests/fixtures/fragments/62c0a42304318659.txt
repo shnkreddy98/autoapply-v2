@@ -1,0 +1,4 @@
+"Mobile": |-
+      - option "Mobile" [ref=e584]:
+        - generic [ref=e585]: Mobile
+  ```

@@ -1,0 +1,10 @@
+"India": |-
+  - option "India" [ref=e1376] [cursor=pointer]:
+    - paragraph [ref=e1378]:
+      - paragraph [ref=e1382]:
+        - generic "India" [ref=e1383]:
+          - generic [ref=e1387]:
+            - generic: India
+  - option "Indonesia" [ref=e1390] [cursor=pointer]:
+    - paragraph [ref=e1392]:
+      - paragraph [ref=e1396]:

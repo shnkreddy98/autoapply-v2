@@ -1,0 +1,18 @@
+"First Name": |-
+    - text: First Name*
+    - textbox "First Name*" [ref=e31]: Jane Quinn
+  - generic [ref=e33]:
+    - text: Last Name*
+    - textbox "Last Name*" [ref=e35]: Doe
+"Last Name": |-
+      - text: Last Name*
+      - textbox "Last Name*" [ref=e35]: Doe
+  - generic [ref=e36]:
+    - generic [ref=e38]:
+      - text: Primary Phone*
+"Can CFS reach out via SMS regarding your application?": |-
+  - text: Can CFS reach out via SMS regarding your application?*
+  - combobox "Can CFS reach out via SMS regarding your application?*" [ref=e44]:
+    - option "'Yes' to opt in, or 'No' to decline.*" [selected]
+    - option "YES"
+    - option "NO"
