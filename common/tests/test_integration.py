@@ -2,6 +2,9 @@
 
 import uuid
 
+import psycopg
+import pytest
+
 from common import db as dbmod
 from common import queue, repo
 
@@ -101,30 +104,46 @@ def test_enqueue_tailoring_refreshes_base_on_conflict(db, seed_user):
 
 
 def _mk_base(db, user_id, label, variant="docx"):
-    key = f"users/{user_id}/resumes/base/{label or 'default'}/{variant}.docx"
+    key = f"users/{user_id}/resumes/base/{label}/{variant}.{variant}"
     return repo.insert_resume_asset(
         db, user_id, "base", key, variant=variant, label=label
     )
 
 
 def test_get_base_asset_label_selection(db, seed_user):
-    """Default selection (label=None) must ignore role bases, and a named label must
-    return exactly that base."""
-    user_id, _ = seed_user
-    default_id = _mk_base(db, user_id, None)
+    """label=None is the user's default role, never "whichever role came last", and a
+    named label returns exactly that base."""
+    user_id, general_id = seed_user
     swe_id = _mk_base(db, user_id, "swe")
 
-    assert repo.get_base_asset(db, user_id, variant="docx")["id"] == default_id
+    assert repo.get_base_asset(db, user_id, variant="docx")["id"] == general_id
     assert repo.get_base_asset(db, user_id, variant="docx", label="swe")["id"] == swe_id
     assert repo.get_base_asset(db, user_id, variant="docx", label="nope") is None
+
+    repo.set_default_resume_label(db, user_id, "swe")
+    assert repo.get_base_asset(db, user_id, variant="docx")["id"] == swe_id
+
+
+def test_base_resume_must_name_its_role(db, seed_user):
+    """An unlabelled base used to mean "the default", a special case in every query."""
+    user_id, _ = seed_user
+    with pytest.raises(psycopg.errors.CheckViolation):
+        repo.insert_resume_asset(db, user_id, "base", "k/x.docx", variant="docx")
+    db.rollback()
+
+
+def test_one_base_per_role_and_format(db, seed_user):
+    user_id, _ = seed_user
+    with pytest.raises(psycopg.errors.UniqueViolation):
+        _mk_base(db, user_id, "general")
+    db.rollback()
 
 
 def test_list_base_assets(db, seed_user):
     user_id, _ = seed_user
-    _mk_base(db, user_id, None)
     _mk_base(db, user_id, "swe")
     labels = {b["label"] for b in repo.list_base_assets(db, user_id)}
-    assert {None, "swe"} <= labels
+    assert labels == {"general", "swe"}
 
 
 def test_claim_pending_skip_locked(db):
@@ -159,24 +178,42 @@ def test_mark_terminal(db):
     assert row["jd_s3_key"] == f"jobs/{job_id}/jd.md"
 
 
-def test_fetch_profile(db, seed_user):
-    user_id, _ = seed_user
+def test_fetch_profile_reads_the_role_resume(db, seed_user):
+    """Facts are per user; resume content comes from the requested role's parsed
+    base, so two roles that disagree on a title each keep their own."""
+    user_id, general_id = seed_user
     with db.cursor() as cur:
         cur.execute(
             "INSERT INTO application_profiles (user_id, city, work_eligible_us) VALUES (%s, %s, %s)",
             (user_id, "Omaha", True),
         )
-        cur.execute(
-            "INSERT INTO work_experiences (user_id, job_title, company_name, bullets) "
-            "VALUES (%s, %s, %s, %s)",
-            (user_id, "Data Engineer", "Airfold", ["built pipelines", "owned dbt"]),
-        )
     db.commit()
+    repo.set_resume_parsed(db, general_id, {
+        "summary": "Generalist.",
+        "work_experiences": [{"job_title": "Engineer", "company_name": "Acme",
+                              "bullets": ["built pipelines", "owned dbt"]}],
+    })
+    de_id = _mk_base(db, user_id, "de")
+    repo.set_resume_parsed(db, de_id, {
+        "work_experiences": [{"job_title": "Data Engineer", "company_name": "Acme"}],
+    })
+
     p = repo.fetch_profile(db, user_id)
+    assert (p.label, p.summary) == ("general", "Generalist.")
     assert p.user["full_name"] == "Test User"
     assert p.profile["city"] == "Omaha"
-    assert len(p.work_experiences) == 1
     assert p.work_experiences[0]["bullets"] == ["built pipelines", "owned dbt"]
+
+    de = repo.fetch_profile(db, user_id, label="de")
+    assert de.label == "de" and de.profile["city"] == "Omaha"
+    assert de.work_experiences[0]["job_title"] == "Data Engineer"
+
+
+def test_fetch_profile_without_parsed_resume_keeps_the_facts(db, seed_user):
+    user_id, _ = seed_user
+    p = repo.fetch_profile(db, user_id, label="missing")
+    assert p.user["full_name"] == "Test User"
+    assert p.work_experiences == [] and p.summary is None
 
 
 def test_base_label_for_job_reports_the_tailoring_source(db, seed_user):
@@ -189,13 +226,16 @@ def test_base_label_for_job_reports_the_tailoring_source(db, seed_user):
     assert repo.base_label_for_job(db, user_id, job_id) == "aiml"
 
 
-def test_base_label_for_job_is_none_without_a_labelled_source(db, seed_user):
-    """No tailoring row, or one on the unlabelled base, both mean 'default base'."""
+def test_base_label_for_job_without_a_tailoring_is_none(db, seed_user):
+    """No tailoring row, or one with no base, both mean 'the default role'; a
+    tailoring from the default role's base reports that role by name."""
     user_id, asset_id = seed_user
     job_id = repo.get_or_create_job(db, "https://example.com/jobs/label-none")
     assert repo.base_label_for_job(db, user_id, job_id) is None
-    repo.enqueue_tailoring(db, user_id, job_id, asset_id)
+    repo.enqueue_tailoring(db, user_id, job_id, None)
     assert repo.base_label_for_job(db, user_id, job_id) is None
+    repo.enqueue_tailoring(db, user_id, job_id, asset_id)
+    assert repo.base_label_for_job(db, user_id, job_id) == "general"
 
 
 def test_base_label_for_job_is_per_user(db, seed_user):

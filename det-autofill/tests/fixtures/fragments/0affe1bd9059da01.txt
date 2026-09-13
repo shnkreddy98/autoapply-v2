@@ -95,7 +95,7 @@
         - button "Delete" [ref=e1154] [cursor=pointer]: Delete
   --
         - generic [ref=e1163]: URL*
-        - textbox "URL" [ref=e1166]: https://github.com/shnkreddy98
+        - textbox "URL" [ref=e1166]: https://github.com/janedoe
     - button "Add Another" [ref=e1170] [cursor=pointer]
   - group "Social Network URLs" [ref=e1172]:
     - heading "Social Network URLs" [level=4] [ref=e1173]

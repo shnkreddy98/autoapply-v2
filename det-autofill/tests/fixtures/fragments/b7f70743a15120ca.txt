@@ -47,7 +47,7 @@
       - generic [ref=e338]:
         - textbox "City" [ref=e340]: San Jose
         - textbox "State/Province" [ref=e342]: CA
-        - textbox "Postal" [ref=e344]: "95126"
+        - textbox "Postal" [ref=e344]: "94000"
   - generic [ref=e345]:
     - generic [ref=e346]: Resume*
 "Address": |-
@@ -63,7 +63,7 @@
       - generic [ref=e338]:
         - textbox "City" [ref=e340]: San Jose
         - textbox "State/Province" [ref=e342]: CA
-        - textbox "Postal" [ref=e344]: "95126"
+        - textbox "Postal" [ref=e344]: "94000"
   - generic [ref=e345]:
     - generic [ref=e346]: Resume*
     - generic [ref=e347]:
@@ -73,7 +73,7 @@
 "City": |-
         - textbox "City" [ref=e340]: San Jose
         - textbox "State/Province" [ref=e342]: CA
-        - textbox "Postal" [ref=e344]: "95126"
+        - textbox "Postal" [ref=e344]: "94000"
   - generic [ref=e345]:
     - generic [ref=e346]: Resume*
     - generic [ref=e347]:
@@ -97,7 +97,7 @@
   - generic [ref=e409]:
 "State/Province": |-
         - textbox "State/Province" [ref=e342]: CA
-        - textbox "Postal" [ref=e344]: "95126"
+        - textbox "Postal" [ref=e344]: "94000"
   - generic [ref=e345]:
     - generic [ref=e346]: Resume*
     - generic [ref=e347]:
@@ -108,7 +108,7 @@
         - /url: "#"
   - generic [ref=e350]:
 "Postal": |-
-        - textbox "Postal" [ref=e344]: "95126"
+        - textbox "Postal" [ref=e344]: "94000"
   - generic [ref=e345]:
     - generic [ref=e346]: Resume*
     - generic [ref=e347]:

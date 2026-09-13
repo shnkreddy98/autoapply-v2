@@ -33,7 +33,7 @@
       - generic [ref=e133]: Twitter URL
 "GitHub URL": |-
       - generic [ref=e138]: GitHub URL
-      - textbox "GitHub URL" [ref=e140]: https://github.com/shnkreddy98
+      - textbox "GitHub URL" [ref=e140]: https://github.com/janedoe
   - listitem [ref=e141]:
     - generic [ref=e142]:
       - generic [ref=e143]: Portfolio URL

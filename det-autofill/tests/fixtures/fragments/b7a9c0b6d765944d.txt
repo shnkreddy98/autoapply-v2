@@ -9,7 +9,7 @@
                   - text: Zip/Postal Code
                   - generic [ref=e255]: .
                   - generic [ref=e256]: Required
-                - textbox "Zip/Postal Code . Required" [active] [ref=e257]: "95126"
+                - textbox "Zip/Postal Code . Required" [active] [ref=e257]: "94000"
               - group "You must select ALL possible values in the section Place of Residence. Place of Residence . Required" [ref=e259]:
                 - generic [ref=e261]:
                   - img "You must select ALL possible values in the section Place of Residence." [ref=e263]

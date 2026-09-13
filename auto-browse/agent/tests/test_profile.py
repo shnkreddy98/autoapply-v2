@@ -8,12 +8,11 @@ def _sample() -> ProfileData:
     return ProfileData(
         user={
             "full_name": "Jane Quinn Doe",
-            "email": "shnk@example.com",
+            "email": "jane@example.com",
             "phone": "+1 555 0100",
             "linkedin": "linkedin.com/in/janedoe",
-            "github": "github.com/shnk",
+            "github": "github.com/janedoe",
             "location": "Omaha, NE",
-            "summary": "Data engineer with dbt + Airflow experience.",
         },
         profile={
             "city": "Omaha",
@@ -22,10 +21,12 @@ def _sample() -> ProfileData:
             "years_of_experience": 5,
             "gender": None,  # voluntary -> (not provided)
         },
+        label="de",
+        summary="Data engineer with dbt + Airflow experience.",
         work_experiences=[
             {
                 "job_title": "Data Engineer",
-                "company_name": "Airfold",
+                "company_name": "Acme",
                 "location": "Remote",
                 "from_date": "2023-01-01",
                 "to_date": None,  # current -> Present
@@ -50,7 +51,7 @@ def _sample() -> ProfileData:
                 "known_duration": "1 year",
             }
         ],
-        login={"login_email": "shnk@example.com", "login_password": "secret"},
+        login={"login_email": "jane@example.com", "login_password": "secret"},
     )
 
 
@@ -69,7 +70,7 @@ def test_linkedin_normalize():
         _linkedin_url("https://www.linkedin.com/in/x")
         == "https://www.linkedin.com/in/x"
     )
-    assert _linkedin_url("shnkreddy") == "https://www.linkedin.com/in/janedoe"
+    assert _linkedin_url("janedoe") == "https://www.linkedin.com/in/janedoe"
     assert _linkedin_url("") == ""
 
 
@@ -84,10 +85,12 @@ def test_render_profile_golden():
     assert "Gender: (not provided)" in out
     assert "Login Password: secret" in out
     # work experience with current -> Present, bullets rendered
-    assert "- Data Engineer, Airfold (Remote) [2023-01-01 – Present]" in out
+    assert "- Data Engineer, Acme (Remote) [2023-01-01 – Present]" in out
     assert "    • Built pipelines" in out
     assert "Languages: Python, SQL" in out
     assert "- Julian <j@a.co> — CEO, known 1 year" in out
+    assert "# Resume role: de" in out
+    assert "Data engineer with dbt + Airflow experience." in out
 
 
 def test_render_prefers_the_confirmed_name_parts():
@@ -122,30 +125,55 @@ def test_render_empty_sections_safe():
 # ---------------- integration ----------------
 
 
-def test_build_profile_from_db(db):
+def _user_with_roles(db):
+    """A user whose default role says Engineer and whose `de` role says Data Engineer."""
+    from common import repo
+
     with db.cursor() as cur:
         cur.execute(
-            "INSERT INTO users (email, full_name, summary) VALUES (%s, %s, %s) RETURNING user_id",
-            ("db@example.com", "Db User", "A summary"),
+            "INSERT INTO users (email, full_name, default_resume_label) "
+            "VALUES (%s, %s, 'general') RETURNING user_id",
+            ("db@example.com", "Db User"),
         )
         user_id = cur.fetchone()["user_id"]
         cur.execute(
             "INSERT INTO application_profiles (user_id, city, work_eligible_us) VALUES (%s, %s, %s)",
             (user_id, "Omaha", True),
         )
-        cur.execute(
-            "INSERT INTO work_experiences (user_id, job_title, company_name, bullets) "
-            "VALUES (%s, %s, %s, %s)",
-            (user_id, "Engineer", "Acme", ["did things"]),
-        )
-        cur.execute(
-            "INSERT INTO skill_groups (user_id, category, skills) VALUES (%s, %s, %s)",
-            (user_id, "Lang", ["Go"]),
-        )
     db.commit()
+    for label, title in (("general", "Engineer"), ("de", "Data Engineer")):
+        asset = repo.insert_resume_asset(
+            db, user_id, "base", f"k/{label}.docx", variant="docx", label=label
+        )
+        repo.set_resume_parsed(db, asset, {
+            "summary": f"{label} summary",
+            "work_experiences": [{"job_title": title, "company_name": "Acme", "bullets": ["did things"]}],
+            "skill_groups": [{"category": "Lang", "skills": ["Go"]}],
+        })
+    return user_id
+
+
+def test_build_profile_from_db(db):
+    user_id = _user_with_roles(db)
     out = build_profile(db, user_id, "/resume/x.pdf")
     assert "# Applicant: Db User <db@example.com>" in out
     assert "City: Omaha" in out
     assert "- Engineer, Acme" in out
     assert "    • did things" in out
     assert "Lang: Go" in out
+
+
+def test_build_profile_follows_the_jobs_role(db):
+    """The form must list the same titles as the resume being uploaded: a job
+    tailored from the `de` resume gets the `de` work history, not the default's."""
+    from common import repo
+
+    user_id = _user_with_roles(db)
+    job_id = repo.add_job_for_user(db, user_id, "https://example.com/jobs/de-profile")
+    de = repo.get_base_asset(db, user_id, variant="docx", label="de")
+    repo.enqueue_tailoring(db, user_id, job_id, de["id"])
+
+    out = build_profile(db, user_id, "/resume/x.pdf", job_id)
+    assert "# Resume role: de" in out
+    assert "- Data Engineer, Acme" in out
+    assert "de summary" in out

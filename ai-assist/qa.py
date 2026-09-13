@@ -17,9 +17,9 @@ from common import keys, repo
 
 MAX_WORDS_DEFAULT = 100
 
-# Label standing for "the unlabelled default base resume". Callers pass it to force
-# the default when the job's own tailoring used a role base. Same spelling as the
-# export tool's folder for those resumes, so one word means one thing everywhere.
+# Label standing for "the user's default role" (users.default_resume_label). Callers
+# pass it to force the default when the job's own tailoring used another role. No
+# real role may use this name (cli.onboard.check_label refuses it).
 DEFAULT_LABEL = "default"
 
 
@@ -49,8 +49,8 @@ def choose_base_asset(
     `label=None` follows the job: whichever base its tailoring was made from
     (`autoapply tailor --label aiml` -> the aiml base). Without this an answer for
     an AI/ML posting is written from the default resume and denies experience that
-    is only listed on the role base. `label=DEFAULT_LABEL` forces the unlabelled
-    base; any other value forces that role's base.
+    is only listed on the role base. `label=DEFAULT_LABEL` forces the user's default
+    role; any other value forces that role's base.
 
     A named label with no base uploaded falls back to the default rather than
     failing — a grounded-but-generic answer beats no answer, and the returned label
@@ -66,10 +66,9 @@ def choose_base_asset(
     asset = repo.get_base_asset(conn, user_id, variant="docx", label=label)
     if asset is None and label is not None:
         asset = repo.get_base_asset(conn, user_id, variant="docx")
-        label = None
     if asset is None:
         raise MissingResume(f"no base resume on file for user {user_id}")
-    return asset, label or DEFAULT_LABEL
+    return asset, asset["label"]
 
 
 def resume_text(storage, asset: dict) -> str:

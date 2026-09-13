@@ -5,20 +5,12 @@ import uuid
 from common import keys, queue, storage
 
 
-def test_base_resume_key_default_path_unchanged():
-    # label=None keeps the original layout, so existing default bases don't move
-    assert keys.base_resume_key("u1", variant="docx", ext="docx") == (
-        "users/u1/resumes/base/docx.docx"
-    )
-    assert keys.base_resume_key("u1") == "users/u1/resumes/base/default.docx"
-
-
-def test_base_resume_key_label_is_collision_free():
-    swe = keys.base_resume_key("u1", variant="docx", ext="docx", label="swe")
-    de = keys.base_resume_key("u1", variant="docx", ext="docx", label="de")
-    default = keys.base_resume_key("u1", variant="docx", ext="docx")
+def test_base_resume_key_is_collision_free():
+    swe = keys.base_resume_key("u1", "swe", "docx", "docx")
+    de = keys.base_resume_key("u1", "de", "docx", "docx")
+    swe_pdf = keys.base_resume_key("u1", "swe", "pdf", "pdf")
     assert swe == "users/u1/resumes/base/swe/docx.docx"
-    assert len({swe, de, default}) == 3  # no two labels share a key
+    assert len({swe, de, swe_pdf}) == 3  # no two role/format pairs share a key
 
 
 def test_localfs_roundtrip(tmp_path):

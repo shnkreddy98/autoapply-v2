@@ -74,10 +74,16 @@ async def resolve_resume(
         if tailored and tailored["status"] == "failed":
             break
 
-    # Fallback: upload the ready-made base PDF — never the docx (that would attach a
-    # DOCX mislabeled as .pdf).
-    base_pdf = repo.get_base_asset(conn, user_id, variant="pdf")
+    # Fallback: upload the ready-made base PDF of the job's role — never the docx
+    # (that would attach a DOCX mislabeled as .pdf), and never the default role's PDF
+    # for a job queued from another role: role bases used to have no PDF at all, so
+    # a `de` job silently went out with the general resume.
+    label = repo.base_label_for_job(conn, user_id, job_id)
+    base_pdf = repo.get_base_asset(conn, user_id, variant="pdf", label=label)
     if base_pdf is None:
-        raise RuntimeError(f"no base PDF resume for user {user_id}")
+        raise RuntimeError(
+            f"no base PDF resume for user {user_id} role {label or '(default)'} "
+            "— autoapply resume parse renders it"
+        )
     log.info("tailored resume not ready for job=%s; using base PDF", job_id)
     return _download(storage, base_pdf["s3_key"], dest), "base"

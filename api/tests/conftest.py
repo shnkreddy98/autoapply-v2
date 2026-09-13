@@ -19,8 +19,8 @@ os.environ["STORAGE_BACKEND"] = "local"
 
 _TABLES = [
     "audit_log", "sessions", "saved_answers", "applications", "tailored_resumes", "resume_assets",
-    "user_jobs", "jobs", "gmail_tokens", "professional_references", "skill_groups",
-    "education", "work_experiences", "application_profiles", "portal_credentials",
+    "user_jobs", "jobs", "gmail_tokens", "professional_references",
+    "application_profiles", "portal_credentials",
     "users",
 ]
 

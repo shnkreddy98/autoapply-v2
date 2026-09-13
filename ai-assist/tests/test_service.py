@@ -37,16 +37,18 @@ def _seed(db, s3, tmp_path, *, with_jd=True, with_resume=True):
     JD object. Every seed gets its own URL."""
     with db.cursor() as cur:
         cur.execute(
-            "INSERT INTO users (email) VALUES (%s) RETURNING user_id", ("q@example.com",)
+            "INSERT INTO users (email, default_resume_label) VALUES (%s, 'general') "
+            "RETURNING user_id",
+            ("q@example.com",),
         )
         user_id = cur.fetchone()["user_id"]
     db.commit()
     if with_resume:
-        key = keys.base_resume_key(user_id, variant="docx")
+        key = keys.base_resume_key(user_id, "general", "docx", "docx")
         s3.put_bytes(key, _docx_bytes(tmp_path, ["Jane Dev", "Built dbt pipelines"]))
         # variant matters: answering parses the docx, so the pdf base is not a
         # substitute and the lookup pins the format
-        repo.insert_resume_asset(db, user_id, "base", key, variant="docx")
+        repo.insert_resume_asset(db, user_id, "base", key, variant="docx", label="general")
     job_id = repo.add_job_for_user(db, user_id, f"https://example.com/jobs/{uuid.uuid4()}")
     if with_jd:
         s3.put_bytes(keys.jd_key(job_id), b"# Job\nNeed dbt + Airflow.", "text/markdown")
@@ -55,7 +57,7 @@ def _seed(db, s3, tmp_path, *, with_jd=True, with_resume=True):
 
 def _add_labelled_base(db, s3, tmp_path, user_id, label, lines):
     """A role base resume, as `autoapply resume add --label` would create it."""
-    key = keys.base_resume_key(user_id, variant="docx", ext="docx", label=label)
+    key = keys.base_resume_key(user_id, label, "docx", "docx")
     s3.put_bytes(key, _docx_bytes(tmp_path / label, lines))
     return repo.insert_resume_asset(
         db, user_id, "base", key, variant="docx", label=label
@@ -118,7 +120,7 @@ def test_max_words_is_forwarded_and_echoed(db, s3, tmp_path, client, monkeypatch
         "answer": "one two three four five.",
         "word_count": 5,
         "max_words": 15,
-        "base_label": "default",
+        "base_label": "general",
     }
 
 
@@ -201,20 +203,22 @@ def test_resume_text_includes_table_content(db, s3, tmp_path, client, monkeypatc
     education section — accurately, for the text it was handed."""
     with db.cursor() as cur:
         cur.execute(
-            "INSERT INTO users (email) VALUES (%s) RETURNING user_id", ("t@example.com",)
+            "INSERT INTO users (email, default_resume_label) VALUES (%s, 'general') "
+            "RETURNING user_id",
+            ("t@example.com",),
         )
         user_id = cur.fetchone()["user_id"]
     db.commit()
-    key = keys.base_resume_key(user_id, variant="docx")
+    key = keys.base_resume_key(user_id, "general", "docx", "docx")
     s3.put_bytes(
         key,
         _docx_bytes(
             tmp_path,
             ["Jane Dev", "Education"],
-            table_rows=[("Master's Degree", "Data Analytics", "San Jose State University")],
+            table_rows=[("Master's Degree", "Data Analytics", "Example State University")],
         ),
     )
-    repo.insert_resume_asset(db, user_id, "base", key, variant="docx")
+    repo.insert_resume_asset(db, user_id, "base", key, variant="docx", label="general")
     job_id = repo.add_job_for_user(db, user_id, f"https://example.com/jobs/{uuid.uuid4()}")
     s3.put_bytes(keys.jd_key(job_id), b"# Job\nNeed a degree.", "text/markdown")
     seen = {}
@@ -225,9 +229,9 @@ def test_resume_text_includes_table_content(db, s3, tmp_path, client, monkeypatc
         json={"user_id": str(user_id), "job_id": str(job_id), "question": "Degree?"},
     )
     assert r.status_code == 200, r.text
-    assert "San Jose State University" in seen["resume"]
+    assert "Example State University" in seen["resume"]
     # order preserved, so the row still reads as sitting under its heading
-    assert seen["resume"].index("Education") < seen["resume"].index("San Jose State")
+    assert seen["resume"].index("Education") < seen["resume"].index("Example State")
 
 
 # ---------------------------------------------------------------------------
@@ -282,7 +286,7 @@ def test_explicit_label_overrides_the_job(db, s3, tmp_path, client, monkeypatch)
     assert r.json()["base_label"] == "de"
 
 
-def test_label_default_forces_the_unlabelled_base(db, s3, tmp_path, client, monkeypatch):
+def test_label_default_forces_the_default_role(db, s3, tmp_path, client, monkeypatch):
     user_id, job_id = _seed(db, s3, tmp_path)
     aiml = _add_labelled_base(
         db, s3, tmp_path, user_id, "aiml", ["Jane Dev", "Shipped a RAG pipeline"]
@@ -302,14 +306,14 @@ def test_label_default_forces_the_unlabelled_base(db, s3, tmp_path, client, monk
     )
     assert r.status_code == 200, r.text
     assert "dbt pipelines" in seen["resume"]
-    assert r.json()["base_label"] == "default"
+    assert r.json()["base_label"] == "general"
 
 
 def test_unknown_label_falls_back_to_the_default_base(
     db, s3, tmp_path, client, monkeypatch
 ):
-    """A label with nothing uploaded still answers — from the default base — and
-    says so, rather than 404ing mid-application."""
+    """A label with nothing uploaded still answers — from the default role — and
+    says which role that was, rather than 404ing mid-application."""
     user_id, job_id = _seed(db, s3, tmp_path)
     seen = {}
     _stub_agent(monkeypatch, seen)
@@ -325,11 +329,11 @@ def test_unknown_label_falls_back_to_the_default_base(
     )
     assert r.status_code == 200, r.text
     assert "dbt pipelines" in seen["resume"]
-    assert r.json()["base_label"] == "default"
+    assert r.json()["base_label"] == "general"
 
 
 def test_untailored_job_uses_the_default_base(db, s3, tmp_path, client, monkeypatch):
-    """No tailoring row -> nothing to follow -> the default base, as before labels."""
+    """No tailoring row -> nothing to follow -> the user's default role."""
     user_id, job_id = _seed(db, s3, tmp_path)
     _add_labelled_base(db, s3, tmp_path, user_id, "aiml", ["Jane Dev", "RAG pipeline"])
     seen = {}
@@ -341,4 +345,4 @@ def test_untailored_job_uses_the_default_base(db, s3, tmp_path, client, monkeypa
     )
     assert r.status_code == 200, r.text
     assert "dbt pipelines" in seen["resume"]
-    assert r.json()["base_label"] == "default"
+    assert r.json()["base_label"] == "general"

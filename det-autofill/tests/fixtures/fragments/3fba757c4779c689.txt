@@ -343,7 +343,7 @@
               - generic [ref=e75]: OR
               - button "Upload Resume" [active] [ref=e77] [cursor=pointer]
           - link "Download jane_doe.pdf" [ref=e374] [cursor=pointer]:
-            - /url: https://careers.bloodcancerunited.org/us/en/fileDownload?dk=applyFileDownload&fileName=jane_doe.pdf&uploadedFileName=shashank_reddy_1222b1r1q4h7k2.pdf
+            - /url: https://careers.bloodcancerunited.org/us/en/fileDownload?dk=applyFileDownload&fileName=jane_doe.pdf&uploadedFileName=jane_doe_1222b1r1q4h7k2.pdf
   --
                   - button "Remove experience" [ref=e410] [cursor=pointer]:
                     - generic [ref=e411]: "-"

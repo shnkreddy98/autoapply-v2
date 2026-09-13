@@ -7,5 +7,5 @@
       - generic [ref=e160]: 
   - button "State/Prov/County Show help" [ref=e162] [cursor=pointer]: 
   - generic "Required" [ref=e163]: Zip/Postal Code*
-  - textbox "Zip/Postal Code" [ref=e164]: "95126"
+  - textbox "Zip/Postal Code" [ref=e164]: "94000"
   - generic [ref=e165]:

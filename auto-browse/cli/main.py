@@ -11,8 +11,16 @@
     autoapply retry [--all] [--user U]                 # reset today's failed JD fetches + recapture
     autoapply status [JOB] [--today] [--user U]        # pipeline state + scores
     autoapply resume show JOB [--user U] [--out P] [--open]
-    autoapply resume add FILE.docx --label L [--user U] [--replace]   # add a role base resume
-    autoapply resume bases [--user U]                  # list uploaded base resumes
+    autoapply resume add FILE.docx --label L [--default] [--replace] [--user U]
+                                                       # upload + parse a role resume (paid parse);
+                                                       # warns when roles disagree on employer dates
+    autoapply resume parse [LABEL ...] [--user U]      # re-parse stored role resumes (paid)
+    autoapply resume default LABEL [--user U]          # role used when a job has no tailoring
+    autoapply resume bases [--user U]                  # list role resumes
+    autoapply profile init [--docx F --label L] [--email E] [--yes]
+                                                       # your facts (contact, address, EEO, ...)
+    autoapply profile show [--label L] [--user U]
+    autoapply profile export [--label L] [--out F]     # facts + one role's resume, as JSON
     autoapply ask JOB "question" [--words N] [--label L] [--user U]
                                                        # answer -> stdout, count -> stderr;
                                                        # base resume follows the job's tailoring label
@@ -45,7 +53,7 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-from common import db, keys, queue, repo
+from common import db, queue, repo
 from common import storage as storagemod
 
 HERE = Path(__file__).resolve().parent.parent  # auto-browse/
@@ -103,7 +111,7 @@ def resolve_user(conn, user_flag: str | None) -> str:
         return ids[0]
     if not ids:
         raise SystemExit(
-            "no active users; seed one: uv run python -m tools.seed_user --email ... --pdf ..."
+            "no active users — create yours: autoapply profile init [--docx resume.docx]"
         )
     with conn.cursor() as cur:
         cur.execute(
@@ -313,8 +321,8 @@ def cmd_jobs_list(args) -> int:
 
 
 def resolve_base(conn, user_id: str, label: str | None):
-    """The docx base asset to tailor from. `label` picks a role base; None = default.
-    Raises if a named label has no base uploaded."""
+    """The docx base asset to tailor from. `label` picks a role base; None = the
+    user's default role. Raises if a named label has no base uploaded."""
     base = repo.get_base_asset(conn, user_id, variant="docx", label=label)
     if base is None and label is not None:
         raise SystemExit(
@@ -327,21 +335,20 @@ def resolve_base(conn, user_id: str, label: str | None):
 def repoint_pending(conn, user_id: str, label: str) -> int:
     """Point this user's still-pending tailorings at `label`'s base resume.
 
-    Only rows that are on the *unlabelled* base (or none at all) are moved: those
-    were queued by JD capture or the apply loop, which don't know about --label. A
-    row already on some other role's base is left alone, so running `--label de`
-    can't hijack a swe batch that hasn't drained yet. Returns rows moved."""
+    Only rows that are on the *default role's* base (or none at all) are moved:
+    those were queued by JD capture or the apply loop, which don't know about
+    --label. A row already on some other role's base is left alone, so running
+    `--label de` can't hijack a swe batch that hasn't drained yet. Returns rows moved."""
     base = resolve_base(conn, user_id, label)
     if base is None:
         return 0
+    default = repo.get_base_asset(conn, user_id, variant="docx")
     with conn.cursor() as cur:
         cur.execute(
             "UPDATE tailored_resumes SET base_asset_id = %s, updated_at = now() "
             "WHERE user_id = %s AND status = 'pending' AND base_asset_id IS DISTINCT FROM %s "
-            "AND (base_asset_id IS NULL OR base_asset_id IN ("
-            "  SELECT id FROM resume_assets WHERE user_id = %s AND kind = 'base' "
-            "  AND label IS NULL))",
-            (base["id"], user_id, base["id"], user_id),
+            "AND (base_asset_id IS NULL OR base_asset_id = %s)",
+            (base["id"], user_id, base["id"], default["id"] if default else None),
         )
         n = cur.rowcount
     conn.commit()
@@ -884,68 +891,40 @@ def cmd_resume_show(args) -> int:
 
 
 def cmd_resume_add(args) -> int:
-    """Upload a role/track base resume (.docx) under a label, for use with
-    `autoapply tailor --label <label>`. docx only — tailoring edits the docx, and the
-    per-job PDF is generated during tailoring."""
-    import mimetypes
+    from cli import onboard
 
-    path = Path(args.file)
-    if not path.is_file():
-        raise SystemExit(f"no such file: {path}")
-    if path.suffix.lower() != ".docx":
-        raise SystemExit("resume add takes a .docx (tailoring edits the docx source)")
-    # 'default' already names the unlabelled base (export folders, `ask --label`);
-    # a real label spelled that way would make those two mean different resumes
-    if args.label.strip().lower() == "default":
-        raise SystemExit("'default' is reserved for the unlabelled base — pick another label")
+    return onboard.cmd_resume_add(args)
 
-    with _connect() as conn:
-        user_id = resolve_user(conn, args.user)
-        existing = repo.get_base_asset(conn, user_id, variant="docx", label=args.label)
-        if existing and not args.replace:
-            raise SystemExit(
-                f"a base labelled {args.label!r} already exists — pass --replace to overwrite"
-            )
-        content_type = mimetypes.guess_type(str(path))[0]
-        if existing:
-            # Overwrite in place. The key is deterministic, so a second row would
-            # have the same s3_key: two identical-looking bases in `resume bases`,
-            # one more on every --replace. Reusing the row also keeps the
-            # tailored_resumes.base_asset_id references pointing at a live asset.
-            _storage().put_file(existing["s3_key"], str(path))
-            repo.refresh_resume_asset(conn, existing["id"], content_type=content_type)
-            asset_id = existing["id"]
-        else:
-            key = keys.base_resume_key(
-                user_id, variant="docx", ext="docx", label=args.label
-            )
-            _storage().put_file(key, str(path))
-            asset_id = repo.insert_resume_asset(
-                conn,
-                user_id,
-                "base",
-                key,
-                variant="docx",
-                label=args.label,
-                content_type=content_type,
-            )
-    print(f"added base '{args.label}' (docx) -> asset {asset_id}")
-    print(f"tailor with it:  autoapply tailor --label {args.label}")
-    return 0
+
+def cmd_resume_parse(args) -> int:
+    from cli import onboard
+
+    return onboard.cmd_resume_parse(args)
+
+
+def cmd_resume_default(args) -> int:
+    from cli import onboard
+
+    return onboard.cmd_resume_default(args)
 
 
 def cmd_resume_bases(args) -> int:
-    """List the user's base resumes so they can see which labels are available."""
+    """List the user's role resumes: which labels exist, which is the default, and
+    whether each has been parsed into a profile."""
     with _connect() as conn:
         user_id = resolve_user(conn, args.user)
         bases = repo.list_base_assets(conn, user_id)
+        default = repo.default_resume_label(conn, user_id)
     if not bases:
-        print("no base resumes (run onboarding, or: autoapply resume add <docx> --label <l>)")
+        print("no resumes (autoapply resume add <file.docx> --label <role>)")
         return 0
     for b in bases:
-        label = b["label"] or "(default)"
+        mark = "*" if b["label"] == default else " "
         when = b["created_at"].strftime("%Y-%m-%d")
-        print(f"{label:<12} {b['variant'] or '-':<5} {when}  {b['s3_key']}")
+        parsed = ""
+        if b["variant"] == "docx":
+            parsed = "parsed" if b.get("parsed") else "NOT PARSED"
+        print(f"{mark} {b['label']:<10} {b['variant'] or '-':<5} {when}  {parsed:<10} {b['s3_key']}")
     return 0
 
 
@@ -1071,6 +1050,12 @@ def _cmd_profile_show(args) -> int:
     from cli import onboard
 
     return onboard.cmd_profile_show(args)
+
+
+def _cmd_profile_export(args) -> int:
+    from cli import onboard
+
+    return onboard.cmd_profile_export(args)
 
 
 # ---------------------------------------------------------------------------
@@ -1345,17 +1330,39 @@ def build_parser() -> argparse.ArgumentParser:
     show.set_defaults(func=cmd_resume_show)
     radd = resume_sub.add_parser(
         "add",
-        help="add a role/track base resume (.docx) under a label",
-        description="Uploads a .docx base resume tagged with --label. Use it in "
-        "tailoring with `autoapply tailor --label <label>` (or per job). docx only: "
-        "tailoring edits the docx and generates the per-job PDF itself.",
+        help="add a resume for a role (.docx), parsed into that role's profile",
+        description="Uploads the .docx under --label with a PDF rendering (LibreOffice) "
+        "for uploads, and parses it with the LLM (needs OPENROUTER_API_KEY; one paid "
+        "call) into the work history, education and skills used for that role. The "
+        "first role you add becomes your default. Prints any employer whose dates, or "
+        "any current employer, disagrees with your other role resumes. Tailor with "
+        "`autoapply tailor --label <label>`.",
     )
-    radd.add_argument("file", help="path to the base resume (.docx)")
-    radd.add_argument("--label", required=True, help="role/track tag, e.g. swe, de, devops")
-    radd.add_argument("--replace", action="store_true", help="overwrite an existing base with this label")
+    radd.add_argument("file", help="path to the resume (.docx)")
+    radd.add_argument("--label", required=True, help="role, e.g. general, swe, de, aiml")
+    radd.add_argument("--replace", action="store_true", help="overwrite this role's resume")
+    radd.add_argument("--default", action="store_true", help="make this the default role")
+    radd.add_argument("--model", help="OpenRouter model for parsing (default: OPENROUTER_MODEL)")
     radd.add_argument("--user", help="user id or email")
     radd.set_defaults(func=cmd_resume_add)
-    rbases = resume_sub.add_parser("bases", help="list uploaded base resumes")
+    rparse = resume_sub.add_parser(
+        "parse",
+        help="re-parse stored role resumes (one paid call each)",
+        description="Downloads each role's stored .docx, renders its PDF if missing and "
+        "re-parses it. For resumes added before parsing existed, or after a parser "
+        "change. With no LABEL, every role is parsed.",
+    )
+    rparse.add_argument("labels", nargs="*", help="roles to parse (default: all)")
+    rparse.add_argument("--model", help="OpenRouter model for parsing (default: OPENROUTER_MODEL)")
+    rparse.add_argument("--user", help="user id or email")
+    rparse.set_defaults(func=cmd_resume_parse)
+    rdefault = resume_sub.add_parser(
+        "default", help="set the role used when a job has no tailoring of its own"
+    )
+    rdefault.add_argument("label", help="an existing role")
+    rdefault.add_argument("--user", help="user id or email")
+    rdefault.set_defaults(func=cmd_resume_default)
+    rbases = resume_sub.add_parser("bases", help="list role resumes (* = default)")
     rbases.add_argument("--user", help="user id or email")
     rbases.set_defaults(func=cmd_resume_bases)
 
@@ -1368,8 +1375,8 @@ def build_parser() -> argparse.ArgumentParser:
         "goes to stdout so it can be piped or copied; the word count and the base "
         "resume used go to stderr. By default the base is whichever one the job was "
         "tailored from (autoapply tailor --label ...), so a role resume's experience "
-        "is not denied; --label overrides it, and --label default forces the "
-        "unlabelled base.",
+        "is not denied; --label overrides it, and --label default forces your "
+        "default role.",
     )
     ask.add_argument("job", help="job id, id prefix, or URL")
     ask.add_argument("question", help="the question, or '-' to read it from stdin")
@@ -1378,8 +1385,8 @@ def build_parser() -> argparse.ArgumentParser:
     )
     ask.add_argument(
         "--label",
-        help="base resume to answer from (default: the one this job was tailored "
-        "from; 'default' forces the unlabelled base)",
+        help="role resume to answer from (default: the one this job was tailored "
+        "from; 'default' forces your default role)",
     )
     ask.add_argument("--user", help="user id or email")
     ask.add_argument(
@@ -1391,21 +1398,19 @@ def build_parser() -> argparse.ArgumentParser:
     profile_sub = profile.add_subparsers(dest="profile_command", required=True)
     pinit = profile_sub.add_parser(
         "init",
-        help="interactive onboarding: parse a resume, review extracted fields, save",
-        description="Extracts contact/experience/education/skills from the resume "
-        "via LLM (needs OPENROUTER_API_KEY), asks for the rest with autofilled "
-        "defaults, then writes the profile and uploads the base resume assets.",
+        help="enter your facts (contact, address, work authorization, EEO, ...)",
+        description="Asks for the facts every application wants, with autofilled "
+        "defaults, and saves them for your user. Role resumes are separate: add each "
+        "with `autoapply resume add FILE.docx --label <role>`. Passing --docx here "
+        "does both in one go: the resume is parsed (needs OPENROUTER_API_KEY; one paid "
+        "call), prefills your contact, and is stored as role --label.",
     )
+    pinit.add_argument("--docx", help="a resume to parse and store as your first role")
     pinit.add_argument(
-        "--pdf",
-        help="base resume PDF (uploaded for applications; "
-        "derived from --docx via LibreOffice when omitted)",
+        "--label", default="general", help="role for --docx (default: general)"
     )
-    pinit.add_argument(
-        "--docx",
-        help="same resume as DOCX (tailoring source; also preferred for parsing)",
-    )
-    pinit.add_argument("--email", help="override the email extracted from the resume")
+    pinit.add_argument("--replace", action="store_true", help="overwrite that role's resume")
+    pinit.add_argument("--email", help="your email (default: the one on --docx)")
     pinit.add_argument(
         "--model", help="OpenRouter model for parsing (default: OPENROUTER_MODEL)"
     )
@@ -1413,9 +1418,20 @@ def build_parser() -> argparse.ArgumentParser:
         "--yes", action="store_true", help="accept all defaults, no prompts"
     )
     pinit.set_defaults(func=_cmd_profile_init)
-    pshow = profile_sub.add_parser("show", help="print the stored profile")
+    pshow = profile_sub.add_parser("show", help="print your facts and role resumes")
+    pshow.add_argument("--label", help="role whose resume content to show (default: default role)")
     pshow.add_argument("--user", help="user id or email")
     pshow.set_defaults(func=_cmd_profile_show)
+    pexport = profile_sub.add_parser(
+        "export",
+        help="print the profile JSON for one role (facts + that role's resume)",
+        description="The document a form filler consumes. The portal password is "
+        "never included, only whether one is set.",
+    )
+    pexport.add_argument("--label", help="role (default: your default role)")
+    pexport.add_argument("--out", help="write to this file instead of stdout")
+    pexport.add_argument("--user", help="user id or email")
+    pexport.set_defaults(func=_cmd_profile_export)
 
     gmail = sub.add_parser("gmail", help="Gmail access for 2FA emails during apply")
     gmail_sub = gmail.add_subparsers(dest="gmail_command", required=True)

@@ -102,7 +102,7 @@ _ARG_DESCRIPTIONS: dict[str, str] = {
         "Short human-readable name of the element, used only for logging/permission "
         '(not for matching). Example: `element="Apply Now button"`.'
     ),
-    "text": ('Text to type into the element. Example: `text="jane.doe@example.com"`.'),
+    "text": ('Text to type into the element. Example: `text="jane@example.com"`.'),
     "values": (
         "Array of option LABEL(s) to select, exactly as shown in the dropdown. "
         'Example: `values=["United States of America (+1)"]`.'
@@ -121,7 +121,7 @@ _ARG_DESCRIPTIONS: dict[str, str] = {
     ),
     "paths": (
         "Array of absolute file path(s) to upload. "
-        'Example: `paths=["/resume/jane_doe.pdf"]`.'
+        'Example: `paths=["/resume/resume.pdf"]`.'
     ),
     "name": ('Human-readable field name. Example: `name="Email Address"`.'),
     "type": (
@@ -130,7 +130,7 @@ _ARG_DESCRIPTIONS: dict[str, str] = {
     ),
     "value": (
         "Value to fill. For a checkbox use `true`/`false`; for a combobox use the "
-        'option text. Example: `value="jane.doe@example.com"`.'
+        'option text. Example: `value="jane@example.com"`.'
     ),
     "action": (
         "Tab operation: `list` (show open tabs), `select` (switch to a tab by "
@@ -151,12 +151,12 @@ _TOOL_EXAMPLES: dict[str, str] = {
     ),
     "browser_type": (
         'Example call — to fill `- textbox "Email" [ref=e282]`: '
-        '{"element": "Email field", "target": "e282", "text": "jane.doe@example.com"}.'
+        '{"element": "Email field", "target": "e282", "text": "jane@example.com"}.'
     ),
     "browser_fill_form": (
         'Example call — fill two fields: {"fields": ['
         '{"name": "Email", "type": "textbox", "target": "e282", '
-        '"value": "jane.doe@example.com"}, '
+        '"value": "jane@example.com"}, '
         '{"name": "Agree", "type": "checkbox", "target": "e301", "value": "true"}]}.'
     ),
     "browser_select_option": (
@@ -173,7 +173,7 @@ _TOOL_EXAMPLES: dict[str, str] = {
         'Example call — {"url": "https://jobs.lever.co/acme/123/apply"}.'
     ),
     "browser_file_upload": (
-        'Example call — {"paths": ["/resume/jane_doe.pdf"]}.'
+        'Example call — {"paths": ["/resume/resume.pdf"]}.'
     ),
     "browser_tabs": (
         "Use this to manage browser tabs. When a click on 'Apply'/a link opens the "

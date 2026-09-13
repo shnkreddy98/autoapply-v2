@@ -32,7 +32,11 @@ class FakeStorage:
 
 def _user(db, email="a@e.co"):
     with db.cursor() as cur:
-        cur.execute("INSERT INTO users (email) VALUES (%s) RETURNING user_id", (email,))
+        cur.execute(
+            "INSERT INTO users (email, default_resume_label) VALUES (%s, 'general') "
+            "RETURNING user_id",
+            (email,),
+        )
         uid = cur.fetchone()["user_id"]
     db.commit()
     return uid
@@ -41,13 +45,14 @@ def _user(db, email="a@e.co"):
 def _base(db, store, uid):
     # Base resume is stored as two variants: 'docx' (tailoring source) and 'pdf'
     # (the ready-to-upload fallback resolve_resume returns on a tailored miss).
-    docx_key = f"users/{uid}/resumes/base/default.docx"
-    pdf_key = f"users/{uid}/resumes/base/default.pdf"
+    docx_key = f"users/{uid}/resumes/base/general/docx.docx"
+    pdf_key = f"users/{uid}/resumes/base/general/pdf.pdf"
     store.objs[docx_key] = b"BASEDOCX"
     store.objs[pdf_key] = b"BASE"
-    repo.insert_resume_asset(db, uid, "base", docx_key, variant="docx")
+    repo.insert_resume_asset(db, uid, "base", docx_key, variant="docx", label="general")
     return repo.insert_resume_asset(
-        db, uid, "base", pdf_key, variant="pdf", content_type="application/pdf"
+        db, uid, "base", pdf_key, variant="pdf", label="general",
+        content_type="application/pdf",
     )
 
 
@@ -133,3 +138,27 @@ async def test_no_resume_raises(db, tmp_path):
             poll_interval=2,
             sleep=_noop_sleep,
         )
+
+
+@pytest.mark.asyncio
+async def test_base_fallback_uploads_the_jobs_role_pdf(db, tmp_path):
+    """A job queued from the `de` resume must not go out with the default role's PDF.
+    Role bases used to have no PDF at all, so the fallback always took the default."""
+    store = FakeStorage()
+    uid = _user(db)
+    _base(db, store, uid)
+    for variant in ("docx", "pdf"):
+        key = f"users/{uid}/resumes/base/de/{variant}.{variant}"
+        store.objs[key] = b"DE-" + variant.upper().encode()
+        de_id = repo.insert_resume_asset(db, uid, "base", key, variant=variant, label="de")
+        if variant == "docx":
+            de_docx = de_id
+    job_id = repo.get_or_create_job(db, "https://example.com/jobs/de-role")
+    repo.enqueue_tailoring(db, uid, job_id, de_docx)  # pending, never finishes
+
+    path, source = await resolve_resume(
+        db, store, uid, job_id, str(tmp_path / "r.pdf"),
+        wait_timeout=2, poll_interval=2, sleep=_noop_sleep,
+    )
+    assert source == "base"
+    assert open(path, "rb").read() == b"DE-PDF"

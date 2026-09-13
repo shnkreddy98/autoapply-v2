@@ -979,7 +979,7 @@ async def main(
         job_id = repo.add_job_for_user(conn, user_id, job_url, source="manual")
         _, source = await resolve_resume(conn, storage, user_id, job_id, host_resume)
         log.info("resume resolved (%s) -> %s", source, host_resume)
-        profile = build_profile(conn, user_id, container_resume)
+        profile = build_profile(conn, user_id, container_resume, job_id)
         try:
             gmail_grant = repo.get_gmail_token(conn, user_id)
         except Exception as exc:  # e.g. live DB missing the gmail_tokens migration

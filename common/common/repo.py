@@ -18,10 +18,17 @@ from common.queue import canonical_url, job_id_for_url, url_normalize
 
 @dataclass
 class ProfileData:
-    """Everything needed to render an applicant's form-fill + resume context."""
+    """Everything needed to fill an application for one role.
+
+    `user`/`profile`/`references`/`login` are the user's own facts and are the same
+    for every role. `label` names the role resume the rest came from: summary, work
+    history, education and skills are parsed per role (resume_assets.parsed), because
+    role resumes legitimately differ and a merged copy has to pick one of them."""
 
     user: dict[str, Any]
     profile: dict[str, Any]
+    label: str | None = None
+    summary: str | None = None
     work_experiences: list[dict[str, Any]] = field(default_factory=list)
     education: list[dict[str, Any]] = field(default_factory=list)
     skill_groups: list[dict[str, Any]] = field(default_factory=list)
@@ -29,8 +36,14 @@ class ProfileData:
     login: dict[str, Any] | None = None
 
 
-def fetch_profile(conn: psycopg.Connection, user_id: str) -> ProfileData:
-    """Load a user's full profile bundle from Postgres."""
+def fetch_profile(
+    conn: psycopg.Connection, user_id: str, label: str | None = None
+) -> ProfileData:
+    """Load a user's facts plus the parsed content of one role resume.
+
+    `label=None` means the user's default role. A role with no parsed resume (not
+    uploaded, or uploaded before parsing existed) yields empty resume sections rather
+    than an error: the facts are still worth filling in."""
     with conn.cursor() as cur:
         cur.execute("SELECT * FROM users WHERE user_id = %s", (user_id,))
         user = cur.fetchone()
@@ -39,27 +52,25 @@ def fetch_profile(conn: psycopg.Connection, user_id: str) -> ProfileData:
         cur.execute("SELECT * FROM application_profiles WHERE user_id = %s", (user_id,))
         profile = cur.fetchone() or {}
         cur.execute(
-            "SELECT * FROM work_experiences WHERE user_id = %s ORDER BY display_order, from_date DESC NULLS LAST",
-            (user_id,),
-        )
-        work = cur.fetchall()
-        cur.execute(
-            "SELECT * FROM education WHERE user_id = %s ORDER BY display_order, from_date DESC NULLS LAST",
-            (user_id,),
-        )
-        edu = cur.fetchall()
-        cur.execute(
-            "SELECT * FROM skill_groups WHERE user_id = %s ORDER BY display_order", (user_id,)
-        )
-        skills = cur.fetchall()
-        cur.execute(
             "SELECT * FROM professional_references WHERE user_id = %s ORDER BY display_order",
             (user_id,),
         )
         refs = cur.fetchall()
         cur.execute("SELECT * FROM portal_credentials WHERE user_id = %s", (user_id,))
         login = cur.fetchone()
-    return ProfileData(user, profile, work, edu, skills, refs, login)
+    base = get_base_asset(conn, user_id, variant="docx", label=label)
+    parsed = (base or {}).get("parsed") or {}
+    return ProfileData(
+        user=user,
+        profile=profile,
+        label=base["label"] if base else label,
+        summary=parsed.get("summary"),
+        work_experiences=parsed.get("work_experiences") or [],
+        education=parsed.get("education") or [],
+        skill_groups=parsed.get("skill_groups") or [],
+        references=refs,
+        login=login,
+    )
 
 
 def active_user_ids(conn: psycopg.Connection) -> list[str]:
@@ -291,20 +302,19 @@ def get_base_asset(
 ) -> dict | None:
     """Newest ready base resume asset for a user.
 
-    `variant` filters by file format ('pdf'/'docx'). `label` selects a role/track
-    base: when given, only that label matches; when omitted, only the default base
-    (label IS NULL) matches — so the default path never accidentally picks up a
-    role-specific base."""
-    clauses = ["user_id = %s", "kind = 'base'", "status = 'ready'"]
-    params: list = [user_id]
+    `variant` filters by file format ('pdf'/'docx'). `label` selects a role base;
+    `label=None` means the user's default role (users.default_resume_label), never
+    "any role" — so the default path cannot pick up whichever role was added last.
+    None when the user has no default role or no base for it."""
+    if label is None:
+        label = default_resume_label(conn, user_id)
+        if label is None:
+            return None
+    clauses = ["user_id = %s", "kind = 'base'", "status = 'ready'", "label = %s"]
+    params: list = [user_id, label]
     if variant:
         clauses.append("variant = %s")
         params.append(variant)
-    if label is None:
-        clauses.append("label IS NULL")
-    else:
-        clauses.append("label = %s")
-        params.append(label)
     with conn.cursor() as cur:
         cur.execute(
             f"SELECT * FROM resume_assets WHERE {' AND '.join(clauses)} "  # noqa: S608 — clauses are literals, values parameterized
@@ -319,7 +329,7 @@ def list_base_assets(conn: psycopg.Connection, user_id: str) -> list[dict]:
     with conn.cursor() as cur:
         cur.execute(
             "SELECT * FROM resume_assets WHERE user_id = %s AND kind = 'base' "
-            "AND status = 'ready' ORDER BY label NULLS FIRST, variant, created_at DESC",
+            "AND status = 'ready' ORDER BY label, variant",
             (user_id,),
         )
         return cur.fetchall()
@@ -352,6 +362,33 @@ def insert_resume_asset(
         asset_id = cur.fetchone()["id"]
     conn.commit()
     return asset_id
+
+
+def default_resume_label(conn: psycopg.Connection, user_id: str) -> str | None:
+    """The role used when a job has no tailoring of its own."""
+    with conn.cursor() as cur:
+        cur.execute("SELECT default_resume_label FROM users WHERE user_id = %s", (user_id,))
+        row = cur.fetchone()
+    return row["default_resume_label"] if row else None
+
+
+def set_default_resume_label(conn: psycopg.Connection, user_id: str, label: str) -> None:
+    with conn.cursor() as cur:
+        cur.execute(
+            "UPDATE users SET default_resume_label = %s, updated_at = now() WHERE user_id = %s",
+            (label, user_id),
+        )
+    conn.commit()
+
+
+def set_resume_parsed(conn: psycopg.Connection, asset_id: str, parsed: dict) -> None:
+    """Store the structured content parsed from a base resume (its role's profile)."""
+    with conn.cursor() as cur:
+        cur.execute(
+            "UPDATE resume_assets SET parsed = %s, parsed_at = now() WHERE id = %s",
+            (Jsonb(parsed), asset_id),
+        )
+    conn.commit()
 
 
 def refresh_resume_asset(
@@ -402,8 +439,7 @@ def base_label_for_job(
 
     Lets later steps (answering application questions) reuse whatever base the job
     was actually tailored with instead of guessing. Returns None when there is no
-    tailoring row, when it has no base attached, or when that base is the unlabelled
-    default — all of which mean "the default base"."""
+    tailoring row or it has no base attached — both mean "the default role"."""
     with conn.cursor() as cur:
         cur.execute(
             "SELECT ra.label FROM tailored_resumes t "

@@ -174,7 +174,7 @@
                   - button "Delete" [ref=e1134] [cursor=pointer]: Delete
                 - generic [ref=e1141]:
                   - generic [ref=e1143]: URL*
-                  - textbox "URL" [ref=e1146]: https://github.com/shnkreddy98
+                  - textbox "URL" [ref=e1146]: https://github.com/janedoe
               - button "Add Another" [ref=e1150] [cursor=pointer]
         - generic [ref=e260]:
           - button "Back" [ref=e378] [cursor=pointer]

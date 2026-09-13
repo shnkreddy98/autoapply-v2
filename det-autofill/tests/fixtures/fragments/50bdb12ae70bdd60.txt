@@ -45,7 +45,7 @@
       - text: City
       - generic [ref=e246]: .
       - generic [ref=e247]: Required
-    - textbox "City . Required" [ref=e248]: "95126"
+    - textbox "City . Required" [ref=e248]: "94000"
   - generic [ref=e249]:
     - img "The field \"Zip/Postal Code\" is mandatory." [ref=e251]
     - generic "The field Zip/Postal Code is mandatory." [ref=e252]:

@@ -180,11 +180,7 @@ def test_review_yes_accepts_all_defaults():
 def test_split_name_defaults():
     """Only a default for the review prompt — compound surnames split wrong, which
     is why the confirmed parts are stored instead of derived at fill time."""
-    assert onboard._split_name("Jane Quinn Doe") == (
-        "Jane",
-        "Quinn",
-        "Doe",
-    )
+    assert onboard._split_name("Jane Quinn Doe") == ("Jane", "Quinn", "Doe")
     assert onboard._split_name("Cher") == ("Cher", None, None)
     assert onboard._split_name(None) == (None, None, None)
 
@@ -211,7 +207,6 @@ def test_review_prompts_override_and_clear():
             "",
             "",  # preferred, pronouns, phone code, portfolio kept
             "portal@x.dev",  # portal login email overridden
-            "1",  # drop experience [1]
             "",
             "",
             "",
@@ -247,7 +242,6 @@ def test_review_prompts_override_and_clear():
     assert data.resume.contact.full_name == "Janet Doe"
     assert data.resume.contact.email == "jane@x.dev"
     assert data.resume.contact.phone is None
-    assert data.resume.work_experiences == []  # dropped
     assert data.profile["visa_sponsorship"] is True
     assert data.profile["years_of_experience"] == 10
     assert data.profile["first_name"] == "Janet"
@@ -291,54 +285,38 @@ def test_review_requires_email():
 # save (live PG via db fixture)
 
 
-class FakeStorage:
-    def __init__(self):
-        self.files = {}
-
-    def put_file(self, key, path):
-        self.files[key] = path
-
-
-def test_save_writes_everything_and_is_idempotent(db, tmp_path):
-    pdf = tmp_path / "r.pdf"
-    pdf.write_bytes(b"%PDF")
+def test_save_writes_the_facts_and_is_idempotent(db):
+    """Facts only: resume content belongs to a role (`resume add`), so saving the
+    facts must neither need nor write a resume."""
     data = interactive_review(_parsed(), yes=True, ask_secret=lambda _: "hunter2")
-    storage = FakeStorage()
 
-    uid = save(db, storage, data, str(pdf), None)
-    uid2 = save(db, storage, data, str(pdf), None)
+    uid = save(db, data)
+    uid2 = save(db, data)
     assert uid == uid2  # keyed by email
 
     from common import repo
 
     p = repo.fetch_profile(db, uid)
     assert p.user["full_name"] == "Jane Doe"
-    assert p.user["summary"] == "Data engineer."
     assert p.profile["city"] == "Austin"
-    assert len(p.work_experiences) == 1  # replaced, not duplicated
-    assert p.work_experiences[0]["bullets"] == ["built pipelines"]
-    assert len(p.education) == 1
-    assert p.education[0]["gpa"] == "3.9/4.0"
     assert p.profile["first_name"] == "Jane" and p.profile["country"] == "United States"
-    assert p.skill_groups[0]["skills"] == ["Python", "SQL"]
-    assert any(k.endswith("pdf.pdf") for k in storage.files)
+    assert p.label is None and p.work_experiences == []  # no role added yet
+    assert repo.list_base_assets(db, uid) == []
     assert p.login["login_email"] == "jane@x.dev"
     assert p.login["login_password"] == "hunter2"
 
     # re-running init and skipping the password must keep the stored credential
     data2 = interactive_review(_parsed(), yes=True, ask_secret=lambda _: "")
-    save(db, storage, data2, str(pdf), None)
+    save(db, data2)
     assert repo.fetch_profile(db, uid).login["login_password"] == "hunter2"
 
 
 def test_profile_parser_wiring():
     from cli import main as cli
 
-    args = cli.build_parser().parse_args(["profile", "init", "--pdf", "r.pdf", "--yes"])
-    assert callable(args.func)
-    args = cli.build_parser().parse_args(
-        ["profile", "init", "--docx", "r.docx"]
-    )  # docx-only ok
-    assert args.pdf is None
+    args = cli.build_parser().parse_args(["profile", "init", "--email", "a@b.c", "--yes"])
+    assert callable(args.func) and args.docx is None  # facts without a resume
+    args = cli.build_parser().parse_args(["profile", "init", "--docx", "r.docx"])
+    assert args.label == "general"  # the first role, unless named
     args = cli.build_parser().parse_args(["profile", "show"])
     assert callable(args.func)

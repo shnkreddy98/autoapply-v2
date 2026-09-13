@@ -1,13 +1,18 @@
-"""`autoapply profile init` — interactive onboarding from a resume file.
+"""User onboarding: the user's facts, and one resume per role.
 
-Pipeline (same shape the old autoapply repo used for /upload-resume):
-    1. extract raw text from the .docx/.pdf (docx preferred: cleaner text)
-    2. LLM parses it into a structured ParsedResume (strict JSON, one retry)
-    3. interactive review: every extracted value is a default you can override;
-       application questions the resume can't answer are asked with sensible
-       autofill (--yes accepts everything non-required)
-    4. save: users + application_profiles + work/education/skills rows, resume
-       files uploaded to MinIO as base assets
+A profile is two things kept apart on purpose:
+
+  * facts — contact, address, work authorization, EEO, logistics. One set per user,
+    asked by `autoapply profile init` and stored in users + application_profiles.
+  * role resumes — `autoapply resume add FILE.docx --label de`. Each .docx is
+    uploaded with a PDF rendering (the apply upload) and parsed by the LLM into a
+    ParsedResume stored on that base (resume_assets.parsed).
+
+The profile used for a job is the facts plus the parsed resume of the role the job
+was tailored from (`autoapply profile export --label de`). Role resumes are never
+merged: they legitimately differ, and a merged copy has to silently pick one. What
+must agree across roles — employers and their dates — is checked when a resume is
+added, and reported rather than overwritten.
 
 All prompts go through an injectable `ask` function so tests can drive them.
 """
@@ -301,7 +306,10 @@ def _ask_password(*, ask_secret=None) -> str | None:
 
 @dataclass
 class OnboardData:
-    """Everything `save` writes: reviewed resume + application answers."""
+    """Everything `save` writes: reviewed contact + application answers. `resume`
+    carries the contact and, when a resume was given, the work history that the
+    years-of-experience default is computed from; its content is stored on the role
+    base by `add_role_resume`, not here."""
 
     resume: ParsedResume
     profile: dict
@@ -374,29 +382,6 @@ def interactive_review(
             "    (!) password not set — account-gated portals (Workday, iCIMS, ...) "
             "will hand off to you; rerun `autoapply profile init` to add one"
         )
-
-    print(f"\n-- resume content --\n  summary: {(parsed.summary or '(none)')[:120]}...")
-    for i, w in enumerate(parsed.work_experiences, 1):
-        span = (
-            f"{w.from_date or '?'} -> {'present' if w.is_current else w.to_date or '?'}"
-        )
-        print(
-            f"  [{i}] {w.job_title} @ {w.company_name} ({span}, {len(w.bullets)} bullets)"
-        )
-    for e in parsed.education:
-        print(f"      {e.degree} {e.major or ''} — {e.school}")
-    print(
-        f"      skills: {', '.join(g.category for g in parsed.skill_groups) or '(none)'}"
-    )
-    if not yes and parsed.work_experiences:
-        drop = ask(
-            "  drop any experience? (indexes, comma-separated, Enter=keep all): "
-        ).strip()
-        if drop:
-            keep = {int(x) for x in re.findall(r"\d+", drop)}
-            parsed.work_experiences = [
-                w for i, w in enumerate(parsed.work_experiences, 1) if i not in keep
-            ]
 
     city, state = _guess_city_state(c.location)
     print("\n-- address (application forms want it split) --")
@@ -528,32 +513,22 @@ def interactive_review(
 
 
 # ---------------------------------------------------------------------------
-# 4. save
+# 4. save facts
 
 
-def save(conn, storage, data: OnboardData, pdf: str | None, docx: str | None) -> str:
-    """Upsert user (by email) + profile, replace resume-content rows, upload
-    base assets. Idempotent: re-running init refreshes everything."""
-    import mimetypes
-
+def save(conn, data: OnboardData) -> str:
+    """Upsert the user (by email), their application_profiles row and portal login.
+    Resume content is not written here — see `add_role_resume`."""
     c = data.resume.contact
     with conn.cursor() as cur:
         cur.execute(
-            "INSERT INTO users (email, full_name, phone, linkedin, github, location, summary) "
-            "VALUES (%s, %s, %s, %s, %s, %s, %s) "
+            "INSERT INTO users (email, full_name, phone, linkedin, github, location) "
+            "VALUES (%s, %s, %s, %s, %s, %s) "
             "ON CONFLICT (email) DO UPDATE SET full_name = EXCLUDED.full_name, "
             "phone = EXCLUDED.phone, linkedin = EXCLUDED.linkedin, github = EXCLUDED.github, "
-            "location = EXCLUDED.location, summary = EXCLUDED.summary, updated_at = now() "
+            "location = EXCLUDED.location, updated_at = now() "
             "RETURNING user_id",
-            (
-                c.email,
-                c.full_name,
-                c.phone,
-                c.linkedin,
-                c.github,
-                c.location,
-                data.resume.summary,
-            ),
+            (c.email, c.full_name, c.phone, c.linkedin, c.github, c.location),
         )
         user_id = str(cur.fetchone()["user_id"])
 
@@ -577,91 +552,230 @@ def save(conn, storage, data: OnboardData, pdf: str | None, docx: str | None) ->
                 "login_password = EXCLUDED.login_password",
                 (user_id, login.get("login_email") or c.email, login["login_password"]),
             )
-
-        for table in ("work_experiences", "education", "skill_groups"):
-            cur.execute(f"DELETE FROM {table} WHERE user_id = %s", (user_id,))  # noqa: S608
-        for i, w in enumerate(data.resume.work_experiences):
-            cur.execute(
-                "INSERT INTO work_experiences (user_id, job_title, company_name, location, "
-                "from_date, to_date, is_current, bullets, display_order) "
-                "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
-                (
-                    user_id,
-                    w.job_title,
-                    w.company_name,
-                    w.location,
-                    w.from_date,
-                    w.to_date,
-                    w.is_current,
-                    w.bullets,
-                    i,
-                ),
-            )
-        for i, e in enumerate(data.resume.education):
-            cur.execute(
-                "INSERT INTO education (user_id, degree, major, school, from_date, to_date, gpa, display_order) "
-                "VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
-                (user_id, e.degree, e.major, e.school, e.from_date, e.to_date, e.gpa, i),
-            )
-        for i, g in enumerate(data.resume.skill_groups):
-            cur.execute(
-                "INSERT INTO skill_groups (user_id, category, skills, display_order) "
-                "VALUES (%s, %s, %s, %s)",
-                (user_id, g.category, g.skills, i),
-            )
     conn.commit()
-
-    for path, variant in ((pdf, "pdf"), (docx, "docx")):
-        if path:
-            key = keys.base_resume_key(
-                user_id, variant=variant, ext=path.rsplit(".", 1)[-1].lower()
-            )
-            storage.put_file(key, path)
-            repo.insert_resume_asset(
-                conn,
-                user_id,
-                "base",
-                key,
-                variant=variant,
-                content_type=mimetypes.guess_type(path)[0],
-            )
     return user_id
+
+
+# ---------------------------------------------------------------------------
+# 5. role resumes
+
+# Becomes a storage folder, so no slashes or spaces; lowercase so `de` and `DE`
+# cannot become two roles.
+_LABEL_RE = re.compile(r"[a-z0-9][a-z0-9_-]{0,31}")
+# `ask --label default` means "the user's default role", so no role may be called that.
+RESERVED_LABEL = "default"
+DEFAULT_ROLE = "general"
+
+
+def check_label(label: str) -> str:
+    label = (label or "").strip()
+    if label == RESERVED_LABEL:
+        raise SystemExit(f"{RESERVED_LABEL!r} is reserved (it means your default role) — pick another label")
+    if not _LABEL_RE.fullmatch(label):
+        raise SystemExit(
+            f"bad label {label!r}: use lowercase letters, digits, '-' or '_' (e.g. swe, de, aiml)"
+        )
+    return label
+
+
+_COMPANY_NOISE = {"inc", "llc", "ltd", "corp", "corporation", "co", "the", "limited", "gmbh"}
+
+
+def _employer_key(name: str | None) -> str:
+    words = re.sub(r"[^a-z0-9]+", " ", (name or "").lower()).split()
+    return " ".join(w for w in words if w not in _COMPANY_NOISE)
+
+
+def _span(w: dict) -> str:
+    """Month precision: resumes print months, and the parser fills in the 1st."""
+    start = (w.get("from_date") or "?")[:7]
+    end = "present" if w.get("is_current") else (w.get("to_date") or "?")[:7]
+    return f"{start} -> {end}"
+
+
+def role_conflicts(conn, user_id: str, label: str, parsed: dict) -> list[str]:
+    """Facts that must agree across a user's role resumes but don't: an employer's
+    dates, and who the current employer is. Titles are deliberately not compared —
+    tailoring a title per role is a choice, a different end date is a mistake.
+    A role leaving an old job out is not a conflict either."""
+    mine = parsed.get("work_experiences") or []
+    by_key = {_employer_key(w.get("company_name")): w for w in mine if w.get("company_name")}
+    my_current = sorted(w["company_name"] for w in mine if w.get("is_current") and w.get("company_name"))
+    out = []
+    for other in repo.list_base_assets(conn, user_id):
+        if other["variant"] != "docx" or other["label"] == label or not other.get("parsed"):
+            continue
+        theirs = other["parsed"].get("work_experiences") or []
+        for w in theirs:
+            mw = by_key.get(_employer_key(w.get("company_name")))
+            if mw and _span(mw) != _span(w):
+                out.append(
+                    f"{w['company_name']}: {label} says {_span(mw)}, {other['label']} says {_span(w)}"
+                )
+        their_current = sorted(w["company_name"] for w in theirs if w.get("is_current") and w.get("company_name"))
+        if {_employer_key(c) for c in my_current} != {_employer_key(c) for c in their_current}:
+            out.append(
+                f"current employer: {label} says {', '.join(my_current) or 'none'}, "
+                f"{other['label']} says {', '.join(their_current) or 'none'}"
+            )
+    return out
+
+
+@dataclass
+class RoleResume:
+    asset_id: str
+    label: str
+    is_default: bool
+    parsed: dict
+    conflicts: list[str]
+
+
+def add_role_resume(
+    conn,
+    storage,
+    user_id: str,
+    label: str,
+    docx_path: str,
+    *,
+    replace: bool = False,
+    make_default: bool = False,
+    parsed: ParsedResume | None = None,
+    model: str = PARSE_MODEL,
+) -> RoleResume:
+    """Upload a role's .docx plus its PDF rendering and store the parsed content.
+
+    Parsing happens before anything is uploaded, so a failed (paid) parse leaves the
+    previous base untouched. The PDF is generated rather than accepted: tailoring
+    edits the docx, and a separately supplied PDF drifts from it. The first role a
+    user adds becomes their default."""
+    import mimetypes
+
+    label = check_label(label)
+    docx = Path(docx_path)
+    if not docx.is_file():
+        raise SystemExit(f"no such file: {docx}")
+    if docx.suffix.lower() != ".docx":
+        raise SystemExit("resumes are added as .docx (tailoring edits the docx source)")
+    if repo.get_base_asset(conn, user_id, variant="docx", label=label) and not replace:
+        raise SystemExit(f"a resume labelled {label!r} already exists — pass --replace to overwrite")
+
+    if parsed is None:
+        parsed = parse_resume_llm(extract_text(str(docx)), model=model)
+    pdf = docx_to_pdf(str(docx))
+
+    ids = {}
+    for variant, path in (("docx", str(docx)), ("pdf", pdf)):
+        content_type = mimetypes.guess_type(path)[0]
+        row = repo.get_base_asset(conn, user_id, variant=variant, label=label)
+        if row:
+            # Overwrite in place: one row per role and format (unique index), and
+            # tailored_resumes.base_asset_id keeps pointing at a live asset.
+            storage.put_file(row["s3_key"], path)
+            repo.refresh_resume_asset(conn, row["id"], content_type=content_type)
+            ids[variant] = row["id"]
+        else:
+            key = keys.base_resume_key(user_id, label, variant, variant)
+            storage.put_file(key, path)
+            ids[variant] = repo.insert_resume_asset(
+                conn, user_id, "base", key, variant=variant, label=label,
+                content_type=content_type,
+            )
+
+    data = parsed.model_dump(mode="json")
+    repo.set_resume_parsed(conn, ids["docx"], data)
+    if make_default or repo.default_resume_label(conn, user_id) is None:
+        repo.set_default_resume_label(conn, user_id, label)
+    return RoleResume(
+        asset_id=ids["docx"],
+        label=label,
+        is_default=repo.default_resume_label(conn, user_id) == label,
+        parsed=data,
+        conflicts=role_conflicts(conn, user_id, label, data),
+    )
+
+
+def reparse_role_resume(conn, storage, user_id: str, label: str, **kw) -> RoleResume:
+    """Re-parse a role's stored .docx (and render its PDF if missing) without the
+    user re-uploading it — for bases added before parsing existed."""
+    base = repo.get_base_asset(conn, user_id, variant="docx", label=label)
+    if base is None:
+        raise SystemExit(f"no resume labelled {label!r} — add one: autoapply resume add <file.docx> --label {label}")
+    work = Path(tempfile.mkdtemp(prefix="autoapply-reparse-"))
+    try:
+        path = work / f"{label}.docx"
+        storage.get_file(base["s3_key"], str(path))
+        return add_role_resume(conn, storage, user_id, label, str(path), replace=True, **kw)
+    finally:
+        import shutil
+
+        shutil.rmtree(work, ignore_errors=True)
+
+
+def print_role_resume(rr: RoleResume) -> None:
+    work = rr.parsed.get("work_experiences") or []
+    print(
+        f"role {rr.label!r}{' (default)' if rr.is_default else ''}: "
+        f"{len(work)} jobs, {len(rr.parsed.get('education') or [])} education, "
+        f"{len(rr.parsed.get('skill_groups') or [])} skill groups"
+    )
+    for w in work:
+        print(f"  {w.get('job_title')} @ {w.get('company_name')} ({_span(w)})")
+    if rr.conflicts:
+        print("\nconflicts with your other role resumes (fix the resume, then --replace):")
+        for c in rr.conflicts:
+            print(f"  ! {c}")
 
 
 # ---------------------------------------------------------------------------
 # CLI entry points (wired from cli/main.py)
 
 
+def _contact_from_user(user: dict | None) -> ParsedContact:
+    u = user or {}
+    return ParsedContact(
+        full_name=u.get("full_name"), email=u.get("email"), phone=u.get("phone"),
+        location=u.get("location"), linkedin=u.get("linkedin"), github=u.get("github"),
+    )
+
+
 def cmd_profile_init(args) -> int:
-    pdf = args.pdf
-    docx = args.docx
-    source = docx or pdf  # docx text extraction is cleaner when both exist
-    if not source:
-        raise SystemExit("pass --docx and/or --pdf")
-    if not pdf:  # the apply agent uploads a PDF — derive it from the docx
-        print(f"converting {docx} -> pdf (LibreOffice) ...")
-        pdf = docx_to_pdf(docx)
-
-    print(f"extracting text from {source} ...")
-    text = extract_text(source)
-    print(f"parsing with {args.model or PARSE_MODEL} ...")
-    parsed = parse_resume_llm(text, model=args.model or PARSE_MODEL)
-    if args.email:
-        parsed.contact.email = args.email
-
     from cli.main import _connect, _storage  # lazy: avoids cycle at import time
 
+    parsed = None
+    if args.docx:
+        label = check_label(args.label)
+        print(f"extracting text from {args.docx} ...")
+        text = extract_text(args.docx)
+        print(f"parsing with {args.model or PARSE_MODEL} ...")
+        parsed = parse_resume_llm(text, model=args.model or PARSE_MODEL)
+    email = args.email or (parsed.contact.email if parsed else None)
+    if not email:
+        raise SystemExit("pass --email (or --docx with an email on the resume)")
+
     with _connect() as conn:
-        existing = load_existing_profile(conn, args.email or parsed.contact.email)
+        existing = load_existing_profile(conn, email)
+        with conn.cursor() as cur:
+            cur.execute("SELECT * FROM users WHERE email = %s", (email,))
+            user = cur.fetchone()
     if existing:
         print("(existing profile found — prompts default to your stored answers)")
 
-    data = interactive_review(parsed, yes=args.yes, existing=existing)
+    # a stored contact beats the resume's only when no resume was given this time
+    contact = parsed.contact if parsed else _contact_from_user(user)
+    contact.email = email
+    review = ParsedResume(contact=contact, work_experiences=parsed.work_experiences if parsed else [])
+    data = interactive_review(review, yes=args.yes, existing=existing)
 
     with _connect() as conn:
-        user_id = save(conn, _storage(), data, pdf, docx)
-    print(f"\nprofile ready: user {user_id} ({data.resume.contact.email})")
-    print("next: autoapply jobs add --file urls.txt && autoapply tailor")
+        user_id = save(conn, data)
+        print(f"\nprofile saved: user {user_id} ({email})")
+        if parsed:
+            rr = add_role_resume(
+                conn, _storage(), user_id, label, args.docx,
+                replace=args.replace, parsed=parsed,
+            )
+            print_role_resume(rr)
+    print("\nadd a resume per role:  autoapply resume add <file.docx> --label <role>")
     return 0
 
 
@@ -670,7 +784,9 @@ def cmd_profile_show(args) -> int:
 
     with _connect() as conn:
         user_id = resolve_user(conn, args.user)
-        p = repo.fetch_profile(conn, user_id)
+        p = repo.fetch_profile(conn, user_id, label=args.label)
+        bases = [b for b in repo.list_base_assets(conn, user_id) if b["variant"] == "docx"]
+        default = repo.default_resume_label(conn, user_id)
     u = p.user
     print(f"{u['full_name']}  <{u['email']}>  {u.get('phone') or ''}")
     print(f"  {u.get('location') or ''}  {u.get('linkedin') or ''}")
@@ -688,13 +804,96 @@ def cmd_profile_show(args) -> int:
         if v is not None and k not in ("user_id", "updated_at")
     }
     print(f"  profile fields set: {len(filled)}")
-    for w in p.work_experiences:
-        span = "present" if w["is_current"] else (w["to_date"] or "?")
-        print(
-            f"  {w['job_title']} @ {w['company_name']} ({w['from_date']} -> {span}, {len(w['bullets'])} bullets)"
+    print("  roles:")
+    if not bases:
+        print("    (none — autoapply resume add <file.docx> --label <role>)")
+    for b in bases:
+        mark = "*" if b["label"] == default else " "
+        state = (
+            f"parsed {b['parsed_at']:%Y-%m-%d}" if b.get("parsed")
+            else f"not parsed — autoapply resume parse {b['label']}"
         )
+        print(f"   {mark} {b['label']:<10} {state}")
+    if p.label is None:
+        return 0
+    print(f"\n  role {p.label!r}:")
+    for w in p.work_experiences:
+        print(f"    {w.get('job_title')} @ {w.get('company_name')} ({_span(w)}, {len(w.get('bullets') or [])} bullets)")
     for e in p.education:
-        print(f"  {e['degree']} {e['major'] or ''} — {e['school']}")
+        print(f"    {e.get('degree')} {e.get('major') or ''} — {e.get('school')}")
     for g in p.skill_groups:
-        print(f"  {g['category']}: {', '.join(g['skills'])}")
+        print(f"    {g.get('category')}: {', '.join(g.get('skills') or [])}")
+    return 0
+
+
+def cmd_profile_export(args) -> int:
+    """The profile JSON a form filler consumes: facts + one role's parsed resume."""
+    from agent.profile import profile_json
+    from cli.main import _connect, resolve_user
+
+    with _connect() as conn:
+        user_id = resolve_user(conn, args.user)
+        p = repo.fetch_profile(conn, user_id, label=args.label)
+    if p.label is None:
+        raise SystemExit("no resume for that role — autoapply resume add <file.docx> --label <role>")
+    if not (p.work_experiences or p.education or p.skill_groups or p.summary):
+        # stderr, so a redirected export still says why the resume half is empty
+        import sys
+
+        print(
+            f"warning: role {p.label!r} has no parsed resume — autoapply resume parse {p.label}",
+            file=sys.stderr,
+        )
+    text = json.dumps(profile_json(p), indent=2, default=str)
+    if args.out:
+        Path(args.out).write_text(text + "\n")
+        print(f"wrote {args.out} (role {p.label!r})")
+    else:
+        print(text)
+    return 0
+
+
+def cmd_resume_add(args) -> int:
+    from cli.main import _connect, _storage, resolve_user
+
+    with _connect() as conn:
+        user_id = resolve_user(conn, args.user)
+        print(f"parsing {args.file} as role {args.label!r} ...")
+        rr = add_role_resume(
+            conn, _storage(), user_id, args.label, args.file,
+            replace=args.replace, make_default=args.default, model=args.model or PARSE_MODEL,
+        )
+    print_role_resume(rr)
+    print(f"\ntailor with it:  autoapply tailor --label {rr.label}")
+    return 0
+
+
+def cmd_resume_parse(args) -> int:
+    from cli.main import _connect, _storage, resolve_user
+
+    with _connect() as conn:
+        user_id = resolve_user(conn, args.user)
+        labels = args.labels or sorted(
+            {b["label"] for b in repo.list_base_assets(conn, user_id) if b["variant"] == "docx"}
+        )
+        if not labels:
+            raise SystemExit("no resumes to parse — autoapply resume add <file.docx> --label <role>")
+        for label in labels:
+            print(f"parsing role {label!r} ...")
+            print_role_resume(
+                reparse_role_resume(conn, _storage(), user_id, label, model=args.model or PARSE_MODEL)
+            )
+    return 0
+
+
+def cmd_resume_default(args) -> int:
+    from cli.main import _connect, resolve_user
+
+    with _connect() as conn:
+        user_id = resolve_user(conn, args.user)
+        label = check_label(args.label)
+        if repo.get_base_asset(conn, user_id, variant="docx", label=label) is None:
+            raise SystemExit(f"no resume labelled {label!r} — add it first")
+        repo.set_default_resume_label(conn, user_id, label)
+    print(f"default role is now {label!r}")
     return 0

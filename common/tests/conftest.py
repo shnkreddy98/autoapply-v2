@@ -22,8 +22,8 @@ os.environ.setdefault("AUTOAPPLY_ENC_KEY", "MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAw
 
 _TABLES = [
     "audit_log", "sessions", "saved_answers", "applications", "tailored_resumes", "resume_assets",
-    "user_jobs", "jobs", "gmail_tokens", "professional_references", "skill_groups",
-    "education", "work_experiences", "application_profiles", "portal_credentials",
+    "user_jobs", "jobs", "gmail_tokens", "professional_references",
+    "application_profiles", "portal_credentials",
     "users",
 ]
 
@@ -61,17 +61,20 @@ def s3():
 
 @pytest.fixture
 def seed_user(db):
-    """Insert one user with a base resume asset; return (user_id, base_asset_id)."""
+    """Insert one user whose default role is 'general', with that base resume docx;
+    return (user_id, base_asset_id)."""
     from common import repo
 
     with db.cursor() as cur:
         cur.execute(
-            "INSERT INTO users (email, full_name) VALUES (%s, %s) RETURNING user_id",
+            "INSERT INTO users (email, full_name, default_resume_label) "
+            "VALUES (%s, %s, 'general') RETURNING user_id",
             ("tester@example.com", "Test User"),
         )
         user_id = cur.fetchone()["user_id"]
     db.commit()
     asset_id = repo.insert_resume_asset(
-        db, user_id, "base", f"users/{user_id}/resumes/base/default.docx", variant="default"
+        db, user_id, "base", f"users/{user_id}/resumes/base/general/docx.docx",
+        variant="docx", label="general",
     )
     return user_id, asset_id

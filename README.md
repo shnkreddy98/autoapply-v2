@@ -47,15 +47,25 @@ docker compose up -d        # repo root; schema loads from db/init.sql on first 
 
 ```bash
 cd auto-browse
-uv run autoapply profile init --pdf your_resume.pdf --docx your_resume.docx
+uv run autoapply profile init --docx general.docx          # your facts + first role
+uv run autoapply resume add de.docx --label de             # one resume per role
+uv run autoapply resume add swe.docx --label swe
 ```
 
-Parses the resume with an LLM (needs `OPENROUTER_API_KEY`), walks you through
-every field interactively — extracted values are the defaults, Enter keeps
-them, `-` clears — then asks the application questions a resume can't answer
-(work authorization, relocation, EEO, certifications) with autofilled answers.
-`--yes` accepts all defaults non-interactively. Re-running refreshes the
-profile. Inspect with `autoapply profile show`.
+A profile has two halves. **Facts** — contact, address, work authorization,
+relocation, EEO, certifications — are yours and the same for every role;
+`profile init` asks for them with autofilled defaults (Enter keeps, `-` clears,
+`--yes` accepts all). **Role resumes** are added per role: each `.docx` is stored
+with a PDF rendering and parsed by an LLM (needs `OPENROUTER_API_KEY`) into that
+role's work history, education and skills. `--docx` on `profile init` adds the
+first role (`--label general` by default) and prefills your contact from it.
+
+Roles are never merged. Tailoring, `ask` and the apply profile all use the role a
+job was tailored from (`autoapply tailor --label de`), falling back to your default
+role (the first one added; change it with `autoapply resume default`). When two
+role resumes disagree on an employer's dates or on your current employer,
+`resume add` says so. Inspect with `autoapply profile show [--label de]`; the JSON
+a form filler reads is `autoapply profile export --label de`.
 
 ### 3. The `autoapply` CLI
 

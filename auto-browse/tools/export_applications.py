@@ -10,8 +10,8 @@ Pulls the PDFs out of MinIO and lays them out one directory per role, then per c
                            /de/databricks/...
 
 The role folder is the label of the base resume the tailoring came from
-(`autoapply resume add <docx> --label swe`). Tailorings from the unlabelled default
-base — including everything tailored before labels existed — go under `default/`.
+(`autoapply resume add <docx> --label swe`). Tailorings whose base resume row is gone
+(or that predate base tracking) go under `unknown-role/`.
 Each role gets its own index.md, so exporting a second label into the same date
 folder adds to the tree instead of overwriting the first one's index.
 
@@ -66,9 +66,10 @@ _OPAQUE_HOSTS = {
 _STRIP_PREFIXES = ("careers.", "jobs.", "job.", "search.", "searchjobs.", "www.", "apply.")
 _STRIP_SUFFIXES = (".com", ".org", ".net", ".io", ".co", ".inc")
 
-# Folder (and --label value) for tailorings whose base resume has no label: the
-# default base, or a row from before labels existed whose base_asset_id is NULL.
-UNLABELLED = "default"
+# Folder (and --label value) for tailorings with no base resume row to name a role:
+# base_asset_id is NULL (the base was deleted, or the row predates base tracking).
+# Every existing base names its role, so this is never a real role's folder.
+UNLABELLED = "unknown-role"
 
 
 def slug(text: str) -> str:
@@ -126,9 +127,9 @@ def ready_rows(
 
     `day` limits to resumes tailored on that local calendar day; None exports all.
     `label` limits to tailorings made from that role's base resume; None exports
-    every role. `label=UNLABELLED` selects the ones with no label — the default base,
-    plus older rows with no base_asset_id at all, which is why the join is a LEFT
-    JOIN and the filter tests IS NULL rather than comparing the string.
+    every role. `label=UNLABELLED` selects the ones with no base row at all, which is
+    why the join is a LEFT JOIN and the filter tests IS NULL rather than comparing
+    the string.
 
     Each row carries `label`, the role folder it belongs in."""
     clauses = [
@@ -151,7 +152,7 @@ def ready_rows(
             "SELECT t.job_id, t.tailored_asset_id, t.resume_score, t.new_resume_score, "
             "       t.job_match_summary, j.url, j.title, j.company, ra.label "
             "FROM tailored_resumes t JOIN jobs j USING (job_id) "
-            # LEFT so a tailoring whose base row is gone still exports (under default/)
+            # LEFT so a tailoring whose base row is gone still exports (under unknown-role/)
             "LEFT JOIN resume_assets ra ON ra.id = t.base_asset_id "
             f"WHERE {' AND '.join(clauses)} "  # noqa: S608 — clauses are literals, values parameterized
             "ORDER BY t.updated_at DESC",
@@ -256,7 +257,7 @@ def main() -> int:
     ap.add_argument(
         "--label",
         help="only export tailorings made from this role's base resume "
-        f"(e.g. swe; {UNLABELLED!r} = the unlabelled default base). "
+        f"(e.g. swe; {UNLABELLED!r} = tailorings whose base resume is gone). "
         "Default: every role, each in its own folder.",
     )
     ap.add_argument("--filename", help="resume filename (default: from the user's full name)")

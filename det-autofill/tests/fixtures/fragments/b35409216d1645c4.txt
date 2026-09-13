@@ -88,10 +88,10 @@
     - textbox "LinkedIn Profile" [ref=e245]: https://www.linkedin.com/in/janedoe
   - generic [ref=e248]:
     - generic [ref=e249]: Website
-    - textbox "Website" [ref=e250]: github.com/shnkreddy98
+    - textbox "Website" [ref=e250]: github.com/janedoe
 "Website": |-
     - generic [ref=e249]: Website
-    - textbox "Website" [ref=e250]: github.com/shnkreddy98
+    - textbox "Website" [ref=e250]: github.com/janedoe
   - generic [ref=e253]:
     - generic [ref=e254]: Are you a U.S. citizen? *
     - generic [ref=e255]:

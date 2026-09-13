@@ -34,7 +34,7 @@
     - option "Alaska"
 "Zip / Postal Code": |-
         - generic [ref=e144]: "*Zip / Postal Code"
-        - textbox "*Zip / Postal Code" [ref=e145]: "95126"
+        - textbox "*Zip / Postal Code" [ref=e145]: "94000"
   - generic [ref=e150] [cursor=pointer]:
     - checkbox "Willing to relocate" [checked] [ref=e151]
     - text: Willing to relocate

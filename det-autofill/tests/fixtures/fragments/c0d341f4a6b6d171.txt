@@ -50,15 +50,15 @@
 "City": |-
         - textbox "City" [ref=e166]: San Jose
         - textbox "State/Province" [ref=e168]: CA
-        - textbox "Postal" [ref=e170]: "95126"
+        - textbox "Postal" [ref=e170]: "94000"
   - generic [ref=e171]:
 "State/Province": |-
         - textbox "State/Province" [ref=e168]: CA
-        - textbox "Postal" [ref=e170]: "95126"
+        - textbox "Postal" [ref=e170]: "94000"
   - generic [ref=e171]:
     - generic [ref=e172]: Resume*
 "Postal": |-
-        - textbox "Postal" [ref=e170]: "95126"
+        - textbox "Postal" [ref=e170]: "94000"
   - generic [ref=e171]:
     - generic [ref=e172]: Resume*
     - generic [ref=e217]:

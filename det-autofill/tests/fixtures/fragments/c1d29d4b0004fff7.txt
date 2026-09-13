@@ -8,7 +8,7 @@
         - button "State Arizona Required" [active] [ref=e718]: Arizona
       - generic [ref=e325]:
         - generic [ref=e327]: Postal Code*
-        - textbox "Postal Code" [ref=e591]: "95126"
+        - textbox "Postal Code" [ref=e591]: "94000"
   --
             - generic [ref=e362]: 1 item selected, United States of America (+1)
           - listbox "items selected" [ref=e364]:

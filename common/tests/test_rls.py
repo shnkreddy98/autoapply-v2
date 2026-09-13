@@ -112,7 +112,7 @@ def test_insert_for_other_user_rejected(api, two_users):
     with pytest.raises(psycopg.errors.Error, match="row-level security"):
         _as(
             api, a,
-            "INSERT INTO work_experiences (user_id, job_title) VALUES (%s, 'x')",
+            "INSERT INTO application_profiles (user_id, city) VALUES (%s, 'x')",
             (b,),
         )
 

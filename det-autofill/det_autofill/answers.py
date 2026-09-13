@@ -242,7 +242,7 @@ def example_profile() -> dict:
         "willing_travel": True,
         "ever_terminated": False,
         "available_start_date": "2026-08-01",
-        "resume_path": "/resume/jane_doe.pdf",
+        "resume_path": "/resume/resume.pdf",
         "skills": ["Python", "SQL", "Spark", "Airflow"],
         "skill_years": {"Python": 6, "SQL": 6, "Spark": 4, "Databricks": 3, "AWS": 5},
         "option_prefs": {"eeo_gender": [r"^woman\b|^female\b"]},

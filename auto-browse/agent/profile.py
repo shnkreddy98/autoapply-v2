@@ -1,10 +1,13 @@
 """Render an applicant's Postgres profile into the text block the browser agent
 uses to fill job applications.
 
-No files, no staging: `build_profile(conn, user_id, resume_path)` fetches the
-profile bundle from Postgres (via `common.repo.fetch_profile`) and renders it
-in-memory. The resume's in-container path is supplied by the caller (the apply
-consumer stages the actual file per run).
+No files, no staging: `build_profile(conn, user_id, resume_path, job_id)` fetches
+the user's facts plus the parsed resume of the role the job was tailored from (via
+`common.repo.fetch_profile`) and renders it in-memory. The resume's in-container
+path is supplied by the caller (the apply consumer stages the actual file per run).
+
+`profile_json` is the same bundle as a document, for `autoapply profile export` and
+the deterministic form filler.
 """
 
 from __future__ import annotations
@@ -14,12 +17,45 @@ from typing import Any
 
 import psycopg
 
+from common import repo
 from common.repo import ProfileData, fetch_profile
 
 
-def build_profile(conn: psycopg.Connection, user_id: str, resume_path: str) -> str:
-    """Fetch + render a user's full profile in one call."""
-    return render_profile(fetch_profile(conn, user_id), resume_path)
+def build_profile(
+    conn: psycopg.Connection, user_id: str, resume_path: str, job_id: str | None = None
+) -> str:
+    """Fetch + render the profile for a job. The work history comes from the role the
+    job was tailored from, so the form gets the same employers and titles as the
+    resume being uploaded; without a tailoring, the user's default role."""
+    label = repo.base_label_for_job(conn, user_id, job_id) if job_id else None
+    return render_profile(fetch_profile(conn, user_id, label=label), resume_path)
+
+
+# Facts that belong to the user row but are account plumbing, not form answers.
+_NOT_PROFILE = {"user_id", "google_sub", "role", "is_active", "created_at", "updated_at"}
+
+
+def profile_json(p: ProfileData) -> dict[str, Any]:
+    """One role's profile as a document: the user's facts plus that role's parsed
+    resume. The portal password is left out — this gets written to files and handed
+    to other tools — and only its presence is reported."""
+    login = p.login or {}
+    return {
+        "role": p.label,
+        "contact": {k: v for k, v in p.user.items() if k not in _NOT_PROFILE},
+        "facts": {k: v for k, v in (p.profile or {}).items() if k not in _NOT_PROFILE},
+        "portal_login": {
+            "email": login.get("login_email") or p.user.get("email"),
+            "password_set": bool(login.get("login_password")),
+        },
+        "summary": p.summary,
+        "work_experiences": p.work_experiences,
+        "education": p.education,
+        "skill_groups": p.skill_groups,
+        "references": [
+            {k: v for k, v in r.items() if k not in ("id", "user_id")} for r in p.references
+        ],
+    }
 
 
 def _yn(value: object) -> str:
@@ -79,6 +115,7 @@ def render_profile(p: ProfileData, resume_path: str) -> str:
     add("# APPLICATION PROFILE")
     add(f"# Applicant: {u.get('full_name')} <{email}>")
     add(f"# Resume to upload (path inside browser): {resume_path}")
+    add(f"# Resume role: {p.label or '(none)'}")
     add("# Use these values to fill application form fields. Leave blank any")
     add("# field marked (not provided). Voluntary/EEO fields may be left blank.")
     add("")
@@ -180,7 +217,7 @@ def render_profile(p: ProfileData, resume_path: str) -> str:
 
     # --- resume content ---
     add("## Resume — Summary")
-    add(u.get("summary") or "(none)")
+    add(p.summary or "(none)")
     add("")
 
     add("## Resume — Work Experience")

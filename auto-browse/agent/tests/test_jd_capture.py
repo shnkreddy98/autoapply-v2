@@ -47,7 +47,8 @@ class FakeStorage:
 def _seed_job_and_user(db, url="https://example.com/jobs/1", email="u@example.com"):
     with db.cursor() as cur:
         cur.execute(
-            "INSERT INTO users (email, full_name) VALUES (%s, %s) RETURNING user_id",
+            "INSERT INTO users (email, full_name, default_resume_label) "
+            "VALUES (%s, %s, 'general') RETURNING user_id",
             (email, "U"),
         )
         user_id = cur.fetchone()["user_id"]
@@ -57,8 +58,9 @@ def _seed_job_and_user(db, url="https://example.com/jobs/1", email="u@example.co
         db,
         user_id,
         "base",
-        f"users/{user_id}/resumes/base/default.docx",
+        f"users/{user_id}/resumes/base/general/docx.docx",
         variant="docx",
+        label="general",
     )
     return job_id, user_id
 

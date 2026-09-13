@@ -47,8 +47,10 @@ def _admin_dsn() -> str:
     )
 
 
-# Newest table in init.sql — bump when the schema grows so stale test DBs rebuild.
-_SCHEMA_SENTINEL = "public.saved_answers"
+# Newest (table, column) in init.sql — bump on every schema change so stale test DBs
+# rebuild. A column, not just a table: changes that only add a column or drop a
+# table would otherwise leave an old schema in place and fail tests confusingly.
+_SCHEMA_SENTINEL = ("resume_assets", "parsed")
 
 
 def ensure_test_db() -> None:
@@ -56,7 +58,7 @@ def ensure_test_db() -> None:
 
     Idempotent: safe to call before every test. `init.sql` uses bare CREATE TABLE
     (not IF NOT EXISTS), so it only ever runs against an empty schema: a fresh DB,
-    or — when the sentinel table is missing (schema drift) — after dropping and
+    or — when the sentinel column is missing (schema drift) — after dropping and
     recreating `public`. The test DB is throwaway by contract, so that's safe."""
     name = os.environ["DB_NAME"]  # conftest has already pointed this at the test DB
     with psycopg.connect(_admin_dsn(), autocommit=True) as admin:
@@ -70,8 +72,10 @@ def ensure_test_db() -> None:
 
     with dbmod.connect() as conn:
         current = conn.execute(
-            "SELECT to_regclass(%s)", (_SCHEMA_SENTINEL,)
-        ).fetchone()["to_regclass"]
+            "SELECT 1 FROM information_schema.columns "
+            "WHERE table_schema = 'public' AND table_name = %s AND column_name = %s",
+            _SCHEMA_SENTINEL,
+        ).fetchone()
         if not current:
             conn.execute("DROP SCHEMA public CASCADE; CREATE SCHEMA public")
             conn.execute(_INIT_SQL.read_text())

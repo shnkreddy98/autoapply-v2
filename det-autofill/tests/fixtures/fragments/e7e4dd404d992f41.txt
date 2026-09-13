@@ -45,7 +45,7 @@
         - generic [ref=f67e157]:
   --
             - generic [ref=f67e160]: required.
-        - textbox "Zip/Postal Code" [ref=f67e162]: "95126"
+        - textbox "Zip/Postal Code" [ref=f67e162]: "94000"
       - generic [ref=f67e163]:
         - generic [ref=f67e164]:
   --

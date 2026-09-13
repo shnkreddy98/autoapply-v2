@@ -26,14 +26,15 @@ async def test_full_pipeline(db, s3, tmp_path):
     # ---- onboarding: a user with a base resume in MinIO ----
     with db.cursor() as cur:
         cur.execute(
-            "INSERT INTO users (email, full_name) VALUES (%s, %s) RETURNING user_id",
+            "INSERT INTO users (email, full_name, default_resume_label) "
+            "VALUES (%s, %s, 'general') RETURNING user_id",
             ("e2e@example.com", "E2E User"),
         )
         user_id = cur.fetchone()["user_id"]
     db.commit()
-    base_key = f"users/{user_id}/resumes/base/default.docx"
+    base_key = f"users/{user_id}/resumes/base/general/docx.docx"
     s3.put_bytes(base_key, b"PK\x03\x04 base docx")
-    repo.insert_resume_asset(db, user_id, "base", base_key, variant="docx")
+    repo.insert_resume_asset(db, user_id, "base", base_key, variant="docx", label="general")
 
     # ---- stage 1: search discovers a job (linked to the searching user) ----
     job_id = repo.add_job_for_user(

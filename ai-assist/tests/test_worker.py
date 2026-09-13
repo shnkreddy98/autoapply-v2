@@ -15,14 +15,17 @@ def _seed(db, s3):
     tailoring row. Returns (tid, user_id, job_id)."""
     with db.cursor() as cur:
         cur.execute(
-            "INSERT INTO users (email, full_name) VALUES (%s, %s) RETURNING user_id",
+            "INSERT INTO users (email, full_name, default_resume_label) "
+            "VALUES (%s, %s, 'general') RETURNING user_id",
             ("t@example.com", "T"),
         )
         user_id = cur.fetchone()["user_id"]
     db.commit()
-    base_key = f"users/{user_id}/resumes/base/default.docx"
+    base_key = keys.base_resume_key(user_id, "general", "docx", "docx")
     s3.put_bytes(base_key, b"PK\x03\x04 fake docx bytes")
-    base_id = repo.insert_resume_asset(db, user_id, "base", base_key, variant="default")
+    base_id = repo.insert_resume_asset(
+        db, user_id, "base", base_key, variant="docx", label="general"
+    )
 
     job_id = repo.get_or_create_job(db, "https://example.com/jobs/1", "Eng")
     s3.put_bytes(keys.jd_key(job_id), b"# Job\nNeed dbt + Airflow.", "text/markdown")

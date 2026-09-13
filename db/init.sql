@@ -16,7 +16,10 @@ CREATE TABLE users (
     linkedin   text,
     github     text,
     location   text,
-    summary    text,                      -- professional summary (resume content)
+    -- Role whose base resume stands in when a job has no tailoring of its own (and
+    -- for `ask --label default`). Set by the first `resume add`, changed with
+    -- `resume default`. Resume content itself lives on resume_assets.parsed.
+    default_resume_label text,
     is_active  boolean NOT NULL DEFAULT true,
     created_at timestamptz NOT NULL DEFAULT now(),
     updated_at timestamptz NOT NULL DEFAULT now()
@@ -117,42 +120,10 @@ CREATE TABLE application_profiles (
     updated_at            timestamptz NOT NULL DEFAULT now()
 );
 
--- ===================== resume content (normalized) =====================
-CREATE TABLE work_experiences (
-    id            uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id       uuid NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
-    job_title     text,
-    company_name  text,
-    location      text,
-    from_date     date,
-    to_date       date,
-    is_current    boolean NOT NULL DEFAULT false,
-    bullets       text[] NOT NULL DEFAULT '{}',
-    display_order integer NOT NULL DEFAULT 0
-);
-CREATE INDEX ix_work_experiences_user ON work_experiences(user_id);
-
-CREATE TABLE education (
-    id            uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id       uuid NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
-    degree        text,
-    major         text,
-    school        text,
-    from_date     date,
-    to_date       date,
-    gpa           text,              -- "3.8/4.0" as printed; scales differ, so not numeric
-    display_order integer NOT NULL DEFAULT 0
-);
-CREATE INDEX ix_education_user ON education(user_id);
-
-CREATE TABLE skill_groups (
-    id            uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id       uuid NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
-    category      text,
-    skills        text[] NOT NULL DEFAULT '{}',
-    display_order integer NOT NULL DEFAULT 0
-);
-CREATE INDEX ix_skill_groups_user ON skill_groups(user_id);
+-- Resume content (summary, work history, education, skills) is not stored here:
+-- it is parsed per role from that role's base resume into resume_assets.parsed.
+-- One merged copy used to live in work_experiences/education/skill_groups, and
+-- role resumes that disagree (a title, an end date) had nowhere to disagree.
 
 CREATE TABLE professional_references (
     id             uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -209,15 +180,26 @@ CREATE TABLE resume_assets (
     user_id      uuid NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
     kind         text NOT NULL CHECK (kind IN ('base', 'tailored')),
     variant      text,                            -- file format: 'pdf' / 'docx'
-    label        text,                            -- role/track base: 'swe','de',... ; null = default base
+    label        text,                            -- role of a base: 'swe','de','general',...
     job_id       uuid REFERENCES jobs(job_id) ON DELETE CASCADE,  -- null for base
     s3_key       text NOT NULL,
     content_type text,
     status       text NOT NULL DEFAULT 'ready'
                    CHECK (status IN ('pending', 'ready', 'failed')),
-    created_at   timestamptz NOT NULL DEFAULT now()
+    -- Structured resume content (cli.onboard.ParsedResume) parsed from the docx of
+    -- a base. Only set on base docx rows; the profile JSON for a role is the user's
+    -- application_profiles facts plus this.
+    parsed       jsonb,
+    parsed_at    timestamptz,
+    created_at   timestamptz NOT NULL DEFAULT now(),
+    -- Every base names its role; "no label" used to mean the default, which made
+    -- the default a special case in every query. The default is users.default_resume_label.
+    CHECK (kind <> 'base' OR label IS NOT NULL)
 );
 CREATE INDEX ix_resume_assets_user ON resume_assets(user_id);
+-- One base per role and format: `resume add --replace` overwrites in place.
+CREATE UNIQUE INDEX ux_resume_assets_base ON resume_assets(user_id, label, variant)
+    WHERE kind = 'base';
 
 -- ===================== tailoring queue + index =====================
 CREATE TABLE tailored_resumes (
@@ -312,9 +294,6 @@ ALTER TABLE users                   ENABLE ROW LEVEL SECURITY;
 ALTER TABLE portal_credentials      ENABLE ROW LEVEL SECURITY;
 ALTER TABLE gmail_tokens            ENABLE ROW LEVEL SECURITY;
 ALTER TABLE application_profiles    ENABLE ROW LEVEL SECURITY;
-ALTER TABLE work_experiences        ENABLE ROW LEVEL SECURITY;
-ALTER TABLE education               ENABLE ROW LEVEL SECURITY;
-ALTER TABLE skill_groups            ENABLE ROW LEVEL SECURITY;
 ALTER TABLE professional_references ENABLE ROW LEVEL SECURITY;
 ALTER TABLE resume_assets           ENABLE ROW LEVEL SECURITY;
 ALTER TABLE tailored_resumes        ENABLE ROW LEVEL SECURITY;
@@ -337,15 +316,6 @@ CREATE POLICY user_isolation ON gmail_tokens
     USING      (user_id = NULLIF(current_setting('app.user_id', true), '')::uuid)
     WITH CHECK (user_id = NULLIF(current_setting('app.user_id', true), '')::uuid);
 CREATE POLICY user_isolation ON application_profiles
-    USING      (user_id = NULLIF(current_setting('app.user_id', true), '')::uuid)
-    WITH CHECK (user_id = NULLIF(current_setting('app.user_id', true), '')::uuid);
-CREATE POLICY user_isolation ON work_experiences
-    USING      (user_id = NULLIF(current_setting('app.user_id', true), '')::uuid)
-    WITH CHECK (user_id = NULLIF(current_setting('app.user_id', true), '')::uuid);
-CREATE POLICY user_isolation ON education
-    USING      (user_id = NULLIF(current_setting('app.user_id', true), '')::uuid)
-    WITH CHECK (user_id = NULLIF(current_setting('app.user_id', true), '')::uuid);
-CREATE POLICY user_isolation ON skill_groups
     USING      (user_id = NULLIF(current_setting('app.user_id', true), '')::uuid)
     WITH CHECK (user_id = NULLIF(current_setting('app.user_id', true), '')::uuid);
 CREATE POLICY user_isolation ON professional_references
