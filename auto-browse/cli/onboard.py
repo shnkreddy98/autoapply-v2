@@ -124,6 +124,7 @@ class ParsedEducation(BaseModel):
     school: str | None = None
     from_date: date | None = None
     to_date: date | None = None
+    gpa: str | None = None  # as printed ("3.8/4.0"); null when the resume omits it
 
 
 class ParsedSkillGroup(BaseModel):
@@ -253,6 +254,18 @@ def _ask_date(
             print("    not a date, try again (empty to skip)")
 
 
+def _split_name(full_name: str | None) -> tuple[str | None, str | None, str | None]:
+    """Default first/middle/last for the review prompts. Only a default: compound
+    surnames ("van der Berg") split wrong, which is why the parts are confirmed and
+    stored rather than derived from users.full_name at fill time."""
+    parts = (full_name or "").split()
+    if not parts:
+        return None, None, None
+    if len(parts) == 1:
+        return parts[0], None, None
+    return parts[0], " ".join(parts[1:-1]) or None, parts[-1]
+
+
 def _guess_city_state(location: str | None) -> tuple[str | None, str | None]:
     if not location:
         return None, None
@@ -335,6 +348,22 @@ def interactive_review(
     c.linkedin = _ask("linkedin", c.linkedin, ask=ask, yes=yes)
     c.github = _ask("github", c.github, ask=ask, yes=yes)
 
+    # Collected here but saved to application_profiles: forms split the name, and
+    # the split cannot be recomputed safely from full_name later.
+    first, middle, last = _split_name(c.full_name)
+    names: dict = {}
+    names["first_name"] = _ask("first name", prior("first_name", first), ask=ask, yes=yes)
+    names["middle_name"] = _ask("middle name", prior("middle_name", middle), ask=ask, yes=yes)
+    names["last_name"] = _ask("last name", prior("last_name", last), ask=ask, yes=yes)
+    names["preferred_name"] = _ask(
+        "preferred name (blank = first name)", prior("preferred_name"), ask=ask, yes=yes
+    )
+    names["pronouns"] = _ask("pronouns (blank = skip)", prior("pronouns"), ask=ask, yes=yes)
+    names["phone_country_code"] = _ask(
+        "phone country code", prior("phone_country_code", "+1"), ask=ask, yes=yes
+    )
+    names["portfolio_url"] = _ask("portfolio url", prior("portfolio_url"), ask=ask, yes=yes)
+
     print("\n-- ATS portal login (the agent signs in / creates portal accounts) --")
     login: dict = {
         "login_email": _ask("portal login email", c.email, ask=ask, yes=yes),
@@ -371,13 +400,14 @@ def interactive_review(
 
     city, state = _guess_city_state(c.location)
     print("\n-- address (application forms want it split) --")
-    profile: dict = {}
+    profile: dict = dict(names)
     profile["street_address"] = _ask(
         "street address", prior("street_address"), ask=ask, yes=yes
     )
     profile["city"] = _ask("city", prior("city", city), ask=ask, yes=yes)
     profile["state"] = _ask("state", prior("state", state), ask=ask, yes=yes)
     profile["zip_code"] = _ask("zip", prior("zip_code"), ask=ask, yes=yes)
+    profile["country"] = _ask("country", prior("country", "United States"), ask=ask, yes=yes)
     profile["date_of_birth"] = _ask_date(
         "date of birth", prior("date_of_birth"), ask=ask, yes=yes
     )
@@ -397,6 +427,9 @@ def interactive_review(
         prior("security_clearance", False),
         ask=ask,
         yes=yes,
+    )
+    profile["over_18"] = _ask_bool(
+        "18 or older?", prior("over_18", True), ask=ask, yes=yes
     )
     profile["years_of_experience"] = int(
         _ask(
@@ -424,6 +457,15 @@ def interactive_review(
     profile["available_start_date"] = _ask_date(
         "available start date", prior("available_start_date"), ask=ask, yes=yes
     )
+    profile["notice_period"] = _ask(
+        "notice period", prior("notice_period", "2 weeks"), ask=ask, yes=yes
+    )
+    profile["how_did_you_hear"] = _ask(
+        "how did you hear about jobs (default answer)",
+        prior("how_did_you_hear", "LinkedIn"),
+        ask=ask,
+        yes=yes,
+    )
     profile["willing_relocate"] = _ask_bool(
         "willing to relocate?", prior("willing_relocate", True), ask=ask, yes=yes
     )
@@ -450,6 +492,7 @@ def interactive_review(
     for col, label in (
         ("gender", "gender"),
         ("race_ethnicity", "race/ethnicity"),
+        ("hispanic_latino", "hispanic or latino"),
         ("veteran_status", "veteran status"),
         ("disability_status", "disability status"),
     ):
@@ -556,9 +599,9 @@ def save(conn, storage, data: OnboardData, pdf: str | None, docx: str | None) ->
             )
         for i, e in enumerate(data.resume.education):
             cur.execute(
-                "INSERT INTO education (user_id, degree, major, school, from_date, to_date, display_order) "
-                "VALUES (%s, %s, %s, %s, %s, %s, %s)",
-                (user_id, e.degree, e.major, e.school, e.from_date, e.to_date, i),
+                "INSERT INTO education (user_id, degree, major, school, from_date, to_date, gpa, display_order) "
+                "VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
+                (user_id, e.degree, e.major, e.school, e.from_date, e.to_date, e.gpa, i),
             )
         for i, g in enumerate(data.resume.skill_groups):
             cur.execute(

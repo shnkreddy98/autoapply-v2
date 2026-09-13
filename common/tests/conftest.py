@@ -21,7 +21,7 @@ os.environ["DB_NAME"] = os.getenv("TEST_DB_NAME", "jobs_test")
 os.environ.setdefault("AUTOAPPLY_ENC_KEY", "MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA=")
 
 _TABLES = [
-    "audit_log", "sessions", "applications", "tailored_resumes", "resume_assets",
+    "audit_log", "sessions", "saved_answers", "applications", "tailored_resumes", "resume_assets",
     "user_jobs", "jobs", "gmail_tokens", "professional_references", "skill_groups",
     "education", "work_experiences", "application_profiles", "portal_credentials",
     "users",

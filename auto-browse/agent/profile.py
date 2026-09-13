@@ -92,19 +92,27 @@ def render_profile(p: ProfileData, resume_path: str) -> str:
 
     add("## Personal Information")
     add(f"Full Name: {_v(u.get('full_name'))}")
+    # Confirmed name parts win; the split is only a fallback for profiles saved
+    # before `profile init` asked for them.
     first, last = _split_name(u.get("full_name"))
-    add(f"First Name: {_v(first)}")
-    add(f"Last Name: {_v(last)}")
+    add(f"First Name: {_v(d.get('first_name') or first)}")
+    add(f"Middle Name: {_v(d.get('middle_name'))}")
+    add(f"Last Name: {_v(d.get('last_name') or last)}")
+    add(f"Preferred Name: {_v(d.get('preferred_name'))}")
+    add(f"Pronouns: {_v(d.get('pronouns'))}")
     add(f"Email: {email}")
     add(f"Phone: {_v(u.get('phone'))}")
+    add(f"Phone Country Code: {_v(d.get('phone_country_code'))}")
     add(f"Date of Birth: {_yn(d.get('date_of_birth'))}")
     add(f"Street Address: {_v(d.get('street_address'))}")
     add(f"City: {_v(d.get('city'))}")
     add(f"State: {_v(d.get('state'))}")
     add(f"ZIP Code: {_v(d.get('zip_code'))}")
-    add(f"18 or older: {_yn(d.get('age_18_or_older'))}")
+    add(f"Country: {_v(d.get('country'))}")
+    add(f"18 or older: {_yn(d.get('over_18'))}")
     add(f"LinkedIn: {_v(_linkedin_url(u.get('linkedin')))}")
     add(f"GitHub: {_v(u.get('github'))}")
+    add(f"Portfolio: {_v(d.get('portfolio_url'))}")
     add(f"Location: {_v(u.get('location'))}")
     add("")
 
@@ -116,6 +124,8 @@ def render_profile(p: ProfileData, resume_path: str) -> str:
 
     add("## Position Preferences")
     add(f"Available Start Date: {_v(d.get('available_start_date'))}")
+    add(f"Notice Period: {_v(d.get('notice_period'))}")
+    add(f"How did you hear about us: {_v(d.get('how_did_you_hear'))}")
     add(f"Desired Salary: {_v(d.get('desired_salary'))}")
     add(f"Employment Type: {_v(d.get('employment_type'))}")
     add(f"Years of Experience: {_v(d.get('years_of_experience'))}")
@@ -133,6 +143,7 @@ def render_profile(p: ProfileData, resume_path: str) -> str:
     add("## EEO Information (Voluntary — leave blank unless required)")
     add(f"Gender: {_yn(d.get('gender'))}")
     add(f"Race / Ethnicity: {_yn(d.get('race_ethnicity'))}")
+    add(f"Hispanic or Latino: {_yn(d.get('hispanic_latino'))}")
     add(f"Veteran Status: {_yn(d.get('veteran_status'))}")
     add(f"Disability Status: {_yn(d.get('disability_status'))}")
     add("")
@@ -186,7 +197,8 @@ def render_profile(p: ProfileData, resume_path: str) -> str:
     add("## Resume — Education")
     for edu in p.education:
         span = _date_span(edu.get("from_date"), edu.get("to_date"))
-        bits = [edu.get("degree"), edu.get("major"), edu.get("school"), span]
+        gpa = f"GPA {edu['gpa']}" if edu.get("gpa") else None
+        bits = [edu.get("degree"), edu.get("major"), edu.get("school"), span, gpa]
         add(f"- {' | '.join(str(b) for b in bits if b)}")
     add("")
 

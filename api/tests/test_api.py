@@ -92,6 +92,15 @@ def test_profile_roundtrip_and_whitelist(client_factory):
     assert r.json()["city"] == "Berlin"
     assert c.get("/profile").json()["willing_relocate"] is True
 
+    # the 2026-09-13 columns are writable through the whitelist too
+    r = c.put("/profile", json={"first_name": "Ann", "country": "Germany", "over_18": True})
+    assert r.status_code == 200
+    assert (r.json()["first_name"], r.json()["country"], r.json()["over_18"]) == (
+        "Ann",
+        "Germany",
+        True,
+    )
+
     # unknown / managed fields are rejected outright, not silently dropped
     assert c.put("/profile", json={"user_id": "x"}).status_code == 422
     assert c.put("/profile", json={"nonsense": 1}).status_code == 422

@@ -66,15 +66,27 @@ CREATE TABLE gmail_tokens (
 -- ===================== application form data (1:1) =====================
 CREATE TABLE application_profiles (
     user_id               uuid PRIMARY KEY REFERENCES users(user_id) ON DELETE CASCADE,
+    -- Forms split the name; users.full_name cannot be split reliably ("Mary Ann
+    -- van der Berg"), so the parts are stored as the applicant confirmed them.
+    first_name            text,
+    middle_name           text,
+    last_name             text,
+    preferred_name        text,
+    pronouns              text,
+    phone_country_code    text,          -- "+1"; phone-country selects are separate controls
+    portfolio_url         text,
     street_address        text,
     city                  text,
     state                 text,
     zip_code              text,
+    country               text,          -- full name ("United States"); the filler maps to ISO codes
     date_of_birth         date,
     work_eligible_us      boolean,
     visa_sponsorship      boolean,
     security_clearance    boolean,
+    over_18               boolean,
     available_start_date  date,
+    notice_period         text,          -- "2 weeks"; free text because forms ask in days, weeks or dates
     desired_salary        text,
     employment_type       text,
     years_of_experience   integer,
@@ -86,8 +98,12 @@ CREATE TABLE application_profiles (
     termination_explanation text,
     gender                text,
     race_ethnicity        text,
+    -- Many forms ask Hispanic/Latino as its own yes/no before race (the EEO-1
+    -- two-question shape), so it cannot be read out of race_ethnicity.
+    hispanic_latino       text,
     veteran_status        text,
     disability_status     text,
+    how_did_you_hear      text,          -- default source answer, e.g. "LinkedIn"
     cert_accuracy         boolean,
     cert_dismissal        boolean,
     cert_background_check boolean,
@@ -124,6 +140,7 @@ CREATE TABLE education (
     school        text,
     from_date     date,
     to_date       date,
+    gpa           text,              -- "3.8/4.0" as printed; scales differ, so not numeric
     display_order integer NOT NULL DEFAULT 0
 );
 CREATE INDEX ix_education_user ON education(user_id);
@@ -238,6 +255,36 @@ CREATE TABLE applications (
 );
 CREATE INDEX ix_applications_user ON applications(user_id);
 
+-- ===================== saved form answers =====================
+-- Answers to application questions the profile columns do not cover, so a question
+-- answered once (by the LLM tier or by hand) fills deterministically next time.
+--   reusable: one row per (user, question) — "Years of experience with Spark?"
+--   per_job:  tied to one job and never replayed elsewhere — "Why do you want to
+--             work at <company>?" must be written fresh for every application.
+--             Kept so a `continue` on the same job does not pay for it again.
+-- question_key is the normalized question text (lowercased, punctuation and
+-- whitespace collapsed); options is the choice list the answer was picked from,
+-- NULL for free text, so a lookup can refuse a match whose options differ.
+CREATE TABLE saved_answers (
+    id            uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id       uuid NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+    question_key  text NOT NULL,
+    question_text text NOT NULL,
+    answer        text NOT NULL,
+    options       text[],
+    source        text NOT NULL CHECK (source IN ('profile', 'rule', 'llm', 'human')),
+    scope         text NOT NULL CHECK (scope IN ('reusable', 'per_job')),
+    job_id        uuid REFERENCES jobs(job_id) ON DELETE CASCADE,
+    times_used    integer NOT NULL DEFAULT 0,
+    created_at    timestamptz NOT NULL DEFAULT now(),
+    updated_at    timestamptz NOT NULL DEFAULT now(),
+    CHECK ((scope = 'per_job') = (job_id IS NOT NULL))
+);
+CREATE UNIQUE INDEX ux_saved_answers_reusable ON saved_answers(user_id, question_key)
+    WHERE scope = 'reusable';
+CREATE UNIQUE INDEX ux_saved_answers_per_job ON saved_answers(user_id, job_id, question_key)
+    WHERE scope = 'per_job';
+
 -- ===================== roles + row-level security =====================
 -- Two planes of access:
 --   * workers/CLI connect as the container superuser (`admin`) — table owner,
@@ -272,6 +319,7 @@ ALTER TABLE professional_references ENABLE ROW LEVEL SECURITY;
 ALTER TABLE resume_assets           ENABLE ROW LEVEL SECURITY;
 ALTER TABLE tailored_resumes        ENABLE ROW LEVEL SECURITY;
 ALTER TABLE applications            ENABLE ROW LEVEL SECURITY;
+ALTER TABLE saved_answers           ENABLE ROW LEVEL SECURITY;
 ALTER TABLE user_jobs               ENABLE ROW LEVEL SECURITY;
 ALTER TABLE jobs                    ENABLE ROW LEVEL SECURITY;
 -- RLS enabled with NO policies = deny-all for autoapply_api. Session lookup and
@@ -310,6 +358,9 @@ CREATE POLICY user_isolation ON tailored_resumes
     USING      (user_id = NULLIF(current_setting('app.user_id', true), '')::uuid)
     WITH CHECK (user_id = NULLIF(current_setting('app.user_id', true), '')::uuid);
 CREATE POLICY user_isolation ON applications
+    USING      (user_id = NULLIF(current_setting('app.user_id', true), '')::uuid)
+    WITH CHECK (user_id = NULLIF(current_setting('app.user_id', true), '')::uuid);
+CREATE POLICY user_isolation ON saved_answers
     USING      (user_id = NULLIF(current_setting('app.user_id', true), '')::uuid)
     WITH CHECK (user_id = NULLIF(current_setting('app.user_id', true), '')::uuid);
 CREATE POLICY user_isolation ON user_jobs

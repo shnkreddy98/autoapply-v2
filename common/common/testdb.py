@@ -48,7 +48,7 @@ def _admin_dsn() -> str:
 
 
 # Newest table in init.sql — bump when the schema grows so stale test DBs rebuild.
-_SCHEMA_SENTINEL = "public.user_jobs"
+_SCHEMA_SENTINEL = "public.saved_answers"
 
 
 def ensure_test_db() -> None:

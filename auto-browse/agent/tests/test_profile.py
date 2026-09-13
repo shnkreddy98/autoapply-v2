@@ -90,6 +90,28 @@ def test_render_profile_golden():
     assert "- Julian <j@a.co> — CEO, known 1 year" in out
 
 
+def test_render_prefers_the_confirmed_name_parts():
+    """The full_name split puts a middle name into First Name; once `profile init`
+    has stored the parts, those are what the forms get."""
+    p = ProfileData(
+        user={"email": "a@b.c", "full_name": "Jane Quinn Doe"},
+        profile={
+            "first_name": "Jane",
+            "middle_name": "Quinn",
+            "last_name": "Doe",
+            "over_18": True,
+            "country": "United States",
+        },
+    )
+    out = render_profile(p, "/r.pdf")
+    assert "First Name: Jane\n" in out
+    assert "Middle Name: Quinn" in out
+    assert "Last Name: Doe" in out
+    # was read from a column that never existed, so it always said (not provided)
+    assert "18 or older: Yes" in out
+    assert "Country: United States" in out
+
+
 def test_render_empty_sections_safe():
     p = ProfileData(user={"email": "a@b.c"}, profile={})
     out = render_profile(p, "/r.pdf")

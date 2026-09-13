@@ -19,6 +19,7 @@ os.environ.setdefault(
 _TABLES = [
     "audit_log",
     "sessions",
+    "saved_answers",
     "applications",
     "tailored_resumes",
     "resume_assets",

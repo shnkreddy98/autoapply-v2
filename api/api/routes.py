@@ -102,15 +102,25 @@ class GmailStatus(BaseModel):
 # application_profiles columns a user may read/write. user_id/updated_at are
 # managed and simply not listed (dropped on output, rejected on input).
 class Profile(BaseModel):
+    first_name: str | None = None
+    middle_name: str | None = None
+    last_name: str | None = None
+    preferred_name: str | None = None
+    pronouns: str | None = None
+    phone_country_code: str | None = None
+    portfolio_url: str | None = None
     street_address: str | None = None
     city: str | None = None
     state: str | None = None
     zip_code: str | None = None
+    country: str | None = None
     date_of_birth: date | None = None
     work_eligible_us: bool | None = None
     visa_sponsorship: bool | None = None
     security_clearance: bool | None = None
+    over_18: bool | None = None
     available_start_date: date | None = None
+    notice_period: str | None = None
     desired_salary: str | None = None
     employment_type: str | None = None
     years_of_experience: int | None = None
@@ -122,8 +132,10 @@ class Profile(BaseModel):
     termination_explanation: str | None = None
     gender: str | None = None
     race_ethnicity: str | None = None
+    hispanic_latino: str | None = None
     veteran_status: str | None = None
     disability_status: str | None = None
+    how_did_you_hear: str | None = None
     cert_accuracy: bool | None = None
     cert_dismissal: bool | None = None
     cert_background_check: bool | None = None

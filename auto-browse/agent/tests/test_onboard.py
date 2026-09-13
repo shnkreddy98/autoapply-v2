@@ -81,7 +81,7 @@ _GOOD = {
             "bullets": ["built pipelines"],
         }
     ],
-    "education": [{"degree": "MS", "school": "UT"}],
+    "education": [{"degree": "MS", "school": "UT", "gpa": "3.9/4.0"}],
     "skill_groups": [{"category": "Languages", "skills": ["Python", "SQL"]}],
 }
 
@@ -170,6 +170,23 @@ def test_review_yes_accepts_all_defaults():
     assert p["electronic_signature"] == "Jane Doe"
     assert p["signature_date"] == date.today()
     assert p["years_of_experience"] >= 6
+    assert (p["first_name"], p["middle_name"], p["last_name"]) == ("Jane", None, "Doe")
+    assert p["phone_country_code"] == "+1" and p["country"] == "United States"
+    assert p["over_18"] is True
+    assert p["hispanic_latino"] == "Prefer not to say"
+    assert p["notice_period"] == "2 weeks" and p["how_did_you_hear"] == "LinkedIn"
+
+
+def test_split_name_defaults():
+    """Only a default for the review prompt — compound surnames split wrong, which
+    is why the confirmed parts are stored instead of derived at fill time."""
+    assert onboard._split_name("Jane Quinn Doe") == (
+        "Jane",
+        "Quinn",
+        "Doe",
+    )
+    assert onboard._split_name("Cher") == ("Cher", None, None)
+    assert onboard._split_name(None) == (None, None, None)
 
 
 def test_review_password_skippable():
@@ -186,24 +203,36 @@ def test_review_prompts_override_and_clear():
             "",
             "",
             "",  # location, linkedin, github kept
+            "",  # first name kept (split from the overridden full name)
+            "",  # middle name blank
+            "Doe-Smith",  # last name overridden
+            "",
+            "",
+            "",
+            "",  # preferred, pronouns, phone code, portfolio kept
             "portal@x.dev",  # portal login email overridden
             "1",  # drop experience [1]
             "",
             "",
             "",
             "",
-            "",  # address block kept/blank
+            "",
+            "",  # address block (street, city, state, zip, country, dob) kept/blank
             "",
             "y",
             "",  # eligible(kept) sponsorship(yes) clearance(kept)
+            "",  # over 18 kept
             "10",
             "",
             "",
             "",
             "",
             "",
-            "",  # yoe=10, rest defaults
+            "",
+            "",
+            "",  # yoe=10, rest defaults (through notice period, how did you hear)
             "",  # ever terminated (kept: no)
+            "",
             "",
             "",
             "",
@@ -221,6 +250,8 @@ def test_review_prompts_override_and_clear():
     assert data.resume.work_experiences == []  # dropped
     assert data.profile["visa_sponsorship"] is True
     assert data.profile["years_of_experience"] == 10
+    assert data.profile["first_name"] == "Janet"
+    assert data.profile["last_name"] == "Doe-Smith"
     assert data.login == {"login_email": "portal@x.dev", "login_password": "pw1"}
 
 
@@ -287,6 +318,8 @@ def test_save_writes_everything_and_is_idempotent(db, tmp_path):
     assert len(p.work_experiences) == 1  # replaced, not duplicated
     assert p.work_experiences[0]["bullets"] == ["built pipelines"]
     assert len(p.education) == 1
+    assert p.education[0]["gpa"] == "3.9/4.0"
+    assert p.profile["first_name"] == "Jane" and p.profile["country"] == "United States"
     assert p.skill_groups[0]["skills"] == ["Python", "SQL"]
     assert any(k.endswith("pdf.pdf") for k in storage.files)
     assert p.login["login_email"] == "jane@x.dev"

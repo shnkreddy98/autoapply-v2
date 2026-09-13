@@ -4,6 +4,7 @@ no business logic (rendering, tailoring, navigation) lives here."""
 from __future__ import annotations
 
 import hashlib
+import re
 import secrets
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
@@ -248,6 +249,10 @@ def remove_job_for_user(conn: psycopg.Connection, user_id: str, job_id: str) -> 
         )
         cur.execute(
             "DELETE FROM resume_assets WHERE user_id = %s AND job_id = %s",
+            (user_id, job_id),
+        )
+        cur.execute(
+            "DELETE FROM saved_answers WHERE user_id = %s AND job_id = %s",
             (user_id, job_id),
         )
         cur.execute("SELECT 1 FROM user_jobs WHERE job_id = %s LIMIT 1", (job_id,))
@@ -585,5 +590,84 @@ def finish_application(
             "UPDATE applications SET status = %s, outcome = %s, finished_at = now() "
             "WHERE id = %s",
             (status, outcome, application_id),
+        )
+    conn.commit()
+
+
+def question_key(question_text: str) -> str:
+    """Normalize a form question for `saved_answers` lookups: lowercase, every run of
+    punctuation/whitespace collapsed to one space. Forms decorate the same question
+    differently ("First Name *", "first name:") and those must share a row.
+    Deliberately no fuzzier than that — near-identical questions can need opposite
+    answers ("authorized to work" vs "require sponsorship")."""
+    return " ".join(re.sub(r"[\W_]+", " ", question_text.lower()).split())
+
+
+def get_saved_answer(
+    conn: psycopg.Connection,
+    user_id: str,
+    question_text: str,
+    *,
+    job_id: str | None = None,
+) -> dict | None:
+    """The stored answer to a question. With `job_id`, only that job's per_job row
+    (why-this-company answers are never replayed onto another job); without, only
+    the reusable row. Which scope a question belongs to is the caller's decision."""
+    with conn.cursor() as cur:
+        if job_id:
+            cur.execute(
+                "SELECT * FROM saved_answers WHERE user_id = %s AND question_key = %s "
+                "AND scope = 'per_job' AND job_id = %s",
+                (user_id, question_key(question_text), job_id),
+            )
+        else:
+            cur.execute(
+                "SELECT * FROM saved_answers WHERE user_id = %s AND question_key = %s "
+                "AND scope = 'reusable'",
+                (user_id, question_key(question_text)),
+            )
+        return cur.fetchone()
+
+
+def save_answer(
+    conn: psycopg.Connection,
+    user_id: str,
+    question_text: str,
+    answer: str,
+    *,
+    source: str,
+    options: list[str] | None = None,
+    job_id: str | None = None,
+) -> str:
+    """Upsert an answer; `job_id` makes it per_job, otherwise reusable. A later
+    answer to the same question replaces the earlier one — a human correction must
+    beat the LLM answer it corrects. Returns the row id."""
+    key = question_key(question_text)
+    scope = "per_job" if job_id else "reusable"
+    conflict = (
+        "(user_id, job_id, question_key) WHERE scope = 'per_job'"
+        if job_id
+        else "(user_id, question_key) WHERE scope = 'reusable'"
+    )
+    with conn.cursor() as cur:
+        cur.execute(
+            "INSERT INTO saved_answers (user_id, question_key, question_text, answer, "
+            "options, source, scope, job_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s) "
+            f"ON CONFLICT {conflict} DO UPDATE SET question_text = EXCLUDED.question_text, "
+            "answer = EXCLUDED.answer, options = EXCLUDED.options, source = EXCLUDED.source, "
+            "updated_at = now() RETURNING id",
+            (user_id, key, question_text, answer, options, source, scope, job_id),
+        )
+        answer_id = cur.fetchone()["id"]
+    conn.commit()
+    return answer_id
+
+
+def mark_answer_used(conn: psycopg.Connection, answer_id: str) -> None:
+    """Count a replay. Answers that keep getting used are the ones worth reviewing."""
+    with conn.cursor() as cur:
+        cur.execute(
+            "UPDATE saved_answers SET times_used = times_used + 1 WHERE id = %s",
+            (answer_id,),
         )
     conn.commit()

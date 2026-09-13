@@ -34,6 +34,48 @@ def test_set_job_title_fills_only_a_blank(db):
         assert cur.fetchone()["title"] == "Data Engineer"
 
 
+def test_question_key_collapses_decoration():
+    assert repo.question_key("First Name *") == repo.question_key("first name:")
+    assert repo.question_key("  Why   Acme?? ") == "why acme"
+
+
+def test_saved_answer_scopes_do_not_leak(db, seed_user):
+    """A per-job answer ("why this company") must never come back for another job,
+    and a reusable one must not shadow it."""
+    user_id, _ = seed_user
+    job_a = repo.add_job_for_user(db, user_id, "https://example.com/jobs/a")
+    job_b = repo.add_job_for_user(db, user_id, "https://example.com/jobs/b")
+    repo.save_answer(db, user_id, "Years of Spark?", "5", source="human", options=None)
+    repo.save_answer(db, user_id, "Why Acme?", "for a", source="llm", job_id=job_a)
+
+    assert repo.get_saved_answer(db, user_id, "years of spark")["answer"] == "5"
+    assert repo.get_saved_answer(db, user_id, "Why Acme?", job_id=job_a)["answer"] == "for a"
+    assert repo.get_saved_answer(db, user_id, "Why Acme?", job_id=job_b) is None
+    assert repo.get_saved_answer(db, user_id, "Why Acme?") is None
+
+
+def test_save_answer_replaces_the_earlier_answer(db, seed_user):
+    """A human correction must replace the LLM answer, not sit beside it."""
+    user_id, _ = seed_user
+    first = repo.save_answer(db, user_id, "Remote OK?", "No", source="llm", options=["Yes", "No"])
+    again = repo.save_answer(db, user_id, "remote ok", "Yes", source="human", options=["Yes", "No"])
+    assert first == again
+    row = repo.get_saved_answer(db, user_id, "Remote OK?")
+    assert (row["answer"], row["source"]) == ("Yes", "human")
+    repo.mark_answer_used(db, row["id"])
+    assert repo.get_saved_answer(db, user_id, "Remote OK?")["times_used"] == 1
+
+
+def test_remove_job_drops_its_per_job_answers(db, seed_user):
+    user_id, _ = seed_user
+    job_id = repo.add_job_for_user(db, user_id, "https://example.com/jobs/rm-answers")
+    repo.save_answer(db, user_id, "Why us?", "because", source="llm", job_id=job_id)
+    repo.save_answer(db, user_id, "Years of Go?", "3", source="human")
+    repo.remove_job_for_user(db, user_id, job_id)
+    assert repo.get_saved_answer(db, user_id, "Why us?", job_id=job_id) is None
+    assert repo.get_saved_answer(db, user_id, "Years of Go?")["answer"] == "3"
+
+
 def test_enqueue_tailoring_unique(db, seed_user):
     user_id, asset_id = seed_user
     job_id = repo.get_or_create_job(db, "https://example.com/jobs/9")
