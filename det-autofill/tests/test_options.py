@@ -30,3 +30,28 @@ def test_preference_patterns_in_order_and_exact_word_wins():
 
 def test_no_value_and_no_prefs_picks_nothing():
     assert match_option("eeo_race", None, [C("1", "Asian")]).index is None
+
+
+# Degree options as listed on a live Greenhouse form (2026-09-13).
+GREENHOUSE_DEGREES = [
+    "Associate's Degree", "Bachelor's Degree", "Doctor of Medicine (M.D.)", "Doctor of Philosophy (Ph.D.)",
+    "Engineer's Degree", "High School", "Juris Doctor (J.D.)", "Master of Business Administration (M.B.A.)",
+    "Master's Degree", "Other",
+]
+
+
+def _degree(value):
+    pick = match_option("degree", value, [C("", t) for t in GREENHOUSE_DEGREES])
+    return GREENHOUSE_DEGREES[pick.index] if pick.index is not None else pick.how
+
+
+def test_resume_degree_names_map_to_form_levels():
+    assert _degree("Master's Degree") == "Master's Degree"
+    assert _degree("Bachelor of Engineering") == "Bachelor's Degree"
+    assert _degree("M.S. in Data Analytics") == "Master's Degree"
+    assert _degree("MBA") == "Master of Business Administration (M.B.A.)"
+    assert _degree("Doctor of Philosophy") == "Doctor of Philosophy (Ph.D.)"
+
+
+def test_master_prefix_alone_is_still_ambiguous():
+    assert _degree("Master").startswith("ambiguous")

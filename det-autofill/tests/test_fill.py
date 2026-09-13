@@ -1,0 +1,161 @@
+"""Fill strategies against real widgets in headless Chromium.
+
+dropdowns.html copies behaviour observed on live Greenhouse react-select and Workday
+prompts (see the comment at its top); the Autofill fixtures add native selects,
+radios, checkboxes, files and React-tracked text inputs.
+"""
+
+from __future__ import annotations
+
+import asyncio
+import json
+
+import pytest
+
+from det_autofill.answers import AnswerStore, example_profile
+from det_autofill.classify import plan
+from det_autofill.fill import FillResult, PlaywrightDriver, fill_combobox, fill_row, read_field
+from det_autofill.profile import from_export
+
+pw = pytest.importorskip("playwright.async_api")
+
+DOC = {
+    "contact": {"email": "jane@example.com", "full_name": "Jane Quinn Doe", "phone": "+1 (555) 010-0199",
+                "linkedin": "https://linkedin.com/in/janedoe"},
+    "facts": {"first_name": "Jane", "last_name": "Doe", "gender": "Male", "country": "United States",
+              "state": "CA", "city": "Springfield", "zip_code": "94000", "street_address": "100 Example St",
+              "how_did_you_hear": "LinkedIn", "visa_sponsorship": True, "work_eligible_us": True,
+              "willing_relocate": True},
+    "education": [{"degree": "Master's Degree", "major": "Data Analytics", "school": "Example State University"}],
+    "skill_groups": [{"skills": ["PySpark"]}],
+}
+
+
+def run(coro):
+    return asyncio.run(coro)
+
+
+async def _open(name):
+    from browser import FORMS, chromium_executable
+
+    p = await pw.async_playwright().start()
+    try:
+        browser = await p.chromium.launch(headless=True, executable_path=chromium_executable())
+    except Exception as exc:
+        await p.stop()
+        pytest.skip(f"chromium unavailable: {exc}")
+    page = await browser.new_page()
+    await page.goto((FORMS / f"{name}.html").as_uri())
+    return p, browser, page
+
+
+async def _extract(page):
+    from browser import EXTRACT_JS
+
+    return json.loads(await page.evaluate(EXTRACT_JS))["fields"]
+
+
+async def _fill_all(name, url, profile, resume=None):
+    p, browser, page = await _open(name)
+    try:
+        store = AnswerStore(profile)
+        fields = await _extract(page)
+        first = plan(fields, store, url)
+        by_index = {f["i"]: f for f in fields}
+        results = {}
+        driver = PlaywrightDriver(page)
+        for row in first.rows:
+            if row.action == "fill":
+                results[row.label] = await fill_row(driver, row, store, by_index[row.index])
+        again = plan(await _extract(page), store, url)
+        state = {sel: await read_field(driver, sel) for r in first.rows for sel in r.selectors}
+        return first, results, again, state, page
+    finally:
+        await browser.close()
+        await p.stop()
+
+
+def test_dropdowns_commit_and_verify():
+    first, results, again, state, _ = run(_fill_all(
+        "dropdowns", "https://acme.wd1.myworkdayjobs.com/x/apply", from_export(DOC)))
+    assert {label: r.ok for label, r in results.items()} == {
+        "Country*": True, "Degree": True, "Gender": True,
+        "How Did You Hear About Us?*": True, "State*": True, "Type to Add Skills": True,
+    }
+    # virtualised list: only reachable by typing; dial code ignored when matching
+    assert results["Country*"].wrote == "United States +1"
+    assert state["#country"]["display"] == "+1"
+    # nested category: Job Board -> LinkedIn
+    assert state["#source"]["chips"] == ["LinkedIn"]
+    assert state["#state"]["display"] == "California"
+    assert state["#skills"]["chips"] == ["PySpark"]  # not Python or Spark SQL
+    assert again.summary()["fill"] == 0  # everything reads as filled afterwards
+
+
+@pytest.mark.parametrize("name,url", [
+    ("greenhouse", "https://job-boards.greenhouse.io/acme/jobs/1"),
+    ("lever", "https://jobs.lever.co/acme/1/apply"),
+    ("ashby", "https://jobs.ashbyhq.com/acme/1/application"),
+    ("workday", "https://acme.wd1.myworkdayjobs.com/x/apply"),
+    ("generic", "https://careers.example.com/apply"),
+])
+def test_autofill_fixtures_fill_and_replan_to_nothing(name, url, tmp_path):
+    resume = tmp_path / "jane_doe.pdf"
+    resume.write_bytes(b"%PDF-1.4 fake")
+    # the Workday fixture's State select offers CA/NY/WA only (TX is correctly refused)
+    profile = example_profile() | {"resume_path": str(resume), "state": "CA"}
+    first, results, again, state, _ = run(_fill_all(name, url, profile))
+    failed = {label: r.how for label, r in results.items() if not r.ok}
+    assert not failed, failed
+    assert results, "nothing was filled"
+    # idempotence: a second plan over the filled page writes nothing new
+    assert again.summary()["fill"] == 0, [(r.label, r.key) for r in again.rows if r.action == "fill"]
+
+
+def test_react_tracked_inputs_notice_the_write():
+    """The fixture's tracker only sets data-react-state when React's own value
+    tracking saw a change — so this proves the framework, not just the DOM, updated."""
+    async def go():
+        p, browser, page = await _open("lever")
+        try:
+            store = AnswerStore(example_profile())
+            fields = await _extract(page)
+            driver = PlaywrightDriver(page)
+            for row in plan(fields, store, "https://jobs.lever.co/acme/1/apply").rows:
+                if row.key == "email":
+                    assert (await fill_row(driver, row, store)).ok
+            return await page.get_attribute('[name="email"]', "data-react-state")
+        finally:
+            await browser.close()
+            await p.stop()
+    assert run(go()) == "jane@x.dev"
+
+
+def test_ambiguous_dropdown_is_left_alone_and_closed():
+    async def go():
+        p, browser, page = await _open("dropdowns")
+        try:
+            driver = PlaywrightDriver(page)
+            # "Country" is a prefix of 240 options and an exact match for none
+            res = await fill_combobox(driver, "#country", "country", {"kind": "text", "value": "Country"})
+            return res, await read_field(driver, "#country")
+        finally:
+            await browser.close()
+            await p.stop()
+    res, state = run(go())
+    assert not res.ok and "ambiguous" in res.how
+    # nothing committed, menu shut, and no search text left to read as an answer
+    assert (state["expanded"], state["display"], state["value"]) == (False, "", "")
+
+
+def test_missing_listbox_fails_cleanly():
+    async def go():
+        p, browser, page = await _open("generic")
+        try:
+            driver = PlaywrightDriver(page)
+            return await fill_combobox(driver, "#pref", "city", {"kind": "text", "value": "Springfield"})
+        finally:
+            await browser.close()
+            await p.stop()
+    res = run(go())
+    assert isinstance(res, FillResult) and not res.ok

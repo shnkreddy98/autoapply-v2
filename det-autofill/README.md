@@ -59,6 +59,22 @@ and its refs die after every action. The DOM path fixes both:
   answers become `option_prefs` from the user's own words; unknowns stay unknown
   (no assumed citizenship, no "No" to EEO questions nobody answered).
 
+- `fill.py` — executes a planned row and verifies it by reading the control back.
+  One `Driver` interface: `PlaywrightDriver` (tests/local) and `McpDriver`
+  (container MCP, CSS selectors as targets). Strategies: native select; radio;
+  checkbox; text (phone/maxlength variants); file; ARIA combobox — open by click,
+  listbox via `aria-controls` (present only while open) / Workday `wd-popup` /
+  the only visible listbox, pick from rendered options or type search terms when
+  the list is a virtualised slice (>=50) or has no match, follow nested categories
+  (≤3), commit = menu closed and the control shows a compatible value; Workday
+  multiselect search (type, Enter, pick, chip). A failure closes the menu and
+  clears any typed search text (leftover text reads as an answer next plan).
+  Live-checked on Greenhouse (2026-09-13): react-select wraps its input in its own
+  `select__input-container`, shows "+1" for "United States +1", School is a
+  server-side search, and degree options are levels ("Master's Degree").
+- `options.py` also strips trailing dial codes and maps resume degree names to
+  form levels; a bare "Master" stays ambiguous (M.B.A. is a master's too).
+
 Ported from `~/repos/Autofill` (job-autofill.js); its 5 form fixtures live in
 `tests/fixtures/forms/` next to `traps.html`. Browser tests use a cached Playwright
 Chromium (`DET_AUTOFILL_CHROMIUM` overrides) and skip without one.

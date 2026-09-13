@@ -409,6 +409,8 @@ def _gate(d: dict) -> tuple[str, str] | None:
 
 def _has_value(d: dict, members: list[dict]) -> bool:
     w = d.get("widget")
+    if d.get("chips"):
+        return True
     if w in ("radio", "checkbox"):
         return any(m.get("checked") for m in members)
     if w == "file":
@@ -492,6 +494,9 @@ def plan(
             continue
         if not overwrite and _has_value(d, members):
             row.reason = "already-filled"
+            # still claims the key: otherwise a second "Website" box that was a
+            # duplicate on the first pass gets filled on the next one
+            claimed.setdefault(row.key, row.index)
             continue
         if row.key in claimed and row.widget not in ("radio", "checkbox"):
             row.reason = f"duplicate-key(first at #{claimed[row.key]})"

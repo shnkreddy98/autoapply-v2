@@ -1,0 +1,448 @@
+"""Execute a plan row against a live page — one strategy per widget, every write
+verified by reading the control back.
+
+Drivers: anything with the `Driver` methods. `PlaywrightDriver` wraps a Playwright
+page (tests, local runs); `McpDriver` sends the same actions to Playwright MCP with
+CSS selectors as targets (the container browser). Both are real browser input, so
+react-select opens on a plain click — the React-prop and synthetic-event tricks
+browser extensions need do not apply here.
+
+Strategies by widget (behaviour observed on live forms, 2026-09-13):
+
+  select     choose via the option ladder, select by value, read back selected text
+  radio      click the matched member, read back :checked
+  checkbox   click only when the state differs, read back
+  combobox   open by click; find the listbox through aria-controls (set only while
+             open), a Workday wd-popup, or the only visible listbox; pick from the
+             rendered options, else type search terms and pick from the filtered
+             ones (long lists render only a slice until typed into); follow nested
+             categories up to 3 levels; committed when the menu is closed and the
+             control shows a value compatible with the option (Greenhouse shows
+             "+1" for "United States +1")
+  search     Workday multiselect: type, Enter, pick, committed when a chip appears
+  text       type, read back; phone digits and maxlength variants
+  file       upload, confirmed by the input's file list or the file name on page
+
+A failure returns the reason and leaves the menu closed; nothing is guessed.
+"""
+
+from __future__ import annotations
+
+import asyncio
+import json
+import re
+from dataclasses import dataclass
+from typing import Any, Protocol
+
+from det_autofill.answers import AnswerStore
+from det_autofill.options import Choice, match_option, nv, text_forms
+
+MAX_HOPS = 3  # nested prompt levels ("Job Board" -> "LinkedIn")
+LONG_LIST = 50  # at or above this, a rendered list is likely a virtualised slice
+
+
+class Driver(Protocol):
+    async def click(self, selector: str) -> None: ...
+    async def type(self, selector: str, text: str, *, slowly: bool = False) -> None: ...
+    async def press(self, key: str) -> None: ...
+    async def select_option(self, selector: str, value: str) -> None: ...
+    async def evaluate(self, js: str, arg: Any = None) -> Any: ...
+    async def upload(self, selector: str, paths: list[str]) -> None: ...
+    async def wait(self, ms: int) -> None: ...
+
+
+@dataclass
+class FillResult:
+    ok: bool
+    how: str
+    wrote: str | None = None
+
+
+# ---------------------------------------------------------------------------
+# in-page probes (read-only)
+
+_SELECTOR_FOR = r"""
+  const esc = (s) => CSS.escape(s);
+  const unique = (sel) => { try { return document.querySelectorAll(sel).length === 1; } catch (e) { return false; } };
+  function selectorFor(el) {
+    if (el.id && unique('#' + esc(el.id))) return '#' + esc(el.id);
+    const parts = [];
+    for (let node = el; node && node.nodeType === 1 && node !== document.documentElement; node = node.parentElement) {
+      if (node !== el && node.id && unique('#' + esc(node.id))) { parts.unshift('#' + esc(node.id)); break; }
+      let part = node.tagName.toLowerCase();
+      const parent = node.parentElement;
+      if (parent) {
+        const same = Array.from(parent.children).filter((c) => c.tagName === node.tagName);
+        if (same.length > 1) part += ':nth-of-type(' + (same.indexOf(node) + 1) + ')';
+      }
+      parts.unshift(part);
+      if (unique(parts.join(' > '))) break;
+    }
+    return parts.join(' > ');
+  }
+"""
+
+READ_FIELD = r"""(selector) => {
+  const el = document.querySelector(selector);
+  if (!el) return JSON.stringify({ missing: true });
+  const text = (n) => (n ? (n.innerText || n.textContent || '') : '').replace(/\s+/g, ' ').trim();
+  // Walk up to the first ancestor that holds a chosen value, stopping before one that
+  // also holds another dropdown: live react-select wraps the input in its own
+  // "select__input-container", so the nearest "container" is not the right scope.
+  let single = null;
+  for (let n = el.parentElement, d = 0; n && d < 6; n = n.parentElement, d++) {
+    if (Array.from(n.querySelectorAll('[role="combobox"], select')).some((c) => c !== el)) break;
+    single = n.querySelector('[class*="singleValue" i], [class*="single-value" i], [data-automation-id="selectedItem"]');
+    if (single) break;
+  }
+  const field = el.closest('[data-automation-id^="formField-"], [data-automation-id="multiSelectContainer"]');
+  const chips = field ? Array.from(field.querySelectorAll('[data-automation-id="selectedItemList"] li')).map(text) : [];
+  return JSON.stringify({
+    tag: el.tagName.toLowerCase(),
+    value: el.tagName === 'SELECT' ? text(el.options[el.selectedIndex]) : (el.value || ''),
+    // react-select shows the pick in a sibling; buttons and div-based comboboxes in
+    // their own text (inputs have none)
+    display: single ? text(single) : (/^(INPUT|SELECT|TEXTAREA)$/.test(el.tagName) ? '' : text(el)),
+    chips,
+    checked: !!(el.checked || el.getAttribute('aria-checked') === 'true'),
+    expanded: el.getAttribute('aria-expanded') === 'true',
+    files: el.files ? Array.from(el.files).map((f) => f.name) : [],
+    invalid: el.getAttribute('aria-invalid') === 'true',
+  });
+}"""
+
+LIST_OPTIONS = "(selector) => {" + _SELECTOR_FOR + r"""
+  const el = document.querySelector(selector);
+  if (!el) return JSON.stringify({ listbox: false, options: [] });
+  const visible = (n) => { const r = n.getBoundingClientRect(); const s = getComputedStyle(n); return r.width > 0 && r.height > 0 && s.visibility !== 'hidden' && s.display !== 'none'; };
+  let lb = null;
+  const ctl = el.getAttribute('aria-controls') || el.getAttribute('aria-owns');
+  if (ctl) lb = document.getElementById(ctl);
+  if (!lb) {
+    const field = el.closest('[data-automation-id^="formField-"], [data-automation-id="multiSelectContainer"]');
+    const ids = [el.id, field && field.id, el.closest('[data-automation-id="multiSelectContainer"]') && el.closest('[data-automation-id="multiSelectContainer"]').id].filter(Boolean);
+    for (const id of ids) {
+      const popup = document.querySelector('[data-automation-widget="wd-popup"][data-associated-widget="' + CSS.escape(id) + '"]');
+      if (popup) { lb = popup; break; }
+    }
+  }
+  if (!lb) {
+    const open = Array.from(document.querySelectorAll('[role="listbox"]')).filter(visible);
+    if (open.length === 1) lb = open[0];
+  }
+  if (!lb) return JSON.stringify({ listbox: false, options: [] });
+  const nodes = Array.from(lb.querySelectorAll('[role="option"], [data-automation-id="promptOption"]'))
+    .filter((n, i, all) => all.indexOf(n.closest('[role="option"]') || n) === i || !n.closest('[role="option"]'));
+  const options = nodes.filter((n) => n.getAttribute('aria-disabled') !== 'true').map((n) => ({
+    text: (n.innerText || n.textContent || '').replace(/\s+/g, ' ').trim(),
+    value: n.getAttribute('data-value') || n.getAttribute('value') || '',
+    selector: selectorFor(n),
+    nested: n.getAttribute('aria-haspopup') === 'true' || !!n.querySelector('[data-automation-id="promptLeafNode"] + *, [class*="chevron" i]'),
+  }));
+  return JSON.stringify({ listbox: true, options });
+}"""
+
+PAGE_HAS_TEXT = r"""(needle) => (document.body.innerText || '').toLowerCase().includes(String(needle).toLowerCase())"""
+
+
+async def _json(driver: Driver, js: str, arg: Any) -> dict:
+    raw = await driver.evaluate(js, arg)
+    return json.loads(raw) if isinstance(raw, str) else raw
+
+
+async def read_field(driver: Driver, selector: str) -> dict:
+    return await _json(driver, READ_FIELD, selector)
+
+
+async def list_options(driver: Driver, selector: str, *, attempts: int = 12, pause_ms: int = 150) -> dict:
+    """The open listbox's options. Polls: menus render after the click, and async
+    option sources (school search) fill in after the request returns."""
+    last = {"listbox": False, "options": []}
+    for _ in range(attempts):
+        last = await _json(driver, LIST_OPTIONS, selector)
+        if last["listbox"] and last["options"]:
+            return last
+        await driver.wait(pause_ms)
+    return last
+
+
+# ---------------------------------------------------------------------------
+# helpers
+
+
+def search_terms(key: str, answer: dict, store: AnswerStore | None) -> list[str]:
+    """What to type into a searchable dropdown. Never a regex or a boolean literal —
+    typing "false" or "^male\\b" filters the real option out (Autofill's bug)."""
+    kind, value = answer["kind"], answer["value"]
+    if kind == "bool":
+        return ["Yes" if value else "No"]
+    if kind == "option":
+        out = []
+        if store and store.text_for(key):
+            out.append(store.text_for(key))
+        for pat in value:
+            words = re.sub(r"\\b|\^|\$|\\s|\\", " ", pat)
+            if not re.search(r"[\[\](){}|*+?.]", words):
+                out.append(re.sub(r"\s+", " ", words).strip())
+        return [t for t in dict.fromkeys(out) if t]
+    from det_autofill.options import candidate_strings
+
+    return candidate_strings(key, value)
+
+
+def _compatible(display: str, chosen: str) -> bool:
+    """Does what the control shows correspond to the option clicked? Controls often
+    show part of it ("+1" for "United States +1") or a different case."""
+    d, forms = nv(display), text_forms(chosen)
+    return bool(d) and any(d == f or d in f or f in d for f in forms)
+
+
+def _pick(key: str, answer: dict, options: list[dict]):
+    choices = [Choice(o.get("value") or "", o["text"]) for o in options]
+    if answer["kind"] == "option":
+        return match_option(key, None, choices, answer["value"])
+    return match_option(key, answer["value"], choices)
+
+
+def _text_variants(key: str, value: str, maxlength: int = 0) -> list[str]:
+    out = [value]
+    if key == "phone":
+        digits = re.sub(r"\D", "", value)
+        out += [digits] + ([digits[1:]] if len(digits) == 11 and digits.startswith("1") else [])
+    out = [v for v in dict.fromkeys(out) if v]
+    if maxlength:
+        fitting = [v for v in out if len(v) <= maxlength]
+        out = fitting or out
+    return out
+
+
+# ---------------------------------------------------------------------------
+# strategies
+
+
+async def fill_text(driver: Driver, selector: str, key: str, value: str, maxlength: int = 0) -> FillResult:
+    for variant in _text_variants(key, str(value), maxlength):
+        await driver.type(selector, variant)
+        got = (await read_field(driver, selector)).get("value", "")
+        if got == variant or (key == "phone" and re.sub(r"\D", "", got) == re.sub(r"\D", "", variant)):
+            return FillResult(True, "typed", variant)
+    return FillResult(False, "value-did-not-stick")
+
+
+async def fill_select(driver: Driver, selector: str, key: str, answer: dict, options: list[dict]) -> FillResult:
+    pick = _pick(key, answer, options)
+    if pick.index is None:
+        return FillResult(False, pick.how)
+    chosen = options[pick.index]
+    await driver.select_option(selector, chosen.get("value") or chosen["text"])
+    got = (await read_field(driver, selector)).get("value", "")
+    ok = nv(got) == nv(chosen["text"])
+    return FillResult(ok, pick.how if ok else "selection-did-not-stick", chosen["text"])
+
+
+async def fill_radio(driver: Driver, selectors: list[str], key: str, answer: dict, options: list[dict]) -> FillResult:
+    pick = _pick(key, answer, options)
+    if pick.index is None:
+        return FillResult(False, pick.how)
+    target = selectors[pick.index]
+    if not (await read_field(driver, target)).get("checked"):
+        await driver.click(target)
+    ok = bool((await read_field(driver, target)).get("checked"))
+    return FillResult(ok, pick.how if ok else "radio-did-not-check", options[pick.index]["text"])
+
+
+async def fill_checkbox(driver: Driver, selector: str, want: bool) -> FillResult:
+    if bool((await read_field(driver, selector)).get("checked")) != want:
+        await driver.click(selector)
+    ok = bool((await read_field(driver, selector)).get("checked")) == want
+    return FillResult(ok, "checkbox" if ok else "checkbox-did-not-toggle", str(want))
+
+
+async def _close(driver: Driver, selector: str, typed: bool = False) -> None:
+    """Leave a failed dropdown as found: menu shut and no search text behind —
+    leftover text reads as an answer and the next plan would skip the field."""
+    if typed:
+        await driver.type(selector, "")
+    if (await read_field(driver, selector)).get("expanded"):
+        await driver.press("Escape")
+
+
+async def fill_combobox(driver: Driver, selector: str, key: str, answer: dict,
+                        store: AnswerStore | None = None, *, search: bool = False) -> FillResult:
+    """Open, pick (scan, then search), follow nested levels, verify the commit."""
+    if search:
+        return await _fill_search(driver, selector, key, answer, store)
+    await driver.click(selector)
+    found = await list_options(driver, selector)
+    typed = False
+    for _hop in range(MAX_HOPS):
+        opts = found["options"]
+        pick = _pick(key, answer, opts) if opts else None
+        if (pick is None or pick.index is None) and (not opts or len(opts) >= LONG_LIST or not found["listbox"]):
+            # nothing usable rendered, or a virtualised slice: filter by typing
+            for term in search_terms(key, answer, store):
+                await driver.type(selector, term, slowly=True)
+                typed = True
+                found = await list_options(driver, selector)
+                pick = _pick(key, answer, found["options"]) if found["options"] else None
+                if pick and pick.index is not None:
+                    break
+        if pick is None or pick.index is None:
+            await _close(driver, selector, typed)
+            return FillResult(False, pick.how if pick else "listbox-never-appeared")
+        option = found["options"][pick.index]
+        await driver.click(option["selector"])
+        await driver.wait(150)
+        state = await read_field(driver, selector)
+        if not state.get("expanded"):
+            shown = state.get("display") or state.get("value") or " ".join(state.get("chips") or [])
+            chosen_text = option["text"]
+            if _compatible(shown, chosen_text) or any(_compatible(c, chosen_text) for c in state.get("chips") or []):
+                return FillResult(True, pick.how, chosen_text)
+            # closed without showing the pick: a Workday prompt that only counts
+            # ("1 item selected") keeps the chosen label in its chip list
+            return FillResult(False, f"closed-without-{chosen_text!r}")
+        nested = await list_options(driver, selector, attempts=4)
+        if nested["options"] and [o["text"] for o in nested["options"]] != [o["text"] for o in found["options"]]:
+            found = nested  # a category opened its next level
+            continue
+        await _close(driver, selector, typed)
+        return FillResult(False, "pick-did-not-commit")
+    await _close(driver, selector, typed)
+    return FillResult(False, "too-many-nested-levels")
+
+
+async def _fill_search(driver: Driver, selector: str, key: str, answer: dict, store: AnswerStore | None) -> FillResult:
+    """Workday multiselect: typed text does not commit; Enter lists matches and a
+    click adds a chip."""
+    for term in search_terms(key, answer, store):
+        await driver.type(selector, term)
+        await driver.press("Enter")
+        found = await list_options(driver, selector)
+        if not found["options"]:
+            continue
+        pick = _pick(key, answer, found["options"])
+        if pick.index is None:
+            continue
+        option = found["options"][pick.index]
+        await driver.click(option["selector"])
+        await driver.wait(150)
+        chips = (await read_field(driver, selector)).get("chips") or []
+        if any(_compatible(c, option["text"]) for c in chips):
+            return FillResult(True, pick.how, option["text"])
+        return FillResult(False, "chip-did-not-appear")
+    return FillResult(False, "no-search-match")
+
+
+async def fill_file(driver: Driver, selector: str, path: str) -> FillResult:
+    if not path:
+        return FillResult(False, "no-file")
+    await driver.upload(selector, [path])
+    name = path.rsplit("/", 1)[-1]
+    state = await read_field(driver, selector)
+    ok = name in (state.get("files") or []) or bool(await driver.evaluate(PAGE_HAS_TEXT, name))
+    return FillResult(ok, "uploaded" if ok else "file-not-registered", name)
+
+
+def _in_search_box(descriptor: dict | None) -> bool:
+    return bool(descriptor and descriptor.get("automation_id") == "searchBox")
+
+
+async def fill_row(driver: Driver, row, store: AnswerStore | None = None, descriptor: dict | None = None) -> FillResult:
+    """Dispatch one planned row (classify.Row with action == 'fill')."""
+    answer, key = row.answer, row.key
+    sel = row.selectors[0]
+    try:
+        if answer["kind"] == "file":
+            return await fill_file(driver, sel, answer["value"])
+        if row.widget == "select":
+            return await fill_select(driver, sel, key, answer, row.options)
+        if row.widget == "radio":
+            return await fill_radio(driver, row.selectors, key, answer, row.options)
+        if row.widget == "checkbox":
+            return await fill_checkbox(driver, sel, bool(answer["value"]))
+        if row.widget == "combobox" or _in_search_box(descriptor):
+            return await fill_combobox(driver, sel, key, answer, store, search=_in_search_box(descriptor))
+        if answer["kind"] in ("text", "date"):
+            return await fill_text(driver, sel, key, str(answer["value"]), (descriptor or {}).get("maxlength", 0))
+        if answer["kind"] == "bool":
+            return await fill_text(driver, sel, key, "Yes" if answer["value"] else "No")
+        return FillResult(False, f"no-strategy:{row.widget}/{answer['kind']}")
+    except Exception as exc:  # one broken widget must not stop the page
+        return FillResult(False, f"error:{type(exc).__name__}:{str(exc)[:120]}")
+
+
+# ---------------------------------------------------------------------------
+# drivers
+
+
+class PlaywrightDriver:
+    """Async Playwright page."""
+
+    def __init__(self, page):
+        self.page = page
+
+    async def click(self, selector):
+        await self.page.locator(selector).click(timeout=5000)
+
+    async def type(self, selector, text, *, slowly=False):
+        loc = self.page.locator(selector)
+        if slowly:
+            await loc.fill("", timeout=5000)
+            await loc.press_sequentially(text, delay=30)
+        else:
+            await loc.fill(text, timeout=5000)
+
+    async def press(self, key):
+        await self.page.keyboard.press(key)
+
+    async def select_option(self, selector, value):
+        await self.page.locator(selector).select_option(value, timeout=5000)
+
+    async def evaluate(self, js, arg=None):
+        return await self.page.evaluate(js, arg)
+
+    async def upload(self, selector, paths):
+        await self.page.locator(selector).set_input_files(paths, timeout=5000)
+
+    async def wait(self, ms):
+        await asyncio.sleep(ms / 1000)
+
+
+class McpDriver:
+    """Playwright MCP (det_autofill.mcpio.Browser) with CSS selectors as targets."""
+
+    def __init__(self, browser):
+        self.b = browser
+
+    async def click(self, selector):
+        await self.b.call("browser_click", element=selector, target=selector)
+
+    async def type(self, selector, text, *, slowly=False):
+        if slowly:  # pressSequentially appends, so empty the box first
+            await self.b.call("browser_type", element=selector, target=selector, text="")
+        await self.b.call("browser_type", element=selector, target=selector, text=text, slowly=slowly)
+
+    async def press(self, key):
+        await self.b.call("browser_press_key", key=key)
+
+    async def select_option(self, selector, value):
+        await self.b.call("browser_select_option", element=selector, target=selector, values=[value])
+
+    async def evaluate(self, js, arg=None):
+        fn = js if arg is None else f"() => ({js})({json.dumps(arg)})"
+        out = await self.b.call("browser_evaluate", function=fn)
+        m = re.search(r"### Result\s*\n(.*?)(?:\n###|\Z)", out, re.S)
+        raw = (m.group(1) if m else out).strip()
+        try:
+            return json.loads(raw)
+        except json.JSONDecodeError:
+            return raw
+
+    async def upload(self, selector, paths):
+        # MCP uploads into a file chooser, which the click opens
+        await self.click(selector)
+        await self.b.call("browser_file_upload", paths=paths)
+
+    async def wait(self, ms):
+        await asyncio.sleep(ms / 1000)

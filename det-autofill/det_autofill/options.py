@@ -52,6 +52,16 @@ def nv(s: object) -> str:
     return re.sub(r"\s+", " ", re.sub(r"[^a-z0-9+ ]", " ", str(s or "").lower())).strip()
 
 
+_DIAL_CODE = re.compile(r"\s*\(?\+\d{1,4}\)?\s*$")
+
+
+def text_forms(text: str) -> list[str]:
+    """Normalized ways an option's text can be compared: as shown, and without a
+    trailing dial code ("United States +1" on Greenhouse's country picker)."""
+    forms = [nv(text), nv(_DIAL_CODE.sub("", text or ""))]
+    return list(dict.fromkeys(f for f in forms if f))
+
+
 @dataclass(frozen=True)
 class Choice:
     value: str
@@ -84,6 +94,33 @@ def candidate_strings(key: str, value: object) -> list[str]:
 
 _PLACEHOLDER = re.compile(r"^(select( one| an option)?|choose( one)?|please select|none selected)?$")
 
+# Resumes name degrees ("Bachelor of Engineering", "M.S. Data Analytics"); forms offer
+# levels ("Bachelor's Degree", "Master's Degree"). Patterns run on nv() text, where
+# "Master's" reads "master s". Business administration is its own option on most
+# forms, so a generic master's must not land on M.B.A. and vice versa.
+DEGREE_LEVELS: list[tuple[str, list[str]]] = [
+    (r"business administration|\bm ?b ?a\b", [r"business administration", r"\bm b a\b"]),
+    (r"ph ?d|doctor of philosophy|doctorate", [r"ph ?d|doctor of philosophy", r"^doctorate"]),
+    # a bare "Master" could be the M.B.A. too, so it must say which kind
+    (r"^master s\b|^masters\b|^master of (?!business)|\bm ?s\b|\bm ?sc\b|\bm ?eng\b|\bm ?tech\b|\bm ?a\b",
+     [r"^master s( degree)?$", r"^master(?!.*business)", r"^graduate degree"]),
+    (r"^bachelor|\bb ?s\b|\bb ?sc\b|\bb ?e\b|\bb ?tech\b|\bb ?a\b|undergraduate",
+     [r"^bachelor s( degree)?$", r"^bachelor"]),
+    (r"^associate", [r"^associate"]),
+    (r"high school|secondary|\bged\b", [r"high school"]),
+    (r"diploma", [r"diploma"]),
+]
+_DEGREE_KEYS = {"degree", "education_level"}
+
+
+def degree_patterns(value: object) -> list[str]:
+    n = nv(value)
+    for trigger, pats in DEGREE_LEVELS:
+        if re.search(trigger, n):
+            return pats
+    return []
+
+
 _YES = r"^(yes|y|true|i am|i do|i have|i will)\b"
 _NO = r"^(no|n|false|i am not|i do not|i don t|i have not|i will not)\b"
 
@@ -112,7 +149,7 @@ def match_option(
     for how, test in (
         ("value-exact", lambda o, c: o.value == c),
         ("value-normalized", lambda o, c: bool(nv(o.value)) and nv(o.value) == nv(c)),
-        ("text-exact", lambda o, c: bool(nv(o.text)) and nv(o.text) == nv(c)),
+        ("text-exact", lambda o, c: nv(c) in text_forms(o.text)),
     ):
         hits = [i for i in live if any(test(options[i], c) for c in cands)]
         pick = _unique(hits, how)
@@ -122,13 +159,15 @@ def match_option(
     patterns = list(prefs or [])
     if isinstance(value, bool) and not patterns:
         patterns = [_YES if value else _NO]
+    if key in _DEGREE_KEYS and not patterns:
+        patterns = degree_patterns(value)
     for pat in patterns:
         rx = re.compile(pat, re.I)
-        hits = [i for i in live if rx.search(nv(options[i].text) or nv(options[i].value))]
+        hits = [i for i in live if any(rx.search(f) for f in (text_forms(options[i].text) or [nv(options[i].value)]))]
         if len(hits) > 1:
             # "No" vs "No, I do not want to answer": an option equal to the matched
             # word itself is the precise one; otherwise refuse
-            exact = [i for i in hits if rx.fullmatch(nv(options[i].text))]
+            exact = [i for i in hits if any(rx.fullmatch(f) for f in text_forms(options[i].text))]
             hits = exact if len(exact) == 1 else hits
         pick = _unique(hits, f"alias:{pat}")
         if pick:
@@ -136,6 +175,6 @@ def match_option(
 
     hits = [
         i for i in live
-        if nv(options[i].text) and any(nv(c) and nv(options[i].text).startswith(nv(c)) for c in cands)
+        if any(nv(c) and f.startswith(nv(c)) for c in cands for f in text_forms(options[i].text))
     ]
     return _unique(hits, "text-prefix") or Pick(None, "no-matching-option")

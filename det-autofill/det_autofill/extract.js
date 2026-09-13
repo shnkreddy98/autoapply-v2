@@ -169,10 +169,15 @@
    * prompt button caption), so an already-answered combobox reads as filled. */
   function displayText(el, widget) {
     if (widget !== 'combobox') return '';
-    const wrap = el.closest('[class*="control" i], [class*="container" i], [data-automation-id^="formField-"]') || el.parentElement;
-    const single = wrap && wrap.querySelector('[class*="singleValue" i], [class*="single-value" i], [data-automation-id="selectedItem"]');
-    if (single && textOf(single)) return textOf(single);
-    if (el.tagName === 'BUTTON') return textOf(el);
+    // first ancestor holding a chosen value, never one shared with another dropdown
+    // (live react-select nests the input in its own "select__input-container")
+    for (let n = el.parentElement, d = 0; n && d < 6; n = n.parentElement, d++) {
+      if (Array.from(n.querySelectorAll('[role="combobox"], select')).some((c) => c !== el)) break;
+      const single = n.querySelector('[class*="singleValue" i], [class*="single-value" i], [data-automation-id="selectedItem"]');
+      if (single && textOf(single)) return textOf(single);
+    }
+    // buttons and div-based comboboxes show the pick as their own text
+    if (!/^(INPUT|SELECT|TEXTAREA)$/.test(el.tagName)) return textOf(el);
     return el.value || '';
   }
 
@@ -223,6 +228,11 @@
       visible: isVisible(el),
       maxlength: parseInt(el.getAttribute('maxlength') || '0', 10) || 0,
       has_files: widget === 'file' ? !!(el.files && el.files.length) : false,
+      // Workday multiselects keep committed picks as chips beside an empty search box
+      chips: (() => {
+        const field = el.closest('[data-automation-id^="formField-"], [data-automation-id="multiSelectContainer"]');
+        return field ? Array.from(field.querySelectorAll('[data-automation-id="selectedItemList"] li')).map(textOf).filter(Boolean) : [];
+      })(),
     };
     out.push(d);
   }

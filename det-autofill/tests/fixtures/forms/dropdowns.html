@@ -1,0 +1,204 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Dropdown fixture</title>
+<style>
+  .select__menu{position:absolute;background:#fff;border:1px solid #999;max-height:200px;overflow:auto}
+  .select__option{padding:2px 6px}
+  [data-automation-widget="wd-popup"]{border:1px solid #999;background:#fff}
+</style></head><body>
+<!--
+  Behaviour copied from live widgets (2026-09-13):
+  - react-select (Greenhouse job-boards): input#id role=combobox inside its own
+    div.select__input-container (so the nearest "container" is NOT the control); aria-controls set only
+    while open; the menu renders OUTSIDE the control; options are
+    react-select-<id>-option-N; typing filters; after a pick the single value shows only
+    part of the option ("United States +1" -> "+1") and the input clears.
+  - Long lists render at most 50 options until the user types (virtualised).
+  - Workday prompts: button[aria-haspopup=listbox] opens a body-level wd-popup tied by
+    data-associated-widget; categories open a second level; a pick lands in
+    ul[data-automation-id=selectedItemList].
+  - Workday multiselect search: typing then Enter shows matches; a click commits a chip.
+-->
+<form id="apply">
+  <label id="country-label" for="country">Country*</label>
+  <div class="select__container" data-rs="country">
+    <div class="select__control">
+      <div class="select__value-container"><div class="select__placeholder">Select...</div>
+        <div class="select__input-container"><input class="select__input" id="country" role="combobox" type="text" aria-expanded="false"
+               aria-haspopup="true" aria-labelledby="country-label" aria-required="true" value=""></div>
+      </div>
+    </div>
+  </div>
+
+  <label id="degree-label" for="degree">Degree</label>
+  <div class="select__container" data-rs="degree">
+    <div class="select__control">
+      <div class="select__value-container"><div class="select__placeholder">Select...</div>
+        <div class="select__input-container"><input class="select__input" id="degree" role="combobox" type="text" aria-expanded="false"
+               aria-haspopup="true" aria-labelledby="degree-label" value=""></div>
+      </div>
+    </div>
+  </div>
+
+  <label id="gender-label" for="gender">Gender</label>
+  <div class="select__container" data-rs="gender">
+    <div class="select__control">
+      <div class="select__value-container"><div class="select__placeholder">Select...</div>
+        <div class="select__input-container"><input class="select__input" id="gender" role="combobox" type="text" aria-expanded="false"
+               aria-haspopup="true" aria-labelledby="gender-label" value=""></div>
+      </div>
+    </div>
+  </div>
+
+  <div data-automation-id="formField-sourcePrompt" id="source-field">
+    <label id="source-label">How Did You Hear About Us?*</label>
+    <button type="button" id="source" data-automation-id="sourcePrompt" aria-haspopup="listbox"
+            aria-labelledby="source-label" aria-expanded="false">Select One</button>
+    <ul data-automation-id="selectedItemList" id="source-selected"></ul>
+  </div>
+
+  <div data-automation-id="formField-state">
+    <label id="state-label">State*</label>
+    <button type="button" id="state" data-automation-id="addressSection_countryRegion" aria-haspopup="listbox"
+            aria-labelledby="state-label" aria-expanded="false">Select One</button>
+  </div>
+
+  <div data-automation-id="formField-skills">
+    <label id="skills-label" for="skills">Type to Add Skills</label>
+    <div data-automation-id="multiSelectContainer" id="skills-container">
+      <ul data-automation-id="selectedItemList" id="skills-selected"></ul>
+      <input id="skills" data-automation-id="searchBox" type="text" aria-labelledby="skills-label">
+    </div>
+  </div>
+</form>
+<script>
+(function () {
+  var COUNTRIES = ['United States +1', 'Afghanistan +93', 'Albania +355', 'Algeria +213'];
+  for (var i = 0; i < 240; i++) COUNTRIES.push('Country ' + i + ' +' + (400 + i));
+  COUNTRIES.push('United States Minor Outlying Islands +1');
+  var DATA = {
+    country: { options: COUNTRIES, shown: function (t) { return t.split(' ').pop(); } },
+    degree: { options: ["Associate's Degree", "Bachelor's Degree", "Master's Degree", 'Doctorate', 'Other'] },
+    gender: { options: ['Man', 'Woman', 'Non-binary', 'I don\'t wish to answer'] },
+  };
+  document.querySelectorAll('[data-rs]').forEach(function (container) {
+    var key = container.getAttribute('data-rs');
+    var input = container.querySelector('input');
+    var control = container.querySelector('.select__control');
+    var menu = null;
+    function close() {
+      if (menu) { menu.remove(); menu = null; }
+      input.setAttribute('aria-expanded', 'false');
+      input.removeAttribute('aria-controls');
+    }
+    function render() {
+      var q = input.value.toLowerCase();
+      var matches = DATA[key].options.filter(function (t) { return t.toLowerCase().indexOf(q) !== -1; });
+      if (!q) matches = matches.slice(0, 50);  // virtualised until the user types
+      var lb = menu.querySelector('[role=listbox]');
+      lb.innerHTML = '';
+      matches.forEach(function (t, n) {
+        var o = document.createElement('div');
+        o.className = 'select__option';
+        o.id = 'react-select-' + key + '-option-' + n;
+        o.setAttribute('role', 'option');
+        o.textContent = t;
+        o.addEventListener('mousedown', function (e) { e.preventDefault(); });
+        o.addEventListener('click', function () {
+          var ph = control.querySelector('.select__placeholder, .select__single-value');
+          ph.className = 'select__single-value';
+          ph.textContent = DATA[key].shown ? DATA[key].shown(t) : t;
+          input.value = '';
+          close();
+        });
+        lb.appendChild(o);
+      });
+    }
+    function open() {
+      if (menu) return;
+      menu = document.createElement('div');
+      menu.className = 'select__menu';
+      var lb = document.createElement('div');
+      lb.setAttribute('role', 'listbox');
+      lb.id = 'react-select-' + key + '-listbox';
+      menu.appendChild(lb);
+      container.appendChild(menu);  // outside .select__control, like the real one
+      input.setAttribute('aria-expanded', 'true');
+      input.setAttribute('aria-controls', lb.id);
+      render();
+    }
+    control.addEventListener('mousedown', function () { setTimeout(open, 10); });
+    input.addEventListener('input', function () { open(); render(); });
+    input.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+  });
+
+  // ---- Workday prompts ----
+  var TREES = {
+    source: { 'Company Website': null, 'Job Board': ['Indeed', 'LinkedIn', 'Glassdoor'], 'Referral': null },
+    state: { 'California': null, 'Colorado': null, 'Connecticut': null },
+  };
+  function prompt(id, commit) {
+    var btn = document.getElementById(id);
+    var popup = null;
+    function closeP() { if (popup) { popup.remove(); popup = null; } btn.setAttribute('aria-expanded', 'false'); }
+    function show(items) {
+      popup.innerHTML = '';
+      var ul = document.createElement('ul'); ul.setAttribute('role', 'listbox'); ul.id = id + '-listbox';
+      items.forEach(function (label) {
+        var li = document.createElement('li');
+        li.setAttribute('role', 'option'); li.setAttribute('data-automation-id', 'promptOption');
+        li.textContent = label;
+        var children = Array.isArray(TREES[id][label]) ? TREES[id][label] : null;
+        if (children) li.setAttribute('aria-haspopup', 'true');
+        li.addEventListener('click', function () {
+          if (children) { show(children); return; }
+          commit(label); closeP();
+        });
+        ul.appendChild(li);
+      });
+      popup.appendChild(ul);
+    }
+    btn.addEventListener('click', function () {
+      if (popup) return;
+      popup = document.createElement('div');
+      popup.setAttribute('data-automation-widget', 'wd-popup');
+      popup.setAttribute('data-associated-widget', btn.id);
+      document.body.appendChild(popup);
+      btn.setAttribute('aria-expanded', 'true');
+      btn.setAttribute('aria-controls', id + '-listbox');
+      show(Object.keys(TREES[id]));
+    });
+  }
+  prompt('source', function (label) {
+    document.getElementById('source-selected').innerHTML = '<li>' + label + '</li>';
+    document.getElementById('source').textContent = '1 item selected';
+  });
+  prompt('state', function (label) { document.getElementById('state').textContent = label; });
+
+  // ---- Workday multiselect search ----
+  var SKILLS = ['Python', 'PySpark', 'SQL', 'Spark SQL', 'Snowflake'];
+  var box = document.getElementById('skills');
+  var sPopup = null;
+  box.addEventListener('keydown', function (e) {
+    if (e.key !== 'Enter') return;
+    e.preventDefault();
+    if (sPopup) sPopup.remove();
+    sPopup = document.createElement('div');
+    sPopup.setAttribute('data-automation-widget', 'wd-popup');
+    sPopup.setAttribute('data-associated-widget', 'skills-container');
+    var ul = document.createElement('ul'); ul.setAttribute('role', 'listbox');
+    SKILLS.filter(function (s) { return s.toLowerCase().indexOf(box.value.toLowerCase()) !== -1; }).forEach(function (s) {
+      var li = document.createElement('li');
+      li.setAttribute('role', 'option'); li.setAttribute('data-automation-id', 'promptOption');
+      li.textContent = s;
+      li.addEventListener('click', function () {
+        var chip = document.createElement('li'); chip.textContent = s;
+        document.getElementById('skills-selected').appendChild(chip);
+        box.value = ''; sPopup.remove(); sPopup = null;
+      });
+      ul.appendChild(li);
+    });
+    sPopup.appendChild(ul);
+    document.body.appendChild(sPopup);
+  });
+})();
+</script>
+</body></html>
