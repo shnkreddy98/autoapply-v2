@@ -1224,3 +1224,83 @@ def test_retry_since_flag_parses():
         ["tailor", "--label", "swe", "--retry-failed", "--retry-since", "7d"]
     )
     assert args.retry_failed and args.retry_since == "7d"
+
+
+# ---------------------------------------------------------------------------
+# CLI sweep regressions (2026-09-01)
+
+
+def test_resolve_job_short_prefix_says_it_is_too_short(db):
+    """A 2-char prefix used to report "no job matching 'ab'", which reads like the
+    job is gone rather than like the 4-char floor rejected the argument."""
+    uid = _mk_user(db)
+    cli.add_jobs(db, uid, ["https://ex.dev/j/short"])
+    with pytest.raises(SystemExit, match="too short"):
+        cli.resolve_job(db, "ab")
+
+
+def test_add_jobs_duplicate_echoes_the_stored_url(db):
+    """Dedup is on url_normalized, so a URL pasted with tracking params can match a
+    row stored clean. Echoing the input would misdescribe the row we now own."""
+    uid = _mk_user(db)
+    first = cli.add_jobs(db, uid, ["https://ex.dev/j/dup"])[0]
+    again = cli.add_jobs(db, uid, ["https://ex.dev/j/dup?utm_source=news"])[0]
+    assert again["duplicate"] is True
+    assert again["job_id"] == first["job_id"]
+    assert again["url"] == "https://ex.dev/j/dup"
+
+
+def test_jobs_list_shows_the_company_until_the_title_is_filled(db, monkeypatch, capsys):
+    """jobs.title is blank for every manually added job until its first tailoring
+    backfills it, which left the column 40 characters of nothing."""
+    uid = _mk_user(db)
+    job_id = cli.add_jobs(db, uid, ["https://ex.dev/j/co"])[0]["job_id"]
+    repo.set_job_company(db, job_id, "Acme Corp")
+    monkeypatch.setattr(cli, "_connect", lambda: db)
+
+    cli.cmd_jobs_list(cli.build_parser().parse_args(["jobs", "list"]))
+    assert "Acme Corp" in capsys.readouterr().out
+
+
+def test_jobs_list_shows_the_company_beside_the_title(db, monkeypatch, capsys):
+    """The company must survive once a tailoring backfills the title — it is the
+    name you scan for before handing the id to `autoapply ask`."""
+    uid = _mk_user(db)
+    job_id = cli.add_jobs(db, uid, ["https://ex.dev/j/co2"])[0]["job_id"]
+    repo.set_job_company(db, job_id, "Acme Corp")
+    repo.set_job_title(db, job_id, "Data Engineer")
+    monkeypatch.setattr(cli, "_connect", lambda: db)
+
+    cli.cmd_jobs_list(cli.build_parser().parse_args(["jobs", "list"]))
+    out = capsys.readouterr().out
+    assert "Acme Corp - Data Engineer" in out
+
+
+def test_status_shows_the_company_beside_the_title(db, monkeypatch, capsys):
+    uid = _mk_user(db)
+    job_id = _mk_ready_job(db, uid, "https://ex.dev/j/status-co")
+    repo.set_job_company(db, job_id, "Acme Corp")
+    repo.set_job_title(db, job_id, "Data Engineer")
+    repo.enqueue_tailoring(db, uid, job_id)
+    monkeypatch.setattr(cli, "_connect", lambda: db)
+
+    cli.cmd_status(cli.build_parser().parse_args(["status"]))
+    assert "Acme Corp - Data Engineer" in capsys.readouterr().out
+
+
+def test_status_today_words_an_empty_day_like_jobs_list(db, monkeypatch, capsys):
+    """`status --today` said "jobs: none   tailoring: none" where `jobs list --today`
+    said "no jobs added today" — the same state described two different ways."""
+    _mk_user(db)
+    monkeypatch.setattr(cli, "_connect", lambda: db)
+
+    cli.cmd_status(cli.build_parser().parse_args(["status", "--today"]))
+    assert capsys.readouterr().out.strip() == "no jobs added today"
+
+
+def test_status_words_an_empty_pipeline_like_jobs_list(db, monkeypatch, capsys):
+    _mk_user(db)
+    monkeypatch.setattr(cli, "_connect", lambda: db)
+
+    cli.cmd_status(cli.build_parser().parse_args(["status"]))
+    assert capsys.readouterr().out.strip() == "no jobs"

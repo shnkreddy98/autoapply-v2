@@ -93,23 +93,40 @@ def get_or_create_job(
     return job_id
 
 
-def set_job_company(conn: psycopg.Connection, job_id: str, company: str | None) -> None:
-    """Fill in `jobs.company` if it is still blank. The capture path never learns the
-    employer name (it only has the URL); the tailor agent reads it out of the JD, so
-    the first tailoring of a job backfills it for everyone. Existing values win — a
-    second user's tailoring must not overwrite what is already there.
+def _backfill_job_text(
+    conn: psycopg.Connection, job_id: str, column: str, value: str | None
+) -> None:
+    """Fill one blank text column on `jobs`. Existing values win — a second user's
+    tailoring must not overwrite what the first one already wrote.
 
     Workers connect as the table owner, which is why this UPDATE is allowed: `jobs`
-    has no UPDATE policy (see db/init.sql), so the RLS-bound API role cannot do it."""
-    if not company or not company.strip():
+    has no UPDATE policy (see db/init.sql), so the RLS-bound API role cannot do it.
+    `column` is always a literal from this module, never caller input."""
+    if not value or not value.strip():
         return
     with conn.cursor() as cur:
         cur.execute(
-            "UPDATE jobs SET company = %s, updated_at = now() "
-            "WHERE job_id = %s AND (company IS NULL OR company = '')",
-            (company.strip(), job_id),
+            f"UPDATE jobs SET {column} = %s, updated_at = now() "
+            f"WHERE job_id = %s AND ({column} IS NULL OR {column} = '')",
+            (value.strip(), job_id),
         )
     conn.commit()
+
+
+def set_job_company(conn: psycopg.Connection, job_id: str, company: str | None) -> None:
+    """Fill in `jobs.company` if it is still blank. The capture path never learns the
+    employer name (it only has the URL); the tailor agent reads it out of the JD, so
+    the first tailoring of a job backfills it for everyone."""
+    _backfill_job_text(conn, job_id, "company", company)
+
+
+def set_job_title(conn: psycopg.Connection, job_id: str, title: str | None) -> None:
+    """Fill in `jobs.title` if it is still blank. Only the `search` discovery path
+    supplies a title up front; jobs added by hand have none, and JD capture cannot
+    supply one either (the proxy returns visible text, not the page title). The
+    tailor agent already reads the role out of the JD, so the first tailoring
+    backfills it for free — same deal as `set_job_company`."""
+    _backfill_job_text(conn, job_id, "title", title)
 
 
 def add_job_for_user(

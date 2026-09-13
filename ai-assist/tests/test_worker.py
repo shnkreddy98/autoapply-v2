@@ -66,6 +66,27 @@ async def test_tailor_success(db, s3, tmp_path):
 
 
 @pytest.mark.asyncio
+async def test_tailor_backfills_the_job_title(db, s3, tmp_path):
+    """Manually added jobs have no title — only `search` supplies one, and JD capture
+    cannot (the proxy returns visible text, not the page title). The tailor agent
+    already reads the role out of the JD, so the first tailoring fills it in."""
+    tid, user_id, job_id = _seed(db, s3)
+    with db.cursor() as cur:  # as `jobs add` leaves it
+        cur.execute("UPDATE jobs SET title = NULL WHERE job_id = %s", (job_id,))
+    db.commit()
+
+    async def fake_tailor(docx_path, jd_text):
+        pdf = tmp_path / "out.pdf"
+        pdf.write_bytes(b"%PDF-1.4")
+        return TailorOutcome(str(pdf), 60, 80, "s", role="Senior Data Engineer")
+
+    await process_once(db, s3, fake_tailor, str(tmp_path / "scratch"))
+    with db.cursor() as cur:
+        cur.execute("SELECT title FROM jobs WHERE job_id = %s", (job_id,))
+        assert cur.fetchone()["title"] == "Senior Data Engineer"
+
+
+@pytest.mark.asyncio
 async def test_tailor_no_base_asset_marks_failed(db, s3, tmp_path):
     with db.cursor() as cur:
         cur.execute("INSERT INTO users (email) VALUES (%s) RETURNING user_id", ("n@e.co",))

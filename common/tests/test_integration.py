@@ -22,6 +22,18 @@ def test_get_or_create_job_dedup(db):
         assert cur.fetchone()["c"] == 1
 
 
+def test_set_job_title_fills_only_a_blank(db):
+    """A second user's tailoring must not rewrite the title the first one wrote —
+    same rule as set_job_company, which shares the backfill."""
+    job_id = repo.get_or_create_job(db, "https://example.com/jobs/title")
+    repo.set_job_title(db, job_id, "  Data Engineer  ")
+    repo.set_job_title(db, job_id, "Something Else")
+    repo.set_job_title(db, job_id, None)
+    with db.cursor() as cur:
+        cur.execute("SELECT title FROM jobs WHERE job_id = %s", (job_id,))
+        assert cur.fetchone()["title"] == "Data Engineer"
+
+
 def test_enqueue_tailoring_unique(db, seed_user):
     user_id, asset_id = seed_user
     job_id = repo.get_or_create_job(db, "https://example.com/jobs/9")

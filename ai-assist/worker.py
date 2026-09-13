@@ -34,6 +34,7 @@ class TailorOutcome:
     job_match_summary: str
     cloud: str | None = None
     company_name: str | None = None  # read out of the JD; backfills jobs.company
+    role: str | None = None  # the JD's job title; backfills jobs.title
 
 
 # async tailor(base_docx_path, jd_text) -> TailorOutcome   (mutates the docx in place)
@@ -65,6 +66,7 @@ async def process_once(
 
         outcome = await tailor(str(base_path), jd_text)
         repo.set_job_company(conn, job_id, outcome.company_name)
+        repo.set_job_title(conn, job_id, outcome.role)
 
         tkey = keys.tailored_resume_key(user_id, job_id, "pdf")
         storage.put_file(tkey, outcome.pdf_path)
@@ -123,6 +125,7 @@ async def real_tailor(base_docx_path: str, jd_text: str) -> TailorOutcome:
         job_match_summary=result.job_match_summary,
         cloud=result.cloud,
         company_name=result.company_name,
+        role=result.role,
     )
 
 

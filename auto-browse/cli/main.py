@@ -1,7 +1,7 @@
 """Unified `autoapply` CLI — one front door over the existing pipeline.
 
     autoapply jobs add [URL ...] [--file urls.txt]     # -> jobs table (source=manual)
-    autoapply jobs list [--status S]
+    autoapply jobs list [--status S] [--today]         # company - title, id, status
     autoapply jobs rm JOB [JOB ...] [--user U]         # drop from your pipeline; re-addable
     autoapply tailor [JOB] [--label L] [--user U] [--retry-failed [--retry-since W]] [--force]
                                                        # jd-capture + drain tailor queue;
@@ -9,7 +9,7 @@
                                                        # already-tailored jobs report as duplicates and are
                                                        # skipped unless --force
     autoapply retry [--all] [--user U]                 # reset today's failed JD fetches + recapture
-    autoapply status [JOB] [--user U]                  # pipeline state + scores
+    autoapply status [JOB] [--today] [--user U]        # pipeline state + scores
     autoapply resume show JOB [--user U] [--out P] [--open]
     autoapply resume add FILE.docx --label L [--user U] [--replace]   # add a role base resume
     autoapply resume bases [--user U]                  # list uploaded base resumes
@@ -21,7 +21,8 @@
                                                        # --today restricts to jobs added today
     autoapply continue JOB [--autosubmit]              # finish an interrupted run in the open browser
 
-JOB accepts a full job_id UUID, an unambiguous id prefix, or the job URL.
+JOB accepts a full job_id UUID, an unambiguous id prefix (4+ characters), or the
+job URL.
 
 Command wrappers (cmd_*) own I/O: they open connections, print, and return exit
 codes. The core functions take an injected connection so tests can drive them
@@ -139,6 +140,14 @@ def resolve_job(conn, ref: str) -> dict:
                 )
             return row
 
+        if re.fullmatch(r"[0-9a-f-]{1,3}", ref.lower()):
+            # The 4-char floor is deliberate: shorter prefixes match too much to be
+            # a safe target for `jobs rm`. Say that, rather than "no job matching",
+            # which reads like the job is missing.
+            raise SystemExit(
+                f"job prefix {ref!r} is too short — give at least 4 characters"
+            )
+
         if re.fullmatch(r"[0-9a-f-]{4,}", ref.lower()):
             cur.execute(
                 "SELECT * FROM jobs WHERE job_id::text LIKE %s", (ref.lower() + "%",)
@@ -177,20 +186,24 @@ def add_jobs(conn, user_id: str, urls: list[str]) -> list[dict]:
     for url in urls:
         with conn.cursor() as cur:
             cur.execute(
-                "SELECT job_id, status FROM jobs WHERE url_normalized = %s",
+                "SELECT job_id, status, url FROM jobs WHERE url_normalized = %s",
                 (queue.url_normalize(url),),
             )
             existing = cur.fetchone()
         job_id = repo.add_job_for_user(conn, user_id, url, source="manual")
-        stored = queue.canonical_url(url)
+        # Report the row as it stands in the DB, not the input. Dedup is on
+        # url_normalized, so a URL pasted with tracking params can match a row that
+        # was stored clean — echoing the input would misdescribe what we own.
+        stored = existing["url"] if existing else queue.canonical_url(url)
         out.append(
             {
                 "url": stored,
                 "job_id": job_id,
                 "status": existing["status"] if existing else "jd_pending",
                 "duplicate": existing is not None,
-                # apply-form URLs get trimmed to the posting page — say so, otherwise
-                # the printed URL silently differs from what was pasted
+                # the stored URL can differ from what was pasted — an apply-form
+                # suffix trimmed off, or an existing row that was added clean — so
+                # say so rather than letting the printed URL differ silently
                 "trimmed": stored != url.strip(),
             }
         )
@@ -243,6 +256,15 @@ def _today_start() -> datetime:
     )
 
 
+def _job_label(row: dict) -> str:
+    """Company first, then the title. The company is what you scan these listings
+    for — you spot the employer, then hand the id to `autoapply ask` — and a title
+    on its own does not say which posting a row is. Either may be missing: only
+    `search` supplies a title up front and only a tailoring backfills one, so
+    manually added jobs show the company alone until then."""
+    return " - ".join(x for x in (row["company"], row["title"]) if x)
+
+
 def _apply_marker(row: dict) -> str:
     """Human word for the latest apply attempt: applied / unconfirmed /
     handed-off / apply-failed."""
@@ -279,7 +301,7 @@ def cmd_jobs_list(args) -> int:
         )
         return 0
     for r in rows:
-        title = (r["title"] or "")[:40]
+        title = _job_label(r)[:40]
         print(
             f"{_id8(r['job_id'])}  {r['status']:<12} {_apply_marker(r):<12} {title:<40} {r['url']}"
         )
@@ -437,7 +459,8 @@ def tailoring_summary(conn, user_id: str, since: datetime | None = None) -> dict
         tailor_counts = {r["status"]: r["n"] for r in cur.fetchall()}
         cur.execute(
             "SELECT t.job_id, t.status, t.resume_score, t.new_resume_score, "
-            "t.job_match_summary, t.error, j.title, j.url, j.status AS job_status, "
+            "t.job_match_summary, t.error, j.title, j.company, j.url, "
+            "j.status AS job_status, "
             "j.error AS job_error, ap.status AS apply_status, ap.outcome AS apply_outcome "
             "FROM tailored_resumes t JOIN jobs j USING (job_id) "
             "JOIN user_jobs uj ON uj.job_id = t.job_id AND uj.user_id = t.user_id "
@@ -453,11 +476,16 @@ def tailoring_summary(conn, user_id: str, since: datetime | None = None) -> dict
     return {"job_counts": job_counts, "tailor_counts": tailor_counts, "rows": rows}
 
 
-def _print_summary(s: dict) -> None:
+def _print_summary(s: dict, scope: str = "") -> None:
     jc, tc = s["job_counts"], s["tailor_counts"]
+    if not jc and not tc:
+        # Word the empty pipeline exactly as `jobs list` does — the same state
+        # described two different ways reads like two different states.
+        print(f"\nno jobs{scope}")
+        return
     print(f"\njobs: {jc or 'none'}   tailoring: {tc or 'none'}")
     for r in s["rows"]:
-        name = (r["title"] or r["url"])[:50]
+        name = (_job_label(r) or r["url"])[:50]
         score = ""
         if r["new_resume_score"] is not None:
             score = f"  score {r['resume_score']} -> {r['new_resume_score']}"
@@ -798,6 +826,7 @@ def cmd_status(args) -> int:
             print(f"job     {job['job_id']}")
             print(f"url     {job['url']}")
             print(f"title   {job['title'] or '-'}")
+            print(f"company {job['company'] or '-'}")
             print(
                 f"status  {job['status']}"
                 + (f"  error: {job['error']}" if job["error"] else "")
@@ -822,7 +851,8 @@ def cmd_status(args) -> int:
                     print(f"  {when}  {a['status']}{out}  (run {a['run_id'] or '-'})")
             return 0
         _print_summary(
-            tailoring_summary(conn, user_id, _today_start() if args.today else None)
+            tailoring_summary(conn, user_id, _today_start() if args.today else None),
+            " added today" if args.today else "",
         )
         return 0
 
@@ -1229,7 +1259,9 @@ def build_parser() -> argparse.ArgumentParser:
         help="remove jobs from your pipeline (so a URL can be re-added)",
         description="Deletes your tailorings, resume rows and apply records for the "
         "job. The shared jobs row is deleted only if no other user owns it. Tailored "
-        "files already in object storage are left in place.",
+        "files already in object storage are left in place. Targets are handled in "
+        "order and a target that cannot be resolved stops the run, so earlier ones "
+        "in the same command stay removed.",
     )
     rm.add_argument("jobs", nargs="+", help="job ids, id prefixes, or URLs")
     rm.add_argument("--user", help="user id or email (default: the only active user)")
