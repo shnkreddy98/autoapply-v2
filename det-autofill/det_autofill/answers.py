@@ -24,12 +24,15 @@ from typing import Any
 # Option-preference lists for enumerated questions: for each canonical key,
 # ordered regexes tried against the widget's options; first hit is clicked.
 OPTION_PREFS: dict[str, list[str]] = {
-    "eeo_gender": [r"decline|prefer not", r"^male$|^female$"],  # decline first
-    "eeo_race": [r"decline|prefer not"],
-    "eeo_hispanic": [r"^no\b", r"decline|prefer not"],
-    "eeo_veteran": [r"not a protected veteran|decline|prefer not", r"^no\b"],
-    "eeo_disability": [r"no,? i do(n't| not) have|decline|prefer not", r"^no\b"],
-    "eeo_gender_identity": [r"decline|prefer not"],
+    # Without the user's own answer (profile option_prefs) the only safe choice is to
+    # decline: these used to fall back to "No" / "not a protected veteran", which
+    # states a fact about the applicant nobody gave.
+    "eeo_gender": [r"decline|prefer not|do not wish|don t wish"],
+    "eeo_race": [r"decline|prefer not|do not wish|don t wish"],
+    "eeo_hispanic": [r"decline|prefer not|do not wish|don t wish"],
+    "eeo_veteran": [r"decline|prefer not|do not wish|don t wish"],
+    "eeo_disability": [r"do not want to answer|decline|prefer not"],
+    "eeo_gender_identity": [r"decline|prefer not|do not wish|don t wish"],
     "work_auth_type": [r"citizen", r"permanent resident|green card"],
     "how_heard": [r"company|corporate website", r"job board|linkedin", r"other"],
     "phone_device_type": [r"mobile|cell", r"personal", r"home"],
@@ -110,11 +113,20 @@ class AnswerStore:
             "school": txt("school"),
             "gpa": p.get("gpa", ""),
         }
+        sponsorship = p.get("visa_sponsorship")
         BOOL = {
-            "visa_sponsorship": p.get("visa_sponsorship", False),
-            "us_citizen": p.get("us_citizen", True),
-            "work_authorized": p.get("work_eligible_us", True),
-            "age_over_18": True,
+            "visa_sponsorship": sponsorship,
+            # Never assumed: a default of True claimed citizenship for applicants who
+            # need sponsorship. Needing sponsorship rules citizenship out; otherwise
+            # only an explicit profile value answers.
+            "us_citizen": p.get("us_citizen", False if sponsorship else None),
+            "work_authorized": p.get("work_eligible_us"),
+            # "authorized to work WITHOUT sponsorship": yes only if both hold
+            "authorized_without_sponsorship": (
+                None if p.get("work_eligible_us") is None or sponsorship is None
+                else bool(p.get("work_eligible_us")) and not sponsorship
+            ),
+            "age_over_18": p.get("age_over_18"),
             "currently_employed": p.get("currently_employed", True),
             "may_contact_employer": p.get("may_contact_employer", False),
             "worked_here_before": False,
@@ -136,18 +148,27 @@ class AnswerStore:
             v = TEXT[key]
             return Answer(key, "text", v) if v is not None else None
         if key in BOOL:
-            return Answer(key, "bool", bool(BOOL[key]))
-        if key in OPTION_PREFS:
-            # profile may prepend its own wording (e.g. an actual gender
-            # answer where the form offers no decline option)
-            mine = (p.get("option_prefs") or {}).get(key, [])
-            return Answer(key, "option", [*mine, *OPTION_PREFS[key]])
+            return Answer(key, "bool", bool(BOOL[key])) if BOOL[key] is not None else None
+        if key in OPTION_PREFS or key in (p.get("option_prefs") or {}):
+            # The profile's own wording replaces the defaults instead of going first:
+            # appended defaults let a form without the user's answer fall through to
+            # "decline" or, for work_auth_type, to "citizen".
+            mine = (p.get("option_prefs") or {}).get(key)
+            if mine:
+                return Answer(key, "option", list(mine))
+            if key == "work_auth_type" and p.get("visa_sponsorship"):
+                return None  # the default list starts with "citizen" — wrong here
+            return Answer(key, "option", list(OPTION_PREFS[key]))
         if key == "resume_upload":
             return Answer(key, "file", p.get("resume_path", ""))
         if key == "cover_letter":
             return None  # LLM tier (or skip when optional)
         if key in ("start_date", "signature_date", "education_dates"):
-            v = p.get({"start_date": "available_start_date"}.get(key, key)) or p.get("today")
+            # only a signature date means "today"; an availability date that falls
+            # back to today put the fill date into education start-date fields
+            v = p.get({"start_date": "available_start_date"}.get(key, key))
+            if key == "signature_date":
+                v = v or p.get("today")
             return Answer(key, "date", v) if v else None
         if key in ("date_month", "date_day", "date_year"):
             return Answer(key, "date_part", key.removeprefix("date_"))
@@ -189,6 +210,16 @@ class AnswerStore:
             )
             return Answer(key, "bool", have)
         return None
+
+    def text_for(self, key: str) -> str | None:
+        """Literal wording for an enumerated key when the form asks it as free text
+        ("How did you hear about us?" as a textbox): the profile's own value first."""
+        own = {
+            "field_of_study": self.p.get("field_of_study"),
+            "how_heard": self.p.get("how_heard_text"),
+            "education_level": self.p.get("degree"),
+        }.get(key)
+        return own or OPTION_TEXT.get(key)
 
     def _skill_years_for(self, label: str) -> str | None:
         """'years of experience with Databricks?' -> look the skill up in the
@@ -238,6 +269,7 @@ def example_profile() -> dict:
         "visa_sponsorship": False,
         "work_eligible_us": True,
         "us_citizen": True,
+        "age_over_18": True,
         "willing_relocate": True,
         "willing_travel": True,
         "ever_terminated": False,

@@ -42,6 +42,12 @@ RULES: list[Rule] = [
     # Workday multiselect chips ("1 items selected" listbox) — already-committed
     # values; touching them deletes chips
     Rule("selected_chips", "skip", (r"^\d* ?items? selected$",)),
+    # captcha / one-time codes go to a human or the email tool. Up here because
+    # "Enter the verification code sent to your email" also says "email".
+    Rule("handoff", "handoff", (
+        r"i'?m not a robot|captcha|recaptcha",
+        r"verification code|security code|one.?time (code|passcode)|\botp\b",
+    )),
     # --- identity -----------------------------------------------------------
     Rule("first_name", "identity", (r"^(legal )?first name", r"\bgiven name\b", r"^preferred first name")),
     Rule("last_name", "identity", (r"^(legal )?last name", r"\bfamily name\b", r"\bsurname\b")),
@@ -80,15 +86,23 @@ RULES: list[Rule] = [
     Rule("password", "account", (r"password",)),
     Rule("username", "account", (r"^user ?name$",)),
     # --- work authorization ---------------------------------------------------
+    # Must outrank visa_sponsorship: "authorized to work WITHOUT sponsorship?" says
+    # "sponsor" but a Yes means no sponsorship is needed — the opposite answer.
+    Rule("authorized_without_sponsorship", "auth", (
+        r"(authoriz\w*|eligible|able|permitted|allowed).{0,60}work.{0,80}without.{0,30}(sponsor|visa)",
+        r"without.{0,30}(sponsor\w*|visa).{0,60}(authoriz|eligible|work)",
+    )),
     Rule("visa_sponsorship", "auth", (
         r"sponsor",  # "require sponsorship", "visa sponsorship", "now or in the future"
         r"require.{0,20}visa",
     )),
-    Rule("us_citizen", "auth", (r"u\.?s\.? citizen",)),
+    # normalize() turns "U.S." into "u s", so the dots are optional spaces here
+    Rule("us_citizen", "auth", (r"\bu ?s ?citizen", r"citizen of the united states")),
     # enumerated status question ("Which work authorization best describes
     # you: citizen / green card / H-1B / ...") — must outrank the yes/no rule
     Rule("work_auth_type", "auth", (
         r"(which|what).{0,25}(work )?authorization.{0,20}(best )?describes",
+        r"(which|what).{0,40}(best )?describes.{0,30}(work|employment) authorization",
         r"(work )?authorization (status|type|category)",
     )),
     Rule("work_authorized", "auth", (
@@ -141,6 +155,10 @@ RULES: list[Rule] = [
     # --- compensation -----------------------------------------------------------
     Rule("desired_salary", "compensation", (r"salary|compensation|desired pay|pay (rate|expectation)|expected pay|wage",)),
     # --- availability ------------------------------------------------------------
+    # Month/year halves of a start or end date belong to an education or employment
+    # row, not to availability ("Start date month" under Education on Greenhouse).
+    # Left unanswered until history rows are filled from the parsed resume.
+    Rule("history_date_part", "history", (r"^(start|end) date (month|year)$", r"^(from|to) (month|year)$")),
     Rule("start_date", "availability", (r"start date|when can you start|available to (start|begin)|earliest.{0,15}start",)),
     Rule("notice_period", "availability", (r"notice period",)),
     Rule("weekends_evenings", "availability", (r"weekend|evening|holiday|night shift|overtime",)),
@@ -178,11 +196,6 @@ RULES: list[Rule] = [
     Rule("leave_blank", "skip", (
         r"employee id", r"if applicable", r"^number$", r"active licenses?",
         r"which licenses", r"clearance (number|level)",
-    )),
-    # --- handoff triggers (not fillable by us OR the LLM; human/email tool) ------------
-    Rule("handoff", "handoff", (
-        r"i'?m not a robot|captcha|recaptcha",
-        r"verification code|security code|one.?time (code|passcode)|\botp\b",
     )),
     # --- skill checkboxes ("Python", "SQL", ... as standalone check items) --------------
     Rule("skill_checkbox", "experience", (

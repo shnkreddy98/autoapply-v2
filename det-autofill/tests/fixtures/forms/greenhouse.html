@@ -1,0 +1,84 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Greenhouse fixture</title></head><body>
+<div id="grnhse_app">
+<form id="application-form">
+  <label for="first_name">First Name *</label>
+  <input type="text" id="first_name" name="first_name">
+
+  <label for="last_name">Last Name *</label>
+  <input type="text" id="last_name" name="last_name">
+
+  <label for="email">Email *</label>
+  <input type="email" id="email" name="email">
+
+  <label for="phone">Phone</label>
+  <input type="tel" id="phone" name="phone">
+
+  <label for="location">Location (City)</label>
+  <input type="text" id="location" name="job_application[location]">
+
+  <label for="resume">Resume/CV</label>
+  <input type="file" id="resume" name="job_application[resume]">
+
+  <label for="question_1234">LinkedIn Profile</label>
+  <input type="text" id="question_1234" name="job_application[answers_attributes][0][text_value]">
+
+  <label for="question_5678">Website</label>
+  <input type="text" id="question_5678">
+
+  <label for="question_9012">Are you legally authorized to work in the United States?</label>
+  <select id="question_9012"><option value="">--</option><option>Yes</option><option>No</option></select>
+
+  <label for="question_9013">Will you now or in the future require sponsorship for employment visa status?</label>
+  <select id="question_9013"><option value="">--</option><option>Yes</option><option>No</option></select>
+
+  <fieldset>
+    <legend>U.S. Equal Employment Opportunity information (Completion is voluntary)</legend>
+    <label for="gender">Gender</label>
+    <select id="gender" name="job_application[gender]">
+      <option value="">Select...</option><option>Male</option><option>Female</option>
+      <option>Decline To Self Identify</option>
+    </select>
+
+    <label for="hispanic_ethnicity">Are you Hispanic/Latino?</label>
+    <select id="hispanic_ethnicity">
+      <option value="">Select...</option><option>Yes</option><option>No</option>
+      <option>Decline To Self Identify</option>
+    </select>
+
+    <label for="race_id">Please identify your race</label>
+    <select id="race_id">
+      <option value="">Select...</option>
+      <option>American Indian or Alaska Native</option>
+      <option>Asian</option>
+      <option>Black or African American</option>
+      <option>Hispanic or Latino</option>
+      <option>Native Hawaiian or Other Pacific Islander</option>
+      <option>Two or More Races</option>
+      <option>White</option>
+      <option>Decline To Self Identify</option>
+    </select>
+
+    <label for="veteran_status">Veteran Status</label>
+    <select id="veteran_status">
+      <option value="">Select...</option>
+      <option>I identify as one or more of the classifications of a protected veteran</option>
+      <option>I am not a protected veteran</option>
+      <option>I don't wish to answer</option>
+    </select>
+
+    <label for="disability_status">Voluntary Self-Identification of Disability (Form CC-305)</label>
+    <select id="disability_status">
+      <option value="">Select...</option>
+      <option>Yes, I have a disability, or have had one in the past</option>
+      <option>No, I do not have a disability and have not had one in the past</option>
+      <option>I do not want to answer</option>
+    </select>
+  </fieldset>
+
+  <label for="hear">How did you hear about this job?</label>
+  <input type="text" id="hear" name="source">
+</form>
+</div>
+<script src="./_react-tracker.js"></script>
+<script>['first_name','last_name','email','phone','location'].forEach(function(id){ window.trackLikeReact(document.getElementById(id)); });</script>
+</body></html>

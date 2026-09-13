@@ -1,0 +1,47 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Unknown ATS fixture</title>
+<style>.hp{position:absolute;left:-9999px;width:1px;height:1px}</style></head><body>
+<form id="careers-apply">
+  <!-- autocomplete attributes: tier 1 -->
+  <p><label for="gn">Your name</label><input id="gn" autocomplete="given-name"></p>
+  <p><label for="fn">Surname</label><input id="fn" autocomplete="family-name"></p>
+  <p><label for="em">Contact e-mail</label><input id="em" autocomplete="email" type="email"></p>
+  <p><label for="st">Street</label><input id="st" autocomplete="street-address"></p>
+  <p><label for="ct">Town / City</label><input id="ct" autocomplete="address-level2"></p>
+  <p><label for="zp">Post Code</label><input id="zp" autocomplete="postal-code"></p>
+
+  <!-- label-only: tier 3 -->
+  <p><label for="mob">Mobile number</label><input id="mob" name="xy19"></p>
+  <p><label for="li">LinkedIn profile</label><input id="li" name="xy20"></p>
+  <p><label for="uni">Which university did you attend?</label><input id="uni" name="xy21"></p>
+  <p><label for="maj">Course of study</label><input id="maj" name="xy22"></p>
+  <p><label for="gy">Expected graduation year</label><input id="gy" name="xy23"></p>
+  <p><label for="not">What is your notice period?</label><input id="not" name="xy24"></p>
+
+  <!-- already filled: must not be overwritten by default -->
+  <p><label for="pref">Preferred name</label><input id="pref" name="xy25" value="DO NOT TOUCH"></p>
+
+  <!-- disabled + readonly -->
+  <p><label for="dis">Job title</label><input id="dis" name="xy26" disabled></p>
+  <p><label for="ro">Current employer</label><input id="ro" name="xy27" readonly></p>
+
+  <!-- poisoned context: a reference's details, not the applicant's -->
+  <fieldset>
+    <legend>Reference 1</legend>
+    <p><label for="rn">Reference first name</label><input id="rn" name="xy28"></p>
+    <p><label for="re">Reference email address</label><input id="re" name="xy29"></p>
+  </fieldset>
+
+  <!-- honeypot -->
+  <div class="hp"><label for="hp1">Leave this blank</label><input id="hp1" name="honeypot"></div>
+
+  <!-- checkbox + radio -->
+  <p><label><input type="checkbox" id="relo" name="xy30"> I am willing to relocate</label></p>
+  <fieldset>
+    <legend>Are you legally authorized to work in the United States?</legend>
+    <label><input type="radio" name="auth" value="1"> Yes</label>
+    <label><input type="radio" name="auth" value="0"> No</label>
+  </fieldset>
+
+  <p><label for="cl">Cover letter</label><textarea id="cl" name="xy31"></textarea></p>
+</form>
+</body></html>

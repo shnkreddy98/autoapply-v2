@@ -1,0 +1,31 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Lever fixture</title></head><body>
+<div class="lever-job-listing-page">
+<form action="https://jobs.lever.co/acme/abc123/apply" method="POST" data-qa="application-form">
+  <input type="text" name="name" placeholder="Full name">
+  <input type="email" name="email" placeholder="Email">
+  <input type="tel" name="phone" placeholder="Phone">
+  <input type="text" name="org" placeholder="Current company">
+  <input type="text" name="location" placeholder="Location">
+  <input type="text" name="urls[LinkedIn]" placeholder="LinkedIn URL">
+  <input type="text" name="urls[GitHub]" placeholder="GitHub URL">
+  <input type="text" name="urls[Portfolio]" placeholder="Portfolio URL">
+  <input type="text" name="urls[Other]" placeholder="Other website">
+  <input type="file" name="resume">
+  <textarea name="comments" placeholder="Additional information"></textarea>
+
+  <fieldset>
+    <legend>Are you authorized to work in the United States?</legend>
+    <label><input type="radio" name="cards[auth][field0]" value="Yes"> Yes</label>
+    <label><input type="radio" name="cards[auth][field0]" value="No"> No</label>
+  </fieldset>
+
+  <fieldset>
+    <legend>Will you require visa sponsorship now or in the future?</legend>
+    <label><input type="radio" name="cards[spons][field0]" value="Yes"> Yes</label>
+    <label><input type="radio" name="cards[spons][field0]" value="No"> No</label>
+  </fieldset>
+</form>
+</div>
+<script src="./_react-tracker.js"></script>
+<script>['name','email','phone','org'].forEach(function(n){ window.trackLikeReact(document.querySelector('[name="'+n+'"]')); });</script>
+</body></html>

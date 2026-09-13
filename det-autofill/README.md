@@ -37,6 +37,32 @@ PARSE (aria.py)  →  MATCH (taxonomy.py)  →  ANSWER (answers.py)  →  FILL+V
   Residual = orphaned radio options in truncated fragments (live snapshots carry
   the parent question) + genuine LLM-tier oddballs ("bitcoin journey", ...).
 
+## DOM path (2026-09-13)
+
+The ARIA snapshot cannot see `autocomplete`, `name`, `id` or `data-automation-id`,
+and its refs die after every action. The DOM path fixes both:
+
+- `extract.js` — read-only function run in the page via MCP `browser_evaluate`;
+  one descriptor per control with its attributes, label / group label / section,
+  required, value, options, visibility and a **unique CSS selector**. The container's
+  MCP accepts selectors as `target` for click/type/select, so actions no longer
+  need snapshot refs.
+- `classify.py` — pure. Gates (honeypot, captcha/OTP, hidden, disabled, read-only)
+  → tier 0 per-ATS attribute tables → 1 `autocomplete` → 2 exact name/id tokens →
+  3a polarity rules (`authorized to work WITHOUT sponsorship`) → 3b the taxonomy
+  below → 3c Autofill's ordered regexes → 4 input type. Refuses identity fields in
+  reference/emergency-contact sections, already-filled fields, duplicate keys and
+  choice keys on text boxes. `plan(...).fingerprint()` is stable across runs.
+- `options.py` — Autofill's option ladder (value → normalized → text → aliases →
+  unique prefix); two plausible options is a miss.
+- `profile.py` — `autoapply profile export` JSON → AnswerStore profile. EEO/source
+  answers become `option_prefs` from the user's own words; unknowns stay unknown
+  (no assumed citizenship, no "No" to EEO questions nobody answered).
+
+Ported from `~/repos/Autofill` (job-autofill.js); its 5 form fixtures live in
+`tests/fixtures/forms/` next to `traps.html`. Browser tests use a cached Playwright
+Chromium (`DET_AUTOFILL_CHROMIUM` overrides) and skip without one.
+
 ## Decisions (agreed 2026-07-08)
 
 - Employment/education history: fill the MOST RECENT row only, skip add-row —

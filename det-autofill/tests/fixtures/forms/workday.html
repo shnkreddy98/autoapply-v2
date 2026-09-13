@@ -1,0 +1,84 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Workday fixture</title>
+<style>.combo{border:1px solid #999;padding:6px;width:260px;cursor:pointer}
+.menu{border:1px solid #999;position:absolute;background:#fff}.menu li{padding:4px;list-style:none}</style>
+</head><body>
+<div data-automation-id="applyFlow">
+  <div data-automation-id="formField-legalNameSection_firstName">
+    <label id="lbl-fn">First Name</label>
+    <input type="text" aria-labelledby="lbl-fn" data-automation-id="legalNameSection_firstName">
+  </div>
+  <div data-automation-id="formField-legalNameSection_lastName">
+    <label id="lbl-ln">Last Name</label>
+    <input type="text" aria-labelledby="lbl-ln" data-automation-id="legalNameSection_lastName">
+  </div>
+  <div data-automation-id="formField-email">
+    <label id="lbl-em">Email Address</label>
+    <input type="text" aria-labelledby="lbl-em" data-automation-id="email">
+  </div>
+  <div data-automation-id="formField-phone-number">
+    <label id="lbl-ph">Phone Number</label>
+    <input type="text" aria-labelledby="lbl-ph" data-automation-id="phone-number">
+  </div>
+  <div data-automation-id="formField-addressSection_addressLine1">
+    <label id="lbl-a1">Address Line 1</label>
+    <input type="text" aria-labelledby="lbl-a1" data-automation-id="addressSection_addressLine1">
+  </div>
+  <div data-automation-id="formField-addressSection_city">
+    <label id="lbl-ct">City</label>
+    <input type="text" aria-labelledby="lbl-ct" data-automation-id="addressSection_city">
+  </div>
+  <div data-automation-id="formField-addressSection_postalCode">
+    <label id="lbl-pc">Postal Code</label>
+    <input type="text" aria-labelledby="lbl-pc" data-automation-id="addressSection_postalCode">
+  </div>
+  <div data-automation-id="formField-addressSection_countryRegion">
+    <label id="lbl-st">State</label>
+    <select data-automation-id="addressSection_countryRegion">
+      <option value="">Select One</option>
+      <option value="CA">California</option><option value="NY">New York</option>
+      <option value="WA">Washington</option>
+    </select>
+  </div>
+
+  <div data-automation-id="formField-countryDropdown">
+    <label id="lbl-cn">Country</label>
+    <div class="combo" role="combobox" aria-haspopup="listbox" aria-labelledby="lbl-cn"
+         data-automation-id="countryDropdown" tabindex="0">Select One</div>
+  </div>
+
+  <fieldset data-automation-id="formField-previousWorker">
+    <legend>Have you previously worked for our organization?</legend>
+    <label><input type="radio" name="prevWorker" value="yes"> Yes</label>
+    <label><input type="radio" name="prevWorker" value="no"> No</label>
+  </fieldset>
+</div>
+
+<script src="./_react-tracker.js"></script>
+<script>
+  // Every Workday text box behaves like a React controlled input.
+  document.querySelectorAll('input[type=text]').forEach(window.trackLikeReact);
+
+  // A Workday-style virtualized prompt: options only exist once opened.
+  var combo = document.querySelector('[data-automation-id="countryDropdown"]');
+  var menu = null;
+  combo.addEventListener('click', function () {
+    if (menu) return;
+    menu = document.createElement('ul');
+    menu.className = 'menu';
+    menu.setAttribute('role', 'listbox');
+    ['Canada', 'India', 'United Kingdom', 'United States of America'].forEach(function (t) {
+      var li = document.createElement('li');
+      li.setAttribute('role', 'option');
+      li.setAttribute('data-automation-id', 'promptOption');
+      li.textContent = t;
+      li.addEventListener('click', function () {
+        combo.textContent = t;
+        combo.setAttribute('data-selected', t);
+        menu.remove(); menu = null;
+      });
+      menu.appendChild(li);
+    });
+    combo.parentNode.appendChild(menu);
+  });
+</script>
+</body></html>
