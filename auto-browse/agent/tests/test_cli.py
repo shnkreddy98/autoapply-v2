@@ -619,14 +619,16 @@ def test_cmd_apply_today_runs_each_ready_job(db, monkeypatch):
         ),
     )
     args = SimpleNamespace(
-        jobs=[], all=False, today=True, user=None, model="m", autosubmit=True
+        jobs=[], all=False, today=True, user=None, model="m", autosubmit=True,
+        engine="agent", mcp=None,
     )
     assert cli.cmd_apply(args) == 0
     assert set(ran) == {j1, j2}
 
     # neither refs nor a batch flag → usage error
     args = SimpleNamespace(
-        jobs=[], all=False, today=False, user=None, model="m", autosubmit=False
+        jobs=[], all=False, today=False, user=None, model="m", autosubmit=False,
+        engine="agent", mcp=None,
     )
     with pytest.raises(SystemExit, match="--all / --today"):
         cli.cmd_apply(args)
@@ -645,7 +647,7 @@ def test_cmd_continue_guards_and_run(db, monkeypatch):
     uid = _mk_user(db)
     job_id = repo.add_job_for_user(db, uid, "https://ex.dev/j/1", source="manual")
     monkeypatch.setattr(cli, "_connect", lambda: contextlib.nullcontext(db))
-    args = SimpleNamespace(job=str(job_id), user=None, model="m", autosubmit=True)
+    args = SimpleNamespace(job=str(job_id), user=None, model="m", autosubmit=True, engine="agent", mcp=None)
 
     with pytest.raises(SystemExit, match="no apply attempt"):
         cli.cmd_continue(args)

@@ -2,9 +2,9 @@
 name = "det-autofill"
 version = "0.1.0"
 description = "Deterministic job-application form filler: ARIA in, actions out; LLM only as one-shot fallback"
-requires-python = ">=3.12"
+requires-python = ">=3.11"
 dependencies = [
-    "mcp>=1.28.1",
+    "mcp>=1.27.2,<2",  # auto-browse runs on mcp 1.x; 2.x changed the client API
 ]
 
 [dependency-groups]

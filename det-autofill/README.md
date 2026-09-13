@@ -103,9 +103,21 @@ Chromium (`DET_AUTOFILL_CHROMIUM` overrides) and skip without one.
       .yml file (mcpio resolves via the compose bind mount); action results
       often omit the snapshot (mcpio re-snapshots); job boards need an Apply
       click before the form exists (runner.ensure_form).
-- [ ] P4 engine.py — page state machine, next-click, error detect (role=alert, page-unchanged)
-- [ ] P5 llm_shot.py — one-shot JSON contract `[{ref, action, value}]`, executed by widgets.py; cap 2/page
-- [ ] P6 integrate: `autoapply apply --engine det`; runner talks to raw playwright MCP :8931 (full ARIA — pruning proxy is an LLM-era optimization)
+- [x] P4 `engine.py` (2026-09-13) — per page: extract → plan → fill (files first) →
+      re-plan for revealed fields → resolver for required gaps → Next, verified by a
+      page-signature change; a rejected Next (role=alert / aria-invalid) gets one repair
+      pass with the flagged fields treated as required. Stops on captcha/code
+      (handoff), unanswered required fields, a failed required upload, or no Next /
+      Submit. Submit only with autosubmit, confirmed by page text.
+- [x] P5 `llm.py` — resolver: saved answer → per-job writer (`ask`) for "why us" /
+      cover letter → one model call per page; choice answers must be an offered
+      option verbatim; the portal login never enters the prompt; only answers that
+      filled are saved; a failing model endpoint leaves the fields unanswered.
+- [x] P6 `autoapply apply|continue --engine det [--mcp URL]` (auto-browse
+      `agent/det_apply.py`): role profile + container resume + saved_answers + ai-assist.
+      Live dry run on a Greenhouse form (headless, fake profile, no submit): 14 fields,
+      resume and location filled; the three company-specific questions left to the model.
+      `runner.py` / `widgets.py` / `aria.py` are the older ARIA-snapshot path.
 
 ## Run
 

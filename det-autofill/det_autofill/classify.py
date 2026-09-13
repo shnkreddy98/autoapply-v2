@@ -393,8 +393,6 @@ def _gate(d: dict) -> tuple[str, str] | None:
     )
     if HONEYPOT_RE.search(hay) or (label_rule and label_rule.key == "honeypot"):
         return ("skip", "honeypot")
-    if label_rule and label_rule.category == "handoff":
-        return ("handoff", "captcha-or-code")
     if d.get("aria_hidden"):
         return ("skip", "aria-hidden")
     if d.get("disabled"):
@@ -404,6 +402,10 @@ def _gate(d: dict) -> tuple[str, str] | None:
     # file inputs are routinely styled invisible behind an "Attach" button
     if not d.get("visible") and d.get("widget") != "file":
         return ("skip", "not-visible")
+    # after visibility: a code field waiting on a later, still hidden step must not
+    # hand off the page the applicant is on
+    if label_rule and label_rule.category == "handoff":
+        return ("handoff", "captcha-or-code")
     return None
 
 

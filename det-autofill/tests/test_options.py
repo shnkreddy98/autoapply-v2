@@ -55,3 +55,18 @@ def test_resume_degree_names_map_to_form_levels():
 
 def test_master_prefix_alone_is_still_ambiguous():
     assert _degree("Master").startswith("ambiguous")
+
+
+def test_city_state_expands_for_location_pickers():
+    opts = [C("", "Springfield, Illinois, United States"), C("", "Springfield, Missouri, United States"),
+            C("", "Springfield, Massachusetts, United States")]
+    assert match_option("location_city", "Springfield, IL", opts).index == 0
+    assert match_option("city", "Springfield", opts).index is None  # a bare city is ambiguous
+
+
+def test_identical_duplicate_options_are_not_ambiguous():
+    """Live Greenhouse location results list the same wording twice."""
+    opts = [C("", "Springfield, Illinois, United States"), C("", "Springfield, Illinois, United States"),
+            C("", "East Springfield, Illinois, United States")]
+    pick = match_option("location_city", "Springfield, IL", opts)
+    assert pick.index == 0 and "identical" in pick.how

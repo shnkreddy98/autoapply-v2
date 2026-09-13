@@ -67,12 +67,13 @@ RULES: list[Rule] = [
     # --- address ------------------------------------------------------------
     Rule("street_address", "address", (r"address line ?1", r"street address", r"^address( line)?( 1)?$", r"^street$")),
     Rule("street_address2", "address", (r"address (line )?2", r"\bapt\b|\bsuite\b|\bunit\b")),
+    # before city: "Location (City)" on Greenhouse wants "City, State, Country"
+    Rule("location_city", "address", (r"location \(?city\)?", r"^(current )?location$", r"where (are you|do you) (located|live|based)")),
     Rule("city", "address", (r"^city$", r"\bcity\b", r"^town$")),
     Rule("state", "address", (r"^state", r"state/?province", r"^province$", r"^region$")),
     Rule("zip_code", "address", (r"zip|postal",)),
     Rule("county", "address", (r"^county$",)),
     Rule("country", "address", (r"^country( of residence)?$", r"\bcountry\b")),
-    Rule("location_city", "address", (r"location \(?city\)?", r"^(current )?location$", r"where (are you|do you) (located|live|based)")),
     # --- links --------------------------------------------------------------
     Rule("linkedin", "links", (r"linked.?in",)),
     Rule("github", "links", (r"git.?hub",)),

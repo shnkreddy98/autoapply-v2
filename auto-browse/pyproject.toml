@@ -15,6 +15,7 @@ dependencies = [
     "python-docx>=1.1.0",
     "pypdf>=5.0",
     "common",
+    "det-autofill",
 ]
 
 [project.scripts]
@@ -26,6 +27,7 @@ package = true
 
 [tool.uv.sources]
 common = { path = "../common", editable = true }
+det-autofill = { path = "../det-autofill", editable = true }
 
 [build-system]
 requires = ["hatchling"]

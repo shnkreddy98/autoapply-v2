@@ -289,7 +289,9 @@ async def fill_combobox(driver: Driver, selector: str, key: str, answer: dict,
                     break
         if pick is None or pick.index is None:
             await _close(driver, selector, typed)
-            return FillResult(False, pick.how if pick else "listbox-never-appeared")
+            if pick is not None:
+                return FillResult(False, pick.how)
+            return FillResult(False, "no-search-match" if found["listbox"] or typed else "listbox-never-appeared")
         option = found["options"][pick.index]
         await driver.click(option["selector"])
         await driver.wait(150)
@@ -339,9 +341,14 @@ async def fill_file(driver: Driver, selector: str, path: str) -> FillResult:
         return FillResult(False, "no-file")
     await driver.upload(selector, [path])
     name = path.rsplit("/", 1)[-1]
-    state = await read_field(driver, selector)
-    ok = name in (state.get("files") or []) or bool(await driver.evaluate(PAGE_HAS_TEXT, name))
-    return FillResult(ok, "uploaded" if ok else "file-not-registered", name)
+    # Greenhouse clears the input and shows the name only once its own upload
+    # finishes, so poll instead of reading once
+    for _ in range(20):
+        state = await read_field(driver, selector)
+        if name in (state.get("files") or []) or await driver.evaluate(PAGE_HAS_TEXT, name):
+            return FillResult(True, "uploaded", name)
+        await driver.wait(250)
+    return FillResult(False, "file-not-registered", name)
 
 
 def _in_search_box(descriptor: dict | None) -> bool:
@@ -440,9 +447,11 @@ class McpDriver:
             return raw
 
     async def upload(self, selector, paths):
-        # MCP uploads into a file chooser, which the click opens
-        await self.click(selector)
-        await self.b.call("browser_file_upload", paths=paths)
+        # setInputFiles works on the hidden <input type=file> real forms use; the
+        # chooser route (click + browser_file_upload) cannot click a hidden input.
+        # Paths are inside the browser container (--allow-unrestricted-file-access).
+        code = f"async (page) => {{ await page.locator({json.dumps(selector)}).setInputFiles({json.dumps(paths)}); }}"
+        await self.b.call("browser_run_code_unsafe", code=code)
 
     async def wait(self, ms):
         await asyncio.sleep(ms / 1000)

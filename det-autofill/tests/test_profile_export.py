@@ -42,5 +42,8 @@ def test_password_never_comes_from_the_export():
     assert "login_password" not in from_export(SPONSORED)
 
 
-def test_major_leads_field_of_study_prefs():
-    assert AnswerStore(from_export(SPONSORED)).get("field_of_study").value[0] == r"\bdata\ analytics\b"
+def test_field_of_study_is_only_the_users_major():
+    """A live Greenhouse Discipline list without "Data Analytics" got "Computer
+    Science" from the fallbacks — a different education than the user's."""
+    assert AnswerStore(from_export(SPONSORED)).get("field_of_study").value == [r"\bdata\ analytics\b"]
+    assert AnswerStore({}).get("field_of_study") is None

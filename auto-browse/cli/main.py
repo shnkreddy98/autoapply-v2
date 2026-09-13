@@ -25,9 +25,13 @@
                                                        # answer -> stdout, count -> stderr;
                                                        # base resume follows the job's tailoring label
     autoapply apply [JOB ...] [--all] [--today] [--user U] [--model M] [--autosubmit]
+                    [--engine agent|det] [--mcp URL]
                                                        # --all: batch every jd_ready job one by one;
-                                                       # --today restricts to jobs added today
-    autoapply continue JOB [--autosubmit]              # finish an interrupted run in the open browser
+                                                       # --today restricts to jobs added today;
+                                                       # --engine det: deterministic filler, model
+                                                       # only for fields it cannot answer
+    autoapply continue JOB [--autosubmit] [--engine agent|det]
+                                                       # finish an interrupted run in the open browser
 
 JOB accepts a full job_id UUID, an unambiguous id prefix (4+ characters), or the
 job URL.
@@ -1113,6 +1117,60 @@ def _run_apply_agent(
     return True
 
 
+def _run_apply_det(
+    conn,
+    user_id: str,
+    job_id,
+    url: str,
+    model: str,
+    autosubmit: bool,
+    mcp_url: str | None = None,
+    continue_run: bool = False,
+) -> bool:
+    """One deterministic-filler run, with the same applications-row bookkeeping as the
+    agent. Returns True unless the run failed or got stuck."""
+    from agent import det_apply
+    from agent.observability import new_run_id
+
+    tailored = repo.lookup_tailored(conn, user_id, job_id)
+    run_id = new_run_id()
+    app_id = repo.start_application(
+        conn, user_id, job_id, run_id=run_id,
+        tailored_resume_id=tailored["id"] if tailored else None,
+    )
+    print(f"{'continuing' if continue_run else 'applying'} {_id8(job_id)}  {url}  (engine det)")
+    print("  watch at http://localhost:6080/vnc.html")
+    try:
+        result = asyncio.run(
+            det_apply.run_det(
+                conn, _storage(), user_id, job_id, url,
+                run_id=run_id, model=model, answer_question=run_answer,
+                autosubmit=autosubmit, navigate=not continue_run,
+                mcp_url=mcp_url or det_apply.PLAYWRIGHT_MCP_URL,
+            )
+        )
+    except Exception as exc:
+        repo.finish_application(conn, app_id, "failed", outcome=str(exc)[:500])
+        print(f"apply failed for {_id8(job_id)}: {exc}", file=sys.stderr)
+        return False
+    for page in result.pages:
+        ok = sum(1 for f in page.filled if f["ok"])
+        bad = [f["label"] for f in page.filled if not f["ok"]]
+        print(f"  page {page.number}: filled {ok}" + (f", failed {len(bad)}: {'; '.join(bad[:3])}" if bad else "")
+              + (f", {page.action}" if page.action else ""))
+    print(f"  {result.status}: {result.reason}  (report output/det-runs/{run_id}.json)")
+    if result.status in ("submitted", "unconfirmed"):
+        repo.finish_application(conn, app_id, "finished", outcome=result.status)
+        return True
+    if result.status == "stuck":
+        repo.finish_application(conn, app_id, "failed", outcome=result.reason[:500])
+        return False
+    # ready-to-submit, or handed off to you (captcha / code): finish in the VNC view
+    print("  finish in the browser, then answer below")
+    repo.finish_application(conn, app_id, "finished", outcome=_confirm_submitted())
+    return True
+
+
 # The autosubmit prompt makes the agent end its final reply with `SUBMITTED: yes`
 # (confirmation page seen) or `SUBMITTED: no`. Take the LAST match — earlier text
 # may discuss the format itself.
@@ -1170,7 +1228,11 @@ def cmd_apply(args) -> int:
             return 0
         for i, (job_id, url) in enumerate(targets, 1):
             print(f"[{i}/{len(targets)}]", end=" ")
-            if not _run_apply_agent(conn, user_id, job_id, url, model, args.autosubmit):
+            if args.engine == "det":
+                ok = _run_apply_det(conn, user_id, job_id, url, model, args.autosubmit, args.mcp)
+            else:
+                ok = _run_apply_agent(conn, user_id, job_id, url, model, args.autosubmit)
+            if not ok:
                 failed += 1
     return 1 if failed else 0
 
@@ -1199,9 +1261,14 @@ def cmd_continue(args) -> int:
             )
         if last["outcome"] == "submitted":
             raise SystemExit("already submitted — nothing to continue")
-        ok = _run_apply_agent(
-            conn, user_id, job_id, url, model, args.autosubmit, continue_run=True
-        )
+        if args.engine == "det":
+            ok = _run_apply_det(
+                conn, user_id, job_id, url, model, args.autosubmit, args.mcp, continue_run=True
+            )
+        else:
+            ok = _run_apply_agent(
+                conn, user_id, job_id, url, model, args.autosubmit, continue_run=True
+            )
     return 0 if ok else 1
 
 
@@ -1471,6 +1538,20 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="agent clicks the final Submit itself (no review pause, no confirm prompt)",
     )
+    apply_p.add_argument(
+        "--engine",
+        choices=("agent", "det"),
+        default="agent",
+        help="agent: the LLM browser agent (default). det: the deterministic filler — "
+        "profile answers, saved answers and `ask` first, one model call per page only "
+        "for fields still unanswered; stops at captchas/codes and before Submit "
+        "unless --autosubmit",
+    )
+    apply_p.add_argument(
+        "--mcp",
+        help="Playwright MCP URL for --engine det (default: DET_PLAYWRIGHT_MCP_URL or "
+        "http://localhost:8931/mcp)",
+    )
     apply_p.set_defaults(func=cmd_apply)
 
     cont = sub.add_parser(
@@ -1490,6 +1571,20 @@ def build_parser() -> argparse.ArgumentParser:
         "--autosubmit",
         action="store_true",
         help="agent clicks the final Submit itself (no review pause, no confirm prompt)",
+    )
+    cont.add_argument(
+        "--engine",
+        choices=("agent", "det"),
+        default="agent",
+        help="agent: the LLM browser agent (default). det: the deterministic filler — "
+        "profile answers, saved answers and `ask` first, one model call per page only "
+        "for fields still unanswered; stops at captchas/codes and before Submit "
+        "unless --autosubmit",
+    )
+    cont.add_argument(
+        "--mcp",
+        help="Playwright MCP URL for --engine det (default: DET_PLAYWRIGHT_MCP_URL or "
+        "http://localhost:8931/mcp)",
     )
     cont.set_defaults(func=cmd_continue)
 

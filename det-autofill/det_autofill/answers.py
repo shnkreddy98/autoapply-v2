@@ -38,7 +38,9 @@ OPTION_PREFS: dict[str, list[str]] = {
     "phone_device_type": [r"mobile|cell", r"personal", r"home"],
     "contact_method": [r"e.?mail", r"phone"],
     "education_level": [r"master", r"bachelor", r"graduate"],
-    "field_of_study": [r"data (science|analytics)", r"computer science", r"information (systems|technology)", r"^other$"],
+    # no default: guessing "Computer Science" for someone who studied something else
+    # misstates their education; without the user's major this stays unanswered
+    "field_of_study": [],
     "employment_type": [r"full.?time"],
     "languages": [r"english"],
 }
@@ -158,7 +160,8 @@ class AnswerStore:
                 return Answer(key, "option", list(mine))
             if key == "work_auth_type" and p.get("visa_sponsorship"):
                 return None  # the default list starts with "citizen" — wrong here
-            return Answer(key, "option", list(OPTION_PREFS[key]))
+            defaults = list(OPTION_PREFS.get(key) or [])
+            return Answer(key, "option", defaults) if defaults else None
         if key == "resume_upload":
             return Answer(key, "file", p.get("resume_path", ""))
         if key == "cover_letter":

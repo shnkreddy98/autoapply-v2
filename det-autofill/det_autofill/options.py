@@ -85,6 +85,13 @@ def candidate_strings(key: str, value: object) -> list[str]:
         if up in US_STATES:
             out.append(US_STATES[up])
         out += [code for code, name in US_STATES.items() if nv(name) == n]
+    if key == "location_city":
+        # "Springfield, IL" -> "Springfield, Illinois" and "..., United States": the
+        # spelled-out forms location pickers list (Greenhouse, Google Places)
+        m = re.match(r"^\s*([^,]+),\s*([A-Za-z]{2})\s*$", str(value))
+        if m and m.group(2).upper() in US_STATES:
+            city, state = m.group(1).strip(), US_STATES[m.group(2).upper()]
+            out += [f"{city}, {state}, United States", f"{city}, {state}"]
     if key in _COUNTRY_KEYS:
         if n in COUNTRY_ISO:
             out.append(COUNTRY_ISO[n])
@@ -125,9 +132,13 @@ _YES = r"^(yes|y|true|i am|i do|i have|i will)\b"
 _NO = r"^(no|n|false|i am not|i do not|i don t|i have not|i will not)\b"
 
 
-def _unique(hits: list[int], how: str) -> Pick | None:
+def _unique(hits: list[int], how: str, options: list | None = None) -> Pick | None:
     if len(hits) == 1:
         return Pick(hits[0], how)
+    if len(hits) > 1 and options is not None and len({nv(options[i].text) for i in hits}) == 1:
+        # identical wording (Greenhouse lists "Springfield, Illinois, United States"
+        # twice): whichever is clicked, the form records the same answer
+        return Pick(hits[0], f"{how}(identical-options)")
     if len(hits) > 1:
         return Pick(None, f"ambiguous-{how}({len(hits)})")
     return None
@@ -152,7 +163,7 @@ def match_option(
         ("text-exact", lambda o, c: nv(c) in text_forms(o.text)),
     ):
         hits = [i for i in live if any(test(options[i], c) for c in cands)]
-        pick = _unique(hits, how)
+        pick = _unique(hits, how, options)
         if pick:
             return pick
 
@@ -169,7 +180,7 @@ def match_option(
             # word itself is the precise one; otherwise refuse
             exact = [i for i in hits if any(rx.fullmatch(f) for f in text_forms(options[i].text))]
             hits = exact if len(exact) == 1 else hits
-        pick = _unique(hits, f"alias:{pat}")
+        pick = _unique(hits, f"alias:{pat}", options)
         if pick:
             return pick
 
@@ -177,4 +188,4 @@ def match_option(
         i for i in live
         if any(nv(c) and f.startswith(nv(c)) for c in cands for f in text_forms(options[i].text))
     ]
-    return _unique(hits, "text-prefix") or Pick(None, "no-matching-option")
+    return _unique(hits, "text-prefix", options) or Pick(None, "no-matching-option")

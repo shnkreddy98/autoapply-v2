@@ -98,8 +98,7 @@ def from_export(doc: dict, *, resume_path: str = "", login_password: str | None 
     }
     if first_edu.get("major"):
         # the user's major before the generic data/CS fallbacks
-        prefs["field_of_study"] = [_esc_words(first_edu["major"]), r"data (science|analytics)",
-                                   r"computer science", r"information (systems|technology)"]
+        prefs["field_of_study"] = [_esc_words(first_edu["major"])]  # never a neighbouring major
     if f.get("how_did_you_hear"):
         prefs["how_heard"] = [_esc_words(f["how_did_you_hear"]), r"job board", r"other"]
     prefs = {k: v for k, v in prefs.items() if v}

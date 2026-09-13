@@ -48,6 +48,7 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "common" },
+    { name = "det-autofill" },
     { name = "httpx" },
     { name = "mcp", extra = ["cli"] },
     { name = "openai" },
@@ -69,6 +70,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "common", editable = "../common" },
+    { name = "det-autofill", editable = "../det-autofill" },
     { name = "httpx", specifier = ">=0.27.0" },
     { name = "mcp", extras = ["cli"], specifier = ">=1.27.2" },
     { name = "openai", specifier = ">=2.41.1" },
@@ -294,6 +296,23 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/3b/f2/5a72274ca9f1b2a8b44a662ee0bf1b435909deb473d6f97bcd035bcdbc71/cryptography-48.0.0-pp311-pypy311_pp73-manylinux_2_34_aarch64.whl", hash = "sha256:ecde28a596bead48b0cfd2a1b4416c3d43074c2d785e3a398d7ec1fc4d0f7fbb", size = 4636797, upload-time = "2026-05-04T22:59:24.912Z" },
     { url = "https://files.pythonhosted.org/packages/b4/e1/48cedb2fe63626e91ded1edad159e2a4fb8b6906c4425eb7749673077ce7/cryptography-48.0.0-pp311-pypy311_pp73-manylinux_2_34_x86_64.whl", hash = "sha256:4defde8685ae324a9eb9d818717e93b4638ef67070ac9bc15b8ca85f63048355", size = 4666800, upload-time = "2026-05-04T22:59:27.474Z" },
     { url = "https://files.pythonhosted.org/packages/a2/ca/7e8365deec19afb2b2c7be7c1c0aa8f99633b54e90c570999acda93260fc/cryptography-48.0.0-pp311-pypy311_pp73-win_amd64.whl", hash = "sha256:db63bf618e5dea46c07de12e900fe1cdd2541e6dc9dbae772a70b7d4d4765f6a", size = 3739536, upload-time = "2026-05-04T22:59:29.61Z" },
+]
+
+[[package]]
+name = "det-autofill"
+version = "0.1.0"
+source = { editable = "../det-autofill" }
+dependencies = [
+    { name = "mcp" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "mcp", specifier = ">=1.27.2,<2" }]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "playwright", specifier = ">=1.62.0" },
+    { name = "pytest", specifier = ">=8" },
 ]
 
 [[package]]

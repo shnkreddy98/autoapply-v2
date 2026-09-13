@@ -1,0 +1,59 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Wizard fixture</title>
+<style>.step{display:none}.step.on{display:block}</style></head><body>
+<!-- Three-step application: client-side validation on Next (role=alert +
+     aria-invalid), a per-job "why us" question, a choice question the profile cannot
+     answer, a review step with Submit, and a confirmation page. #captcha adds a
+     verification-code field on step 2. -->
+<h1 id="title">Apply: Data Engineer at Acme</h1>
+<form id="apply" onsubmit="return false">
+  <section class="step on" id="s1"><h2>Your details</h2>
+    <label for="first_name">First Name*</label><input id="first_name" name="first_name" required>
+    <label for="last_name">Last Name*</label><input id="last_name" name="last_name" required>
+    <label for="email">Email*</label><input id="email" name="email" type="email" required>
+    <label for="resume">Resume*</label><input id="resume" type="file" required>
+    <button type="button" id="next1">Next</button>
+  </section>
+  <section class="step" id="s2"><h2>Questions</h2>
+    <fieldset><legend>Do you hold a valid commercial driver's license?*</legend>
+      <label><input type="radio" name="cdl" value="yes" required> Yes</label>
+      <label><input type="radio" name="cdl" value="no"> No</label></fieldset>
+    <!-- no required marker: the page only enforces it on Continue (repair path) -->
+    <label for="location_pref">Which office would you work from?</label>
+    <select id="location_pref" data-required="true"><option value="">Select...</option>
+      <option>Austin</option><option>Remote (US)</option><option>London</option></select>
+    <label for="why">Why do you want to work at Acme?*</label><textarea id="why" required></textarea>
+    <div id="captcha-slot"></div>
+    <div id="err2" role="alert" style="display:none"></div>
+    <button type="button" id="next2">Continue</button>
+  </section>
+  <section class="step" id="s3"><h2>Review</h2>
+    <p>Check your answers.</p>
+    <button type="button" id="submit">Submit Application</button>
+  </section>
+  <section class="step" id="done"><h2>Thank you for applying!</h2></section>
+</form>
+<script>
+  if (location.hash === '#captcha') {
+    document.getElementById('captcha-slot').innerHTML =
+      '<label for="code">Enter the verification code sent to your email*</label><input id="code" required>';
+  }
+  function show(id) { document.querySelectorAll('.step').forEach(s => s.classList.toggle('on', s.id === id)); }
+  function check(step) {
+    const bad = Array.from(document.querySelectorAll('#' + step + ' [required], #' + step + ' [data-required]')).filter((el) => {
+      if (el.type === 'radio') return !document.querySelector('#' + step + ' [name="' + el.name + '"]:checked');
+      if (el.type === 'file') return !el.files.length;
+      return !el.value.trim();
+    });
+    document.querySelectorAll('#' + step + ' [aria-invalid]').forEach(el => el.removeAttribute('aria-invalid'));
+    bad.forEach(el => el.setAttribute('aria-invalid', 'true'));
+    return bad.length === 0;
+  }
+  document.getElementById('next1').onclick = () => { if (check('s1')) show('s2'); };
+  document.getElementById('next2').onclick = () => {
+    const err = document.getElementById('err2');
+    if (check('s2')) { err.style.display = 'none'; show('s3'); }
+    else { err.textContent = 'Please complete all required fields.'; err.style.display = 'block'; }
+  };
+  document.getElementById('submit').onclick = () => show('done');
+</script>
+</body></html>
