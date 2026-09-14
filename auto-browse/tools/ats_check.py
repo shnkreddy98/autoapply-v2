@@ -61,7 +61,8 @@ TARGETS = KB / "targets.json"
 PER_TARGET_TIMEOUT_S = 900
 
 GONE_RE = re.compile(
-    r"not currently accepting applications|no longer (available|accepting|open|posted|active)|job (not found|has expired|is closed|is no longer)"
+    r"not currently accepting applications|job is (not|no longer) available|page (was )?not found|could not be found"
+    r"|no longer (available|accepting|open|posted|active)|job (not found|has expired|is closed|is no longer)"
     r"|position (has been|is) (filled|closed)|posting (has )?(expired|closed|been removed)"
     r"|page (not found|does ?n.t exist)|this (job|requisition|position) (is|has been) (closed|filled|removed)"
     r"|job you (are|were) looking for|no longer (be )?found|sorry, this job|opening (is )?closed|\b404\b",
@@ -75,7 +76,9 @@ ACCOUNT_WALL = "account wall: sign-in / create-account page (det has no login fl
 # Final-submit wording the check driver refuses to click, whatever the engine thinks.
 # Recruitee's final button is a bare "Send"; "Apply" is left out because it is also
 # how a posting opens its form
-SUBMIT_GUARD = re.compile(r"\b(submit|send (my |your )?application|finish application|complete application)\b|^\s*send\s*$", re.I)
+# Apple's "Submit Resume" on a posting opens the application (the engine only takes it
+# as Apply on a page with no form)
+SUBMIT_GUARD = re.compile(r"\b(submit(?! (your |a )?(resume|cv)\s*$)|send (my |your )?application|finish application|complete application)\b|^\s*send\s*$", re.I)
 FILLABLE = {"text", "textarea", "select", "radio", "checkbox", "combobox", "date", "file"}
 # fill results that are correct refusals (the page offers nothing that matches the
 # profile), not widget bugs
@@ -130,7 +133,12 @@ async def open_live_posting(browser, driver, candidates, max_candidates) -> tupl
         await driver.wait(2000)  # Hirebridge's closed-posting redirect is script-driven and late
         here = await driver.evaluate("() => location.href")
         # Hirebridge redirects a closed posting to ClosedJob.aspx with generic text
-        if len(text.strip()) < 80 or GONE_RE.search(text[:3000]) or re.search(r"closed|expired|notfound=1", str(here), re.I):
+        # a posting id missing from where the page ended up: bounced to the job list
+        # (ApplicantPro /jobs/4187102 -> /jobsearch/)
+        ids = re.findall(r"\d{4,}", url.split("?")[0])
+        bounced = bool(ids) and not any(i in str(here) for i in ids)
+        if (len(text.strip()) < 80 or GONE_RE.search(text[:3000]) or bounced
+                or re.search(r"closed|expired|notfound=1", str(here), re.I)):
             tried.append(f"{url} -> gone")
             continue
         return url, tried

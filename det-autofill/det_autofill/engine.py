@@ -123,7 +123,7 @@ NEXT_RE = re.compile(r"^(next(?! (slide|image|photo|item|job|jobs|article|story|
 # Breezy: "Apply To Position"; Paycor: "Apply for this Position"
 # Dayforce: "Apply without an Account" beside Sign In; UKG Ready: "Type it in myself"
 # beside "Use my resume"
-APPLY_RE = re.compile(r"^(apply( now| manually| online| here| (to|for) (this )?(job|position|role|opening)| without an account| as (a )?guest)?|continue as (a )?guest|type it in myself|enter (it|my (info|information|details)) manually|i'?m interested|start (your |an |the )?application|begin application)$", re.I)
+APPLY_RE = re.compile(r"^(apply( now| manually| online| here| (to|for) (this )?(job|position|role|opening)| without an account| as (a )?guest)?|continue as (a )?guest|type it in myself|submit (your |a )?(resume|cv)|enter (it|my (info|information|details)) manually|i'?m interested|start (your |an |the )?application|begin application)$", re.I)
 
 
 class Resolver(Protocol):
