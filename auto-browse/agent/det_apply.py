@@ -9,7 +9,8 @@ What gets plugged into det_autofill.engine:
   * per-job questions ("why this company") answered by ai-assist through `ask`
   * one OpenRouter call per page for whatever is still unanswered
 
-The browser is Playwright MCP (the container, :8931) driven by CSS selectors.
+The browser is the container's Playwright MCP, reached through the pruning proxy
+(:8932), driven by CSS selectors.
 """
 
 from __future__ import annotations
@@ -34,7 +35,11 @@ from agent.profile import profile_json
 
 log = logging.getLogger(__name__)
 
-PLAYWRIGHT_MCP_URL = os.getenv("DET_PLAYWRIGHT_MCP_URL", "http://localhost:8931/mcp")
+# The pruning proxy, not raw :8931: the proxy holds the container browser's only MCP
+# session (one session per browser profile), so a direct :8931 client is refused with
+# "Browser is already in use" while the stack runs. Through the proxy the filler shares
+# the agent's browser; uploads fall back to the chooser (run_code is hidden there).
+PLAYWRIGHT_MCP_URL = os.getenv("DET_PLAYWRIGHT_MCP_URL", "http://localhost:8932/mcp")
 REPORT_DIR = Path(__file__).resolve().parent.parent / "output" / "det-runs"
 
 

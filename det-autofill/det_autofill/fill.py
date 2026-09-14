@@ -142,6 +142,25 @@ LIST_OPTIONS = "(selector) => {" + _SELECTOR_FOR + r"""
   return JSON.stringify({ listbox: true, options });
 }"""
 
+# The visible control that opens a file input's chooser: its <label for>, or an
+# Attach/Upload/Choose button inside the same field. '' when there is none.
+FILE_TRIGGER = "(selector) => {" + _SELECTOR_FOR + r"""
+  const input = document.querySelector(selector);
+  if (!input) return '';
+  const visible = (n) => { const r = n.getBoundingClientRect(); const s = getComputedStyle(n); return r.width > 1 && r.height > 1 && s.visibility !== 'hidden' && s.display !== 'none'; };
+  const words = /attach|upload|choose file|select file|browse|add file/i;
+  if (input.id) {
+    const lbl = document.querySelector('label[for="' + CSS.escape(input.id) + '"]');
+    if (lbl && visible(lbl) && words.test(lbl.textContent || '')) return selectorFor(lbl);
+  }
+  for (let scope = input.parentElement, d = 0; scope && d < 5; scope = scope.parentElement, d++) {
+    if (scope.querySelectorAll('input[type=file]').length > 1) break;  // never another field's button
+    const btn = Array.from(scope.querySelectorAll('button, [role=button], label, a')).find((b) => visible(b) && words.test(b.textContent || b.getAttribute('aria-label') || ''));
+    if (btn) return selectorFor(btn);
+  }
+  return '';
+}"""
+
 PAGE_HAS_TEXT = r"""(needle) => (document.body.innerText || '').toLowerCase().includes(String(needle).toLowerCase())"""
 
 
@@ -447,11 +466,20 @@ class McpDriver:
             return raw
 
     async def upload(self, selector, paths):
-        # setInputFiles works on the hidden <input type=file> real forms use; the
-        # chooser route (click + browser_file_upload) cannot click a hidden input.
+        # setInputFiles works on the hidden <input type=file> real forms use.
         # Paths are inside the browser container (--allow-unrestricted-file-access).
         code = f"async (page) => {{ await page.locator({json.dumps(selector)}).setInputFiles({json.dumps(paths)}); }}"
-        await self.b.call("browser_run_code_unsafe", code=code)
+        out = await self.b.call("browser_run_code_unsafe", code=code)
+        if "not available" not in out and "not found" not in out.lower():
+            return
+        # The pruning proxy (the agent's own browser session) hides run_code: open the
+        # file chooser with the field's visible Attach/Upload button — a hidden input
+        # cannot be clicked — and hand the file to browser_file_upload.
+        trigger = await self.evaluate(FILE_TRIGGER, selector)
+        if not trigger:
+            raise RuntimeError(f"no visible upload button for {selector}")
+        await self.click(trigger)
+        await self.b.call("browser_file_upload", paths=paths)
 
     async def wait(self, ms):
         await asyncio.sleep(ms / 1000)

@@ -68,7 +68,7 @@ def resolve_owner(conn: psycopg.Connection) -> str | None:
     return None
 
 
-def run(role: str, location: str, tier: str, max_pages: int, cap: int) -> int:
+def run(role: str, location: str, tier: str, max_pages: int, cap: int, freshness: str = "pd") -> int:
     conn = db.connect()
     try:
         usage.ensure_table(conn)
@@ -89,7 +89,7 @@ def run(role: str, location: str, tier: str, max_pages: int, cap: int) -> int:
                     budget_hit = True
                     break
                 queries_spent += 1
-                results = brave.search_page(query, offset=page)
+                results = brave.search_page(query, offset=page, freshness=freshness)
                 time.sleep(REQUEST_GAP_S)
                 if not results:
                     break
@@ -122,6 +122,11 @@ def main() -> int:
     parser.add_argument("--location", default="United States")
     parser.add_argument("--tier", choices=list(TIER_FILES), default="1",
                         help="1 = major ATS every run, 2 = long-tail once daily")
+    # "pd" (past day) matches the daily cron. A quiet day returns nothing at all
+    # (2026-09-14: 8/8 sites empty for pd, results for pw), so a manual catch-up run
+    # can widen the window; the seen-URL cutoff still stops at known postings.
+    parser.add_argument("--freshness", choices=["pd", "pw", "pm"], default="pd",
+                        help="Brave freshness window: pd=past day (default), pw=week, pm=month")
     parser.add_argument("--max-pages", type=int, default=3,
                         help="pagination depth per site (each page is one billed query)")
     args = parser.parse_args()
@@ -132,7 +137,7 @@ def main() -> int:
     cap = int(os.getenv("SEARCH_MONTHLY_QUERY_CAP", "4000"))
 
     try:
-        return run(args.role, args.location, args.tier, args.max_pages, cap)
+        return run(args.role, args.location, args.tier, args.max_pages, cap, args.freshness)
     except brave.BraveAuthError as exc:
         print(f"config error: {exc}")
         return 3

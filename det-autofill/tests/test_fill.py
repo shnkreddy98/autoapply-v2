@@ -159,3 +159,46 @@ def test_missing_listbox_fails_cleanly():
             await p.stop()
     res = run(go())
     assert isinstance(res, FillResult) and not res.ok
+
+
+def test_mcp_upload_falls_back_to_the_chooser_behind_the_proxy():
+    """The pruning proxy hides browser_run_code_unsafe; the upload then clicks the
+    field's visible Attach button and uses browser_file_upload."""
+    from det_autofill.fill import McpDriver
+
+    class ProxyLike:
+        def __init__(self):
+            self.calls = []
+
+        async def call(self, name, **args):
+            self.calls.append((name, args))
+            if name == "browser_run_code_unsafe":
+                return "Tool 'browser_run_code_unsafe' is not available."
+            if name == "browser_evaluate":
+                return '### Result\n"#attach-resume"\n'
+            return "ok"
+
+    proxy = ProxyLike()
+    run(McpDriver(proxy).upload("#resume", ["/resume/r1/resume.pdf"]))
+    assert [c[0] for c in proxy.calls] == ["browser_run_code_unsafe", "browser_evaluate", "browser_click", "browser_file_upload"]
+    assert proxy.calls[2][1]["target"] == "#attach-resume"
+    assert proxy.calls[3][1] == {"paths": ["/resume/r1/resume.pdf"]}
+
+
+def test_file_trigger_finds_the_attach_button_on_greenhouse_markup():
+    from det_autofill.fill import FILE_TRIGGER
+
+    async def go():
+        p, browser, page = await _open("greenhouse")
+        try:
+            await page.set_content('<div class="field"><label>Resume/CV</label>'
+                                   '<button type="button" id="attach">Attach</button>'
+                                   '<input type="file" id="resume" style="display:none"></div>'
+                                   '<div class="field"><label>Cover letter</label>'
+                                   '<button type="button" id="attach2">Attach</button>'
+                                   '<input type="file" id="cover" style="display:none"></div>')
+            return await page.evaluate(FILE_TRIGGER, "#resume"), await page.evaluate(FILE_TRIGGER, "#cover")
+        finally:
+            await browser.close()
+            await p.stop()
+    assert run(go()) == ("#attach", "#attach2")

@@ -1550,7 +1550,7 @@ def build_parser() -> argparse.ArgumentParser:
     apply_p.add_argument(
         "--mcp",
         help="Playwright MCP URL for --engine det (default: DET_PLAYWRIGHT_MCP_URL or "
-        "http://localhost:8931/mcp)",
+        "http://localhost:8932/mcp, the proxy that owns the agent browser)",
     )
     apply_p.set_defaults(func=cmd_apply)
 
@@ -1584,7 +1584,7 @@ def build_parser() -> argparse.ArgumentParser:
     cont.add_argument(
         "--mcp",
         help="Playwright MCP URL for --engine det (default: DET_PLAYWRIGHT_MCP_URL or "
-        "http://localhost:8931/mcp)",
+        "http://localhost:8932/mcp, the proxy that owns the agent browser)",
     )
     cont.set_defaults(func=cmd_continue)
 
