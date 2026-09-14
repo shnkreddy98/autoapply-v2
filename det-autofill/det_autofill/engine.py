@@ -65,7 +65,9 @@ NAV_JS = r"""() => {
   // plain links are included for "Apply for this job" (Lever): _nav only lets links
   // count as Apply, never as Next or Submit
   // [onclick]: Paycor's "Apply for this Position" is a bare <div onclick>
-  const nodes = Array.from(document.querySelectorAll('button, input[type=submit], input[type=button], a[role=button], [role=button], a[href], [onclick]'))
+  // custom-element buttons: UKG's <ukg-button>Apply now</ukg-button>
+  const custom = Array.from(document.getElementsByTagName('*')).filter((n) => /-BUTTON$/.test(n.tagName));
+  const nodes = Array.from(document.querySelectorAll('button, input[type=submit], input[type=button], a[role=button], [role=button], a[href], [onclick]')).concat(custom)
     .filter((n) => visible(n) && !n.disabled && n.getAttribute('aria-disabled') !== 'true');
   return JSON.stringify(nodes.map((n) => ({ text: text(n).slice(0, 80), selector: selectorFor(n),
     // href="#" / javascript: is a script-driven button styled as a link (JazzHR's

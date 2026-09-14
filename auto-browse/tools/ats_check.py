@@ -127,7 +127,7 @@ async def open_live_posting(browser, driver, candidates, max_candidates) -> tupl
         await driver.wait(2000)  # Hirebridge's closed-posting redirect is script-driven and late
         here = await driver.evaluate("() => location.href")
         # Hirebridge redirects a closed posting to ClosedJob.aspx with generic text
-        if len(text.strip()) < 80 or GONE_RE.search(text[:3000]) or re.search(r"closed|expired", str(here).split("?")[0], re.I):
+        if len(text.strip()) < 80 or GONE_RE.search(text[:3000]) or re.search(r"closed|expired|notfound=1", str(here), re.I):
             tried.append(f"{url} -> gone")
             continue
         return url, tried
