@@ -67,7 +67,7 @@ RULES: list[Rule] = [
     # --- contact ------------------------------------------------------------
     Rule("email_confirm", "contact", (r"(confirm|verify|re.?enter|retype).{0,10}e.?mail",)),
     Rule("email", "contact", (r"e.?mail",)),
-    Rule("phone_country_code", "contact", (r"country (phone )?code", r"phone.{0,10}country")),
+    Rule("phone_country_code", "contact", (r"country (phone |dial(l)?ing )?code", r"phone.{0,10}country", r"dial(l)?(ing)? code")),
     Rule("phone_device_type", "contact", (r"(phone|number) (device )?type", r"primary number type", r"device type")),
     Rule("phone_extension", "contact", (r"extension",)),
     Rule("phone", "contact", (r"phone", r"^mobile( number)?$", r"primary number", r"cell")),

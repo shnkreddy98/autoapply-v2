@@ -588,6 +588,9 @@ class PlaywrightDriver:
     async def wait(self, ms):
         await asyncio.sleep(ms / 1000)
 
+    async def navigate(self, url):
+        await self.page.goto(url)
+
     async def tabs(self):
         return len(self.page.context.pages)
 
@@ -711,6 +714,9 @@ class McpDriver:
 
     async def wait(self, ms):
         await asyncio.sleep(ms / 1000)
+
+    async def navigate(self, url):
+        await self.b.navigate(url)
 
     async def tabs(self):
         out = await self.b.call("browser_tabs", action="list")

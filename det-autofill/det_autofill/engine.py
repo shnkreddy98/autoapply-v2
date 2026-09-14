@@ -98,6 +98,16 @@ STATE_JS = r"""() => {
     confirmation: /thank you for (applying|your application)|application (has been |was )?(received|submitted)|we('ve| have) received your application|successfully submitted/.test(body) });
 }"""
 
+# the URL of a large visible iframe on the same site: the page's real content
+FRAME_JS = r"""() => {
+  const site = location.hostname.split('.').slice(-2).join('.');
+  const f = Array.from(document.querySelectorAll('iframe[src]')).find((n) => {
+    const r = n.getBoundingClientRect();
+    try { return r.width > 300 && r.height > 300 && new URL(n.src).hostname.endsWith(site); } catch (e) { return false; }
+  });
+  return f ? f.src : '';
+}"""
+
 # a sign-in or account-creation step: a visible password box, or an identity
 # provider / account URL (Google's email-first sign-in has no password box yet)
 ACCOUNT_PAGE_JS = r"""() => {
@@ -111,7 +121,8 @@ SUBMIT_RE = re.compile(r"^(submit( (my )?application)?|send( application)?|apply
 NEXT_RE = re.compile(r"^(next(?! (slide|image|photo|item|job|jobs|article|story|post))( step| page)?|continue|save (and|&) continue|save and next|proceed|review( application)?)\b", re.I)
 # "apply manually": Workday's Apply opens a chooser (autofill with resume / apply manually)
 # Breezy: "Apply To Position"; Paycor: "Apply for this Position"
-APPLY_RE = re.compile(r"^(apply( now| manually| online| here| (to|for) (this )?(job|position|role|opening))?|i'?m interested|start (your |an |the )?application|begin application)$", re.I)
+# Dayforce: "Apply without an Account" beside Sign In
+APPLY_RE = re.compile(r"^(apply( now| manually| online| here| (to|for) (this )?(job|position|role|opening)| without an account| as (a )?guest)?|continue as (a )?guest|i'?m interested|start (your |an |the )?application|begin application)$", re.I)
 
 
 class Resolver(Protocol):
@@ -190,7 +201,7 @@ def _nav(buttons: list[dict], pattern: re.Pattern) -> dict | None:
     if pattern is APPLY_RE:
         # Workday's chooser: "Apply Manually" beside "Autofill with Resume"; the
         # posting's own "Apply" stays on the page behind it
-        hits.sort(key=lambda b: not re.search(r"manually", b["text"], re.I))
+        hits.sort(key=lambda b: not re.search(r"manually|without an account|guest", b["text"], re.I))
     return hits[0] if hits else None
 
 
@@ -372,6 +383,15 @@ async def run(driver: Driver, store: AnswerStore, *, resolver: Resolver | None =
                 if _signature(after) == before:
                     result.status, result.reason = "stuck", f"{apply_btn['text']!r} did not open an application form"
                     return result
+                continue
+            # iCIMS renders the posting and its form inside a same-site iframe that
+            # the page probes cannot reach: open the frame's own URL instead
+            frame = await driver.evaluate(FRAME_JS)
+            if frame and hasattr(driver, "navigate") and frame not in context.setdefault("_frames", []):
+                context["_frames"].append(frame)
+                report.action = "open-frame"
+                await driver.navigate(frame)
+                await settle(driver)
                 continue
 
         if stop_at_account_pages and await driver.evaluate(ACCOUNT_PAGE_JS):

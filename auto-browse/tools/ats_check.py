@@ -68,7 +68,6 @@ GONE_RE = re.compile(
     re.I,
 )
 ACCOUNT_WALL = "account wall: sign-in / create-account page (det has no login flow)"
-LOGIN_RE = re.compile(r"\b(sign ?in|log ?in|create (an |your )?account|forgot (your )?password|verify your email)\b", re.I)
 # Final-submit wording the check driver refuses to click, whatever the engine thinks.
 # Recruitee's final button is a bare "Send"; "Apply" is left out because it is also
 # how a posting opens its form
@@ -157,14 +156,16 @@ async def audit_page(driver) -> dict:
             empty.append((f.get("group_label") or f.get("label") or f.get("placeholder") or f["selector"])[:100])
     has_password = any(f.get("type") == "password" and f.get("visible") for f in fields)
     return {"empty_required": empty, "errors": state["alerts"], "invalid": state["invalid"],
-            "password_page": has_password, "url": state["url"]}
+            "password_page": has_password, "account_page": bool(await driver.evaluate(engine.ACCOUNT_PAGE_JS)),
+            "url": state["url"]}
 
 
 def verdict(result: engine.RunResult, audit: dict, page_text: str) -> str:
     if result.status == "handoff":
         return "BLOCKED"
-    if audit["password_page"] or (result.status == "stuck" and LOGIN_RE.search(page_text[:2000])
-                                  and not audit["empty_required"]):
+    # "Sign In" in a site header is not an account wall: that took posting pages the
+    # engine could not open (iCIMS, UKG) for blocked ones
+    if audit["password_page"] or audit["account_page"]:
         return "BLOCKED"
     if result.status == "ready-to-submit" and not audit["empty_required"] and not audit["errors"] and not audit["invalid"]:
         return "PASS"
@@ -221,7 +222,9 @@ async def check_target(target, *, browser, conn, storage, user_id, doc, store, c
     for p in result.pages:
         for f in p.filled:
             last[(p.number, f["label"])] = f
-    failed = [f for f in last.values() if not f["ok"]]
+    # a field that vanished under the fill (Dayforce rebuilds work and education
+    # history after parsing the resume) is judged by the final audit, not as a bug
+    failed = [f for f in last.values() if not f["ok"] and "does not match any elements" not in f["how"]]
     fill_failures = list(dict.fromkeys(f"{f['label'][:70]} ({f['how']})" for f in failed if not REFUSALS.match(f["how"])))
     refused = list(dict.fromkeys(f"{f['label'][:70]} ({f['how']})" for f in failed if REFUSALS.match(f["how"])))
     unanswered = sorted({u for p in result.pages for u in p.unresolved})
