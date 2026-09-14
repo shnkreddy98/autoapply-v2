@@ -387,3 +387,41 @@ def test_apply_on_a_posting_with_a_search_box_opens_the_form(tmp_path):
 def test_a_bare_apply_button_is_never_reported_as_the_submit(tmp_path):
     result = _run_posting(tmp_path, "#bare")
     assert result.status == "stuck" and "did not open an application form" in result.reason
+
+
+def test_workday_apply_chooser_goes_through_apply_manually(tmp_path):
+    result = _run_posting(tmp_path, "#chooser")
+    assert [p.action for p in result.pages[:2]] == ["apply", "apply"]
+    assert (result.status, result.reason) == ("ready-to-submit", "stopped before 'Submit Application'")
+
+
+def test_oracle_span_checkbox_is_agreed_and_the_honeypot_left_alone(tmp_path):
+    from browser import FORMS, chromium_executable
+
+    async def go():
+        store = AnswerStore(from_export(DOC, resume_path=str(tmp_path / "r.pdf")) | {"agree_terms": True})
+        p = await pw.async_playwright().start()
+        try:
+            browser = await p.chromium.launch(headless=True, executable_path=chromium_executable())
+        except Exception as exc:
+            await p.stop()
+            pytest.skip(f"chromium unavailable: {exc}")
+        try:
+            page = await browser.new_page()
+            await page.goto((FORMS / "oracle_like.html").as_uri())
+            await page.evaluate("() => document.getElementById('honey-pot-1').addEventListener('input', () => document.title = 'HONEY')")
+            result = await engine.run(PlaywrightDriver(page), store, resolver=None, autosubmit=False)
+            return result, await page.title()
+        finally:
+            await browser.close()
+            await p.stop()
+
+    result, title = asyncio.run(go())
+    assert (result.status, result.reason) == ("ready-to-submit", "stopped before 'Submit'"), result.reason
+    assert title != "HONEY"
+
+
+def test_nav_wording_seen_on_live_postings():
+    assert engine.APPLY_RE.search("Apply To Position") and engine.APPLY_RE.search("Apply for this Position")
+    assert engine._nav([{"text": "Next slide", "selector": "#s"}], engine.NEXT_RE) is None
+    assert engine._nav([{"text": "Next", "selector": "#n"}], engine.NEXT_RE)["selector"] == "#n"

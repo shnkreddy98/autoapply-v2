@@ -491,7 +491,9 @@ def plan(
         if row.key in CHOICE_ONLY and row.widget not in ("select", "radio", "checkbox", "combobox"):
             row.reason = f"control-mismatch:{row.key}!={row.widget}"
             continue
-        if row.key in FILE_KEYS and row.widget != "file":
+        if (row.key in FILE_KEYS) != (row.widget == "file"):
+            # Teamtailor's "Additional files" input (id candidate_file_remote_url) read
+            # as a URL box and got typed into
             row.reason = f"control-mismatch:{row.key}!={row.widget}"
             continue
         if not overwrite and _has_value(d, members):

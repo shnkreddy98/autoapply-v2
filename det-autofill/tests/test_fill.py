@@ -307,3 +307,32 @@ def test_a_beforeunload_dialog_is_accepted_so_the_session_is_not_wedged():
     b.session = Session()
     assert run(b.call("browser_navigate", url="https://next.example")) == "### Result\nok"
     assert b.session.calls == ["browser_navigate", "browser_handle_dialog", "browser_navigate"]
+
+
+def test_mcp_upload_follows_a_link_that_only_reveals_the_input():
+    from det_autofill.fill import McpDriver
+
+    class Page:
+        def __init__(self):
+            self.calls, self.revealed, self.chooser = [], False, False
+
+        async def call(self, name, **args):
+            self.calls.append((name, args.get("target") or args.get("function", "")[:0]))
+            if name == "browser_run_code_unsafe":
+                return "Tool browser_run_code_unsafe not available"
+            if name == "browser_evaluate":
+                return '### Result\n"#resume"' if self.revealed else '### Result\n"#attach-link"'
+            if name == "browser_click":
+                if args["target"] == "#attach-link":
+                    self.revealed = True
+                else:
+                    self.chooser = True
+                return "### Result\nclicked"
+            if name == "browser_file_upload":
+                return "### Result\nuploaded" if self.chooser else "### Error\nError: No file chooser visible"
+            return ""
+
+    page = Page()
+    run(McpDriver(page).upload("#resume", ["/r.pdf"]))
+    assert [c for c in page.calls if c[0] in ("browser_click", "browser_file_upload")] == [
+        ("browser_click", "#attach-link"), ("browser_file_upload", ""), ("browser_click", "#resume"), ("browser_file_upload", "")]

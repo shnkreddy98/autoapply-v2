@@ -10,10 +10,19 @@
   document.getElementById('apply').addEventListener('click', (e) => {
     e.preventDefault();
     if (location.hash === '#bare') return;
+    if (location.hash === '#chooser' && !document.getElementById('manual')) {
+      // Workday: Apply opens a dialog; the form comes after "Apply Manually"
+      document.body.insertAdjacentHTML('beforeend', '<div role="dialog" id="dlg"><button>Autofill with Resume</button><button id="manual">Apply Manually</button></div>');
+      document.getElementById('manual').addEventListener('click', () => { document.getElementById('dlg').remove(); openForm(); });
+      return;
+    }
+    openForm();
+  });
+  function openForm() {
     document.getElementById('main').innerHTML =
       '<form><label for="fn">First Name*</label><input id="fn" required>' +
       '<label for="em">Email*</label><input id="em" type="email" required>' +
       '<button type="button" id="send">Submit Application</button></form>';
-  });
+  }
 </script>
 </body></html>

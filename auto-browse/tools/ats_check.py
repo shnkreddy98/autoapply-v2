@@ -65,9 +65,12 @@ GONE_RE = re.compile(
     r"|job you (are|were) looking for|no longer (be )?found|sorry, this job|opening (is )?closed|\b404\b",
     re.I,
 )
+ACCOUNT_WALL = "account wall: sign-in / create-account page (det has no login flow)"
 LOGIN_RE = re.compile(r"\b(sign ?in|log ?in|create (an |your )?account|forgot (your )?password|verify your email)\b", re.I)
 # Final-submit wording the check driver refuses to click, whatever the engine thinks.
-SUBMIT_GUARD = re.compile(r"\b(submit|send (my |your )?application|finish application|complete application)\b", re.I)
+# Recruitee's final button is a bare "Send"; "Apply" is left out because it is also
+# how a posting opens its form
+SUBMIT_GUARD = re.compile(r"\b(submit|send (my |your )?application|finish application|complete application)\b|^\s*send\s*$", re.I)
 FILLABLE = {"text", "textarea", "select", "radio", "checkbox", "combobox", "date", "file"}
 # fill results that are correct refusals (the page offers nothing that matches the
 # profile), not widget bugs
@@ -119,7 +122,9 @@ async def open_live_posting(browser, driver, candidates, max_candidates) -> tupl
         await driver.wait(2500)
         text = await driver.evaluate(PAGE_TEXT_JS)
         text = text if isinstance(text, str) else ""
-        if len(text.strip()) < 80 or GONE_RE.search(text[:3000]):
+        here = await driver.evaluate("() => location.href")
+        # Hirebridge redirects a closed posting to ClosedJob.aspx with generic text
+        if len(text.strip()) < 80 or GONE_RE.search(text[:3000]) or re.search(r"closed|expired", str(here).split("?")[0], re.I):
             tried.append(f"{url} -> gone")
             continue
         return url, tried
@@ -197,12 +202,21 @@ async def check_target(target, *, browser, conn, storage, user_id, doc, store, c
     audit = await audit_page(driver)
     end_text = await driver.evaluate(PAGE_TEXT_JS)
     status = verdict(result, audit, end_text if isinstance(end_text, str) else "")
-    failed = [f for p in result.pages for f in p.filled if not f["ok"]]
+    # the last attempt per field counts: a covered field retried after the page
+    # unlocked is not a failure
+    last = {}
+    for p in result.pages:
+        for f in p.filled:
+            last[(p.number, f["label"])] = f
+    failed = [f for f in last.values() if not f["ok"]]
     fill_failures = list(dict.fromkeys(f"{f['label'][:70]} ({f['how']})" for f in failed if not REFUSALS.match(f["how"])))
     refused = list(dict.fromkeys(f"{f['label'][:70]} ({f['how']})" for f in failed if REFUSALS.match(f["how"])))
     unanswered = sorted({u for p in result.pages for u in p.unresolved})
     return out | {
-        "status": status, "engine_status": result.status, "reason": result.reason,
+        "status": status, "engine_status": result.status,
+        # a stuck run that verdict() calls BLOCKED stopped at a sign-in page: say so
+        # instead of the engine's "no Next or Submit control on the page"
+        "reason": (ACCOUNT_WALL if status == "BLOCKED" and result.status == "stuck" else result.reason),
         "pages": len(result.pages), "filled": sum(1 for p in result.pages for f in p.filled if f["ok"]),
         "fill_failures": fill_failures, "refused": refused, "unanswered": unanswered,
         "empty_required": audit["empty_required"], "errors": audit["errors"] + audit["invalid"],

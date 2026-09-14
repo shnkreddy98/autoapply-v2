@@ -64,10 +64,13 @@ NAV_JS = r"""() => {
   }
   // plain links are included for "Apply for this job" (Lever): _nav only lets links
   // count as Apply, never as Next or Submit
-  const nodes = Array.from(document.querySelectorAll('button, input[type=submit], input[type=button], a[role=button], [role=button], a[href]'))
+  // [onclick]: Paycor's "Apply for this Position" is a bare <div onclick>
+  const nodes = Array.from(document.querySelectorAll('button, input[type=submit], input[type=button], a[role=button], [role=button], a[href], [onclick]'))
     .filter((n) => visible(n) && !n.disabled && n.getAttribute('aria-disabled') !== 'true');
   return JSON.stringify(nodes.map((n) => ({ text: text(n).slice(0, 80), selector: selectorFor(n),
-    link: n.tagName === 'A' && n.getAttribute('role') !== 'button',
+    // href="#" / javascript: is a script-driven button styled as a link (JazzHR's
+    // <a href="#" class="btn">Submit Application</a>), not navigation
+    link: n.tagName === 'A' && n.getAttribute('role') !== 'button' && !/^(#|javascript:)/i.test(n.getAttribute('href') || ''),
     type: (n.getAttribute('type') || '').toLowerCase(), automation_id: n.getAttribute('data-automation-id') || '' })));
 }"""
 
@@ -77,12 +80,14 @@ STATE_JS = r"""() => {
   const fields = Array.from(document.querySelectorAll('input, select, textarea, [role=combobox]')).filter(visible)
     .map((n) => n.id || n.name || n.getAttribute('data-automation-id') || n.tagName);
   const headings = Array.from(document.querySelectorAll('h1, h2, h3, [role=heading]')).filter(visible).map(text).slice(0, 8);
+  // Workday's Apply opens a chooser dialog and nothing else changes
+  const dialogs = Array.from(document.querySelectorAll('[role=dialog], [aria-modal="true"], dialog[open]')).filter(visible).map((n) => text(n).slice(0, 120));
   const alerts = Array.from(document.querySelectorAll('[role=alert], [aria-live=assertive], .error, [class*="error" i], [data-automation-id*="error" i]'))
     .filter(visible).map(text).filter((t) => t && t.length < 300).slice(0, 12);
   const invalid = Array.from(document.querySelectorAll('[aria-invalid="true"]')).filter(visible)
     .map((n) => '#' + CSS.escape(n.id || '')).filter((s) => s !== '#');
   const body = (document.body.innerText || '').toLowerCase();
-  return JSON.stringify({ url: location.href, fields, headings, alerts: Array.from(new Set(alerts)), invalid,
+  return JSON.stringify({ url: location.href, fields, headings, dialogs, alerts: Array.from(new Set(alerts)), invalid,
     confirmation: /thank you for (applying|your application)|application (has been |was )?(received|submitted)|we('ve| have) received your application|successfully submitted/.test(body) });
 }"""
 
@@ -110,9 +115,11 @@ OVERLAY_JS = r"""() => {
 }"""
 
 SUBMIT_RE = re.compile(r"^(submit( (my )?application)?|send( application)?|apply( now)?|finish|complete( application)?)$", re.I)
-NEXT_RE = re.compile(r"^(next( step| page)?|continue|save (and|&) continue|save and next|proceed|review( application)?)\b", re.I)
+# not "Next slide": SuccessFactors pages carry a job carousel beside POSTULER/Apply
+NEXT_RE = re.compile(r"^(next(?! (slide|image|photo|item|job|jobs|article|story|post))( step| page)?|continue|save (and|&) continue|save and next|proceed|review( application)?)\b", re.I)
 # "apply manually": Workday's Apply opens a chooser (autofill with resume / apply manually)
-APPLY_RE = re.compile(r"^(apply( now| manually| for this job| for this position)?|i'?m interested|start application)$", re.I)
+# Breezy: "Apply To Position"; Paycor: "Apply for this Position"
+APPLY_RE = re.compile(r"^(apply( now| manually| online| here| (to|for) (this )?(job|position|role|opening))?|i'?m interested|start (your |an |the )?application|begin application)$", re.I)
 
 
 class Resolver(Protocol):
@@ -149,7 +156,7 @@ async def _state(driver: Driver) -> dict:
 
 
 def _signature(state: dict) -> str:
-    return hashlib.sha1(json.dumps([state["url"], state["fields"], state["headings"]]).encode()).hexdigest()
+    return hashlib.sha1(json.dumps([state["url"], state["fields"], state["headings"], state.get("dialogs")]).encode()).hexdigest()
 
 
 async def dismiss_overlays(driver: Driver) -> bool:
@@ -202,6 +209,10 @@ def _nav(buttons: list[dict], pattern: re.Pattern) -> dict | None:
         # Greenhouse pages carry a top "Apply" button (scrolls to the form) and the
         # real "Submit application" at the bottom: the most specific wording wins
         hits.sort(key=lambda b: (not re.search(r"submit", b["text"], re.I), not re.search(r"application", b["text"], re.I)))
+    if pattern is APPLY_RE:
+        # Workday's chooser: "Apply Manually" beside "Autofill with Resume"; the
+        # posting's own "Apply" stays on the page behind it
+        hits.sort(key=lambda b: not re.search(r"manually", b["text"], re.I))
     return hits[0] if hits else None
 
 
@@ -272,6 +283,9 @@ async def _fill_page(driver, store, resolver, report, context, *, overwrite, inv
     attempted: set[str] = set()
     filled_ok: set[str] = set()  # a later re-render (Lever parses the resume) can wipe these
     retried: set[str] = set()
+    # covered when tried: Teamtailor keeps the form behind a disabled overlay until its
+    # certification question is answered, and uploads go first — so try again later
+    covered: set[str] = set()
     # keyed by selector, not row index: react-select adds hidden inputs after each pick,
     # which shifts every later index and lost track of a required field that failed
     failed: set[str] = set()
@@ -289,14 +303,15 @@ async def _fill_page(driver, store, resolver, report, context, *, overwrite, inv
             return f"{handoff[0].reason}: {handoff[0].label[:60]}", []
         todo = [r for r in rows if r.action == "fill" and (
             r.selectors[0] not in attempted
-            or (r.selectors[0] in filled_ok and r.selectors[0] not in retried))]
+            or (r.selectors[0] in filled_ok and r.selectors[0] not in retried)
+            or (r.selectors[0] in covered and r.selectors[0] not in retried))]
         todo.sort(key=lambda r: r.widget != "file")  # uploads can autofill the rest
         if not todo:
             break
         for row in todo:
             sel = row.selectors[0]
             if sel in attempted:
-                retried.add(sel)  # filled before, empty now: the page reset it once
+                retried.add(sel)  # filled before and emptied, or covered: one more try
             attempted.add(sel)
             result = await fill_row(driver, row, store, by_index.get(row.index))
             report.filled.append({"label": row.label[:80], "key": row.key, "ok": result.ok, "how": result.how, "source": "profile"})
@@ -307,6 +322,8 @@ async def _fill_page(driver, store, resolver, report, context, *, overwrite, inv
                     await settle(driver)  # resume parsing re-renders some forms
             else:
                 failed.add(sel)
+                if "intercepted" in result.how:
+                    covered.add(sel)
 
     # a required upload that did not register cannot be answered by anyone else
     broken_files = [r for r in rows if r.widget == "file" and r.selectors[0] in failed and r.required]

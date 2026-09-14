@@ -109,7 +109,7 @@ READ_FIELD = r"""(selector) => {
     // their own text (inputs have none)
     display: single ? text(single) : (/^(INPUT|SELECT|TEXTAREA)$/.test(el.tagName) ? '' : text(el)),
     chips,
-    checked: !!(el.checked || el.getAttribute('aria-checked') === 'true'),
+    checked: !!(el.checked || el.getAttribute('aria-checked') === 'true' || /--checked\b/i.test(String(el.className))),
     expanded: el.getAttribute('aria-expanded') === 'true',
     files: el.files ? Array.from(el.files).map((f) => f.name) : [],
     invalid: el.getAttribute('aria-invalid') === 'true',
@@ -153,7 +153,11 @@ FILE_TRIGGER = "(selector) => {" + _SELECTOR_FOR + r"""
   const input = document.querySelector(selector);
   if (!input) return '';
   const visible = (n) => { const r = n.getBoundingClientRect(); const s = getComputedStyle(n); return r.width > 1 && r.height > 1 && s.visibility !== 'hidden' && s.display !== 'none'; };
-  const words = /attach|upload|choose file|select file|browse|add file/i;
+  const words = /attach|upload|choose file|select file|browse|add file|drag and drop|drop (a |your )?file/i;
+  // Recruitee lays the real input over its drop zone at opacity 0: the input itself
+  // is the click target, and no button with upload wording exists outside it
+  const box = input.getBoundingClientRect();
+  if (box.width > 8 && box.height > 8 && getComputedStyle(input).visibility !== 'hidden' && getComputedStyle(input).display !== 'none') return selectorFor(input);
   if (input.id) {
     const lbl = document.querySelector('label[for="' + CSS.escape(input.id) + '"]');
     if (lbl && visible(lbl) && words.test(lbl.textContent || '')) return selectorFor(lbl);
@@ -562,11 +566,21 @@ class McpDriver:
         # The pruning proxy (the agent's own browser session) hides run_code: open the
         # file chooser with the field's visible Attach/Upload button — a hidden input
         # cannot be clicked — and hand the file to browser_file_upload.
-        trigger = await self.evaluate(FILE_TRIGGER, selector)
-        if not trigger:
-            raise RuntimeError(f"no visible upload button for {selector}")
-        await self.click(trigger)
-        await self.b.call("browser_file_upload", paths=paths)
+        tried = []
+        for _ in range(2):
+            trigger = await self.evaluate(FILE_TRIGGER, selector)
+            if not trigger or trigger in tried:
+                break
+            tried.append(trigger)
+            await self.click(trigger)
+            try:
+                await self._act("browser_file_upload", paths=paths)
+                return
+            except RuntimeError:
+                # JazzHR's "Attach resume" link only reveals the real input; no file
+                # chooser opened, so look for the trigger again on the changed page
+                await self.wait(300)
+        raise RuntimeError(f"no upload button opened a file chooser for {selector} (tried {tried})")
 
     async def wait(self, ms):
         await asyncio.sleep(ms / 1000)

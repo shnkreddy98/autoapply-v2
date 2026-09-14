@@ -1,0 +1,26 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Oracle-like fixture</title></head><body>
+<!-- Oracle Candidate Experience email step (2026-09-14): the agreement "checkbox" is a
+     span toggled by a click binding (no input, no role), marked checked by a class;
+     a visible honeypot text box sits next to the email. NEXT refuses until agreed. -->
+<form onsubmit="return false">
+  <label for="primary-email-0">Email Address</label><input id="primary-email-0" type="email" class="input-row__control">
+  <label for="honey-pot-1">honeypot</label><input id="honey-pot-1" type="text">
+  <span class="apply-flow-input-checkbox" id="legal-disclaimer-checkbox-label">
+    <span class="apply-flow-input-checkbox__button" id="agree" style="display:inline-block;width:16px;height:16px;border:1px solid"></span>
+    <span class="apply-flow-input-checkbox__label apply-flow-input-checkbox__label--required">I have read the <a href="#">Important Privacy Information</a></span>
+  </span>
+  <div id="err" role="alert" style="display:none"></div>
+  <button type="submit" id="next">NEXT</button>
+</form>
+<script>
+  const agree = document.getElementById('agree');
+  agree.addEventListener('click', () => agree.classList.toggle('apply-flow-input-checkbox__button--checked'));
+  document.getElementById('next').addEventListener('click', () => {
+    const err = document.getElementById('err');
+    if (!agree.classList.contains('apply-flow-input-checkbox__button--checked')) {
+      err.textContent = 'You need to agree to the terms and conditions.'; err.style.display = 'block'; return;
+    }
+    document.querySelector('form').innerHTML = '<h2>Review</h2><button type="button">Submit</button>';
+  });
+</script>
+</body></html>

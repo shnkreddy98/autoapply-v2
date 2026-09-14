@@ -13,6 +13,9 @@
     'input', 'select', 'textarea',
     '[role="combobox"]', '[role="listbox"]', '[aria-haspopup="listbox"]',
     '[role="radio"]', '[role="checkbox"]', '[role="switch"]',
+    // Oracle Candidate Experience: <span class="apply-flow-input-checkbox__button">
+    // with a knockout click binding, no input and no role
+    '[class*="checkbox__button" i]',
   ].join(', ');
   const SKIP_INPUT_TYPES = new Set(['hidden', 'submit', 'button', 'reset', 'image']);
 
@@ -39,6 +42,10 @@
     if (wrap && textOf(wrap)) return textOf(wrap);
     const al = labelledBy(el);
     if (al) return al;
+    if (/checkbox__button/i.test(String(el.className)) && el.parentElement) {
+      const lbl = el.parentElement.querySelector('[class*="checkbox__label" i]');
+      if (lbl && textOf(lbl)) return textOf(lbl);
+    }
     const aria = (el.getAttribute('aria-label') || '').trim();
     if (aria) return aria;
     const wrapper = el.closest(
@@ -131,6 +138,7 @@
     if (tag === 'textarea') return 'textarea';
     if (type === 'radio' || role === 'radio') return 'radio';
     if (type === 'checkbox' || role === 'checkbox' || role === 'switch') return 'checkbox';
+    if (tag !== 'input' && /checkbox__button/i.test(String(el.className))) return 'checkbox';
     if (type === 'file') return 'file';
     if (role === 'combobox' || role === 'listbox' || el.getAttribute('aria-haspopup') === 'listbox') return 'combobox';
     if (type === 'date') return 'date';
@@ -234,10 +242,11 @@
       group_label: gl,
       option_label: isChoice ? label : '',
       section: sectionOf(el),
-      required: !!(el.required || el.getAttribute('aria-required') === 'true' || /[*✱]\s*$|\(required\)/i.test(gl || label)),
+      required: !!(el.required || el.getAttribute('aria-required') === 'true' || /[*✱]\s*$|\(required\)/i.test(gl || label)
+        || (el.parentElement && !!el.parentElement.querySelector('[class*="label--required" i]'))),
       value: widget === 'select' ? (el.selectedIndex >= 0 && el.options[el.selectedIndex] ? textOf(el.options[el.selectedIndex]) : '') : (el.value || ''),
       display: displayText(el, widget),
-      checked: isChoice ? !!(el.checked || el.getAttribute('aria-checked') === 'true') : null,
+      checked: isChoice ? !!(el.checked || el.getAttribute('aria-checked') === 'true' || /--checked\b/i.test(String(el.className))) : null,
       options: widget === 'select' ? Array.from(el.options).map((o) => ({ value: o.value, text: textOf(o) })) : [],
       group_key: isChoice ? groupKeyFor(el) : '',
       controls: el.getAttribute('aria-controls') || el.getAttribute('aria-owns') || '',

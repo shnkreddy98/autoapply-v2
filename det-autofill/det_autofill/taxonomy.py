@@ -38,7 +38,7 @@ RULES: list[Rule] = [
     # --- traps (must outrank everything) --------------------------------------
     # Workday anti-bot honeypot: "Enter website. This input is for robots only,
     # do not enter if you're human." Filling it flags the session.
-    Rule("honeypot", "skip", (r"for robots only", r"do not (enter|fill)")),
+    Rule("honeypot", "skip", (r"for robots only", r"do not (enter|fill)", r"honey ?pot")),
     # Workday multiselect chips ("1 items selected" listbox) — already-committed
     # values; touching them deletes chips
     Rule("selected_chips", "skip", (r"^\d* ?items? selected$",)),
