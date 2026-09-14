@@ -49,14 +49,14 @@ class DbSavedAnswers:
     def __init__(self, conn, user_id: str, job_id: str):
         self.conn, self.user_id, self.job_id = conn, user_id, job_id
 
-    def get(self, row, *, per_job: bool) -> str | None:
+    def get(self, row, *, per_job: bool) -> dict | None:
         found = repo.get_saved_answer(
             self.conn, self.user_id, row.label, job_id=self.job_id if per_job else None
         )
         if not found:
             return None
         repo.mark_answer_used(self.conn, found["id"])
-        return found["answer"]
+        return {"answer": found["answer"], "source": found["source"]}
 
     def put(self, row, answer: str, *, per_job: bool, source: str) -> None:
         options = [o.get("text") for o in row.options if o.get("text")] or None

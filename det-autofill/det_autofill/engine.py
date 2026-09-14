@@ -31,8 +31,12 @@ MAX_FILL_PASSES = 3  # fields revealed by earlier answers ("If yes, explain")
 MAX_REPAIRS = 1  # extra attempts after a Next that the page rejected
 
 # Skip reasons a resolver may still answer. Everything else (honeypot, disabled,
-# poisoned context, already filled, ...) is a decision, not a gap.
-RESOLVABLE = {"no-answer", "unclassified", "no-text-answer-for-free-text-box", "below-confidence-floor", "leave-blank"}
+# poisoned context, already filled, ...) is a decision, not a gap. Duplicate-key and
+# control-mismatch rows are misclassifications of a field that still needs an answer:
+# a required one skipped for those reasons silently left the form incomplete.
+RESOLVABLE = {"no-answer", "unclassified", "no-text-answer-for-free-text-box", "below-confidence-floor",
+              "leave-blank"}
+MISCLASSIFIED_PREFIXES = ("duplicate-key", "control-mismatch")
 FILLABLE_WIDGETS = {"text", "textarea", "select", "radio", "checkbox", "combobox", "date"}
 
 NAV_JS = r"""() => {
@@ -156,7 +160,8 @@ def _needs_resolver(row: Row, failed: set[str]) -> bool:
         return False
     if row.selectors[0] in failed:
         return True
-    return row.action == "skip" and row.reason in RESOLVABLE and row.required
+    reason = row.reason or ""
+    return row.action == "skip" and row.required and (reason in RESOLVABLE or reason.startswith(MISCLASSIFIED_PREFIXES))
 
 
 async def fill_page(driver: Driver, store: AnswerStore, resolver: Resolver | None, report: PageReport,

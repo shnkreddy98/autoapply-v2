@@ -62,7 +62,8 @@ ATTESTATION_RE = re.compile(
 
 
 class SavedAnswers(Protocol):
-    def get(self, row: Row, *, per_job: bool) -> str | None: ...
+    def get(self, row: Row, *, per_job: bool) -> dict | None:
+        """{"answer": str, "source": "llm" | "human" | ...} or None."""
     def put(self, row: Row, answer: str, *, per_job: bool, source: str) -> None: ...
 
 
@@ -178,7 +179,11 @@ class LLMResolver:
         for row in rows:
             per_job = is_per_job(row)
             stored = self.saved.get(row, per_job=per_job) if self.saved else None
-            answer = answer_from_text(row, stored)
+            if stored and stored.get("source") == "llm" and ATTESTATION_RE.search(row.label or ""):
+                # a model's old answer to a qualification question carries no evidence:
+                # ask again under the evidence rule instead of replaying it
+                stored = None
+            answer = answer_from_text(row, (stored or {}).get("answer"))
             if answer:
                 out[row.index] = answer | {"source": "saved"}
                 continue
@@ -206,6 +211,8 @@ class LLMResolver:
     async def learned(self, row: Row, answer: dict, result: FillResult, context: dict) -> None:
         if not (self.saved and result.ok) or answer.get("source") not in ("llm", "ask"):
             return
+        if answer.get("source") == "llm" and ATTESTATION_RE.search(row.label or ""):
+            return  # qualification answers are re-derived from the profile every time
         text = result.wrote if answer["kind"] == "option" and result.wrote else answer["value"]
         if isinstance(text, bool):
             text = "Yes" if text else "No"

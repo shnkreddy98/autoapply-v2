@@ -40,7 +40,8 @@ class FakeSaved:
         self.stored, self.put_calls = dict(stored or {}), []
 
     def get(self, row, *, per_job):
-        return self.stored.get(row.label)
+        answer = self.stored.get(row.label)
+        return {"answer": answer, "source": "human"} if answer is not None else None
 
     def put(self, row, answer, *, per_job, source):
         self.put_calls.append((row.label, answer, per_job, source))
@@ -226,3 +227,39 @@ def test_unit_testing_is_not_an_address_line():
     rule = match(FormField(ref="", role="combobox", label=label))
     assert rule is None or rule.key != "street_address2"
     assert match(FormField(ref="", role="textbox", label="Unit")).key == "street_address2"
+
+
+
+def test_saved_model_answers_to_qualification_questions_are_not_replayed():
+    """The first Nextdoor run saved unverified "Yes" answers; the second replayed them
+    as saved answers, past the evidence rule."""
+    q = _row("Do you have experience with Kotlin?", "select", ["Yes", "No"])
+
+    class Saved:
+        def get(self, row, *, per_job):
+            return {"answer": "Yes", "source": "llm"}
+
+        def put(self, *a, **kw):
+            raise AssertionError("qualification answers from the model are never saved")
+
+    async def model(messages):
+        return json.dumps({"answers": [{"id": 0, "answer": "Yes", "evidence": "not in the profile"}]})
+
+    resolver = LLMResolver(model, {"skills": ["Python"]}, saved=Saved())
+    assert asyncio.run(resolver.resolve([q], {})) == {}
+    asyncio.run(resolver.learned(q, {"kind": "option", "value": ["^yes$"], "source": "llm"},
+                                 FillResult(True, "x", "Yes"), {}))
+
+
+def test_required_rows_skipped_as_duplicates_still_count_as_gaps():
+    row = Row(index=3, selectors=["#b"], widget="combobox", label="Bachelor's degree and 5 years?", required=True,
+              action="skip", reason="duplicate-key(first at #1)")
+    assert engine._needs_resolver(row, set())
+
+
+def test_degree_and_years_screen_is_not_skill_years():
+    from det_autofill.aria import FormField
+    from det_autofill.taxonomy import match
+
+    label = "Do you have a Bachelor's degree in Computer Science and 5 years of experience as a Software Engineer?"
+    assert match(FormField(ref="", role="combobox", label=label)).key == "degree_requirement"

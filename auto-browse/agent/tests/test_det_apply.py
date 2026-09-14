@@ -75,8 +75,8 @@ def test_saved_answers_adapter_scopes_per_job_rows(db):
     a.put(_row("Preferred office?", ["Austin", "Remote"]), "Remote", per_job=False, source="llm")
     a.put(_row("Why Acme?"), "Because of the platform.", per_job=True, source="llm")
 
-    assert b.get(_row("preferred office"), per_job=False) == "Remote"  # reusable anywhere
-    assert a.get(_row("Why Acme?"), per_job=True) == "Because of the platform."
+    assert b.get(_row("preferred office"), per_job=False) == {"answer": "Remote", "source": "llm"}  # reusable anywhere
+    assert a.get(_row("Why Acme?"), per_job=True)["answer"] == "Because of the platform."
     assert b.get(_row("Why Acme?"), per_job=True) is None  # never replayed on another job
     saved = repo.get_saved_answer(db, uid, "Preferred office?")
     assert saved["options"] == ["Austin", "Remote"] and saved["times_used"] == 1

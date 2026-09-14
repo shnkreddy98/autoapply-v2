@@ -122,6 +122,10 @@ RULES: list[Rule] = [
     # --- age ------------------------------------------------------------------
     Rule("age_over_18", "age", (r"(18|eighteen).{0,25}(age|older|over|above)", r"(over|above|at least|under).{0,15}(age )?(of )?18", r"legal (working )?age")),
     # --- experience / skills --------------------------------------------------
+    # "Bachelor's degree ... and 5 years of experience as a Software Engineer" is a
+    # qualification screen, not a years-with-a-skill question: answering it with the
+    # years count fails, and two of them on one page collided as duplicate keys
+    Rule("degree_requirement", "screening", (r"\bdegree\b.{0,120}\byears?\b", r"\byears?\b.{0,120}\bdegree\b")),
     Rule("skill_years", "experience", (
         r"(how many )?years.{0,40}experience.{0,60}(in|with|using)",
         r"experience.{0,30}(python|sql|java|spark|databricks|aws|azure|gcp|etl|tableau|airflow|kafka|snowflake)",
