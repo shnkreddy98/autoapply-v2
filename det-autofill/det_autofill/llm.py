@@ -41,8 +41,24 @@ Rules:
 - If a field lists options, answer with exactly one option copied verbatim, or null.
 - Never invent facts: citizenship, visas, clearances, licenses, degrees, employers,
   dates, years of experience with a tool the profile does not show. Unknown -> null.
+- "Do you have / have you" questions about experience, skills, degrees or years:
+  answer "Yes" only if EVERY requirement in the question is shown by the profile, and
+  put the exact supporting words from the profile in "evidence" (copied verbatim).
+  If any requirement is missing (a language, a framework, a number of years) answer
+  null — never "Yes" on partial matches.
 - Numbers as plain digits. Free-text answers: first person, under 60 words, no em dashes.
-Return ONLY a JSON object: {"answers": [{"id": <field id>, "answer": <string or null>}]}"""
+Return ONLY a JSON object:
+{"answers": [{"id": <field id>, "answer": <string or null>, "evidence": <string or null>}]}"""
+
+# Qualification/experience attestations. A "Yes" to one of these is a claim about the
+# applicant; the model must back it with words that exist in the profile, checked here.
+# (A live Nextdoor form got "Yes" to ten "full term experience with Kotlin, Spring,
+# Memcached..." questions that the resume did not support.)
+ATTESTATION_RE = re.compile(
+    r"\b(do|did|have|has) you (have|possess|hold|currently have)\b|\bhave you (worked|used|built|led|managed)\b"
+    r"|\byears? of\b.{0,40}\bexperience\b|\bexperience (with|in|using)\b|\bdegree\b|\bcertifi",
+    re.I,
+)
 
 
 class SavedAnswers(Protocol):
@@ -99,7 +115,21 @@ def build_messages(rows: list[Row], profile_doc: dict, jd_text: str = "") -> lis
     return [{"role": "system", "content": SYSTEM}, {"role": "user", "content": user}]
 
 
-def parse_answers(reply: str, rows: list[Row]) -> dict[int, dict]:
+def _affirmative(row: Row, answer: dict) -> bool:
+    value = answer.get("value")
+    if answer["kind"] == "bool":
+        return value is True
+    if answer["kind"] == "option":
+        return bool(re.search(r"\^yes", " ".join(value)))
+    return bool(re.match(r"\s*yes\b", str(value), re.I))
+
+
+def _evidence_in_profile(evidence: object, profile_text: str) -> bool:
+    ev = re.sub(r"\s+", " ", str(evidence or "")).strip().lower()
+    return len(ev) >= 8 and ev in profile_text
+
+
+def parse_answers(reply: str, rows: list[Row], profile_text: str | None = None) -> dict[int, dict]:
     text = re.sub(r"^```(?:json)?\s*|\s*```$", "", (reply or "").strip())
     try:
         items = json.loads(text).get("answers") or []
@@ -114,8 +144,12 @@ def parse_answers(reply: str, rows: list[Row]) -> dict[int, dict]:
         if row is None:
             continue
         answer = answer_from_text(row, item.get("answer"))
-        if answer:
-            out[row.index] = answer | {"source": "llm"}
+        if not answer:
+            continue
+        if (profile_text is not None and ATTESTATION_RE.search(row.label or "") and _affirmative(row, answer)
+                and not _evidence_in_profile(item.get("evidence"), profile_text)):
+            continue  # an unbacked "Yes" to a qualification is not an answer
+        out[row.index] = answer | {"source": "llm"}
     return out
 
 
@@ -165,7 +199,8 @@ class LLMResolver:
                 # a gap, not a crash: the fields stay unanswered and the run says why
                 context["resolver_error"] = f"{type(exc).__name__}: {str(exc)[:200]}"
                 return out
-            out.update(parse_answers(reply, for_model))
+            profile_text = re.sub(r"\s+", " ", json.dumps(self.profile_doc, default=str, ensure_ascii=False)).lower()
+            out.update(parse_answers(reply, for_model, profile_text))
         return out
 
     async def learned(self, row: Row, answer: dict, result: FillResult, context: dict) -> None:

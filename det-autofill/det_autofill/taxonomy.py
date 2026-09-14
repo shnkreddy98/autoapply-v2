@@ -66,7 +66,9 @@ RULES: list[Rule] = [
     Rule("phone", "contact", (r"phone", r"^mobile( number)?$", r"primary number", r"cell")),
     # --- address ------------------------------------------------------------
     Rule("street_address", "address", (r"address line ?1", r"street address", r"^address( line)?( 1)?$", r"^street$")),
-    Rule("street_address2", "address", (r"address (line )?2", r"\bapt\b|\bsuite\b|\bunit\b")),
+    # apt/suite/unit only as the whole label: "configuring pipeline stages for unit,
+    # integration, and canary rollouts" is a skills question, not an address line
+    Rule("street_address2", "address", (r"address (line )?2", r"^(apt|apartment|suite|unit)( ?(no|number|#))?$")),
     # before city: "Location (City)" on Greenhouse wants "City, State, Country"
     Rule("location_city", "address", (r"location \(?city\)?", r"^(current )?location$", r"where (are you|do you) (located|live|based)")),
     Rule("city", "address", (r"^city$", r"\bcity\b", r"^town$")),

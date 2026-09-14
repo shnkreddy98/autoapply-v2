@@ -181,3 +181,48 @@ def test_model_endpoint_failure_is_reported_not_raised(tmp_path):
     result, _, _, heading = asyncio.run(_run(tmp_path, resolver=resolver))
     assert result.status == "stuck" and heading == "Questions"
     assert "model call failed: ConnectionError: 404" in result.reason
+
+
+# ---------------------------------------------------------------------------
+# guards found on a live Nextdoor form (2026-09-14)
+
+PROFILE_TEXT = json.dumps({"skill_groups": [{"skills": ["Python", "SQL", "Docker", "Kubernetes"]}],
+                           "work_experiences": [{"bullets": ["Built REST APIs in Python and FastAPI"]}]}).lower()
+
+
+def test_unbacked_yes_to_an_experience_question_is_dropped():
+    q = _row("Do you have full term experience using Kotlin and Spring for web services?", "select", ["Yes", "No"])
+    reply = json.dumps({"answers": [{"id": 0, "answer": "Yes", "evidence": "Kotlin microservices"}]})
+    assert parse_answers(reply, [q], PROFILE_TEXT) == {}
+    backed = json.dumps({"answers": [{"id": 0, "answer": "Yes", "evidence": "Built REST APIs in Python and FastAPI"}]})
+    assert parse_answers(backed, [q], PROFILE_TEXT)[0]["value"] == [r"^yes$"]
+
+
+def test_no_needs_no_evidence_and_non_attestations_are_unaffected():
+    q = _row("Do you have experience with Kotlin?", "select", ["Yes", "No"])
+    assert parse_answers(json.dumps({"answers": [{"id": 0, "answer": "No"}]}), [q], PROFILE_TEXT)[0]["value"] == [r"^no$"]
+    office = _row("Which office would you work from?", "select", ["Austin", "Remote"])
+    assert parse_answers(json.dumps({"answers": [{"id": 0, "answer": "Remote"}]}), [office], PROFILE_TEXT)
+
+
+def test_submit_button_prefers_submit_application_over_apply():
+    buttons = [{"text": "Apply", "selector": "#top"}, {"text": "Autofill my application", "selector": "#af"},
+               {"text": "Submit application", "selector": "#submit"}]
+    assert engine._nav(buttons, engine.SUBMIT_RE)["selector"] == "#submit"
+    assert engine._nav([{"text": "Apply", "selector": "#top"}], engine.SUBMIT_RE)["selector"] == "#top"
+
+
+def test_failed_fields_are_tracked_by_selector_not_index():
+    row = _row("Master's degree?", "combobox", index=7)
+    moved = Row(index=9, selectors=row.selectors, widget="combobox", label=row.label, required=True)
+    assert engine._needs_resolver(moved, {row.selectors[0]})  # same field, shifted index
+
+
+def test_unit_testing_is_not_an_address_line():
+    from det_autofill.aria import FormField
+    from det_autofill.taxonomy import match
+
+    label = "Do you have experience configuring pipeline stages for unit, integration, and canary rollouts?"
+    rule = match(FormField(ref="", role="combobox", label=label))
+    assert rule is None or rule.key != "street_address2"
+    assert match(FormField(ref="", role="textbox", label="Unit")).key == "street_address2"

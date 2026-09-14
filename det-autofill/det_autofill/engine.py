@@ -134,6 +134,10 @@ async def _buttons(driver: Driver) -> list[dict]:
 
 def _nav(buttons: list[dict], pattern: re.Pattern) -> dict | None:
     hits = [b for b in buttons if pattern.search(b["text"])]
+    if pattern is SUBMIT_RE:
+        # Greenhouse pages carry a top "Apply" button (scrolls to the form) and the
+        # real "Submit application" at the bottom: the most specific wording wins
+        hits.sort(key=lambda b: (not re.search(r"submit", b["text"], re.I), not re.search(r"application", b["text"], re.I)))
     return hits[0] if hits else None
 
 
@@ -147,10 +151,10 @@ async def _wait_for_change(driver: Driver, before: str, *, attempts: int = 20, p
     return state
 
 
-def _needs_resolver(row: Row, failed: set[int]) -> bool:
+def _needs_resolver(row: Row, failed: set[str]) -> bool:
     if row.widget not in FILLABLE_WIDGETS:
         return False
-    if row.index in failed:
+    if row.selectors[0] in failed:
         return True
     return row.action == "skip" and row.reason in RESOLVABLE and row.required
 
@@ -162,7 +166,9 @@ async def fill_page(driver: Driver, store: AnswerStore, resolver: Resolver | Non
     rejected Next: they count as required even without a required marker."""
     invalid = invalid or set()
     attempted: set[str] = set()
-    failed: set[int] = set()
+    # keyed by selector, not row index: react-select adds hidden inputs after each pick,
+    # which shifts every later index and lost track of a required field that failed
+    failed: set[str] = set()
     rows: list[Row] = []
     for _pass in range(MAX_FILL_PASSES):
         url, fields = await extract(driver)
@@ -184,10 +190,10 @@ async def fill_page(driver: Driver, store: AnswerStore, resolver: Resolver | Non
             result = await fill_row(driver, row, store, by_index.get(row.index))
             report.filled.append({"label": row.label[:80], "key": row.key, "ok": result.ok, "how": result.how, "source": "profile"})
             if not result.ok:
-                failed.add(row.index)
+                failed.add(row.selectors[0])
 
     # a required upload that did not register cannot be answered by anyone else
-    broken_files = [r for r in rows if r.widget == "file" and r.index in failed and r.required]
+    broken_files = [r for r in rows if r.widget == "file" and r.selectors[0] in failed and r.required]
     gaps = [r for r in rows if _needs_resolver(r, failed)]
     if gaps and resolver:
         url, fields = await extract(driver)
@@ -203,8 +209,8 @@ async def fill_page(driver: Driver, store: AnswerStore, resolver: Resolver | Non
                                   "source": answer.get("source", "resolver")})
             await resolver.learned(row, answer, result, context)
             if result.ok:
-                failed.discard(row.index)
-                gaps = [g for g in gaps if g.index != row.index]
+                failed.discard(row.selectors[0])
+                gaps = [g for g in gaps if g.selectors[0] != row.selectors[0]]
     unanswered = broken_files + [r for r in gaps if r.required]
     return None, unanswered
 
