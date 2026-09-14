@@ -460,3 +460,9 @@ def test_high_school_diploma_follows_the_resume_education():
     assert match(FormField(ref="", role="select", label="Do you have a high school diploma or GED?*")).key == "high_school_diploma"
     assert AnswerStore({"degree": "Master of Science"}).get("high_school_diploma").value is True
     assert AnswerStore({}).get("high_school_diploma") is None
+
+
+def test_an_unbacked_no_to_an_immigration_status_question_is_dropped_too():
+    q = _row("Are you currently in F-1 Visa status?", "radio", ["Yes", "No"])
+    reply = json.dumps({"answers": [{"id": 0, "answer": "No", "evidence": ""}]})
+    assert parse_answers(reply, [q], PROFILE_TEXT) == {}

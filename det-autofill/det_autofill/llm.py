@@ -54,6 +54,9 @@ Return ONLY a JSON object:
 # applicant; the model must back it with words that exist in the profile, checked here.
 # (A live Nextdoor form got "Yes" to ten "full term experience with Kotlin, Spring,
 # Memcached..." questions that the resume did not support.)
+# immigration facts the profile does not carry (F-1, DACA, OPT, green card): any
+# answer, not only an affirmative one, needs evidence
+IMMIGRATION_RE = re.compile(r"\bf-?1\b|\bdaca\b|\bopt\b|\bh-?1b\b|green card|permanent resident|visa (status|type)|immigration status", re.I)
 ATTESTATION_RE = re.compile(
     r"\b(do|did|have|has) you (have|possess|hold|currently have)\b|\bhave you (worked|used|built|led|managed)\b"
     r"|\byears? of\b.{0,40}\bexperience\b|\bexperience (with|in|using)\b|\bdegree\b|\bcertifi",
@@ -150,6 +153,9 @@ def parse_answers(reply: str, rows: list[Row], profile_text: str | None = None) 
         if (profile_text is not None and ATTESTATION_RE.search(row.label or "") and _affirmative(row, answer)
                 and not _evidence_in_profile(item.get("evidence"), profile_text)):
             continue  # an unbacked "Yes" to a qualification is not an answer
+        if (profile_text is not None and IMMIGRATION_RE.search(row.label or "")
+                and not _evidence_in_profile(item.get("evidence"), profile_text)):
+            continue  # "No" to "Are you in F-1 status?" is as much a guess as "Yes"
         out[row.index] = answer | {"source": "llm"}
     return out
 

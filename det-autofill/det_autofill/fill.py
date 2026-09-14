@@ -35,7 +35,7 @@ from dataclasses import dataclass
 from typing import Any, Protocol
 
 from det_autofill.answers import AnswerStore
-from det_autofill.options import Choice, match_option, nv, text_forms
+from det_autofill.options import Choice, hispanic_only, match_option, nv, text_forms
 
 MAX_HOPS = 3  # nested prompt levels ("Job Board" -> "LinkedIn")
 LONG_LIST = 50  # at or above this, a rendered list is likely a virtualised slice
@@ -154,6 +154,14 @@ FILE_TRIGGER = "(selector) => {" + _SELECTOR_FOR + r"""
   const input = document.querySelector(selector);
   if (!input) return '';
   const visible = (n) => { const r = n.getBoundingClientRect(); const s = getComputedStyle(n); return r.width > 1 && r.height > 1 && s.visibility !== 'hidden' && s.display !== 'none'; };
+  // Jobvite: the resume field is a "Select" menu button; once open, its "File" item
+  // (a <label for> a file input parked under <body>) opens the chooser
+  if (input.tagName !== 'INPUT') {
+    if (input.getAttribute('aria-expanded') !== 'true') return selectorFor(input);
+    const item = Array.from(document.querySelectorAll('label[for], [role=menuitem], button, a, li'))
+      .find((n) => visible(n) && n !== input && /^(file|my (computer|device)|(upload )?from (my )?(computer|device)|upload( a)? file|browse|attach( a)? file)$/i.test((n.innerText || '').trim()));
+    return item ? selectorFor(item) : '';
+  }
   const words = /attach|upload|choose file|select file|browse|add file|drag and drop|drop (a |your )?file/i;
   // Recruitee lays the real input over its drop zone at opacity 0: the input itself
   // is the click target, and no button with upload wording exists outside it
@@ -170,6 +178,39 @@ FILE_TRIGGER = "(selector) => {" + _SELECTOR_FOR + r"""
   }
   return '';
 }"""
+
+# Cookie / consent banners cover the bottom of the page and swallow clicks meant for
+# the form (a live Lever page's banner made radios and checkboxes "not take").
+# Only an explicit accept/close button inside a container marked as such is clicked.
+OVERLAY_JS = r"""() => {
+  const visible = (n) => { const r = n.getBoundingClientRect(); const s = getComputedStyle(n); return r.width > 1 && r.height > 1 && s.visibility !== 'hidden' && s.display !== 'none'; };
+  const words = /^(accept( all)?( cookies)?|allow( all)?( cookies)?|i agree|agree|got it|ok(ay)?|dismiss|close)[!.]?$/i;
+  const marked = Array.from(document.querySelectorAll('[id*="cookie" i], [class*="cookie" i], [id*="consent" i], [class*="consent" i], [id*="onetrust" i], [class*="gdpr" i], [aria-label*="cookie" i], [class*="cc-window" i]'));
+  // Lever's banner is "div.cc-window.cc-banner": nothing says cookie but its text, so
+  // fixed/sticky boxes that talk about cookies count too
+  const floating = Array.from(document.querySelectorAll('body div, body section, body aside'))
+    .filter((n) => /fixed|sticky/.test(getComputedStyle(n).position) && /cookie/i.test((n.innerText || '').slice(0, 400)));
+  // OneTrust's preference centre dims the page (#onetrust-pc-dark-filter, no buttons of
+  // its own) and names its buttons by id; ADP opened it over the whole posting
+  const known = Array.from(document.querySelectorAll('#onetrust-accept-btn-handler, #accept-recommended-btn-handler, .save-preference-btn-handler, .onetrust-close-btn-handler')).find(visible);
+  if (known) { known.setAttribute('data-det-overlay', '1'); return true; }
+  // Eightfold opens a "Data Privacy Agreement" dialog after the resume upload and
+  // blocks the form until "I Agree" — the same terms the application's own consent
+  // box asks for
+  const agreements = Array.from(document.querySelectorAll('[role=dialog], [aria-modal="true"], dialog[open]'))
+    .filter((n) => /privacy (statement|agreement|policy|notice)|terms (of use|and conditions)|data (privacy|protection)/i.test((n.innerText || '').slice(0, 600)));
+  const boxes = marked.concat(floating, agreements).filter((n) => visible(n) && !(n.closest('form') && !n.matches('[role=dialog], [aria-modal="true"], dialog')));
+  for (const box of boxes) {
+    // "I Agree" over the dialog's "Close" (Eightfold lists Close first)
+    const label = (b) => (b.innerText || b.getAttribute('aria-label') || '').trim();
+    const btn = Array.from(box.querySelectorAll('button, [role=button], a'))
+      .filter((b) => visible(b) && words.test(label(b)))
+      .sort((x, y) => /^(close|dismiss)/i.test(label(x)) - /^(close|dismiss)/i.test(label(y)))[0];
+    if (btn) { btn.setAttribute('data-det-overlay', '1'); return true; }
+  }
+  return false;
+}"""
+
 
 # Click through the page's own hit test: only when the point at the control's centre
 # resolves to the control (or its label); otherwise say what covers it.
@@ -283,7 +324,9 @@ async def fill_text(driver: Driver, selector: str, key: str, value: str, maxleng
         await driver.type(selector, variant)
         state = await read_field(driver, selector)
         got = state.get("value", "")
-        if key == "phone" and re.sub(r"\D", "", got) == re.sub(r"\D", "", variant):
+        got_digits, want_digits = re.sub(r"\D", "", got), re.sub(r"\D", "", variant)
+        # intl-tel-input (Teamtailor, Workable) adds the dial code to what was typed
+        if key == "phone" and want_digits and (got_digits == want_digits or (len(want_digits) >= 10 and got_digits.endswith(want_digits))):
             # Eightfold rejects "(408) 555-…" ("Only use digits, dashes or parentheses")
             # once the box loses focus: leave it, and try the next format if flagged
             await driver.press("Tab")
@@ -314,10 +357,25 @@ CHOICE_LABEL = "(selector) => {" + _SELECTOR_FOR + r"""
   if (!el) return '';
   const r = el.getBoundingClientRect();
   const st = getComputedStyle(el);
-  if (r.width >= 2 && r.height >= 2 && st.opacity !== '0' && st.visibility !== 'hidden') return '';
+  // opacity 0 over a real box is still clickable (Eightfold lays it over the label)
+  if (r.width >= 2 && r.height >= 2 && st.visibility !== 'hidden') return '';
   const lbl = el.closest('label') || (el.labels && el.labels[0]);
   return lbl ? selectorFor(lbl) : '';
 }"""
+
+
+async def dismiss_overlays(driver: Driver) -> bool:
+    """Close a cookie/consent banner if one is showing. Marks the button, then clicks it
+    by that mark so the click goes through the driver like any other action."""
+    found = await driver.evaluate(OVERLAY_JS)
+    if found is True or found == "true":
+        try:
+            await driver.click('[data-det-overlay="1"]')
+            await driver.wait(300)
+            return True
+        except Exception:
+            return False
+    return False
 
 
 async def _click_choice(driver: Driver, selector: str) -> None:
@@ -375,6 +433,12 @@ async def fill_combobox(driver: Driver, selector: str, key: str, answer: dict,
         return await _fill_search(driver, selector, key, answer, store)
     await driver.click(selector)
     found = await list_options(driver, selector)
+    if key == "eeo_race" and store and found["options"] and hispanic_only(found["options"]):
+        # Eightfold's "Ethnicity" offers only Hispanic / Not Hispanic: that is the
+        # Hispanic question, and the race answer ("Asian") matches none of it
+        alt = store.get("eeo_hispanic")
+        if alt:
+            key, answer = "eeo_hispanic", {"kind": alt.kind, "value": alt.value}
     typed = False
     for _hop in range(MAX_HOPS):
         opts = found["options"]
@@ -440,8 +504,12 @@ async def _fill_search(driver: Driver, selector: str, key: str, answer: dict, st
 async def fill_file(driver: Driver, selector: str, path: str) -> FillResult:
     if not path:
         return FillResult(False, "no-file")
-    await driver.upload(selector, [path])
     name = path.rsplit("/", 1)[-1]
+    # Eightfold keeps an earlier upload and renders it a moment after the form, when
+    # its label no longer opens a chooser
+    if await driver.evaluate(PAGE_HAS_TEXT, name):
+        return FillResult(True, "already-uploaded", name)
+    await driver.upload(selector, [path])
     # Greenhouse clears the input and shows the name only once its own upload
     # finishes, so poll instead of reading once
     for _ in range(20):
@@ -621,6 +689,14 @@ class McpDriver:
                 await self._act("browser_file_upload", paths=paths)
                 return
             except RuntimeError:
+                # Eightfold asks for a "Data Privacy Agreement" before its chooser
+                # opens: agree, then the chooser is there
+                if await dismiss_overlays(self):
+                    try:
+                        await self._act("browser_file_upload", paths=paths)
+                        return
+                    except RuntimeError:
+                        tried.remove(trigger)  # the click went to the dialog: once more
                 # JazzHR's "Attach resume" link only reveals the real input; no file
                 # chooser opened, so look for the trigger again on the changed page
                 await self.wait(300)

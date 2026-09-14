@@ -198,3 +198,20 @@ def test_salary_unit_selects_do_not_take_the_amount_key():
     rows = plan([cur, amount, period], AnswerStore(example_profile())).rows
     assert [r.key for r in rows] == ["salary_currency", "desired_salary", "salary_period"]
     assert all(r.action == "fill" for r in rows)
+
+
+def test_ethnicity_with_only_hispanic_choices_is_the_hispanic_question():
+    d = _d(0, label="Ethnicity", widget="select", options=[
+        {"value": "0", "text": "I do not wish to provide this information"},
+        {"value": "1", "text": "Hispanic/Latino"}, {"value": "2", "text": "Not Hispanic/Latino"}])
+    assert plan([d], AnswerStore(example_profile())).rows[0].key == "eeo_hispanic"
+
+
+def test_long_attestations_are_not_company_or_school_fields():
+    from det_autofill.aria import FormField
+    from det_autofill.taxonomy import match
+
+    certify = "I certify that all statements made by me on this application are true and correct to the best of my knowledge"
+    assert match(FormField(ref="", role="radio", label=certify)).key == "agree_terms"
+    f1 = "Are you currently in F-1 Visa status? (An F-1 Visa is granted to foreign students attending school in the United States)"
+    assert match(FormField(ref="", role="radio", label=f1)).key == "visa_status_detail"

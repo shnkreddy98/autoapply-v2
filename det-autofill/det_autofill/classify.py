@@ -32,6 +32,7 @@ from urllib.parse import urlparse
 from det_autofill import taxonomy
 from det_autofill.answers import AnswerStore
 from det_autofill.aria import FormField
+from det_autofill.options import hispanic_only
 
 
 def norm(s: object) -> str:
@@ -494,6 +495,8 @@ def plan(
             row.reason = "already-filled" if not overwrite and _has_value(d, members) else "unclassified"
             continue
         row.key, row.tier, row.rule, row.confidence = hit
+        if row.key == "eeo_race" and row.options and hispanic_only(row.options):
+            row.key = "eeo_hispanic"  # "Ethnicity" asked as Hispanic / Not Hispanic
         if row.key == "desired_salary" and row.widget in ("select", "combobox"):
             # Breezy groups a currency select, the amount box and a pay-period select
             # under one "Desired Salary" heading; the first select took the key and

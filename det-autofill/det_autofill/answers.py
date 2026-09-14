@@ -150,6 +150,8 @@ class AnswerStore:
             "weekends_evenings": p.get("weekends_evenings", False),
             "agree_terms": True,
         }
+        if key == "desired_salary" and re.search(r"\b(month|monthly|hour|hourly|week|weekly|per day|daily)\b", label, re.I):
+            return None  # the profile's figure is yearly; typing it into a monthly box misstates it
         if key in TEXT:
             v = TEXT[key]
             return Answer(key, "text", v) if v is not None else None

@@ -189,3 +189,11 @@ def match_option(
         if any(nv(c) and f.startswith(nv(c)) for c in cands for f in text_forms(options[i].text))
     ]
     return _unique(hits, "text-prefix", options) or Pick(None, "no-matching-option")
+
+
+def hispanic_only(options: list[dict]) -> bool:
+    """An "Ethnicity" question whose choices are only Hispanic / Not Hispanic (and a
+    decline): the Hispanic question under another name."""
+    texts = [o.get("text", "") for o in options if o.get("text")]
+    return bool(texts) and any(re.search(r"hispanic|latin", t, re.I) for t in texts) and all(
+        re.search(r"hispanic|latin|wish|decline|prefer|choose not|not to (say|answer|disclose)", t, re.I) for t in texts)

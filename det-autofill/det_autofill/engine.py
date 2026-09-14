@@ -22,7 +22,7 @@ from typing import Protocol
 
 from det_autofill.answers import AnswerStore
 from det_autofill.classify import Row, plan
-from det_autofill.fill import CaptchaCover, Driver, FillResult, fill_row
+from det_autofill.fill import OVERLAY_JS, CaptchaCover, Driver, FillResult, dismiss_overlays, fill_row  # noqa: F401
 
 EXTRACT_JS = (Path(__file__).parent / "extract.js").read_text()
 
@@ -82,36 +82,18 @@ STATE_JS = r"""() => {
   const headings = Array.from(document.querySelectorAll('h1, h2, h3, [role=heading]')).filter(visible).map(text).slice(0, 8);
   // Workday's Apply opens a chooser dialog and nothing else changes
   const dialogs = Array.from(document.querySelectorAll('[role=dialog], [aria-modal="true"], dialog[open]')).filter(visible).map((n) => text(n).slice(0, 120));
+  // a class that styles an error state ("peer-invalid:text-error", Tailwind variants on
+  // Teamtailor's consent labels) is not an error message, nor is a label around a control
+  const errorClass = (n) => String(n.className || '').split(/\s+/).some((c) => /error/i.test(c) && !/[:\[]/.test(c));
   const alerts = Array.from(document.querySelectorAll('[role=alert], [aria-live=assertive], .error, [class*="error" i], [data-automation-id*="error" i]'))
-    .filter(visible).map(text).filter((t) => t && t.length < 300).slice(0, 12);
+    .filter((n) => visible(n) && n.tagName !== 'LABEL' && !n.querySelector('input, select, textarea')
+      && (n.matches('[role=alert], [aria-live=assertive], [data-automation-id*="error" i]') || errorClass(n)))
+    .map(text).filter((t) => t && t.length < 300).slice(0, 12);
   const invalid = Array.from(document.querySelectorAll('[aria-invalid="true"]')).filter(visible)
     .map((n) => '#' + CSS.escape(n.id || '')).filter((s) => s !== '#');
   const body = (document.body.innerText || '').toLowerCase();
   return JSON.stringify({ url: location.href, fields, headings, dialogs, alerts: Array.from(new Set(alerts)), invalid,
     confirmation: /thank you for (applying|your application)|application (has been |was )?(received|submitted)|we('ve| have) received your application|successfully submitted/.test(body) });
-}"""
-
-# Cookie / consent banners cover the bottom of the page and swallow clicks meant for
-# the form (a live Lever page's banner made radios and checkboxes "not take").
-# Only an explicit accept/close button inside a container marked as such is clicked.
-OVERLAY_JS = r"""() => {
-  const visible = (n) => { const r = n.getBoundingClientRect(); const s = getComputedStyle(n); return r.width > 1 && r.height > 1 && s.visibility !== 'hidden' && s.display !== 'none'; };
-  const words = /^(accept( all)?( cookies)?|allow( all)?( cookies)?|i agree|agree|got it|ok(ay)?|dismiss|close)[!.]?$/i;
-  const marked = Array.from(document.querySelectorAll('[id*="cookie" i], [class*="cookie" i], [id*="consent" i], [class*="consent" i], [id*="onetrust" i], [class*="gdpr" i], [aria-label*="cookie" i], [class*="cc-window" i]'));
-  // Lever's banner is "div.cc-window.cc-banner": nothing says cookie but its text, so
-  // fixed/sticky boxes that talk about cookies count too
-  const floating = Array.from(document.querySelectorAll('body div, body section, body aside'))
-    .filter((n) => /fixed|sticky/.test(getComputedStyle(n).position) && /cookie/i.test((n.innerText || '').slice(0, 400)));
-  // OneTrust's preference centre dims the page (#onetrust-pc-dark-filter, no buttons of
-  // its own) and names its buttons by id; ADP opened it over the whole posting
-  const known = Array.from(document.querySelectorAll('#onetrust-accept-btn-handler, #accept-recommended-btn-handler, .save-preference-btn-handler, .onetrust-close-btn-handler')).find(visible);
-  if (known) { known.setAttribute('data-det-overlay', '1'); return true; }
-  const boxes = marked.concat(floating).filter((n) => visible(n) && !n.closest('form'));
-  for (const box of boxes) {
-    const btn = Array.from(box.querySelectorAll('button, [role=button], a')).find((b) => visible(b) && words.test((b.innerText || b.getAttribute('aria-label') || '').trim()));
-    if (btn) { btn.setAttribute('data-det-overlay', '1'); return true; }
-  }
-  return false;
 }"""
 
 SUBMIT_RE = re.compile(r"^(submit( (my )?application)?|send( application)?|apply( now)?|finish|complete( application)?)$", re.I)
@@ -157,20 +139,6 @@ async def _state(driver: Driver) -> dict:
 
 def _signature(state: dict) -> str:
     return hashlib.sha1(json.dumps([state["url"], state["fields"], state["headings"], state.get("dialogs")]).encode()).hexdigest()
-
-
-async def dismiss_overlays(driver: Driver) -> bool:
-    """Close a cookie/consent banner if one is showing. Marks the button, then clicks it
-    by that mark so the click goes through the driver like any other action."""
-    found = await driver.evaluate(OVERLAY_JS)
-    if found is True or found == "true":
-        try:
-            await driver.click('[data-det-overlay="1"]')
-            await driver.wait(300)
-            return True
-        except Exception:
-            return False
-    return False
 
 
 async def settle(driver: Driver, *, quiet_polls: int = 2, attempts: int = 16, pause_ms: int = 400) -> None:
@@ -315,15 +283,19 @@ async def _fill_page(driver, store, resolver, report, context, *, overwrite, inv
             attempted.add(sel)
             result = await fill_row(driver, row, store, by_index.get(row.index))
             report.filled.append({"label": row.label[:80], "key": row.key, "ok": result.ok, "how": result.how, "source": "profile"})
+            if row.widget == "file":
+                await settle(driver)  # resume parsing re-renders some forms
             if result.ok:
                 filled_ok.add(sel)
                 failed.discard(sel)
-                if row.widget == "file":
-                    await settle(driver)  # resume parsing re-renders some forms
             else:
                 failed.add(sel)
                 if "intercepted" in result.how:
                     covered.add(sel)
+            if row.widget == "file" or "intercepted" in result.how:
+                # an upload can open an agreement dialog over the form (Eightfold's
+                # "Data Privacy Agreement", before the file even registers)
+                await dismiss_overlays(driver)
 
     # a required upload that did not register cannot be answered by anyone else
     broken_files = [r for r in rows if r.widget == "file" and r.selectors[0] in failed and r.required]

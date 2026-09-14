@@ -49,6 +49,13 @@ RULES: list[Rule] = [
         r"verification code|security code|one.?time (code|passcode)|\botp\b",
     )),
     # --- identity -----------------------------------------------------------
+    # before identity/employment/education: long attestations mention "company",
+    # "school" and "employment" in passing
+    Rule("agree_terms", "consent", (
+        r"^i (hereby )?certify that (all )?(the )?(statements|information|answers)",
+        r"(true|accurate),? (and )?(correct|complete|accurate) to the best of my",
+    )),
+    Rule("visa_status_detail", "auth", (r"\bf[- ]?1 (visa|status|student)", r"\bdaca\b", r"\bopt\b.{0,20}(status|stem|extension)")),
     Rule("first_name", "identity", (r"^(legal )?first name", r"\bgiven name\b", r"^preferred first name")),
     Rule("last_name", "identity", (r"^(legal )?last name", r"\bfamily name\b", r"\bsurname\b")),
     Rule("middle_name", "identity", (r"middle (name|initial)",)),
@@ -170,6 +177,8 @@ RULES: list[Rule] = [
     )),
     Rule("referred_by_employee", "employment", (r"referred (to this position )?by", r"know anyone (at|who works)", r"friends or family.{0,20}working")),
     # --- compensation -----------------------------------------------------------
+    # before desired_salary: what the applicant earns now is not what they ask for
+    Rule("current_salary", "compensation", (r"current (monthly |annual |yearly |base )?(salary|compensation|pay|wage|ctc)", r"(salary|compensation|pay) (currently|at present)")),
     Rule("desired_salary", "compensation", (r"salary|compensation|desired pay|pay (rate|expectation)|expected pay|wage",)),
     # --- availability ------------------------------------------------------------
     # Month/year halves of a start or end date belong to an education or employment

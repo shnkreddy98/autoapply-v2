@@ -346,7 +346,16 @@
         return !!lbl && isVisible(lbl);
       })()),
       maxlength: parseInt(el.getAttribute('maxlength') || '0', 10) || 0,
-      has_files: widget === 'file' ? !!(el.files && el.files.length) : false,
+      // or a file the site already holds: Eightfold keeps the upload across visits and
+      // shows "resume.pdf  Replace  Delete" while the input itself stays empty
+      has_files: widget === 'file' ? !!(el.files && el.files.length) || (() => {
+        for (let n = el.parentElement, d = 0; n && d < 5; n = n.parentElement, d++) {
+          if (n.querySelectorAll('input[type="file"]').length > 1) break;
+          const t = textOf(n);
+          if (/\.(pdf|docx?|rtf|odt|txt)\b/i.test(t) && /\b(replace|remove|delete)\b/i.test(t)) return true;
+        }
+        return false;
+      })() : false,
       // Workday multiselects keep committed picks as chips beside an empty search box
       chips: (() => {
         const field = el.closest('[data-automation-id^="formField-"], [data-automation-id="multiSelectContainer"]');
@@ -355,6 +364,24 @@
     };
     out.push(d);
   }
+  /* Jobvite: no labelled file input, only a "Select" menu button labelled by the
+   * "Add Resume*" heading. It is the resume field; fill.py opens its menu for the file. */
+  for (const btn of document.querySelectorAll('button[aria-haspopup]')) {
+    if (seen.has(btn) || !isVisible(btn)) continue;
+    const name = labelledBy(btn) || btn.getAttribute('aria-label') || '';
+    if (!/\b(resume|cv|curriculum)\b/i.test(name)) continue;
+    seen.add(btn);
+    out.push({
+      i: out.length, selector: selectorFor(btn), tag: 'button', type: 'file', widget: 'file',
+      role: '', name: '', id: btn.id || '', autocomplete: '', automation_id: '', aria_label: '', placeholder: '',
+      label: name, group_label: '', option_label: '', section: sectionOf(btn),
+      required: btn.getAttribute('aria-required') === 'true' || /[*✱]\s*$/.test(name),
+      value: '', display: '', checked: null, options: [], group_key: '', controls: '', expanded: false,
+      disabled: btn.disabled, readonly: false, aria_hidden: false, visible: true, maxlength: 0,
+      has_files: false, chips: [],
+    });
+  }
+
   /* BambooHR (Fabric): a native <select> kept at zero size behind a
    * <button aria-haspopup> that opens a role=menu. The select is what carries the
    * label and required flag; the button is what a user operates. */
