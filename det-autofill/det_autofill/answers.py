@@ -24,6 +24,10 @@ from typing import Any
 # Option-preference lists for enumerated questions: for each canonical key,
 # ordered regexes tried against the widget's options; first hit is clicked.
 OPTION_PREFS: dict[str, list[str]] = {
+    # the unit beside a desired-salary box (Breezy): the profile's figure is a yearly
+    # amount in US dollars
+    "salary_currency": [r"^us dollar|^usd\b|^\$$"],
+    "salary_period": [r"^(year|yearly|annual|annually|per year)$"],
     # Without the user's own answer (profile option_prefs) the only safe choice is to
     # decline: these used to fall back to "No" / "not a protected veteran", which
     # states a fact about the applicant nobody gave.
@@ -196,6 +200,11 @@ class AnswerStore:
             return Answer(key, "bool", p.get("currently_employed", True))
         if key == "referred_by_name":
             return Answer(key, "text", p.get("referred_by_name", "N/A"))
+        if key == "high_school_diploma":
+            # any degree on the resume implies finishing secondary school; with no
+            # education on file the question stays open
+            has = bool(p.get("degree") or p.get("school") or p.get("education"))
+            return Answer(key, "bool", True) if has else None
         if key == "non_compete":
             return Answer(key, "bool", False)
         if key == "leave_blank":

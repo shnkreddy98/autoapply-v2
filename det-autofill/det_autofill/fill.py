@@ -136,7 +136,8 @@ LIST_OPTIONS = "(selector) => {" + _SELECTOR_FOR + r"""
     if (open.length === 1) lb = open[0];
   }
   if (!lb) return JSON.stringify({ listbox: false, options: [] });
-  const nodes = Array.from(lb.querySelectorAll('[role="option"], [data-automation-id="promptOption"]'))
+  // menuitem: BambooHR's select toggles open a role=menu
+  const nodes = Array.from(lb.querySelectorAll('[role="option"], [role="menuitem"], [role="menuitemradio"], [data-automation-id="promptOption"]'))
     .filter((n, i, all) => all.indexOf(n.closest('[role="option"]') || n) === i || !n.closest('[role="option"]'));
   const options = nodes.filter((n) => n.getAttribute('aria-disabled') !== 'true').map((n) => ({
     text: (n.innerText || n.textContent || '').replace(/\s+/g, ' ').trim(),
@@ -172,7 +173,7 @@ FILE_TRIGGER = "(selector) => {" + _SELECTOR_FOR + r"""
 
 # Click through the page's own hit test: only when the point at the control's centre
 # resolves to the control (or its label); otherwise say what covers it.
-HIT_CLICK = r"""({selector}) => {
+HIT_CLICK = "({selector}) => {" + _SELECTOR_FOR + r"""
   const el = document.querySelector(selector);
   if (!el) return 'missing';
   el.scrollIntoView({block: 'center', inline: 'nearest'});
@@ -182,6 +183,14 @@ HIT_CLICK = r"""({selector}) => {
   if (!top || !(top === el || el.contains(top) || (label && label.contains(top)))) {
     // a challenge the page raised is the human's to solve, never to click around
     if (top && top.tagName === 'IFRAME' && /captcha|challenge/i.test(`${top.title} ${top.src}`)) return `captcha: ${top.title.slice(0, 60)} (visibility ${getComputedStyle(top).visibility})`;
+    // Eightfold floats a <p> label over its combobox inputs: a cover inside the
+    // control's own field (no other control there) is part of the widget, and a real
+    // click on it is what a user's click does
+    for (let box = el.parentElement, d = 0; top && box && d < 4; box = box.parentElement, d++) {
+      const others = Array.from(box.querySelectorAll('input:not([type=hidden]), select, textarea, [role=combobox], button')).filter((c) => c !== el && !c.contains(el) && c.getAttribute('aria-hidden') !== 'true');
+      if (others.length) break;
+      if (box.contains(top)) return 'cover:' + selectorFor(top);
+    }
     const what = top ? `${top.tagName.toLowerCase()}${top.id ? '#' + top.id : ''} ${String(top.className || '').slice(0, 40)}` : 'nothing';
     return 'covered by ' + what;
   }
@@ -255,7 +264,9 @@ def _text_variants(key: str, value: str, maxlength: int = 0) -> list[str]:
     out = [value]
     if key == "phone":
         digits = re.sub(r"\D", "", value)
-        out += [digits] + ([digits[1:]] if len(digits) == 11 and digits.startswith("1") else [])
+        national = digits[1:] if len(digits) == 11 and digits.startswith("1") else digits
+        dashed = f"{national[:3]}-{national[3:6]}-{national[6:]}" if len(national) == 10 else ""
+        out += [dashed, digits, national]
     out = [v for v in dict.fromkeys(out) if v]
     if maxlength:
         fitting = [v for v in out if len(v) <= maxlength]
@@ -270,8 +281,17 @@ def _text_variants(key: str, value: str, maxlength: int = 0) -> list[str]:
 async def fill_text(driver: Driver, selector: str, key: str, value: str, maxlength: int = 0) -> FillResult:
     for variant in _text_variants(key, str(value), maxlength):
         await driver.type(selector, variant)
-        got = (await read_field(driver, selector)).get("value", "")
-        if got == variant or (key == "phone" and re.sub(r"\D", "", got) == re.sub(r"\D", "", variant)):
+        state = await read_field(driver, selector)
+        got = state.get("value", "")
+        if key == "phone" and re.sub(r"\D", "", got) == re.sub(r"\D", "", variant):
+            # Eightfold rejects "(408) 555-…" ("Only use digits, dashes or parentheses")
+            # once the box loses focus: leave it, and try the next format if flagged
+            await driver.press("Tab")
+            await driver.wait(250)
+            if (await read_field(driver, selector)).get("invalid"):
+                continue
+            return FillResult(True, "typed", variant)
+        if got == variant:
             return FillResult(True, "typed", variant)
     return FillResult(False, "value-did-not-stick")
 
@@ -287,13 +307,34 @@ async def fill_select(driver: Driver, selector: str, key: str, answer: dict, opt
     return FillResult(ok, pick.how if ok else "selection-did-not-stick", chosen["text"])
 
 
+# The label to click instead of a radio/checkbox drawn at zero size or transparent;
+# '' when the input itself is clickable.
+CHOICE_LABEL = "(selector) => {" + _SELECTOR_FOR + r"""
+  const el = document.querySelector(selector);
+  if (!el) return '';
+  const r = el.getBoundingClientRect();
+  const st = getComputedStyle(el);
+  if (r.width >= 2 && r.height >= 2 && st.opacity !== '0' && st.visibility !== 'hidden') return '';
+  const lbl = el.closest('label') || (el.labels && el.labels[0]);
+  return lbl ? selectorFor(lbl) : '';
+}"""
+
+
+async def _click_choice(driver: Driver, selector: str) -> None:
+    """Click a radio/checkbox, through its label when the input is not drawn
+    (BambooHR hides the native input behind a styled span; clicking it waited out
+    Playwright's visibility timeout three times over)."""
+    label = await driver.evaluate(CHOICE_LABEL, selector)
+    await driver.click(label or selector)
+
+
 async def fill_radio(driver: Driver, selectors: list[str], key: str, answer: dict, options: list[dict]) -> FillResult:
     pick = _pick(key, answer, options)
     if pick.index is None:
         return FillResult(False, pick.how)
     target = selectors[pick.index]
     if not (await read_field(driver, target)).get("checked"):
-        await driver.click(target)
+        await _click_choice(driver, target)
     ok = bool((await read_field(driver, target)).get("checked"))
     return FillResult(ok, pick.how if ok else "radio-did-not-check", options[pick.index]["text"])
 
@@ -313,7 +354,7 @@ async def fill_option_checkbox(driver: Driver, selector: str, option_label: str,
 
 async def fill_checkbox(driver: Driver, selector: str, want: bool) -> FillResult:
     if bool((await read_field(driver, selector)).get("checked")) != want:
-        await driver.click(selector)
+        await _click_choice(driver, selector)
     ok = bool((await read_field(driver, selector)).get("checked")) == want
     return FillResult(ok, "checkbox" if ok else "checkbox-did-not-toggle", str(want))
 
@@ -521,6 +562,9 @@ class McpDriver:
                 if isinstance(hit, str) and hit.startswith("captcha"):
                     raise CaptchaCover(hit)
                 if hit == "clicked":
+                    return
+                if isinstance(hit, str) and hit.startswith("cover:") and hit[6:] != selector:
+                    await self.click(hit[6:])
                     return
                 raise RuntimeError(f"browser_click intercepted, page hit test says {hit!r}: {out[:160]}")
             # a control can be covered for a few seconds while the page works

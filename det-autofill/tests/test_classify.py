@@ -148,8 +148,16 @@ def test_honeypot_beats_the_token_tier():
 
 
 def test_choice_keys_refuse_text_boxes():
-    d = _d(0, label="Will you require visa sponsorship?")
+    d = _d(0, label="Visa sponsorship details")
     assert plan([d], AnswerStore(example_profile())).rows[0].reason.startswith("control-mismatch")
+    assert plan([_d(0, label="Gender")], AnswerStore(example_profile())).rows[0].reason.startswith("control-mismatch")
+
+
+def test_a_yes_no_question_in_a_text_box_is_typed_as_yes_or_no():
+    store = AnswerStore(example_profile())
+    row = plan([_d(0, label="Will you require visa sponsorship?")], store).rows[0]
+    want = "Yes" if store.get("visa_sponsorship").value else "No"
+    assert (row.action, row.answer) == ("fill", {"kind": "text", "value": want})
 
 
 def test_duplicate_key_fills_the_first_only():
@@ -181,3 +189,12 @@ def test_start_date_never_defaults_to_today():
     store = AnswerStore({"today": "2026-09-13"})
     assert store.get("start_date") is None
     assert store.get("signature_date").value == "2026-09-13"
+
+
+def test_salary_unit_selects_do_not_take_the_amount_key():
+    cur = _d(0, label="Desired Salary", widget="select", options=[{"value": "USD", "text": "US Dollar ($)"}, {"value": "EUR", "text": "Euro (€)"}])
+    amount = _d(1, label="Desired Salary")
+    period = _d(2, label="Desired Salary", widget="select", options=[{"value": "h", "text": "Hourly"}, {"value": "y", "text": "Yearly"}])
+    rows = plan([cur, amount, period], AnswerStore(example_profile())).rows
+    assert [r.key for r in rows] == ["salary_currency", "desired_salary", "salary_period"]
+    assert all(r.action == "fill" for r in rows)

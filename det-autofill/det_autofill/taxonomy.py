@@ -141,6 +141,7 @@ RULES: list[Rule] = [
     Rule("years_experience", "experience", (r"years of (relevant |professional |work )?experience", r"\byoe\b", r"total.{0,15}experience")),
     Rule("skills_list", "experience", (r"(primary|secondary|top|add) skills", r"^skills?$", r"type to add skills")),
     # --- education ------------------------------------------------------------
+    Rule("high_school_diploma", "education", (r"high school (diploma|graduate|education)|\bged\b",)),
     Rule("education_level", "education", (r"(highest )?(level of )?education( level| completed)?$", r"highest degree")),
     Rule("degree", "education", (r"^degree", r"\bdegree\b")),
     Rule("school", "education", (r"school|university|college|institution",)),
@@ -150,12 +151,15 @@ RULES: list[Rule] = [
     # --- employment history (most recent row only; resume carries the rest) ----
     Rule("current_title", "employment", (r"(current |most recent |job )?title$", r"current (role|position)")),
     Rule("current_company", "employment", (r"(current |most recent )?(company|employer)( name)?$",)),
-    Rule("job_duties", "employment", (r"role description|duties|responsibilit|^description$",)),
+    # a label, not a question: "What interests you… Which responsibility…" is per job
+    Rule("job_duties", "employment", (r"role description", r"^(job |role )?(duties|responsibilities|description)( (and|&) (duties|responsibilities))?$",)),
     Rule("job_from_date", "employment", (r"^from$", r"start (date )?\(work", r"date started")),
     Rule("job_to_date", "employment", (r"^to$", r"end date", r"date ended")),
     Rule("currently_work_here", "employment", (r"i currently work here", r"current(ly)? (position|job)\?")),
     Rule("referred_by_name", "employment", (r"who referred you", r"referr(er|al) name")),
     Rule("non_compete", "employment", (r"non.?comp|non.?solicit",)),
+    # before currently_employed: "related to anyone who is currently employed by X"
+    Rule("relatives_employed", "employment", (r"relative|family member|related to (anyone|someone|an employee)",)),
     Rule("currently_employed", "employment", (r"currently (employed|working)",)),
     Rule("may_contact_employer", "employment", (r"may we contact",)),
     Rule("reason_for_leaving", "employment", (r"reason for leaving",)),
@@ -165,7 +169,6 @@ RULES: list[Rule] = [
         r"worked (for|at|with|here).{0,40}before",
     )),
     Rule("referred_by_employee", "employment", (r"referred (to this position )?by", r"know anyone (at|who works)", r"friends or family.{0,20}working")),
-    Rule("relatives_employed", "employment", (r"relative|family member",)),
     # --- compensation -----------------------------------------------------------
     Rule("desired_salary", "compensation", (r"salary|compensation|desired pay|pay (rate|expectation)|expected pay|wage",)),
     # --- availability ------------------------------------------------------------
@@ -177,7 +180,7 @@ RULES: list[Rule] = [
     Rule("notice_period", "availability", (r"notice period",)),
     Rule("weekends_evenings", "availability", (r"weekend|evening|holiday|night shift|overtime",)),
     Rule("employment_type", "availability", (r"full.?time|part.?time|employment type",)),
-    Rule("hours_availability", "availability", (r"hours (per week|of availability)|core working hours|shift",)),
+    Rule("hours_availability", "availability", (r"hours (per week|of availability)|core working hours|\bshifts?\b(?! (in|of|to|towards?))",)),
     # --- relocation / travel / onsite ---------------------------------------------
     Rule("willing_relocate", "relocation", (r"relocat",)),
     Rule("willing_travel", "relocation", (r"travel",)),
@@ -196,6 +199,7 @@ RULES: list[Rule] = [
     # before agree_terms: opting into marketing is never implied by applying
     Rule("marketing_consent", "consent", (
         r"(contact|email|text|message) me about (future|other|new)", r"future (job )?opportunities",
+        r"receiv\w* (sms|text)( message)?s? (updates|messages|alerts|notifications)",
         r"\bmarketing\b", r"newsletter", r"job alerts?", r"talent (community|network|pool)",
     )),
     Rule("agree_terms", "consent", (
@@ -214,6 +218,8 @@ RULES: list[Rule] = [
     Rule("languages", "misc", (r"languages? (do you )?(speak|preference)|language preference",)),
     # --- optional / leave blank -------------------------------------------------------
     Rule("leave_blank", "skip", (
+        # a follow-up to an answer ("If you answered Yes for being related…, name")
+        r"^if (you )?(answered|selected|responded|said|checked) (yes|no)", r"^if (yes|so)\b",
         r"employee id", r"if applicable", r"^number$", r"active licenses?",
         r"which licenses", r"clearance (number|level)",
     )),

@@ -268,9 +268,14 @@ CHOICE_ONLY = {
     "eeo_gender", "eeo_race", "eeo_hispanic", "eeo_veteran", "eeo_disability",
     "eeo_gender_identity", "visa_sponsorship", "work_authorized",
     "authorized_without_sponsorship", "age_over_18", "worked_here_before",
-    "phone_device_type",
+    "phone_device_type", "salary_currency", "salary_period",
 }
 FILE_KEYS = {"resume_upload"}
+# Rippling asks "Will you now or in the future require sponsorship…?" as a free-text
+# box: a yes/no question typed as "Yes"/"No". Only a question worded as one — "If you
+# need sponsorship, which visa?" is not answered by "Yes".
+YES_NO_AS_TEXT = {"visa_sponsorship", "work_authorized", "authorized_without_sponsorship", "age_over_18", "worked_here_before"}
+YES_NO_QUESTION = re.compile(r"^(do|does|are|will|would|have|has|is|can|could)\b")
 
 
 # ---------------------------------------------------------------------------
@@ -364,6 +369,10 @@ def classify(d: dict, ats: str) -> tuple[str, str, str, float] | None:
     for cand in dict.fromkeys(filter(None, [norm(d.get("name")), norm(d.get("id")), norm(d.get("automation_id"))])):
         if cand in TOKEN_MAP:
             return _hit(TOKEN_MAP[cand], "2", f"token:{cand}", 0.9)
+    # a file input named for a resume is the resume, whatever text sits nearby
+    # (Breezy: hidden <input type=file name="cResume"> beside "Apply Using LinkedIn")
+    if d.get("widget") == "file" and re.search(r"resume|\bcv\b|curriculum", f"{d.get('name')} {d.get('id')}", re.I):
+        return _hit("resume_upload", "2", "file:name~resume", 0.9)
     # 3a — polarity
     question = norm(label_of(d))
     for key, rx in POLARITY_RULES:
@@ -397,7 +406,8 @@ def _gate(d: dict) -> tuple[str, str] | None:
         return ("skip", "aria-hidden")
     if d.get("disabled"):
         return ("skip", "disabled")
-    if d.get("readonly"):
+    # readonly means nothing to a radio or checkbox (Eightfold marks all of its radios)
+    if d.get("readonly") and d.get("widget") not in ("radio", "checkbox"):
         return ("skip", "readonly")
     # file inputs are routinely styled invisible behind an "Attach" button
     if not d.get("visible") and d.get("widget") != "file":
@@ -479,16 +489,28 @@ def plan(
             continue
         hit = classify(d, ats)
         if hit is None:
-            row.reason = "unclassified"
+            # an unlabelled box that already holds a value (Rippling's phone country
+            # "Search" combobox preset to "+1 US") needs nobody's answer
+            row.reason = "already-filled" if not overwrite and _has_value(d, members) else "unclassified"
             continue
         row.key, row.tier, row.rule, row.confidence = hit
+        if row.key == "desired_salary" and row.widget in ("select", "combobox"):
+            # Breezy groups a currency select, the amount box and a pay-period select
+            # under one "Desired Salary" heading; the first select took the key and
+            # the amount box was then skipped as a duplicate
+            texts = " ".join(norm(o.get("text", "")) for o in (d.get("options") or []))
+            if re.search(r"dollar|euro|pound|\busd\b", texts):
+                row.key = "salary_currency"
+            elif re.search(r"\b(hourly|monthly|yearly|annual)\b", texts):
+                row.key = "salary_period"
         if row.confidence < min_confidence:
             row.reason = "below-confidence-floor"
             continue
         if row.key in POISONABLE and POISON_RE.search(norm(f"{d.get('section')} {d.get('group_label')}")):
             row.reason = "poisoned-context"
             continue
-        if row.key in CHOICE_ONLY and row.widget not in ("select", "radio", "checkbox", "combobox"):
+        if row.key in CHOICE_ONLY and row.widget not in ("select", "radio", "checkbox", "combobox") and not (
+                row.key in YES_NO_AS_TEXT and row.widget in ("text", "textarea") and YES_NO_QUESTION.match(norm(row.label))):
             row.reason = f"control-mismatch:{row.key}!={row.widget}"
             continue
         if (row.key in FILE_KEYS) != (row.widget == "file"):
@@ -518,6 +540,8 @@ def plan(
         if answer.kind == "handoff":
             row.action, row.reason = "handoff", "needs-human"
             continue
+        if answer.kind == "bool" and row.widget in ("text", "textarea"):
+            answer = type(answer)(row.key, "text", "Yes" if answer.value else "No")
         if answer.kind == "option" and row.widget in ("text", "textarea"):
             # a preference list cannot be typed; a text box needs the literal answer
             text = store.text_for(row.key)

@@ -425,3 +425,38 @@ def test_nav_wording_seen_on_live_postings():
     assert engine.APPLY_RE.search("Apply To Position") and engine.APPLY_RE.search("Apply for this Position")
     assert engine._nav([{"text": "Next slide", "selector": "#s"}], engine.NEXT_RE) is None
     assert engine._nav([{"text": "Next", "selector": "#n"}], engine.NEXT_RE)["selector"] == "#n"
+
+
+def test_breezy_labels_come_from_headings_not_hidden_errors():
+    from browser import FORMS, chromium_executable
+    from det_autofill.classify import classify
+
+    async def go():
+        p = await pw.async_playwright().start()
+        try:
+            browser = await p.chromium.launch(headless=True, executable_path=chromium_executable())
+        except Exception as exc:
+            await p.stop()
+            pytest.skip(f"chromium unavailable: {exc}")
+        try:
+            page = await browser.new_page()
+            await page.goto((FORMS / "breezy_like.html").as_uri())
+            return (await engine.extract(PlaywrightDriver(page)))[1]
+        finally:
+            await browser.close()
+            await p.stop()
+
+    fields = {f["name"] or f["id"]: f for f in asyncio.run(go())}
+    assert fields["cName"]["label"].startswith("Full Name")
+    assert fields["cEmail"]["label"].startswith("Email Address")
+    assert fields["section_q1"]["label"].startswith("Do you have a high school diploma")
+    assert fields["race_ethnicity"]["group_label"] == "Race or Ethnicity"
+    assert classify(fields["cResume"], "breezy")[0] == "resume_upload"
+
+
+def test_high_school_diploma_follows_the_resume_education():
+    from det_autofill.taxonomy import FormField, match
+
+    assert match(FormField(ref="", role="select", label="Do you have a high school diploma or GED?*")).key == "high_school_diploma"
+    assert AnswerStore({"degree": "Master of Science"}).get("high_school_diploma").value is True
+    assert AnswerStore({}).get("high_school_diploma") is None

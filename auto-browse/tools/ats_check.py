@@ -14,7 +14,9 @@ Per target:
   PASS     reached the submit button, no empty required field, no error on the page
   FAIL     a fill failed, a required field stayed empty, or the page shows errors —
            split into fill bugs (a widget did not take a value) and profile gaps
-           (nobody could answer: unbacked qualification questions, missing facts)
+  GAPS     every widget worked, but required questions only the user can answer are
+           left (unbacked qualification questions, missing facts); the run stops on
+           that page, so later pages of a multi-page form are not reached
   BLOCKED  captcha / one-time code, or a sign-in / create-account page
   GONE     every candidate posting is closed — find a fresh one on that ATS (see
            kb/ats-check/README.md) and add it to the target's candidates
@@ -59,7 +61,7 @@ TARGETS = KB / "targets.json"
 PER_TARGET_TIMEOUT_S = 900
 
 GONE_RE = re.compile(
-    r"no longer (available|accepting|open|posted)|job (not found|has expired|is closed|is no longer)"
+    r"no longer (available|accepting|open|posted|active)|job (not found|has expired|is closed|is no longer)"
     r"|position (has been|is) (filled|closed)|posting (has )?(expired|closed|been removed)"
     r"|page (not found|does ?n.t exist)|this (job|requisition|position) (is|has been) (closed|filled|removed)"
     r"|job you (are|were) looking for|no longer (be )?found|sorry, this job|opening (is )?closed|\b404\b",
@@ -212,6 +214,13 @@ async def check_target(target, *, browser, conn, storage, user_id, doc, store, c
     fill_failures = list(dict.fromkeys(f"{f['label'][:70]} ({f['how']})" for f in failed if not REFUSALS.match(f["how"])))
     refused = list(dict.fromkeys(f"{f['label'][:70]} ({f['how']})" for f in failed if REFUSALS.match(f["how"])))
     unanswered = sorted({u for p in result.pages for u in p.unresolved})
+    if status == "PASS" and fill_failures:
+        status = "FAIL"  # reached submit, but a widget misbehaved on the way
+    if (status == "FAIL" and result.status == "stuck" and unanswered and not fill_failures
+            and not audit["errors"] and not audit["invalid"]):
+        # every widget worked; what is left are questions only the user can answer
+        # ("Pick a football team you follow…") — a profile gap, not an autofill bug
+        status = "GAPS"
     return out | {
         "status": status, "engine_status": result.status,
         # a stuck run that verdict() calls BLOCKED stopped at a sign-in page: say so
@@ -233,7 +242,7 @@ def write_report(results: list[dict], label: str | None) -> Path:
     if previous.exists():
         fresh = {r["platform"] for r in results}
         results = [r for r in json.loads(previous.read_text()) if r["platform"] not in fresh] + results
-    counts = {s: sum(1 for r in results if r["status"] == s) for s in ("PASS", "FAIL", "BLOCKED", "GONE")}
+    counts = {s: sum(1 for r in results if r["status"] == s) for s in ("PASS", "GAPS", "FAIL", "BLOCKED", "GONE")}
     lines = [f"# ATS check {day}", "", f"role: {label or '(default)'}  |  " + "  ".join(f"{k} {v}" for k, v in counts.items()), "",
              "| platform | status | pages | filled | detail |", "|---|---|---|---|---|"]
     for r in results:

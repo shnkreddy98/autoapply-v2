@@ -19,7 +19,19 @@
   ].join(', ');
   const SKIP_INPUT_TYPES = new Set(['hidden', 'submit', 'button', 'reset', 'image']);
 
-  const textOf = (el) => (el ? (el.innerText || el.textContent || '') : '').replace(/\s+/g, ' ').trim();
+  // icons carry fallback text ("SVGs not supported by this browser." in Workable's
+  // <svg><desc>), which became the resume field's label
+  const textOf = (el) => {
+    if (!el) return '';
+    const raw = el.querySelector && el.querySelector('svg') ? stripSvg(el) : (el.innerText || el.textContent || '');
+    return raw.replace(/\s+/g, ' ').trim();
+  };
+  function stripSvg(el) {
+    const copy = el.cloneNode(true);
+    copy.querySelectorAll('svg').forEach((n) => n.remove());
+    return copy.textContent || '';
+  }
+  const UPLOAD_HINT = /^(\+\s*)?(upload|drop|drag|select|choose|attach|browse)\b/i;
   const cssEscape = (s) => (window.CSS && CSS.escape ? CSS.escape(s) : String(s).replace(/[^\w-]/g, '\\$&'));
 
   function labelledBy(el) {
@@ -28,10 +40,40 @@
     return ids.split(/\s+/).map((id) => textOf(document.getElementById(id))).filter(Boolean).join(' ');
   }
 
+  function rendered(n) {
+    const st = getComputedStyle(n);
+    return st.display !== 'none' && st.visibility !== 'hidden';
+  }
+
+  /* The text just before the control, or before one of its wrappers, climbing only
+   * while the wrapper holds nothing but this question's own controls. Breezy puts an
+   * <h3> before each input and a hidden "A full name is required" after it (which the
+   * next field used to take as its label); Rippling puts the question in a sibling
+   * <div><p> before the field's wrapper, three levels up. */
+  const CONTROLS = 'input:not([type="hidden"]), select, textarea, [role="radio"], [role="checkbox"], [role="combobox"]';
+  function textBefore(start, own) {
+    const mine = (n) => own.some((o) => o === n || o.contains(n) || n.contains(o));
+    for (let node = start, depth = 0; node && node !== document.body && depth < 6; node = node.parentElement, depth++) {
+      if (Array.from(node.querySelectorAll(CONTROLS)).some((c) => !mine(c))) break;
+      for (let prev = node.previousElementSibling; prev; prev = prev.previousElementSibling) {
+        if (!rendered(prev) || /error|invalid|hint|screen-reader/i.test(`${prev.className} ${prev.getAttribute('data-testid') || ''}`)) continue;
+        if (prev.matches(CONTROLS) || prev.querySelector(CONTROLS)) return '';
+        if (/^(LABEL|LEGEND|SPAN|DIV|P|H[1-6])$/.test(prev.tagName)) {
+          const t = textOf(prev);
+          if (t && t.length <= 300 && !UPLOAD_HINT.test(t)) return t;
+        }
+      }
+    }
+    return '';
+  }
+
   function bestLabel(el) {
     if (el.labels && el.labels.length) {
-      const t = textOf(el.labels[0]);
-      if (t) return t;
+      const own = Array.from(el.labels).map((l) => labelledBy(l) || textOf(l)).filter(Boolean);
+      const named = own.find((t) => !UPLOAD_HINT.test(t));
+      if (named) return named;
+      // a drop zone's labels only say "Upload a file": the field's name sits before it
+      if (own.length) return (el.type === 'file' && textBefore(el, [el])) || own[0];
     }
     const id = el.getAttribute('id');
     if (id) {
@@ -39,6 +81,9 @@
       if (lf && textOf(lf)) return textOf(lf);
     }
     const wrap = el.closest('label');
+    // Rippling's upload <label aria-labelledby="… field-4-label"> reads "Drop or
+    // select (.pdf)"; the field name is what it points at
+    if (wrap && labelledBy(wrap)) return labelledBy(wrap);
     if (wrap && textOf(wrap)) return textOf(wrap);
     const al = labelledBy(el);
     if (al) return al;
@@ -47,7 +92,13 @@
       if (lbl && textOf(lbl)) return textOf(lbl);
     }
     const aria = (el.getAttribute('aria-label') || '').trim();
-    if (aria) return aria;
+    // "file-input" (BambooHR) is an id, not a name: keep looking
+    if (aria && !/^[a-z0-9]+([_-][a-z0-9]+)+$/i.test(aria)) return aria;
+    // a div with role=radio names its own option (Rippling: <div role="radio"><p>Yes</p>)
+    if (el.tagName !== 'INPUT' && /^(radio|checkbox)$/.test(el.getAttribute('role') || '')) {
+      const own = textOf(el);
+      if (own && own.length <= 120) return own;
+    }
     const wrapper = el.closest(
       '[data-automation-id^="formField-"], [data-field-entry-id], [data-testid="FieldEntry"], ' +
       '.application-question, .field, .form-group, .application-field, [class*="field" i]'
@@ -58,18 +109,13 @@
     }
     // Lever: <li class="application-question"><div class="application-label">…</div>
     // <div class="application-field"><select>…</select></div></li>
+    // Breezy: <li class="question"><div class="dropdown"><h3>…</h3><div class="dropdown-container">
     const question = el.closest('.application-question, [class*="question" i]');
     if (question) {
-      const lbl = Array.from(question.querySelectorAll('[class*="label" i], label')).find((n) => !n.contains(el) && textOf(n));
+      const lbl = Array.from(question.querySelectorAll('[class*="label" i], label, h2, h3, h4, h5')).find((n) => !n.contains(el) && rendered(n) && textOf(n));
       if (lbl) return textOf(lbl);
     }
-    for (let prev = el.previousElementSibling; prev; prev = prev.previousElementSibling) {
-      if (/^(LABEL|LEGEND|SPAN|DIV|P)$/.test(prev.tagName)) {
-        const t = textOf(prev);
-        if (t && t.length <= 120) return t;
-      }
-    }
-    return '';
+    return textBefore(el, [el]);
   }
 
   function groupScope(el) {
@@ -83,7 +129,7 @@
 
   function groupLabel(el) {
     const scope = groupScope(el);
-    if (!scope) return '';
+    if (!scope) return headingBefore(el);
     // a lone checkbox inside its own <label> is its own question: Lever puts both
     // consent boxes in one question block, and borrowing the neighbour's text swapped
     // the required "retain my data" box with the optional marketing one
@@ -99,10 +145,36 @@
     if (aria) return aria;
     const lab = labelledBy(scope);
     if (lab) return lab;
-    // a label wrapping another control names that control, not this group
+    // the group's own <label for="radiogroup-id"> (Eightfold)
+    if (scope.id) {
+      const forScope = document.querySelector(`label[for="${cssEscape(scope.id)}"]`);
+      if (forScope && textOf(forScope)) return textOf(forScope);
+    }
+    // a label wrapping or pointing at another control names that control, not this group
     const lbl = Array.from(scope.querySelectorAll('label, [class*="label" i]'))
-      .find((n) => !n.contains(el) && !n.querySelector('input, select, textarea') && textOf(n));
+      .find((n) => !n.contains(el) && !n.querySelector('input, select, textarea') && textOf(n)
+        && !(n.htmlFor && scope.querySelector(`[id="${cssEscape(n.htmlFor)}"]`)));
     if (lbl) return textOf(lbl);
+    return headingBefore(el) || textBefore(scope, Array.from(scope.querySelectorAll(CONTROLS)));
+  }
+
+  /* Breezy EEO: <div class="multiplechoice"><h3>Race or Ethnicity</h3><ul> of radios,
+   * with no fieldset or labelled group: the heading inside the smallest ancestor
+   * holding every radio of the same name. */
+  function headingBefore(el) {
+    if (!el.name) return '';
+    const peers = document.querySelectorAll(`input[name="${cssEscape(el.name)}"]`);
+    let box = el.parentElement;
+    while (box && box !== document.body && Array.from(peers).some((p) => !box.contains(p))) box = box.parentElement;
+    if (!box || box === document.body || peers.length < 2) return '';
+    // the heading can sit inside that ancestor or just before it, as long as the
+    // wider box holds no other question's controls
+    for (let n = 0; box && n < 2; box = box.parentElement, n++) {
+      const others = Array.from(box.querySelectorAll('input, select, textarea')).filter((i) => i.name !== el.name && i.type !== 'hidden');
+      if (others.length) break;
+      const h = Array.from(box.querySelectorAll('h2, h3, h4, h5, legend, p')).find((x) => rendered(x) && !x.querySelector('input') && textOf(x) && textOf(x).length <= 160);
+      if (h) return textOf(h);
+    }
     return '';
   }
 
@@ -154,8 +226,13 @@
   function selectorFor(el) {
     const tag = el.tagName.toLowerCase();
     const id = el.getAttribute('id');
-    if (id && unique(`#${cssEscape(id)}`)) return `#${cssEscape(id)}`;
     const name = el.getAttribute('name');
+    // counter ids ("FabricTextField-345") are renumbered when the form re-renders —
+    // BambooHR's were, between planning and typing, so the address went to another
+    // box; a unique name survives that
+    const generated = id && /(^:r|[-_:]\d+$|\d{3,})/.test(id);
+    if (generated && name && unique(`${tag}[name="${cssEscape(name)}"]`)) return `${tag}[name="${cssEscape(name)}"]`;
+    if (id && unique(`#${cssEscape(id)}`)) return `#${cssEscape(id)}`;
     const type = el.getAttribute('type');
     if (name) {
       const byName = `${tag}[name="${cssEscape(name)}"]`;
@@ -221,6 +298,15 @@
     // wrapper; describe the outermost once
     if (el.parentElement && el.parentElement.closest('[role="combobox"]') && el.getAttribute('role') === 'combobox') continue;
 
+    // Jobvite draws <i role="radio" aria-selected> inside the <label> of a real radio;
+    // describing both made two groups for one question. The native input wins when a
+    // user can reach it (itself or its label); Rippling's is unreachable, so its
+    // role=radio div stays.
+    if (tag !== 'input' && /^(radio|checkbox)$/.test(el.getAttribute('role') || '')) {
+      const host = el.closest('label') || el;
+      const native = host.querySelector('input[type="radio"], input[type="checkbox"]');
+      if (native && native !== el && (isVisible(native) || (host.tagName === 'LABEL' && isVisible(host)))) continue;
+    }
     const widget = widgetOf(el, tag, type);
     const isChoice = widget === 'radio' || widget === 'checkbox';
     const label = bestLabel(el);
@@ -254,7 +340,11 @@
       disabled: !!(el.disabled || el.getAttribute('aria-disabled') === 'true'),
       readonly: !!el.readOnly,
       aria_hidden: !!el.closest('[aria-hidden="true"]'),
-      visible: isVisible(el),
+      // custom radios/checkboxes hide the input and draw the label (BambooHR Fabric)
+      visible: isVisible(el) || (isChoice && (() => {
+        const lbl = el.closest('label') || (el.labels && el.labels[0]);
+        return !!lbl && isVisible(lbl);
+      })()),
       maxlength: parseInt(el.getAttribute('maxlength') || '0', 10) || 0,
       has_files: widget === 'file' ? !!(el.files && el.files.length) : false,
       // Workday multiselects keep committed picks as chips beside an empty search box
@@ -264,6 +354,30 @@
       })(),
     };
     out.push(d);
+  }
+  /* BambooHR (Fabric): a native <select> kept at zero size behind a
+   * <button aria-haspopup> that opens a role=menu. The select is what carries the
+   * label and required flag; the button is what a user operates. */
+  for (const sel of document.querySelectorAll('select')) {
+    if (isVisible(sel)) continue;
+    let btn = null;
+    for (let n = sel.parentElement, d = 0; n && d < 3 && !btn; n = n.parentElement, d++) {
+      btn = n.querySelector('button[aria-haspopup]:not([aria-haspopup="false"])');
+    }
+    if (!btn || seen.has(btn) || !isVisible(btn)) continue;
+    seen.add(btn);
+    out.push({
+      i: out.length, selector: selectorFor(btn), tag: 'button', type: 'button', widget: 'combobox',
+      role: btn.getAttribute('role') || '', name: sel.getAttribute('name') || '', id: sel.getAttribute('id') || '',
+      autocomplete: '', automation_id: '', aria_label: '', placeholder: '',
+      label: bestLabel(sel), group_label: '', option_label: '', section: sectionOf(sel),
+      required: !!(sel.required || /[*✱]\s*$/.test(bestLabel(sel))),
+      value: '', display: /^[–—-]*\s*select\s*[–—-]*$/i.test(textOf(btn)) ? '' : textOf(btn),
+      checked: null, options: Array.from(sel.options).filter((o) => textOf(o)).map((o) => ({ value: o.value, text: textOf(o) })),
+      group_key: '', controls: '', expanded: btn.getAttribute('aria-expanded') === 'true',
+      disabled: btn.getAttribute('aria-disabled') === 'true', readonly: false, aria_hidden: false,
+      visible: true, maxlength: 0, has_files: false, chips: [],
+    });
   }
   return JSON.stringify({ url: location.href, fields: out });
 }
