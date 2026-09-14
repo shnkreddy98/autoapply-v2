@@ -374,6 +374,8 @@ async def run(driver: Driver, store: AnswerStore, *, resolver: Resolver | None =
                     result.reason = f"could not click {apply_btn['text']!r}: {err}"
                     return result
                 after = await _wait_for_change(driver, before)
+                if _signature(after) == before and await dismiss_overlays(driver):
+                    continue  # Apply opened a consent gate (ADP); the form is behind it
                 if _signature(after) == before and tabs:
                     await driver.wait(1500)  # a popup window lands after the click returns
                 if _signature(after) == before and tabs and await driver.tabs() > tabs:

@@ -194,6 +194,10 @@ OVERLAY_JS = r"""() => {
   // its own) and names its buttons by id; ADP opened it over the whole posting
   const known = Array.from(document.querySelectorAll('#onetrust-accept-btn-handler, #accept-recommended-btn-handler, .save-preference-btn-handler, .onetrust-close-btn-handler')).find(visible);
   if (known) { known.setAttribute('data-det-overlay', '1'); return true; }
+  // ADP's application consent gate after Apply: "Consent & Continue" / "Decline & Close"
+  const gate = Array.from(document.querySelectorAll('button, [role=button]')).find((b) => visible(b)
+    && /^(consent|agree|accept|i agree) (&|and) continue$/i.test((b.innerText || '').trim()));
+  if (gate) { gate.setAttribute('data-det-overlay', '1'); return true; }
   // Eightfold opens a "Data Privacy Agreement" dialog after the resume upload and
   // blocks the form until "I Agree" — the same terms the application's own consent
   // box asks for

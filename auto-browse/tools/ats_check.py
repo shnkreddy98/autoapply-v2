@@ -255,6 +255,24 @@ async def check_target(target, *, browser, conn, storage, user_id, doc, store, c
     }
 
 
+async def _tab_state(browser) -> tuple[int, int]:
+    """(tab count, current index) of the shared browser."""
+    out = await browser.call("browser_tabs", action="list")
+    rows = re.findall(r"^\s*- (\d+):( \(current\))?", out or "", re.M)
+    current = next((int(n) for n, cur in rows if cur), 0)
+    return len(rows), current
+
+
+async def _restore_tabs(browser, home: tuple[int, int]) -> None:
+    """Close the tabs a target opened (popup applications) and go back to the tab the
+    sweep started on; the tabs that were open before the sweep are left alone."""
+    count, _ = await _tab_state(browser)
+    for index in range(count - 1, home[0] - 1, -1):
+        await browser.call("browser_tabs", action="close", index=index)
+    if (await _tab_state(browser))[1] != home[1]:
+        await browser.call("browser_tabs", action="select", index=home[1])
+
+
 def write_report(results: list[dict], label: str | None) -> Path:
     """Merge into today's results (a later run of a platform replaces its earlier row,
     so `--only x` reruns do not erase the rest of the day's sweep), then render."""
@@ -319,6 +337,7 @@ async def main_async(args) -> int:
 
         results, report = [], None
         browser = await Browser(args.mcp).connect()
+        home = await _tab_state(browser)
         try:
             for i, target in enumerate(targets, 1):
                 print(f"[{i}/{len(targets)}] {target['platform']} ...", flush=True)
@@ -335,6 +354,7 @@ async def main_async(args) -> int:
                         t.update({"url": r.get("url") or t.get("url"), "last_status": r["status"],
                                   "last_checked": r.get("checked")})
                 TARGETS.write_text(json.dumps(data, indent=1))
+                await _restore_tabs(browser, home)
                 # a full sweep runs for hours: keep the report current after each target
                 report = write_report(results, bundle.label)
         finally:
