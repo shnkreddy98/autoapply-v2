@@ -61,7 +61,7 @@ TARGETS = KB / "targets.json"
 PER_TARGET_TIMEOUT_S = 900
 
 GONE_RE = re.compile(
-    r"no longer (available|accepting|open|posted|active)|job (not found|has expired|is closed|is no longer)"
+    r"not currently accepting applications|no longer (available|accepting|open|posted|active)|job (not found|has expired|is closed|is no longer)"
     r"|position (has been|is) (filled|closed)|posting (has )?(expired|closed|been removed)"
     r"|page (not found|does ?n.t exist)|this (job|requisition|position) (is|has been) (closed|filled|removed)"
     r"|job you (are|were) looking for|no longer (be )?found|sorry, this job|opening (is )?closed|\b404\b",
@@ -124,6 +124,7 @@ async def open_live_posting(browser, driver, candidates, max_candidates) -> tupl
         await driver.wait(2500)
         text = await driver.evaluate(PAGE_TEXT_JS)
         text = text if isinstance(text, str) else ""
+        await driver.wait(2000)  # Hirebridge's closed-posting redirect is script-driven and late
         here = await driver.evaluate("() => location.href")
         # Hirebridge redirects a closed posting to ClosedJob.aspx with generic text
         if len(text.strip()) < 80 or GONE_RE.search(text[:3000]) or re.search(r"closed|expired", str(here).split("?")[0], re.I):
@@ -194,7 +195,7 @@ async def check_target(target, *, browser, conn, storage, user_id, doc, store, c
     context: dict = {}
     try:
         result = await asyncio.wait_for(
-            engine.run(driver, store, resolver=resolver, autosubmit=False, context=context),
+            engine.run(driver, store, resolver=resolver, autosubmit=False, context=context, stop_at_account_pages=True),
             timeout=PER_TARGET_TIMEOUT_S,
         )
     except asyncio.TimeoutError:
@@ -202,6 +203,16 @@ async def check_target(target, *, browser, conn, storage, user_id, doc, store, c
     except Exception as exc:
         result = engine.RunResult(status="stuck", reason=f"error: {type(exc).__name__}: {str(exc)[:200]}")
     audit = await audit_page(driver)
+    if (not any(f["ok"] for p in result.pages for f in p.filled)
+            and re.search(r"closed|expired", str(audit["url"]).split("?")[0], re.I)):
+        # the posting redirected to a closed page only after it loaded (Hirebridge)
+        rest = target["candidates"][target["candidates"].index(url) + 1:] if url in target["candidates"] else []
+        if rest:
+            r = await check_target(target | {"candidates": rest}, browser=browser, conn=conn, storage=storage,
+                                   user_id=user_id, doc=doc, store=store, complete=complete,
+                                   max_candidates=max_candidates - len(tried) - 1)
+            return r | {"tried": tried + [f"{url} -> gone"] + r["tried"]}
+        return out | {"status": "GONE", "tried": tried + [f"{url} -> gone"]}
     end_text = await driver.evaluate(PAGE_TEXT_JS)
     status = verdict(result, audit, end_text if isinstance(end_text, str) else "")
     # the last attempt per field counts: a covered field retried after the page
@@ -225,7 +236,8 @@ async def check_target(target, *, browser, conn, storage, user_id, doc, store, c
         "status": status, "engine_status": result.status,
         # a stuck run that verdict() calls BLOCKED stopped at a sign-in page: say so
         # instead of the engine's "no Next or Submit control on the page"
-        "reason": (ACCOUNT_WALL if status == "BLOCKED" and result.status == "stuck" else result.reason),
+        "reason": (ACCOUNT_WALL if status == "BLOCKED" and (result.status == "stuck" or result.reason.startswith("account page"))
+                   else result.reason),
         "pages": len(result.pages), "filled": sum(1 for p in result.pages for f in p.filled if f["ok"]),
         "fill_failures": fill_failures, "refused": refused, "unanswered": unanswered,
         "empty_required": audit["empty_required"], "errors": audit["errors"] + audit["invalid"],

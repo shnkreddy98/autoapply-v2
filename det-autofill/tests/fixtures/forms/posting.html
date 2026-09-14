@@ -7,9 +7,15 @@
 <main id="main"><h1>Senior Data Engineer</h1><p>Build pipelines.</p>
   <a role="button" id="apply" href="#">Apply</a></main>
 <script>
+  if (location.hash === '#form') document.addEventListener('DOMContentLoaded', () => openForm());
   document.getElementById('apply').addEventListener('click', (e) => {
     e.preventDefault();
     if (location.hash === '#bare') return;
+    if (location.hash === '#popup') {
+      // Hirebridge: Apply is javascript:popUp(url) — the form opens in a new window
+      window.open(location.href.split('#')[0] + '#form', '_blank');
+      return;
+    }
     if (location.hash === '#chooser' && !document.getElementById('manual')) {
       // Workday: Apply opens a dialog; the form comes after "Apply Manually"
       document.body.insertAdjacentHTML('beforeend', '<div role="dialog" id="dlg"><button>Autofill with Resume</button><button id="manual">Apply Manually</button></div>');

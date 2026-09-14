@@ -466,3 +466,35 @@ def test_an_unbacked_no_to_an_immigration_status_question_is_dropped_too():
     q = _row("Are you currently in F-1 Visa status?", "radio", ["Yes", "No"])
     reply = json.dumps({"answers": [{"id": 0, "answer": "No", "evidence": ""}]})
     assert parse_answers(reply, [q], PROFILE_TEXT) == {}
+
+
+def test_apply_that_opens_a_new_tab_is_followed(tmp_path):
+    result = _run_posting(tmp_path, "#popup")
+    assert (result.status, result.reason) == ("ready-to-submit", "stopped before 'Submit Application'")
+
+
+def test_the_ats_check_stops_at_a_sign_in_page_before_typing(tmp_path):
+    from browser import chromium_executable
+
+    async def go():
+        store = AnswerStore(from_export(DOC, resume_path=str(tmp_path / "r.pdf")))
+        p = await pw.async_playwright().start()
+        try:
+            browser = await p.chromium.launch(headless=True, executable_path=chromium_executable())
+        except Exception as exc:
+            await p.stop()
+            pytest.skip(f"chromium unavailable: {exc}")
+        try:
+            page = await browser.new_page()
+            await page.set_content('<form><label for="e">Email*</label><input id="e" type="email" required>'
+                                   '<label for="p">Password*</label><input id="p" type="password" required>'
+                                   '<button type="button">Next</button></form>')
+            result = await engine.run(PlaywrightDriver(page), store, stop_at_account_pages=True)
+            return result, await page.input_value("#e")
+        finally:
+            await browser.close()
+            await p.stop()
+
+    result, typed = asyncio.run(go())
+    assert result.status == "handoff" and result.reason.startswith("account page")
+    assert typed == ""

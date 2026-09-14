@@ -588,6 +588,13 @@ class PlaywrightDriver:
     async def wait(self, ms):
         await asyncio.sleep(ms / 1000)
 
+    async def tabs(self):
+        return len(self.page.context.pages)
+
+    async def select_last_tab(self):
+        self.page = self.page.context.pages[-1]
+        await self.page.bring_to_front()
+
 
 # The pruning proxy's read-before-write gate reads "#e<digits>" in an action's
 # arguments as a snapshot ref the agent has not fetched and refuses the action.
@@ -704,3 +711,10 @@ class McpDriver:
 
     async def wait(self, ms):
         await asyncio.sleep(ms / 1000)
+
+    async def tabs(self):
+        out = await self.b.call("browser_tabs", action="list")
+        return len(re.findall(r"^\s*- \d+:", out or "", re.M))
+
+    async def select_last_tab(self):
+        await self._act("browser_tabs", action="select", index=await self.tabs() - 1)

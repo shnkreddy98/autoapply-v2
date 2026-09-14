@@ -96,6 +96,14 @@ STATE_JS = r"""() => {
     confirmation: /thank you for (applying|your application)|application (has been |was )?(received|submitted)|we('ve| have) received your application|successfully submitted/.test(body) });
 }"""
 
+# a sign-in or account-creation step: a visible password box, or an identity
+# provider / account URL (Google's email-first sign-in has no password box yet)
+ACCOUNT_PAGE_JS = r"""() => {
+  const shown = (n) => { const r = n.getBoundingClientRect(); return r.width > 1 && r.height > 1 && getComputedStyle(n).visibility !== 'hidden'; };
+  if (Array.from(document.querySelectorAll('input[type=password]')).some(shown)) return true;
+  return /accounts\.google\.|login\.microsoftonline\.|linkedin\.com\/(uas\/)?login|passport\.|\/(sign-?in|log-?in|create-?account|register)(\b|\/|\?|$)|applylogin/i.test(location.href);
+}"""
+
 SUBMIT_RE = re.compile(r"^(submit( (my )?application)?|send( application)?|apply( now)?|finish|complete( application)?)$", re.I)
 # not "Next slide": SuccessFactors pages carry a job carousel beside POSTULER/Apply
 NEXT_RE = re.compile(r"^(next(?! (slide|image|photo|item|job|jobs|article|story|post))( step| page)?|continue|save (and|&) continue|save and next|proceed|review( application)?)\b", re.I)
@@ -321,8 +329,13 @@ async def _fill_page(driver, store, resolver, report, context, *, overwrite, inv
 
 
 async def run(driver: Driver, store: AnswerStore, *, resolver: Resolver | None = None, autosubmit: bool = False,
-              context: dict | None = None, max_pages: int = MAX_PAGES, overwrite: bool = False) -> RunResult:
-    """Drive the application from the page the browser is on."""
+              context: dict | None = None, max_pages: int = MAX_PAGES, overwrite: bool = False,
+              stop_at_account_pages: bool = False) -> RunResult:
+    """Drive the application from the page the browser is on.
+
+    stop_at_account_pages: hand off on a sign-in / create-account page instead of
+    typing into it. The live ATS check sets it: it typed the applicant's email into
+    Google's and Amazon's sign-in flows and pressed Next."""
     context = dict(context or {})
     result = RunResult(status="stuck")
     repairs = 0
@@ -341,16 +354,27 @@ async def run(driver: Driver, store: AnswerStore, *, resolver: Resolver | None =
             if apply_btn:
                 report.action = "apply"
                 before = _signature(state)
+                tabs = await driver.tabs() if hasattr(driver, "tabs") else 0
                 if err := await _nav_click(driver, apply_btn["selector"]):
                     result.status = "handoff" if err.startswith("captcha") else "stuck"
                     result.reason = f"could not click {apply_btn['text']!r}: {err}"
                     return result
                 after = await _wait_for_change(driver, before)
+                if _signature(after) == before and tabs:
+                    await driver.wait(1500)  # a popup window lands after the click returns
+                if _signature(after) == before and tabs and await driver.tabs() > tabs:
+                    # Hirebridge's Apply is javascript:popUp(...): the form is in a new tab
+                    await driver.select_last_tab()
+                    await settle(driver)
+                    continue
                 if _signature(after) == before:
                     result.status, result.reason = "stuck", f"{apply_btn['text']!r} did not open an application form"
                     return result
                 continue
 
+        if stop_at_account_pages and await driver.evaluate(ACCOUNT_PAGE_JS):
+            result.status, result.reason = "handoff", "account page: sign in or create an account"
+            return result
         handoff, unanswered = await fill_page(driver, store, resolver, report, context,
                                               overwrite=overwrite, invalid=invalid)
         if handoff:
