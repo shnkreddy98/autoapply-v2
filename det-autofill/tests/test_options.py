@@ -70,3 +70,10 @@ def test_identical_duplicate_options_are_not_ambiguous():
             C("", "East Springfield, Illinois, United States")]
     pick = match_option("location_city", "Springfield, IL", opts)
     assert pick.index == 0 and "identical" in pick.how
+
+
+def test_a_shared_dial_code_picks_the_united_states():
+    from det_autofill.options import Choice, match_option
+
+    opts = [Choice(value=str(i), text=t) for i, t in enumerate(["🇨🇦 +1 Canada", "🇺🇸 +1 United States", "🇺🇲 +1 United States Minor Outlying Islands", "🇯🇲 +1 Jamaica", "🇬🇧 +44 United Kingdom"])]
+    assert match_option("phone_country_code", "+1", opts).index == 1

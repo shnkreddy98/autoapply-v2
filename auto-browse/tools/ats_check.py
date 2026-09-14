@@ -204,8 +204,12 @@ async def check_target(target, *, browser, conn, storage, user_id, doc, store, c
     except Exception as exc:
         result = engine.RunResult(status="stuck", reason=f"error: {type(exc).__name__}: {str(exc)[:200]}")
     audit = await audit_page(driver)
-    if (not any(f["ok"] for p in result.pages for f in p.filled)
-            and re.search(r"closed|expired", str(audit["url"]).split("?")[0], re.I)):
+    end_text = await driver.evaluate(PAGE_TEXT_JS)
+    closed = (not any(f["ok"] for p in result.pages for f in p.filled)
+              and re.search(r"closed|expired", str(audit["url"]).split("?")[0], re.I))
+    # targets come from the user's own history: "You've already applied for this job"
+    # (Dayforce) ends the test for that posting, not for the ATS
+    if closed or re.search(r"already applied (for|to) this", str(end_text), re.I):
         # the posting redirected to a closed page only after it loaded (Hirebridge)
         rest = target["candidates"][target["candidates"].index(url) + 1:] if url in target["candidates"] else []
         if rest:
@@ -214,7 +218,6 @@ async def check_target(target, *, browser, conn, storage, user_id, doc, store, c
                                    max_candidates=max_candidates - len(tried) - 1)
             return r | {"tried": tried + [f"{url} -> gone"] + r["tried"]}
         return out | {"status": "GONE", "tried": tried + [f"{url} -> gone"]}
-    end_text = await driver.evaluate(PAGE_TEXT_JS)
     status = verdict(result, audit, end_text if isinstance(end_text, str) else "")
     # the last attempt per field counts: a covered field retried after the page
     # unlocked is not a failure

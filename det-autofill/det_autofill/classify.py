@@ -272,6 +272,7 @@ CHOICE_ONLY = {
     "phone_device_type", "salary_currency", "salary_period",
 }
 FILE_KEYS = {"resume_upload"}
+REPEATABLE = {"phone_country_code"}
 # Rippling asks "Will you now or in the future require sponsorship…?" as a free-text
 # box: a yes/no question typed as "Yes"/"No". Only a question worded as one — "If you
 # need sponsorship, which visa?" is not answered by "Yes".
@@ -527,7 +528,8 @@ def plan(
             # duplicate on the first pass gets filled on the next one
             claimed.setdefault(row.key, row.index)
             continue
-        if row.key in claimed and row.widget not in ("radio", "checkbox"):
+        # every phone on a form has its own dial-code picker (Dayforce: home and mobile)
+        if row.key in claimed and row.widget not in ("radio", "checkbox") and row.key not in REPEATABLE:
             row.reason = f"duplicate-key(first at #{claimed[row.key]})"
             continue
         answer = store.get(row.key, row.label)

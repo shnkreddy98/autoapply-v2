@@ -188,6 +188,11 @@ def match_option(
         i for i in live
         if any(nv(c) and f.startswith(nv(c)) for c in cands for f in text_forms(options[i].text))
     ]
+    if key == "phone_country_code" and len(hits) > 1:
+        # "+1" is shared by 25 countries in Dayforce's list ("🇨🇦 +1 Canada", …); the
+        # profile's phone is a US number
+        us = [i for i in hits if re.search(r"united states( of america)?(?! \w)|\bu\.?s\.?a?\b", options[i].text, re.I)]
+        hits = us if len(us) == 1 else hits
     return _unique(hits, "text-prefix", options) or Pick(None, "no-matching-option")
 
 

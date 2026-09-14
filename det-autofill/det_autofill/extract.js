@@ -278,7 +278,7 @@
     // (live react-select nests the input in its own "select__input-container")
     for (let n = el.parentElement, d = 0; n && d < 6; n = n.parentElement, d++) {
       if (Array.from(n.querySelectorAll('[role="combobox"], select')).some((c) => c !== el)) break;
-      const single = n.querySelector('[class*="singleValue" i], [class*="single-value" i], [data-automation-id="selectedItem"]');
+      const single = n.querySelector('[class*="singleValue" i], [class*="single-value" i], [data-automation-id="selectedItem"], .ant-select-selection-item');
       if (single && textOf(single)) return textOf(single);
     }
     // buttons and div-based comboboxes show the pick as their own text
@@ -362,6 +362,12 @@
         return field ? Array.from(field.querySelectorAll('[data-automation-id="selectedItemList"] li')).map(textOf).filter(Boolean) : [];
       })(),
     };
+    // Ant Design selects without search keep a zero-width readonly <input role=combobox>
+    // inside the visible .ant-select box (Dayforce): operate the box
+    if (widget === 'combobox' && !d.visible) {
+      const box = el.closest('.ant-select');
+      if (box && isVisible(box)) Object.assign(d, { selector: selectorFor(box), visible: true, readonly: false });
+    }
     out.push(d);
   }
   /* Jobvite: no labelled file input, only a "Select" menu button labelled by the

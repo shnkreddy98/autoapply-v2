@@ -97,7 +97,7 @@ READ_FIELD = r"""(selector) => {
   let single = null;
   for (let n = el.parentElement, d = 0; n && d < 6; n = n.parentElement, d++) {
     if (Array.from(n.querySelectorAll('[role="combobox"], select')).some((c) => c !== el)) break;
-    single = n.querySelector('[class*="singleValue" i], [class*="single-value" i], [data-automation-id="selectedItem"]');
+    single = n.querySelector('[class*="singleValue" i], [class*="single-value" i], [data-automation-id="selectedItem"], .ant-select-selection-item');
     if (single) break;
   }
   const field = el.closest('[data-automation-id^="formField-"], [data-automation-id="multiSelectContainer"]');
@@ -284,6 +284,9 @@ def search_terms(key: str, answer: dict, store: AnswerStore | None) -> list[str]
         return [t for t in dict.fromkeys(out) if t]
     from det_autofill.options import candidate_strings
 
+    if key == "phone_country_code":
+        # "+1" filters to 25 countries; the country name narrows it to one
+        return ["United States", *candidate_strings(key, value)]
     return candidate_strings(key, value)
 
 
