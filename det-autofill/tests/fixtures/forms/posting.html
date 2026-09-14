@@ -1,0 +1,19 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Posting fixture</title></head><body>
+<!-- A Workday-style posting page (GM, 2026-09-14): a job-search box and a location
+     filter are visible beside the posting's "Apply" button. "Apply" opens the form.
+     #bare drops the form so Apply is all there is. -->
+<header><label for="q">Search for jobs</label><input id="q" type="search">
+  <label for="loc">Location</label><input id="loc"></header>
+<main id="main"><h1>Senior Data Engineer</h1><p>Build pipelines.</p>
+  <a role="button" id="apply" href="#">Apply</a></main>
+<script>
+  document.getElementById('apply').addEventListener('click', (e) => {
+    e.preventDefault();
+    if (location.hash === '#bare') return;
+    document.getElementById('main').innerHTML =
+      '<form><label for="fn">First Name*</label><input id="fn" required>' +
+      '<label for="em">Email*</label><input id="em" type="email" required>' +
+      '<button type="button" id="send">Submit Application</button></form>';
+  });
+</script>
+</body></html>

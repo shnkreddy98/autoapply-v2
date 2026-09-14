@@ -281,3 +281,29 @@ def test_mcp_click_hands_off_when_a_captcha_challenge_covers_the_form():
 
     with pytest.raises(CaptchaCover):
         run(McpDriver(Page()).click("#x"))
+
+
+def test_a_beforeunload_dialog_is_accepted_so_the_session_is_not_wedged():
+    from types import SimpleNamespace
+
+    from det_autofill.mcpio import Browser
+
+    class Session:
+        def __init__(self):
+            self.calls, self.open = [], True
+
+        async def call_tool(self, name, args):
+            self.calls.append(name)
+            if name == "browser_handle_dialog":
+                self.open = False
+                text = "### Result\nhandled"
+            elif self.open:
+                text = '### Error\n### Modal state\n- ["beforeunload" dialog with message ""]: can be handled by browser_handle_dialog'
+            else:
+                text = "### Result\nok"
+            return SimpleNamespace(content=[SimpleNamespace(text=text)])
+
+    b = Browser("http://unused")
+    b.session = Session()
+    assert run(b.call("browser_navigate", url="https://next.example")) == "### Result\nok"
+    assert b.session.calls == ["browser_navigate", "browser_handle_dialog", "browser_navigate"]

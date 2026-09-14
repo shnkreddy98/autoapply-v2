@@ -541,6 +541,10 @@ class McpDriver:
     async def evaluate(self, js, arg=None):
         fn = js if arg is None else f"() => ({js})({json.dumps(arg)})"
         out = await self.b.call("browser_evaluate", function=fn)
+        if re.match(r"\s*### Error", out or ""):
+            # e.g. "Execution context was destroyed" mid-navigation; returning the
+            # error text as the value made callers parse it as page data
+            raise RuntimeError(f"browser_evaluate failed: {out[:200]}")
         m = re.search(r"### Result\s*\n(.*?)(?:\n###|\Z)", out, re.S)
         raw = (m.group(1) if m else out).strip()
         try:

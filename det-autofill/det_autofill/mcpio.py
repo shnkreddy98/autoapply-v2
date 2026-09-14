@@ -52,6 +52,9 @@ def snapshot_body(text: str) -> str:
     return text
 
 
+BEFOREUNLOAD_RE = re.compile(r'\["beforeunload" dialog')
+
+
 class Browser:
     """await Browser(url).connect(); await b.call('browser_click', target='e7')"""
 
@@ -76,6 +79,16 @@ class Browser:
             await self._stack.aclose()
 
     async def call(self, name: str, **args) -> str:
+        out = await self._call(name, **args)
+        if name != "browser_handle_dialog" and BEFOREUNLOAD_RE.search(out):
+            # a form page asks "leave site?" when navigated away from (Paylocity). The
+            # dialog blocks every later tool call, so one open page wedged the whole
+            # session; leaving is what the navigation already meant to do
+            await self._call("browser_handle_dialog", accept=True)
+            out = await self._call(name, **args)
+        return out
+
+    async def _call(self, name: str, **args) -> str:
         result = await self.session.call_tool(name, args)
         parts = [c.text for c in result.content if getattr(c, "text", None)]
         return "\n".join(parts)

@@ -272,7 +272,7 @@ async def main_async(args) -> int:
         complete = None if args.no_model else det_apply.openrouter_complete(args.model or DEFAULT_MODEL)
         print(f"ATS check: {len(targets)} target(s), role {bundle.label!r}, mcp {args.mcp}")
 
-        results = []
+        results, report = [], None
         browser = await Browser(args.mcp).connect()
         try:
             for i, target in enumerate(targets, 1):
@@ -290,9 +290,10 @@ async def main_async(args) -> int:
                         t.update({"url": r.get("url") or t.get("url"), "last_status": r["status"],
                                   "last_checked": r.get("checked")})
                 TARGETS.write_text(json.dumps(data, indent=1))
+                # a full sweep runs for hours: keep the report current after each target
+                report = write_report(results, bundle.label)
         finally:
             await browser.close()
-    report = write_report(results, bundle.label)
     print(f"report: {report}")
     return 0 if all(r["status"] == "PASS" for r in results) else 1
 

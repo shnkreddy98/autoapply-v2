@@ -97,6 +97,10 @@ OVERLAY_JS = r"""() => {
   // fixed/sticky boxes that talk about cookies count too
   const floating = Array.from(document.querySelectorAll('body div, body section, body aside'))
     .filter((n) => /fixed|sticky/.test(getComputedStyle(n).position) && /cookie/i.test((n.innerText || '').slice(0, 400)));
+  // OneTrust's preference centre dims the page (#onetrust-pc-dark-filter, no buttons of
+  // its own) and names its buttons by id; ADP opened it over the whole posting
+  const known = Array.from(document.querySelectorAll('#onetrust-accept-btn-handler, #accept-recommended-btn-handler, .save-preference-btn-handler, .onetrust-close-btn-handler')).find(visible);
+  if (known) { known.setAttribute('data-det-overlay', '1'); return true; }
   const boxes = marked.concat(floating).filter((n) => visible(n) && !n.closest('form'));
   for (const box of boxes) {
     const btn = Array.from(box.querySelectorAll('button, [role=button], a')).find((b) => visible(b) && words.test((b.innerText || b.getAttribute('aria-label') || '').trim()));
@@ -107,7 +111,8 @@ OVERLAY_JS = r"""() => {
 
 SUBMIT_RE = re.compile(r"^(submit( (my )?application)?|send( application)?|apply( now)?|finish|complete( application)?)$", re.I)
 NEXT_RE = re.compile(r"^(next( step| page)?|continue|save (and|&) continue|save and next|proceed|review( application)?)\b", re.I)
-APPLY_RE = re.compile(r"^(apply( now| for this job| for this position)?|i'?m interested|start application)$", re.I)
+# "apply manually": Workday's Apply opens a chooser (autofill with resume / apply manually)
+APPLY_RE = re.compile(r"^(apply( now| manually| for this job| for this position)?|i'?m interested|start application)$", re.I)
 
 
 class Resolver(Protocol):
@@ -174,9 +179,16 @@ async def settle(driver: Driver, *, quiet_polls: int = 2, attempts: int = 16, pa
 
 
 async def extract(driver: Driver) -> tuple[str, list[dict]]:
-    raw = await driver.evaluate(EXTRACT_JS)
-    data = json.loads(raw) if isinstance(raw, str) else raw
-    return data["url"], data["fields"]
+    for attempt in range(3):
+        try:
+            raw = await driver.evaluate(EXTRACT_JS)
+            data = json.loads(raw) if isinstance(raw, str) else raw
+            return data["url"], data["fields"]
+        except (RuntimeError, ValueError, TypeError, KeyError):
+            # a page still navigating (a redirect after Apply) has no document to read
+            if attempt == 2:
+                raise
+            await driver.wait(1500)
 
 
 async def _buttons(driver: Driver) -> list[dict]:
@@ -210,6 +222,38 @@ def _needs_resolver(row: Row, failed: set[str]) -> bool:
         return True
     reason = row.reason or ""
     return row.action == "skip" and row.required and (reason in RESOLVABLE or reason.startswith(MISCLASSIFIED_PREFIXES))
+
+
+async def _nav_click(driver: Driver, selector: str) -> str | None:
+    """Click Apply/Next/Submit; the error text when it cannot be clicked. A consent
+    overlay can open after the page loaded (ADP's OneTrust preference centre), so one
+    dismissal and retry before giving up."""
+    try:
+        await driver.click(selector)
+        return None
+    except CaptchaCover as exc:
+        return f"captcha over the form ({exc})"
+    except Exception as exc:
+        if not await dismiss_overlays(driver):
+            return f"{type(exc).__name__}: {str(exc)[:160]}"
+    try:
+        await driver.click(selector)
+        return None
+    except Exception as exc:
+        return f"{type(exc).__name__}: {str(exc)[:160]}"
+
+
+def _looks_like_form(fields: list[dict], store: AnswerStore, url: str) -> bool:
+    """An application form, not a posting page with a job-search box. GM's Workday
+    posting has visible search and filter inputs, so "any visible field" skipped the
+    Apply click and the posting's own Apply button was then taken for the final submit."""
+    visible = {f["selector"] for f in fields if f.get("visible") and f.get("widget") in FILLABLE_WIDGETS | {"file"}}
+    if not visible:
+        return False
+    if any(f.get("widget") == "file" for f in fields if f["selector"] in visible):
+        return True
+    rows = [r for r in plan(fields, store, url).rows if visible.intersection(r.selectors)]
+    return any(r.required for r in rows) or sum(1 for r in rows if r.key) >= 3
 
 
 async def fill_page(driver: Driver, store: AnswerStore, resolver: Resolver | None, report: PageReport,
@@ -302,14 +346,20 @@ async def run(driver: Driver, store: AnswerStore, *, resolver: Resolver | None =
 
         # a job-board landing page: the form appears after "Apply"
         buttons = await _buttons(driver)
-        _, fields = await extract(driver)
-        if not [f for f in fields if f.get("visible") and f.get("widget") in FILLABLE_WIDGETS | {"file"}]:
+        url, fields = await extract(driver)
+        if not _looks_like_form(fields, store, url):
             apply_btn = _nav(buttons, APPLY_RE)
             if apply_btn:
                 report.action = "apply"
                 before = _signature(state)
-                await driver.click(apply_btn["selector"])
-                await _wait_for_change(driver, before)
+                if err := await _nav_click(driver, apply_btn["selector"]):
+                    result.status = "handoff" if err.startswith("captcha") else "stuck"
+                    result.reason = f"could not click {apply_btn['text']!r}: {err}"
+                    return result
+                after = await _wait_for_change(driver, before)
+                if _signature(after) == before:
+                    result.status, result.reason = "stuck", f"{apply_btn['text']!r} did not open an application form"
+                    return result
                 continue
 
         handoff, unanswered = await fill_page(driver, store, resolver, report, context,
@@ -331,7 +381,10 @@ async def run(driver: Driver, store: AnswerStore, *, resolver: Resolver | None =
         before = _signature(state)
         if nxt:
             report.action = "next"
-            await driver.click(nxt["selector"])
+            if err := await _nav_click(driver, nxt["selector"]):
+                result.status = "handoff" if err.startswith("captcha") else "stuck"
+                result.reason = f"could not click {nxt['text']!r}: {err}"
+                return result
             after = await _wait_for_change(driver, before)
             if _signature(after) == before or after["alerts"]:
                 report.errors = after["alerts"] or ["page did not change after Next"]
@@ -346,12 +399,20 @@ async def run(driver: Driver, store: AnswerStore, *, resolver: Resolver | None =
             repairs, invalid = 0, set()
             context.pop("errors", None)
             continue
+        if submit and APPLY_RE.search(submit["text"]) and not any(f["ok"] for f in report.filled):
+            # nothing was filled and the only way on is "Apply": still a posting page;
+            # clicking could just as well send a prefilled form, so stop and say so
+            result.status, result.reason = "stuck", f"only {submit['text']!r} and nothing filled: not an application form"
+            return result
         if submit:
             if not autosubmit:
                 result.status, result.reason = "ready-to-submit", f"stopped before {submit['text']!r}"
                 return result
             report.action = "submit"
-            await driver.click(submit["selector"])
+            if err := await _nav_click(driver, submit["selector"]):
+                result.status = "handoff" if err.startswith("captcha") else "stuck"
+                result.reason = f"could not click {submit['text']!r}: {err}"
+                return result
             after = await _wait_for_change(driver, before, attempts=30)
             if after["confirmation"]:
                 result.status, result.reason = "submitted", "confirmation page seen"

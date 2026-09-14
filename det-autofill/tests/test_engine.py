@@ -354,3 +354,36 @@ def test_select_question_label_on_lever_markup(tmp_path):
             await p.stop()
 
     assert asyncio.run(go()) == ["Years of Python?"]
+
+
+def _run_posting(tmp_path, hash_=""):
+    from browser import FORMS, chromium_executable
+
+    async def go():
+        store = AnswerStore(from_export(DOC, resume_path=str(tmp_path / "r.pdf")))
+        p = await pw.async_playwright().start()
+        try:
+            browser = await p.chromium.launch(headless=True, executable_path=chromium_executable())
+        except Exception as exc:
+            await p.stop()
+            pytest.skip(f"chromium unavailable: {exc}")
+        try:
+            page = await browser.new_page()
+            await page.goto((FORMS / "posting.html").as_uri() + hash_)
+            return await engine.run(PlaywrightDriver(page), store, resolver=None, autosubmit=False)
+        finally:
+            await browser.close()
+            await p.stop()
+
+    return asyncio.run(go())
+
+
+def test_apply_on_a_posting_with_a_search_box_opens_the_form(tmp_path):
+    result = _run_posting(tmp_path)
+    assert result.pages[0].action == "apply"
+    assert (result.status, result.reason) == ("ready-to-submit", "stopped before 'Submit Application'")
+
+
+def test_a_bare_apply_button_is_never_reported_as_the_submit(tmp_path):
+    result = _run_posting(tmp_path, "#bare")
+    assert result.status == "stuck" and "did not open an application form" in result.reason
