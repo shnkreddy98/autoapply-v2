@@ -263,3 +263,94 @@ def test_degree_and_years_screen_is_not_skill_years():
 
     label = "Do you have a Bachelor's degree in Computer Science and 5 years of experience as a Software Engineer?"
     assert match(FormField(ref="", role="combobox", label=label)).key == "degree_requirement"
+
+
+
+def test_links_count_as_apply_but_not_as_next_or_submit():
+    buttons = [{"text": "Apply for this job", "selector": "a.apply", "link": True},
+               {"text": "Continue reading", "selector": "a.more", "link": True},
+               {"text": "Submit", "selector": "a.fake", "link": True}]
+    assert engine._nav(buttons, engine.APPLY_RE)["selector"] == "a.apply"
+    assert engine._nav(buttons, engine.NEXT_RE) is None
+    assert engine._nav(buttons, engine.SUBMIT_RE) is None
+
+
+def test_lever_like_form_question_labels_checkboxes_and_rerender(tmp_path):
+    """Live Lever findings: question labels outside the choices, race checkboxes that
+    must only tick the user's own answer, and a re-render after the resume upload."""
+    from browser import FORMS, chromium_executable
+
+    doc = DOC | {"facts": DOC["facts"] | {"race_ethnicity": "Asian"}}
+
+    async def go():
+        resume = tmp_path / "jane_doe.pdf"
+        resume.write_bytes(b"%PDF-1.4")
+        store = AnswerStore(from_export(doc, resume_path=str(resume)) | {"agree_terms": True})
+        p = await pw.async_playwright().start()
+        try:
+            browser = await p.chromium.launch(headless=True, executable_path=chromium_executable())
+        except Exception as exc:
+            await p.stop()
+            pytest.skip(f"chromium unavailable: {exc}")
+        try:
+            page = await browser.new_page()
+            await page.goto((FORMS / "lever_like.html").as_uri())
+            result = await engine.run(PlaywrightDriver(page), store, resolver=None, autosubmit=False)
+            state = await page.evaluate("""() => ({
+              auth: (document.querySelector('[name="cards[q1][field0]"]:checked') || {}).value || null,
+              race: Array.from(document.querySelectorAll('[name="survey[race][field1]"]:checked')).map(x => x.value),
+              consent: document.querySelector('input[type=checkbox][name="consent[store]"]').checked,
+              marketing: document.querySelector('input[type=checkbox][name="consent[marketing]"]').checked })""")
+            return result, state
+        finally:
+            await browser.close()
+            await p.stop()
+
+    result, state = asyncio.run(go())
+    assert result.status == "ready-to-submit", result.reason
+    assert state == {"auth": "Yes", "race": ["Asian"], "consent": True, "marketing": False}
+    labels = {f["label"] for p in result.pages for f in p.filled}
+    assert "Are you legally authorized to work in the United States?✱" in labels or \
+        any(l.startswith("Are you legally authorized") for l in labels)
+
+
+def test_marketing_consent_is_not_agreement():
+    from det_autofill.aria import FormField
+    from det_autofill.taxonomy import match
+
+    retain = match(FormField(ref="", role="checkbox", label="Everseen has my consent to retain my data for 6 months"))
+    market = match(FormField(ref="", role="checkbox", label="Everseen has my consent to contact me about future job opportunities."))
+    assert retain.key == "agree_terms" and market.key == "marketing_consent"
+    assert AnswerStore({}).get("marketing_consent") is None  # never ticked on the user's behalf
+
+
+def test_work_permission_in_the_role_country_is_not_a_country_picker():
+    from det_autofill.taxonomy import FormField, match
+
+    role = match(FormField(ref="", role="select", label="Do you have the right to work, without support, in the country where this role is based? ✱"))
+    assert role.key == "work_authorized_role_country"
+    assert AnswerStore({"work_eligible_us": True}).get(role.key) is None  # the posting's country decides
+    assert match(FormField(ref="", role="select", label="Country")).key == "country"
+    assert match(FormField(ref="", role="select", label="Which country do you live in?")).key == "country"
+
+
+def test_select_question_label_on_lever_markup(tmp_path):
+    from browser import FORMS, chromium_executable, EXTRACT_JS
+
+    async def go():
+        p = await pw.async_playwright().start()
+        try:
+            browser = await p.chromium.launch(headless=True, executable_path=chromium_executable())
+        except Exception as exc:
+            await p.stop()
+            pytest.skip(f"chromium unavailable: {exc}")
+        try:
+            page = await browser.new_page()
+            await page.goto((FORMS / "lever_like.html").as_uri())
+            fields = json.loads(await page.evaluate(EXTRACT_JS))["fields"]
+            return [f["label"] for f in fields if f["widget"] == "select"]
+        finally:
+            await browser.close()
+            await p.stop()
+
+    assert asyncio.run(go()) == ["Years of Python?"]

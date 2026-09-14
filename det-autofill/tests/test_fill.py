@@ -202,3 +202,82 @@ def test_file_trigger_finds_the_attach_button_on_greenhouse_markup():
             await browser.close()
             await p.stop()
     assert run(go()) == ("#attach", "#attach2")
+
+
+
+def test_mcp_selectors_that_look_like_proxy_refs_are_rewritten():
+    """Ashby field ids are UUIDs; "#e061b99b-..." was refused by the proxy's
+    read-before-write gate as an unread ref, and the refusal was ignored."""
+    from det_autofill.fill import McpDriver, _unref
+
+    assert _unref("#e061b99b-3f7c-4750") == '[id="e061b99b-3f7c-4750"]'
+    assert _unref("#email") == "#email" and _unref("#react-select-e1-option-0") == "#react-select-e1-option-0"
+
+    class Refusing:
+        async def call(self, name, **args):
+            return "⚠ Blocked: ref(s) e061 were not read from the current page. (The action was NOT performed.)"
+
+    with pytest.raises(RuntimeError, match="refused by the MCP server"):
+        run(McpDriver(Refusing()).type("#x", "hi"))
+
+
+def test_mcp_click_retries_a_timeout_then_gives_up():
+    from det_autofill.fill import McpDriver
+
+    class Busy:
+        def __init__(self, fail):
+            self.fail, self.calls = fail, 0
+
+        async def call(self, name, **args):
+            self.calls += 1
+            if self.calls <= self.fail:
+                return "### Error\nTimeoutError: browserBackend.callTool: Timeout 5000ms exceeded."
+            return "ok"
+
+    class Fast(McpDriver):
+        async def wait(self, ms):
+            return None
+
+    busy = Busy(fail=2)
+    run(Fast(busy).click("#x"))
+    assert busy.calls == 3
+    with pytest.raises(RuntimeError, match="Timeout"):
+        run(Fast(Busy(fail=5)).click("#x"))
+
+
+def test_mcp_click_falls_back_to_the_page_hit_test_when_the_cover_is_gone():
+    from det_autofill.fill import McpDriver
+
+    intercepted = ("### Error\nTimeoutError: browserBackend.callTool: Timeout 5000ms exceeded.\nCall log:\n"
+                   "  - <iframe title=\"Widget containing checkbox for hCaptcha security challenge\"></iframe> "
+                   "from <div id=\"h-captcha\">…</div> subtree intercepts pointer events")
+
+    class Page:
+        def __init__(self, hit):
+            self.hit, self.calls = hit, []
+
+        async def call(self, name, **args):
+            self.calls.append(name)
+            if name == "browser_click":
+                return intercepted
+            return f'### Result\n"{self.hit}"'
+
+    page = Page("clicked")
+    run(McpDriver(page).click("#race-white"))
+    assert page.calls == ["browser_click", "browser_evaluate"]
+
+    with pytest.raises(RuntimeError, match="Timeout"):
+        run(McpDriver(Page("covered")).click("#x"))
+
+
+def test_mcp_click_hands_off_when_a_captcha_challenge_covers_the_form():
+    from det_autofill.fill import CaptchaCover, McpDriver
+
+    class Page:
+        async def call(self, name, **args):
+            if name == "browser_click":
+                return "### Error\nTimeoutError: Timeout 5000ms exceeded.\n  - <iframe> subtree intercepts pointer events"
+            return '### Result\n"captcha: hCaptcha challenge"'
+
+    with pytest.raises(CaptchaCover):
+        run(McpDriver(Page()).click("#x"))

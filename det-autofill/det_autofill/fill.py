@@ -51,6 +51,11 @@ class Driver(Protocol):
     async def wait(self, ms: int) -> None: ...
 
 
+class CaptchaCover(RuntimeError):
+    """A captcha challenge sits over the form (Lever's hCaptcha opens full-viewport
+    mid-fill): the run hands off instead of recording every widget as broken."""
+
+
 @dataclass
 class FillResult:
     ok: bool
@@ -161,6 +166,25 @@ FILE_TRIGGER = "(selector) => {" + _SELECTOR_FOR + r"""
   return '';
 }"""
 
+# Click through the page's own hit test: only when the point at the control's centre
+# resolves to the control (or its label); otherwise say what covers it.
+HIT_CLICK = r"""({selector}) => {
+  const el = document.querySelector(selector);
+  if (!el) return 'missing';
+  el.scrollIntoView({block: 'center', inline: 'nearest'});
+  const r = el.getBoundingClientRect();
+  const top = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2);
+  const label = el.closest('label') || (el.id ? document.querySelector(`label[for="${CSS.escape(el.id)}"]`) : null);
+  if (!top || !(top === el || el.contains(top) || (label && label.contains(top)))) {
+    // a challenge the page raised is the human's to solve, never to click around
+    if (top && top.tagName === 'IFRAME' && /captcha|challenge/i.test(`${top.title} ${top.src}`)) return `captcha: ${top.title.slice(0, 60)} (visibility ${getComputedStyle(top).visibility})`;
+    const what = top ? `${top.tagName.toLowerCase()}${top.id ? '#' + top.id : ''} ${String(top.className || '').slice(0, 40)}` : 'nothing';
+    return 'covered by ' + what;
+  }
+  el.click();
+  return 'clicked';
+}"""
+
 PAGE_HAS_TEXT = r"""(needle) => (document.body.innerText || '').toLowerCase().includes(String(needle).toLowerCase())"""
 
 
@@ -268,6 +292,19 @@ async def fill_radio(driver: Driver, selectors: list[str], key: str, answer: dic
         await driver.click(target)
     ok = bool((await read_field(driver, target)).get("checked"))
     return FillResult(ok, pick.how if ok else "radio-did-not-check", options[pick.index]["text"])
+
+
+async def fill_option_checkbox(driver: Driver, selector: str, option_label: str, prefs: list[str]) -> FillResult:
+    """One checkbox of a multi-choice question ("select all that apply" race boxes).
+    Ticked only when its own label matches the user's answer; every other box is left
+    unticked. Treating the preference list as a plain True ticked "Hispanic, Latino,
+    or Spanish origin" for an Asian applicant on a live Lever form."""
+    label = nv(option_label)
+    want = bool(label) and any(re.search(p, f, re.I) for p in prefs for f in text_forms(option_label))
+    if not want:
+        state = await read_field(driver, selector)
+        return FillResult(not state.get("checked"), "left-unchecked" if not state.get("checked") else "checked-by-someone-else")
+    return await fill_checkbox(driver, selector, True)
 
 
 async def fill_checkbox(driver: Driver, selector: str, want: bool) -> FillResult:
@@ -386,6 +423,8 @@ async def fill_row(driver: Driver, row, store: AnswerStore | None = None, descri
         if row.widget == "radio":
             return await fill_radio(driver, row.selectors, key, answer, row.options)
         if row.widget == "checkbox":
+            if answer["kind"] == "option":
+                return await fill_option_checkbox(driver, sel, (descriptor or {}).get("option_label", ""), answer["value"])
             return await fill_checkbox(driver, sel, bool(answer["value"]))
         if row.widget == "combobox" or _in_search_box(descriptor):
             return await fill_combobox(driver, sel, key, answer, store, search=_in_search_box(descriptor))
@@ -394,6 +433,8 @@ async def fill_row(driver: Driver, row, store: AnswerStore | None = None, descri
         if answer["kind"] == "bool":
             return await fill_text(driver, sel, key, "Yes" if answer["value"] else "No")
         return FillResult(False, f"no-strategy:{row.widget}/{answer['kind']}")
+    except CaptchaCover:
+        raise
     except Exception as exc:  # one broken widget must not stop the page
         return FillResult(False, f"error:{type(exc).__name__}:{str(exc)[:120]}")
 
@@ -435,25 +476,67 @@ class PlaywrightDriver:
         await asyncio.sleep(ms / 1000)
 
 
+# The pruning proxy's read-before-write gate reads "#e<digits>" in an action's
+# arguments as a snapshot ref the agent has not fetched and refuses the action.
+# Ashby ids are UUIDs ("#e061b99b-3f7c-..."), so those selectors were silently
+# dropped. The attribute form selects the same element without the "#e" prefix.
+_REF_LOOKALIKE = re.compile(r"#(e\d[\w\\-]*)")
+# a refusal by the proxy's gate, or any Playwright error ("element ... intercepts
+# pointer events" when a cookie banner covers the control) — both used to be ignored
+_BLOCKED = re.compile(r"^\W*Blocked:|was NOT performed|^### Error|^Error:|intercepts pointer events|Timeout \d+ms exceeded", re.I | re.M)
+
+
+def _unref(selector: str) -> str:
+    return _REF_LOOKALIKE.sub(lambda m: '[id="' + m.group(1).replace("\\", "") + '"]', selector)
+
+
 class McpDriver:
     """Playwright MCP (det_autofill.mcpio.Browser) with CSS selectors as targets."""
 
     def __init__(self, browser):
         self.b = browser
 
+    async def _act(self, name, **args):
+        out = await self.b.call(name, **args)
+        if _BLOCKED.search(out or ""):
+            raise RuntimeError(f"{name} refused by the MCP server: {out[:160]}")
+        return out
+
     async def click(self, selector):
-        await self.b.call("browser_click", element=selector, target=selector)
+        selector = _unref(selector)
+        for attempt in range(3):
+            out = await self.b.call("browser_click", element=selector, target=selector)
+            if not _BLOCKED.search(out or ""):
+                return
+            if "intercepts pointer events" in out:
+                # Ask the page what is on top. Lever opens hCaptcha's challenge as a
+                # full-viewport iframe mid-fill: that is a handoff, not a broken widget.
+                # When the page's own hit test lands on the control the cover is already
+                # gone, and a DOM click is what the user's click would be.
+                hit = await self.evaluate(HIT_CLICK, {"selector": selector})
+                if isinstance(hit, str) and hit.startswith("captcha"):
+                    raise CaptchaCover(hit)
+                if hit == "clicked":
+                    return
+                raise RuntimeError(f"browser_click intercepted, page hit test says {hit!r}: {out[:160]}")
+            # a control can be covered for a few seconds while the page works
+            # (Lever parsing an uploaded resume); a timeout is worth waiting out
+            if "Timeout" not in out or attempt == 2:
+                raise RuntimeError(f"browser_click refused by the MCP server: {out[:160]}")
+            await self.wait(1500)
 
     async def type(self, selector, text, *, slowly=False):
+        selector = _unref(selector)
         if slowly:  # pressSequentially appends, so empty the box first
-            await self.b.call("browser_type", element=selector, target=selector, text="")
-        await self.b.call("browser_type", element=selector, target=selector, text=text, slowly=slowly)
+            await self._act("browser_type", element=selector, target=selector, text="")
+        await self._act("browser_type", element=selector, target=selector, text=text, slowly=slowly)
 
     async def press(self, key):
-        await self.b.call("browser_press_key", key=key)
+        await self._act("browser_press_key", key=key)
 
     async def select_option(self, selector, value):
-        await self.b.call("browser_select_option", element=selector, target=selector, values=[value])
+        selector = _unref(selector)
+        await self._act("browser_select_option", element=selector, target=selector, values=[value])
 
     async def evaluate(self, js, arg=None):
         fn = js if arg is None else f"() => ({js})({json.dumps(arg)})"

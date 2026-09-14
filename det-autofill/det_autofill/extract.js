@@ -43,11 +43,18 @@
     if (aria) return aria;
     const wrapper = el.closest(
       '[data-automation-id^="formField-"], [data-field-entry-id], [data-testid="FieldEntry"], ' +
-      '.field, .form-group, .application-field, [class*="field" i]'
+      '.application-question, .field, .form-group, .application-field, [class*="field" i]'
     );
     if (wrapper) {
       const lbl = wrapper.querySelector('label, legend, [class*="label" i]');
       if (lbl && !lbl.contains(el) && textOf(lbl)) return textOf(lbl);
+    }
+    // Lever: <li class="application-question"><div class="application-label">…</div>
+    // <div class="application-field"><select>…</select></div></li>
+    const question = el.closest('.application-question, [class*="question" i]');
+    if (question) {
+      const lbl = Array.from(question.querySelectorAll('[class*="label" i], label')).find((n) => !n.contains(el) && textOf(n));
+      if (lbl) return textOf(lbl);
     }
     for (let prev = el.previousElementSibling; prev; prev = prev.previousElementSibling) {
       if (/^(LABEL|LEGEND|SPAN|DIV|P)$/.test(prev.tagName)) {
@@ -59,23 +66,36 @@
   }
 
   function groupScope(el) {
+    // .application-question: Lever keeps the question text in a sibling
+    // div.application-label, outside the <ul> of choices
     return el.closest(
       'fieldset, [role="radiogroup"], [role="group"], [data-automation-id^="formField-"], ' +
-      '[data-field-entry-id], .field, .form-group'
+      '[data-field-entry-id], .field, .form-group, .application-question, [class*="question" i]'
     );
   }
 
   function groupLabel(el) {
     const scope = groupScope(el);
     if (!scope) return '';
+    // a lone checkbox inside its own <label> is its own question: Lever puts both
+    // consent boxes in one question block, and borrowing the neighbour's text swapped
+    // the required "retain my data" box with the optional marketing one
+    if (el.closest('label')) {
+      const peers = el.name
+        ? scope.querySelectorAll(`input[name="${cssEscape(el.name)}"]:not([type="hidden"])`)
+        : scope.querySelectorAll('input[type="checkbox"], input[type="radio"]');
+      if (peers.length <= 1) return '';
+    }
     const legend = scope.querySelector('legend');
     if (legend && textOf(legend)) return textOf(legend);
     const aria = (scope.getAttribute('aria-label') || '').trim();
     if (aria) return aria;
     const lab = labelledBy(scope);
     if (lab) return lab;
-    const lbl = scope.querySelector('label');
-    if (lbl && !lbl.contains(el)) return textOf(lbl);
+    // a label wrapping another control names that control, not this group
+    const lbl = Array.from(scope.querySelectorAll('label, [class*="label" i]'))
+      .find((n) => !n.contains(el) && !n.querySelector('input, select, textarea') && textOf(n));
+    if (lbl) return textOf(lbl);
     return '';
   }
 
@@ -214,7 +234,7 @@
       group_label: gl,
       option_label: isChoice ? label : '',
       section: sectionOf(el),
-      required: !!(el.required || el.getAttribute('aria-required') === 'true' || /\*\s*$|\(required\)/i.test(gl || label)),
+      required: !!(el.required || el.getAttribute('aria-required') === 'true' || /[*✱]\s*$|\(required\)/i.test(gl || label)),
       value: widget === 'select' ? (el.selectedIndex >= 0 && el.options[el.selectedIndex] ? textOf(el.options[el.selectedIndex]) : '') : (el.value || ''),
       display: displayText(el, widget),
       checked: isChoice ? !!(el.checked || el.getAttribute('aria-checked') === 'true') : null,

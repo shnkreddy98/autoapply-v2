@@ -1,0 +1,45 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Lever-like fixture</title></head><body>
+<!-- Markup copied from a live Lever application (2026-09-14): the question text sits
+     in div.application-label beside the <ul> of choices, required is marked "✱", race
+     is a set of checkboxes, the two consent boxes share one question block. Choosing a resume re-renders
+     the questions 600ms later and wipes their state, as Lever's resume parsing does. -->
+<form id="application-form">
+  <div class="application-question"><label>Resume/CV ✱</label><input type="file" id="resume" name="resume" required></div>
+  <div style="height:60vh"></div>
+  <ul id="questions"></ul>
+  <li class="application-question"><div class="application-label"><div class="text">Years of Python?</div></div>
+    <div class="application-field"><select name="cards[q9][field0]"><option value="">Select...</option><option>1-3</option><option>4+</option></select></div></li>
+  <button type="button" id="btn-submit">Submit application</button>
+</form>
+<!-- a cookie banner covering most of the viewport, like the live page's; clicks on
+     the questions underneath land on the banner until it is accepted -->
+<div class="cc-window cc-banner cc-bottom" style="position:fixed;left:0;right:0;bottom:0;height:75vh;background:#eee;z-index:9">
+  <span>🍪 Privacy Notice. This website uses cookies to improve your web experience.</span>
+  <div class="message-buttons"><button class="cc-btn cc-deny">Deny</button><button class="cc-btn cc-allow">Accept</button></div>
+</div>
+<script>document.querySelectorAll('.cc-btn').forEach((b) => b.addEventListener('click', () => document.querySelector('.cc-window').remove()));</script>
+<script>
+  const HTML = `
+  <li class="application-question custom-question"><div><div class="application-label full-width multiple-choice">
+    <div class="text">Are you legally authorized to work in the United States?<span class="required">✱</span></div></div>
+    <div class="application-field full-width required-field"><ul>
+      <li><label><input type="radio" name="cards[q1][field0]" value="Yes" required><span class="application-answer-alternative">Yes</span></label></li>
+      <li><label><input type="radio" name="cards[q1][field0]" value="No" required><span class="application-answer-alternative">No</span></label></li>
+    </ul></div></div></li>
+  <li class="application-question"><div><div class="application-label"><div class="text">Race/Ethnicity (select all that apply)</div></div>
+    <div class="application-field"><ul>
+      <li><label><input type="checkbox" name="survey[race][field1]" value="Hispanic, Latino, or Spanish origin"><span>Hispanic, Latino, or Spanish origin</span></label></li>
+      <li><label><input type="checkbox" name="survey[race][field1]" value="Asian"><span>Asian</span></label></li>
+      <li><label><input type="checkbox" name="survey[race][field1]" value="Some other race"><span>Some other race, ethnicity, or origin</span></label></li>
+    </ul></div></div></li>
+  <li class="application-question"><div class="application-label">Consent</div><ul>
+    <li><label><span class="consent-required">Acme has my consent to retain my data for the purpose of considering me for employment.</span>
+      <input type="hidden" name="consent[store]" value="0"><input type="checkbox" name="consent[store]" value="1" required></label></li>
+    <li><label><span class="">Acme has my consent to contact me about future job opportunities.</span>
+      <input type="hidden" name="consent[marketing]" value="0"><input type="checkbox" name="consent[marketing]" value="1"></label></li>
+  </ul></li>`;
+  const render = () => { document.getElementById('questions').innerHTML = HTML; };
+  render();
+  document.getElementById('resume').addEventListener('change', () => setTimeout(render, 600));
+</script>
+</body></html>

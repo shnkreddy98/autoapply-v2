@@ -75,7 +75,8 @@ RULES: list[Rule] = [
     Rule("state", "address", (r"^state", r"state/?province", r"^province$", r"^region$")),
     Rule("zip_code", "address", (r"zip|postal",)),
     Rule("county", "address", (r"^county$",)),
-    Rule("country", "address", (r"^country( of residence)?$", r"\bcountry\b")),
+    # a work-permission question that mentions a country is not a country picker
+    Rule("country", "address", (r"^country( of residence)?$", r"^(?!.*\b(work|sponsor|visa|authoriz|eligib|permit|right to)).*\bcountry\b")),
     # --- links --------------------------------------------------------------
     Rule("linkedin", "links", (r"linked.?in",)),
     Rule("github", "links", (r"git.?hub",)),
@@ -89,6 +90,12 @@ RULES: list[Rule] = [
     Rule("password", "account", (r"password",)),
     Rule("username", "account", (r"^user ?name$",)),
     # --- work authorization ---------------------------------------------------
+    # "right to work in the country where this role is based": the answer depends on
+    # where the posting is, which the US-only profile flags cannot say. No stored
+    # answer exists for this key, so it goes to the resolver with the job description.
+    Rule("work_authorized_role_country", "auth", (
+        r"(right|authoriz\w*|eligible|permit\w*|allowed).{0,60}work.{0,80}(country|location) (where|in which|of) (this|the) (role|job|position|vacancy)",
+    )),
     # Must outrank visa_sponsorship: "authorized to work WITHOUT sponsorship?" says
     # "sponsor" but a Yes means no sponsorship is needed — the opposite answer.
     Rule("authorized_without_sponsorship", "auth", (
@@ -186,7 +193,13 @@ RULES: list[Rule] = [
     Rule("how_heard", "source", (r"how did you (hear|find|first hear)", r"^source( type)?$", r"hear about (us|this)")),
     Rule("contact_method", "source", (r"preferred contact method",)),
     # --- consent / signature ------------------------------------------------------
+    # before agree_terms: opting into marketing is never implied by applying
+    Rule("marketing_consent", "consent", (
+        r"(contact|email|text|message) me about (future|other|new)", r"future (job )?opportunities",
+        r"\bmarketing\b", r"newsletter", r"job alerts?", r"talent (community|network|pool)",
+    )),
     Rule("agree_terms", "consent", (
+        r"\b(has|have|give|gives) my consent\b", r"\bconsent to (retain|store|process|the (processing|storage))",
         r"i (agree|accept|consent|certify|acknowledge|attest|have read)",
         r"terms (of use|and conditions)", r"privacy (policy|notice)", r"gdpr",
         r"^(accept|agree|consent)$", r"acknowledg", r"sms|text message",

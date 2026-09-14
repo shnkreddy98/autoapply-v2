@@ -22,7 +22,7 @@ from typing import Protocol
 
 from det_autofill.answers import AnswerStore
 from det_autofill.classify import Row, plan
-from det_autofill.fill import Driver, FillResult, fill_row
+from det_autofill.fill import CaptchaCover, Driver, FillResult, fill_row
 
 EXTRACT_JS = (Path(__file__).parent / "extract.js").read_text()
 
@@ -62,9 +62,12 @@ NAV_JS = r"""() => {
     }
     return parts.join(' > ');
   }
-  const nodes = Array.from(document.querySelectorAll('button, input[type=submit], input[type=button], a[role=button], [role=button]'))
+  // plain links are included for "Apply for this job" (Lever): _nav only lets links
+  // count as Apply, never as Next or Submit
+  const nodes = Array.from(document.querySelectorAll('button, input[type=submit], input[type=button], a[role=button], [role=button], a[href]'))
     .filter((n) => visible(n) && !n.disabled && n.getAttribute('aria-disabled') !== 'true');
   return JSON.stringify(nodes.map((n) => ({ text: text(n).slice(0, 80), selector: selectorFor(n),
+    link: n.tagName === 'A' && n.getAttribute('role') !== 'button',
     type: (n.getAttribute('type') || '').toLowerCase(), automation_id: n.getAttribute('data-automation-id') || '' })));
 }"""
 
@@ -81,6 +84,25 @@ STATE_JS = r"""() => {
   const body = (document.body.innerText || '').toLowerCase();
   return JSON.stringify({ url: location.href, fields, headings, alerts: Array.from(new Set(alerts)), invalid,
     confirmation: /thank you for (applying|your application)|application (has been |was )?(received|submitted)|we('ve| have) received your application|successfully submitted/.test(body) });
+}"""
+
+# Cookie / consent banners cover the bottom of the page and swallow clicks meant for
+# the form (a live Lever page's banner made radios and checkboxes "not take").
+# Only an explicit accept/close button inside a container marked as such is clicked.
+OVERLAY_JS = r"""() => {
+  const visible = (n) => { const r = n.getBoundingClientRect(); const s = getComputedStyle(n); return r.width > 1 && r.height > 1 && s.visibility !== 'hidden' && s.display !== 'none'; };
+  const words = /^(accept( all)?( cookies)?|allow( all)?( cookies)?|i agree|agree|got it|ok(ay)?|dismiss|close)[!.]?$/i;
+  const marked = Array.from(document.querySelectorAll('[id*="cookie" i], [class*="cookie" i], [id*="consent" i], [class*="consent" i], [id*="onetrust" i], [class*="gdpr" i], [aria-label*="cookie" i], [class*="cc-window" i]'));
+  // Lever's banner is "div.cc-window.cc-banner": nothing says cookie but its text, so
+  // fixed/sticky boxes that talk about cookies count too
+  const floating = Array.from(document.querySelectorAll('body div, body section, body aside'))
+    .filter((n) => /fixed|sticky/.test(getComputedStyle(n).position) && /cookie/i.test((n.innerText || '').slice(0, 400)));
+  const boxes = marked.concat(floating).filter((n) => visible(n) && !n.closest('form'));
+  for (const box of boxes) {
+    const btn = Array.from(box.querySelectorAll('button, [role=button], a')).find((b) => visible(b) && words.test((b.innerText || b.getAttribute('aria-label') || '').trim()));
+    if (btn) { btn.setAttribute('data-det-overlay', '1'); return true; }
+  }
+  return false;
 }"""
 
 SUBMIT_RE = re.compile(r"^(submit( (my )?application)?|send( application)?|apply( now)?|finish|complete( application)?)$", re.I)
@@ -125,6 +147,32 @@ def _signature(state: dict) -> str:
     return hashlib.sha1(json.dumps([state["url"], state["fields"], state["headings"]]).encode()).hexdigest()
 
 
+async def dismiss_overlays(driver: Driver) -> bool:
+    """Close a cookie/consent banner if one is showing. Marks the button, then clicks it
+    by that mark so the click goes through the driver like any other action."""
+    found = await driver.evaluate(OVERLAY_JS)
+    if found is True or found == "true":
+        try:
+            await driver.click('[data-det-overlay="1"]')
+            await driver.wait(300)
+            return True
+        except Exception:
+            return False
+    return False
+
+
+async def settle(driver: Driver, *, quiet_polls: int = 2, attempts: int = 16, pause_ms: int = 400) -> None:
+    """Wait until the page stops changing (two identical signatures in a row)."""
+    last, quiet = None, 0
+    for _ in range(attempts):
+        sig = _signature(await _state(driver)) + json.dumps((await _state(driver))["alerts"])
+        quiet = quiet + 1 if sig == last else 0
+        if quiet >= quiet_polls:
+            return
+        last = sig
+        await driver.wait(pause_ms)
+
+
 async def extract(driver: Driver) -> tuple[str, list[dict]]:
     raw = await driver.evaluate(EXTRACT_JS)
     data = json.loads(raw) if isinstance(raw, str) else raw
@@ -137,7 +185,7 @@ async def _buttons(driver: Driver) -> list[dict]:
 
 
 def _nav(buttons: list[dict], pattern: re.Pattern) -> dict | None:
-    hits = [b for b in buttons if pattern.search(b["text"])]
+    hits = [b for b in buttons if pattern.search(b["text"]) and (pattern is APPLY_RE or not b.get("link"))]
     if pattern is SUBMIT_RE:
         # Greenhouse pages carry a top "Apply" button (scrolls to the form) and the
         # real "Submit application" at the bottom: the most specific wording wins
@@ -169,8 +217,17 @@ async def fill_page(driver: Driver, store: AnswerStore, resolver: Resolver | Non
     """Fill everything answerable on the current page. Returns (handoff reason or None,
     required rows still unanswered). `invalid` are selectors the page flagged after a
     rejected Next: they count as required even without a required marker."""
+    try:
+        return await _fill_page(driver, store, resolver, report, context, overwrite=overwrite, invalid=invalid)
+    except CaptchaCover as exc:
+        return f"captcha over the form ({exc})", []
+
+
+async def _fill_page(driver, store, resolver, report, context, *, overwrite, invalid):
     invalid = invalid or set()
     attempted: set[str] = set()
+    filled_ok: set[str] = set()  # a later re-render (Lever parses the resume) can wipe these
+    retried: set[str] = set()
     # keyed by selector, not row index: react-select adds hidden inputs after each pick,
     # which shifts every later index and lost track of a required field that failed
     failed: set[str] = set()
@@ -186,16 +243,26 @@ async def fill_page(driver: Driver, store: AnswerStore, resolver: Resolver | Non
         handoff = [r for r in rows if r.action == "handoff"]
         if handoff:
             return f"{handoff[0].reason}: {handoff[0].label[:60]}", []
-        todo = [r for r in rows if r.action == "fill" and r.selectors[0] not in attempted]
+        todo = [r for r in rows if r.action == "fill" and (
+            r.selectors[0] not in attempted
+            or (r.selectors[0] in filled_ok and r.selectors[0] not in retried))]
         todo.sort(key=lambda r: r.widget != "file")  # uploads can autofill the rest
         if not todo:
             break
         for row in todo:
-            attempted.add(row.selectors[0])
+            sel = row.selectors[0]
+            if sel in attempted:
+                retried.add(sel)  # filled before, empty now: the page reset it once
+            attempted.add(sel)
             result = await fill_row(driver, row, store, by_index.get(row.index))
             report.filled.append({"label": row.label[:80], "key": row.key, "ok": result.ok, "how": result.how, "source": "profile"})
-            if not result.ok:
-                failed.add(row.selectors[0])
+            if result.ok:
+                filled_ok.add(sel)
+                failed.discard(sel)
+                if row.widget == "file":
+                    await settle(driver)  # resume parsing re-renders some forms
+            else:
+                failed.add(sel)
 
     # a required upload that did not register cannot be answered by anyone else
     broken_files = [r for r in rows if r.widget == "file" and r.selectors[0] in failed and r.required]
@@ -231,6 +298,7 @@ async def run(driver: Driver, store: AnswerStore, *, resolver: Resolver | None =
         state = await _state(driver)
         report = PageReport(number=number, url=state["url"])
         result.pages.append(report)
+        await dismiss_overlays(driver)
 
         # a job-board landing page: the form appears after "Apply"
         buttons = await _buttons(driver)
