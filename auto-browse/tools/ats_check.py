@@ -67,6 +67,10 @@ GONE_RE = re.compile(
     r"|job you (are|were) looking for|no longer (be )?found|sorry, this job|opening (is )?closed|\b404\b",
     re.I,
 )
+# the applicant's email already has an account there (UKG Ready, Hirebridge)
+ACCOUNT_TEXT_RE = re.compile(
+    r"already have an account|(log|sign) in to continue|email address is already associated|"
+    r"already (registered|associated with (a|an) (profile|account))", re.I)
 ACCOUNT_WALL = "account wall: sign-in / create-account page (det has no login flow)"
 # Final-submit wording the check driver refuses to click, whatever the engine thinks.
 # Recruitee's final button is a bare "Send"; "Apply" is left out because it is also
@@ -165,7 +169,7 @@ def verdict(result: engine.RunResult, audit: dict, page_text: str) -> str:
         return "BLOCKED"
     # "Sign In" in a site header is not an account wall: that took posting pages the
     # engine could not open (iCIMS, UKG) for blocked ones
-    if audit["password_page"] or audit["account_page"]:
+    if audit["password_page"] or audit["account_page"] or ACCOUNT_TEXT_RE.search(page_text[:3000]):
         return "BLOCKED"
     if result.status == "ready-to-submit" and not audit["empty_required"] and not audit["errors"] and not audit["invalid"]:
         return "PASS"

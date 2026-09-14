@@ -121,8 +121,9 @@ SUBMIT_RE = re.compile(r"^(submit( (my )?application)?|send( application)?|apply
 NEXT_RE = re.compile(r"^(next(?! (slide|image|photo|item|job|jobs|article|story|post))( step| page)?|continue|save (and|&) continue|save and next|proceed|review( application)?)\b", re.I)
 # "apply manually": Workday's Apply opens a chooser (autofill with resume / apply manually)
 # Breezy: "Apply To Position"; Paycor: "Apply for this Position"
-# Dayforce: "Apply without an Account" beside Sign In
-APPLY_RE = re.compile(r"^(apply( now| manually| online| here| (to|for) (this )?(job|position|role|opening)| without an account| as (a )?guest)?|continue as (a )?guest|i'?m interested|start (your |an |the )?application|begin application)$", re.I)
+# Dayforce: "Apply without an Account" beside Sign In; UKG Ready: "Type it in myself"
+# beside "Use my resume"
+APPLY_RE = re.compile(r"^(apply( now| manually| online| here| (to|for) (this )?(job|position|role|opening)| without an account| as (a )?guest)?|continue as (a )?guest|type it in myself|enter (it|my (info|information|details)) manually|i'?m interested|start (your |an |the )?application|begin application)$", re.I)
 
 
 class Resolver(Protocol):
@@ -201,7 +202,7 @@ def _nav(buttons: list[dict], pattern: re.Pattern) -> dict | None:
     if pattern is APPLY_RE:
         # Workday's chooser: "Apply Manually" beside "Autofill with Resume"; the
         # posting's own "Apply" stays on the page behind it
-        hits.sort(key=lambda b: not re.search(r"manually|without an account|guest", b["text"], re.I))
+        hits.sort(key=lambda b: not re.search(r"manually|without an account|guest|myself", b["text"], re.I))
     return hits[0] if hits else None
 
 
