@@ -49,8 +49,11 @@ LOGIN_JS = "() => {" + FRAMES_JS + r"""
     .map((n) => ({ text: (n.innerText || n.value || n.getAttribute('aria-label') || '').replace(/\s+/g, ' ').trim().slice(0, 60), selector: sel(n) }))
     .filter((b) => b.text);
   const text = frameDocs().map(({ doc }) => (doc.body && doc.body.innerText) || '').join('\n').slice(0, 4000);
+  // a challenge the portal raised (iCIMS shows hCaptcha after the email step)
+  const captcha = deepAll('iframe').some((f) => { const r = f.getBoundingClientRect();
+    return r.width > 100 && r.height > 100 && getComputedStyle(f).visibility !== 'hidden' && /captcha|challenge/i.test(`${f.title} ${f.src}`); });
   return JSON.stringify({ url: location.href, emails: emails.map(sel), passwords: passwords.map(sel),
-    codes: codes.map(sel), buttons, text });
+    codes: codes.map(sel), buttons, text, captcha });
 }"""
 
 SIGN_IN_RE = re.compile(r"^(sign ?in|log ?in|login|continue|next|verify( code)?|submit( code)?)$", re.I)
@@ -58,7 +61,8 @@ SIGN_IN_RE = re.compile(r"^(sign ?in|log ?in|login|continue|next|verify( code)?|
 SWITCH_RE = re.compile(r"^(sign ?in|log ?in|already have an account\??.*|i already have an account|existing (user|candidate).*)$", re.I)
 CREATE_RE = re.compile(r"create (an |your )?account|register|sign ?up|verify (new )?password|confirm password|re-?enter password", re.I)
 REJECTED_RE = re.compile(
-    r"(incorrect|invalid|wrong)\s+(e-?mail|user ?name|password|credentials|login|code)|"
+    # not a prompt: Hirebridge shows "Incorrect Email? click here" on every sign-in page
+    r"(incorrect|invalid|wrong)\s+(e-?mail|user ?name|password|credentials|login|code)(?!\s*\?)|"
     r"(password|credentials)\s+(is|are)\s+(incorrect|invalid)|does(n't| not) match|account (is )?locked|too many (failed )?attempts|"
     r"(don't|do not|didn't|did not) recogni[sz]e (those|your|these) (credentials|details)|credentials (are )?not recogni[sz]ed",
     re.I)
@@ -120,6 +124,8 @@ async def sign_in(driver: Driver, creds: Credentials | None, otp: Callable[[], A
     for _step in range(MAX_STEPS):
         await dismiss_overlays(driver)
         page = await _page(driver)
+        if page.get("captcha"):
+            return "captcha at sign-in: solve it in the browser (noVNC :6080), then continue"
         if REJECTED_RE.search(page["text"]):
             return "sign-in rejected: " + REJECTED_RE.search(page["text"]).group(0)
         if not (page["emails"] or page["passwords"] or page["codes"]):
