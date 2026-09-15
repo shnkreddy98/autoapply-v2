@@ -121,6 +121,10 @@ FRAME_JS = r"""() => {
 ACCOUNT_PAGE_JS = "() => {" + FRAMES_JS + r"""
   const shown = (n) => { const r = n.getBoundingClientRect(); return r.width > 1 && r.height > 1 && getComputedStyle(n).visibility !== 'hidden'; };
   if (deepAll('input[type=password]').some(shown)) return true;
+  // UKG Ready: "We noticed you already have an account using this email address.
+  // Please log in to continue." with only a Log in button
+  const body = frameDocs().map(({ doc }) => (doc.body && doc.body.innerText) || '').join('\n').slice(0, 3000);
+  if (/already have an account|(log|sign) in to continue|already (registered|associated with (a|an) (profile|account))/i.test(body)) return true;
   return /accounts\.google\.|login\.microsoftonline\.|linkedin\.com\/(uas\/)?login|passport\.|\/(sign-?in|log-?in|create-?account|register)(\b|\/|\?|$)|applylogin/i.test(location.href);
 }"""
 

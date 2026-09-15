@@ -75,7 +75,7 @@ GONE_RE = re.compile(
 ACCOUNT_TEXT_RE = re.compile(
     r"already have an account|(log|sign) in to continue|email address is already associated|"
     r"already (registered|associated with (a|an) (profile|account))", re.I)
-ACCOUNT_WALL = "account wall: sign-in / create-account page (det has no login flow)"
+ACCOUNT_WALL = "account wall: stopped on a sign-in page"
 # Final-submit wording the check driver refuses to click, whatever the engine thinks.
 # Recruitee's final button is a bare "Send"; "Apply" is left out because it is also
 # how a posting opens its form
@@ -265,8 +265,7 @@ async def check_target(target, *, browser, conn, storage, user_id, doc, store, c
         "status": status, "engine_status": result.status,
         # a stuck run that verdict() calls BLOCKED stopped at a sign-in page: say so
         # instead of the engine's "no Next or Submit control on the page"
-        "reason": (ACCOUNT_WALL if status == "BLOCKED" and (result.status == "stuck" or result.reason.startswith("account page"))
-                   else result.reason),
+        "reason": ACCOUNT_WALL if status == "BLOCKED" and result.status == "stuck" else result.reason,
         "pages": len(result.pages), "filled": sum(1 for p in result.pages for f in p.filled if f["ok"]),
         "fill_failures": fill_failures, "refused": refused, "unanswered": unanswered,
         "empty_required": audit["empty_required"], "errors": audit["errors"] + audit["invalid"],

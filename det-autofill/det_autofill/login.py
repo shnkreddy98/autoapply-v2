@@ -59,7 +59,8 @@ SWITCH_RE = re.compile(r"^(sign ?in|log ?in|already have an account\??.*|i alrea
 CREATE_RE = re.compile(r"create (an |your )?account|register|sign ?up|verify (new )?password|confirm password|re-?enter password", re.I)
 REJECTED_RE = re.compile(
     r"(incorrect|invalid|wrong)\s+(e-?mail|user ?name|password|credentials|login|code)|"
-    r"(password|credentials)\s+(is|are)\s+(incorrect|invalid)|does(n't| not) match|account (is )?locked|too many (failed )?attempts",
+    r"(password|credentials)\s+(is|are)\s+(incorrect|invalid)|does(n't| not) match|account (is )?locked|too many (failed )?attempts|"
+    r"(don't|do not|didn't|did not) recogni[sz]e (those|your|these) (credentials|details)|credentials (are )?not recogni[sz]ed",
     re.I)
 
 
@@ -91,6 +92,17 @@ def _button(page: dict, pattern: re.Pattern) -> dict | None:
     return hits[0] if hits else None
 
 
+async def _click(driver: Driver, selector: str, wait_ms: int) -> None:
+    """Click and wait; follow a tab the click opened (UKG Ready opens its sign-in form
+    in a new window)."""
+    tabs = await driver.tabs() if hasattr(driver, "tabs") else 0
+    await driver.click(selector)
+    await driver.wait(wait_ms)
+    if tabs and await driver.tabs() > tabs:
+        await driver.select_last_tab()
+        await driver.wait(1500)
+
+
 def _signature(page: dict) -> str:
     return json.dumps([page["url"], page["emails"], page["passwords"], page["codes"]])
 
@@ -111,8 +123,16 @@ async def sign_in(driver: Driver, creds: Credentials | None, otp: Callable[[], A
         if REJECTED_RE.search(page["text"]):
             return "sign-in rejected: " + REJECTED_RE.search(page["text"]).group(0)
         if not (page["emails"] or page["passwords"] or page["codes"]):
-            return None
-        if _signature(page) == last:
+            # a notice with a Log in button and no boxes yet: open the sign-in form once
+            notice = re.search(r"already have an account|(log|sign) in to continue|already (registered|associated)", page["text"], re.I)
+            switch = None if switched or not notice else next((b for b in page["buttons"] if SWITCH_RE.search(b["text"])), None)
+            if not switch:
+                return None
+            switched = True
+            last = _signature(page)
+            await _click(driver, switch["selector"], 2500)
+            continue
+        if _signature(page) == last and not switched:
             return "sign-in step did not advance"
         last = _signature(page)
         host = re.sub(r"^https?://([^/]+).*", r"\1", page["url"])
@@ -131,10 +151,10 @@ async def sign_in(driver: Driver, creds: Credentials | None, otp: Callable[[], A
                 await _type(driver, boxes[0], code)
             button = _button(page, SIGN_IN_RE)
             if button:
-                await driver.click(button["selector"])
+                await _click(driver, button["selector"], 2500)
             else:
                 await driver.press("Enter")
-            await driver.wait(2500)
+                await driver.wait(2500)
             continue
 
         if not creds or not creds.password:
@@ -146,8 +166,7 @@ async def sign_in(driver: Driver, creds: Credentials | None, otp: Callable[[], A
             if not switch:
                 return "no account on this portal (the check never creates one)"
             switched = True
-            await driver.click(switch["selector"])
-            await driver.wait(2000)
+            await _click(driver, switch["selector"], 2000)
             continue
 
         if page["passwords"]:
@@ -165,6 +184,5 @@ async def sign_in(driver: Driver, creds: Credentials | None, otp: Callable[[], A
         button = _button(page, SIGN_IN_RE)
         if not button:
             return "no sign-in button"
-        await driver.click(button["selector"])
-        await driver.wait(3000)
+        await _click(driver, button["selector"], 3000)
     return "sign-in took too many steps"
