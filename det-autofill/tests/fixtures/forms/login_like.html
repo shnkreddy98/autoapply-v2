@@ -1,0 +1,43 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Portal sign-in fixture</title></head><body>
+<!-- A portal sign-in the way enterprise ATS do it: #create starts on a create-account
+     form (Workday) with a "Sign In" switch; then email first (iCIMS), password, a
+     six-box emailed code (Oracle), then the application. The right password is
+     "s3cret" and the code "482913"; a wrong password shows "Incorrect password". -->
+<div id="app"></div>
+<script>
+  const app = document.getElementById('app');
+  const tries = { password: 0 };
+  document.body.dataset.tries = '0';
+  function screen(html, bind) { app.innerHTML = html; bind && bind(); }
+  function create() {
+    screen(`<h2>Create Account</h2><label for="ce">Email Address</label><input id="ce" type="email">
+      <label for="cp">Password</label><input id="cp" type="password"><label for="cv">Verify New Password</label><input id="cv" type="password">
+      <button id="mk" type="button">Create Account</button><button id="si" type="button">Sign In</button>`,
+      () => { document.getElementById('si').onclick = email; document.getElementById('mk').onclick = () => { document.body.dataset.created = '1'; }; });
+  }
+  function email() {
+    screen(`<h2>Sign in</h2><label for="em">Email address</label><input id="em" type="email"><button id="nx" type="button">Next</button>`,
+      () => { document.getElementById('nx').onclick = () => { if (document.getElementById('em').value.includes('@')) password(); }; });
+  }
+  function password() {
+    screen(`<h2>Enter your password</h2><label for="pw">Password</label><input id="pw" type="password"><div id="err" role="alert"></div><button id="go" type="button">Sign In</button>`,
+      () => { document.getElementById('go').onclick = () => {
+        document.body.dataset.tries = String(++tries.password);
+        if (document.getElementById('pw').value === 's3cret') code();
+        else document.getElementById('err').textContent = 'Incorrect password. Try again.';
+      }; });
+  }
+  function code() {
+    const boxes = [0,1,2,3,4,5].map((i) => `<input id="d${i}" maxlength="1" inputmode="numeric" aria-label="Verification code digit ${i + 1} of six">`).join('');
+    screen(`<h2>Check your email</h2>${boxes}<button id="vf" type="button">Verify</button>`,
+      () => { document.getElementById('vf').onclick = () => {
+        const got = [0,1,2,3,4,5].map((i) => document.getElementById('d' + i).value).join('');
+        if (got === '482913') form();
+      }; });
+  }
+  function form() {
+    screen(`<form><label for="fn">First Name*</label><input id="fn" required><button type="button" id="send">Submit Application</button></form>`);
+  }
+  location.hash === '#create' ? create() : email();
+</script>
+</body></html>

@@ -18,8 +18,9 @@ import json
 import re
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
-from typing import Protocol
+from typing import Awaitable, Callable, Protocol
 
+from det_autofill import login
 from det_autofill.answers import AnswerStore
 from det_autofill.classify import Row, plan
 from det_autofill.fill import FRAMES_JS, OVERLAY_JS, CaptchaCover, Driver, FillResult, dismiss_overlays, fill_row  # noqa: F401
@@ -351,12 +352,16 @@ async def _fill_page(driver, store, resolver, report, context, *, overwrite, inv
 
 async def run(driver: Driver, store: AnswerStore, *, resolver: Resolver | None = None, autosubmit: bool = False,
               context: dict | None = None, max_pages: int = MAX_PAGES, overwrite: bool = False,
-              stop_at_account_pages: bool = False) -> RunResult:
+              stop_at_account_pages: bool = False, credentials: login.Credentials | None = None,
+              otp: Callable[[], Awaitable[str | None]] | None = None) -> RunResult:
     """Drive the application from the page the browser is on.
 
     stop_at_account_pages: hand off on a sign-in / create-account page instead of
     typing into it. The live ATS check sets it: it typed the applicant's email into
-    Google's and Amazon's sign-in flows and pressed Next."""
+    Google's and Amazon's sign-in flows and pressed Next.
+    credentials / otp: sign in on account pages instead (det_autofill.login) — one
+    password attempt per portal, codes read from the applicant's inbox by `otp()`,
+    never an account created."""
     context = dict(context or {})
     result = RunResult(status="stuck")
     repairs = 0
@@ -404,11 +409,28 @@ async def run(driver: Driver, store: AnswerStore, *, resolver: Resolver | None =
                 await settle(driver)
                 continue
 
-        if stop_at_account_pages and await driver.evaluate(ACCOUNT_PAGE_JS):
-            result.status, result.reason = "handoff", "account page: sign in or create an account"
-            return result
+        if (credentials or stop_at_account_pages) and await driver.evaluate(ACCOUNT_PAGE_JS):
+            if credentials is None:
+                result.status, result.reason = "handoff", "account page: sign in or create an account"
+                return result
+            why = await login.sign_in(driver, credentials, otp, context)
+            if why:
+                result.status, result.reason = "handoff", why
+                return result
+            if _signature(await _state(driver)) != _signature(state):
+                report.action = "sign-in"
+                continue
+            # nothing to sign in to on this page: fill it like any other
         handoff, unanswered = await fill_page(driver, store, resolver, report, context,
                                               overwrite=overwrite, invalid=invalid)
+        if handoff and handoff.startswith("captcha-or-code") and otp and state["url"] not in context.setdefault("code_pages", set()):
+            # an emailed code inside the application (Oracle's "Enter verification code")
+            context["code_pages"].add(state["url"])
+            why = await login.sign_in(driver, credentials, otp, context)
+            if not why:
+                report.action = "code"
+                continue
+            handoff = why
         if handoff:
             result.status, result.reason = "handoff", handoff
             return result

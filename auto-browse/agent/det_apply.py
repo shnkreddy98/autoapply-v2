@@ -19,11 +19,13 @@ import asyncio
 import json
 import logging
 import os
+import re
+import time
 from pathlib import Path
-from typing import Callable
+from typing import Awaitable, Callable
 
 from common import keys, repo
-from det_autofill import engine
+from det_autofill import engine, login
 from det_autofill.answers import AnswerStore
 from det_autofill.fill import McpDriver
 from det_autofill.llm import LLMResolver
@@ -88,6 +90,41 @@ def jd_text(storage, job_id: str) -> str:
         return ""
 
 
+def portal_credentials(bundle) -> login.Credentials | None:
+    """The applicant's portal sign-in (`autoapply profile init`), or None without a
+    password. Never logged: it is typed into the portal and nowhere else."""
+    cred = bundle.login or {}
+    if not cred.get("login_password"):
+        return None
+    email = cred.get("login_email") or (bundle.user or {}).get("email")
+    return login.Credentials(email, cred["login_password"]) if email else None
+
+
+# host words that say nothing about who sends the code
+_HOST_NOISE = {"www", "careers", "career", "jobs", "job", "apply", "recruiting", "com", "net", "io", "co", "org", "us", "wd1", "wd3", "wd5", "fa", "ocs"}
+
+
+def inbox_otp(conn, user_id: str, url: str) -> Callable[[], Awaitable[str | None]] | None:
+    """An `otp()` for the engine that reads the verification code from the applicant's
+    Gmail (`autoapply gmail connect`), or None when no inbox is connected. Only mail
+    that arrived after this run started counts, and each message is used once."""
+    token = repo.get_gmail_token(conn, user_id)
+    if not token:
+        return None
+    from agent import email_otp
+
+    host = re.sub(r"^https?://([^/]+).*", r"\1", url or "")
+    company = " ".join(w for w in re.split(r"[.\-]", host) if w and w not in _HOST_NOISE)
+    since, seen = int(time.time()) - 60, set()
+
+    async def otp() -> str | None:
+        found = await email_otp.fetch_email(token["refresh_token"], company, None, since, seen)
+        m = re.search(r"VERIFICATION CODE: (\w+)", found)
+        return m.group(1) if m else None
+
+    return otp
+
+
 async def run_det(
     conn,
     storage,
@@ -133,6 +170,7 @@ async def run_det(
         result = await engine.run(
             McpDriver(browser), store, resolver=resolver, autosubmit=autosubmit,
             context={"job_id": str(job_id), "url": url},
+            credentials=portal_credentials(bundle), otp=inbox_otp(conn, user_id, url),
         )
     finally:
         await browser.close()

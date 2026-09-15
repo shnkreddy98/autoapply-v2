@@ -532,3 +532,48 @@ def test_a_form_inside_a_same_origin_iframe_is_filled_in_place(tmp_path):
     assert result.pages[0].action == "apply"
     assert (result.status, result.reason) == ("ready-to-submit", "stopped before 'Submit'"), result.reason
     assert state == {"first": "Jane", "email": DOC["contact"]["email"], "auth": True, "sent": None}
+
+
+def _run_login(tmp_path, hash_="", password="s3cret", otp_code="482913"):
+    from browser import FORMS, chromium_executable
+
+    from det_autofill.login import Credentials
+
+    async def go():
+        store = AnswerStore(from_export(DOC, resume_path=str(tmp_path / "r.pdf")))
+        p = await pw.async_playwright().start()
+        try:
+            browser = await p.chromium.launch(headless=True, executable_path=chromium_executable())
+        except Exception as exc:
+            await p.stop()
+            pytest.skip(f"chromium unavailable: {exc}")
+        try:
+            page = await browser.new_page()
+            await page.goto((FORMS / "login_like.html").as_uri() + hash_)
+            codes = []
+
+            async def otp():
+                codes.append(1)
+                return otp_code
+
+            result = await engine.run(PlaywrightDriver(page), store, stop_at_account_pages=True,
+                                      credentials=Credentials("jane@example.com", password), otp=otp)
+            return result, await page.evaluate("() => ({...document.body.dataset})"), len(codes)
+        finally:
+            await browser.close()
+            await p.stop()
+
+    return asyncio.run(go())
+
+
+def test_sign_in_goes_email_password_emailed_code_then_the_form(tmp_path):
+    result, dataset, codes = _run_login(tmp_path, "#create")
+    assert (result.status, result.reason) == ("ready-to-submit", "stopped before 'Submit Application'"), result.reason
+    assert dataset.get("created") is None  # switched to Sign In, never created an account
+    assert dataset["tries"] == "1" and codes == 1
+
+
+def test_a_rejected_password_is_never_retried(tmp_path):
+    result, dataset, _ = _run_login(tmp_path, password="wrong")
+    assert result.status == "handoff" and "rejected" in result.reason
+    assert dataset["tries"] == "1"

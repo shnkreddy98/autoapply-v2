@@ -17,7 +17,10 @@ Per target:
   GAPS     every widget worked, but required questions only the user can answer are
            left (unbacked qualification questions, missing facts); the run stops on
            that page, so later pages of a multi-page form are not reached
-  BLOCKED  captcha / one-time code, or a sign-in / create-account page
+  BLOCKED  captcha, a code with no inbox connected, a rejected sign-in, or a portal
+           where the applicant has no account (the check signs in to existing
+           accounts with the stored portal password, once per portal; --no-login
+           stops at the sign-in page instead; it never creates an account)
   GONE     every candidate posting is closed — find a fresh one on that ATS (see
            kb/ats-check/README.md) and add it to the target's candidates
 
@@ -190,7 +193,8 @@ def verdict(result: engine.RunResult, audit: dict, page_text: str) -> str:
     return "FAIL"
 
 
-async def check_target(target, *, browser, conn, storage, user_id, doc, store, complete, max_candidates) -> dict:
+async def check_target(target, *, browser, conn, storage, user_id, doc, store, complete, max_candidates,
+                       credentials=None) -> dict:
     driver = NoSubmitDriver(browser)
     url, tried = await open_live_posting(browser, driver, target["candidates"], max_candidates)
     out = {"platform": target["platform"], "url": url, "tried": tried, "checked": datetime.now(timezone.utc).isoformat()}
@@ -214,7 +218,8 @@ async def check_target(target, *, browser, conn, storage, user_id, doc, store, c
     context: dict = {}
     try:
         result = await asyncio.wait_for(
-            engine.run(driver, store, resolver=resolver, autosubmit=False, context=context, stop_at_account_pages=True),
+            engine.run(driver, store, resolver=resolver, autosubmit=False, context=context, stop_at_account_pages=True,
+                       credentials=credentials, otp=det_apply.inbox_otp(conn, user_id, url) if credentials else None),
             timeout=PER_TARGET_TIMEOUT_S,
         )
     except asyncio.TimeoutError:
@@ -233,7 +238,7 @@ async def check_target(target, *, browser, conn, storage, user_id, doc, store, c
         if rest:
             r = await check_target(target | {"candidates": rest}, browser=browser, conn=conn, storage=storage,
                                    user_id=user_id, doc=doc, store=store, complete=complete,
-                                   max_candidates=max_candidates - len(tried) - 1)
+                                   max_candidates=max_candidates - len(tried) - 1, credentials=credentials)
             return r | {"tried": tried + [f"{url} -> gone"] + r["tried"]}
         return out | {"status": "GONE", "tried": tried + [f"{url} -> gone"]}
     status = verdict(result, audit, end_text if isinstance(end_text, str) else "")
@@ -347,7 +352,12 @@ async def main_async(args) -> int:
         store = AnswerStore(from_export(doc, resume_path=f"{RESUME_CONTAINER_ROOT}/{run_dir}/resume.pdf",
                                         login_password=(bundle.login or {}).get("login_password")))
         complete = None if args.no_model else det_apply.openrouter_complete(args.model or DEFAULT_MODEL)
-        print(f"ATS check: {len(targets)} target(s), role {bundle.label!r}, mcp {args.mcp}")
+        # signs in to existing accounts with the stored portal password (one attempt per
+        # portal) unless --no-login; never creates an account
+        credentials = None if args.no_login else det_apply.portal_credentials(bundle)
+        inbox = "connected" if repo.get_gmail_token(conn, user_id) else "not connected (codes hand off)"
+        print(f"ATS check: {len(targets)} target(s), role {bundle.label!r}, mcp {args.mcp}, "
+              f"sign-in {'on' if credentials else 'off'}, inbox {inbox}")
 
         results, report = [], None
         browser = await Browser(args.mcp).connect()
@@ -357,7 +367,8 @@ async def main_async(args) -> int:
                 print(f"[{i}/{len(targets)}] {target['platform']} ...", flush=True)
                 try:
                     r = await check_target(target, browser=browser, conn=conn, storage=storage, user_id=user_id,
-                                           doc=doc, store=store, complete=complete, max_candidates=args.max_candidates)
+                                           doc=doc, store=store, complete=complete, max_candidates=args.max_candidates,
+                                           credentials=credentials)
                 except Exception as exc:  # one broken target never stops the sweep
                     r = {"platform": target["platform"], "url": None, "tried": [], "status": "FAIL",
                          "reason": f"check crashed: {type(exc).__name__}: {str(exc)[:200]}"}
@@ -386,6 +397,7 @@ def main() -> None:
     p.add_argument("--mcp", default=det_apply.PLAYWRIGHT_MCP_URL, help="Playwright MCP URL (default: the proxy)")
     p.add_argument("--model", help="model for the resolver (default: OPENROUTER_MODEL)")
     p.add_argument("--no-model", action="store_true", help="deterministic answers only; gaps are reported")
+    p.add_argument("--no-login", action="store_true", help="stop at sign-in pages instead of signing in to existing accounts")
     p.add_argument("--max-candidates", type=int, default=6, help="closed postings to skip per target before GONE")
     sys.exit(asyncio.run(main_async(p.parse_args())))
 
