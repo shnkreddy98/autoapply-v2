@@ -365,9 +365,14 @@ async def main_async(args) -> int:
             for i, target in enumerate(targets, 1):
                 print(f"[{i}/{len(targets)}] {target['platform']} ...", flush=True)
                 try:
+                    # a portal that rejected the password is not tried again: every sweep
+                    # would add a failed attempt toward its lockout (--retry-login clears it)
+                    skip_login = target.get("login_rejected") and not args.retry_login
                     r = await check_target(target, browser=browser, conn=conn, storage=storage, user_id=user_id,
                                            doc=doc, store=store, complete=complete, max_candidates=args.max_candidates,
-                                           credentials=credentials)
+                                           credentials=None if skip_login else credentials)
+                    if skip_login and r["status"] == "BLOCKED":
+                        r["reason"] = f"sign-in skipped: password rejected on {target['login_rejected']}"
                 except Exception as exc:  # one broken target never stops the sweep
                     r = {"platform": target["platform"], "url": None, "tried": [], "status": "FAIL",
                          "reason": f"check crashed: {type(exc).__name__}: {str(exc)[:200]}"}
@@ -377,6 +382,10 @@ async def main_async(args) -> int:
                     if t["platform"] == target["platform"]:
                         t.update({"url": r.get("url") or t.get("url"), "last_status": r["status"],
                                   "last_checked": r.get("checked")})
+                        if str(r.get("reason", "")).startswith("sign-in rejected"):
+                            t["login_rejected"] = str(r.get("checked", ""))[:10]
+                        elif r["status"] in ("PASS", "GAPS") and args.retry_login:
+                            t.pop("login_rejected", None)
                 TARGETS.write_text(json.dumps(data, indent=1))
                 await _restore_tabs(browser, home)
                 # a full sweep runs for hours: keep the report current after each target
@@ -397,6 +406,7 @@ def main() -> None:
     p.add_argument("--model", help="model for the resolver (default: OPENROUTER_MODEL)")
     p.add_argument("--no-model", action="store_true", help="deterministic answers only; gaps are reported")
     p.add_argument("--no-login", action="store_true", help="stop at sign-in pages instead of signing in to existing accounts")
+    p.add_argument("--retry-login", action="store_true", help="sign in again on portals that rejected the password before")
     p.add_argument("--max-candidates", type=int, default=6, help="closed postings to skip per target before GONE")
     sys.exit(asyncio.run(main_async(p.parse_args())))
 
