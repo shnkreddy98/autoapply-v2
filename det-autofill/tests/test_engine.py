@@ -498,3 +498,37 @@ def test_the_ats_check_stops_at_a_sign_in_page_before_typing(tmp_path):
     result, typed = asyncio.run(go())
     assert result.status == "handoff" and result.reason.startswith("account page")
     assert typed == ""
+
+
+def test_a_form_inside_a_same_origin_iframe_is_filled_in_place(tmp_path):
+    """iCIMS: everything after the wrapper page is inside one iframe."""
+    from browser import FORMS, chromium_executable
+
+    async def go():
+        store = AnswerStore(from_export(DOC, resume_path=str(tmp_path / "r.pdf")) | {"work_eligible_us": True})
+        p = await pw.async_playwright().start()
+        try:
+            browser = await p.chromium.launch(headless=True, executable_path=chromium_executable())
+        except Exception as exc:
+            await p.stop()
+            pytest.skip(f"chromium unavailable: {exc}")
+        try:
+            page = await browser.new_page()
+            await page.goto((FORMS / "icims_like.html").as_uri())
+            result = await engine.run(PlaywrightDriver(page), store, resolver=None, autosubmit=False)
+            frame = page.frame_locator("#icims_content_iframe")
+            state = {
+                "first": await frame.locator("#fn").input_value(),
+                "email": await frame.locator("#em").input_value(),
+                "auth": await frame.locator("input[name=auth][value=yes]").is_checked(),
+                "sent": await frame.locator("body").get_attribute("data-sent"),
+            }
+            return result, state
+        finally:
+            await browser.close()
+            await p.stop()
+
+    result, state = asyncio.run(go())
+    assert result.pages[0].action == "apply"
+    assert (result.status, result.reason) == ("ready-to-submit", "stopped before 'Submit'"), result.reason
+    assert state == {"first": "Jane", "email": DOC["contact"]["email"], "auth": True, "sent": None}

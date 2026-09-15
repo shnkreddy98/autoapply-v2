@@ -22,9 +22,9 @@ from typing import Protocol
 
 from det_autofill.answers import AnswerStore
 from det_autofill.classify import Row, plan
-from det_autofill.fill import OVERLAY_JS, CaptchaCover, Driver, FillResult, dismiss_overlays, fill_row  # noqa: F401
+from det_autofill.fill import FRAMES_JS, OVERLAY_JS, CaptchaCover, Driver, FillResult, dismiss_overlays, fill_row  # noqa: F401
 
-EXTRACT_JS = (Path(__file__).parent / "extract.js").read_text()
+EXTRACT_JS = (Path(__file__).parent / "extract.js").read_text().replace("/*FRAMES*/", FRAMES_JS)
 
 MAX_PAGES = 12
 MAX_FILL_PASSES = 3  # fields revealed by earlier answers ("If yes, explain")
@@ -39,17 +39,21 @@ RESOLVABLE = {"no-answer", "unclassified", "no-text-answer-for-free-text-box", "
 MISCLASSIFIED_PREFIXES = ("duplicate-key", "control-mismatch")
 FILLABLE_WIDGETS = {"text", "textarea", "select", "radio", "checkbox", "combobox", "date"}
 
-NAV_JS = r"""() => {
+NAV_JS = "() => {" + FRAMES_JS + r"""
   const text = (n) => (n.innerText || n.value || n.getAttribute('aria-label') || '').replace(/\s+/g, ' ').trim();
   const visible = (n) => { const r = n.getBoundingClientRect(); const s = getComputedStyle(n); return r.width > 1 && r.height > 1 && s.visibility !== 'hidden' && s.display !== 'none'; };
   const esc = (s) => CSS.escape(s);
-  const unique = (sel) => { try { return document.querySelectorAll(sel).length === 1; } catch (e) { return false; } };
   function selectorFor(el) {
+    const doc = el.ownerDocument;
+    return framePrefix(doc) + localSelector(el, doc);
+  }
+  function localSelector(el, doc) {
+    const unique = (sel) => { try { return doc.querySelectorAll(sel).length === 1; } catch (e) { return false; } };
     if (el.id && unique('#' + esc(el.id))) return '#' + esc(el.id);
     const aid = el.getAttribute('data-automation-id');
     if (aid && unique('[data-automation-id="' + esc(aid) + '"]')) return '[data-automation-id="' + esc(aid) + '"]';
     const parts = [];
-    for (let node = el; node && node.nodeType === 1 && node !== document.documentElement; node = node.parentElement) {
+    for (let node = el; node && node.nodeType === 1 && node !== doc.documentElement; node = node.parentElement) {
       if (node !== el && node.id && unique('#' + esc(node.id))) { parts.unshift('#' + esc(node.id)); break; }
       let part = node.tagName.toLowerCase();
       const parent = node.parentElement;
@@ -66,8 +70,8 @@ NAV_JS = r"""() => {
   // count as Apply, never as Next or Submit
   // [onclick]: Paycor's "Apply for this Position" is a bare <div onclick>
   // custom-element buttons: UKG's <ukg-button>Apply now</ukg-button>
-  const custom = Array.from(document.getElementsByTagName('*')).filter((n) => /-BUTTON$/.test(n.tagName));
-  const nodes = Array.from(document.querySelectorAll('button, input[type=submit], input[type=button], a[role=button], [role=button], a[href], [onclick]')).concat(custom)
+  const custom = frameDocs().flatMap(({ doc }) => Array.from(doc.getElementsByTagName('*'))).filter((n) => /-BUTTON$/.test(n.tagName));
+  const nodes = deepAll('button, input[type=submit], input[type=button], a[role=button], [role=button], a[href], [onclick]').concat(custom)
     .filter((n) => visible(n) && !n.disabled && n.getAttribute('aria-disabled') !== 'true');
   return JSON.stringify(nodes.map((n) => ({ text: text(n).slice(0, 80), selector: selectorFor(n),
     // href="#" / javascript: is a script-driven button styled as a link (JazzHR's
@@ -76,43 +80,46 @@ NAV_JS = r"""() => {
     type: (n.getAttribute('type') || '').toLowerCase(), automation_id: n.getAttribute('data-automation-id') || '' })));
 }"""
 
-STATE_JS = r"""() => {
+STATE_JS = "() => {" + FRAMES_JS + r"""
   const visible = (n) => { const r = n.getBoundingClientRect(); const s = getComputedStyle(n); return r.width > 1 && r.height > 1 && s.visibility !== 'hidden' && s.display !== 'none'; };
   const text = (n) => (n.innerText || n.textContent || '').replace(/\s+/g, ' ').trim();
-  const fields = Array.from(document.querySelectorAll('input, select, textarea, [role=combobox]')).filter(visible)
+  const fields = deepAll('input, select, textarea, [role=combobox]').filter(visible)
     .map((n) => n.id || n.name || n.getAttribute('data-automation-id') || n.tagName);
-  const headings = Array.from(document.querySelectorAll('h1, h2, h3, [role=heading]')).filter(visible).map(text).slice(0, 8);
+  const headings = deepAll('h1, h2, h3, [role=heading]').filter(visible).map(text).slice(0, 8);
   // Workday's Apply opens a chooser dialog and nothing else changes
-  const dialogs = Array.from(document.querySelectorAll('[role=dialog], [aria-modal="true"], dialog[open]')).filter(visible).map((n) => text(n).slice(0, 120));
+  const dialogs = deepAll('[role=dialog], [aria-modal="true"], dialog[open]').filter(visible).map((n) => text(n).slice(0, 120));
   // a class that styles an error state ("peer-invalid:text-error", Tailwind variants on
   // Teamtailor's consent labels) is not an error message, nor is a label around a control
   const errorClass = (n) => String(n.className || '').split(/\s+/).some((c) => /error/i.test(c) && !/[:\[]/.test(c));
-  const alerts = Array.from(document.querySelectorAll('[role=alert], [aria-live=assertive], .error, [class*="error" i], [data-automation-id*="error" i]'))
+  const alerts = deepAll('[role=alert], [aria-live=assertive], .error, [class*="error" i], [data-automation-id*="error" i]')
     .filter((n) => visible(n) && n.tagName !== 'LABEL' && !n.querySelector('input, select, textarea')
       && (n.matches('[role=alert], [aria-live=assertive], [data-automation-id*="error" i]') || errorClass(n)))
     .map(text).filter((t) => t && t.length < 300).slice(0, 12);
-  const invalid = Array.from(document.querySelectorAll('[aria-invalid="true"]')).filter(visible)
-    .map((n) => '#' + CSS.escape(n.id || '')).filter((s) => s !== '#');
-  const body = (document.body.innerText || '').toLowerCase();
+  const invalid = deepAll('[aria-invalid="true"]').filter((n) => visible(n) && n.id)
+    .map((n) => framePrefix(n.ownerDocument) + '#' + CSS.escape(n.id));
+  const body = frameDocs().map(({ doc }) => (doc.body && doc.body.innerText) || '').join('\n').toLowerCase();
   return JSON.stringify({ url: location.href, fields, headings, dialogs, alerts: Array.from(new Set(alerts)), invalid,
     confirmation: /thank you for (applying|your application)|application (has been |was )?(received|submitted)|we('ve| have) received your application|successfully submitted/.test(body) });
 }"""
 
-# the URL of a large visible iframe on the same site: the page's real content
+# the URL of a large visible iframe the probes cannot read (another origin, e.g. a
+# job board embedded on a company site): opening it is the only way in. Readable
+# frames are handled in place (frames.js) — iCIMS bounces its frame URL back.
 FRAME_JS = r"""() => {
-  const site = location.hostname.split('.').slice(-2).join('.');
   const f = Array.from(document.querySelectorAll('iframe[src]')).find((n) => {
     const r = n.getBoundingClientRect();
-    try { return r.width > 300 && r.height > 300 && new URL(n.src).hostname.endsWith(site); } catch (e) { return false; }
+    let readable = false;
+    try { readable = !!n.contentDocument; } catch (e) {}
+    return !readable && r.width > 300 && r.height > 300 && /^https?:/.test(n.src) && !/captcha|recaptcha|hcaptcha|youtube|vimeo|maps/i.test(n.src);
   });
   return f ? f.src : '';
 }"""
 
 # a sign-in or account-creation step: a visible password box, or an identity
 # provider / account URL (Google's email-first sign-in has no password box yet)
-ACCOUNT_PAGE_JS = r"""() => {
+ACCOUNT_PAGE_JS = "() => {" + FRAMES_JS + r"""
   const shown = (n) => { const r = n.getBoundingClientRect(); return r.width > 1 && r.height > 1 && getComputedStyle(n).visibility !== 'hidden'; };
-  if (Array.from(document.querySelectorAll('input[type=password]')).some(shown)) return true;
+  if (deepAll('input[type=password]').some(shown)) return true;
   return /accounts\.google\.|login\.microsoftonline\.|linkedin\.com\/(uas\/)?login|passport\.|\/(sign-?in|log-?in|create-?account|register)(\b|\/|\?|$)|applylogin/i.test(location.href);
 }"""
 
@@ -120,10 +127,10 @@ SUBMIT_RE = re.compile(r"^(submit( (my )?application)?|send( application)?|apply
 # not "Next slide": SuccessFactors pages carry a job carousel beside POSTULER/Apply
 NEXT_RE = re.compile(r"^(next(?! (slide|image|photo|item|job|jobs|article|story|post))( step| page)?|continue|save (and|&) continue|save and next|proceed|review( application)?)\b", re.I)
 # "apply manually": Workday's Apply opens a chooser (autofill with resume / apply manually)
-# Breezy: "Apply To Position"; Paycor: "Apply for this Position"
+# Breezy: "Apply To Position"; Paycor: "Apply for this Position"; iCIMS: "Apply for this job online"
 # Dayforce: "Apply without an Account" beside Sign In; UKG Ready: "Type it in myself"
 # beside "Use my resume"
-APPLY_RE = re.compile(r"^(apply( now| manually| online| here| (to|for) (this )?(job|position|role|opening)| without an account| as (a )?guest)?|continue as (a )?guest|type it in myself|submit (your |a )?(resume|cv)|enter (it|my (info|information|details)) manually|i'?m interested|start (your |an |the )?application|begin application)$", re.I)
+APPLY_RE = re.compile(r"^(apply( now| manually| online| here| (to|for) (this )?(job|position|role|opening)( online)?| without an account| as (a )?guest)?|continue as (a )?guest|type it in myself|submit (your |a )?(resume|cv)|enter (it|my (info|information|details)) manually|i'?m interested|start (your |an |the )?application|begin application)$", re.I)
 
 
 class Resolver(Protocol):

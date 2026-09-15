@@ -1,4 +1,5 @@
 () => {
+/*FRAMES*/
   /*
    * Read-only field extractor, run in the page via Playwright MCP `browser_evaluate`.
    * Returns a JSON string: one descriptor per form control. Writes nothing to the
@@ -37,7 +38,7 @@
   function labelledBy(el) {
     const ids = (el.getAttribute('aria-labelledby') || '').trim();
     if (!ids) return '';
-    return ids.split(/\s+/).map((id) => textOf(document.getElementById(id))).filter(Boolean).join(' ');
+    return ids.split(/\s+/).map((id) => textOf(el.ownerDocument.getElementById(id))).filter(Boolean).join(' ');
   }
 
   function rendered(n) {
@@ -53,7 +54,7 @@
   const CONTROLS = 'input:not([type="hidden"]), select, textarea, [role="radio"], [role="checkbox"], [role="combobox"]';
   function textBefore(start, own) {
     const mine = (n) => own.some((o) => o === n || o.contains(n) || n.contains(o));
-    for (let node = start, depth = 0; node && node !== document.body && depth < 6; node = node.parentElement, depth++) {
+    for (let node = start, depth = 0; node && node !== start.ownerDocument.body && depth < 6; node = node.parentElement, depth++) {
       if (Array.from(node.querySelectorAll(CONTROLS)).some((c) => !mine(c))) break;
       for (let prev = node.previousElementSibling; prev; prev = prev.previousElementSibling) {
         if (!rendered(prev) || /error|invalid|hint|screen-reader/i.test(`${prev.className} ${prev.getAttribute('data-testid') || ''}`)) continue;
@@ -77,7 +78,7 @@
     }
     const id = el.getAttribute('id');
     if (id) {
-      const lf = document.querySelector(`label[for="${cssEscape(id)}"]`);
+      const lf = el.ownerDocument.querySelector(`label[for="${cssEscape(id)}"]`);
       if (lf && textOf(lf)) return textOf(lf);
     }
     const wrap = el.closest('label');
@@ -147,7 +148,7 @@
     if (lab) return lab;
     // the group's own <label for="radiogroup-id"> (Eightfold)
     if (scope.id) {
-      const forScope = document.querySelector(`label[for="${cssEscape(scope.id)}"]`);
+      const forScope = scope.ownerDocument.querySelector(`label[for="${cssEscape(scope.id)}"]`);
       if (forScope && textOf(forScope)) return textOf(forScope);
     }
     // a label wrapping or pointing at another control names that control, not this group
@@ -163,10 +164,11 @@
    * holding every radio of the same name. */
   function headingBefore(el) {
     if (!el.name) return '';
-    const peers = document.querySelectorAll(`input[name="${cssEscape(el.name)}"]`);
+    const peers = el.ownerDocument.querySelectorAll(`input[name="${cssEscape(el.name)}"]`);
     let box = el.parentElement;
-    while (box && box !== document.body && Array.from(peers).some((p) => !box.contains(p))) box = box.parentElement;
-    if (!box || box === document.body || peers.length < 2) return '';
+    const body = el.ownerDocument.body;
+    while (box && box !== body && Array.from(peers).some((p) => !box.contains(p))) box = box.parentElement;
+    if (!box || box === body || peers.length < 2) return '';
     // the heading can sit inside that ancestor or just before it, as long as the
     // wider box holds no other question's controls
     for (let n = 0; box && n < 2; box = box.parentElement, n++) {
@@ -182,7 +184,7 @@
    * closest heading above. Used to refuse identity fields inside "Reference 1" or
    * "Emergency contact" blocks. */
   function sectionOf(el) {
-    for (let node = el, depth = 0; node && node !== document.body && depth < 8; node = node.parentElement, depth++) {
+    for (let node = el, depth = 0; node && node !== el.ownerDocument.body && depth < 8; node = node.parentElement, depth++) {
       if (node.tagName === 'FIELDSET') {
         const lg = node.querySelector(':scope > legend');
         if (lg && textOf(lg)) return textOf(lg).slice(0, 80);
@@ -217,13 +219,19 @@
     return 'text';
   }
 
-  function unique(sel) {
-    try { return document.querySelectorAll(sel).length === 1; } catch (e) { return false; }
-  }
+  /* `unique` is rebound per element by selectorFor: uniqueness only holds inside the
+   * element's own document (a frame's selector is prefixed with the hop into it). */
+  let unique = () => false;
 
   /* A CSS selector that matches exactly this element, so MCP actions can target it
    * without snapshot refs (which die after every mutation). */
   function selectorFor(el) {
+    const doc = el.ownerDocument;
+    unique = (sel) => { try { return doc.querySelectorAll(sel).length === 1; } catch (e) { return false; } };
+    return framePrefix(doc) + localSelector(el, doc);
+  }
+
+  function localSelector(el, doc) {
     const tag = el.tagName.toLowerCase();
     const id = el.getAttribute('id');
     const name = el.getAttribute('name');
@@ -245,7 +253,7 @@
     const aid = el.getAttribute('data-automation-id');
     if (aid && unique(`[data-automation-id="${cssEscape(aid)}"]`)) return `[data-automation-id="${cssEscape(aid)}"]`;
     const parts = [];
-    for (let node = el; node && node.nodeType === 1 && node !== document.documentElement; node = node.parentElement) {
+    for (let node = el; node && node.nodeType === 1 && node !== doc.documentElement; node = node.parentElement) {
       const nid = node.getAttribute('id');
       if (node !== el && nid && unique(`#${cssEscape(nid)}`)) {
         parts.unshift(`#${cssEscape(nid)}`);
@@ -288,7 +296,7 @@
 
   const seen = new Set();
   const out = [];
-  for (const el of document.querySelectorAll(CANDIDATES)) {
+  for (const el of deepAll(CANDIDATES)) {
     if (seen.has(el)) continue;
     seen.add(el);
     const tag = el.tagName.toLowerCase();
@@ -372,7 +380,7 @@
   }
   /* Jobvite: no labelled file input, only a "Select" menu button labelled by the
    * "Add Resume*" heading. It is the resume field; fill.py opens its menu for the file. */
-  for (const btn of document.querySelectorAll('button[aria-haspopup]')) {
+  for (const btn of deepAll('button[aria-haspopup]')) {
     if (seen.has(btn) || !isVisible(btn)) continue;
     const name = labelledBy(btn) || btn.getAttribute('aria-label') || '';
     if (!/\b(resume|cv|curriculum)\b/i.test(name)) continue;
@@ -391,7 +399,7 @@
   /* BambooHR (Fabric): a native <select> kept at zero size behind a
    * <button aria-haspopup> that opens a role=menu. The select is what carries the
    * label and required flag; the button is what a user operates. */
-  for (const sel of document.querySelectorAll('select')) {
+  for (const sel of deepAll('select')) {
     if (isVisible(sel)) continue;
     let btn = null;
     for (let n = sel.parentElement, d = 0; n && d < 3 && !btn; n = n.parentElement, d++) {

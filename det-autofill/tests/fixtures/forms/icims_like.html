@@ -1,0 +1,33 @@
+<!doctype html><html><head><meta charset="utf-8"><title>iCIMS-like fixture</title></head><body>
+<!-- iCIMS (2026-09-14): the careers page is a wrapper; the posting, its Apply button and
+     the application form all live in a same-origin <iframe id="icims_content_iframe">,
+     whose own URL bounces back to the wrapper when opened directly. -->
+<header><a href="#">Log in</a><label for="q">Search for:</label><input id="q"></header>
+<iframe id="icims_content_iframe" style="width:900px;height:700px;border:0"></iframe>
+<script>
+  const frame = document.getElementById('icims_content_iframe');
+  const doc = frame.contentDocument;
+  doc.open();
+  doc.write(`<!doctype html><body>
+    <h1>Data Engineer II</h1><p>Build pipelines.</p>
+    <a href="#" id="apply" class="iCIMS_ApplyOnlineButton" role="button">Apply for this job online</a>
+    <div id="form" style="display:none"><form onsubmit="return false">
+      <label for="fn">First Name *</label><input id="fn" name="firstName" required>
+      <label for="ln">Last Name *</label><input id="ln" name="lastName" required>
+      <label for="em">Email *</label><input id="em" name="email" type="email" required>
+      <fieldset><legend>Are you legally authorized to work in the United States? *</legend>
+        <label><input type="radio" name="auth" value="yes" required> Yes</label>
+        <label><input type="radio" name="auth" value="no"> No</label></fieldset>
+      <button type="button" id="send">Submit</button>
+    </form></div>
+    <script>
+      document.getElementById('apply').addEventListener('click', (e) => {
+        e.preventDefault();
+        document.getElementById('apply').remove();
+        document.getElementById('form').style.display = 'block';
+      });
+      document.getElementById('send').addEventListener('click', () => { document.body.dataset.sent = '1'; });
+    <\/script></body>`);
+  doc.close();
+</script>
+</body></html>

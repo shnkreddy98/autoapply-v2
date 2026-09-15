@@ -31,6 +31,7 @@ from __future__ import annotations
 import asyncio
 import json
 import re
+from pathlib import Path
 from dataclasses import dataclass
 from typing import Any, Protocol
 
@@ -66,29 +67,36 @@ class FillResult:
 # ---------------------------------------------------------------------------
 # in-page probes (read-only)
 
-_SELECTOR_FOR = r"""
+# frame traversal shared by every probe (see frames.js)
+FRAMES_JS = (Path(__file__).parent / "frames.js").read_text()
+
+_SELECTOR_FOR = FRAMES_JS + r"""
   const esc = (s) => CSS.escape(s);
-  const unique = (sel) => { try { return document.querySelectorAll(sel).length === 1; } catch (e) { return false; } };
   function selectorFor(el) {
-    if (el.id && unique('#' + esc(el.id))) return '#' + esc(el.id);
-    const parts = [];
-    for (let node = el; node && node.nodeType === 1 && node !== document.documentElement; node = node.parentElement) {
-      if (node !== el && node.id && unique('#' + esc(node.id))) { parts.unshift('#' + esc(node.id)); break; }
-      let part = node.tagName.toLowerCase();
-      const parent = node.parentElement;
-      if (parent) {
-        const same = Array.from(parent.children).filter((c) => c.tagName === node.tagName);
-        if (same.length > 1) part += ':nth-of-type(' + (same.indexOf(node) + 1) + ')';
+    const doc = el.ownerDocument;
+    const unique = (sel) => { try { return doc.querySelectorAll(sel).length === 1; } catch (e) { return false; } };
+    const local = (() => {
+      if (el.id && unique('#' + esc(el.id))) return '#' + esc(el.id);
+      const parts = [];
+      for (let node = el; node && node.nodeType === 1 && node !== doc.documentElement; node = node.parentElement) {
+        if (node !== el && node.id && unique('#' + esc(node.id))) { parts.unshift('#' + esc(node.id)); break; }
+        let part = node.tagName.toLowerCase();
+        const parent = node.parentElement;
+        if (parent) {
+          const same = Array.from(parent.children).filter((c) => c.tagName === node.tagName);
+          if (same.length > 1) part += ':nth-of-type(' + (same.indexOf(node) + 1) + ')';
+        }
+        parts.unshift(part);
+        if (unique(parts.join(' > '))) break;
       }
-      parts.unshift(part);
-      if (unique(parts.join(' > '))) break;
-    }
-    return parts.join(' > ');
+      return parts.join(' > ');
+    })();
+    return framePrefix(doc) + local;
   }
 """
 
-READ_FIELD = r"""(selector) => {
-  const el = document.querySelector(selector);
+READ_FIELD = "(selector) => {" + FRAMES_JS + r"""
+  const el = deepQuery(selector);
   if (!el) return JSON.stringify({ missing: true });
   const text = (n) => (n ? (n.innerText || n.textContent || '') : '').replace(/\s+/g, ' ').trim();
   // Walk up to the first ancestor that holds a chosen value, stopping before one that
@@ -117,22 +125,23 @@ READ_FIELD = r"""(selector) => {
 }"""
 
 LIST_OPTIONS = "(selector) => {" + _SELECTOR_FOR + r"""
-  const el = document.querySelector(selector);
+  const el = deepQuery(selector);
   if (!el) return JSON.stringify({ listbox: false, options: [] });
+  const doc = el.ownerDocument;
   const visible = (n) => { const r = n.getBoundingClientRect(); const s = getComputedStyle(n); return r.width > 0 && r.height > 0 && s.visibility !== 'hidden' && s.display !== 'none'; };
   let lb = null;
   const ctl = el.getAttribute('aria-controls') || el.getAttribute('aria-owns');
-  if (ctl) lb = document.getElementById(ctl);
+  if (ctl) lb = doc.getElementById(ctl);
   if (!lb) {
     const field = el.closest('[data-automation-id^="formField-"], [data-automation-id="multiSelectContainer"]');
     const ids = [el.id, field && field.id, el.closest('[data-automation-id="multiSelectContainer"]') && el.closest('[data-automation-id="multiSelectContainer"]').id].filter(Boolean);
     for (const id of ids) {
-      const popup = document.querySelector('[data-automation-widget="wd-popup"][data-associated-widget="' + CSS.escape(id) + '"]');
+      const popup = doc.querySelector('[data-automation-widget="wd-popup"][data-associated-widget="' + CSS.escape(id) + '"]');
       if (popup) { lb = popup; break; }
     }
   }
   if (!lb) {
-    const open = Array.from(document.querySelectorAll('[role="listbox"]')).filter(visible);
+    const open = Array.from(doc.querySelectorAll('[role="listbox"]')).filter(visible);
     if (open.length === 1) lb = open[0];
   }
   if (!lb) return JSON.stringify({ listbox: false, options: [] });
@@ -151,14 +160,14 @@ LIST_OPTIONS = "(selector) => {" + _SELECTOR_FOR + r"""
 # The visible control that opens a file input's chooser: its <label for>, or an
 # Attach/Upload/Choose button inside the same field. '' when there is none.
 FILE_TRIGGER = "(selector) => {" + _SELECTOR_FOR + r"""
-  const input = document.querySelector(selector);
+  const input = deepQuery(selector);
   if (!input) return '';
   const visible = (n) => { const r = n.getBoundingClientRect(); const s = getComputedStyle(n); return r.width > 1 && r.height > 1 && s.visibility !== 'hidden' && s.display !== 'none'; };
   // Jobvite: the resume field is a "Select" menu button; once open, its "File" item
   // (a <label for> a file input parked under <body>) opens the chooser
   if (input.tagName !== 'INPUT') {
     if (input.getAttribute('aria-expanded') !== 'true') return selectorFor(input);
-    const item = Array.from(document.querySelectorAll('label[for], [role=menuitem], button, a, li'))
+    const item = Array.from(input.ownerDocument.querySelectorAll('label[for], [role=menuitem], button, a, li'))
       .find((n) => visible(n) && n !== input && /^(file|my (computer|device)|(upload )?from (my )?(computer|device)|upload( a)? file|browse|attach( a)? file)$/i.test((n.innerText || '').trim()));
     return item ? selectorFor(item) : '';
   }
@@ -168,7 +177,7 @@ FILE_TRIGGER = "(selector) => {" + _SELECTOR_FOR + r"""
   const box = input.getBoundingClientRect();
   if (box.width > 8 && box.height > 8 && getComputedStyle(input).visibility !== 'hidden' && getComputedStyle(input).display !== 'none') return selectorFor(input);
   if (input.id) {
-    const lbl = document.querySelector('label[for="' + CSS.escape(input.id) + '"]');
+    const lbl = input.ownerDocument.querySelector('label[for="' + CSS.escape(input.id) + '"]');
     if (lbl && visible(lbl) && words.test(lbl.textContent || '')) return selectorFor(lbl);
   }
   for (let scope = input.parentElement, d = 0; scope && d < 5; scope = scope.parentElement, d++) {
@@ -182,26 +191,29 @@ FILE_TRIGGER = "(selector) => {" + _SELECTOR_FOR + r"""
 # Cookie / consent banners cover the bottom of the page and swallow clicks meant for
 # the form (a live Lever page's banner made radios and checkboxes "not take").
 # Only an explicit accept/close button inside a container marked as such is clicked.
-OVERLAY_JS = r"""() => {
+OVERLAY_JS = "() => {" + FRAMES_JS + r"""
+  // the selector of the button to press, marked so the click can find it again
+  deepAll('[data-det-overlay]').forEach((n) => n.removeAttribute('data-det-overlay'));
+  const mark = (n) => { n.setAttribute('data-det-overlay', '1'); return framePrefix(n.ownerDocument) + '[data-det-overlay="1"]'; };
   const visible = (n) => { const r = n.getBoundingClientRect(); const s = getComputedStyle(n); return r.width > 1 && r.height > 1 && s.visibility !== 'hidden' && s.display !== 'none'; };
   const words = /^(accept( all)?( cookies)?|allow( all)?( cookies)?|i agree|agree|got it|ok(ay)?|dismiss|close)[!.]?$/i;
-  const marked = Array.from(document.querySelectorAll('[id*="cookie" i], [class*="cookie" i], [id*="consent" i], [class*="consent" i], [id*="onetrust" i], [class*="gdpr" i], [aria-label*="cookie" i], [class*="cc-window" i]'));
+  const marked = Array.from(deepAll('[id*="cookie" i], [class*="cookie" i], [id*="consent" i], [class*="consent" i], [id*="onetrust" i], [class*="gdpr" i], [aria-label*="cookie" i], [class*="cc-window" i]'));
   // Lever's banner is "div.cc-window.cc-banner": nothing says cookie but its text, so
   // fixed/sticky boxes that talk about cookies count too
-  const floating = Array.from(document.querySelectorAll('body div, body section, body aside'))
+  const floating = deepAll('body div, body section, body aside')
     .filter((n) => /fixed|sticky/.test(getComputedStyle(n).position) && /cookie/i.test((n.innerText || '').slice(0, 400)));
   // OneTrust's preference centre dims the page (#onetrust-pc-dark-filter, no buttons of
   // its own) and names its buttons by id; ADP opened it over the whole posting
-  const known = Array.from(document.querySelectorAll('#onetrust-accept-btn-handler, #accept-recommended-btn-handler, .save-preference-btn-handler, .onetrust-close-btn-handler')).find(visible);
-  if (known) { known.setAttribute('data-det-overlay', '1'); return true; }
+  const known = deepAll('#onetrust-accept-btn-handler, #accept-recommended-btn-handler, .save-preference-btn-handler, .onetrust-close-btn-handler').find(visible);
+  if (known) return mark(known);
   // ADP's application consent gate after Apply: "Consent & Continue" / "Decline & Close"
-  const gate = Array.from(document.querySelectorAll('button, [role=button]')).find((b) => visible(b)
+  const gate = deepAll('button, [role=button]').find((b) => visible(b)
     && /^(consent|agree|accept|i agree) (&|and) continue$/i.test((b.innerText || '').trim()));
-  if (gate) { gate.setAttribute('data-det-overlay', '1'); return true; }
+  if (gate) return mark(gate);
   // Eightfold opens a "Data Privacy Agreement" dialog after the resume upload and
   // blocks the form until "I Agree" — the same terms the application's own consent
   // box asks for
-  const agreements = Array.from(document.querySelectorAll('[role=dialog], [aria-modal="true"], dialog[open]'))
+  const agreements = deepAll('[role=dialog], [aria-modal="true"], dialog[open]')
     .filter((n) => /privacy (statement|agreement|policy|notice)|terms (of use|and conditions)|data (privacy|protection)/i.test((n.innerText || '').slice(0, 600)));
   const boxes = marked.concat(floating, agreements).filter((n) => visible(n) && !(n.closest('form') && !n.matches('[role=dialog], [aria-modal="true"], dialog')));
   for (const box of boxes) {
@@ -210,21 +222,22 @@ OVERLAY_JS = r"""() => {
     const btn = Array.from(box.querySelectorAll('button, [role=button], a'))
       .filter((b) => visible(b) && words.test(label(b)))
       .sort((x, y) => /^(close|dismiss)/i.test(label(x)) - /^(close|dismiss)/i.test(label(y)))[0];
-    if (btn) { btn.setAttribute('data-det-overlay', '1'); return true; }
+    if (btn) return mark(btn);
   }
-  return false;
+  return '';
 }"""
 
 
 # Click through the page's own hit test: only when the point at the control's centre
 # resolves to the control (or its label); otherwise say what covers it.
 HIT_CLICK = "({selector}) => {" + _SELECTOR_FOR + r"""
-  const el = document.querySelector(selector);
+  const el = deepQuery(selector);
   if (!el) return 'missing';
+  const doc = el.ownerDocument;
   el.scrollIntoView({block: 'center', inline: 'nearest'});
   const r = el.getBoundingClientRect();
-  const top = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2);
-  const label = el.closest('label') || (el.id ? document.querySelector(`label[for="${CSS.escape(el.id)}"]`) : null);
+  const top = doc.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2);
+  const label = el.closest('label') || (el.id ? doc.querySelector(`label[for="${CSS.escape(el.id)}"]`) : null);
   if (!top || !(top === el || el.contains(top) || (label && label.contains(top)))) {
     // a challenge the page raised is the human's to solve, never to click around
     if (top && top.tagName === 'IFRAME' && /captcha|challenge/i.test(`${top.title} ${top.src}`)) return `captcha: ${top.title.slice(0, 60)} (visibility ${getComputedStyle(top).visibility})`;
@@ -243,7 +256,9 @@ HIT_CLICK = "({selector}) => {" + _SELECTOR_FOR + r"""
   return 'clicked';
 }"""
 
-PAGE_HAS_TEXT = r"""(needle) => (document.body.innerText || '').toLowerCase().includes(String(needle).toLowerCase())"""
+PAGE_HAS_TEXT = "(needle) => {" + FRAMES_JS + r"""
+  return frameDocs().some(({ doc }) => ((doc.body && doc.body.innerText) || '').toLowerCase().includes(String(needle).toLowerCase()));
+}"""
 
 
 async def _json(driver: Driver, js: str, arg: Any) -> dict:
@@ -360,7 +375,7 @@ async def fill_select(driver: Driver, selector: str, key: str, answer: dict, opt
 # The label to click instead of a radio/checkbox drawn at zero size or transparent;
 # '' when the input itself is clickable.
 CHOICE_LABEL = "(selector) => {" + _SELECTOR_FOR + r"""
-  const el = document.querySelector(selector);
+  const el = deepQuery(selector);
   if (!el) return '';
   const r = el.getBoundingClientRect();
   const st = getComputedStyle(el);
@@ -375,9 +390,9 @@ async def dismiss_overlays(driver: Driver) -> bool:
     """Close a cookie/consent banner if one is showing. Marks the button, then clicks it
     by that mark so the click goes through the driver like any other action."""
     found = await driver.evaluate(OVERLAY_JS)
-    if found is True or found == "true":
+    if isinstance(found, str) and found and found != "false":
         try:
-            await driver.click('[data-det-overlay="1"]')
+            await driver.click(found)
             await driver.wait(300)
             return True
         except Exception:

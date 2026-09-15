@@ -84,9 +84,13 @@ FILLABLE = {"text", "textarea", "select", "radio", "checkbox", "combobox", "date
 # profile), not widget bugs
 REFUSALS = re.compile(r"^(no-matching-option|no-search-match|ambiguous|no-options|no-value)")
 
-PAGE_TEXT_JS = "() => (document.body && document.body.innerText || '').slice(0, 8000)"
-CONTROL_TEXT_JS = r"""(selector) => { const el = document.querySelector(selector);
-  return el ? (el.innerText || el.value || el.getAttribute('aria-label') || '').replace(/\s+/g, ' ').trim() : ''; }"""
+# page and same-origin frames (iCIMS keeps the posting inside one)
+PAGE_TEXT_JS = "() => {" + engine.FRAMES_JS + """
+  return frameDocs().map(({ doc }) => (doc.body && doc.body.innerText) || '').join('\\n').slice(0, 8000); }"""
+# null when the control cannot be read: the guard then refuses rather than guesses
+CONTROL_TEXT_JS = "(selector) => {" + engine.FRAMES_JS + r"""
+  const el = deepQuery(selector);
+  return el ? (el.innerText || el.value || el.getAttribute('aria-label') || '').replace(/\s+/g, ' ').trim() : null; }"""
 
 
 class NoSubmitDriver(McpDriver):
@@ -94,7 +98,9 @@ class NoSubmitDriver(McpDriver):
 
     async def click(self, selector):
         text = await self.evaluate(CONTROL_TEXT_JS, selector)
-        if isinstance(text, str) and len(text) < 60 and SUBMIT_GUARD.search(text):
+        if not isinstance(text, str):
+            raise RuntimeError(f"refused to click {selector!r}: its text could not be read to rule out a submit")
+        if len(text) < 60 and SUBMIT_GUARD.search(text):
             raise RuntimeError(f"refused to click {text!r}: the ATS check never submits")
         await super().click(selector)
 

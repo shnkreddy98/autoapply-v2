@@ -8,7 +8,8 @@ import json
 import os
 from pathlib import Path
 
-EXTRACT_JS = (Path(__file__).parents[1] / "det_autofill" / "extract.js").read_text()
+from det_autofill.engine import EXTRACT_JS  # frames.js spliced in
+
 FORMS = Path(__file__).parent / "fixtures" / "forms"
 
 
