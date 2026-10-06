@@ -177,3 +177,31 @@ def test_build_profile_follows_the_jobs_role(db):
     assert "# Resume role: de" in out
     assert "- Data Engineer, Acme" in out
     assert "de summary" in out
+
+
+def test_password_never_reaches_traces_or_logs(tmp_path, monkeypatch):
+    """The MCP echoes the code that typed the password; 72 trace / log / form files
+    held it in plain text before secrets were scrubbed on write."""
+    import json
+    import logging
+    import secrets
+
+    from agent import observability as obs
+
+    monkeypatch.setattr(obs, "TRACE_DIR", tmp_path)
+    monkeypatch.setattr(obs, "LOG_DIR", tmp_path)
+    monkeypatch.setattr(obs, "FORMS_DIR", tmp_path)
+    # made at run time (no credential-shaped literal for secret scanners); the quote
+    # checks that the JSON-escaped form is scrubbed too
+    value = 'v"' + secrets.token_hex(6)
+    obs.register_secret(value)
+    trace = obs.Trace("r1")
+    trace.event("tool_result", result=f"await page.fill({value!r});")
+    obs.write_form_record("r1", {"Sign-in field": value})
+    log = obs.setup_logging("r1")
+    log.info("tool_call_result: %s", json.dumps({"code": f"fill({value!r})"}))
+    for h in log.handlers:
+        h.flush()
+    written = "".join(p.read_text() for p in tmp_path.iterdir())
+    assert value[2:] not in written and written.count("[redacted]") >= 3
+    logging.getLogger(obs.LOGGER_NAME).handlers.clear()

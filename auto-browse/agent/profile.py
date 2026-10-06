@@ -18,6 +18,7 @@ from typing import Any
 
 import psycopg
 
+from agent import observability
 from common import repo
 from common.repo import ProfileData, fetch_profile
 
@@ -29,7 +30,11 @@ def build_profile(
     job was tailored from, so the form gets the same employers and titles as the
     resume being uploaded; without a tailoring, the user's default role."""
     label = repo.base_label_for_job(conn, user_id, job_id) if job_id else None
-    return render_profile(fetch_profile(conn, user_id, label=label), resume_path)
+    data = fetch_profile(conn, user_id, label=label)
+    # the portal password goes into this text for sign-in pages; keep it out of every
+    # trace, log and record written from here on (they held it in plain text)
+    observability.register_secret((data.login or {}).get("login_password"))
+    return render_profile(data, resume_path)
 
 
 # Facts that belong to the user row but are account plumbing, not form answers.
