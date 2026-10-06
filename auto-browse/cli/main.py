@@ -3,6 +3,7 @@
     autoapply jobs add [URL ...] [--file urls.txt]     # -> jobs table (source=manual)
     autoapply jobs list [--status S] [--today]         # company - title, id, status
     autoapply jobs rm JOB [JOB ...] [--user U]         # drop from your pipeline; re-addable
+    autoapply jobs skip JOB [JOB ...] [--user U]       # not applying: batch apply passes over it
     autoapply tailor [JOB] [--label L] [--user U] [--retry-failed [--retry-since W]] [--force]
                                                        # jd-capture + drain tailor queue;
                                                        # JOB re-tailors one job; --label picks a role base;
@@ -25,14 +26,16 @@
                                                        # answer -> stdout, count -> stderr;
                                                        # base resume follows the job's tailoring label
     autoapply apply [JOB ...] [--all] [--today] [--user U] [--model M] [--autosubmit]
-                    [--engine agent|det] [--mcp URL]
+                    [--engine agent|det|det+agent] [--mcp URL]
                                                        # --all: batch every jd_ready job one by one;
                                                        # --today restricts to jobs added today;
                                                        # --engine det: deterministic filler, model
                                                        # only for fields it cannot answer;
+                                                       # --engine det+agent: det first, the agent
+                                                       # finishes the page det stopped on;
                                                        # --model jev-latest (det only): Jev picks
                                                        # options/profile values, `ask` writes
-    autoapply continue JOB [--autosubmit] [--engine agent|det]
+    autoapply continue JOB [--autosubmit] [--engine agent|det|det+agent]
                                                        # finish an interrupted run in the open browser
 
 JOB accepts a full job_id UUID, an unambiguous id prefix (4+ characters), or the
@@ -263,6 +266,21 @@ def cmd_jobs_rm(args) -> int:
     return 0
 
 
+def cmd_jobs_skip(args) -> int:
+    """Mark jobs as deliberately not applied to. Recorded as an apply attempt with
+    outcome "skipped": batch apply (--all / --today) passes over it, `apply JOB` by
+    name still runs it, and the job and its tailoring stay (unlike `jobs rm`)."""
+    with _connect() as conn:
+        user_id = resolve_user(conn, args.user)
+        for ref in args.jobs:
+            job = resolve_job(conn, ref)
+            repo.add_job_for_user(conn, user_id, job["url"], source="manual")  # as apply does
+            app_id = repo.start_application(conn, user_id, job["job_id"], run_id=None)
+            repo.finish_application(conn, app_id, "finished", outcome="skipped")
+            print(f"{_id8(job['job_id'])}  skipped      {job['url']}")
+    return 0
+
+
 def _today_start() -> datetime:
     """Local midnight, tz-aware (job timestamps are UTC; 'today' means the user's day)."""
     return (
@@ -280,13 +298,17 @@ def _job_label(row: dict) -> str:
 
 
 def _apply_marker(row: dict) -> str:
-    """Human word for the latest apply attempt: applied / unconfirmed /
-    handed-off / apply-failed."""
+    """Human word for the latest apply attempt: applied / applied-before / skipped /
+    unconfirmed / handed-off / apply-failed."""
     status, outcome = row.get("apply_status"), row.get("apply_outcome")
     if status is None:
         return ""
     if outcome == "submitted":
         return "applied"
+    if outcome == "already applied":
+        return "applied-before"  # the portal says so; no new application this run
+    if outcome == "skipped":
+        return "skipped"
     if outcome == "unconfirmed":
         return "unconfirmed"  # autosubmit run gave no clear SUBMITTED verdict
     if status == "failed":
@@ -1076,9 +1098,11 @@ def _run_apply_agent(
     model: str,
     autosubmit: bool,
     continue_run: bool = False,
+    handover: str | None = None,
 ) -> bool:
     """One agent run against one job, with the applications-row bookkeeping.
-    Returns True on success."""
+    Returns True on success. `handover` (det+agent): det's brief; the agent continues
+    the page det left open."""
     from agent import loop
     from agent.observability import new_run_id
 
@@ -1091,7 +1115,8 @@ def _run_apply_agent(
         run_id=run_id,
         tailored_resume_id=tailored["id"] if tailored else None,
     )
-    print(f"{'continuing' if continue_run else 'applying'} {_id8(job_id)}  {url}")
+    print(f"{'continuing' if continue_run or handover else 'applying'} {_id8(job_id)}  {url}"
+          + ("  (agent, from det's handover)" if handover else ""))
     if autosubmit:
         print("  autosubmit on — agent clicks the final Submit itself")
         print("  watch at http://localhost:6080/vnc.html")
@@ -1106,6 +1131,7 @@ def _run_apply_agent(
                 run_id=run_id,
                 autosubmit=autosubmit,
                 continue_run=continue_run,
+                handover=handover,
             )
         )
     except Exception as exc:
@@ -1128,9 +1154,12 @@ def _run_apply_det(
     autosubmit: bool,
     mcp_url: str | None = None,
     continue_run: bool = False,
+    agent_fallback: bool = False,
 ) -> bool:
     """One deterministic-filler run, with the same applications-row bookkeeping as the
-    agent. Returns True unless the run failed or got stuck."""
+    agent. Returns True unless the run failed or got stuck. `agent_fallback`
+    (det+agent): when det stops short, the agent finishes the open page from det's
+    handover, as its own applications row."""
     from agent import det_apply
     from agent.observability import new_run_id
 
@@ -1148,7 +1177,7 @@ def _run_apply_det(
                 conn, _storage(), user_id, job_id, url,
                 run_id=run_id, model=model, answer_question=run_answer,
                 autosubmit=autosubmit, navigate=not continue_run,
-                mcp_url=mcp_url or det_apply.PLAYWRIGHT_MCP_URL,
+                mcp_url=mcp_url or det_apply.PLAYWRIGHT_MCP_URL, push=not agent_fallback,
             )
         )
     except Exception as exc:
@@ -1161,6 +1190,13 @@ def _run_apply_det(
         print(f"  page {page.number}: filled {ok}" + (f", failed {len(bad)}: {'; '.join(bad[:3])}" if bad else "")
               + (f", {page.action}" if page.action else ""))
     print(f"  {result.status}: {result.reason}  (report output/det-runs/{run_id}.json)")
+    if agent_fallback and det_apply.agent_should_take_over(result):
+        repo.finish_application(conn, app_id, "failed", outcome=f"det stopped, agent took over: {result.reason}"[:500])
+        print("  det stopped short — the agent takes over the open page")
+        return _run_apply_agent(conn, user_id, job_id, url, model, autosubmit,
+                                continue_run=True, handover=det_apply.agent_handover(result))
+    if agent_fallback and result.status == "handoff":
+        det_apply.push_handoff(result, url, job_id)  # the agent does not take this one
     if result.status in ("submitted", "unconfirmed"):
         repo.finish_application(conn, app_id, "finished", outcome=result.status)
         return True
@@ -1176,7 +1212,7 @@ def _run_apply_det(
 # The autosubmit prompt makes the agent end its final reply with `SUBMITTED: yes`
 # (confirmation page seen) or `SUBMITTED: no`. Take the LAST match — earlier text
 # may discuss the format itself.
-_SUBMIT_VERDICT_RE = re.compile(r"SUBMITTED:\s*(yes|no)\b", re.IGNORECASE)
+_SUBMIT_VERDICT_RE = re.compile(r"SUBMITTED:\s*(yes|no|already)\b", re.IGNORECASE)
 
 
 def _autosubmit_outcome(final_text: str | None) -> str:
@@ -1186,14 +1222,17 @@ def _autosubmit_outcome(final_text: str | None) -> str:
     hits = _SUBMIT_VERDICT_RE.findall(final_text or "")
     if not hits:
         return "unconfirmed"
-    return "submitted" if hits[-1].lower() == "yes" else "not submitted"
+    # "already": the portal said this job was applied to before (Coca-Cola and BU on
+    # 2026-10-05, after a manual application); the agent used to report that as "yes"
+    return {"yes": "submitted", "already": "already applied"}.get(hits[-1].lower(), "not submitted")
 
 
 def select_ready_jobs(conn, user_id: str, since: datetime | None) -> list[dict]:
     """Batch-apply selection: jd_ready jobs (added since `since` when given),
-    minus the ones whose latest attempt already ended in a confirmed submit."""
+    minus the ones whose latest attempt ended in a confirmed submit, that the portal
+    says were applied to before, or that the user skipped (`jobs skip`)."""
     rows = repo.list_jobs_for_user(conn, user_id, "jd_ready", since=since)
-    return [r for r in rows if r.get("apply_outcome") != "submitted"]
+    return [r for r in rows if r.get("apply_outcome") not in ("submitted", "already applied", "skipped")]
 
 
 def _check_engine_model(engine: str, model: str) -> None:
@@ -1239,8 +1278,9 @@ def cmd_apply(args) -> int:
             return 0
         for i, (job_id, url) in enumerate(targets, 1):
             print(f"[{i}/{len(targets)}]", end=" ")
-            if args.engine == "det":
-                ok = _run_apply_det(conn, user_id, job_id, url, model, args.autosubmit, args.mcp)
+            if args.engine in ("det", "det+agent"):
+                ok = _run_apply_det(conn, user_id, job_id, url, model, args.autosubmit, args.mcp,
+                                    agent_fallback=args.engine == "det+agent")
             else:
                 ok = _run_apply_agent(conn, user_id, job_id, url, model, args.autosubmit)
             if not ok:
@@ -1273,9 +1313,10 @@ def cmd_continue(args) -> int:
             )
         if last["outcome"] == "submitted":
             raise SystemExit("already submitted — nothing to continue")
-        if args.engine == "det":
+        if args.engine in ("det", "det+agent"):
             ok = _run_apply_det(
-                conn, user_id, job_id, url, model, args.autosubmit, args.mcp, continue_run=True
+                conn, user_id, job_id, url, model, args.autosubmit, args.mcp, continue_run=True,
+                agent_fallback=args.engine == "det+agent",
             )
         else:
             ok = _run_apply_agent(
@@ -1330,6 +1371,16 @@ def build_parser() -> argparse.ArgumentParser:
     rm.add_argument("jobs", nargs="+", help="job ids, id prefixes, or URLs")
     rm.add_argument("--user", help="user id or email (default: the only active user)")
     rm.set_defaults(func=cmd_jobs_rm)
+    skip = jobs_sub.add_parser(
+        "skip",
+        help="mark jobs as not applying (batch apply passes over them)",
+        description="Records an apply attempt with outcome 'skipped'. `apply --all / "
+        "--today` passes over the job; `apply JOB` by name still runs it. The job and "
+        "its tailoring stay; `jobs rm` removes them instead.",
+    )
+    skip.add_argument("jobs", nargs="+", help="job ids, id prefixes, or URLs")
+    skip.add_argument("--user", help="user id or email (default: the only active user)")
+    skip.set_defaults(func=cmd_jobs_skip)
     lst = jobs_sub.add_parser("list", help="list your jobs")
     lst.add_argument("--status", choices=_JOB_STATUSES)
     lst.add_argument("--today", action="store_true", help="only jobs added today")
@@ -1553,12 +1604,14 @@ def build_parser() -> argparse.ArgumentParser:
     )
     apply_p.add_argument(
         "--engine",
-        choices=("agent", "det"),
+        choices=("agent", "det", "det+agent"),
         default="agent",
         help="agent: the LLM browser agent (default). det: the deterministic filler — "
         "profile answers, saved answers and `ask` first, one model call per page only "
         "for fields still unanswered; stops at captchas/codes and before Submit "
-        "unless --autosubmit",
+        "unless --autosubmit. det+agent: det first; when it stops short (a field or "
+        "control it cannot handle, an account step) the agent finishes the same page "
+        "from det's handover. Captchas, emailed codes and AI-use questions stay yours",
     )
     apply_p.add_argument(
         "--mcp",
@@ -1588,12 +1641,14 @@ def build_parser() -> argparse.ArgumentParser:
     )
     cont.add_argument(
         "--engine",
-        choices=("agent", "det"),
+        choices=("agent", "det", "det+agent"),
         default="agent",
         help="agent: the LLM browser agent (default). det: the deterministic filler — "
         "profile answers, saved answers and `ask` first, one model call per page only "
         "for fields still unanswered; stops at captchas/codes and before Submit "
-        "unless --autosubmit",
+        "unless --autosubmit. det+agent: det first; when it stops short (a field or "
+        "control it cannot handle, an account step) the agent finishes the same page "
+        "from det's handover. Captchas, emailed codes and AI-use questions stay yours",
     )
     cont.add_argument(
         "--mcp",

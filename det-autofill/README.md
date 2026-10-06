@@ -129,6 +129,12 @@ Chromium (`DET_AUTOFILL_CHROMIUM` overrides) and skip without one.
       Live dry run on a Greenhouse form (headless, fake profile, no submit): 14 fields,
       resume and location filled; the three company-specific questions left to the model.
       `runner.py` / `widgets.py` / `aria.py` are the older ARIA-snapshot path.
+- [x] P7 `--engine det+agent` (2026-10-05, auto-browse `agent/det_apply.py`): det first;
+      when it stops short (`agent_should_take_over`: stuck, or an account step such as "no
+      sign-in button") the LLM agent continues the same open page from `agent_handover` —
+      what det filled, what is left, why it stopped. Never handed over: captchas, emailed
+      codes, rejected or already-tried passwords, or a page whose only gap is an AI-use
+      question. Each half records its own applications row.
 
 ## Run
 

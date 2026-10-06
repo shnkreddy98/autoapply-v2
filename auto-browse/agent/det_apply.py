@@ -13,6 +13,10 @@ What gets plugged into det_autofill.engine:
 
 The browser is the container's Playwright MCP, reached through the pruning proxy
 (:8932), driven by CSS selectors.
+
+`--engine det+agent`: when det stops short (`agent_should_take_over`), the LLM agent
+continues on the same open page with `agent_handover` — what det filled, what is
+left and why it stopped — so it completes only the rest.
 """
 
 from __future__ import annotations
@@ -27,13 +31,14 @@ from pathlib import Path
 from typing import Awaitable, Callable
 
 from common import keys, repo
-from det_autofill import engine, login
+from det_autofill import engine, login, taxonomy
 from det_autofill.answers import AnswerStore
 from det_autofill.fill import McpDriver
 from det_autofill.jev import JevResolver
 from det_autofill.llm import LLMResolver
 from det_autofill.mcpio import Browser
 from det_autofill.profile import from_export
+from det_autofill.aria import FormField
 
 from agent import email_otp, notify
 from agent.apply import resolve_resume
@@ -71,6 +76,64 @@ class DbSavedAnswers:
             self.conn, self.user_id, row.label, answer, source=source, options=options,
             job_id=self.job_id if per_job else None,
         )
+
+
+def push_handoff(result: engine.RunResult, url: str, job_id) -> None:
+    """det stops at a captcha / code it cannot get from the inbox; the page stays open
+    for `autoapply continue JOB --engine det` once the person is done."""
+    notify.push(
+        f"Apply paused: {result.reason[:80]}",
+        f"{url}\nFinish it on screen, then: autoapply continue {job_id} --engine det",
+        click=notify.vnc_url(),
+    )
+
+
+# Stops the agent must not pick up: a captcha or an emailed code is the person's, a
+# rejected password is never retried, and det already used this run's sign-in try.
+# Rivian's "no sign-in button" and "no account on this portal" are fine: the agent
+# signs in or creates the account (det never creates one).
+_PERSON_ONLY_RE = re.compile(
+    r"captcha|human check|one-time code|code did not arrive|sign-in rejected|already tried|needs-human", re.I
+)
+
+
+def _left_for_the_applicant(label: str) -> bool:
+    rule = taxonomy.match(FormField(ref="", role="", label=label))
+    return bool(rule and rule.key == "ai_disclosure")
+
+
+def agent_should_take_over(result: engine.RunResult) -> bool:
+    """det+agent: hand the open page to the agent when det stopped short of Submit
+    for a reason the agent can act on. Not when the only gaps are questions det leaves
+    to the applicant (AI use: the agent leaves them too, so it could only stop again)."""
+    if result.status not in ("stuck", "handoff") or _PERSON_ONLY_RE.search(result.reason or ""):
+        return False
+    gaps = result.pages[-1].unresolved if result.pages else []
+    return not (gaps and all(_left_for_the_applicant(g) for g in gaps))
+
+
+def agent_handover(result: engine.RunResult, limit: int = 40) -> str:
+    """The brief the agent continues from: what det filled on the page it is on, what
+    is left and why det stopped. The agent re-reading every field from scratch
+    refilled them and spent most of its calls on work det had done."""
+    page = result.pages[-1] if result.pages else engine.PageReport(number=0, url="")
+    ok = list(dict.fromkeys(f["label"] for f in page.filled if f["ok"]))
+    failed = [f["label"] for f in page.filled if not f["ok"] and f["label"] not in ok]
+    left = list(dict.fromkeys(page.unresolved + failed))
+    lines = [
+        "HANDOVER FROM THE DETERMINISTIC FILLER: a rule-based filler already filled this "
+        f"page from the applicant profile and stopped ({result.status}: {result.reason[:300]}).",
+        "Already filled — keep these; touch one only if the page marks it invalid: "
+        + ("; ".join(ok[:limit]) or "(nothing on this page)"),
+        "Left for you: " + ("; ".join(left[:limit]) or "(nothing listed: find what blocks the page, e.g. an "
+                            "unsaved section, a sign-in step, a control it could not operate)"),
+        "Complete only what is left, then continue through the remaining steps. Answer from the "
+        "APPLICANT PROFILE and the resume only: a field whose answer they do not state stays "
+        "empty and is named in your summary — never guess one to get past validation. Questions "
+        "about AI use in this application are the applicant's: leave them. Captchas are a "
+        "human handoff, never solved by you.",
+    ]
+    return "\n".join(lines)
 
 
 def openrouter_complete(model: str) -> Callable:
@@ -138,9 +201,12 @@ async def run_det(
     navigate: bool = True,
     mcp_url: str = PLAYWRIGHT_MCP_URL,
     complete: Callable | None = None,
+    push: bool = True,
 ) -> engine.RunResult:
     """Fill one application. `answer_question(user_id, job_id, question, words)` is
-    `cli.main.run_answer` (ai-assist); `navigate=False` continues the open page."""
+    `cli.main.run_answer` (ai-assist); `navigate=False` continues the open page.
+    `push=False` leaves the handoff alert to the caller (det+agent decides first
+    whether the agent takes over)."""
     from agent.loop import RESUME_CONTAINER_ROOT, SCRATCH_ROOT
 
     label = repo.base_label_for_job(conn, user_id, job_id)
@@ -180,14 +246,8 @@ async def run_det(
         )
     finally:
         await browser.close()
-    if result.status == "handoff":
-        # det stops at a captcha / code it cannot get from the inbox; the page stays
-        # open for `autoapply continue JOB --engine det` once the person is done
-        await asyncio.to_thread(
-            notify.push, f"Apply paused: {result.reason[:80]}",
-            f"{url}\nFinish it on screen, then: autoapply continue {job_id} --engine det",
-            click=notify.vnc_url(),
-        )
+    if push and result.status == "handoff":
+        await asyncio.to_thread(push_handoff, result, url, job_id)
     REPORT_DIR.mkdir(parents=True, exist_ok=True)
     (REPORT_DIR / f"{run_id}.json").write_text(json.dumps(result.to_dict(), indent=2, default=str))
     return result
