@@ -30,7 +30,39 @@
       <label><input type="radio" name="sponsor" value="no"> No</label>
     </fieldset>
   </div>
+  <!-- Yes/No as live Ashby draws it (jobs.ashbyhq.com/dailypay, 2026-10-05): the label's
+       `for` is the checkbox's name (it has no id), the star is CSS on _required_, the
+       display:none checkbox is ticked only for Yes, the buttons default to type=submit -->
+  <div class="_fieldEntry_1e3gg_28 ashby-application-form-field-entry" data-field-path="b84fbcfe" data-field-entry-id="q5_b84fbcfe">
+    <label class="_heading_f7cvd_52 _required_f7cvd_91 _label_1e3gg_42 ashby-application-form-question-title" for="b84fbcfe">Are you legally authorized to work in the United States?&nbsp;</label>
+    <div class="_container_1svni_28 _yesno_1e3gg_148  ashby-application-form-input-yesno">
+      <button class="_container_pjyt6_1 _option_1svni_32  ashby-application-form-input-yesno-option" aria-pressed="false" data-option="yes">Yes</button>
+      <button class="_container_pjyt6_1 _option_1svni_32  ashby-application-form-input-yesno-option" aria-pressed="false" data-option="no">No</button>
+      <input type="checkbox" class="_input_1svni_78" tabindex="-1" name="b84fbcfe" style="display:none">
+    </div>
+  </div>
+  <div class="_fieldEntry_1e3gg_28 ashby-application-form-field-entry" data-field-path="c95acd0f" data-field-entry-id="q6_c95acd0f">
+    <label class="_heading_f7cvd_52 _required_f7cvd_91 _label_1e3gg_42 ashby-application-form-question-title" for="c95acd0f">Will you now or in the future require employer sponsorship to work in the United States?&nbsp;</label>
+    <div class="_container_1svni_28 _yesno_1e3gg_148  ashby-application-form-input-yesno">
+      <button class="_container_pjyt6_1 _option_1svni_32  ashby-application-form-input-yesno-option" aria-pressed="false" data-option="yes">Yes</button>
+      <button class="_container_pjyt6_1 _option_1svni_32  ashby-application-form-input-yesno-option" aria-pressed="false" data-option="no">No</button>
+      <input type="checkbox" class="_input_1svni_78" tabindex="-1" name="c95acd0f" style="display:none">
+    </div>
+  </div>
 </form>
 <script src="./_react-tracker.js"></script>
 <script>document.querySelectorAll('input[type=text]').forEach(window.trackLikeReact);</script>
+<script>
+document.querySelectorAll('.ashby-application-form-input-yesno').forEach((box) => {
+  const btns = box.querySelectorAll('button');
+  btns.forEach((b) => b.addEventListener('click', (e) => {
+    e.preventDefault();
+    btns.forEach((o) => {
+      o.setAttribute('aria-pressed', o === b ? 'true' : 'false');
+      o.classList.toggle('_active_1svni_57', o === b);
+    });
+    box.querySelector('input').checked = b.dataset.option === 'yes';
+  }));
+});
+</script>
 </body></html>

@@ -85,7 +85,9 @@ def answer_from_text(row: Row, text: Any) -> dict | None:
     if text is None:
         return None
     text = str(text).strip()
-    if not text or text.lower() in ("null", "none", "n/a"):
+    # "N/A" is the answer where the question asks for it (Found: "Please write N/A if
+    # you have not ..."); elsewhere it means the model had none
+    if not text or text.lower() in ("null", "none") or (text.lower() == "n/a" and not re.search(r"\bN/A\b", row.label)):
         return None
     if row.widget == "checkbox":
         if nv(text) in ("yes", "true", "checked"):

@@ -39,6 +39,14 @@ RULES: list[Rule] = [
     # Workday anti-bot honeypot: "Enter website. This input is for robots only,
     # do not enter if you're human." Filling it flags the session.
     Rule("honeypot", "skip", (r"for robots only", r"do not (enter|fill)", r"honey ?pot")),
+    # Whether an AI filled the application is the applicant's statement to make, never
+    # det's or the model's (Found Industries: "Are you an LLM, AI agent, or other
+    # associated agentic tool? ... Select all that apply", options include "I am a human")
+    Rule("ai_disclosure", "skip", (
+        r"are you an? (llm|ai|bot|robot|language model|(ai |automated )?agent)\b",
+        r"(did|do|have) you (use|used) (ai|chatgpt|generative ai|an? (ai|llm)|any ai)",
+        r"\bai tools?\b.{0,60}\bappl(y|ied|ying|ication|icant)",
+    )),
     # Workday multiselect chips ("1 items selected" listbox) — already-committed
     # values; touching them deletes chips
     Rule("selected_chips", "skip", (r"^\d* ?items? selected$",)),
@@ -55,7 +63,10 @@ RULES: list[Rule] = [
         r"^i (hereby )?certify that (all )?(the )?(statements|information|answers)",
         r"(true|accurate),? (and )?(correct|complete|accurate) to the best of my",
     )),
-    Rule("visa_status_detail", "auth", (r"\bf[- ]?1 (visa|status|student)", r"\bdaca\b", r"\bopt\b.{0,20}(status|stem|extension)")),
+    # not a sponsorship question that lists visas as examples: "require sponsorship or visa
+    # transfer (i.e. H-1B, OPT, F-1, Student Visa)" (Resilience, 2026-10-05) went unanswered
+    Rule("visa_status_detail", "auth", (r"^(?!.*sponsor).*\bf[- ]?1 (visa|status|student)", r"^(?!.*sponsor).*\bdaca\b",
+                                        r"^(?!.*sponsor).*\bopt\b.{0,20}(status|stem|extension)")),
     Rule("first_name", "identity", (r"^(legal )?first name", r"\bgiven name\b", r"^preferred first name")),
     Rule("last_name", "identity", (r"^(legal )?last name", r"\bfamily name\b", r"\bsurname\b")),
     Rule("middle_name", "identity", (r"middle (name|initial)",)),
@@ -77,7 +88,7 @@ RULES: list[Rule] = [
     # integration, and canary rollouts" is a skills question, not an address line
     Rule("street_address2", "address", (r"address (line )?2", r"^(apt|apartment|suite|unit)( ?(no|number|#))?$")),
     # before city: "Location (City)" on Greenhouse wants "City, State, Country"
-    Rule("location_city", "address", (r"location \(?city\)?", r"^(current )?location$", r"where (are you|do you) (located|live|based)")),
+    Rule("location_city", "address", (r"location \(?city\)?", r"^(current )?location$", r"where (are you|do you) (currently )?(located|live|based)")),
     Rule("city", "address", (r"^city$", r"\bcity\b", r"^town$")),
     Rule("state", "address", (r"^state", r"state/?province", r"^province$", r"^region$")),
     Rule("zip_code", "address", (r"zip|postal",)),
@@ -101,13 +112,13 @@ RULES: list[Rule] = [
     # where the posting is, which the US-only profile flags cannot say. No stored
     # answer exists for this key, so it goes to the resolver with the job description.
     Rule("work_authorized_role_country", "auth", (
-        r"(right|authoriz\w*|eligible|permit\w*|allowed).{0,60}work.{0,80}(country|location) (where|in which|of) (this|the) (role|job|position|vacancy)",
+        r"(right|authori[sz]\w*|eligible|permit\w*|allowed).{0,60}work.{0,80}(country|location) (where|in which|of) (this|the) (role|job|position|vacancy)",
     )),
     # Must outrank visa_sponsorship: "authorized to work WITHOUT sponsorship?" says
     # "sponsor" but a Yes means no sponsorship is needed — the opposite answer.
     Rule("authorized_without_sponsorship", "auth", (
-        r"(authoriz\w*|eligible|able|permitted|allowed).{0,60}work.{0,80}without.{0,30}(sponsor|visa)",
-        r"without.{0,30}(sponsor\w*|visa).{0,60}(authoriz|eligible|work)",
+        r"(authori[sz]\w*|eligible|able|permitted|allowed).{0,60}work.{0,80}without.{0,30}(sponsor|visa)",
+        r"without.{0,30}(sponsor\w*|visa).{0,60}(authori[sz]|eligible|work)",
     )),
     Rule("visa_sponsorship", "auth", (
         r"sponsor",  # "require sponsorship", "visa sponsorship", "now or in the future"
@@ -118,13 +129,16 @@ RULES: list[Rule] = [
     # enumerated status question ("Which work authorization best describes
     # you: citizen / green card / H-1B / ...") — must outrank the yes/no rule
     Rule("work_auth_type", "auth", (
-        r"(which|what).{0,25}(work )?authorization.{0,20}(best )?describes",
-        r"(which|what).{0,40}(best )?describes.{0,30}(work|employment) authorization",
-        r"(work )?authorization (status|type|category)",
+        r"(which|what).{0,25}(work )?authori[sz]ation.{0,20}(best )?describes",
+        r"(which|what).{0,40}(best )?describes.{0,30}(work|employment) authori[sz]ation",
+        r"(work )?authori[sz]ation (status|type|category)",
+        # Ashby (CivicMarketplace): "Which of the following best describes your
+        # authorisation to work in the United States?"
+        r"(which|what).{0,40}describes.{0,20}authori[sz]ation to work",
     )),
     Rule("work_authorized", "auth", (
-        r"(legally )?authoriz.{0,30}work", r"eligible to work", r"right to work",
-        r"work eligib", r"immigration status", r"work authorization",
+        r"(legally )?authori[sz].{0,30}work", r"eligible to work", r"right to work",
+        r"work eligib", r"immigration status", r"work authori[sz]ation",
     )),
     # --- EEO / demographics ---------------------------------------------------
     Rule("eeo_hispanic", "eeo", (r"hispanic|latino|latinx",)),
@@ -171,7 +185,8 @@ RULES: list[Rule] = [
     Rule("may_contact_employer", "employment", (r"may we contact",)),
     Rule("reason_for_leaving", "employment", (r"reason for leaving",)),
     Rule("worked_here_before", "employment", (
-        r"(previously|ever|before).{0,30}(worked|employed)", r"former (employee|associate)",
+        # Ashby: "Have you ever been an employee or contractor at <company>?"
+        r"(previously|ever|before).{0,30}(worked|employed|an? (employee|contractor))", r"former (employee|associate)",
         r"(currently|have you).{0,20}employed (by|with|at)",
         r"worked (for|at|with|here).{0,40}before",
     )),
@@ -199,7 +214,9 @@ RULES: list[Rule] = [
     Rule("background_check_ok", "screening", (r"background (check|investigation)",)),
     Rule("drug_test_ok", "screening", (r"drug (test|screen)",)),
     Rule("ever_terminated", "screening", (r"terminated|dismissed|fired",)),
-    Rule("security_clearance", "screening", (r"security clearance|government clearance|export control|itar",)),
+    # Core One: "What is your current clearance level?"
+    Rule("security_clearance", "screening", (r"security clearance|government clearance|export control|itar",
+                                             r"clearance (level|status)|(current|active) clearance")),
     Rule("military", "screening", (r"military (spouse|service|info)", r"armed forces")),
     # --- referral / source ------------------------------------------------------
     Rule("how_heard", "source", (r"how did you (hear|find|first hear)", r"^source( type)?$", r"hear about (us|this)")),

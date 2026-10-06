@@ -77,3 +77,55 @@ def test_a_shared_dial_code_picks_the_united_states():
 
     opts = [Choice(value=str(i), text=t) for i, t in enumerate(["🇨🇦 +1 Canada", "🇺🇸 +1 United States", "🇺🇲 +1 United States Minor Outlying Islands", "🇯🇲 +1 Jamaica", "🇬🇧 +44 United Kingdom"])]
     assert match_option("phone_country_code", "+1", opts).index == 1
+
+
+def test_a_trailing_dial_code_matches_workdays_wording():
+    # Workday's search for "United States" returns only this option
+    assert match_option("phone_country_code", "+1", [C("", "United States of America (+1)")]).index == 0
+    opts = [C("", t) for t in ["Canada (+1)", "India (+91)", "United States Minor Outlying Islands (+1)",
+                               "United States of America (+1)"]]
+    assert match_option("phone_country_code", "+1", opts).index == 3
+    assert match_option("phone_country_code", "+91", opts).index == 1
+    # "+1" must not match "+91" or "+12"
+    assert match_option("phone_country_code", "+1", [C("", "India (+91)"), C("", "X (+12)")]).index is None
+
+
+def test_a_number_picks_the_range_holding_it():
+    opts = [C("", t) for t in ["0-2 years", "3-5 years", "6-9 years", "10+ years"]]
+    assert match_option("years_experience", 7, opts).index == 2
+    assert match_option("years_experience", "12", opts).index == 3
+    assert match_option("years_experience", 7, [C("", "Less than 1 year"), C("", "1 to 5 years"),
+                                                C("", "More than 5 years")]).index == 2
+    assert match_option("desired_salary", 165000, [C("", "$100,000 - $150,000"), C("", "$150,000 - $200,000")]).index == 1
+    # overlapping ranges are two plausible answers: a miss
+    assert match_option("years_experience", 5, [C("", "3-5 years"), C("", "5-10 years")]).index is None
+    # an exact option still wins over a range
+    assert match_option("years_experience", 7, [C("", "7"), C("", "5-10")]).index == 0
+    # leading digits are not a match: 1 is not "10+ years"
+    assert match_option("years_experience", 1, [C("", "0-2 years"), C("", "10+ years")]).index == 0
+
+
+def test_a_race_list_naming_hispanic_on_every_line_is_not_the_hispanic_question():
+    from det_autofill.options import hispanic_only
+
+    workday = ["Asian (Not Hispanic or Latino)", "White (Not Hispanic or Latino)", "Hispanic or Latino", "I do not wish to answer"]
+    assert not hispanic_only([{"text": t} for t in workday])
+    assert hispanic_only([{"text": t} for t in ["Hispanic or Latino", "Not Hispanic or Latino", "I decline to self-identify"]])
+
+
+def test_both_bounds_of_a_worded_range_count():
+    taleo = ["Less than 1 year", "1 or more years but less than 3 years", "3 or more years but less than 5 years",
+             "5 or more years but less than 7 years", "7 or more years but less than 10 years", "10 or more years",
+             "No experience"]
+    opts = [C("", t) for t in taleo]
+    assert match_option("skill_years", 7, opts).index == 4
+    assert match_option("skill_years", 0.5, opts).index == 0
+    assert match_option("skill_years", 12, opts).index == 5
+    assert match_option("skill_years", 2, [C("", "Up to 2 years"), C("", "At least 3 years")]).index == 0
+
+
+def test_notice_period_takes_the_shortest_option_that_covers_it():
+    # Chainlink: Immediately available / 1 month / 2 months / 3 months or more, profile "2 weeks"
+    opts = [C(o, o) for o in ["Immediately available", "1 month", "2 months", "3 months or more"]]
+    assert opts[match_option("notice_period", "2 weeks", opts).index].text == "1 month"
+    assert match_option("notice_period", "4 months", opts[:3]).index is None

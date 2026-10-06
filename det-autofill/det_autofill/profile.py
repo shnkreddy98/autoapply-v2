@@ -32,7 +32,10 @@ _EEO_VOCAB: dict[str, list[tuple[str, list[str]]]] = {
         (r"prefer not|decline", [r"decline|prefer not|do not wish|don t wish"]),
     ],
     "eeo_race": [
-        (r"^asian", [r"^asian\b"]), (r"^white", [r"^white\b", r"caucasian"]),
+        # "South Asian" first where a form splits Asian (Samsara), plain "Asian" where
+        # it does not (Interstates fell through to the model once the profile said
+        # South Asian)
+        (r"\basian\b", [r"^asian\b"]), (r"^white", [r"^white\b", r"caucasian"]),
         (r"black|african", [r"\bblack\b", r"african american"]),
         (r"hispanic|latin", [r"hispanic", r"latino"]),
         (r"two or more|multi", [r"two or more", r"multiracial"]),
@@ -98,9 +101,17 @@ def from_export(doc: dict, *, resume_path: str = "", login_password: str | None 
     }
     if first_edu.get("major"):
         # the user's major before the generic data/CS fallbacks
-        prefs["field_of_study"] = [_esc_words(first_edu["major"])]  # never a neighbouring major
+        # never a neighbouring major or another degree's: a list without the major
+        # ("Discipline" on Found / Interstates has no Data Analytics) gets "Other"
+        prefs["field_of_study"] = [_esc_words(first_edu["major"]), r"^other$"]
     if f.get("how_did_you_hear"):
-        prefs["how_heard"] = [_esc_words(f["how_did_you_hear"]), r"job board", r"other"]
+        heard = f["how_did_you_hear"]
+        if re.search(r"company|career|corporate", heard, re.I):
+            # Samsara lists "Samsara Careers Site", no "Company website"; a job board
+            # is not the same answer
+            prefs["how_heard"] = [_esc_words(heard), r"careers? (site|page|website)|company (website|site|careers)|corporate (website|site)", r"other"]
+        else:
+            prefs["how_heard"] = [_esc_words(heard), r"job board", r"other"]
     prefs = {k: v for k, v in prefs.items() if v}
 
     out = {

@@ -102,14 +102,17 @@ READ_FIELD = "(selector) => {" + FRAMES_JS + r"""
   // Walk up to the first ancestor that holds a chosen value, stopping before one that
   // also holds another dropdown: live react-select wraps the input in its own
   // "select__input-container", so the nearest "container" is not the right scope.
-  let single = null;
+  let single = null, multi = [];
   for (let n = el.parentElement, d = 0; n && d < 6; n = n.parentElement, d++) {
     if (Array.from(n.querySelectorAll('[role="combobox"], select')).some((c) => c !== el)) break;
     single = n.querySelector('[class*="singleValue" i], [class*="single-value" i], [data-automation-id="selectedItem"], .ant-select-selection-item');
-    if (single) break;
+    // react-select multi (Greenhouse "select all that apply") shows each pick as a chip;
+    // unread, every pick there failed as "closed-without" (Samsara, Core One EEO)
+    multi = Array.from(n.querySelectorAll('[class*="multi-value__label" i]')).map(text);
+    if (single || multi.length) break;
   }
   const field = el.closest('[data-automation-id^="formField-"], [data-automation-id="multiSelectContainer"]');
-  const chips = field ? Array.from(field.querySelectorAll('[data-automation-id="selectedItemList"] li')).map(text) : [];
+  const chips = field ? Array.from(field.querySelectorAll('[data-automation-id="selectedItemList"] li')).map(text) : multi;
   return JSON.stringify({
     tag: el.tagName.toLowerCase(),
     value: el.tagName === 'SELECT' ? text(el.options[el.selectedIndex]) : (el.value || ''),
@@ -117,7 +120,9 @@ READ_FIELD = "(selector) => {" + FRAMES_JS + r"""
     // their own text (inputs have none)
     display: single ? text(single) : (/^(INPUT|SELECT|TEXTAREA)$/.test(el.tagName) ? '' : text(el)),
     chips,
-    checked: !!(el.checked || el.getAttribute('aria-checked') === 'true' || /--checked\b/i.test(String(el.className))),
+    // aria-pressed: Ashby's Yes / No buttons, which extract.js reads as a radio pair
+    checked: !!(el.checked || el.getAttribute('aria-checked') === 'true' || el.getAttribute('aria-pressed') === 'true'
+      || /--checked\b/i.test(String(el.className))),
     expanded: el.getAttribute('aria-expanded') === 'true',
     files: el.files ? Array.from(el.files).map((f) => f.name) : [],
     invalid: el.getAttribute('aria-invalid') === 'true',
@@ -280,6 +285,19 @@ async def list_options(driver: Driver, selector: str, *, attempts: int = 12, pau
             return last
         await driver.wait(pause_ms)
     return last
+
+
+async def peek_options(driver: Driver, selector: str, limit: int = 80) -> list[dict]:
+    """A dropdown's choices without picking one, for the resolver. Without them the
+    model answered "Yes" where the choices were "Yes, without accommodations" / "Yes,
+    with accommodations" (Interstates, 2026-10-05). Long lists are cut to `limit`:
+    the resolver needs the kind of answer, not 240 countries."""
+    try:
+        await driver.click(selector)
+        found = await list_options(driver, selector, attempts=6)
+    finally:
+        await _close(driver, selector)
+    return [{"value": o.get("value") or "", "text": o["text"]} for o in found["options"][:limit] if o.get("text")]
 
 
 # ---------------------------------------------------------------------------
@@ -446,6 +464,11 @@ async def _close(driver: Driver, selector: str, typed: bool = False) -> None:
         await driver.type(selector, "")
     if (await read_field(driver, selector)).get("expanded"):
         await driver.press("Escape")
+        # a prompt that ignores Escape stays open over the next questions and every
+        # later click times out (Ethnicity's popup covered Veteran Status and the
+        # terms box); its own button toggles it shut
+        if (await read_field(driver, selector)).get("expanded"):
+            await driver.click(selector)
 
 
 async def fill_combobox(driver: Driver, selector: str, key: str, answer: dict,
@@ -542,6 +565,17 @@ async def fill_file(driver: Driver, selector: str, path: str) -> FillResult:
     return FillResult(False, "file-not-registered", name)
 
 
+async def fill_date_part(driver: Driver, selector: str, value: str) -> FillResult:
+    """One Month / Day / Year box of a split date. Live Workday shows a typed "01" as
+    "1", so the read-back is compared as a number; both spellings are tried."""
+    for variant in dict.fromkeys([value, value.lstrip("0") or "0"]):
+        await driver.type(selector, variant)
+        got = re.sub(r"\D", "", (await read_field(driver, selector)).get("value", ""))
+        if got and int(got) == int(value):
+            return FillResult(True, "typed", variant)
+    return FillResult(False, "value-did-not-stick")
+
+
 def _in_search_box(descriptor: dict | None) -> bool:
     return bool(descriptor and descriptor.get("automation_id") == "searchBox")
 
@@ -567,6 +601,8 @@ async def fill_row(driver: Driver, row, store: AnswerStore | None = None, descri
             return await fill_text(driver, sel, key, str(answer["value"]), (descriptor or {}).get("maxlength", 0))
         if answer["kind"] == "bool":
             return await fill_text(driver, sel, key, "Yes" if answer["value"] else "No")
+        if answer["kind"] == "date_part":
+            return await fill_date_part(driver, sel, str(answer["value"]))
         return FillResult(False, f"no-strategy:{row.widget}/{answer['kind']}")
     except CaptchaCover:
         raise

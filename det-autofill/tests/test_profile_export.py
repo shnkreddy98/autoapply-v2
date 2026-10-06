@@ -19,7 +19,9 @@ def test_sponsorship_answers_follow_the_facts():
     assert store.get("visa_sponsorship").value is True
     assert store.get("authorized_without_sponsorship").value is False
     assert store.get("us_citizen").value is False  # needing sponsorship rules it out
-    assert store.get("work_auth_type") is None  # the default list starts with "citizen"
+    # never the default list, which starts with "citizen": only the sentence that says
+    # authorised but needing sponsorship (how Ashby asks it)
+    assert not any("citizen" in pat for pat in store.get("work_auth_type").value)
 
 
 def test_eeo_uses_the_users_own_words_not_decline_defaults():
@@ -44,6 +46,7 @@ def test_password_never_comes_from_the_export():
 
 def test_field_of_study_is_only_the_users_major():
     """A live Greenhouse Discipline list without "Data Analytics" got "Computer
-    Science" from the fallbacks — a different education than the user's."""
-    assert AnswerStore(from_export(SPONSORED)).get("field_of_study").value == [r"\bdata\ analytics\b"]
+    Science" from the fallbacks — a different education than the user's. "Other" is
+    the only fallback: Found's required Discipline list has no Data Analytics."""
+    assert AnswerStore(from_export(SPONSORED)).get("field_of_study").value == [r"\bdata\ analytics\b", r"^other$"]
     assert AnswerStore({}).get("field_of_study") is None

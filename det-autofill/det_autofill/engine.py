@@ -23,7 +23,9 @@ from typing import Awaitable, Callable, Protocol
 from det_autofill import login
 from det_autofill.answers import AnswerStore
 from det_autofill.classify import Row, plan
-from det_autofill.fill import FRAMES_JS, OVERLAY_JS, CaptchaCover, Driver, FillResult, dismiss_overlays, fill_row  # noqa: F401
+from det_autofill.options import nv
+from det_autofill.fill import (FRAMES_JS, OVERLAY_JS, _SELECTOR_FOR, CaptchaCover, Driver, FillResult,  # noqa: F401
+                               dismiss_overlays, fill_row, peek_options)
 
 EXTRACT_JS = (Path(__file__).parent / "extract.js").read_text().replace("/*FRAMES*/", FRAMES_JS)
 
@@ -128,6 +130,47 @@ ACCOUNT_PAGE_JS = "() => {" + FRAMES_JS + r"""
   return /accounts\.google\.|login\.microsoftonline\.|linkedin\.com\/(uas\/)?login|passport\.|\/(sign-?in|log-?in|create-?account|register)(\b|\/|\?|$)|applylogin/i.test(location.href);
 }"""
 
+# "Add" buttons that open a work-history or education entry: inline (UKG Pro's "Add
+# Experience" appends a "Work Experience 1" block) or a subform that needs its own
+# Save (Oracle's "Add Experience", SmartRecruiters' Add / Save). `holds` is what the
+# section already shows, entries' input values included, so an entry that a resume
+# parse or an earlier pass put there is never added twice. The section is the first
+# ancestor with a heading, widened while that adds no other heading (numbered entry
+# headings such as "Work Experience 2" don't count).
+ADD_JS = "() => {" + _SELECTOR_FOR + r"""
+  const visible = (n) => { const r = n.getBoundingClientRect(); const s = getComputedStyle(n); return r.width > 1 && r.height > 1 && s.visibility !== 'hidden' && s.display !== 'none'; };
+  const text = (n) => (n.innerText || n.textContent || '').replace(/\s+/g, ' ').trim();
+  const HEAD = 'h1, h2, h3, h4, h5, h6, legend, [role=heading]';
+  const heads = (n) => Array.from(n.querySelectorAll(HEAD)).filter((h) => !/\d\s*$/.test(text(h))).length;
+  const out = [];
+  for (const b of deepAll('button, [role=button]')) {
+    const label = text(b) || (b.getAttribute('aria-label') || '').trim();
+    if (!visible(b) || b.disabled || !/^\+?\s*add\b/i.test(label) || label.length > 60) continue;
+    const body = b.ownerDocument.body;
+    let scope = b.parentElement;
+    while (scope && scope !== body && !scope.querySelector(HEAD)) scope = scope.parentElement;
+    if (!scope || scope === body) continue;
+    while (scope.parentElement && scope.parentElement !== body && heads(scope.parentElement) === heads(scope)) scope = scope.parentElement;
+    const head = Array.from(scope.querySelectorAll(HEAD)).find((h) => visible(h) && text(h));
+    const values = Array.from(scope.querySelectorAll('input, textarea, select')).filter(visible)
+      .map((n) => (n.tagName === 'SELECT' ? text(n.options[n.selectedIndex] || n) : n.value || ''));
+    out.push({ text: label.replace(/^\+\s*/, ''), selector: selectorFor(b),
+      heading: head ? text(head).slice(0, 80) : '', holds: (text(scope) + ' ' + values.join(' ')).slice(0, 6000) });
+  }
+  return JSON.stringify(out);
+}"""
+ENTRY_KINDS = (
+    # kind, what the button or its heading says, the answer an entry is recognised by
+    # (not the job title: the posting's own heading can carry the same words)
+    ("experience", re.compile(r"experience|employment|work history|employer|\bjobs?\b|\bpositions?\b", re.I),
+     "current_company"),
+    ("education", re.compile(r"education|school|degree|universit|college|academic", re.I), "school"),
+)
+NOT_ENTRY_RE = re.compile(r"skill|language|certific|licen[cs]e|reference|link|website|url|file|attach|document|social|"
+                          r"award|project|publication|volunteer|military", re.I)
+SAVE_RE = re.compile(r"^(save( (and close|changes|entry|experience|education|employment))?|done|ok|update|confirm|"
+                     r"add (experience|education|employment|entry|position|job|school|degree))$", re.I)
+
 SUBMIT_RE = re.compile(r"^(submit( (my )?application)?|send( application)?|apply( now)?|finish|complete( application)?)$", re.I)
 # not "Next slide": SuccessFactors pages carry a job carousel beside POSTULER/Apply
 NEXT_RE = re.compile(r"^(next(?! (slide|image|photo|item|job|jobs|article|story|post))( step| page)?|continue|save (and|&) continue|save and next|proceed|review( application)?)\b", re.I)
@@ -153,6 +196,7 @@ class PageReport:
     filled: list[dict] = field(default_factory=list)  # label, key, how, ok, source
     unresolved: list[str] = field(default_factory=list)  # required labels nothing answered
     errors: list[str] = field(default_factory=list)
+    entries: list[str] = field(default_factory=list)  # work-history / education entries added
     action: str | None = None  # next | submit | apply | None
 
 
@@ -228,13 +272,15 @@ async def _wait_for_change(driver: Driver, before: str, *, attempts: int = 20, p
     return state
 
 
-def _needs_resolver(row: Row, failed: set[str]) -> bool:
+def _needs_resolver(row: Row, failed: set[str], optional: bool = False) -> bool:
+    """`optional`: optional fields go to the resolver too (context["resolve_optional"],
+    set by the apply bench to measure a model answering every field on its own)."""
     if row.widget not in FILLABLE_WIDGETS:
         return False
     if row.selectors[0] in failed:
         return True
     reason = row.reason or ""
-    return row.action == "skip" and row.required and (reason in RESOLVABLE or reason.startswith(MISCLASSIFIED_PREFIXES))
+    return row.action == "skip" and (row.required or optional) and (reason in RESOLVABLE or reason.startswith(MISCLASSIFIED_PREFIXES))
 
 
 async def _nav_click(driver: Driver, selector: str) -> str | None:
@@ -331,12 +377,18 @@ async def _fill_page(driver, store, resolver, report, context, *, overwrite, inv
                 # "Data Privacy Agreement", before the file even registers)
                 await dismiss_overlays(driver)
 
-    # a required upload that did not register cannot be answered by anyone else
-    broken_files = [r for r in rows if r.widget == "file" and r.selectors[0] in failed and r.required]
-    gaps = [r for r in rows if _needs_resolver(r, failed)]
+    # a required upload that did not register, or that nothing knew to fill, cannot be
+    # answered by anyone else: an unrecognised resume field was skipped and det pressed
+    # Submit without a resume (Ashby, 2026-10-05)
+    broken_files = [r for r in rows if r.widget == "file" and r.required and (
+        r.selectors[0] in failed or (r.action == "skip" and r.reason in ("unclassified", "no-answer")))]
+    gaps = [r for r in rows if _needs_resolver(r, failed, bool(context.get("resolve_optional")))]
     if gaps and resolver:
         url, fields = await extract(driver)
         by_index = {f["i"]: f for f in fields}
+        for row in gaps:
+            if row.widget == "combobox" and not row.options:
+                row.options = await peek_options(driver, row.selectors[0])
         answers = await resolver.resolve(gaps, context)
         for row in gaps:
             answer = answers.get(row.index)
@@ -350,8 +402,87 @@ async def _fill_page(driver, store, resolver, report, context, *, overwrite, inv
             if result.ok:
                 failed.discard(row.selectors[0])
                 gaps = [g for g in gaps if g.selectors[0] != row.selectors[0]]
-    unanswered = broken_files + [r for r in gaps if r.required]
+    # a required question only the applicant may answer (AI use) stops the run before
+    # Submit with everything else filled; the resolver never sees it
+    mine = [r for r in rows if r.required and r.reason == "for-the-applicant"]
+    unanswered = broken_files + [r for r in gaps if r.required] + mine
     return None, unanswered
+
+
+def _entry_kind(button: dict) -> tuple[str, str] | None:
+    """(kind, answer key) for an Add button that opens a work-history or education
+    entry. The button's own words decide first: a bare "Add" goes by its heading."""
+    for words in (button["text"], f"{button['text']} {button['heading']}"):
+        if NOT_ENTRY_RE.search(words):
+            return None
+        for kind, pattern, key in ENTRY_KINDS:
+            if pattern.search(words):
+                return kind, key
+    return None
+
+
+async def _add_entries(driver: Driver, store: AnswerStore, report: PageReport, context: dict,
+                       *, overwrite: bool = False) -> tuple[str, str] | None:
+    """Enter the most recent job and the most recent education through the page's
+    "Add" buttons: Oracle, UKG Pro and SmartRecruiters take them only as entries, and
+    their steps were rejected with "Employment History is required". One entry per kind
+    per run, from profile answers only (no resolver: the page's own gaps were resolved
+    already), and never one the section already shows. Returns (status, reason) when
+    the entry could not be completed."""
+    added = context.setdefault("_entries_added", set())
+    for _ in range(len(ENTRY_KINDS)):
+        pick = None
+        for button in json.loads(await driver.evaluate(ADD_JS)):
+            hit = _entry_kind(button)
+            if not hit or hit[0] in added:
+                continue
+            answer = store.get(hit[1])
+            name = nv(answer.value) if answer and isinstance(answer.value, str) else ""
+            if not name:
+                continue
+            if f" {name} " in f" {nv(button['holds'])} ":
+                added.add(hit[0])  # already entered (resume parse, a pre-added block, an earlier page)
+                continue
+            pick = button, hit[0]
+            break
+        if not pick:
+            return None
+        button, kind = pick
+        added.add(kind)
+        before = {b["selector"] for b in await _buttons(driver)}
+        sig = _signature(await _state(driver))
+        if err := await _nav_click(driver, button["selector"]):
+            return ("handoff" if err.startswith("captcha") else "stuck"), f"could not click {button['text']!r}: {err}"
+        await _wait_for_change(driver, sig)
+        handoff, missing = await fill_page(driver, store, None, report, context, overwrite=overwrite)
+        if handoff:
+            return "handoff", handoff
+        where = button["heading"] or kind
+        if missing:
+            return "stuck", f"required field(s) unanswered in {where}: " + "; ".join(r.label[:80] for r in missing[:5])
+        # a subform has its own Save that appeared with it; an inline block has none
+        save = next((b for b in await _buttons(driver) if b["selector"] not in before and SAVE_RE.search(b["text"])), None)
+        if save:
+            sig = _signature(await _state(driver))
+            if err := await _nav_click(driver, save["selector"]):
+                return "stuck", f"could not click {save['text']!r} in {where}: {err}"
+            after = await _wait_for_change(driver, sig)
+            if after["alerts"]:
+                return "stuck", f"{save['text']!r} in {where} rejected: " + "; ".join(after["alerts"][:3])
+        report.entries.append(f"{kind}: {button['text']}" + (f" -> {save['text']}" if save else ""))
+    return None
+
+
+async def _open_frame(driver: Driver, report: PageReport, context: dict) -> bool:
+    """Navigate into a large frame the probes cannot read, once per frame URL."""
+    frame = await driver.evaluate(FRAME_JS)
+    if not frame or not hasattr(driver, "navigate") or frame in context.setdefault("_frames", []):
+        return False
+    context["_frames"].append(frame)
+    report.action = "open-frame"
+    await driver.navigate(frame)
+    await settle(driver)
+    return True
 
 
 async def run(driver: Driver, store: AnswerStore, *, resolver: Resolver | None = None, autosubmit: bool = False,
@@ -399,18 +530,18 @@ async def run(driver: Driver, store: AnswerStore, *, resolver: Resolver | None =
                     await driver.select_last_tab()
                     await settle(driver)
                     continue
+                if _signature(after) == before and await _open_frame(driver, report, context):
+                    # a careers site that embeds the ATS: Apply loaded a cross-origin frame
+                    # the probes cannot read (Greenhouse on samsara.com), so nothing seemed
+                    # to change and the run stopped at "did not open an application form"
+                    continue
                 if _signature(after) == before:
                     result.status, result.reason = "stuck", f"{apply_btn['text']!r} did not open an application form"
                     return result
                 continue
             # iCIMS renders the posting and its form inside a same-site iframe that
             # the page probes cannot reach: open the frame's own URL instead
-            frame = await driver.evaluate(FRAME_JS)
-            if frame and hasattr(driver, "navigate") and frame not in context.setdefault("_frames", []):
-                context["_frames"].append(frame)
-                report.action = "open-frame"
-                await driver.navigate(frame)
-                await settle(driver)
+            if await _open_frame(driver, report, context):
                 continue
 
         if (credentials or stop_at_account_pages) and await driver.evaluate(ACCOUNT_PAGE_JS):
@@ -444,6 +575,9 @@ async def run(driver: Driver, store: AnswerStore, *, resolver: Resolver | None =
             result.reason = "required field(s) unanswered: " + "; ".join(report.unresolved[:5])
             if context.get("resolver_error"):
                 result.reason += f" (model call failed: {context['resolver_error']})"
+            return result
+        if stop := await _add_entries(driver, store, report, context, overwrite=overwrite):
+            result.status, result.reason = stop
             return result
 
         buttons = await _buttons(driver)
