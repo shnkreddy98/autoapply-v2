@@ -101,7 +101,17 @@ STATE_JS = "() => {" + FRAMES_JS + r"""
   const invalid = deepAll('[aria-invalid="true"]').filter((n) => visible(n) && n.id)
     .map((n) => framePrefix(n.ownerDocument) + '#' + CSS.escape(n.id));
   const body = frameDocs().map(({ doc }) => (doc.body && doc.body.innerText) || '').join('\n').toLowerCase();
-  return JSON.stringify({ url: location.href, fields, headings, dialogs, alerts: Array.from(new Set(alerts)), invalid,
+  // a human check the person has to pass: a challenge frame on screen (not reCAPTCHA's
+  // invisible-mode badge, which many forms always show) or its wording. Hyperbolic's
+  // Ashby form raised one after Submit while the page already read like a
+  // confirmation, and the run was recorded as submitted.
+  const challenge = deepAll('iframe').some((f) => {
+    const r = f.getBoundingClientRect(); const s = getComputedStyle(f);
+    if (r.width < 50 || r.height < 40 || s.visibility === 'hidden' || s.display === 'none') return false;
+    if (f.closest('.grecaptcha-badge') || /size=invisible/.test(f.src || '')) return false;
+    return /captcha|challenge|turnstile|arkose|funcaptcha|security check/i.test(`${f.title} ${f.src}`);
+  }) || /verify (that )?you('re| are) (a )?human|are you a robot|i'?m not a robot|complete the security check|human verification/.test(body);
+  return JSON.stringify({ url: location.href, fields, headings, dialogs, alerts: Array.from(new Set(alerts)), invalid, challenge,
     confirmation: /thank you for (applying|your application)|application (has been |was )?(received|submitted)|we('ve| have) received your application|successfully submitted/.test(body) });
 }"""
 
@@ -613,13 +623,23 @@ async def run(driver: Driver, store: AnswerStore, *, resolver: Resolver | None =
             if not autosubmit:
                 result.status, result.reason = "ready-to-submit", f"stopped before {submit['text']!r}"
                 return result
+            if state.get("challenge"):
+                result.status, result.reason = "handoff", "human check before Submit: solve it in the browser (noVNC :6080)"
+                return result
             report.action = "submit"
             if err := await _nav_click(driver, submit["selector"]):
                 result.status = "handoff" if err.startswith("captcha") else "stuck"
                 result.reason = f"could not click {submit['text']!r}: {err}"
                 return result
             after = await _wait_for_change(driver, before, attempts=30)
-            if after["confirmation"]:
+            if after["confirmation"] and not after.get("challenge"):
+                await driver.wait(1500)  # a human check can load just after the page text changes
+                after = await _state(driver)
+            if after.get("challenge"):
+                # nothing counts as sent while a human check is on screen
+                result.status, result.reason = ("handoff", "human check after Submit: solve it in the browser "
+                                                "(noVNC :6080) and confirm the application went through")
+            elif after["confirmation"]:
                 result.status, result.reason = "submitted", "confirmation page seen"
             elif after["alerts"]:
                 result.status, result.reason = "stuck", "submit rejected: " + "; ".join(after["alerts"][:3])
