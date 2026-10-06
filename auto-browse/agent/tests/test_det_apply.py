@@ -103,7 +103,7 @@ def test_run_det_hands_the_engine_the_jobs_role_and_container_resume(db, monkeyp
         async def close(self):
             seen["closed"] = True
 
-    async def fake_run(driver, store, *, resolver, autosubmit, context):
+    async def fake_run(driver, store, *, resolver, autosubmit, context, credentials=None, otp=None):
         seen["store"], seen["resolver"], seen["autosubmit"] = store, resolver, autosubmit
         return RunResult(status="ready-to-submit", reason="stopped before 'Submit'")
 

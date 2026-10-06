@@ -370,7 +370,9 @@ def interactive_review(
     first, middle, last = _split_name(c.full_name)
     names: dict = {}
     names["first_name"] = _ask("first name", prior("first_name", first), ask=ask, yes=yes)
-    names["middle_name"] = _ask("middle name", prior("middle_name", middle), ask=ask, yes=yes)
+    # a stored profile's empty middle name was cleared on purpose: re-running init
+    # refilled it from the full-name split, which already sits in a two-word first name
+    names["middle_name"] = _ask("middle name", ex["middle_name"] if "middle_name" in ex else middle, ask=ask, yes=yes)
     names["last_name"] = _ask("last name", prior("last_name", last), ask=ask, yes=yes)
     names["preferred_name"] = _ask(
         "preferred name (blank = first name)", prior("preferred_name"), ask=ask, yes=yes

@@ -332,3 +332,81 @@ def test_system_prompt_mentions_email_tool():
     from agent.loop import SYSTEM_PROMPT
 
     assert EMAIL_TOOL_NAME in SYSTEM_PROMPT
+
+
+# ---------------------------------------------------------------------------
+# verification links, ranking, host hints (2026-10-01: filters trash portal mail;
+# Workday verifies accounts with a link, not a code)
+
+
+def test_extract_links_keeps_verification_and_drops_footer():
+    text = (
+        "Click this link to confirm your email address and complete setup for your candidate\n"
+        "account https://acme.wd5.myworkdayjobs.com/AcmeCareers/activate/tok123?x=1 The link will expire.\n"
+        "Unsubscribe https://acme.com/unsubscribe?u=1  Privacy https://acme.com/privacy\n"
+        "Follow us https://www.linkedin.com/company/acme"
+    )
+    assert email_otp.extract_links(text) == ["https://acme.wd5.myworkdayjobs.com/AcmeCareers/activate/tok123?x=1"]
+
+
+def test_format_result_gives_links_on_their_own_lines():
+    out = email_otp.format_result("Acme <alto@otp.workday.com>", "Verify your candidate account",
+                                  "Verify: https://acme.wd5.myworkdayjobs.com/x/activate/abc")
+    assert out.startswith("CONFIRMATION LINK: https://acme.wd5.myworkdayjobs.com/x/activate/abc\n")
+
+
+def test_verification_subject_beats_a_newer_thank_you_from_the_same_sender():
+    metas = [
+        {"id": "thanks", "from": "Acme <alto@otp.workday.com>", "subject": "Thank you for applying", "internal_ms": 2},
+        {"id": "verify", "from": "Acme <alto@otp.workday.com>", "subject": "Verify your candidate account", "internal_ms": 1},
+    ]
+    assert email_otp.rank_messages(metas, "Acme", None)[0]["id"] == "verify"
+
+
+@pytest.mark.parametrize(("host", "words"), [
+    ("secure7.saashr.com", "saashr"),
+    ("https://acme.wd5.myworkdayjobs.com/en-US/careers", "acme myworkdayjobs"),
+    ("127.0.0.1:41234", ""),
+])
+def test_host_words(host, words):
+    assert email_otp.host_words(host) == words
+
+
+async def test_search_covers_read_mail_and_trash(monkeypatch):
+    seen_params = {}
+
+    async def fake_get(self, url, params=None, headers=None):
+        seen_params.update(params or {})
+        return httpx.Response(200, json={}, request=httpx.Request("GET", url))
+
+    monkeypatch.setattr(httpx.AsyncClient, "get", fake_get)
+    async with httpx.AsyncClient() as client:
+        await email_otp._search_once(client, "tok", "Acme", None, 1000, set())
+    assert seen_params["includeSpamTrash"] == "true"
+    assert "is:unread" not in seen_params["q"] and "after:1000" in seen_params["q"]
+
+
+# ---------------------------------------------------------------------------
+# handoff auto-resume and the open-link guard
+
+
+def test_handoff_cleared_rules():
+    from agent.loop import handoff_cleared
+
+    cap = {"captcha": True, "solved": False, "code": False, "sig": 1}
+    assert not handoff_cleared(cap, cap)
+    assert handoff_cleared(cap, cap | {"solved": True})  # reCAPTCHA keeps its iframe once ticked
+    assert handoff_cleared(cap, cap | {"captcha": False})
+    code = {"captcha": False, "solved": False, "code": True, "sig": 1}
+    assert not handoff_cleared(code, code | {"sig": 2})  # the code box is still there
+    assert handoff_cleared(code, code | {"code": False})
+    other = {"captcha": False, "solved": False, "code": False, "sig": 1}
+    assert handoff_cleared(other, other | {"sig": 2})
+    assert not handoff_cleared(None, other)
+
+
+def test_open_link_tool_only_exposed_with_the_email_tool():
+    from agent.loop import OPEN_LINK_TOOL, OPEN_LINK_TOOL_NAME, build_system_prompt
+
+    assert OPEN_LINK_TOOL["function"]["name"] == OPEN_LINK_TOOL_NAME
+    assert OPEN_LINK_TOOL_NAME in build_system_prompt()

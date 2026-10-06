@@ -2,17 +2,23 @@
 
 When a portal sends a 2FA code / confirmation link to the applicant's email, the
 agent calls the tool; this module polls the applicant's Gmail (their own OAuth
-grant, gmail.readonly) for a matching UNREAD message received after the apply run
+grant, gmail.readonly) for a matching message received after the apply run
 started, and returns:
 
 - the code, extracted deterministically (regex), when one is found — the LLM never
   sees the email body on this path; or
-- the sender + subject + full body (fenced as untrusted content) when no code is
-  extracted, so the model can find a confirmation link to navigate to.
+- the verification link(s), also picked out in code ("CONFIRMATION LINK: <url>"
+  lines), which the agent opens with `open_email_link`; the loop opens only links
+  that came out of a fetched email; or
+- the sender + subject + body (fenced as untrusted content) when neither is found.
 
-Matching is deterministic: rank unread messages by company/sender-hint hits in the
-From header and Subject, newest first. Messages already returned this run are
-skipped via a per-run seen-set (no gmail.modify scope — we never mark-as-read).
+Every message counts, read or unread, Spam and Trash included: the applicant's
+filters skip the inbox and trash portal mail (on 2026-10-01 ADP's "Here's your
+verification code" sat in Trash, already read, and the old `is:unread` search over
+inbox-visible mail could not find it). The run's start time bounds the search, and a
+per-run seen-set keeps a message from being returned twice (no gmail.modify scope —
+we never mark-as-read). Matching ranks messages by company/sender-hint hits in the
+From header and Subject, newest first.
 
 App-level OAuth client comes from GMAIL_CLIENT_ID / GMAIL_CLIENT_SECRET; the
 per-user refresh token lives in the gmail_tokens table (see common.repo).
@@ -99,6 +105,42 @@ def extract_code(text: str) -> str | None:
     return None
 
 
+_URL = re.compile(r"https?://[^\s<>\"')\]]+")
+_LINK_WORDS = re.compile(r"verif|confirm|activat|validat|registration|complete your|finish (signing|setting)", re.I)
+_LINK_NOISE = re.compile(r"unsubscribe|privacy|terms|policy|preferences|optout|opt-out|facebook\.|twitter\.|x\.com/"
+                         r"|linkedin\.com|instagram\.|youtube\.|\.(png|jpe?g|gif|svg|ico)\b|/help\b|support\.", re.I)
+
+
+def extract_links(text: str) -> list[str]:
+    """Verification links in email text, best first, at most three: the URL itself or
+    the words around it (anchor text sits next to its href after _strip_html) say
+    verify / confirm / activate. Footer links (unsubscribe, privacy, social) never."""
+    out: list[str] = []
+    for m in _URL.finditer(text):
+        url = m.group(0).rstrip(".,;:")
+        near = text[max(0, m.start() - 80): m.end() + 80]
+        if url in out or _LINK_NOISE.search(url):
+            continue
+        if _LINK_WORDS.search(url) or _LINK_WORDS.search(near):
+            out.append(url)
+    return out[:3]
+
+
+# host words that say nothing about who sends the mail
+_HOST_NOISE = {"www", "careers", "career", "jobs", "job", "apply", "recruiting", "com", "net", "io", "co", "org", "us",
+               "wd1", "wd3", "wd5", "fa", "ocs", "secure", "secure7", "secure10"}
+
+
+def host_words(host: str) -> str:
+    """A portal's host or URL as sender-matching words: "secure7.saashr.com" ->
+    "saashr", "acme.wd5.myworkdayjobs.com" -> "acme myworkdayjobs"."""
+    host = re.sub(r"^https?://([^/]+).*", r"\1", host or "")
+    return " ".join(w for w in re.split(r"[.\-:]", host.lower()) if w and w not in _HOST_NOISE and not w.isdigit())
+
+
+_VERIFY_SUBJECT = re.compile(r"verif|confirm|activat|validat|\bcode\b|one[- ]time|passcode|sign[- ]?in|log[- ]?in|security", re.I)
+
+
 def _tokens(s: str) -> list[str]:
     return [t for t in re.split(r"[^a-z0-9]+", s.lower()) if len(t) >= 3]
 
@@ -107,7 +149,10 @@ def rank_messages(
     metas: list[dict[str, Any]], company: str, sender_hint: str | None
 ) -> list[dict[str, Any]]:
     """Score messages by company/sender-hint hits: From-header hits weigh double
-    Subject hits. Zero-score messages drop out. Newest-first within equal score.
+    Subject hits. Zero-score messages drop out. Among matches, a verification-looking
+    subject wins over a newer one that is not: Workday sends "Verify your candidate
+    account" and "Thank you for applying" from the same sender minutes apart, and the
+    newer thank-you used to be returned instead. Newest-first within equal score.
 
     Each meta: {"id", "from", "subject", "internal_ms"}."""
     want = _tokens(company) + (_tokens(sender_hint) if sender_hint else [])
@@ -116,6 +161,8 @@ def rank_messages(
         frm, subj = m.get("from", "").lower(), m.get("subject", "").lower()
         score = sum(2 for t in want if t in frm) + sum(1 for t in want if t in subj)
         if score > 0:
+            if _VERIFY_SUBJECT.search(subj):
+                score += 10
             scored.append((score, m.get("internal_ms", 0), m))
     scored.sort(key=lambda x: (x[0], x[1]), reverse=True)
     return [m for _, _, m in scored]
@@ -180,16 +227,24 @@ def _fence(text: str) -> str:
 
 def format_result(frm: str, subject: str, body: str) -> str:
     """Code found -> deterministic short payload (body never reaches the model).
-    No code -> fenced full content so the model can pick out a confirmation link."""
+    Verification link found -> "CONFIRMATION LINK: <url>" lines for open_email_link.
+    Neither -> fenced full content so the model can read an unusual format."""
     code = extract_code(subject + "\n" + body)
     if code:
         return f"VERIFICATION CODE: {code}\n" + _fence(
             f"From: {frm}\nSubject: {subject}"
         )
+    links = extract_links(body)
+    if links:
+        return (
+            "".join(f"CONFIRMATION LINK: {u}\n" for u in links)
+            + "Open the first link with `open_email_link`; it opens in a new tab and "
+            "comes back to the application tab.\n"
+            + _fence(f"From: {frm}\nSubject: {subject}\n\n{body[:1500]}")
+        )
     return (
-        "No code auto-extracted — decide from the email content (a code in an "
-        "unusual format, or a confirmation link to browser_navigate to):\n"
-        + _fence(f"From: {frm}\nSubject: {subject}\n\n{body}")
+        "No code or verification link auto-extracted — decide from the email "
+        "content:\n" + _fence(f"From: {frm}\nSubject: {subject}\n\n{body}")
     )
 
 
@@ -227,9 +282,12 @@ async def _search_once(
     seen: set[str],
 ) -> str | None:
     auth = {"Authorization": f"Bearer {token}"}
-    q = f"is:unread after:{since_epoch}"
+    # read or unread, Spam and Trash too: filters trash portal mail (see module doc)
+    q = f"after:{since_epoch}"
     resp = await client.get(
-        GMAIL_API + "/messages", params={"q": q, "maxResults": 25}, headers=auth
+        GMAIL_API + "/messages",
+        params={"q": q, "maxResults": 25, "includeSpamTrash": "true"},
+        headers=auth,
     )
     resp.raise_for_status()
     ids = [m["id"] for m in resp.json().get("messages") or [] if m["id"] not in seen]
