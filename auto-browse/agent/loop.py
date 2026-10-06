@@ -55,6 +55,10 @@ log = logging.getLogger(LOGGER_NAME)
 # applicant's own Gmail (per-user OAuth grant). Handled in the agent loop, not
 # forwarded to the browser MCP — see agent/email_otp.py.
 EMAIL_TOOL_NAME = "get_email_code"
+# Virtual tool: open a verification link from that email in a new tab, then come back
+# to the application tab (Workday's "Verify your candidate account"). Only links that
+# get_email_code returned this run can be opened — the agent has no navigate tool.
+OPEN_LINK_TOOL_NAME = "open_email_link"
 
 # Human-in-the-loop handoff scenarios: when the page shows one of these, the agent
 # must stop and hand control to the human operator instead of attempting it itself.
@@ -137,10 +141,13 @@ _EMAIL_BLOCK = (
     "EMAIL VERIFICATION: when the page says a verification code or confirmation "
     f"link was sent to the applicant's email, call `{EMAIL_TOOL_NAME}` with the "
     "company/portal name shown on the page (and `sender_hint` if the page names the "
-    "sending address). It waits for the email and returns either the code — type it "
-    "into the page — or the email's content; if that content is a confirmation LINK, "
-    f"call `{HUMAN_TOOL_NAME}` with the link in `instructions` so the human opens it "
-    "(you have no navigation tool). If it reports nothing found, fall back to "
+    "sending address). It waits for the email and returns `VERIFICATION CODE: ...` — "
+    "type it into the page — or `CONFIRMATION LINK: ...` lines: call "
+    f"`{OPEN_LINK_TOOL_NAME}` with the first link. It opens the link in a new tab, "
+    "closes that tab and returns you to the application tab; then take a "
+    "`browser_snapshot` and continue there (if the page asks you to sign in — Workday "
+    "does after account verification — use the Login Email and Login Password from "
+    "the profile). If it reports nothing found, fall back to "
     f"`{HUMAN_TOOL_NAME}`."
 )
 
@@ -194,6 +201,8 @@ MUST DOs:
 - RESUME UPLOAD: click the attach/upload control, then IMMEDIATELY call `browser_file_upload` with the resume path. While the file chooser is open the page text can appear EMPTY — that is normal, not an error: the chooser is a native dialog. Do not click elsewhere or treat the blank text as a broken page; just call `browser_file_upload`.
 - Prefer autofill from the uploaded RESUME when the page offers it. Sign-in / account-based autofill is allowed where the portal requires it (per-ATS rules may forbid it).
 - If the portal requires an account: ALWAYS try to SIGN IN FIRST, using the Login Email and Login Password from the profile (use that same given password for every site). Only if sign-in fails because no account exists (e.g. "account not found", "no user", "incorrect email") should you then CREATE an account, reusing the same email and given password. Never create an account before trying to sign in.
+- Never invent a personal fact. Answer only from the APPLICANT PROFILE and the resume; a required question whose answer they do not state (a license, criminal history, references, shift or overtime availability, relatives, clearances) is left unanswered and named in your summary — do not submit with it guessed.
+- Never answer a question about whether AI, an AI agent or automation is being used for this application (e.g. "Are you an LLM or AI agent?", "Did you use AI to apply?"). That is the applicant's statement to make: leave it unanswered and name it in your summary.
 """
 
 _PROMPT_TAIL = """
@@ -310,6 +319,28 @@ EMAIL_TOOL: dict[str, Any] = {
     },
 }
 
+OPEN_LINK_TOOL: dict[str, Any] = {
+    "type": "function",
+    "function": {
+        "name": OPEN_LINK_TOOL_NAME,
+        "description": (
+            f"Open a CONFIRMATION LINK that `{EMAIL_TOOL_NAME}` returned. The link opens "
+            "in a new tab (verifying the account), that tab is closed, and the browser "
+            "goes back to the application tab. Returns what the link's page said."
+        ),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "url": {
+                    "type": "string",
+                    "description": f"A link copied exactly from a `CONFIRMATION LINK:` line of `{EMAIL_TOOL_NAME}`.",
+                },
+            },
+            "required": ["url"],
+        },
+    },
+}
+
 # ============================ prompt-injection guards ============================
 # Tools whose results are web-page content the model must treat as untrusted DATA.
 _PAGE_TOOLS = {
@@ -406,6 +437,8 @@ ATS_INSTRUCTIONS_PATH = Path(
 )
 
 MAX_ITERATIONS = int(os.getenv("MAX_ITERATIONS", "250"))
+# seconds a verification link's tab gets to redirect and render before it is read
+EMAIL_LINK_SETTLE_SECONDS = float(os.getenv("EMAIL_LINK_SETTLE_SECONDS", "4"))
 
 # Hard cost ceiling per application run. Once accrued LLM spend reaches this, the
 # loop aborts before issuing another (billable) call — a wedged/looping run can't
@@ -652,30 +685,121 @@ async def _complete_with_retry(
     raise RuntimeError(f"LLM call failed after {max_retries} attempts: {last_err}")
 
 
+HANDOFF_POLL_SECONDS = float(os.getenv("HANDOFF_POLL_SECONDS", "5"))
+HANDOFF_TIMEOUT_SECONDS = float(os.getenv("HANDOFF_TIMEOUT_SECONDS", "1800"))
+# What the page holds that a person has to clear: a visible captcha (and whether it
+# was solved — reCAPTCHA keeps its iframe after the checkbox is ticked), a code box,
+# and a signature of the page to notice that it moved on.
+_BLOCKER_PROBE_JS = r"""() => {
+  const vis = (n) => { const r = n.getBoundingClientRect(); const s = getComputedStyle(n);
+    return r.width > 2 && r.height > 2 && s.visibility !== 'hidden' && s.display !== 'none'; };
+  const text = ((document.body && document.body.innerText) || '').slice(0, 5000);
+  const frame = Array.from(document.querySelectorAll('iframe')).filter(vis).some((f) =>
+    /captcha|recaptcha|hcaptcha|turnstile|challenges\.cloudflare|arkoselabs|funcaptcha/i.test((f.src || '') + ' ' + (f.title || '')));
+  const words = /verify (that )?you('| a)re (a )?human|i'?m not a robot|press (&|and) hold|complete the (security )?check|security challenge/i.test(text);
+  const solved = Array.from(document.querySelectorAll('textarea[name="g-recaptcha-response"], textarea[name="h-captcha-response"], input[name="cf-turnstile-response"]'))
+    .some((n) => (n.value || '').length > 20);
+  const code = Array.from(document.querySelectorAll('input')).filter(vis).some((n) => n.autocomplete === 'one-time-code'
+    || /\b(code|otp|passcode|verification)\b/i.test([n.name, n.id, n.getAttribute('aria-label'), n.placeholder].join(' ')));
+  let h = 0; const sig = location.href + '|' + text.slice(0, 3000);
+  for (let i = 0; i < sig.length; i++) h = (h * 31 + sig.charCodeAt(i)) | 0;
+  return JSON.stringify({ captcha: frame || words, solved, code, sig: h });
+}"""
+
+
+async def _probe_blocker(session: ClientSession | None) -> dict | None:
+    if session is None:
+        return None
+    try:
+        out = result_text(await session.call_tool("browser_evaluate", {"function": _BLOCKER_PROBE_JS}))
+    except Exception:
+        return None
+    m = re.search(r'\{[^{}]*"sig"[^{}]*\}', out.replace('\\"', '"'))
+    try:
+        return json.loads(m.group(0)) if m else None
+    except json.JSONDecodeError:
+        return None
+
+
+def handoff_cleared(start: dict | None, now: dict | None) -> bool:
+    """Has the person finished what the handoff was for? A captcha: solved or gone. A
+    code box: gone. Anything else: the page moved on."""
+    if not start or not now:
+        return False
+    if start.get("captcha"):
+        return bool(now.get("solved")) or not now.get("captcha")
+    if start.get("code"):
+        return not now.get("code")
+    return now.get("sig") != start.get("sig")
+
+
+async def _wait_for_human(session: ClientSession | None, start: dict | None) -> tuple[str, str]:
+    """("typed", text) when the person types in the terminal, ("auto", "") when the
+    page shows the step done on two polls in a row, ("timeout", "") after
+    HANDOFF_TIMEOUT_SECONDS. Without a terminal and without a page to watch there is
+    nothing to wait on: ("typed", "")."""
+    loop_ = asyncio.get_running_loop()
+    typed: asyncio.Future = loop_.create_future()
+    fd = None
+    if sys.stdin is not None and sys.stdin.isatty():
+        fd = sys.stdin.fileno()
+        loop_.add_reader(fd, lambda: typed.done() or typed.set_result(sys.stdin.readline().strip()))
+    elif session is None:
+        return "typed", ""
+    try:
+        deadline = time.monotonic() + HANDOFF_TIMEOUT_SECONDS
+        streak = 0
+        while time.monotonic() < deadline:
+            try:
+                return "typed", await asyncio.wait_for(asyncio.shield(typed), timeout=HANDOFF_POLL_SECONDS)
+            except asyncio.TimeoutError:
+                pass
+            streak = streak + 1 if handoff_cleared(start, await _probe_blocker(session)) else 0
+            if streak >= 2:
+                return "auto", ""
+        return "timeout", ""
+    finally:
+        if fd is not None:
+            loop_.remove_reader(fd)
+
+
 async def _human_handoff(
-    arguments: dict[str, Any], trace: Trace | None, iteration: int
+    arguments: dict[str, Any],
+    trace: Trace | None,
+    iteration: int,
+    session: ClientSession | None = None,
+    task: str = "",
 ) -> str:
     """Pause the run and hand control to the human operator.
 
-    The human can act two ways, in either combination: (1) change the page directly
-    in the browser over VNC, and/or (2) type a meaningful response here (a
-    verification code, an instruction, or just 'continue'). Their typed response is
-    injected back into the conversation as this tool's result; whatever they changed
-    on screen is picked up by the next `browser_snapshot`.
+    The person gets a push (agent.notify: ntfy, with the VNC link) and can act two
+    ways, in either combination: change the page in the browser over VNC, and/or type
+    a response in the terminal (a code, an instruction, or 'continue'). The run also
+    resumes on its own once the page shows the step is done (captcha solved or gone,
+    code box gone, page moved on), so a person on a phone does not have to reach the
+    terminal. After HANDOFF_TIMEOUT_SECONDS the agent is told to stop.
     """
+    from agent import notify
+
     reason = str(arguments.get("reason") or "human action required")
     instructions = str(
         arguments.get("instructions")
         or "Complete the step on screen, then type 'continue'."
     )
+    job = (re.search(r"https?://\S+", task) or [""])[0]
     bar = "=" * 64
-    banner = (
+    print(
         f"\n{bar}\n"
         f"  HUMAN HANDOFF NEEDED — {reason}\n"
-        f"  On the browser screen (VNC): {instructions}\n"
-        "  When done, type a response (a code, an instruction, or 'continue')\n"
-        "  and press Enter to resume.\n"
-        f"{bar}\n> "
+        f"  On the browser screen (VNC {notify.vnc_url()}): {instructions}\n"
+        "  The run resumes by itself once the step is done on screen, or type a\n"
+        "  response (a code, an instruction, or 'continue') and press Enter.\n"
+        f"{bar}\n> ",
+        end="",
+        flush=True,
+    )
+    pushed = await asyncio.to_thread(
+        notify.push, f"Apply paused: {reason}", f"{instructions}\n{job}".strip(), click=notify.vnc_url()
     )
     if trace is not None:
         trace.event(
@@ -683,21 +807,69 @@ async def _human_handoff(
             iteration=iteration,
             reason=reason,
             instructions=instructions,
+            pushed=pushed,
         )
-    try:
-        response = (await asyncio.to_thread(input, banner)).strip()
-    except EOFError:  # non-interactive run — nothing to wait on
-        response = ""
-    log.info("human handoff (%s) -> %r", reason, response)
+    start = await _probe_blocker(session)
+    how, response = await _wait_for_human(session, start)
+    log.info("human handoff (%s) -> %s %r", reason, how, response)
     if trace is not None:
-        trace.event("human_handoff_response", iteration=iteration, response=response)
-    if not response:
-        response = "continue"
+        trace.event("human_handoff_response", iteration=iteration, response=response, how=how)
+    if how == "timeout":
+        await asyncio.to_thread(
+            notify.push, f"Apply gave up waiting: {reason}", job, click=notify.vnc_url(), priority="default"
+        )
+        return (
+            f"HUMAN RESPONSE: none — nobody completed the step within "
+            f"{HANDOFF_TIMEOUT_SECONDS / 60:.0f} minutes. Do not retry it. Stop and "
+            f"return a short summary saying the application is waiting on: {reason}."
+        )
+    if how == "auto":
+        return (
+            "HUMAN RESPONSE: (auto) the step is no longer on the page — the human "
+            "finished it on screen. Take a fresh `browser_snapshot` to see the current "
+            "page, then continue the application."
+        )
     return (
-        f"HUMAN RESPONSE: {response}\n"
+        f"HUMAN RESPONSE: {response or 'continue'}\n"
         "The human has finished the requested step (and may have changed the page "
         "directly). Take a fresh `browser_snapshot` to see the current page, then "
         "continue the application."
+    )
+
+
+async def _page_host(session: ClientSession) -> str:
+    try:
+        out = result_text(await session.call_tool("browser_evaluate", {"function": "() => location.host"}))
+    except Exception:
+        return ""
+    m = re.search(r"([a-z0-9-]+(?:\.[a-z0-9-]+)+)", out.split("### Result", 1)[-1], re.I)
+    return m.group(1) if m else ""
+
+
+async def _open_email_link(session: ClientSession, url: str) -> str:
+    """Open a verification link in a new tab, read what it says, close the tab and go
+    back to the tab the application is in. Workday verifies the candidate account in
+    the link's tab and expects the applicant to carry on (sign in) in the original."""
+    tab_row = re.compile(r"^\s*- (\d+):( \(current\))?", re.M)
+
+    async def current() -> int:
+        listing = result_text(await session.call_tool("browser_tabs", {"action": "list"}))
+        return next((int(n) for n, cur in tab_row.findall(listing) if cur), 0)
+
+    home = await current()
+    await session.call_tool("browser_tabs", {"action": "new", "url": url})
+    await asyncio.sleep(EMAIL_LINK_SETTLE_SECONDS)  # verification pages redirect, then render
+    page = await _current_page_text(session)
+    opened = await current()
+    if opened != home:
+        await session.call_tool("browser_tabs", {"action": "close", "index": opened})
+    await session.call_tool("browser_tabs", {"action": "select", "index": home})
+    return (
+        "Opened the confirmation link in a new tab. What that page said:\n"
+        f"{_wrap_untrusted(page[:2000])}\n"
+        "That tab is closed and the browser is back on the application tab. Take a "
+        "`browser_snapshot` and continue there; sign in with the profile's Login Email "
+        "and Login Password if the page asks."
     )
 
 
@@ -735,6 +907,10 @@ async def agent_loop(
     openrouter_tools.append(HUMAN_TOOL)
     if email_fetcher is not None:
         openrouter_tools.append(EMAIL_TOOL)
+        openrouter_tools.append(OPEN_LINK_TOOL)
+    # links get_email_code returned this run: the only URLs open_email_link may open,
+    # so text on a page or in an email cannot steer the browser anywhere else
+    email_links: set[str] = set()
 
     if trace is not None:
         trace.event(
@@ -886,16 +1062,40 @@ async def agent_loop(
                     log.warning("L4 blocked write on %s: marker=%r", tool_name, hit)
                 elif tool_name == HUMAN_TOOL_NAME:
                     # Virtual tool: pause for the human instead of calling the MCP.
-                    tool_content = await _human_handoff(arguments, trace, iteration)
+                    tool_content = await _human_handoff(
+                        arguments, trace, iteration, session=session, task=original_task
+                    )
                 elif tool_name == EMAIL_TOOL_NAME and email_fetcher is not None:
                     # Virtual tool: read the verification email from the applicant's
                     # Gmail. Email text is attacker-controllable — harvest honeypot
-                    # markers from it exactly like page content.
-                    tool_content = await email_fetcher(
-                        str(arguments.get("company") or ""),
-                        arguments.get("sender_hint") or None,
+                    # markers from it exactly like page content. The portal's host is
+                    # always a sender hint: UKG Ready mails from donotreply@saashr.com
+                    # with no employer name anywhere the ranking can see.
+                    from agent.email_otp import host_words
+
+                    hint = " ".join(
+                        h for h in (arguments.get("sender_hint"), host_words(await _page_host(session))) if h
                     )
+                    tool_content = await email_fetcher(
+                        str(arguments.get("company") or ""), hint or None
+                    )
+                    email_links |= set(re.findall(r"^CONFIRMATION LINK: (\S+)$", tool_content, re.M))
                     taint |= _harvest_taint(tool_content)
+                    debug(
+                        "tool_call_result", {"name": tool_name, "result": tool_content}
+                    )
+                elif tool_name == OPEN_LINK_TOOL_NAME and email_fetcher is not None:
+                    url = str(arguments.get("url") or "").strip()
+                    if url not in email_links:
+                        ok = False
+                        tool_content = (
+                            f"REFUSED: {OPEN_LINK_TOOL_NAME} only opens a link that "
+                            f"{EMAIL_TOOL_NAME} returned on a `CONFIRMATION LINK:` line, "
+                            "copied exactly."
+                        )
+                    else:
+                        tool_content = await _open_email_link(session, url)
+                        taint |= _harvest_taint(tool_content)
                     debug(
                         "tool_call_result", {"name": tool_name, "result": tool_content}
                     )
@@ -940,6 +1140,57 @@ async def agent_loop(
 SCRATCH_ROOT = os.getenv("SCRATCH_ROOT", str(HERE / "output" / "resume"))
 # path root the resume is reachable at INSIDE the playwright container (mount of SCRATCH_ROOT)
 RESUME_CONTAINER_ROOT = os.getenv("RESUME_CONTAINER_ROOT", "/resume")
+
+
+def apply_task(job_url: str, autosubmit: bool = False, continue_run: bool = False) -> str:
+    """The user turn that starts a run (the current page is appended once loaded)."""
+    submit_clause = (
+        "and click the final Submit to complete the application."
+        if autosubmit
+        else "and STOP before the final submit so the user can review."
+    )
+    if continue_run:
+        return (
+            f"Continue the partially completed application for this job: {job_url}\n\n"
+            "A previous run already filled part of the form; the browser is still on "
+            "it. Verify what is filled, complete the rest (including the resume "
+            f"upload if missing), {submit_clause}"
+        )
+    return (
+        f"Apply for this job: {job_url}\n\n"
+        "Fill the application using the applicant profile, upload the resume, "
+        + submit_clause
+    )
+
+
+def initial_messages(
+    profile: str, task: str, autosubmit: bool = False, continue_run: bool = False
+) -> list[dict[str, Any]]:
+    """System prompt + rendered profile + ATS rules + task: the context a run starts
+    from. Shared with the apply bench (bench/engines.py) so a benchmarked agent sees
+    exactly what a real application run sees."""
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    messages: list[dict[str, Any]] = [
+        {
+            "role": "system",
+            "content": f"{build_system_prompt(autosubmit, continue_run)}\n\nToday's date is {today}.",
+        },
+        {"role": "system", "content": f"APPLICANT PROFILE:\n\n{profile}"},
+    ]
+    ats_instructions = load_ats_instructions()
+    if ats_instructions:
+        messages.append(
+            {
+                "role": "system",
+                "content": (
+                    "ATS / DOMAIN-SPECIFIC INSTRUCTIONS — match the current "
+                    "page's host to a section and follow its rules; these "
+                    f"override generic guidance:\n\n{ats_instructions}"
+                ),
+            }
+        )
+    messages.append({"role": "user", "content": task})
+    return messages
 
 
 def _is_blank_page(text: str) -> bool:
@@ -996,25 +1247,7 @@ async def main(
             gmail_grant["refresh_token"], run_start_epoch
         )
         log.info("gmail 2FA tool enabled (%s)", gmail_grant.get("gmail_address"))
-    ats_instructions = load_ats_instructions()
-    submit_clause = (
-        "and click the final Submit to complete the application."
-        if autosubmit
-        else "and STOP before the final submit so the user can review."
-    )
-    if continue_run:
-        task = (
-            f"Continue the partially completed application for this job: {job_url}\n\n"
-            "A previous run already filled part of the form; the browser is still on "
-            "it. Verify what is filled, complete the rest (including the resume "
-            f"upload if missing), {submit_clause}"
-        )
-    else:
-        task = (
-            f"Apply for this job: {job_url}\n\n"
-            "Fill the application using the applicant profile, upload the resume, "
-            + submit_clause
-        )
+    task = apply_task(job_url, autosubmit, continue_run)
 
     client = create_openrouter_client()
     usage = _new_usage()
@@ -1045,26 +1278,7 @@ async def main(
                     chars=len(page),
                 )
                 task = f"{task}\n\nCURRENT PAGE:\n{_wrap_untrusted(page)}"
-                today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-                messages: list[dict[str, Any]] = [
-                    {
-                        "role": "system",
-                        "content": f"{build_system_prompt(autosubmit, continue_run)}\n\nToday's date is {today}.",
-                    },
-                    {"role": "system", "content": f"APPLICANT PROFILE:\n\n{profile}"},
-                ]
-                if ats_instructions:
-                    messages.append(
-                        {
-                            "role": "system",
-                            "content": (
-                                "ATS / DOMAIN-SPECIFIC INSTRUCTIONS — match the current "
-                                "page's host to a section and follow its rules; these "
-                                f"override generic guidance:\n\n{ats_instructions}"
-                            ),
-                        }
-                    )
-                messages.append({"role": "user", "content": task})
+                messages = initial_messages(profile, task, autosubmit, continue_run)
                 result = await agent_loop(
                     model,
                     task,

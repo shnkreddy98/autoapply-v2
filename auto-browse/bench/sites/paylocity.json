@@ -1,0 +1,88 @@
+{
+ "site": "paylocity",
+ "style": "paylocity",
+ "evidence": "recruiting.paylocity.com application captured 2026-07-09 (output/.playwright-mcp/page-2026-07-09T18-43-07-949Z.yml): most text boxes have no accessible name (the label is nearby text, not linked), Country and State are type-in dropdowns showing their value as text ('Country United States'), Address Line 1 is an address-autocomplete combobox, 'How did you hear about us?' is an unnamed radiogroup, an SMS consent dropdown, skills typed one at a time, 'Next Step' to move on, and a cookie 'Privacy' alertdialog. The live check (2026-09-14) failed on this page: 'Have you applied for a job with us before? (required); Country United States' unanswered, and a click intercepted by 'div modal-content size-small branding-font'. The EEO step is reconstructed.",
+ "company": "Brookline Home Services",
+ "labels": "detached",
+ "job": {
+  "title": "Data Engineer",
+  "location": "Austin, TX",
+  "description": "Brookline Home Services sends technicians to 200,000 homes a year. Our data team builds the pipelines behind scheduling and pricing.\n\nResponsibilities: build pipelines from field-service systems into Snowflake; maintain Airflow; partner with analysts.\n\nQualifications: 4+ years of data engineering, Python, SQL, Airflow.\n\nAustin, TX."
+ },
+ "flow": {"posting": "separate", "apply_button": "Apply", "challenges": [],
+          "overlay": {"title": "Privacy", "role": "alertdialog", "class": "modal-content size-small branding-font",
+                      "text": "We use cookies to improve your experience. You can accept all cookies or manage your settings.",
+                      "buttons": ["Cookies Settings", "Accept All Cookies"], "keep": ["Cookies Settings"], "dismiss": "Accept All Cookies"}},
+ "next": "Next Step",
+ "submit": "Submit Application",
+ "confirmation": "Thank you for applying! Your application has been received by Brookline Home Services.",
+ "steps": [
+  {
+   "title": "Application",
+   "sections": [
+    {
+     "fields": [
+      {"id": "resume", "label": "Resume", "widget": "file", "required": true, "trigger": "Select File(s)", "expect": {"file": "resume"}},
+      {"id": "first_name", "label": "First Name", "widget": "text", "required": true, "expect": {"from": "facts.first_name"}},
+      {"id": "last_name", "label": "Last Name", "widget": "text", "required": true, "expect": {"from": "facts.last_name"}},
+      {"id": "middle_name", "label": "Middle Name", "widget": "text", "expect": {"blank": true, "why": "facts.middle_name is empty"}},
+      {"id": "preferred", "label": "Preferred Name", "widget": "text", "expect": {"from": "facts.preferred_name"}},
+      {"id": "email", "label": "Email", "widget": "text", "input_type": "email", "required": true, "expect": {"from": "contact.email"}},
+      {"id": "phone", "label": "Phone", "widget": "text", "input_type": "tel", "required": true, "expect": {"from": "contact.phone", "match": "phone"}},
+      {"id": "alt_phone", "label": "Alternate Phone", "widget": "text", "expect": {"blank": true, "why": "one phone in the profile"}},
+      {"id": "sms", "label": "We may use SMS during the hiring process. Do you give us permission to text you?", "widget": "select", "blank_option": "--",
+       "options": ["Yes*", "No"], "expect": {"ignore": "the applicant's preference is not recorded"}}
+     ]
+    },
+    {
+     "heading": "Address",
+     "fields": [
+      {"id": "country", "label": "Country", "widget": "typeahead", "placeholder": "", "required": true,
+       "options": ["Canada", "Mexico", "United Kingdom", "United States"], "expect": {"from": "facts.country"}},
+      {"id": "address1", "label": "Address Line 1", "widget": "text", "required": true, "expect": {"from": "facts.street_address"}},
+      {"id": "address2", "label": "Address Line 2(optional)", "widget": "text", "expect": {"blank": true, "why": "one address line"}},
+      {"id": "city", "label": "City", "widget": "text", "required": true, "expect": {"from": "facts.city"}},
+      {"id": "county", "label": "County", "widget": "text", "expect": {"ignore": "not in the profile; Travis would be right"}},
+      {"id": "state", "label": "State", "widget": "typeahead", "placeholder": "Select a state", "required": true,
+       "options": ["Arizona", "California", "Colorado", "Oklahoma", "Texas"], "expect": {"from": "facts.state"}},
+      {"id": "zip", "label": "Zip Code", "widget": "text", "required": true, "expect": {"from": "facts.zip_code"}}
+     ]
+    },
+    {
+     "heading": "Additional Information",
+     "fields": [
+      {"id": "linkedin", "label": "LinkedIn Profile", "widget": "text", "expect": {"from": "contact.linkedin", "match": "url"}},
+      {"id": "heard", "label": "How did you hear about us?", "widget": "radio", "required": true,
+       "options": ["Company Website", "Friend or Family Member", "Current Employee", "Linkedin", "Indeed", "Other"],
+       "expect": {"from": "facts.how_did_you_hear", "map": {"LinkedIn": "Linkedin"}}},
+      {"id": "applied_before", "label": "Have you applied for a job with us before?", "widget": "select", "required": true, "blank_option": "--",
+       "options": ["Yes", "No"], "expect": {"value": "No", "why": "first application to this company"}},
+      {"id": "work_auth", "label": "Are you legally authorized to work in the United States?", "widget": "select", "required": true, "blank_option": "--",
+       "options": ["Yes", "No"], "expect": {"from": "facts.work_eligible_us", "map": {"true": "Yes", "false": "No"}}},
+      {"id": "sponsorship", "label": "Will you now or in the future require sponsorship for employment visa status?", "widget": "select", "required": true, "blank_option": "--",
+       "options": ["Yes", "No"], "expect": {"from": "facts.visa_sponsorship", "map": {"true": "Yes", "false": "No"}}},
+      {"id": "salary", "label": "Desired Salary", "widget": "text", "expect": {"from": "facts.desired_salary", "match": "digits"}},
+      {"id": "cover", "label": "Cover Letter", "widget": "file", "trigger": "Select Cover Letter", "expect": {"ignore": "optional"}}
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Voluntary Self-Identification",
+   "reconstructed": true,
+   "sections": [
+    {
+     "fields": [
+      {"id": "gender", "label": "Gender", "widget": "select", "blank_option": "--", "options": ["Female", "Male", "I do not wish to self-identify"], "expect": {"from": "facts.gender"}},
+      {"id": "race", "label": "Race/Ethnicity", "widget": "select", "blank_option": "--",
+       "options": ["Asian", "Black or African American", "Hispanic or Latino", "White", "Two or More Races", "I do not wish to self-identify"],
+       "expect": {"from": "facts.race_ethnicity"}},
+      {"id": "veteran", "label": "Veteran Status", "widget": "select", "blank_option": "--",
+       "options": ["I am not a protected veteran", "I identify as one or more of the classifications of protected veteran", "I do not wish to self-identify"],
+       "expect": {"from": "facts.veteran_status"}}
+     ]
+    }
+   ]
+  }
+ ]
+}

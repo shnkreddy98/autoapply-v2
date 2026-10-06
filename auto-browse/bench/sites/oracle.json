@@ -1,0 +1,149 @@
+{
+ "site": "oracle",
+ "style": "oracle",
+ "evidence": "Oracle Recruiting Cloud (fa-*.oraclecloud.com/hcmUI/CandidateExperience) captured in agent trace 2026-06-26 (output/traces/20260626T003837Z-9a0bc8.jsonl): Apply Now opens an email page ('You don't need to have an account') with a terms checkbox; an emailed six-digit code follows (planned challenge, skipped here); section 1 'Contact Information' has title pill buttons, cx-select comboboxes (an input with role=combobox that only takes a pick: phone country code, address country/state, month and year), Employment History entered through an 'Add Experience' subform, Education through 'Add Education', resume and links under 'Supporting Documents and URLs'. Steps 2-3 (questions, disclosures and e-signature) were never captured — the live check stops at the code — so they are reconstructed.",
+ "company": "Meridian Health Systems",
+ "job": {
+  "title": "Data Engineer",
+  "location": "Austin, TX, United States",
+  "description": "Meridian Health Systems runs 40 clinics across Texas. The data engineering team moves claims and scheduling data into our analytics platform.\n\nResponsibilities: build and run batch and streaming pipelines; maintain the Snowflake warehouse; partner with analysts on data quality.\n\nQualifications: 5+ years of data engineering; Python and SQL; Airflow or similar; cloud data warehouse experience.\n\nHybrid, Austin office three days a week."
+ },
+ "flow": {"posting": "separate", "apply_button": "Apply Now", "apply_as": "button", "challenges": []},
+ "next": "Next",
+ "submit": "Submit",
+ "required_note": "* Required",
+ "confirmation": "Thank you for your job application. We have received your application and will review it.",
+ "steps": [
+  {
+   "title": "Job application form",
+   "sections": [
+    {
+     "heading": "You don't need to have an account",
+     "note": "Enter your email to start. We'll send you a code to verify it.",
+     "fields": [
+      {"id": "start_email", "label": "Email Address", "widget": "text", "input_type": "email", "required": true, "expect": {"from": "contact.email"}},
+      {"id": "terms", "label": "I agree with the terms and conditions", "widget": "checkbox", "required": true, "expect": {"from": "facts.cert_privacy_notice"}}
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Contact Information",
+   "sections": [
+    {
+     "fields": [
+      {"id": "title", "label": "Title", "widget": "buttons", "options": ["Doctor", "Miss", "Mr.", "Mrs.", "Ms.", "Mx."],
+       "expect": {"ignore": "optional honorific; the profile has none"}},
+      {"id": "first_name", "label": "First Name", "widget": "text", "required": true, "expect": {"from": "facts.first_name"}},
+      {"id": "middle_name", "label": "Middle Name", "widget": "text", "expect": {"blank": true, "why": "facts.middle_name is empty"}},
+      {"id": "last_name", "label": "Last Name", "widget": "text", "required": true, "expect": {"from": "facts.last_name"}},
+      {"id": "phone_code", "label": "Country code", "widget": "typeahead", "named": true, "placeholder": "", "group": "Phone Number",
+       "options": ["+1", "+44", "+52", "+61", "+91"], "expect": {"from": "facts.phone_country_code"}},
+      {"id": "phone", "label": "Phone Number", "widget": "text", "input_type": "tel", "required": true, "group": "Phone Number",
+       "expect": {"from": "contact.phone", "match": "phone"}}
+     ]
+    },
+    {
+     "heading": "Address",
+     "note": "Please enter your home address. This block contains dependent drop-down lists.",
+     "fields": [
+      {"id": "country", "label": "Country", "widget": "typeahead", "named": true, "placeholder": "", "required": true,
+       "options": ["Canada", "India", "Mexico", "United Kingdom", "United States"], "expect": {"from": "facts.country"}},
+      {"id": "address1", "label": "Address Line 1", "widget": "text", "required": true, "expect": {"from": "facts.street_address"}},
+      {"id": "address2", "label": "Address Line 2", "widget": "text", "expect": {"blank": true, "why": "one address line in the profile"}},
+      {"id": "city", "label": "City", "widget": "text", "required": true, "expect": {"from": "facts.city"}},
+      {"id": "state", "label": "State", "widget": "typeahead", "named": true, "placeholder": "", "required": true,
+       "options": ["Arizona", "California", "Colorado", "New Mexico", "Oklahoma", "Texas", "Washington"], "expect": {"from": "facts.state"}},
+      {"id": "zip", "label": "ZIP Code", "widget": "text", "required": true, "expect": {"from": "facts.zip_code"}}
+     ]
+    },
+    {
+     "heading": "Education History",
+     "repeat": {"add": "Add Education", "save": "Save", "summary": "edu_major", "noun": "education"},
+     "fields": [
+      {"id": "edu_school", "label": "School", "widget": "text", "required": true, "expect": {"from": "education.0.school"}},
+      {"id": "edu_degree", "label": "Degree", "widget": "typeahead", "named": true, "placeholder": "", "required": true,
+       "options": ["Associate's Degree", "Bachelor's Degree", "Master's Degree", "Doctorate", "High School Diploma"], "expect": {"from": "education.0.degree"}},
+      {"id": "edu_major", "label": "Major", "widget": "text", "expect": {"from": "education.0.major"}}
+     ]
+    },
+    {
+     "heading": "Employment History",
+     "repeat": {"add": "Add Employment", "save": "Add Experience", "summary": "emp_employer", "noun": "experience", "required": true},
+     "fields": [
+      {"id": "emp_employer", "label": "Employer Name", "widget": "text", "required": true, "expect": {"from": "work_experiences.0.company_name"}},
+      {"id": "emp_title", "label": "Job Title", "widget": "text", "required": true, "expect": {"from": "work_experiences.0.job_title"}},
+      {"id": "emp_start_month", "label": "Start Date Month", "widget": "typeahead", "named": true, "placeholder": "",
+       "options": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+       "expect": {"from": "work_experiences.0.from_date", "format": "month_name"}},
+      {"id": "emp_start_year", "label": "Start Date Year", "widget": "typeahead", "named": true, "placeholder": "",
+       "options": ["2026", "2025", "2024", "2023", "2022", "2021", "2020", "2019", "2018", "2017", "2016", "2015"],
+       "expect": {"from": "work_experiences.0.from_date", "format": "year"}},
+      {"id": "emp_end_month", "label": "End Date Month", "widget": "typeahead", "named": true, "placeholder": "",
+       "options": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+       "expect": {"blank": true, "why": "current job"}},
+      {"id": "emp_country", "label": "Employer Country", "widget": "typeahead", "named": true, "placeholder": "",
+       "options": ["Canada", "India", "Mexico", "United Kingdom", "United States"], "expect": {"value": "United States", "why": "work_experiences.0.location = Austin, TX"}},
+      {"id": "emp_city", "label": "Employer City", "widget": "text", "expect": {"value": "Austin", "match": "prefix", "why": "work_experiences.0.location = Austin, TX"}},
+      {"id": "emp_resp", "label": "Responsibilities", "widget": "textarea", "expect": {"free_text": true, "min_chars": 40}},
+      {"id": "emp_supervisor", "label": "Supervisor Name", "widget": "text", "expect": {"blank": true, "why": "not in the profile"}}
+     ]
+    },
+    {
+     "heading": "Supporting Documents and URLs",
+     "fields": [
+      {"id": "resume", "label": "Resume", "widget": "file", "required": true, "trigger": "Upload Resume", "expect": {"file": "resume"}},
+      {"id": "cover", "label": "Cover Letter", "widget": "file", "trigger": "Upload Cover Letter", "expect": {"ignore": "optional"}},
+      {"id": "link1", "label": "Supporting Documents and URLs Link 1", "widget": "text", "expect": {"ignore": "any profile link is fine"}}
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Application Questions",
+   "reconstructed": true,
+   "sections": [
+    {
+     "fields": [
+      {"id": "work_auth", "label": "Are you legally authorized to work in the United States?", "widget": "buttons", "required": true,
+       "options": ["Yes", "No"], "expect": {"from": "facts.work_eligible_us", "map": {"true": "Yes", "false": "No"}}},
+      {"id": "sponsorship", "label": "Will you now or in the future require sponsorship for employment visa status?", "widget": "buttons", "required": true,
+       "options": ["Yes", "No"], "expect": {"from": "facts.visa_sponsorship", "map": {"true": "Yes", "false": "No"}}},
+      {"id": "prior", "label": "Have you previously been employed by Meridian Health Systems?", "widget": "buttons", "required": true,
+       "options": ["Yes", "No"], "expect": {"value": "No", "why": "not in work_experiences"}},
+      {"id": "hybrid", "label": "This role requires working from our Austin office three days a week. Are you able to meet this requirement?", "widget": "buttons", "required": true,
+       "options": ["Yes", "No"], "expect": {"value": "Yes", "why": "lives in Austin"}},
+      {"id": "years", "label": "How many years of data engineering experience do you have?", "widget": "typeahead", "named": true, "placeholder": "", "required": true,
+       "options": ["Less than 2 years", "2 to 4 years", "5 to 7 years", "8 or more years"], "expect": {"value": "5 to 7 years", "why": "facts.years_of_experience = 7"}}
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Disclosures and E-Signature",
+   "reconstructed": true,
+   "sections": [
+    {
+     "heading": "Diversity",
+     "fields": [
+      {"id": "gender", "label": "Gender", "widget": "typeahead", "named": true, "placeholder": "",
+       "options": ["Female", "Male", "Non-Binary", "I do not wish to self-identify"], "expect": {"from": "facts.gender"}},
+      {"id": "ethnicity", "label": "Ethnicity", "widget": "typeahead", "named": true, "placeholder": "",
+       "options": ["Hispanic or Latino", "Asian (Not Hispanic or Latino)", "Black or African American (Not Hispanic or Latino)", "White (Not Hispanic or Latino)", "Two or More Races (Not Hispanic or Latino)", "I do not wish to self-identify"],
+       "expect": {"from": "facts.race_ethnicity", "map": {"Asian": "Asian (Not Hispanic or Latino)", "White": "White (Not Hispanic or Latino)"}}},
+      {"id": "veteran", "label": "Veteran Status", "widget": "typeahead", "named": true, "placeholder": "",
+       "options": ["I am not a protected veteran", "I identify as one or more of the classifications of protected veteran", "I do not wish to self-identify"],
+       "expect": {"from": "facts.veteran_status"}}
+     ]
+    },
+    {
+     "heading": "E-Signature",
+     "note": "By typing your name below you confirm that the information in this application is true and complete.",
+     "fields": [
+      {"id": "esign", "label": "Full Name", "widget": "text", "required": true, "expect": {"from": "contact.full_name"}}
+     ]
+    }
+   ]
+  }
+ ]
+}

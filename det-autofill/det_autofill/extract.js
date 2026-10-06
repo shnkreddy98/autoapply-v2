@@ -71,7 +71,8 @@
   function bestLabel(el) {
     if (el.labels && el.labels.length) {
       const own = Array.from(el.labels).map((l) => labelledBy(l) || textOf(l)).filter(Boolean);
-      const named = own.find((t) => !UPLOAD_HINT.test(t));
+      // "Upload your CV/Resume" (Ashby) names the field; only a bare "Upload a file" does not
+      const named = own.find((t) => !UPLOAD_HINT.test(t) || /\b(resume|cv|cover letter|transcript)\b/i.test(t));
       if (named) return named;
       // a drop zone's labels only say "Upload a file": the field's name sits before it
       if (own.length) return (el.type === 'file' && textBefore(el, [el])) || own[0];
@@ -134,7 +135,11 @@
     // a lone checkbox inside its own <label> is its own question: Lever puts both
     // consent boxes in one question block, and borrowing the neighbour's text swapped
     // the required "retain my data" box with the optional marketing one
-    if (el.closest('label')) {
+    // A <label for> beside the box counts the same, unless it only says "Yes" / "I
+    // agree" (then the group asks the question): Workday's terms box took the text
+    // before its group, "Veteran Status", and was answered as the veteran question.
+    const sideLabel = !el.closest('label') && el.labels && el.labels[0];
+    if (el.closest('label') || (sideLabel && !/^(yes|no|i agree|agree|i accept|accept)$/i.test(textOf(sideLabel).trim()))) {
       const peers = el.name
         ? scope.querySelectorAll(`input[name="${cssEscape(el.name)}"]:not([type="hidden"])`)
         : scope.querySelectorAll('input[type="checkbox"], input[type="radio"]');
@@ -157,6 +162,20 @@
         && !(n.htmlFor && scope.querySelector(`[id="${cssEscape(n.htmlFor)}"]`)));
     if (lbl) return textOf(lbl);
     return headingBefore(el) || textBefore(scope, Array.from(scope.querySelectorAll(CONTROLS)));
+  }
+
+  /* Which date a Month / Day / Year box belongs to: Workday labels each box only by
+   * its part and the group around it by the date ("From", "To", "Date"). Live Workday
+   * nests an unlabelled group inside the labelled one, so walk out to the first name. */
+  const DATE_PART = /^(month|day|year|mm|dd|yyyy)\*?$/i;
+  function dateGroupLabel(el) {
+    for (let scope = el.closest('[role="group"], fieldset'), n = 0; scope && n < 3;
+      scope = scope.parentElement && scope.parentElement.closest('[role="group"], fieldset'), n++) {
+      const legend = scope.querySelector('legend');
+      const name = (legend && textOf(legend)) || (scope.getAttribute('aria-label') || '').trim() || labelledBy(scope);
+      if (name) return name;
+    }
+    return '';
   }
 
   /* Breezy EEO: <div class="multiplechoice"><h3>Race or Ethnicity</h3><ul> of radios,
@@ -217,6 +236,31 @@
     if (role === 'combobox' || role === 'listbox' || el.getAttribute('aria-haspopup') === 'listbox') return 'combobox';
     if (type === 'date') return 'date';
     return 'text';
+  }
+
+  /* Ashby asks yes/no questions with two plain <button>s and nothing else a user can
+   * operate: no role, no input it names. Its display:none checkbox beside them is
+   * ticked only for Yes, so No and unanswered read the same there; the buttons'
+   * aria-pressed is the answer. The box, or null when this is not such a pair. */
+  function yesNoBox(box) {
+    if (!box || box.closest('[role="alertdialog"]')) return null;
+    const btns = Array.from(box.children).filter((n) => n.tagName === 'BUTTON');
+    if (btns.length !== 2 || !/^yes$/i.test(textOf(btns[0])) || !/^no$/i.test(textOf(btns[1]))) return null;
+    if (Array.from(box.querySelectorAll('input, select, textarea')).some((n) => n.type !== 'hidden' && rendered(n))) return null;
+    return box;
+  }
+
+  /* Ashby marks a required question only with a "_required_…" class on its title (the
+   * star is CSS); radio groups and custom questions carry no required attribute, so a
+   * required work-authorisation question read as optional and det pressed Submit. */
+  function titleRequired(el) {
+    const entry = el.closest('.ashby-application-form-field-entry, [data-field-entry-id]');
+    // a required "select all that apply" group needs one box, not every box: Chainlink's
+    // source list read as five required questions and stopped the run
+    const boxes = entry ? entry.querySelectorAll('input[type="checkbox"], [role="checkbox"]').length : 0;
+    if ((el.type === 'checkbox' || el.getAttribute('role') === 'checkbox') && boxes > 1) return false;
+    const title = entry && entry.querySelector('.ashby-application-form-question-title, label, legend');
+    return !!title && /(^|[\s_-])required([\s_-]|$)/i.test(String(title.className));
   }
 
   /* `unique` is rebound per element by selectorFor: uniqueness only holds inside the
@@ -296,10 +340,30 @@
 
   const seen = new Set();
   const out = [];
-  for (const el of deepAll(CANDIDATES)) {
+  for (const el of deepAll(CANDIDATES + ', button')) {
     if (seen.has(el)) continue;
-    seen.add(el);
     const tag = el.tagName.toLowerCase();
+    const yesNo = yesNoBox(el.parentElement);
+    if (tag === 'button' && !yesNo && !el.matches(CANDIDATES)) continue;
+    seen.add(el);
+    if (yesNo) {
+      // one radio per button, grouped by their box; the box's checkbox is skipped
+      if (tag !== 'button') continue;
+      const question = textBefore(yesNo, [yesNo]);
+      out.push({
+        i: out.length, selector: selectorFor(el), tag, type: 'button', widget: 'radio',
+        role: '', name: '', id: el.id || '', autocomplete: '', automation_id: '', aria_label: '', placeholder: '',
+        label: question, group_label: question, option_label: textOf(el), date_of: '', section: sectionOf(yesNo),
+        // Ashby's star is CSS on the label's "_required_…" class, not text
+        required: /[*✱]\s*$/.test(question) || Array.from(yesNo.parentElement.children)
+          .some((n) => n !== yesNo && /(^|[\s_-])required([\s_-]|$)/i.test(String(n.className))),
+        value: '', display: '', checked: el.getAttribute('aria-pressed') === 'true', options: [],
+        group_key: `scope:${selectorFor(yesNo)}`, controls: '', expanded: false, disabled: el.disabled,
+        readonly: false, aria_hidden: !!el.closest('[aria-hidden="true"]'), visible: isVisible(el), maxlength: 0,
+        has_files: false, chips: [],
+      });
+      continue;
+    }
     const type = (el.getAttribute('type') || (tag === 'select' ? 'select' : tag === 'textarea' ? 'textarea' : '')).toLowerCase();
     if (tag === 'input' && SKIP_INPUT_TYPES.has(type)) continue;
     // react-select and friends nest a role=combobox input inside a role=combobox
@@ -335,8 +399,9 @@
       label: gl || label,
       group_label: gl,
       option_label: isChoice ? label : '',
+      date_of: !isChoice && DATE_PART.test(label.trim()) ? dateGroupLabel(el) : '',
       section: sectionOf(el),
-      required: !!(el.required || el.getAttribute('aria-required') === 'true' || /[*✱]\s*$|\(required\)/i.test(gl || label)
+      required: !!(el.required || el.getAttribute('aria-required') === 'true' || /[*✱]\s*$|\(required\)/i.test(gl || label) || titleRequired(el)
         || (el.parentElement && !!el.parentElement.querySelector('[class*="label--required" i]'))),
       value: widget === 'select' ? (el.selectedIndex >= 0 && el.options[el.selectedIndex] ? textOf(el.options[el.selectedIndex]) : '') : (el.value || ''),
       display: displayText(el, widget),
@@ -367,7 +432,14 @@
       // Workday multiselects keep committed picks as chips beside an empty search box
       chips: (() => {
         const field = el.closest('[data-automation-id^="formField-"], [data-automation-id="multiSelectContainer"]');
-        return field ? Array.from(field.querySelectorAll('[data-automation-id="selectedItemList"] li')).map(textOf).filter(Boolean) : [];
+        if (field) return Array.from(field.querySelectorAll('[data-automation-id="selectedItemList"] li')).map(textOf).filter(Boolean);
+        // react-select multi (Greenhouse): picks are chips beside the input
+        for (let n = el.parentElement, d = 0; n && d < 6; n = n.parentElement, d++) {
+          if (Array.from(n.querySelectorAll('[role="combobox"], select')).some((c) => c !== el)) break;
+          const got = Array.from(n.querySelectorAll('[class*="multi-value__label" i]')).map(textOf).filter(Boolean);
+          if (got.length) return got;
+        }
+        return [];
       })(),
     };
     // Ant Design selects without search keep a zero-width readonly <input role=combobox>

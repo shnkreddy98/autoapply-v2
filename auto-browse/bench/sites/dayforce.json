@@ -1,0 +1,122 @@
+{
+ "site": "dayforce",
+ "style": "dayforce",
+ "evidence": "jobs.dayforcehcm.com manual application captured 2026-06-30 (output/.playwright-mcp/page-2026-06-30T06-59-56-391Z.yml): 'Candidate Info' with labels as plain text ('Email Address *') beside unnamed text boxes and unnamed comboboxes (country code, preferred contact method, country, state, how did you hear), a resume upload, then Education History entries with ISO date text boxes. The live check (2026-09-14) failed clicking Next: 'covered by div ant-modal-wrap'. The modal's content was not captured; it is mocked as a privacy notice. Work history, questions and self-identification steps are reconstructed.",
+ "company": "Cosmos Retail Group",
+ "labels": "detached",
+ "job": {
+  "title": "Senior Data Engineer (Remote)",
+  "location": "Remote - United States",
+  "description": "Cosmos Retail Group runs 300 stores. The data engineering team owns the pipelines from point of sale to the warehouse.\n\nResponsibilities: build and run pipelines in AWS; maintain Kafka streams; model data in Snowflake with dbt.\n\nQualifications: 5+ years of data engineering, Python, SQL, Kafka, AWS.\n\nRemote within the United States."
+ },
+ "flow": {"posting": "separate", "apply_button": "Apply", "challenges": [],
+          "overlay": {"title": "Privacy Statement", "wrap_class": "ant-modal-wrap", "class": "ant-modal",
+                      "text": "Cosmos Retail Group collects the information in this application to evaluate your candidacy.",
+                      "buttons": ["Decline", "Accept"], "keep": ["Decline"], "dismiss": "Accept"}},
+ "next": "Next",
+ "submit": "Submit",
+ "confirmation": "Thank you for applying. Your application was submitted to Cosmos Retail Group.",
+ "steps": [
+  {
+   "title": "Candidate Info",
+   "sections": [
+    {
+     "fields": [
+      {"id": "email", "label": "Email Address", "widget": "text", "input_type": "email", "required": true, "expect": {"from": "contact.email"}},
+      {"id": "first_name", "label": "First Name", "widget": "text", "required": true, "expect": {"from": "facts.first_name"}},
+      {"id": "middle_name", "label": "Middle Name", "widget": "text", "expect": {"blank": true, "why": "facts.middle_name is empty"}},
+      {"id": "last_name", "label": "Last Name", "widget": "text", "required": true, "expect": {"from": "facts.last_name"}},
+      {"id": "phone_code", "label": "Country Code", "widget": "typeahead", "placeholder": "",
+       "options": ["+1 Canada", "+1 United States", "+44 United Kingdom", "+52 Mexico", "+91 India"],
+       "expect": {"value": "+1 United States", "why": "facts.phone_country_code = +1, US number"}},
+      {"id": "mobile", "label": "Mobile Phone Number", "widget": "text", "input_type": "tel", "required": true, "expect": {"from": "contact.phone", "match": "phone"}},
+      {"id": "contact_method", "label": "Preferred Contact Method", "widget": "typeahead", "placeholder": "", "required": true,
+       "options": ["Email", "Mobile Phone", "Home Phone"], "expect": {"any": true, "why": "not in the profile"}},
+      {"id": "country", "label": "Country", "widget": "typeahead", "placeholder": "", "required": true,
+       "options": ["Canada", "Mexico", "United Kingdom", "United States"], "expect": {"from": "facts.country"}},
+      {"id": "state", "label": "State/Province", "widget": "typeahead", "placeholder": "", "required": true,
+       "options": ["Arizona", "California", "Oklahoma", "Texas"], "expect": {"from": "facts.state"}},
+      {"id": "address1", "label": "Address Line 1", "widget": "text", "required": true, "expect": {"from": "facts.street_address"}},
+      {"id": "address2", "label": "Address Line 2", "widget": "text", "expect": {"blank": true, "why": "one address line"}},
+      {"id": "city", "label": "City", "widget": "text", "required": true, "expect": {"from": "facts.city"}},
+      {"id": "zip", "label": "Zip / Postal Code", "widget": "text", "required": true, "expect": {"from": "facts.zip_code"}},
+      {"id": "heard", "label": "How did you hear about this job?", "widget": "typeahead", "placeholder": "", "required": true,
+       "options": ["Company Website", "Indeed", "LinkedIn", "Referral", "Other"], "expect": {"from": "facts.how_did_you_hear"}}
+     ]
+    },
+    {
+     "heading": "Resume Upload",
+     "fields": [
+      {"id": "resume", "label": "Resume", "widget": "file", "required": true, "trigger": "Upload", "expect": {"file": "resume"}},
+      {"id": "cover", "label": "Cover Letter", "widget": "file", "trigger": "Upload", "expect": {"ignore": "optional"}}
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Education History",
+   "sections": [
+    {
+     "fields": [
+      {"id": "edu_degree", "label": "Degree", "widget": "text", "required": true,
+       "expect": {"one_of": ["Bachelor's Degree", "Bachelor's", "Bachelor of Science", "BS", "B.S.", "Bachelor of Science in Computer Science"], "why": "education.0.degree"}},
+      {"id": "edu_completed", "label": "Completed", "widget": "checkbox", "expect": {"value": true, "why": "graduated 2019-05"}},
+      {"id": "edu_field", "label": "Field of Study", "widget": "text", "expect": {"from": "education.0.major"}},
+      {"id": "edu_school", "label": "School", "widget": "text", "required": true, "expect": {"from": "education.0.school"}},
+      {"id": "edu_start", "label": "Start Date", "widget": "text", "input_type": "date", "expect": {"from": "education.0.from_date", "match": "date"}},
+      {"id": "edu_end", "label": "End Date", "widget": "text", "input_type": "date", "expect": {"from": "education.0.to_date", "match": "date"}}
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Work History",
+   "reconstructed": true,
+   "sections": [
+    {
+     "fields": [
+      {"id": "job_title", "label": "Job Title", "widget": "text", "required": true, "expect": {"from": "work_experiences.0.job_title"}},
+      {"id": "employer", "label": "Employer", "widget": "text", "required": true, "expect": {"from": "work_experiences.0.company_name"}},
+      {"id": "job_current", "label": "Current Job", "widget": "checkbox", "expect": {"from": "work_experiences.0.is_current"}},
+      {"id": "job_start", "label": "Start Date", "dom_id": "job_start", "widget": "text", "input_type": "date", "required": true,
+       "expect": {"from": "work_experiences.0.from_date", "match": "date"}},
+      {"id": "job_end", "label": "End Date", "dom_id": "job_end", "widget": "text", "input_type": "date", "show_if": {"field": "job_current", "equals": false},
+       "expect": {"blank": true, "why": "current job"}}
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Questions",
+   "reconstructed": true,
+   "sections": [
+    {
+     "fields": [
+      {"id": "work_auth", "label": "Are you legally eligible to work in the United States?", "widget": "typeahead", "placeholder": "", "required": true,
+       "options": ["Yes", "No"], "expect": {"from": "facts.work_eligible_us", "map": {"true": "Yes", "false": "No"}}},
+      {"id": "sponsorship", "label": "Will you require sponsorship now or in the future?", "widget": "typeahead", "placeholder": "", "required": true,
+       "options": ["Yes", "No"], "expect": {"from": "facts.visa_sponsorship", "map": {"true": "Yes", "false": "No"}}},
+      {"id": "over_18", "label": "Are you 18 years of age or older?", "widget": "typeahead", "placeholder": "", "required": true,
+       "options": ["Yes", "No"], "expect": {"from": "facts.over_18", "map": {"true": "Yes", "false": "No"}}}
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Self-Identification",
+   "reconstructed": true,
+   "sections": [
+    {
+     "fields": [
+      {"id": "gender", "label": "Gender", "widget": "typeahead", "placeholder": "", "options": ["Female", "Male", "Prefer not to say"], "expect": {"from": "facts.gender"}},
+      {"id": "race", "label": "Race/Ethnicity", "widget": "typeahead", "placeholder": "",
+       "options": ["Asian", "Black or African American", "Hispanic or Latino", "White", "Two or More Races", "Prefer not to say"], "expect": {"from": "facts.race_ethnicity"}},
+      {"id": "veteran", "label": "Veteran Status", "widget": "typeahead", "placeholder": "",
+       "options": ["I am not a protected veteran", "I identify as one or more of the classifications of protected veteran", "Prefer not to say"],
+       "expect": {"from": "facts.veteran_status"}}
+     ]
+    }
+   ]
+  }
+ ]
+}

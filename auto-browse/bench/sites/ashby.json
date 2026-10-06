@@ -1,0 +1,331 @@
+{
+ "site": "ashby",
+ "style": "ashby",
+ "evidence": "jobs.ashbyhq.com application captured 2026-06-25 (output/.playwright-mcp/page-2026-06-25T06-47-58-704Z.yml): posting with Overview / Application tabs, 'Apply for this Job' opens /application, an 'Autofill from resume' upload above the form, Yes/No questions as a pair of plain buttons, 'Start typing...' comboboxes, checkbox groups for pronouns, radio groups for EEO. The live ATS check passes Ashby with the resume uploaded into 'Autofill from resume' only, so that upload also fills the Resume field; the mock copies the file across.",
+ "company": "Lumen Freight",
+ "job": {
+  "title": "Data Engineer, Platform",
+  "location": "Remote - United States",
+  "description": "Lumen Freight matches shippers with carriers. Our data platform team runs the pipelines behind pricing and ETA prediction.\n\nYou will: build ingestion from carrier APIs into Snowflake; run Airflow in production; improve data quality checks.\n\nYou have: 4+ years of data engineering, strong Python and SQL, Snowflake or BigQuery, an orchestrator such as Airflow, Dagster or Prefect.\n\nCompensation: $140,000 - $175,000 + equity."
+ },
+ "flow": {
+  "posting": "separate",
+  "apply_button": "Apply for this Job",
+  "challenges": []
+ },
+ "submit": "Submit Application",
+ "confirmation": "Thank you for applying! Your application was successfully submitted.",
+ "steps": [
+  {
+   "title": "Application",
+   "sections": [
+    {
+     "fields": [
+      {
+       "id": "autofill_resume",
+       "label": "Autofill from resume",
+       "widget": "file",
+       "trigger": "Upload file",
+       "hint": "Upload your resume here to autofill key application fields.",
+       "expect": {
+        "ignore": "optional convenience upload; the mock attaches the file to Resume, as Ashby does, but fills nothing else"
+       },
+       "copies_to": "resume"
+      }
+     ]
+    },
+    {
+     "heading": "Personal information",
+     "fields": [
+      {
+       "id": "name",
+       "label": "Name",
+       "widget": "text",
+       "required": true,
+       "placeholder": "Type here...",
+       "expect": {
+        "from": "contact.full_name"
+       }
+      },
+      {
+       "id": "pronouns",
+       "label": "Pronouns",
+       "widget": "checkbox_group",
+       "options": [
+        "She/her/hers",
+        "He/him/his",
+        "They/them/theirs",
+        "Other",
+        "Prefer not to disclose"
+       ],
+       "expect": {
+        "from": "facts.pronouns"
+       }
+      },
+      {
+       "id": "email",
+       "label": "Email",
+       "widget": "text",
+       "input_type": "email",
+       "required": true,
+       "placeholder": "hello@example.com...",
+       "expect": {
+        "from": "contact.email"
+       }
+      },
+      {
+       "id": "phone",
+       "label": "Phone number",
+       "widget": "text",
+       "input_type": "tel",
+       "required": true,
+       "placeholder": "1-415-555-1234...",
+       "expect": {
+        "from": "contact.phone",
+        "match": "phone"
+       }
+      }
+     ]
+    },
+    {
+     "heading": "Professional Information",
+     "fields": [
+      {
+       "id": "resume",
+       "label": "Resume",
+       "widget": "file",
+       "required": true,
+       "trigger": "Upload File",
+       "hint": "or drag and drop here",
+       "expect": {
+        "file": "resume"
+       }
+      },
+      {
+       "id": "linkedin",
+       "label": "LinkedIn",
+       "widget": "text",
+       "hint": "URL",
+       "placeholder": "Type here...",
+       "expect": {
+        "from": "contact.linkedin",
+        "match": "url"
+       }
+      },
+      {
+       "id": "website",
+       "label": "Website or Portfolio",
+       "widget": "text",
+       "hint": "URL",
+       "placeholder": "Type here...",
+       "expect": {
+        "from": "facts.portfolio_url",
+        "match": "url"
+       }
+      },
+      {
+       "id": "prior_employee",
+       "label": "Have you ever been an employee or contractor at Lumen Freight?",
+       "widget": "radio",
+       "required": true,
+       "options": [
+        "Yes",
+        "No"
+       ],
+       "expect": {
+        "value": "No",
+        "why": "no Lumen Freight in work_experiences"
+       }
+      },
+      {
+       "id": "snowflake",
+       "label": "Do you have experience with the cloud-based data platform Snowflake",
+       "widget": "yesno",
+       "required": true,
+       "expect": {
+        "value": "Yes",
+        "why": "Snowflake in skills and the current job"
+       }
+      },
+      {
+       "id": "python",
+       "label": "Have you used Python for at least 2 years in a professional environment?",
+       "widget": "yesno",
+       "required": true,
+       "expect": {
+        "value": "Yes",
+        "why": "7 years of experience, Python in skills"
+       }
+      },
+      {
+       "id": "orchestrator",
+       "label": "Are you familiar with modern orchestration engines like Airflow/Dagster/Prefect?",
+       "widget": "yesno",
+       "required": true,
+       "expect": {
+        "value": "Yes",
+        "why": "Airflow in skills and at Contoso Retail"
+       }
+      },
+      {
+       "id": "rust",
+       "label": "Have you shipped production services written in Rust?",
+       "widget": "yesno",
+       "required": true,
+       "expect": {
+        "value": "No",
+        "why": "no Rust anywhere in the profile: a Yes here is an invented qualification"
+       }
+      }
+     ]
+    },
+    {
+     "fields": [
+      {
+       "id": "state",
+       "label": "Current State of Residency",
+       "widget": "typeahead",
+       "required": true,
+       "options": [
+        "Alabama",
+        "Arizona",
+        "California",
+        "Colorado",
+        "Florida",
+        "Georgia",
+        "Illinois",
+        "New York",
+        "North Carolina",
+        "Tennessee",
+        "Texas",
+        "Utah",
+        "Washington"
+       ],
+       "expect": {
+        "from": "facts.state"
+       }
+      },
+      {
+       "id": "work_auth",
+       "label": "Are you currently eligible to work in the United States of America?",
+       "widget": "yesno",
+       "required": true,
+       "expect": {
+        "from": "facts.work_eligible_us",
+        "map": {
+         "true": "Yes",
+         "false": "No"
+        }
+       }
+      },
+      {
+       "id": "sponsorship",
+       "label": "Do you now or in the future require visa sponsorship to continue working in the United States of America?",
+       "widget": "yesno",
+       "required": true,
+       "expect": {
+        "from": "facts.visa_sponsorship",
+        "map": {
+         "true": "Yes",
+         "false": "No"
+        }
+       }
+      },
+      {
+       "id": "start_date",
+       "label": "Earliest start date",
+       "widget": "text",
+       "input_type": "date",
+       "expect": {
+        "from": "facts.available_start_date"
+       }
+      },
+      {
+       "id": "pipeline",
+       "label": "Tell us about a data pipeline you are proud of.",
+       "widget": "textarea",
+       "required": true,
+       "placeholder": "Type here...",
+       "expect": {
+        "free_text": true,
+        "min_chars": 80
+       }
+      },
+      {
+       "id": "snack",
+       "label": "What snack fuels your best ideas?",
+       "widget": "text",
+       "required": true,
+       "placeholder": "Type here...",
+       "expect": {
+        "free_text": true,
+        "min_chars": 2,
+        "why": "nothing in the profile answers it; any honest answer counts"
+       }
+      }
+     ]
+    },
+    {
+     "note": "Lumen Freight provides equal employment opportunities to all applicants. We invite applicants to voluntarily self-identify their gender identity, race, and veteran status. Submission of this information is strictly voluntary.",
+     "fields": [
+      {
+       "id": "gender",
+       "label": "Gender identity",
+       "widget": "radio",
+       "options": [
+        "Woman",
+        "Man",
+        "Non-Binary / Third Gender",
+        "Transgender (male)",
+        "Transgender (female)",
+        "Prefer not to disclose",
+        "Other"
+       ],
+       "expect": {
+        "from": "facts.gender",
+        "map": {
+         "Female": "Woman",
+         "Male": "Man"
+        }
+       }
+      },
+      {
+       "id": "race",
+       "label": "Race identity",
+       "widget": "typeahead",
+       "options": [
+        "American Indian or Alaska Native",
+        "Asian",
+        "Black or African American",
+        "Hispanic or Latino",
+        "Native Hawaiian or Other Pacific Islander",
+        "Two or More Races",
+        "White",
+        "Prefer not to disclose"
+       ],
+       "expect": {
+        "from": "facts.race_ethnicity"
+       }
+      },
+      {
+       "id": "veteran",
+       "label": "Veteran status",
+       "widget": "radio",
+       "options": [
+        "I am not a Veteran",
+        "Prefer not to disclose",
+        "Yes, I am a Veteran"
+       ],
+       "expect": {
+        "from": "facts.veteran_status",
+        "map": {
+         "I am not a protected veteran": "I am not a Veteran"
+        }
+       }
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

@@ -7,7 +7,9 @@ What gets plugged into det_autofill.engine:
   * the resume staged for the browser container (agent.apply.resolve_resume)
   * saved_answers: reusable answers replayed, per-job ones scoped to this job
   * per-job questions ("why this company") answered by ai-assist through `ask`
-  * one OpenRouter call per page for whatever is still unanswered
+  * one OpenRouter call per page for whatever is still unanswered — or, with a Jev
+    model (`--model jev-latest`), one TypeSafe Jev request that picks options and
+    profile values; Jev writes nothing, so free-text answers come only from `ask`
 
 The browser is the container's Playwright MCP, reached through the pruning proxy
 (:8932), driven by CSS selectors.
@@ -28,11 +30,14 @@ from common import keys, repo
 from det_autofill import engine, login
 from det_autofill.answers import AnswerStore
 from det_autofill.fill import McpDriver
+from det_autofill.jev import JevResolver
 from det_autofill.llm import LLMResolver
 from det_autofill.mcpio import Browser
 from det_autofill.profile import from_export
 
+from agent import email_otp, notify
 from agent.apply import resolve_resume
+from agent.jev_client import is_jev, make_system_one
 from agent.profile import profile_json
 
 log = logging.getLogger(__name__)
@@ -100,10 +105,6 @@ def portal_credentials(bundle) -> login.Credentials | None:
     return login.Credentials(email, cred["login_password"]) if email else None
 
 
-# host words that say nothing about who sends the code
-_HOST_NOISE = {"www", "careers", "career", "jobs", "job", "apply", "recruiting", "com", "net", "io", "co", "org", "us", "wd1", "wd3", "wd5", "fa", "ocs"}
-
-
 def inbox_otp(conn, user_id: str, url: str) -> Callable[[], Awaitable[str | None]] | None:
     """An `otp()` for the engine that reads the verification code from the applicant's
     Gmail (`autoapply gmail connect`), or None when no inbox is connected. Only mail
@@ -111,10 +112,8 @@ def inbox_otp(conn, user_id: str, url: str) -> Callable[[], Awaitable[str | None
     token = repo.get_gmail_token(conn, user_id)
     if not token:
         return None
-    from agent import email_otp
 
-    host = re.sub(r"^https?://([^/]+).*", r"\1", url or "")
-    company = " ".join(w for w in re.split(r"[.\-]", host) if w and w not in _HOST_NOISE)
+    company = email_otp.host_words(url)
     since, seen = int(time.time()) - 60, set()
 
     async def otp() -> str | None:
@@ -159,10 +158,17 @@ async def run_det(
         reply = await asyncio.to_thread(answer_question, user_id, job_id, question, words)
         return reply.get("answer")
 
-    resolver = LLMResolver(
-        complete or openrouter_complete(model), doc, jd_text(storage, job_id),
-        saved=DbSavedAnswers(conn, user_id, job_id), per_job=per_job,
-    )
+    saved = DbSavedAnswers(conn, user_id, job_id)
+    if is_jev(model):
+        # Jev picks; the LLM resolver stays only for per-job answers through `ask`
+        # (complete=None: no OpenRouter call)
+        resolver = JevResolver(make_system_one(model), doc, saved=saved,
+                               writer=LLMResolver(None, doc, saved=saved, per_job=per_job))
+    else:
+        resolver = LLMResolver(
+            complete or openrouter_complete(model), doc, jd_text(storage, job_id),
+            saved=saved, per_job=per_job,
+        )
     browser = await Browser(mcp_url).connect()
     try:
         if navigate:
@@ -174,6 +180,14 @@ async def run_det(
         )
     finally:
         await browser.close()
+    if result.status == "handoff":
+        # det stops at a captcha / code it cannot get from the inbox; the page stays
+        # open for `autoapply continue JOB --engine det` once the person is done
+        await asyncio.to_thread(
+            notify.push, f"Apply paused: {result.reason[:80]}",
+            f"{url}\nFinish it on screen, then: autoapply continue {job_id} --engine det",
+            click=notify.vnc_url(),
+        )
     REPORT_DIR.mkdir(parents=True, exist_ok=True)
     (REPORT_DIR / f"{run_id}.json").write_text(json.dumps(result.to_dict(), indent=2, default=str))
     return result

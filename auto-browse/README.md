@@ -100,9 +100,18 @@ system messages; today's date is injected at runtime.
   and were dropped in the ground-up rewrite; reintroduce them here as needed.)
 - **Human handoff.** `request_human_help` is a virtual tool handled in the loop (not
   forwarded to the proxy): it pauses the run and asks the human to act on the browser
-  screen for steps the agent must not do itself — OTP/verification codes, email
-  confirmation links, and CAPTCHA / bot-detection challenges — then resumes with the
-  human's reply. Triggers live in `HIL_SCENARIOS`.
+  screen for steps the agent must not do itself — SMS/authenticator codes, codes or
+  links when Gmail is not connected, and CAPTCHA / bot-detection challenges (never
+  solved by the agent). It sends an ntfy push with the noVNC link (`NTFY_TOPIC`,
+  `agent/notify.py`) and resumes on the human's terminal reply or by itself once the
+  page shows the step done (captcha solved or gone, code box gone, page moved on);
+  it gives up after `HANDOFF_TIMEOUT_SECONDS`. Triggers live in `HIL_SCENARIOS`.
+- **Email codes and links.** `get_email_code` reads the applicant's Gmail (all mail,
+  Trash included — filters trash portal mail — since the run started) and returns
+  `VERIFICATION CODE:` or `CONFIRMATION LINK:` lines picked out in code.
+  `open_email_link` opens such a link in a new tab, closes it and returns to the
+  application tab (Workday's "Verify your candidate account"); it refuses any URL the
+  email tool did not return.
 - **LLM resilience.** The model call is wrapped with exponential backoff + full
   jitter (`LLM_MAX_RETRIES`, `LLM_BACKOFF_BASE`, `LLM_BACKOFF_CAP`, `LLM_TIMEOUT`)
   handling timeouts, connection/5xx errors, empty responses, and rate limits —

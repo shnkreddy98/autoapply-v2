@@ -1,0 +1,339 @@
+{
+ "site": "jazzhr",
+ "style": "jazzhr",
+ "evidence": "*.applytojob.com (JazzHR) captured 2026-07-08 (output/.playwright-mcp/page-2026-07-08T23-48-25-608Z.yml): the posting and 'Apply for this position' form on one page; labels are text with the star inline ('First Name*') and also name their controls; an Address block of free text boxes (City, State/Province as text); the resume behind a 'Resume*' button; yes/no questions as selects; multiple-choice questions as checkbox lists where only one box may be ticked; a references text area. The live check (2026-09-14) passed this platform.",
+ "company": "SynergyPoint Health",
+ "job": {
+  "title": "Data Engineer II (Mid-Level)",
+  "location": "Austin, TX (On-site)",
+  "description": "SynergyPoint Health runs men's health clinics in Texas. Build the Future of Healthcare Data.\n\nWhat You'll Do: build pipelines from our EHR into a cloud warehouse; automate reporting; keep data accurate.\n\nRequired Qualifications: 4+ years of data engineering; Python and SQL; Airflow or similar.\n\nLocation Requirements: on site Monday-Friday at our Austin office.\n\nCompensation: $120,000 - $150,000."
+ },
+ "flow": {
+  "posting": "same_page",
+  "apply_button": "Apply",
+  "form_heading": "Apply for this position",
+  "challenges": []
+ },
+ "submit": "SUBMIT APPLICATION",
+ "confirmation": "Thank you for applying! Your application was successfully submitted to SynergyPoint Health.",
+ "steps": [
+  {
+   "title": "Apply for this position",
+   "sections": [
+    {
+     "fields": [
+      {
+       "id": "first_name",
+       "label": "First Name",
+       "widget": "text",
+       "required": true,
+       "expect": {
+        "from": "facts.first_name"
+       }
+      },
+      {
+       "id": "last_name",
+       "label": "Last Name",
+       "widget": "text",
+       "required": true,
+       "expect": {
+        "from": "facts.last_name"
+       }
+      },
+      {
+       "id": "email",
+       "label": "Email Address",
+       "widget": "text",
+       "input_type": "email",
+       "required": true,
+       "expect": {
+        "from": "contact.email"
+       }
+      },
+      {
+       "id": "phone",
+       "label": "Phone",
+       "widget": "text",
+       "input_type": "tel",
+       "required": true,
+       "expect": {
+        "from": "contact.phone",
+        "match": "phone"
+       }
+      },
+      {
+       "id": "address",
+       "label": "Address",
+       "widget": "text",
+       "required": true,
+       "expect": {
+        "from": "facts.street_address"
+       }
+      },
+      {
+       "id": "city",
+       "label": "City",
+       "widget": "text",
+       "expect": {
+        "from": "facts.city"
+       }
+      },
+      {
+       "id": "state",
+       "label": "State/Province",
+       "widget": "text",
+       "expect": {
+        "one_of": [
+         "Texas",
+         "TX"
+        ],
+        "why": "facts.state"
+       }
+      },
+      {
+       "id": "postal",
+       "label": "Postal",
+       "widget": "text",
+       "expect": {
+        "from": "facts.zip_code"
+       }
+      },
+      {
+       "id": "resume",
+       "label": "Resume",
+       "widget": "file",
+       "required": true,
+       "trigger": "Resume*",
+       "expect": {
+        "file": "resume"
+       }
+      }
+     ]
+    },
+    {
+     "fields": [
+      {
+       "id": "license",
+       "label": "Do you have a valid driver's license?",
+       "widget": "select",
+       "required": true,
+       "blank_option": "",
+       "options": [
+        "Yes",
+        "No"
+       ],
+       "expect": {
+        "any": true,
+        "why": "not in the profile",
+        "personal": true
+       }
+      },
+      {
+       "id": "eligibility",
+       "label": "What's your citizenship / employment eligibility?",
+       "widget": "select",
+       "required": true,
+       "blank_option": "",
+       "options": [
+        "U.S. Citizen or U.S. National",
+        "Permanent Resident (Green Card)",
+        "Authorized to work, requires sponsorship",
+        "Not authorized to work in the U.S."
+       ],
+       "expect": {
+        "one_of": [
+         "U.S. Citizen or U.S. National",
+         "Permanent Resident (Green Card)"
+        ],
+        "why": "eligible without sponsorship; citizen vs green card is not in the profile"
+       }
+      },
+      {
+       "id": "over_18",
+       "label": "Are you 18 years of age or older?",
+       "widget": "select",
+       "required": true,
+       "blank_option": "",
+       "options": [
+        "Yes",
+        "No"
+       ],
+       "expect": {
+        "from": "facts.over_18",
+        "map": {
+         "true": "Yes",
+         "false": "No"
+        }
+       }
+      },
+      {
+       "id": "linkedin",
+       "label": "LinkedIn Profile URL:",
+       "widget": "text",
+       "required": true,
+       "expect": {
+        "from": "contact.linkedin",
+        "match": "url"
+       }
+      },
+      {
+       "id": "languages",
+       "label": "What languages do you speak fluently?",
+       "widget": "text",
+       "required": true,
+       "expect": {
+        "any": true,
+        "why": "not in the profile",
+        "personal": true
+       }
+      },
+      {
+       "id": "salary",
+       "label": "Desired salary",
+       "widget": "text",
+       "required": true,
+       "expect": {
+        "from": "facts.desired_salary",
+        "match": "digits"
+       }
+      },
+      {
+       "id": "start",
+       "label": "Earliest start date?",
+       "widget": "text",
+       "required": true,
+       "expect": {
+        "from": "facts.available_start_date",
+        "format": "month_year",
+        "why": "any day/month/year spelling of 2026-11-02"
+       }
+      },
+      {
+       "id": "weekends",
+       "label": "Can you work weekends?",
+       "widget": "select",
+       "blank_option": "",
+       "options": [
+        "Yes",
+        "No"
+       ],
+       "expect": {
+        "ignore": "optional, not in the profile"
+       }
+      },
+      {
+       "id": "felony",
+       "label": "Have you ever been convicted of a felony?",
+       "widget": "select",
+       "required": true,
+       "blank_option": "",
+       "options": [
+        "Yes",
+        "No"
+       ],
+       "expect": {
+        "any": true,
+        "why": "not in the profile: a hand-off or an honest answer from the user",
+        "personal": true
+       }
+      },
+      {
+       "id": "references",
+       "label": "References: Please enter names and contact information:",
+       "widget": "textarea",
+       "required": true,
+       "expect": {
+        "any": true,
+        "why": "the profile has no references",
+        "personal": true
+       }
+      },
+      {
+       "id": "de_years",
+       "label": "How many years of professional Data Engineering experience do you have?",
+       "widget": "checkbox_group",
+       "single": true,
+       "required": true,
+       "options": [
+        "Less than 4 years",
+        "4-5 years",
+        "6-7 years",
+        "8+ years"
+       ],
+       "expect": {
+        "value": "6-7 years",
+        "why": "facts.years_of_experience = 7"
+       }
+      },
+      {
+       "id": "onsite",
+       "label": "Are you able to work onsite Monday-Friday at our Austin office?",
+       "widget": "checkbox_group",
+       "single": true,
+       "required": true,
+       "options": [
+        "Yes",
+        "No"
+       ],
+       "expect": {
+        "value": "Yes",
+        "why": "lives in Austin"
+       }
+      },
+      {
+       "id": "sponsorship",
+       "label": "If hired today, would you require current or future employer sponsorship to work in the United States?",
+       "widget": "checkbox_group",
+       "single": true,
+       "required": true,
+       "options": [
+        "Yes",
+        "No"
+       ],
+       "expect": {
+        "from": "facts.visa_sponsorship",
+        "map": {
+         "true": "Yes",
+         "false": "No"
+        }
+       }
+      },
+      {
+       "id": "local",
+       "label": "Are you currently located in the Greater Austin area or planning to relocate before your start date?",
+       "widget": "checkbox_group",
+       "single": true,
+       "required": true,
+       "options": [
+        "Currently local",
+        "Relocating independently before start date",
+        "Not local and no relocation planned"
+       ],
+       "expect": {
+        "value": "Currently local",
+        "why": "lives in Austin"
+       }
+      },
+      {
+       "id": "databricks_years",
+       "label": "How many years have you worked with Azure Databricks in a production environment?",
+       "widget": "checkbox_group",
+       "single": true,
+       "required": true,
+       "options": [
+        "None",
+        "Less than 1 year",
+        "1-2 years",
+        "3+ years"
+       ],
+       "expect": {
+        "value": "None",
+        "why": "no Databricks or Azure in the profile"
+       }
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

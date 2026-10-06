@@ -27,7 +27,7 @@ Per target:
 Safety: autosubmit is off, and the driver refuses any click on a control whose text
 reads like a final submit, so a mislabelled button cannot send an application.
 Answers come from the user's real profile (default role unless --label); model calls
-use auto-browse's OPENROUTER_* settings. Nothing is written to saved_answers.
+use auto-browse's OPENROUTER_* settings, or TypeSafe with a Jev --model (TYPESAFE_API_KEY). Nothing is written to saved_answers.
 """
 
 from __future__ import annotations
@@ -51,11 +51,13 @@ from det_autofill import engine  # noqa: E402
 from det_autofill.answers import AnswerStore  # noqa: E402
 from det_autofill.classify import _has_value  # noqa: E402
 from det_autofill.fill import McpDriver  # noqa: E402
+from det_autofill.jev import JevResolver  # noqa: E402
 from det_autofill.llm import LLMResolver  # noqa: E402
 from det_autofill.mcpio import Browser  # noqa: E402
 from det_autofill.profile import from_export  # noqa: E402
 
 from agent import det_apply  # noqa: E402
+from agent.jev_client import is_jev, make_system_one  # noqa: E402
 from agent.loop import DEFAULT_MODEL, RESUME_CONTAINER_ROOT, SCRATCH_ROOT  # noqa: E402
 from agent.profile import profile_json  # noqa: E402
 
@@ -194,7 +196,7 @@ def verdict(result: engine.RunResult, audit: dict, page_text: str) -> str:
 
 
 async def check_target(target, *, browser, conn, storage, user_id, doc, store, complete, max_candidates,
-                       credentials=None) -> dict:
+                       credentials=None, jev=None) -> dict:
     driver = NoSubmitDriver(browser)
     url, tried = await open_live_posting(browser, driver, target["candidates"], max_candidates)
     out = {"platform": target["platform"], "url": url, "tried": tried, "checked": datetime.now(timezone.utc).isoformat()}
@@ -215,6 +217,8 @@ async def check_target(target, *, browser, conn, storage, user_id, doc, store, c
         return (reply or "").strip() or None
 
     resolver = LLMResolver(complete, doc, page_text, saved=ReadOnlySaved(conn, user_id), per_job=per_job)
+    if jev:
+        resolver = JevResolver(jev, doc, saved=ReadOnlySaved(conn, user_id), writer=resolver)
     context: dict = {}
     try:
         result = await asyncio.wait_for(
@@ -238,7 +242,7 @@ async def check_target(target, *, browser, conn, storage, user_id, doc, store, c
         if rest:
             r = await check_target(target | {"candidates": rest}, browser=browser, conn=conn, storage=storage,
                                    user_id=user_id, doc=doc, store=store, complete=complete,
-                                   max_candidates=max_candidates - len(tried) - 1, credentials=credentials)
+                                   max_candidates=max_candidates - len(tried) - 1, credentials=credentials, jev=jev)
             return r | {"tried": tried + [f"{url} -> gone"] + r["tried"]}
         return out | {"status": "GONE", "tried": tried + [f"{url} -> gone"]}
     status = verdict(result, audit, end_text if isinstance(end_text, str) else "")
@@ -350,7 +354,10 @@ async def main_async(args) -> int:
         storage.get_file(pdf["s3_key"], str(host_resume))
         store = AnswerStore(from_export(doc, resume_path=f"{RESUME_CONTAINER_ROOT}/{run_dir}/resume.pdf",
                                         login_password=(bundle.login or {}).get("login_password")))
-        complete = None if args.no_model else det_apply.openrouter_complete(args.model or DEFAULT_MODEL)
+        # a Jev --model resolves fields; free text then comes from --writer, if given
+        jev = make_system_one(args.model) if is_jev(args.model) and not args.no_model else None
+        llm = args.writer if jev else (args.model or DEFAULT_MODEL)
+        complete = None if args.no_model or not llm else det_apply.openrouter_complete(llm)
         # signs in to existing accounts with the stored portal password (one attempt per
         # portal) unless --no-login; never creates an account
         credentials = None if args.no_login else det_apply.portal_credentials(bundle)
@@ -370,7 +377,7 @@ async def main_async(args) -> int:
                     skip_login = target.get("login_rejected") and not args.retry_login
                     r = await check_target(target, browser=browser, conn=conn, storage=storage, user_id=user_id,
                                            doc=doc, store=store, complete=complete, max_candidates=args.max_candidates,
-                                           credentials=None if skip_login else credentials)
+                                           credentials=None if skip_login else credentials, jev=jev)
                     if skip_login and r["status"] == "BLOCKED":
                         r["reason"] = f"sign-in skipped: password rejected on {target['login_rejected']}"
                 except Exception as exc:  # one broken target never stops the sweep
@@ -403,7 +410,9 @@ def main() -> None:
     p.add_argument("--label", help="role whose resume/profile to use (default: the user's default role)")
     p.add_argument("--user", help="user id (default: the only active user)")
     p.add_argument("--mcp", default=det_apply.PLAYWRIGHT_MCP_URL, help="Playwright MCP URL (default: the proxy)")
-    p.add_argument("--model", help="model for the resolver (default: OPENROUTER_MODEL)")
+    p.add_argument("--model", help="model for the resolver (default: OPENROUTER_MODEL); jev / jev-latest uses "
+                                   "TypeSafe Jev, which picks answers and writes none")
+    p.add_argument("--writer", help="with a Jev --model: OpenRouter model for free-text answers")
     p.add_argument("--no-model", action="store_true", help="deterministic answers only; gaps are reported")
     p.add_argument("--no-login", action="store_true", help="stop at sign-in pages instead of signing in to existing accounts")
     p.add_argument("--retry-login", action="store_true", help="sign in again on portals that rejected the password before")

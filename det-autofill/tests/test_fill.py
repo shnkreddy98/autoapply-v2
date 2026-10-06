@@ -112,6 +112,119 @@ def test_autofill_fixtures_fill_and_replan_to_nothing(name, url, tmp_path):
     assert again.summary()["fill"] == 0, [(r.label, r.key) for r in again.rows if r.action == "fill"]
 
 
+def test_ashby_yes_no_buttons_answer_as_a_radio_pair():
+    """Ashby's Yes / No questions are two plain buttons beside a display:none checkbox
+    that is ticked only for Yes. det saw neither, so on the apply bench every one of
+    them (7 required on the mock) was left blank and the run stopped."""
+    first, results, again, state, _ = run(_fill_all(
+        "ashby", "https://jobs.ashbyhq.com/acme/1/application", example_profile()))
+    rows = {r.label: r for r in first.rows if r.label.startswith(("Are you legally", "Will you now"))}
+    assert set(rows) == {"Are you legally authorized to work in the United States?",
+                         "Will you now or in the future require employer sponsorship to work in the United States?"}
+    for row in rows.values():
+        # the star is CSS on the label's _required_ class
+        assert (row.widget, row.required, [o["text"] for o in row.options]) == ("radio", True, ["Yes", "No"])
+    auth, sponsor = (rows[k] for k in sorted(rows))
+    assert results[auth.label].wrote == "Yes" and results[sponsor.label].wrote == "No"
+    assert [state[s]["checked"] for s in auth.selectors] == [True, False]
+    assert [state[s]["checked"] for s in sponsor.selectors] == [False, True]
+    # the hidden checkboxes are the same questions, not two more fields
+    assert not [r for r in first.rows if r.widget == "checkbox"]
+
+
+def test_ashby_title_class_marks_required_and_an_upload_label_can_name_the_field():
+    """Live Ashby (CivicMarketplace, 2026-10-05): required only as a class on the
+    question title, and the resume input's own label is "Upload your CV/Resume" with
+    "(.pdf format)" before the drop zone. det took the description as the label and
+    the radio question as optional, then pressed Submit without either."""
+    html = """<form>
+      <div class="ashby-application-form-field-entry" data-field-entry-id="a_1">
+        <label class="_heading _required_f7cvd_91 ashby-application-form-question-title" for="cv">Upload your CV/Resume</label>
+        <div class="ashby-application-form-question-description"><p>(.pdf format)</p></div>
+        <div role="presentation"><input type="file" id="cv" tabindex="-1" required
+          style="position:absolute;width:1px;height:1px;clip:rect(0,0,0,0)"><button type="button">Upload File</button></div>
+      </div>
+      <div class="ashby-application-form-field-entry" data-field-entry-id="a_2">
+        <fieldset><label class="_heading _required_f7cvd_91 ashby-application-form-question-title">Which best describes you?</label>
+          <label><input type="radio" name="q2" value="a"> A</label><label><input type="radio" name="q2" value="b"> B</label></fieldset>
+      </div>
+      <div class="ashby-application-form-field-entry" data-field-entry-id="a_4">
+        <label class="_heading _required_f7cvd_91 ashby-application-form-question-title">Where did you hear about us?</label>
+        <label><input type="checkbox" name="src" value="t"> Twitter</label><label><input type="checkbox" name="src" value="b"> Blog</label>
+      </div>
+      <div class="ashby-application-form-field-entry" data-field-entry-id="a_3">
+        <label class="_heading ashby-application-form-question-title" for="opt">Anything else?</label><input type="text" id="opt">
+      </div></form>"""
+
+    async def go():
+        p = await pw.async_playwright().start()
+        try:
+            from browser import chromium_executable
+            browser = await p.chromium.launch(headless=True, executable_path=chromium_executable())
+        except Exception as exc:
+            await p.stop()
+            pytest.skip(f"chromium unavailable: {exc}")
+        try:
+            page = await browser.new_page()
+            await page.set_content(html)
+            return await _extract(page)
+        finally:
+            await browser.close()
+            await p.stop()
+
+    fields = {f["label"]: f for f in run(go())}
+    assert fields["Upload your CV/Resume"]["widget"] == "file"
+    assert fields["Which best describes you?"]["required"] and fields["Upload your CV/Resume"]["required"]
+    assert not fields["Anything else?"]["required"]
+    # a required "select all that apply" group needs one box, not every box (Chainlink)
+    assert not any(f["required"] for f in fields.values() if f["widget"] == "checkbox")
+
+
+def test_greenhouse_multi_select_pick_reads_back_as_a_chip():
+    """Greenhouse "select all that apply": react-select multi shows picks as chips
+    (select__multi-value__label). det never read them, so every pick failed as
+    "closed-without" (Samsara "Where have you learned about Samsara?")."""
+    html = """<label id="ql" for="q">Where have you learned about us?*</label>
+      <div class="select__control"><div class="select__value-container select__value-container--is-multi">
+        <div class="select__input-container"><input id="q" class="select__input" role="combobox" aria-expanded="false"
+          aria-controls="menu" aria-labelledby="ql" aria-required="true"></div></div></div>
+      <div id="menu" role="listbox" hidden><div role="option">LinkedIn</div><div role="option">Company blog or website</div></div>
+      <script>
+        const q = document.getElementById('q'), menu = document.getElementById('menu');
+        q.addEventListener('click', () => { menu.hidden = false; q.setAttribute('aria-expanded', 'true'); });
+        menu.querySelectorAll('[role=option]').forEach((o) => o.addEventListener('click', () => {
+          const chip = document.createElement('div');
+          chip.className = 'select__multi-value';
+          chip.innerHTML = '<div class="select__multi-value__label"></div>';
+          chip.firstChild.textContent = o.textContent;
+          q.closest('.select__value-container').prepend(chip);
+          menu.hidden = true; q.setAttribute('aria-expanded', 'false');
+        }));
+      </script>"""
+
+    async def go():
+        p = await pw.async_playwright().start()
+        try:
+            from browser import chromium_executable
+            browser = await p.chromium.launch(headless=True, executable_path=chromium_executable())
+        except Exception as exc:
+            await p.stop()
+            pytest.skip(f"chromium unavailable: {exc}")
+        try:
+            page = await browser.new_page()
+            await page.set_content(html)
+            res = await fill_combobox(PlaywrightDriver(page), "#q", "how_heard",
+                                      {"kind": "text", "value": "Company blog or website"})
+            return res, [f for f in await _extract(page) if f["selector"] == "#q"][0]
+        finally:
+            await browser.close()
+            await p.stop()
+
+    res, field = run(go())
+    assert res.ok, res.how
+    assert field["chips"] == ["Company blog or website"]  # a re-plan sees it as answered
+
+
 def test_react_tracked_inputs_notice_the_write():
     """The fixture's tracker only sets data-react-state when React's own value
     tracking saw a change — so this proves the framework, not just the DOM, updated."""

@@ -67,7 +67,7 @@ NO = r"^no\b"
 @dataclass
 class Answer:
     key: str
-    kind: str  # text | bool | option | date | file | skill_map
+    kind: str  # text | bool | option | date | date_part | file | skill_map
     value: Any  # str / bool / list-of-pref-regexes / iso date / path / dict
 
 
@@ -165,7 +165,14 @@ class AnswerStore:
             if mine:
                 return Answer(key, "option", list(mine))
             if key == "work_auth_type" and p.get("visa_sponsorship"):
-                return None  # the default list starts with "citizen" — wrong here
+                # the default list starts with "citizen" — wrong here. Ashby asks it as
+                # sentences: "I am authorised to work in the United States but will
+                # require employer sponsorship in the future"; status lists (H-1B, F-1
+                # OPT ...) match none of this and go to the resolver
+                if not p.get("work_eligible_us"):
+                    return None
+                return Answer(key, "option", [r"^(?!.*\bnot (currently )?authori[sz]ed)(?!.*\b(do not|don.?t) require)"
+                                              r".*\bauthori[sz]ed\b.*\brequire\b.*\bsponsor"])
             defaults = list(OPTION_PREFS.get(key) or [])
             return Answer(key, "option", defaults) if defaults else None
         if key == "resume_upload":
@@ -177,7 +184,9 @@ class AnswerStore:
             # back to today put the fill date into education start-date fields
             v = p.get({"start_date": "available_start_date"}.get(key, key))
             if key == "signature_date":
-                v = v or p.get("today")
+                # you sign on the day you apply; the stored date is the day the profile
+                # was set up (weeks old on the live profile) and was typed as-is
+                v = p.get("today") or v
             return Answer(key, "date", v) if v else None
         if key in ("date_month", "date_day", "date_year"):
             return Answer(key, "date_part", key.removeprefix("date_"))

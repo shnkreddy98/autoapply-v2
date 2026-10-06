@@ -1,0 +1,68 @@
+{
+ "site": "breezy",
+ "style": "breezy",
+ "evidence": "*.breezy.hr application captured 2026-07-09 and 2026-09-14 (output/.playwright-mcp/page-2026-09-14T19-49-05-919Z.yml) and det-autofill/tests/fixtures/forms/breezy_like.html: every label is an <h3> before its control, text boxes are named by their placeholder, selects have no name at all, desired salary is a currency select + amount + period select, custom questions are unnamed selects or text boxes under an <h3>, EEO radios under a heading. The same capture shows a past run that typed the email into 'Phone Number' and 'Yes' into 'Address'. The live check (2026-09-14) passed this platform.",
+ "company": "Harborview Benefits",
+ "labels": "heading",
+ "job": {
+  "title": "Data Engineer II",
+  "location": "Remote (US)",
+  "description": "Harborview Benefits administers supplemental benefits for health plans. Our data engineers build the pipelines behind member eligibility and claims.\n\nResponsibilities: build ETL from carrier files into the warehouse; maintain Airflow; improve data quality.\n\nRequirements: 3+ years of data engineering; Python; SQL; a cloud warehouse.\n\nRemote (US)."
+ },
+ "flow": {"posting": "separate", "apply_button": "Apply To Position", "challenges": []},
+ "submit": "Submit Application",
+ "confirmation": "Thank you for applying! Your application has been received by Harborview Benefits.",
+ "steps": [
+  {
+   "title": "Application",
+   "sections": [
+    {
+     "heading": "Personal Details",
+     "fields": [
+      {"id": "resume", "label": "Resume", "widget": "file", "required": true, "trigger": "Upload Resume", "expect": {"file": "resume"}},
+      {"id": "name", "label": "Full Name", "widget": "text", "required": true, "expect": {"from": "contact.full_name"}},
+      {"id": "email", "label": "Email Address", "widget": "text", "input_type": "email", "required": true, "expect": {"from": "contact.email"}},
+      {"id": "phone", "label": "Phone Number", "widget": "text", "input_type": "tel", "required": true, "expect": {"from": "contact.phone", "match": "phone"}},
+      {"id": "address", "label": "Address", "widget": "text", "required": true, "expect": {"from": "facts.street_address", "match": "prefix"}}
+     ]
+    },
+    {
+     "heading": "Experience Summary",
+     "fields": [
+      {"id": "summary", "label": "Summary", "widget": "textarea", "expect": {"ignore": "optional"}}
+     ]
+    },
+    {
+     "fields": [
+      {"id": "salary_currency", "label": "Salary currency", "widget": "select", "labels": "detached", "blank_option": "",
+       "options": ["US Dollar ($)", "Canadian Dollar ($)", "Euro (€)", "British Pound (£)"], "expect": {"value": "US Dollar ($)", "why": "the profile salary is US dollars"}},
+      {"id": "salary", "label": "Desired Salary", "widget": "text", "required": true, "expect": {"from": "facts.desired_salary", "match": "digits"}},
+      {"id": "salary_period", "label": "Salary period", "widget": "select", "labels": "detached", "blank_option": "",
+       "options": ["Hourly", "Weekly", "Monthly", "Yearly"], "expect": {"value": "Yearly", "why": "an annual figure"}},
+      {"id": "over_18", "label": "Are you at least 18 years of age?", "widget": "select", "required": true, "blank_option": "",
+       "options": ["Yes", "No"], "expect": {"from": "facts.over_18", "map": {"true": "Yes", "false": "No"}}},
+      {"id": "diploma", "label": "Do you have a high school diploma or GED?", "widget": "select", "required": true, "blank_option": "",
+       "options": ["Yes", "No"], "expect": {"value": "Yes", "why": "holds a Bachelor's degree"}},
+      {"id": "worked_here", "label": "Have you ever worked for Harborview Benefits or any subsidiaries as an employee or temporary worker? If yes, who was your direct supervisor?", "widget": "text", "required": true,
+       "expect": {"value": "No", "match": "prefix", "why": "not in work_experiences"}},
+      {"id": "work_auth", "label": "Are you legally authorized to work in the United States?", "widget": "select", "required": true, "blank_option": "",
+       "options": ["Yes", "No"], "expect": {"from": "facts.work_eligible_us", "map": {"true": "Yes", "false": "No"}}},
+      {"id": "sponsorship", "label": "Do you need sponsorship?", "widget": "select", "required": true, "blank_option": "",
+       "options": ["Yes", "No"], "expect": {"from": "facts.visa_sponsorship", "map": {"true": "Yes", "false": "No"}}}
+     ]
+    },
+    {
+     "heading": "We're an equal opportunity employer",
+     "fields": [
+      {"id": "race", "label": "Race or Ethnicity", "widget": "radio",
+       "options": ["White (not Hispanic or Latino)", "Black or African-American (not Hispanic or Latino)", "Asian (not Hispanic or Latino)",
+                   "American Indian or Alaskan Native (not Hispanic or Latino)", "Native Hawaiian or other Pacific islander (not Hispanic or Latino)",
+                   "Two or more races/ethnicities (not Hispanic or Latino)", "Hispanic or Latino (including Black individuals whose origins are Hispanic)", "I don't wish to answer"],
+       "expect": {"from": "facts.race_ethnicity", "map": {"Asian": "Asian (not Hispanic or Latino)", "White": "White (not Hispanic or Latino)"}}},
+      {"id": "gender", "label": "Gender", "widget": "radio", "options": ["Male", "Female", "I don't wish to answer"], "expect": {"from": "facts.gender"}}
+     ]
+    }
+   ]
+  }
+ ]
+}

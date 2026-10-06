@@ -1,0 +1,78 @@
+{
+ "site": "rippling",
+ "style": "rippling",
+ "evidence": "ats.rippling.com application captured 2026-07-09 (output/.playwright-mcp/page-2026-07-09T00-09-49-856Z.yml): one page; standard fields have names, but every custom question is a text block above an unnamed textbox, an unnamed radiogroup (with 'Clear selection' and 'Add comment' buttons) or a combobox named only 'Select'; the phone country picker is a combobox named 'Search'; EEO comboboxes open a 'Select...' dialog; the final button reads 'Apply', same as the posting's. The live check (2026-09-14) ended GAPS on a required personal question ('Pick a football team you follow...').",
+ "company": "Fieldstone Sports Analytics",
+ "job": {
+  "title": "Lead Data Engineer",
+  "location": "Remote (US)",
+  "description": "Fieldstone Sports Analytics turns tracking data from professional matches into scouting reports.\n\nYou will: lead a team of three data engineers; build streaming ingestion from stadium feeds; own our Snowflake warehouse.\n\nYou have: 6+ years of data engineering; Python; SQL; Kafka; experience leading engineers.\n\nRemote in the US."
+ },
+ "flow": {"posting": "separate", "apply_button": "Apply", "challenges": []},
+ "submit": "Apply",
+ "confirmation": "Application submitted. Thank you for applying to Fieldstone Sports Analytics.",
+ "steps": [
+  {
+   "title": "Apply",
+   "sections": [
+    {
+     "fields": [
+      {"id": "resume", "label": "Résumé", "widget": "file", "required": true, "trigger": "Upload résumé", "expect": {"file": "resume"}},
+      {"id": "first_name", "label": "First name", "widget": "text", "required": true, "expect": {"from": "facts.first_name"}},
+      {"id": "last_name", "label": "Last name", "widget": "text", "required": true, "expect": {"from": "facts.last_name"}},
+      {"id": "email", "label": "Email", "widget": "text", "input_type": "email", "required": true, "expect": {"from": "contact.email"}},
+      {"id": "pronouns", "label": "Pronouns", "widget": "typeahead", "named": true, "placeholder": "",
+       "options": ["She/her", "He/him", "They/them", "Prefer not to say"], "expect": {"from": "facts.pronouns", "map": {"She/her/hers": "She/her", "He/him/his": "He/him"}}},
+      {"id": "company", "label": "Current company", "widget": "text", "required": true, "expect": {"from": "work_experiences.0.company_name"}},
+      {"id": "phone_country", "label": "Phone country", "widget": "typeahead", "labels": "detached", "placeholder": "Search",
+       "options": ["+1 US", "+1 CA", "+44 GB", "+52 MX", "+91 IN"], "expect": {"value": "+1 US", "why": "facts.phone_country_code = +1, US number"}},
+      {"id": "phone", "label": "Phone number", "widget": "text", "input_type": "tel", "expect": {"from": "contact.phone", "match": "phone"}},
+      {"id": "location", "label": "Location", "widget": "text", "required": true, "expect": {"value": "Austin", "match": "prefix", "why": "contact.location"}},
+      {"id": "linkedin", "label": "LinkedIn Link", "widget": "text", "required": true, "expect": {"from": "contact.linkedin", "match": "url"}},
+      {"id": "website", "label": "Website link", "widget": "text", "expect": {"ignore": "portfolio or GitHub both fine"}},
+      {"id": "cover", "label": "Cover letter", "widget": "file", "trigger": "Drop or select (.doc / .docx / .pdf)", "expect": {"ignore": "optional"}}
+     ]
+    },
+    {
+     "fields": [
+      {"id": "python_years", "label": "How many years of professional experience do you have with Python?", "widget": "text", "labels": "detached", "required": true,
+       "expect": {"from": "facts.years_of_experience", "match": "digits"}},
+      {"id": "salary", "label": "What is your expected base salary?", "widget": "text", "labels": "detached", "required": true,
+       "expect": {"from": "facts.desired_salary", "match": "digits"}},
+      {"id": "work_auth", "label": "Are you authorized to work in the US?", "widget": "radio", "labels": "detached", "required": true,
+       "options": ["Yes", "No"], "expect": {"from": "facts.work_eligible_us", "map": {"true": "Yes", "false": "No"}}},
+      {"id": "sponsorship", "label": "Will you require visa sponsorship now or in the future?", "widget": "radio", "labels": "detached", "required": true,
+       "options": ["Yes", "No", "N/A"], "expect": {"from": "facts.visa_sponsorship", "map": {"true": "Yes", "false": "No"}}},
+      {"id": "linkedin_again", "label": "Please share your LinkedIn profile", "widget": "text", "labels": "detached",
+       "expect": {"from": "contact.linkedin", "match": "url"}},
+      {"id": "every_tool", "label": "Have you worked with every tool in the world to have ever existed?", "widget": "typeahead", "labels": "detached", "placeholder": "Select", "required": true,
+       "options": ["Yes", "No"], "expect": {"value": "No", "why": "a trick question: Yes is a false claim"}},
+      {"id": "football", "label": "Pick a football team you follow. What's one player, match, or moment involving them that stuck with you?", "widget": "textarea", "labels": "detached", "required": true,
+       "expect": {"free_text": true, "min_chars": 2, "why": "a personal question the profile cannot answer"}}
+     ]
+    },
+    {
+     "heading": "Voluntary self-identification",
+     "fields": [
+      {"id": "gender", "label": "Gender", "widget": "typeahead", "named": true, "placeholder": "",
+       "options": ["Male", "Female", "Non-binary", "Choose not to disclose"], "expect": {"from": "facts.gender"}},
+      {"id": "race", "label": "Please identify your race", "widget": "typeahead", "named": true, "placeholder": "",
+       "options": ["American Indian or Alaska Native", "Asian", "Black or African American", "Native Hawaiian or Other Pacific Islander", "White", "Two or More Races", "Choose not to disclose"],
+       "expect": {"from": "facts.race_ethnicity"}},
+      {"id": "hispanic", "label": "Are you Hispanic/Latino?", "widget": "typeahead", "named": true, "placeholder": "",
+       "options": ["Yes", "No", "Choose not to disclose"], "expect": {"from": "facts.hispanic_latino"}},
+      {"id": "veteran", "label": "Veteran Status", "widget": "typeahead", "named": true, "placeholder": "",
+       "options": ["I am not a protected veteran", "I identify as one or more of the classifications of protected veteran", "Choose not to disclose"],
+       "expect": {"from": "facts.veteran_status"}},
+      {"id": "disability", "label": "Disability Status", "widget": "typeahead", "named": true, "placeholder": "",
+       "options": ["Yes, I have a disability, or have had one in the past", "No, I do not have a disability and have not had one in the past", "I do not want to answer"],
+       "expect": {"from": "facts.disability_status", "map": {"No, I do not have a disability": "No, I do not have a disability and have not had one in the past"}}},
+      {"id": "sms", "label": "Text message consent", "widget": "radio", "labels": "detached",
+       "options": ["Yes - I consent to receiving text messages", "No - I do not consent to receiving text messages"],
+       "expect": {"ignore": "the applicant's preference is not recorded"}}
+     ]
+    }
+   ]
+  }
+ ]
+}

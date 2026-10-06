@@ -1,0 +1,73 @@
+{
+ "site": "jobvite",
+ "style": "jobvite",
+ "evidence": "jobs.jobvite.com application captured 2026-09-14 (output/.playwright-mcp/page-2026-09-14T20-01-21-065Z.yml): 'Add Resume*' then 'Personal Information' with labels that name their controls ('First Name*'), native selects for Country and State/Province, a required Preferred Name, and a sponsorship question whose radios have empty names (their text is not inside a label); desired salary as text. The live check (2026-09-14) passed in 4 pages, ending before 'Send Application'. The self-identification page was not captured in full: reconstructed.",
+ "company": "Granite Civic Software",
+ "option_label": "detached",
+ "job": {
+  "title": "Software Engineer - Data",
+  "location": "Austin, TX",
+  "description": "Granite Civic Software builds case-management systems for county courts. The data team builds reporting and integration pipelines.\n\nResponsibilities: build ETL between court systems and our SaaS platform; maintain SQL Server and Snowflake models; automate data validation.\n\nRequirements: 4+ years building data pipelines; SQL; Python or C#.\n\nAustin, TX (hybrid)."
+ },
+ "flow": {"posting": "separate", "apply_button": "Apply", "challenges": []},
+ "next": "Next",
+ "submit": "Send Application",
+ "confirmation": "Thank you for applying. Your application has been sent to Granite Civic Software.",
+ "steps": [
+  {
+   "title": "Apply",
+   "sections": [
+    {
+     "heading": "Add Resume",
+     "fields": [
+      {"id": "resume", "label": "Resume", "widget": "file", "required": true, "trigger": "Upload", "expect": {"file": "resume"}}
+     ]
+    },
+    {
+     "heading": "Personal Information",
+     "fields": [
+      {"id": "first_name", "label": "First Name", "widget": "text", "required": true, "expect": {"from": "facts.first_name"}},
+      {"id": "last_name", "label": "Last Name", "widget": "text", "required": true, "expect": {"from": "facts.last_name"}},
+      {"id": "preferred", "label": "Preferred Name", "widget": "text", "required": true, "expect": {"from": "facts.preferred_name"}},
+      {"id": "email", "label": "Email", "widget": "text", "input_type": "email", "required": true, "expect": {"from": "contact.email"}},
+      {"id": "phone", "label": "Phone", "widget": "text", "input_type": "tel", "required": true, "expect": {"from": "contact.phone", "match": "phone"}},
+      {"id": "country", "label": "Country", "widget": "select", "required": true, "blank_option": "Select an option...",
+       "options": ["United States", "Canada", "United Kingdom", "Aland Islands", "Mexico"], "expect": {"from": "facts.country"}},
+      {"id": "address", "label": "Address", "widget": "text", "required": true, "expect": {"from": "facts.street_address"}},
+      {"id": "address2", "label": "Address2", "widget": "text", "expect": {"blank": true, "why": "one address line"}},
+      {"id": "city", "label": "City", "widget": "text", "required": true, "expect": {"from": "facts.city"}},
+      {"id": "state", "label": "State/Province", "widget": "select", "required": true, "blank_option": "Select an option...",
+       "options": ["Not Applicable", "Alaska", "Alabama", "Arkansas", "Arizona", "California", "Oklahoma", "Texas"], "expect": {"from": "facts.state"}},
+      {"id": "zip", "label": "Zip", "widget": "text", "required": true, "expect": {"from": "facts.zip_code"}}
+     ]
+    },
+    {
+     "fields": [
+      {"id": "sponsorship", "label": "Will you now or in the future require the Company to sponsor you for or support you with any U.S. immigration benefit application (e.g., H-1B)?", "widget": "radio", "required": true,
+       "options": ["Yes", "No", "I am not sure"], "expect": {"from": "facts.visa_sponsorship", "map": {"true": "Yes", "false": "No"}}},
+      {"id": "salary", "label": "Desired Annual Base Salary", "widget": "text", "required": true, "expect": {"from": "facts.desired_salary", "match": "digits"}},
+      {"id": "heard", "label": "How did you hear about this position?", "widget": "select", "required": true, "blank_option": "Select an option...",
+       "options": ["Company Website", "Indeed", "LinkedIn", "Referral", "Other"], "expect": {"from": "facts.how_did_you_hear"}}
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Self Identification",
+   "reconstructed": true,
+   "sections": [
+    {
+     "fields": [
+      {"id": "gender", "label": "Gender", "widget": "radio", "options": ["Female", "Male", "I do not wish to self-identify"], "expect": {"from": "facts.gender"}},
+      {"id": "race", "label": "Race/Ethnicity", "widget": "select", "blank_option": "Select an option...",
+       "options": ["Asian (Not Hispanic or Latino)", "Black or African American (Not Hispanic or Latino)", "Hispanic or Latino", "White (Not Hispanic or Latino)", "Two or More Races (Not Hispanic or Latino)", "I do not wish to self-identify"],
+       "expect": {"from": "facts.race_ethnicity", "map": {"Asian": "Asian (Not Hispanic or Latino)", "White": "White (Not Hispanic or Latino)"}}},
+      {"id": "veteran", "label": "Veteran Status", "widget": "radio",
+       "options": ["I am not a protected veteran", "I identify as one or more of the classifications of protected veteran", "I do not wish to self-identify"],
+       "expect": {"from": "facts.veteran_status"}}
+     ]
+    }
+   ]
+  }
+ ]
+}

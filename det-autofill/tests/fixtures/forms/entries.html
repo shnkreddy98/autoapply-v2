@@ -1,0 +1,75 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Entries fixture</title>
+<style>.hidden { display: none; }</style></head><body>
+<!-- Work history and education entered through Add buttons, the two shapes live sites use:
+     a subform with its own Save (Oracle "Add Experience", SmartRecruiters Add / Save) and
+     an inline block appended per click (UKG Pro "Add Experience" -> "Work Experience 1").
+     #parsed starts with an education block already filled, as after a resume parse. -->
+<h1>Data Engineer, Platform</h1>
+<form id="app" novalidate onsubmit="return false">
+  <section>
+    <h2>Contact</h2>
+    <label for="email">Email*</label><input type="email" id="email" name="email" required>
+  </section>
+  <section>
+    <h2>About us</h2>
+    <p>Many of our engineers came from Initech and Example State University.</p>
+  </section>
+  <section id="exp">
+    <h2>Work Experience*</h2>
+    <div class="entries"></div>
+    <button type="button" id="add-exp">Add Experience</button>
+    <div class="subform hidden">
+      <label for="exp_company">Employer Name*</label><input type="text" id="exp_company" required>
+      <label for="exp_title">Job Title*</label><input type="text" id="exp_title" required>
+      <button type="button" id="exp-cancel">Cancel</button>
+      <button type="button" id="exp-save">Save</button>
+      <div class="error" role="alert"></div>
+    </div>
+  </section>
+  <section id="edu">
+    <h2>Education</h2>
+    <div class="blocks"></div>
+    <button type="button" id="add-edu">+ Add education</button>
+  </section>
+  <section id="cert">
+    <h2>Certifications</h2>
+    <button type="button" id="add-cert">Add Certification</button>
+  </section>
+  <div class="error" id="form-error" role="alert"></div>
+  <button type="button" id="submit">Submit Application</button>
+</form>
+<div id="thanks" class="hidden"><h2>Thank you for applying</h2></div>
+<script>
+window.__clicks = [];
+const $ = (s) => document.querySelector(s);
+let edu = 0;
+function addEdu(school) {
+  edu += 1;
+  const block = document.createElement('div');
+  block.innerHTML = '<label for="school_' + edu + '">School or University</label><input type="text" id="school_' + edu + '">'
+    + '<button type="button">Remove education</button>';
+  $('#edu .blocks').appendChild(block);
+  if (school) block.querySelector('input').value = school;
+}
+$('#add-exp').addEventListener('click', () => { window.__clicks.push('exp'); $('#exp .subform').classList.remove('hidden'); $('#add-exp').classList.add('hidden'); });
+$('#exp-cancel').addEventListener('click', () => { $('#exp .subform').classList.add('hidden'); $('#add-exp').classList.remove('hidden'); });
+$('#exp-save').addEventListener('click', () => {
+  if (!$('#exp_company').value || !$('#exp_title').value) { $('#exp .error').textContent = 'Employer Name and Job Title are required'; return; }
+  $('#exp .error').textContent = '';
+  const entry = document.createElement('div');
+  entry.className = 'entry';
+  entry.textContent = $('#exp_title').value + ' at ' + $('#exp_company').value;
+  $('#exp .entries').appendChild(entry);
+  $('#exp .subform').classList.add('hidden');
+  $('#add-exp').classList.remove('hidden');
+});
+$('#add-edu').addEventListener('click', () => { window.__clicks.push('edu'); addEdu(''); });
+$('#add-cert').addEventListener('click', () => { window.__clicks.push('cert'); });
+$('#submit').addEventListener('click', () => {
+  if (!$('#email').value || !$('#exp .entries').children.length) { $('#form-error').textContent = 'Work Experience is required'; return; }
+  $('#app').classList.add('hidden');
+  $('#thanks').classList.remove('hidden');
+});
+if (location.hash === '#parsed') addEdu('Example State University');
+</script>
+</body></html>

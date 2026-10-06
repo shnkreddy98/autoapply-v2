@@ -1,0 +1,96 @@
+{
+ "site": "greenhouse",
+ "style": "greenhouse",
+ "evidence": "job-boards.greenhouse.io application captured 2026-06-30 (output/.playwright-mcp/page-2026-06-30T03-06-19-774Z.yml): posting and form on one page, every choice question is a react-select combobox, race is only asked after Hispanic/Latino = No, phone country is its own combobox.",
+ "company": "Acme Robotics",
+ "job": {
+  "title": "Senior Data Engineer",
+  "location": "Austin, TX (Hybrid)",
+  "description": "Acme Robotics builds warehouse robots. The data platform team owns the pipelines that turn fleet telemetry into the dashboards operations runs on.\n\nWhat you will do: build and run streaming pipelines on Kafka and Spark; own our Snowflake warehouse and dbt models; mentor two junior engineers.\n\nWhat you bring: 5+ years of data engineering; Python and SQL; Kafka or Kinesis; a cloud data warehouse. The team works from our Austin office two days a week.\n\nSalary range: $150,000 - $185,000."
+ },
+ "flow": {"posting": "same_page", "apply_button": "Apply", "challenges": []},
+ "submit": "Submit application",
+ "confirmation": "Thank you for applying. Your application has been received.",
+ "steps": [
+  {
+   "title": "Apply for this job",
+   "sections": [
+    {
+     "fields": [
+      {"id": "first_name", "label": "First Name", "widget": "text", "required": true, "expect": {"from": "facts.first_name"}},
+      {"id": "last_name", "label": "Last Name", "widget": "text", "required": true, "expect": {"from": "facts.last_name"}},
+      {"id": "preferred_name", "label": "Preferred First Name", "widget": "text", "expect": {"from": "facts.preferred_name"}},
+      {"id": "email", "label": "Email", "widget": "text", "input_type": "email", "required": true, "expect": {"from": "contact.email"}},
+      {"id": "phone_country", "label": "Country", "widget": "react_select", "group": "Phone",
+       "options": ["United States +1", "Canada +1", "India +91", "Mexico +52", "United Kingdom +44", "United States Minor Outlying Islands +1"],
+       "display": "last_word",
+       "expect": {"from": "facts.phone_country_code", "map": {"+1": "United States +1"}}},
+      {"id": "phone", "label": "Phone", "widget": "text", "input_type": "tel", "group": "Phone", "required": true, "expect": {"from": "contact.phone", "match": "phone"}},
+      {"id": "location", "label": "Location (City)", "widget": "react_select", "async": true,
+       "options": ["Austin, Texas, United States", "Austintown, Ohio, United States", "Dallas, Texas, United States", "Houston, Texas, United States", "San Antonio, Texas, United States"],
+       "expect": {"value": "Austin, Texas, United States", "why": "contact.location = Austin, TX"}},
+      {"id": "resume", "label": "Resume/CV", "widget": "file", "required": true, "trigger": "Attach", "expect": {"file": "resume"}},
+      {"id": "cover_letter", "label": "Cover Letter", "widget": "file", "trigger": "Attach", "expect": {"ignore": "optional, no cover letter in the profile"}}
+     ]
+    },
+    {
+     "heading": "Education",
+     "fields": [
+      {"id": "school", "label": "School", "widget": "react_select", "async": true,
+       "options": ["University of Texas at Austin", "University of Texas at Dallas", "University of Texas at San Antonio", "Texas A&M University", "Texas State University", "Other"],
+       "expect": {"from": "education.0.school"}},
+      {"id": "degree", "label": "Degree", "widget": "react_select",
+       "options": ["High School", "Associate's Degree", "Bachelor's Degree", "Master's Degree", "Master of Business Administration (M.B.A.)", "Doctor of Philosophy (Ph.D.)", "Other"],
+       "expect": {"from": "education.0.degree"}},
+      {"id": "discipline", "label": "Discipline", "widget": "react_select",
+       "options": ["Computer Engineering", "Computer Science", "Data Science", "Electrical Engineering", "Information Systems", "Mathematics", "Statistics", "Other"],
+       "expect": {"from": "education.0.major"}}
+     ]
+    },
+    {
+     "fields": [
+      {"id": "why_acme", "label": "In 2-4 sentences, describe why you are interested in working at Acme Robotics.", "widget": "textarea", "required": true,
+       "expect": {"free_text": true, "min_chars": 60}},
+      {"id": "linkedin", "label": "LinkedIn Profile", "widget": "text", "expect": {"from": "contact.linkedin", "match": "url"}},
+      {"id": "website", "label": "Website / Portfolio", "widget": "text", "expect": {"from": "facts.portfolio_url", "match": "url"}},
+      {"id": "salary", "label": "What are your annual base salary expectations?", "widget": "text", "required": true,
+       "expect": {"from": "facts.desired_salary", "match": "digits"}},
+      {"id": "work_auth", "label": "Are you legally authorized to work in the United States?", "widget": "react_select", "required": true,
+       "options": ["Yes", "No"], "expect": {"from": "facts.work_eligible_us", "map": {"true": "Yes", "false": "No"}}},
+      {"id": "sponsorship", "label": "Will you now or in the future require visa sponsorship for employment at Acme Robotics?", "widget": "react_select", "required": true,
+       "options": ["Yes", "No"], "expect": {"from": "facts.visa_sponsorship", "map": {"true": "Yes", "false": "No"}}},
+      {"id": "office", "label": "This role works from our Austin office two days a week. Are you able to do that?", "widget": "react_select", "required": true,
+       "options": ["Yes", "No"], "expect": {"value": "Yes", "why": "lives in Austin (contact.location, facts.city)"}},
+      {"id": "prior_employee", "label": "Have you previously been employed by Acme Robotics?", "widget": "react_select", "required": true,
+       "options": ["Yes", "No"], "expect": {"value": "No", "why": "no Acme Robotics in work_experiences"}},
+      {"id": "heard", "label": "How did you hear about this job?", "widget": "react_select",
+       "options": ["Company Website", "Indeed", "LinkedIn", "Referral", "Other"], "expect": {"from": "facts.how_did_you_hear"}},
+      {"id": "referral_code", "label": "Employee referral code", "widget": "text", "hint": "Only if an Acme employee referred you.",
+       "expect": {"blank": true, "why": "nobody referred the applicant"}},
+      {"id": "privacy", "label": "I have read and agree to the Acme Robotics Applicant Privacy Notice.", "widget": "checkbox", "required": true,
+       "expect": {"from": "facts.cert_privacy_notice"}}
+     ]
+    },
+    {
+     "heading": "Voluntary Self-Identification",
+     "note": "Acme Robotics is an equal opportunity employer. Completion of this section is voluntary and will not affect your application.",
+     "fields": [
+      {"id": "gender", "label": "Gender", "widget": "react_select",
+       "options": ["Male", "Female", "Decline To Self Identify"], "expect": {"from": "facts.gender"}},
+      {"id": "hispanic", "label": "Are you Hispanic/Latino?", "widget": "react_select",
+       "options": ["Yes", "No", "Decline To Self Identify"], "expect": {"from": "facts.hispanic_latino"}},
+      {"id": "race", "label": "Please identify your race", "widget": "react_select", "show_if": {"field": "hispanic", "equals": "No"},
+       "options": ["American Indian or Alaskan Native", "Asian", "Black or African American", "Native Hawaiian or Other Pacific Islander", "White", "Two or More Races", "Decline To Self Identify"],
+       "expect": {"from": "facts.race_ethnicity"}},
+      {"id": "veteran", "label": "Veteran Status", "widget": "react_select",
+       "options": ["I am not a protected veteran", "I identify as one or more of the classifications of protected veteran", "I don't wish to answer"],
+       "expect": {"from": "facts.veteran_status"}},
+      {"id": "disability", "label": "Disability Status", "widget": "react_select",
+       "options": ["Yes, I have a disability, or have had one in the past", "No, I do not have a disability and have not had one in the past", "I do not want to answer"],
+       "expect": {"from": "facts.disability_status", "map": {"No, I do not have a disability": "No, I do not have a disability and have not had one in the past"}}}
+     ]
+    }
+   ]
+  }
+ ]
+}

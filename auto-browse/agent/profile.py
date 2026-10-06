@@ -13,6 +13,7 @@ the deterministic form filler.
 from __future__ import annotations
 
 import re
+from datetime import date
 from typing import Any
 
 import psycopg
@@ -202,7 +203,9 @@ def render_profile(p: ProfileData, resume_path: str) -> str:
 
     add("## Signature")
     add(f"Electronic Signature: {_v(d.get('electronic_signature'))}")
-    add(f"Signature Date: {_yn(d.get('signature_date'))}")
+    # today, not the stored date: that is the day the profile was set up, and the agent
+    # copied it onto disability forms (apply bench, 2026-10-01)
+    add(f"Signature Date: {date.today().isoformat()}")
     add("")
 
     add("## References")

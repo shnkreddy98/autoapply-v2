@@ -577,3 +577,175 @@ def test_a_rejected_password_is_never_retried(tmp_path):
     result, dataset, _ = _run_login(tmp_path, password="wrong")
     assert result.status == "handoff" and "rejected" in result.reason
     assert dataset["tries"] == "1"
+
+
+def _run_entries(tmp_path, hash_=""):
+    from browser import FORMS, chromium_executable
+
+    doc = DOC | {"education": [{"degree": "Master's Degree", "major": "Data Analytics", "school": "Example State University"}]}
+    store = AnswerStore(from_export(doc))
+
+    async def go():
+        p = await pw.async_playwright().start()
+        try:
+            browser = await p.chromium.launch(headless=True, executable_path=chromium_executable())
+        except Exception as exc:
+            await p.stop()
+            pytest.skip(f"chromium unavailable: {exc}")
+        try:
+            page = await browser.new_page()
+            await page.goto((FORMS / "entries.html").as_uri() + hash_)
+            result = await engine.run(PlaywrightDriver(page), store, autosubmit=True)
+            seen = await page.evaluate("""() => ({clicks: window.__clicks,
+                entries: Array.from(document.querySelectorAll('#exp .entry')).map((n) => n.textContent),
+                schools: Array.from(document.querySelectorAll('#edu input')).map((n) => n.value)})""")
+            return result, seen
+        finally:
+            await browser.close()
+            await p.stop()
+
+    return asyncio.run(go())
+
+
+def test_work_history_and_education_are_added_through_their_add_buttons(tmp_path):
+    """Oracle, UKG Pro and SmartRecruiters take the job history only as entries; det
+    never pressed Add, and those steps were rejected with "Employment History is required"."""
+    result, seen = _run_entries(tmp_path)
+    assert result.status == "submitted", result.reason
+    # subform saved; inline block filled; Certification is not an entry det makes
+    assert seen == {"clicks": ["exp", "edu"], "entries": ["Data Engineer at Initech"],
+                    "schools": ["Example State University"]}
+    assert result.pages[0].entries == ["experience: Add Experience -> Save", "education: Add education"]
+
+
+def test_an_entry_the_section_already_shows_is_not_added_again(tmp_path):
+    # a resume parse left an education block; the page text elsewhere names the school too
+    result, seen = _run_entries(tmp_path, "#parsed")
+    assert result.status == "submitted", result.reason
+    assert seen["clicks"] == ["exp"] and seen["schools"] == ["Example State University"]
+
+
+def test_a_required_upload_nothing_recognised_stops_the_run_before_submit(tmp_path):
+    """det pressed Submit on a live Ashby form with its resume field unrecognised; the
+    site refused it, but a form that does not check would have gone out without one."""
+    from browser import chromium_executable
+
+    html = """<form onsubmit="document.body.dataset.sent = 1; return false">
+      <label for="email">Email*</label><input type="email" id="email" required>
+      <p>(.pdf format)</p><input type="file" id="x9" required>
+      <button type="submit">Submit Application</button></form>"""
+
+    async def go():
+        p = await pw.async_playwright().start()
+        try:
+            browser = await p.chromium.launch(headless=True, executable_path=chromium_executable())
+        except Exception as exc:
+            await p.stop()
+            pytest.skip(f"chromium unavailable: {exc}")
+        try:
+            page = await browser.new_page()
+            await page.set_content(html)
+            result = await engine.run(PlaywrightDriver(page), AnswerStore(from_export(DOC)), autosubmit=True)
+            return result, await page.evaluate("() => document.body.dataset.sent || null")
+        finally:
+            await browser.close()
+            await p.stop()
+
+    result, sent = asyncio.run(go())
+    assert result.status == "stuck" and "unanswered" in result.reason and sent is None
+
+
+def test_apply_that_loads_a_cross_origin_ats_frame_opens_the_frame(tmp_path):
+    """samsara.com: Apply loads Greenhouse's form in a cross-origin iframe; the page
+    probes cannot read it, nothing seemed to change, and the run stopped at "'Apply
+    Now' did not open an application form"."""
+    import functools
+    import threading
+    from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+
+    from browser import FORMS, chromium_executable
+
+    def serve(directory):
+        quiet = type("Quiet", (SimpleHTTPRequestHandler,), {"log_message": lambda *a: None})
+        srv = ThreadingHTTPServer(("127.0.0.1", 0), functools.partial(quiet, directory=str(directory)))
+        threading.Thread(target=srv.serve_forever, daemon=True).start()
+        return srv
+
+    ats = serve(FORMS)
+    (tmp_path / "careers.html").write_text(f"""<!doctype html><html><body><h1>Data Engineer</h1>
+      <p>Join us.</p><a href="#" id="apply">Apply Now</a><div id="slot"></div>
+      <script>document.getElementById('apply').addEventListener('click', (e) => {{ e.preventDefault();
+        document.getElementById('slot').innerHTML = '<iframe src="http://localhost:{ats.server_port}/entries.html"'
+          + ' style="width:800px;height:1200px;border:0"></iframe>'; }});</script></body></html>""")
+    site = serve(tmp_path)
+    doc = DOC | {"education": [{"degree": "Master's Degree", "major": "Data Analytics", "school": "Example State University"}]}
+
+    async def go():
+        p = await pw.async_playwright().start()
+        try:
+            browser = await p.chromium.launch(headless=True, executable_path=chromium_executable())
+        except Exception as exc:
+            await p.stop()
+            pytest.skip(f"chromium unavailable: {exc}")
+        try:
+            page = await browser.new_page()
+            await page.goto(f"http://127.0.0.1:{site.server_port}/careers.html")
+            return await engine.run(PlaywrightDriver(page), AnswerStore(from_export(doc)), autosubmit=True)
+        finally:
+            await browser.close()
+            await p.stop()
+
+    try:
+        result = asyncio.run(go())
+    finally:
+        ats.shutdown()
+        site.shutdown()
+    assert result.status == "submitted", result.reason
+    assert [pg.action for pg in result.pages][:2] == ["open-frame", "submit"]
+
+
+def test_the_resolver_sees_a_dropdowns_choices(tmp_path):
+    """The model answered "Yes" to a dropdown whose choices were "Yes, without
+    accommodations" / "Yes, with accommodations" / "No" (Interstates): it was never
+    shown them. det now opens an unanswered dropdown and passes its options on."""
+    from browser import chromium_executable
+
+    q = "Are you able to perform the essential functions of the job?*"
+    html = f"""<form onsubmit="document.body.dataset.sent = 1; return false">
+      <label for="email">Email*</label><input type="email" id="email" required>
+      <label id="ql" for="q">{q}</label>
+      <input id="q" role="combobox" aria-controls="lb" aria-expanded="false" aria-labelledby="ql" aria-required="true">
+      <ul id="lb" role="listbox" hidden><li role="option">Yes, without accommodations</li>
+        <li role="option">Yes, with accommodations</li><li role="option">No</li></ul>
+      <button type="submit">Submit Application</button></form>
+      <script>
+        const q = document.getElementById('q'), lb = document.getElementById('lb');
+        const shut = () => {{ lb.hidden = true; q.setAttribute('aria-expanded', 'false'); }};
+        q.addEventListener('click', () => {{ lb.hidden = !lb.hidden; q.setAttribute('aria-expanded', String(!lb.hidden)); }});
+        q.addEventListener('keydown', (e) => {{ if (e.key === 'Escape') shut(); }});
+        lb.querySelectorAll('li').forEach((li) => li.addEventListener('click', () => {{ q.value = li.textContent; shut(); }}));
+      </script>"""
+    model = FakeModel({q: "Yes, without accommodations"})
+
+    async def go():
+        p = await pw.async_playwright().start()
+        try:
+            browser = await p.chromium.launch(headless=True, executable_path=chromium_executable())
+        except Exception as exc:
+            await p.stop()
+            pytest.skip(f"chromium unavailable: {exc}")
+        try:
+            page = await browser.new_page()
+            await page.set_content(html)
+            resolver = LLMResolver(model, DOC, "")
+            result = await engine.run(PlaywrightDriver(page), AnswerStore(from_export(DOC)), resolver=resolver,
+                                      autosubmit=True)
+            return result, await page.input_value("#q"), await page.evaluate("() => document.body.dataset.sent || null")
+        finally:
+            await browser.close()
+            await p.stop()
+
+    result, value, submitted = asyncio.run(go())
+    sent = json.loads(model.seen[0][1]["content"].split("Fields:\n", 1)[1])
+    assert sent[0]["options"] == ["Yes, without accommodations", "Yes, with accommodations", "No"]
+    assert value == "Yes, without accommodations" and submitted == "1", result.reason

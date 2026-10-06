@@ -113,6 +113,17 @@ Chromium (`DET_AUTOFILL_CHROMIUM` overrides) and skip without one.
       cover letter → one model call per page; choice answers must be an offered
       option verbatim; the portal login never enters the prompt; only answers that
       filled are saved; a failing model endpoint leaves the fields unanswered.
+- [x] P5b `jev.py` (2026-10-01) — `JevResolver`, the same seat as `llm.py` backed by
+      TypeSafe Jev, which answers typed questions and writes nothing. Option fields get
+      one Choice over the page's own options plus `none`. Text boxes get a Choice over
+      profile values found in code, and the typed value is the profile's own string.
+      Written answers go to an optional `writer` (an `LLMResolver`). One request per
+      page; a pick below 0.5 confidence (0.8 for a qualification or immigration "Yes")
+      is left unanswered. Dates go to Jev split into month / day / year, each field
+      carries its section heading, and work history counts as complete for experience
+      and employer questions. Network code stays in auto-browse
+      (`agent/jev_client.py`). On the 20-site bench: 67.5% → 72.4% (no model → Jev),
+      ceiling 75.6% with perfect answers.
 - [x] P6 `autoapply apply|continue --engine det [--mcp URL]` (auto-browse
       `agent/det_apply.py`): role profile + container resume + saved_answers + ai-assist.
       Live dry run on a Greenhouse form (headless, fake profile, no submit): 14 fields,

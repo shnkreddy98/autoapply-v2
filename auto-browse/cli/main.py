@@ -29,7 +29,9 @@
                                                        # --all: batch every jd_ready job one by one;
                                                        # --today restricts to jobs added today;
                                                        # --engine det: deterministic filler, model
-                                                       # only for fields it cannot answer
+                                                       # only for fields it cannot answer;
+                                                       # --model jev-latest (det only): Jev picks
+                                                       # options/profile values, `ask` writes
     autoapply continue JOB [--autosubmit] [--engine agent|det]
                                                        # finish an interrupted run in the open browser
 
@@ -1194,6 +1196,14 @@ def select_ready_jobs(conn, user_id: str, since: datetime | None) -> list[dict]:
     return [r for r in rows if r.get("apply_outcome") != "submitted"]
 
 
+def _check_engine_model(engine: str, model: str) -> None:
+    from agent.jev_client import is_jev
+
+    if engine != "det" and is_jev(model):
+        # Jev answers typed questions and writes nothing; the agent needs tool calls
+        raise SystemExit(f"{model} can only drive --engine det (it picks answers; the agent engine needs a chat model)")
+
+
 def cmd_apply(args) -> int:
     from agent import loop
 
@@ -1202,6 +1212,7 @@ def cmd_apply(args) -> int:
         raise SystemExit("pass job(s), or --all / --today to batch through ready jobs")
 
     model = args.model or loop.DEFAULT_MODEL
+    _check_engine_model(args.engine, model)
     failed = 0
     with _connect() as conn:
         user_id = resolve_user(conn, args.user)
@@ -1243,6 +1254,7 @@ def cmd_continue(args) -> int:
     from agent import loop
 
     model = args.model or loop.DEFAULT_MODEL
+    _check_engine_model(args.engine, model)
     with _connect() as conn:
         user_id = resolve_user(conn, args.user)
         job = resolve_job(conn, args.job)
@@ -1531,7 +1543,8 @@ def build_parser() -> argparse.ArgumentParser:
     )
     apply_p.add_argument("--user", help="user id or email")
     apply_p.add_argument(
-        "--model", help="OpenRouter model (default: OPENROUTER_MODEL env)"
+        "--model", help="OpenRouter model (default: OPENROUTER_MODEL env); with --engine det also "
+        "jev / jev-latest: TypeSafe Jev picks options and profile values (TYPESAFE_API_KEY) and writes nothing"
     )
     apply_p.add_argument(
         "--autosubmit",
@@ -1565,7 +1578,8 @@ def build_parser() -> argparse.ArgumentParser:
     cont.add_argument("job", help="job id, id prefix, or URL")
     cont.add_argument("--user", help="user id or email")
     cont.add_argument(
-        "--model", help="OpenRouter model (default: OPENROUTER_MODEL env)"
+        "--model", help="OpenRouter model (default: OPENROUTER_MODEL env); with --engine det also "
+        "jev / jev-latest: TypeSafe Jev picks options and profile values (TYPESAFE_API_KEY) and writes nothing"
     )
     cont.add_argument(
         "--autosubmit",

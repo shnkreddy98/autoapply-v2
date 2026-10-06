@@ -1,0 +1,131 @@
+{
+ "site": "lever",
+ "style": "lever",
+ "evidence": "jobs.lever.co application captured 2026-06-30 (output/.playwright-mcp/page-2026-06-30T07-17-38-740Z.yml): one page under the posting, required marked with ✱, pronouns as a checkbox list, custom questions as cards whose question is plain text above unlabelled radio groups, long multiple-choice qualification questions, EEO as native selects plus a race radio list whose options carry a definition, a disability form with Name and Date text boxes. The live check (2026-09-14) also met a full-viewport hCaptcha mid-fill; captchas are a planned challenge, not rendered here.",
+ "company": "Tessellate AI",
+ "star": "✱",
+ "job": {
+  "title": "Senior Data Engineer - Platform",
+  "location": "Remote (US)",
+  "description": "Tessellate AI builds forecasting software for grocery chains. We are hiring a senior data engineer to own the pipelines that feed our models.\n\nYou will: build streaming ingestion from point-of-sale feeds; run our Snowflake warehouse and dbt project; own production pipeline reliability end to end.\n\nYou have: 6+ years of data engineering; Python, SQL; Kafka or Kinesis; experience on call for production data systems. Databricks is a plus, not required.\n\nUS remote. Salary: $160,000 - $190,000."
+ },
+ "flow": {"posting": "separate", "apply_button": "Apply for this job", "challenges": []},
+ "submit": "Submit application",
+ "confirmation": "Application submitted! Thank you for applying to Tessellate AI.",
+ "steps": [
+  {
+   "title": "Submit your application",
+   "sections": [
+    {
+     "fields": [
+      {"id": "resume", "label": "Resume/CV", "widget": "file", "required": true, "trigger": "Attach resume/CV", "expect": {"file": "resume"}},
+      {"id": "name", "label": "Full name", "widget": "text", "required": true, "expect": {"from": "contact.full_name"}},
+      {"id": "pronouns", "label": "Pronouns", "widget": "checkbox_group",
+       "options": ["He/him", "She/her", "They/them", "Xe/xem", "Ze/hir", "Ey/em", "Hir/hir", "Fae/faer", "Hu/hu", "Use name only", "Custom"],
+       "expect": {"from": "facts.pronouns", "map": {"She/her/hers": "She/her", "He/him/his": "He/him", "They/them/theirs": "They/them"}}},
+      {"id": "email", "label": "Email", "widget": "text", "input_type": "email", "required": true, "expect": {"from": "contact.email"}},
+      {"id": "phone", "label": "Phone", "widget": "text", "input_type": "tel", "required": true, "expect": {"from": "contact.phone", "match": "phone"}},
+      {"id": "location", "label": "Current location", "widget": "text",
+       "expect": {"value": "Austin", "match": "prefix", "why": "contact.location = Austin, TX ('Austin, Texas' counts too)"}},
+      {"id": "company", "label": "Current company", "widget": "text", "expect": {"from": "work_experiences.0.company_name"}}
+     ]
+    },
+    {
+     "heading": "Links",
+     "fields": [
+      {"id": "linkedin", "label": "LinkedIn URL", "widget": "text", "expect": {"from": "contact.linkedin", "match": "url"}},
+      {"id": "twitter", "label": "Twitter URL", "widget": "text", "expect": {"blank": true, "why": "no Twitter in the profile"}},
+      {"id": "github", "label": "GitHub URL", "widget": "text", "expect": {"from": "contact.github", "match": "url"}},
+      {"id": "portfolio", "label": "Portfolio URL", "widget": "text", "expect": {"from": "facts.portfolio_url", "match": "url"}},
+      {"id": "other_site", "label": "Other website", "widget": "text", "expect": {"ignore": "optional; a repeat of a link above is fine"}}
+     ]
+    },
+    {
+     "heading": "Preferred First Name",
+     "fields": [
+      {"id": "preferred", "label": "Type your response", "widget": "text", "expect": {"from": "facts.preferred_name"}}
+     ]
+    },
+    {
+     "heading": "US Screening Questions",
+     "fields": [
+      {"id": "work_auth", "label": "Are you legally authorized to work in the United States?", "widget": "radio", "required": true,
+       "options": ["Yes", "No"], "expect": {"from": "facts.work_eligible_us", "map": {"true": "Yes", "false": "No"}}},
+      {"id": "sponsorship", "label": "Will you now, or in the future, require sponsorship for employment visa status (i.g. H1-B visa status)?", "widget": "radio", "required": true,
+       "options": ["Yes", "No"], "expect": {"from": "facts.visa_sponsorship", "map": {"true": "Yes", "false": "No"}}},
+      {"id": "over_18", "label": "Are you over 18 years of age?", "widget": "radio", "required": true,
+       "options": ["Yes", "No"], "expect": {"from": "facts.over_18", "map": {"true": "Yes", "false": "No"}}},
+      {"id": "worked_here", "label": "Have you ever worked for Tessellate AI before?", "widget": "radio", "required": true,
+       "options": ["Yes", "No"], "expect": {"value": "No", "why": "no Tessellate AI in work_experiences"}},
+      {"id": "left_when", "label": "If yes, when did you leave?", "widget": "text", "show_if": {"field": "worked_here", "equals": "Yes"},
+       "expect": {"blank": true, "why": "never worked there"}},
+      {"id": "anything_else", "label": "Is there anything else you'd like us to know about you?", "widget": "textarea",
+       "expect": {"ignore": "optional free text"}}
+     ]
+    },
+    {
+     "heading": "Relationship w/ Current Employee",
+     "fields": [
+      {"id": "relationship", "label": "Do you have any family members, domestic partners or close personal relationships with a current employee of Tessellate AI?", "widget": "radio",
+       "options": ["Yes", "No"], "expect": {"ignore": "the profile cannot say; optional"}}
+     ]
+    },
+    {
+     "heading": "Senior Data Engineer - Platform",
+     "fields": [
+      {"id": "databricks", "label": "What best describes your experience operating Databricks in a production environment?", "widget": "radio", "required": true,
+       "options": ["Used Databricks occasionally for development, proof-of-concepts, or analytics.",
+                   "Regularly built and maintained production Databricks pipelines but shared operational ownership with other engineers.",
+                   "Owned production Databricks environments, including pipeline reliability, monitoring, performance tuning, and incident response.",
+                   "Primarily developed Databricks jobs while another team handled production operations.",
+                   "No meaningful Databricks production experience."],
+       "expect": {"value": "No meaningful Databricks production experience.", "why": "no Databricks anywhere in the profile: any other choice invents experience"}},
+      {"id": "pipelines", "label": "Which best describes your responsibility for production data pipelines?", "widget": "radio", "required": true,
+       "options": ["End-to-end ownership including deployments, monitoring, SLAs, incident response, and ongoing optimization.",
+                   "Responsible for development and support of production pipelines with shared operational ownership.",
+                   "Primarily developed pipelines while another team handled production support.",
+                   "Worked mostly on reporting, analytics, or ad hoc data requests rather than production pipelines.",
+                   "No production pipeline experience."],
+       "expect": {"value": "End-to-end ownership including deployments, monitoring, SLAs, incident response, and ongoing optimization.",
+                  "why": "owns the Snowflake warehouse and runs the data platform on-call rotation (work_experiences.0)"}}
+     ]
+    },
+    {
+     "heading": "U.S. Equal Employment Opportunity information (Completion is voluntary and will not subject you to adverse treatment)",
+     "fields": [
+      {"id": "gender", "label": "Gender", "widget": "select", "blank_option": "Select ...",
+       "options": ["Male", "Female", "Decline to self-identify"], "expect": {"from": "facts.gender"}},
+      {"id": "race", "label": "Race", "widget": "radio",
+       "options": ["Hispanic or Latino A person of Cuban, Mexican, Puerto Rican, South or Central American, or other Spanish culture or origin regardless of race.",
+                   "White (Not Hispanic or Latino) A person having origins in any of the original peoples of Europe, the Middle East, or North Africa.",
+                   "Black or African American (Not Hispanic or Latino) A person having origins in any of the black racial groups of Africa.",
+                   "Native Hawaiian or Other Pacific Islander (Not Hispanic or Latino) A person having origins in any of the peoples of Hawaii, Guam, Samoa, or other Pacific Islands.",
+                   "Asian (Not Hispanic or Latino) A person having origins in any of the original peoples of the Far East, Southeast Asia, or the Indian Subcontinent.",
+                   "American Indian or Alaska Native (Not Hispanic or Latino) A person having origins in any of the original peoples of North and South America, and who maintain tribal affiliation or community attachment.",
+                   "Two or More Races (Not Hispanic or Latino) All persons who identify with more than one of the above five races.",
+                   "Decline to self-identify"],
+       "expect": {"from": "facts.race_ethnicity", "map": {"Asian": "Asian (Not Hispanic or Latino)", "White": "White (Not Hispanic or Latino)"}, "match": "prefix"}}
+     ]
+    },
+    {
+     "heading": "Self-identification of veteran status (Completion is voluntary and will not subject you to adverse treatment)",
+     "fields": [
+      {"id": "veteran", "label": "Veteran status", "widget": "select", "blank_option": "Select ...",
+       "options": ["I identify as one or more of the classifications of protected veteran listed above", "I am not a protected veteran", "I decline to self-identify for protected veteran status"],
+       "expect": {"from": "facts.veteran_status"}}
+     ]
+    },
+    {
+     "heading": "Voluntary self-identification of disability",
+     "fields": [
+      {"id": "disability", "label": "Disability status", "widget": "select", "blank_option": "Select ...",
+       "options": ["Yes, I have a disability, or have had one in the past", "No, I do not have a disability and have not had one in the past", "I do not want to answer"],
+       "expect": {"from": "facts.disability_status", "map": {"No, I do not have a disability": "No, I do not have a disability and have not had one in the past"}}},
+      {"id": "dis_name", "label": "Name", "widget": "text", "expect": {"from": "contact.full_name"}},
+      {"id": "dis_date", "label": "Date", "widget": "text", "expect": {"today": true}}
+     ]
+    }
+   ]
+  }
+ ]
+}

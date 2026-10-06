@@ -160,6 +160,111 @@ def test_a_yes_no_question_in_a_text_box_is_typed_as_yes_or_no():
     assert (row.action, row.answer) == ("fill", {"kind": "text", "value": want})
 
 
+def test_ashby_first_name_box_keeps_the_system_name_id():
+    # CivicMarketplace splits the name: "First Name" is still _systemfield_name
+    store = AnswerStore(example_profile())
+    rows = plan([_d(0, id="_systemfield_name", name="_systemfield_name", label="First Name")], store,
+                "https://jobs.ashbyhq.com/acme/1/application").rows
+    assert (rows[0].key, rows[0].answer["value"]) == ("first_name", store.get("first_name").value)
+    rows = plan([_d(0, id="_systemfield_name", name="_systemfield_name", label="Name")], store,
+                "https://jobs.ashbyhq.com/acme/1/application").rows
+    assert rows[0].key == "full_name"
+
+
+def test_a_sponsorship_question_that_lists_visas_is_still_the_sponsorship_question():
+    q = "Will you now, or in the future, require sponsorship or visa transfer for employment (i.e. H-1B, OPT, F-1, Student Visa)?"
+    row = plan([_d(0, widget="select", label=q, options=[{"value": "y", "text": "Yes"}, {"value": "n", "text": "No"}])],
+               AnswerStore(example_profile())).rows[0]
+    assert (row.key, row.action) == ("visa_sponsorship", "fill")
+    row = plan([_d(0, label="Are you currently in F-1 status?")], AnswerStore(example_profile())).rows[0]
+    assert row.key == "visa_status_detail"
+
+
+def test_authorisation_sentences_pick_authorised_but_needs_sponsorship():
+    from det_autofill.fill import _pick
+
+    options = ["I am authorised to work in the United States and do not require employer sponsorship now or in the future",
+               "I am authorised to work in the United States but will require employer sponsorship in the future",
+               "I am not currently authorised to work in the United States and will require employer sponsorship"]
+    q = "Which of the following best describes your authorisation to work in the United States?"
+    members = [_d(n, widget="radio", group_label=q, group_key="g", option_label=o) for n, o in enumerate(options)]
+    profile = example_profile() | {"visa_sponsorship": True, "work_eligible_us": True}
+    row = plan(members, AnswerStore(profile)).rows[0]
+    assert (row.key, row.action) == ("work_auth_type", "fill")
+    assert _pick(row.key, row.answer, row.options).index == 1
+
+
+def test_clearance_level_list_takes_the_no_clearance_option():
+    from det_autofill.fill import _pick
+
+    options = ["Secret", "Top Secret", "TS/SCI", "I do not have a clearance", "Status Unknown"]
+    members = [_d(0, widget="select", label="What is your current clearance level?*",
+                  options=[{"value": o, "text": o} for o in options])]
+    row = plan(members, AnswerStore(example_profile() | {"security_clearance": False})).rows[0]
+    assert (row.key, row.action) == ("security_clearance", "fill")
+    assert options[_pick(row.key, row.answer, row.options).index] == "I do not have a clearance"
+
+
+def test_company_website_source_and_a_missing_major():
+    from det_autofill.fill import _pick
+
+    doc = {**SPONSORED, "facts": {**SPONSORED["facts"], "how_did_you_hear": "Company website"}}
+    store = AnswerStore(from_export(doc))
+    heard = ["LinkedIn Jobs", "Samsara Careers Site", "Indeed / Glassdoor", "Wellfound"]
+    row = plan([_d(0, widget="select", label="How did you hear about this opportunity?*",
+                   options=[{"value": o, "text": o} for o in heard])], store).rows[0]
+    assert heard[_pick(row.key, row.answer, row.options).index] == "Samsara Careers Site"
+    # no "Data Analytics" on the list: "Other", never the bachelor's Computer Science
+    majors = ["Computer Science", "Information Systems", "Other", "Statistics & Decision Theory"]
+    row = plan([_d(0, widget="select", label="Discipline", options=[{"value": o, "text": o} for o in majors])],
+               store).rows[0]
+    assert majors[_pick(row.key, row.answer, row.options).index] == "Other"
+
+
+def test_ai_use_questions_are_left_to_the_applicant():
+    q = ("Are you an LLM, AI agent, or other associated agentic tool? We are surveying the applicant pool "
+         "to understand the suite of AI tools that the applicant is using. Select all that apply*")
+    row = plan([_d(0, widget="combobox", label=q)], AnswerStore(example_profile())).rows[0]
+    assert (row.action, row.reason) == ("skip", "for-the-applicant")
+    row = plan([_d(0, label="Did you use AI to complete this application?")], AnswerStore(example_profile())).rows[0]
+    assert row.reason == "for-the-applicant"
+
+
+def test_south_asian_still_answers_a_plain_asian_list():
+    from det_autofill.fill import _pick
+
+    doc = {**SPONSORED, "facts": {**SPONSORED["facts"], "race_ethnicity": "South Asian"}}
+    store = AnswerStore(from_export(doc))
+    for options, want in ((["White", "Asian", "Black or African American"], "Asian"),
+                          (["East Asian", "South Asian (inclusive of Indian)", "Southeast Asian"], "South Asian (inclusive of Indian)")):
+        row = plan([_d(0, widget="select", label="Race", options=[{"value": o, "text": o} for o in options])], store).rows[0]
+        assert options[_pick(row.key, row.answer, row.options).index] == want
+
+
+def test_na_is_an_answer_only_where_the_question_asks_for_it():
+    from det_autofill.classify import Row
+    from det_autofill.llm import answer_from_text
+
+    asks = Row(index=0, selectors=["#a"], widget="textarea", required=True,
+               label="If yes, what experience have you had? Please write N/A if you have not been an intern.*")
+    other = Row(index=1, selectors=["#b"], widget="text", required=False, label="Graduation year")
+    assert answer_from_text(asks, "N/A") == {"kind": "text", "value": "N/A"}
+    assert answer_from_text(other, "N/A") is None
+
+
+def test_currently_based_is_the_location_question():
+    # live Ashby (the agency fund, 2026-10-05) left this required box empty
+    row = plan([_d(0, label="Where are you currently based?")], AnswerStore(example_profile())).rows[0]
+    assert (row.key, row.action) == ("location_city", "fill")
+
+
+def test_ever_been_an_employee_is_the_worked_here_question():
+    q = "Have you ever been an employee or contractor at Lumen Freight?"
+    rows = plan([_d(0, widget="radio", group_label=q, group_key="g", option_label="Yes"),
+                 _d(1, widget="radio", group_label=q, group_key="g", option_label="No")], AnswerStore(example_profile())).rows
+    assert (rows[0].key, rows[0].action) == ("worked_here_before", "fill")
+
+
 def test_duplicate_key_fills_the_first_only():
     rows = plan([_d(0, label="Email"), _d(1, label="Email")], AnswerStore(example_profile())).rows
     assert rows[0].action == "fill" and rows[1].reason.startswith("duplicate-key")
@@ -189,6 +294,8 @@ def test_start_date_never_defaults_to_today():
     store = AnswerStore({"today": "2026-09-13"})
     assert store.get("start_date") is None
     assert store.get("signature_date").value == "2026-09-13"
+    # the stored signature date is the day the profile was set up: you sign today
+    assert AnswerStore({"today": "2026-10-05", "signature_date": "2026-09-13"}).get("signature_date").value == "2026-10-05"
 
 
 def test_salary_unit_selects_do_not_take_the_amount_key():
@@ -215,3 +322,36 @@ def test_long_attestations_are_not_company_or_school_fields():
     assert match(FormField(ref="", role="radio", label=certify)).key == "agree_terms"
     f1 = "Are you currently in F-1 Visa status? (An F-1 Visa is granted to foreign students attending school in the United States)"
     assert match(FormField(ref="", role="radio", label=f1)).key == "visa_status_detail"
+
+
+def test_split_date_boxes_take_their_groups_date():
+    # Workday: spinbuttons labelled only "Month" / "Year" inside groups "From*" and "Date"
+    store = AnswerStore({"job_from_date": "2022-03-01", "job_to_date": "", "education_dates": "May 2019",
+                         "today": "2026-10-04"})
+    rows = plan([
+        _d(0, role="spinbutton", label="Month", date_of="From*", section="Work Experience 1"),
+        _d(1, role="spinbutton", label="Year", date_of="From*", section="Work Experience 1"),
+        _d(2, role="spinbutton", label="Month", date_of="To*", section="Work Experience 1"),
+        _d(3, role="spinbutton", label="Year", date_of="To", section="Education 1"),
+        _d(4, role="spinbutton", label="Month", date_of="From", section="Education 1"),
+        _d(5, role="spinbutton", label="Day", date_of="Date", section="Voluntary Self-Identification of Disability"),
+        _d(6, role="spinbutton", label="Month", date_of="", section=""),
+    ], store).rows
+    got = [(r.action, (r.answer or {}).get("value"), r.reason or "") for r in rows]
+    assert got[0] == ("fill", "03", "") and got[1] == ("fill", "2022", "")
+    assert got[2][2] == "no-answer"  # current job: no end date
+    assert got[3] == ("fill", "2019", "")  # education "To" is graduation
+    assert got[4][2] == "no-answer"  # no school start date stored
+    assert got[5] == ("fill", "04", "")  # self-ID date is today
+    assert got[6][2] == "no-answer"  # a part with no date to belong to
+
+
+def test_date_parts_reads_resume_spellings():
+    from det_autofill.classify import date_parts
+
+    assert date_parts("2022-03-01") == {"year": 2022, "month": 3, "day": 1}
+    assert date_parts("2022-03") == {"year": 2022, "month": 3}
+    assert date_parts("03/2022") == {"year": 2022, "month": 3}
+    assert date_parts("March 2022") == {"year": 2022, "month": 3}
+    assert date_parts("2022") == {"year": 2022}
+    assert date_parts("Present") == {} and date_parts(None) == {}

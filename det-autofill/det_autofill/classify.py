@@ -137,6 +137,16 @@ WORKDAY_IDS = [
     ("mobile", "phone"), ("city", "city"), ("state", "region"), ("region", "region"),
     ("country", "country"), ("degree", "degree"), ("source", "howDidYouHear"),
 ]
+def _id_has_word(automation_id: str, token: str) -> bool:
+    """`token` inside an automation id, starting where one of its words does
+    (camelCase, `_`, `-`): "addressSection_city" has "city", "ethnicityDropdown"
+    does not — a plain substring test keyed Workday's Ethnicity prompt as the city."""
+    words = norm(re.sub(r"(?<=[a-z0-9])(?=[A-Z])", " ", automation_id)).split()
+    flat, want = "".join(words), token.replace(" ", "")
+    starts = [sum(len(w) for w in words[:k]) for k in range(len(words))]
+    return any(flat.startswith(want, i) for i in starts)
+
+
 _WORKDAY_HOST = re.compile(r"(^|\.)(myworkdayjobs|myworkdaysite|myworkday)\.com$")
 
 
@@ -272,12 +282,63 @@ CHOICE_ONLY = {
     "phone_device_type", "salary_currency", "salary_period",
 }
 FILE_KEYS = {"resume_upload"}
-REPEATABLE = {"phone_country_code"}
+# a split date's Month / Year boxes repeat for every date on the page (From, To)
+REPEATABLE = {"phone_country_code", "date_month", "date_day", "date_year"}
 # Rippling asks "Will you now or in the future require sponsorship…?" as a free-text
 # box: a yes/no question typed as "Yes"/"No". Only a question worded as one — "If you
 # need sponsorship, which visa?" is not answered by "Yes".
 YES_NO_AS_TEXT = {"visa_sponsorship", "work_authorized", "authorized_without_sponsorship", "age_over_18", "worked_here_before"}
 YES_NO_QUESTION = re.compile(r"^(do|does|are|will|would|have|has|is|can|could)\b")
+
+
+# A split date's group label ("From", "To", "Date") names which date it is; these are
+# the keys it may resolve to.
+DATE_KEYS = {"job_from_date", "job_to_date", "education_dates", "signature_date", "start_date"}
+_EDUCATION = re.compile(r"educat|school|universit|college|degree")
+_WORK = re.compile(r"experience|employ|work history|\bjobs?\b")
+_MONTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"]
+
+
+def date_parts(value: object) -> dict[str, int]:
+    """Year / month / day of a profile date, only the parts it states: parsed resumes
+    hold "2022-03-01", "2022-03", "03/2022" or "March 2022"."""
+    s = str(value or "").strip()
+    m = re.fullmatch(r"(\d{4})-(\d{1,2})(?:-(\d{1,2}))?", s)
+    if m:
+        y, mo, d = m.groups()
+        return {"year": int(y), "month": int(mo), **({"day": int(d)} if d else {})}
+    m = re.fullmatch(r"(\d{1,2})/(?:(\d{1,2})/)?(\d{4})", s)
+    if m:
+        mo, d, y = m.groups()
+        return {"year": int(y), "month": int(mo), **({"day": int(d)} if d else {})}
+    m = re.fullmatch(r"([A-Za-z]{3})[a-z]*\.?,?\s+(\d{4})", s)
+    if m and m.group(1).lower() in _MONTHS:
+        return {"year": int(m.group(2)), "month": _MONTHS.index(m.group(1).lower()) + 1}
+    if re.fullmatch(r"\d{4}", s):
+        return {"year": int(s)}
+    return {}
+
+
+def _date_part_answer(store: AnswerStore, key: str, d: dict):
+    """One box of a split date (Workday's Month / Year spinbuttons). The box only says
+    which part it is; the group label and the section say which date. Before this the
+    boxes were classified but had no answer, and Workday stopped at "From is required"."""
+    rule = taxonomy.match(FormField(ref="", role="date", label=d.get("date_of") or ""))
+    parent = rule.key if rule else None
+    section = norm(d.get("section"))
+    if _EDUCATION.search(section):
+        # Education's "From" / "To" are the school's dates; only graduation is stored
+        parent = "education_dates" if parent in ("job_to_date", "education_dates") else None
+    elif parent == "start_date" and _WORK.search(section):
+        parent = "job_from_date"  # a job's "Start Date", not availability
+    if parent not in DATE_KEYS:
+        return None
+    answer = store.get(parent, d.get("date_of") or "")
+    part = key.removeprefix("date_")
+    n = date_parts(answer.value if answer else None).get(part)
+    if n is None:
+        return None
+    return type(answer)(key, "date_part", str(n) if part == "year" else f"{n:02d}")
 
 
 # ---------------------------------------------------------------------------
@@ -341,6 +402,12 @@ def haystack(d: dict) -> str:
     ])))
 
 
+def _first_name_label(d: dict) -> bool:
+    """An Ashby form that splits the name keeps the id _systemfield_name on its "First
+    Name" box (CivicMarketplace, 2026-10-05): the full name was typed into it."""
+    return bool(re.match(r"(legal |preferred )?(first|given) name", norm(label_of(d))))
+
+
 def classify(d: dict, ats: str) -> tuple[str, str, str, float] | None:
     """(key, tier, rule, confidence) for one descriptor, or None."""
     hay = haystack(d)
@@ -349,6 +416,8 @@ def classify(d: dict, ats: str) -> tuple[str, str, str, float] | None:
         if name != ats:
             continue
         for attr, value, kind in table:
+            if kind == "fullName" and _first_name_label(d):
+                continue
             if d.get(attr) == value:
                 return _hit(kind, "0", f"{ats}:{attr}={value}", 0.99)
     if ats == "workday" and d.get("automation_id"):
@@ -357,7 +426,7 @@ def classify(d: dict, ats: str) -> tuple[str, str, str, float] | None:
             if aid == token:
                 return _hit(kind, "0", f"workday:{token}=exact", 0.99)
         for token, kind in WORKDAY_IDS:
-            if token in aid:
+            if _id_has_word(d["automation_id"], token):
                 return _hit(kind, "0", f"workday:{token}~substring", 0.85)
     # 1 — autocomplete
     ac = d.get("autocomplete") or ""
@@ -369,7 +438,7 @@ def classify(d: dict, ats: str) -> tuple[str, str, str, float] | None:
                 return _hit(AUTOCOMPLETE_MAP[tok], "1", f"autocomplete={tok}", 0.95)
     # 2 — exact tokens
     for cand in dict.fromkeys(filter(None, [norm(d.get("name")), norm(d.get("id")), norm(d.get("automation_id"))])):
-        if cand in TOKEN_MAP:
+        if cand in TOKEN_MAP and not (TOKEN_MAP[cand] == "fullName" and _first_name_label(d)):
             return _hit(TOKEN_MAP[cand], "2", f"token:{cand}", 0.9)
     # a file input named for a resume is the resume, whatever text sits nearby
     # (Breezy: hidden <input type=file name="cResume"> beside "Apply Using LinkedIn")
@@ -418,6 +487,8 @@ def _gate(d: dict) -> tuple[str, str] | None:
     # hand off the page the applicant is on
     if label_rule and label_rule.category == "handoff":
         return ("handoff", "captcha-or-code")
+    if label_rule and label_rule.key == "ai_disclosure":
+        return ("skip", "for-the-applicant")
     return None
 
 
@@ -533,7 +604,16 @@ def plan(
             row.reason = f"duplicate-key(first at #{claimed[row.key]})"
             continue
         answer = store.get(row.key, row.label)
+        if answer is not None and answer.kind == "date_part":
+            answer = _date_part_answer(store, row.key, d)
         if answer is None:
+            row.reason = "no-answer"
+            continue
+        if row.key == "work_auth_type" and answer.kind == "option" and row.options and not any(
+                re.search(pat, norm(o.get("text", "")), re.I) for pat in answer.value for o in row.options):
+            # the stored pattern fits sentence options only (Ashby's "authorised ... but
+            # will require sponsorship"); a status list (Citizen / H-1B / F-1 OPT) is the
+            # resolver's, with the job description
             row.reason = "no-answer"
             continue
         if answer.kind in ("text", "date") and (answer.value is None or str(answer.value).strip() == ""):
