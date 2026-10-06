@@ -23,3 +23,9 @@ kb/
 
 # local agent working agreement — not shared
 CLAUDE.md
+
+# local tooling: Claude Code per-machine settings, editor swap / OS files
+**/.claude/settings.local.json
+*.swp
+*.swo
+.DS_Store

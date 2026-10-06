@@ -11,6 +11,8 @@ runs/
 future_tests.md
 input/urls.txt
 .playwright-mcp
+# scratch page snapshots from manual runs (real forms, may hold PII)
+temp/
 
 # recorder corpus + its persistent browser profile (real PII, local only)
 tools/recorder/recordings/
