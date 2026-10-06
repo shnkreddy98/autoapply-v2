@@ -1,0 +1,87 @@
+{
+ "site": "adp",
+ "style": "adp",
+ "evidence": "ADP Workforce Now recruitment (workforcenow.adp.com/mascsr/.../recruitment.html) from captured fragments (det-autofill/tests/fixtures/fragments, 5 from workforcenow.adp.com, 6 from myjobs.adp.com) and agent traces 2026-06-29/30: Apply opens a consent gate over the posting (det_autofill.engine notes it), then a first page of First Name, Last Name, Email and Mobile Number with Continue; the live check (2026-09-14) failed there with 'Mobile Number is required'. A 'Send' code and 'Enter the Verification Code' dialog follow (planned challenge, skipped here). Everything after the code was never captured: those steps are reconstructed.",
+ "company": "Redwood Mutual Insurance",
+ "job": {
+  "title": "Senior Data Engineer",
+  "location": "Austin, TX",
+  "description": "Redwood Mutual Insurance is modernizing its claims data platform.\n\nWhat You Will Build: streaming pipelines from claims systems into a cloud warehouse; data quality monitoring; self-service datasets for actuaries.\n\nWhat you bring: 6+ years of data engineering; Python; SQL; Kafka; Snowflake or Redshift.\n\nAustin, TX. Hybrid."
+ },
+ "flow": {"posting": "separate", "apply_button": "Apply",
+          "chooser": ["I Agree"], "manual_choice": "I Agree", "chooser_title": "Privacy Notice and Consent",
+          "chooser_note": "By selecting I Agree you consent to the collection and use of your information for recruiting purposes.",
+          "challenges": []},
+ "next": "Continue",
+ "submit": "Submit",
+ "confirmation": "Thank you for applying. Your application has been submitted to Redwood Mutual Insurance.",
+ "steps": [
+  {
+   "title": "Let's get started",
+   "sections": [
+    {
+     "fields": [
+      {"id": "first_name", "label": "First Name", "widget": "text", "required": true, "expect": {"from": "facts.first_name"}},
+      {"id": "last_name", "label": "Last Name", "widget": "text", "required": true, "expect": {"from": "facts.last_name"}},
+      {"id": "email", "label": "Email", "widget": "text", "input_type": "email", "required": true, "expect": {"from": "contact.email"}},
+      {"id": "phone_country", "label": "Country Code", "widget": "select", "group": "Mobile Number", "blank_option": "",
+       "options": ["+1 (US)", "+1 (CA)", "+44 (GB)", "+52 (MX)", "+91 (IN)"], "expect": {"value": "+1 (US)", "why": "facts.phone_country_code = +1, a US number"}},
+      {"id": "mobile", "label": "Mobile Number", "widget": "text", "input_type": "tel", "required": true, "group": "Mobile Number",
+       "expect": {"from": "contact.phone", "match": "phone"}}
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Application",
+   "reconstructed": true,
+   "sections": [
+    {
+     "heading": "Resume",
+     "fields": [
+      {"id": "resume", "label": "Upload Resume", "widget": "file", "required": true, "trigger": "Upload", "expect": {"file": "resume"}}
+     ]
+    },
+    {
+     "heading": "Address",
+     "fields": [
+      {"id": "address1", "label": "Address Line 1", "widget": "text", "required": true, "expect": {"from": "facts.street_address"}},
+      {"id": "city", "label": "City", "widget": "text", "required": true, "expect": {"from": "facts.city"}},
+      {"id": "state", "label": "State", "widget": "select", "required": true, "options": ["Arizona", "California", "Oklahoma", "Texas"], "expect": {"from": "facts.state"}},
+      {"id": "zip", "label": "Zip Code", "widget": "text", "required": true, "expect": {"from": "facts.zip_code"}}
+     ]
+    },
+    {
+     "heading": "Questions",
+     "fields": [
+      {"id": "work_auth", "label": "Are you legally authorized to work in the United States?", "widget": "radio", "required": true,
+       "options": ["Yes", "No"], "expect": {"from": "facts.work_eligible_us", "map": {"true": "Yes", "false": "No"}}},
+      {"id": "sponsorship", "label": "Will you now or in the future require sponsorship for employment visa status?", "widget": "radio", "required": true,
+       "options": ["Yes", "No"], "expect": {"from": "facts.visa_sponsorship", "map": {"true": "Yes", "false": "No"}}},
+      {"id": "start", "label": "When are you available to start?", "widget": "text", "input_type": "date", "expect": {"from": "facts.available_start_date"}},
+      {"id": "salary", "label": "Desired Salary", "widget": "text", "expect": {"from": "facts.desired_salary", "match": "digits"}}
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Voluntary Information",
+   "reconstructed": true,
+   "sections": [
+    {
+     "fields": [
+      {"id": "gender", "label": "Gender", "widget": "select", "options": ["Female", "Male", "I choose not to disclose"], "expect": {"from": "facts.gender"}},
+      {"id": "race", "label": "Race/Ethnicity", "widget": "select",
+       "options": ["Asian (not Hispanic or Latino)", "Black or African American (not Hispanic or Latino)", "Hispanic or Latino", "White (not Hispanic or Latino)", "Two or more races (not Hispanic or Latino)", "I choose not to disclose"],
+       "expect": {"from": "facts.race_ethnicity", "map": {"Asian": "Asian (not Hispanic or Latino)", "White": "White (not Hispanic or Latino)"}}},
+      {"id": "veteran", "label": "Veteran Status", "widget": "select",
+       "options": ["I am not a protected veteran", "I identify as one or more of the classifications of protected veteran", "I choose not to disclose"],
+       "expect": {"from": "facts.veteran_status"}},
+      {"id": "attest", "label": "I certify that the information in this application is true and complete.", "widget": "checkbox", "required": true,
+       "expect": {"from": "facts.cert_accuracy"}}
+     ]
+    }
+   ]
+  }
+ ]
+}

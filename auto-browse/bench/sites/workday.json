@@ -1,0 +1,175 @@
+{
+ "site": "workday",
+ "style": "workday",
+ "evidence": "myworkdayjobs.com flows captured 2026-06-25 .. 07-09 (output/.playwright-mcp page-2026-06-25T20-26-12-313Z.yml My Information, page-2026-07-01T00-45-07-220Z.yml My Experience) and det-autofill/tests/fixtures/forms/dropdowns.html: Apply opens a chooser dialog, the application is one page with steps and 'Save and Continue', choice questions are buttons that open a body-level wd-popup, 'How Did You Hear About Us?' and phone code are multiselect search boxes with categories, dates are Month / Year spinbuttons. The real flow has a Create Account / Sign In step before My Information; that is a planned challenge (see bench/README.md), not rendered yet.",
+ "company": "Globex Logistics",
+ "job": {
+  "title": "Staff Data Engineer",
+  "location": "Austin, Texas",
+  "description": "Globex Logistics moves 2 million parcels a day. The Data Engineering team builds the platform that routes them.\n\nResponsibilities: design batch and streaming pipelines on AWS; operate Kafka and Spark at scale; own data contracts with product teams.\n\nQualifications: 6+ years in data engineering; Python, SQL and one JVM language; Kafka; AWS; experience leading engineers.\n\nPay range: $170,000 - $210,000 per year."
+ },
+ "flow": {"posting": "separate", "apply_button": "Apply", "chooser": ["Autofill with Resume", "Apply Manually", "Use My Last Application"], "challenges": []},
+ "next": "Save and Continue",
+ "submit": "Submit",
+ "confirmation": "Application Submitted. Thank you for applying to Globex Logistics.",
+ "steps": [
+  {
+   "title": "My Information",
+   "sections": [
+    {
+     "fields": [
+      {"id": "heard", "label": "How Did You Hear About Us?", "widget": "wd_multiselect", "required": true,
+       "tree": {"Job Board": ["Glassdoor", "Indeed", "LinkedIn", "ZipRecruiter"], "Company Website": null, "Referral": ["Employee Referral", "Friend or Family"], "Social Media": ["Facebook", "Instagram", "X (Twitter)"], "Career Fair": null},
+       "expect": {"from": "facts.how_did_you_hear"}},
+      {"id": "prior_worker", "label": "Have you previously worked for Globex Logistics as an employee or contractor?", "widget": "radio", "required": true,
+       "options": ["Yes", "No"], "expect": {"value": "No", "why": "no Globex in work_experiences"}},
+      {"id": "country", "label": "Country", "widget": "wd_prompt", "required": true,
+       "options": ["Canada", "India", "Mexico", "United Kingdom", "United States of America"],
+       "expect": {"from": "facts.country", "map": {"United States": "United States of America"}}}
+     ]
+    },
+    {
+     "heading": "Legal Name",
+     "fields": [
+      {"id": "first_name", "label": "First Name", "widget": "text", "required": true, "aid": "legalNameSection_firstName", "expect": {"from": "facts.first_name"}},
+      {"id": "middle_name", "label": "Middle Name", "widget": "text", "aid": "legalNameSection_middleName", "expect": {"blank": true, "why": "facts.middle_name is empty"}},
+      {"id": "last_name", "label": "Last Name", "widget": "text", "required": true, "aid": "legalNameSection_lastName", "expect": {"from": "facts.last_name"}}
+     ]
+    },
+    {
+     "heading": "Address",
+     "fields": [
+      {"id": "address1", "label": "Address Line 1", "widget": "text", "required": true, "aid": "addressSection_addressLine1", "expect": {"from": "facts.street_address"}},
+      {"id": "address2", "label": "Address Line 2", "widget": "text", "aid": "addressSection_addressLine2", "expect": {"blank": true, "why": "the profile has one address line"}},
+      {"id": "city", "label": "City", "widget": "text", "required": true, "aid": "addressSection_city", "expect": {"from": "facts.city"}},
+      {"id": "state", "label": "State", "widget": "wd_prompt", "required": true, "aid": "addressSection_countryRegion",
+       "options": ["Arizona", "California", "Colorado", "Florida", "Georgia", "New York", "Oklahoma", "Texas", "Utah", "Washington"],
+       "expect": {"from": "facts.state"}},
+      {"id": "postal", "label": "Postal Code", "widget": "text", "required": true, "aid": "addressSection_postalCode", "expect": {"from": "facts.zip_code"}},
+      {"id": "county", "label": "County", "widget": "text", "aid": "addressSection_regionSubdivision1", "expect": {"ignore": "not in the profile; Travis would be right, blank is fine"}}
+     ]
+    },
+    {
+     "heading": "Phone",
+     "fields": [
+      {"id": "device", "label": "Phone Device Type", "widget": "wd_prompt", "required": true, "aid": "phone-device-type",
+       "options": ["Home", "Mobile", "Work"], "expect": {"any": true, "why": "the profile does not say; any choice is acceptable"}},
+      {"id": "phone_code", "label": "Country Phone Code", "widget": "wd_multiselect", "required": true, "aid": "countryPhoneCode",
+       "tree": {"Canada (+1)": null, "India (+91)": null, "Mexico (+52)": null, "United Kingdom (+44)": null, "United States of America (+1)": null},
+       "expect": {"from": "facts.phone_country_code", "map": {"+1": "United States of America (+1)"}}},
+      {"id": "phone", "label": "Phone Number", "widget": "text", "required": true, "aid": "phone-number", "expect": {"from": "contact.phone", "match": "phone"}},
+      {"id": "extension", "label": "Phone Extension", "widget": "text", "aid": "phone-extension", "expect": {"blank": true, "why": "no extension in the profile"}}
+     ]
+    }
+   ]
+  },
+  {
+   "title": "My Experience",
+   "sections": [
+    {
+     "heading": "Work Experience 1",
+     "fields": [
+      {"id": "job_title", "label": "Job Title", "widget": "text", "required": true, "aid": "jobTitle", "expect": {"from": "work_experiences.0.job_title"}},
+      {"id": "company", "label": "Company", "widget": "text", "required": true, "aid": "company", "expect": {"from": "work_experiences.0.company_name"}},
+      {"id": "job_location", "label": "Location", "widget": "text", "aid": "location", "expect": {"from": "work_experiences.0.location"}},
+      {"id": "current", "label": "I currently work here", "widget": "checkbox", "aid": "currentlyWorkHere", "expect": {"from": "work_experiences.0.is_current"}},
+      {"id": "from", "label": "From", "widget": "wd_date", "parts": ["Month", "Year"], "required": true, "aid": "startDate",
+       "expect": {"from": "work_experiences.0.from_date", "format": "month_year"}},
+      {"id": "to", "label": "To", "widget": "wd_date", "parts": ["Month", "Year"], "required": true, "aid": "endDate",
+       "show_if": {"field": "current", "equals": false}, "expect": {"blank": true, "why": "current job has no end date"}},
+      {"id": "role_description", "label": "Role Description", "widget": "textarea", "aid": "description",
+       "expect": {"free_text": true, "min_chars": 40}}
+     ]
+    },
+    {
+     "heading": "Education 1",
+     "fields": [
+      {"id": "school", "label": "School or University", "widget": "text", "required": true, "aid": "school", "expect": {"from": "education.0.school"}},
+      {"id": "degree", "label": "Degree", "widget": "wd_prompt", "required": true, "aid": "degree",
+       "options": ["High School Diploma", "Associate's Degree", "Bachelor's Degree", "Master's Degree", "MBA", "Doctorate"],
+       "expect": {"from": "education.0.degree"}},
+      {"id": "field_of_study", "label": "Field of Study", "widget": "wd_multiselect", "aid": "field-of-study",
+       "tree": {"Business Administration": null, "Computer Engineering": null, "Computer Science": null, "Data Science": null, "Information Systems": null, "Mathematics": null, "Statistics": null},
+       "expect": {"from": "education.0.major"}}
+     ]
+    },
+    {
+     "heading": "Resume/CV",
+     "fields": [
+      {"id": "resume", "label": "Resume/CV", "widget": "file", "required": true, "trigger": "Select files", "aid": "file-upload-input-ref",
+       "hint": "Upload a file (5MB max)", "expect": {"file": "resume"}}
+     ]
+    },
+    {
+     "heading": "Social Network URLs",
+     "fields": [
+      {"id": "linkedin", "label": "LinkedIn", "widget": "text", "aid": "linkedinQuestion", "expect": {"from": "contact.linkedin", "match": "url"}}
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Application Questions",
+   "sections": [
+    {
+     "fields": [
+      {"id": "work_auth", "label": "Are you legally authorized to work in the country in which you are applying?", "widget": "wd_prompt", "required": true,
+       "options": ["Yes", "No"], "expect": {"from": "facts.work_eligible_us", "map": {"true": "Yes", "false": "No"}}},
+      {"id": "sponsorship", "label": "Will you now or in the future require sponsorship for employment visa status (e.g., H-1B visa status)?", "widget": "wd_prompt", "required": true,
+       "options": ["Yes", "No"], "expect": {"from": "facts.visa_sponsorship", "map": {"true": "Yes", "false": "No"}}},
+      {"id": "over_18", "label": "Are you at least 18 years of age?", "widget": "wd_prompt", "required": true,
+       "options": ["Yes", "No"], "expect": {"from": "facts.over_18", "map": {"true": "Yes", "false": "No"}}},
+      {"id": "years", "label": "How many years of professional data engineering experience do you have?", "widget": "wd_prompt", "required": true,
+       "options": ["0-2 years", "3-5 years", "6-9 years", "10+ years"],
+       "expect": {"value": "6-9 years", "why": "facts.years_of_experience = 7"}},
+      {"id": "salary", "label": "What is your desired annual base salary (USD)?", "widget": "text", "required": true,
+       "expect": {"from": "facts.desired_salary", "match": "digits"}},
+      {"id": "relocate", "label": "Are you willing to relocate for this position?", "widget": "wd_prompt", "required": true,
+       "options": ["Yes", "No"], "expect": {"from": "facts.willing_relocate", "map": {"true": "Yes", "false": "No"}}}
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Voluntary Disclosures",
+   "sections": [
+    {
+     "note": "Globex Logistics is an Equal Opportunity Employer. Providing this information is voluntary.",
+     "fields": [
+      {"id": "gender", "label": "Gender", "widget": "wd_prompt", "aid": "gender",
+       "options": ["Female", "Male", "I do not wish to answer"], "expect": {"from": "facts.gender"}},
+      {"id": "ethnicity", "label": "Ethnicity", "widget": "wd_prompt", "aid": "ethnicityDropdown",
+       "options": ["American Indian or Alaska Native (Not Hispanic or Latino)", "Asian (Not Hispanic or Latino)", "Black or African American (Not Hispanic or Latino)", "Hispanic or Latino", "Native Hawaiian or Other Pacific Islander (Not Hispanic or Latino)", "Two or More Races (Not Hispanic or Latino)", "White (Not Hispanic or Latino)", "I do not wish to answer"],
+       "expect": {"from": "facts.race_ethnicity", "map": {"Asian": "Asian (Not Hispanic or Latino)", "White": "White (Not Hispanic or Latino)"}}},
+      {"id": "veteran", "label": "Veteran Status", "widget": "wd_prompt", "aid": "veteranStatus",
+       "options": ["I am not a protected veteran", "I identify as one or more of the classifications of protected veteran", "I do not wish to self-identify"],
+       "expect": {"from": "facts.veteran_status"}},
+      {"id": "terms", "label": "I have read and consent to the terms and conditions", "widget": "checkbox", "required": true, "aid": "agreementCheckbox",
+       "expect": {"from": "facts.cert_privacy_notice"}}
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Self Identify",
+   "sections": [
+    {
+     "heading": "Voluntary Self-Identification of Disability",
+     "note": "Form CC-305. We are a federal contractor or subcontractor. The law requires us to provide equal employment opportunity to qualified people with disabilities.",
+     "fields": [
+      {"id": "sid_name", "label": "Name", "widget": "text", "required": true, "aid": "name", "expect": {"from": "contact.full_name"}},
+      {"id": "sid_date", "label": "Date", "widget": "wd_date", "parts": ["Month", "Day", "Year"], "required": true, "aid": "dateSignedOn",
+       "expect": {"today": true}},
+      {"id": "disability", "label": "Please check one of the boxes below:", "widget": "checkbox_group", "required": true, "single": true, "aid": "disabilityStatus",
+       "options": ["Yes, I have a disability (or previously had a disability)", "No, I do not have a disability and have not had one in the past", "I do not want to answer"],
+       "expect": {"from": "facts.disability_status", "map": {"No, I do not have a disability": "No, I do not have a disability and have not had one in the past"}}}
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Review",
+   "sections": [{"note": "Review your application, then select Submit.", "fields": []}]
+  }
+ ]
+}

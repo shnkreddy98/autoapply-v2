@@ -1,0 +1,112 @@
+{
+ "site": "smartrecruiters",
+ "style": "smartrecruiters",
+ "evidence": "jobs.smartrecruiters.com one-click application captured 2026-06-24 (output/.playwright-mcp/page-2026-06-24T05-43-28-632Z.yml, ...05-45-43-534Z.yml personal information; ...05-48-39-905Z.yml preliminary questions): 'Personal information' with a confirm-email box, a Country/Region combobox, Experience required and entered through Add / Save, Resume, a message to the hiring team, then 'Preliminary questions' with radiogroups, 'select all that apply' pickers that keep chips with 'Delete X' buttons, and EEO. The app is built from web components; the live check (2026-09-14, oneclick-ui) filled 0 fields and found 'no Next or Submit control', which is what fields and buttons inside shadow roots look like to a light-DOM reader. The mock puts both steps in open shadow roots.",
+ "company": "Silver Mesa Resorts",
+ "job": {
+  "title": "Sr. Engineer - Data Analytics",
+  "location": "Austin, TX, United States",
+  "description": "Silver Mesa Resorts operates hotels and casinos. The data analytics team builds the platform behind guest, gaming and revenue reporting.\n\nResponsibilities: design end-to-end cloud data architecture from ingestion to reporting; operate Kafka and Airflow; own data quality and governance practices.\n\nRequirements: Bachelor's degree in Computer Science or similar; 5+ years as a data engineer on cloud platforms; SQL and Python.\n\nOn site at our Austin property."
+ },
+ "flow": {"posting": "separate", "apply_button": "I'm interested", "challenges": []},
+ "next": "Next",
+ "submit": "Submit",
+ "confirmation": "Thank you for applying! Your application to Silver Mesa Resorts was received.",
+ "steps": [
+  {
+   "title": "Personal information",
+   "shadow": true,
+   "sections": [
+    {
+     "note": "Fields marked with * are required.",
+     "fields": [
+      {"id": "first_name", "label": "First name", "widget": "text", "required": true, "expect": {"from": "facts.first_name"}},
+      {"id": "last_name", "label": "Last name", "widget": "text", "required": true, "expect": {"from": "facts.last_name"}},
+      {"id": "email", "label": "Email", "widget": "text", "input_type": "email", "required": true, "expect": {"from": "contact.email"}},
+      {"id": "email2", "label": "Confirm your email", "widget": "text", "input_type": "email", "required": true, "expect": {"from": "contact.email"}},
+      {"id": "country", "label": "Country/Region", "widget": "typeahead", "named": true, "placeholder": "", "required": true,
+       "options": ["Canada", "Mexico", "United Kingdom", "United States"], "expect": {"from": "facts.country"}},
+      {"id": "city", "label": "City", "widget": "text", "required": true, "expect": {"from": "facts.city"}},
+      {"id": "phone", "label": "Phone number", "widget": "text", "input_type": "tel", "expect": {"from": "contact.phone", "match": "phone"}}
+     ]
+    },
+    {
+     "heading": "Experience",
+     "repeat": {"add": "Add", "save": "Save", "summary": "exp_title", "noun": "experience", "required": true},
+     "fields": [
+      {"id": "exp_title", "label": "Title", "widget": "text", "required": true, "expect": {"from": "work_experiences.0.job_title"}},
+      {"id": "exp_company", "label": "Company", "widget": "text", "required": true, "expect": {"from": "work_experiences.0.company_name"}},
+      {"id": "exp_location", "label": "Office location", "widget": "text", "expect": {"value": "Austin", "match": "prefix", "why": "work_experiences.0.location"}},
+      {"id": "exp_from", "label": "From", "widget": "text", "placeholder": "MM/YYYY", "required": true,
+       "expect": {"from": "work_experiences.0.from_date", "format": "month_year"}},
+      {"id": "exp_current", "label": "I currently work here", "widget": "checkbox", "expect": {"from": "work_experiences.0.is_current"}},
+      {"id": "exp_to", "label": "To", "widget": "text", "placeholder": "MM/YYYY", "show_if": {"field": "exp_current", "equals": false},
+       "expect": {"blank": true, "why": "current job"}}
+     ]
+    },
+    {
+     "heading": "Education",
+     "repeat": {"add": "Add", "save": "Save", "summary": "edu_school", "noun": "education"},
+     "fields": [
+      {"id": "edu_school", "label": "Institution", "widget": "text", "required": true, "expect": {"from": "education.0.school"}},
+      {"id": "edu_major", "label": "Major", "widget": "text", "expect": {"from": "education.0.major"}},
+      {"id": "edu_degree", "label": "Degree", "widget": "text", "expect": {"one_of": ["Bachelor's Degree", "Bachelor's", "Bachelor of Science", "BS", "B.S.", "Bachelor"], "why": "education.0.degree"}}
+     ]
+    },
+    {
+     "heading": "Resume",
+     "fields": [
+      {"id": "resume", "label": "Resume", "widget": "file", "required": true, "trigger": "Choose a file or drop it here", "expect": {"file": "resume"}}
+     ]
+    },
+    {
+     "heading": "Message to the Hiring Team",
+     "fields": [
+      {"id": "message", "label": "Let the company know about your interest working there", "widget": "textarea", "expect": {"ignore": "optional"}}
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Preliminary questions",
+   "shadow": true,
+   "sections": [
+    {
+     "fields": [
+      {"id": "eligible", "label": "Are you currently eligible to work in the United States of America?", "widget": "radio", "required": true,
+       "options": ["Yes", "No"], "expect": {"from": "facts.work_eligible_us", "map": {"true": "Yes", "false": "No"}}},
+      {"id": "over_21", "label": "Are you at least 21 years of age or older?", "widget": "radio", "required": true,
+       "options": ["Yes", "No"], "expect": {"value": "Yes", "why": "Bachelor's finished 2019 and 7 years of work: at least 28"}},
+      {"id": "worked_here", "label": "Have you previously worked for Silver Mesa Resorts?", "widget": "radio", "required": true,
+       "options": ["Yes", "No"], "expect": {"value": "No", "why": "not in work_experiences"}},
+      {"id": "salary", "label": "Salary Expectations", "widget": "text", "input_type": "number", "expect": {"from": "facts.desired_salary", "match": "digits"}},
+      {"id": "cs_degree", "label": "Do you hold a Bachelor's degree in Computer Science, Engineering, or a similar technical discipline?", "widget": "radio", "required": true,
+       "options": ["Yes", "No"], "expect": {"value": "Yes", "why": "education.0: Bachelor's Degree, Computer Science"}},
+      {"id": "tools", "label": "Which of the following technologies do you have hands-on production experience with? (Select all that apply)", "widget": "multi_combo", "required": true,
+       "options": ["Apache Airflow", "Apache Kafka", "Apache Spark", "Databricks", "dbt", "Google BigQuery", "Microsoft Fabric", "Snowflake"],
+       "expect": {"set": ["Apache Airflow", "Apache Kafka", "Apache Spark", "dbt", "Snowflake"], "why": "skill_groups, minus Databricks / BigQuery / Fabric which the profile never mentions"}},
+      {"id": "cloud_years", "label": "How many years of hands-on experience do you have working as a data engineer on cloud-based data analytics platforms?", "widget": "typeahead", "named": true, "placeholder": "", "required": true,
+       "options": ["Less than 2 years", "2-4 years", "5-7 years", "8+ years"], "expect": {"value": "5-7 years", "why": "7 years, all on AWS / Snowflake / Redshift"}},
+      {"id": "commute", "label": "Are you able to commute to our Austin property daily?", "widget": "radio", "required": true,
+       "options": ["Yes", "No"], "expect": {"value": "Yes", "why": "lives in Austin"}}
+     ]
+    },
+    {
+     "fields": [
+      {"id": "gender", "label": "Gender", "widget": "typeahead", "named": true, "placeholder": "",
+       "options": ["Female", "Male", "I do not wish to answer"], "expect": {"from": "facts.gender"}},
+      {"id": "race", "label": "Race/Ethnicity", "widget": "typeahead", "named": true, "placeholder": "",
+       "options": ["Asian", "Black or African American", "Hispanic or Latino", "White", "Two or More Races", "I do not wish to answer"], "expect": {"from": "facts.race_ethnicity"}},
+      {"id": "disability", "label": "Do you have (or have a history/record of having) a disability?", "widget": "radio", "required": true,
+       "options": ["Yes, I have a disability, or have had one in the past.", "No, I do not have a disability and have not had one in the past.", "I do not want to answer."],
+       "expect": {"from": "facts.disability_status", "map": {"No, I do not have a disability": "No, I do not have a disability and have not had one in the past."}}},
+      {"id": "veteran", "label": "Are you a protected veteran?", "widget": "radio", "required": true,
+       "options": ["Yes", "No", "Prefer not to answer"], "expect": {"from": "facts.veteran_status", "map": {"I am not a protected veteran": "No"}}},
+      {"id": "privacy", "label": "You declare that you have read and understand the privacy notice of Silver Mesa Resorts.", "widget": "checkbox", "required": true,
+       "expect": {"from": "facts.cert_privacy_notice"}}
+     ]
+    }
+   ]
+  }
+ ]
+}

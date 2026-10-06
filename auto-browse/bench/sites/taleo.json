@@ -1,0 +1,132 @@
+{
+ "site": "taleo",
+ "style": "taleo",
+ "evidence": "Taleo careersection application captured 2026-07-09 (output/.playwright-mcp/page-2026-07-09T00-56-20-004Z.yml, 'Job Profile Questions') and fragments from weyerhaeuser.taleo.net / atkcareers.taleo.net (det-autofill/tests/fixtures/fragments): a step navigation bar, questions as radio groups named '1. <question> (<code>) . Required', native selects, 'Save and Continue'. The live check (2026-09-14) stopped at the account login wall (planned challenge, skipped here). Personal Information, Work Experience, Education, Diversity and E-Signature steps follow the classic Taleo flow but were not captured in full: reconstructed.",
+ "company": "Atlas Aerospace",
+ "job": {
+  "title": "Data Engineer II",
+  "location": "Austin, TX",
+  "description": "Atlas Aerospace builds avionics test systems. The data engineering group moves test-rig data into an analytics platform used by our engineers.\n\nResponsibilities: build ETL and orchestration (Airflow); maintain the data warehouse (Snowflake); automate data quality checks; containerize jobs with Docker.\n\nRequirements: Bachelor's in CS or IT; 5+ years of data engineering; Python, SQL, Spark; a cloud platform (AWS, Azure or GCP).\n\nAustin, TX."
+ },
+ "flow": {"posting": "separate", "apply_button": "Apply Online", "challenges": []},
+ "next": "Save and Continue",
+ "submit": "Submit",
+ "confirmation": "Thank you for applying. Your application has been successfully submitted to Atlas Aerospace.",
+ "steps": [
+  {
+   "title": "Personal Information",
+   "reconstructed": true,
+   "sections": [
+    {
+     "fields": [
+      {"id": "first_name", "label": "First Name", "widget": "text", "required": true, "expect": {"from": "facts.first_name"}},
+      {"id": "middle_name", "label": "Middle Name", "widget": "text", "expect": {"blank": true, "why": "facts.middle_name is empty"}},
+      {"id": "last_name", "label": "Last Name", "widget": "text", "required": true, "expect": {"from": "facts.last_name"}},
+      {"id": "email", "label": "Email Address", "widget": "text", "input_type": "email", "required": true, "expect": {"from": "contact.email"}},
+      {"id": "phone", "label": "Primary Number", "widget": "text", "input_type": "tel", "required": true, "expect": {"from": "contact.phone", "match": "phone"}},
+      {"id": "address1", "label": "Address (line 1)", "widget": "text", "required": true, "expect": {"from": "facts.street_address"}},
+      {"id": "city", "label": "City", "widget": "text", "required": true, "expect": {"from": "facts.city"}},
+      {"id": "country", "label": "Country of Residence", "widget": "select", "required": true,
+       "options": ["Canada", "Mexico", "United Kingdom", "United States"], "expect": {"from": "facts.country"}},
+      {"id": "state", "label": "State/Province of Residence", "widget": "select", "required": true,
+       "options": ["Arizona", "California", "Oklahoma", "Texas", "Washington"], "expect": {"from": "facts.state"}},
+      {"id": "zip", "label": "Zip/Postal Code", "widget": "text", "required": true, "expect": {"from": "facts.zip_code"}}
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Job Profile Questions",
+   "sections": [
+    {
+     "fields": [
+      {"id": "q_edu", "label": "1. Indicate the highest level of education you've completed in CS or IT related field. (5800) . Required", "widget": "radio", "required": true,
+       "options": ["High School/GED", "Associate's degree", "Bachelor's degree", "Master's or higher", "None of the above"],
+       "expect": {"value": "Bachelor's degree", "why": "education.0: Bachelor's Degree in Computer Science"}},
+      {"id": "q_de_years", "label": "2. How many years of hands-on experience do you have in data engineering and backend automation? (YE01) . Required", "widget": "radio", "required": true,
+       "options": ["Less than 1 year", "1 or more years but less than 3 years", "3 or more years but less than 5 years", "5 or more years but less than 7 years", "7 or more years but less than 10 years", "10 or more years", "No experience"],
+       "expect": {"value": "7 or more years but less than 10 years", "why": "facts.years_of_experience = 7"}},
+      {"id": "q_python_years", "label": "3. How many years of experience do you have in Python, SQL, and big data technologies (Hadoop, Spark)? (YE01) . Required", "widget": "radio", "required": true,
+       "options": ["Less than 1 year", "1 or more years but less than 3 years", "3 or more years but less than 5 years", "5 or more years but less than 7 years", "7 or more years but less than 10 years", "10 or more years", "No experience"],
+       "expect": {"value": "7 or more years but less than 10 years", "why": "Python and SQL across all 7 years (Contoso 2019, Northwind 2022)"}},
+      {"id": "q_docker", "label": "4. Do you have experience containerizing data jobs with Docker? (DK02) . Required", "widget": "radio", "required": true,
+       "options": ["Yes", "No"], "expect": {"value": "Yes", "why": "Docker in skill_groups"}},
+      {"id": "q_azure_ml", "label": "5. Do you have production experience with Azure ML Studio? (AZ07) . Required", "widget": "radio", "required": true,
+       "options": ["Yes", "No"], "expect": {"value": "No", "why": "no Azure anywhere in the profile"}}
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Work Experience",
+   "reconstructed": true,
+   "sections": [
+    {
+     "fields": [
+      {"id": "employer", "label": "Employer", "widget": "text", "required": true, "expect": {"from": "work_experiences.0.company_name"}},
+      {"id": "job_function", "label": "Job Function", "widget": "text", "required": true, "expect": {"from": "work_experiences.0.job_title"}},
+      {"id": "current_job", "label": "Current Job", "widget": "checkbox", "expect": {"from": "work_experiences.0.is_current"}},
+      {"id": "start_month", "label": "Start Date (Month)", "widget": "select", "required": true,
+       "options": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+       "expect": {"from": "work_experiences.0.from_date", "format": "month_name"}},
+      {"id": "start_year", "label": "Start Date (Year)", "widget": "select", "required": true,
+       "options": ["2026", "2025", "2024", "2023", "2022", "2021", "2020", "2019", "2018", "2017", "2016"],
+       "expect": {"from": "work_experiences.0.from_date", "format": "year"}},
+      {"id": "end_month", "label": "End Date (Month)", "widget": "select", "show_if": {"field": "current_job", "equals": false},
+       "options": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+       "expect": {"blank": true, "why": "current job"}}
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Education",
+   "reconstructed": true,
+   "sections": [
+    {
+     "fields": [
+      {"id": "institution", "label": "Institution", "widget": "select", "required": true,
+       "options": ["Rice University", "Texas A&M University", "Texas State University", "University of Texas at Austin", "University of Texas at Dallas", "Other"],
+       "expect": {"from": "education.0.school"}},
+      {"id": "program", "label": "Program", "widget": "text", "expect": {"from": "education.0.major"}},
+      {"id": "edu_level", "label": "Education Level (Achieved)", "widget": "select", "required": true,
+       "options": ["High School", "Associate's Degree", "Bachelor's Degree", "Master's Degree", "Doctorate"],
+       "expect": {"from": "education.0.degree"}},
+      {"id": "graduated", "label": "Graduated", "widget": "checkbox", "expect": {"value": true, "why": "education.0.to_date 2019-05"}}
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Diversity",
+   "reconstructed": true,
+   "sections": [
+    {
+     "fields": [
+      {"id": "gender", "label": "Gender", "widget": "select", "options": ["Female", "Male", "I do not wish to disclose"], "expect": {"from": "facts.gender"}},
+      {"id": "hispanic", "label": "Are you Hispanic or Latino?", "widget": "select", "options": ["Yes", "No", "I do not wish to disclose"], "expect": {"from": "facts.hispanic_latino"}},
+      {"id": "race", "label": "Race", "widget": "select",
+       "options": ["American Indian or Alaska Native", "Asian", "Black or African American", "Native Hawaiian or Other Pacific Islander", "White", "I do not wish to disclose"],
+       "expect": {"from": "facts.race_ethnicity"}},
+      {"id": "veteran", "label": "Protected Veteran Status", "widget": "select",
+       "options": ["I am not a protected veteran", "I identify as one or more of the classifications of protected veteran", "I do not wish to self-identify"],
+       "expect": {"from": "facts.veteran_status"}}
+     ]
+    }
+   ]
+  },
+  {
+   "title": "E-Signature",
+   "reconstructed": true,
+   "sections": [
+    {
+     "note": "By entering my full name below I certify that the information provided is accurate and complete.",
+     "fields": [
+      {"id": "esign_name", "label": "Full Name", "widget": "text", "required": true, "expect": {"from": "contact.full_name"}},
+      {"id": "esign_agree", "label": "I have read and agree to the above statement", "widget": "checkbox", "required": true, "expect": {"from": "facts.cert_accuracy"}}
+     ]
+    }
+   ]
+  }
+ ]
+}

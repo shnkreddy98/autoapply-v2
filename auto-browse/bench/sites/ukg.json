@@ -1,0 +1,448 @@
+{
+ "site": "ukg",
+ "style": "ukg",
+ "evidence": "recruiting.ultipro.com (UKG Pro) from 34 captured fragments (det-autofill/tests/fixtures/fragments, host recruiting.ultipro.com) and agent traces 2026-06-24..06-30: Apply now is a <ukg-button> custom element; control names read twice with the star first ('*Address 1 *Address 1'); 'Save and continue' between steps; Work Experience entered through 'Add Experience'; questions as radio groups and plain text boxes named '*Have you ever been employed by ...?'; EEO selects each paired with an 'I decline to say ...' checkbox; the disability form with Month / Day / Year text boxes and 'Choose Date'. A sign-in / create-account wall sits between the posting and the form (planned challenge, skipped here).",
+ "company": "Pinecrest Engineering",
+ "labels": "doubled",
+ "star_before": true,
+ "job": {
+  "title": "Data Engineer III",
+  "location": "Austin, Texas",
+  "description": "Pinecrest Engineering designs water infrastructure. The analytics group builds data pipelines from project management and sensor systems.\n\nWhat you'll do: build ETL into Snowflake; automate reporting; support project managers with data.\n\nWhat you need: 5+ years of data engineering, Python, SQL, Airflow, cloud data warehousing.\n\nOffice in Austin, Texas."
+ },
+ "flow": {
+  "posting": "separate",
+  "apply_button": "Apply now",
+  "button_tag": "ukg-button",
+  "challenges": []
+ },
+ "next": "Save and continue",
+ "submit": "Submit application",
+ "confirmation": "Thank you for applying. Your application was submitted to Pinecrest Engineering.",
+ "steps": [
+  {
+   "title": "Contact information",
+   "sections": [
+    {
+     "fields": [
+      {
+       "id": "resume",
+       "label": "Resume",
+       "widget": "file",
+       "required": true,
+       "trigger": "Upload Resume DOC, DOCX, or PDF (Max file size 6MB).",
+       "expect": {
+        "file": "resume"
+       }
+      },
+      {
+       "id": "first_name",
+       "label": "First name",
+       "widget": "text",
+       "required": true,
+       "expect": {
+        "from": "facts.first_name"
+       }
+      },
+      {
+       "id": "last_name",
+       "label": "Last name",
+       "widget": "text",
+       "required": true,
+       "expect": {
+        "from": "facts.last_name"
+       }
+      },
+      {
+       "id": "preferred",
+       "label": "Preferred Name",
+       "widget": "text",
+       "expect": {
+        "from": "facts.preferred_name"
+       }
+      },
+      {
+       "id": "phone",
+       "label": "Phone number",
+       "widget": "text",
+       "input_type": "tel",
+       "required": true,
+       "expect": {
+        "from": "contact.phone",
+        "match": "phone"
+       }
+      },
+      {
+       "id": "address1",
+       "label": "Address 1",
+       "widget": "text",
+       "required": true,
+       "expect": {
+        "from": "facts.street_address"
+       }
+      },
+      {
+       "id": "address2",
+       "label": "Address 2",
+       "widget": "text",
+       "expect": {
+        "blank": true,
+        "why": "one address line"
+       }
+      },
+      {
+       "id": "city",
+       "label": "City",
+       "widget": "text",
+       "required": true,
+       "expect": {
+        "from": "facts.city"
+       }
+      },
+      {
+       "id": "state",
+       "label": "State / Province",
+       "widget": "select",
+       "required": true,
+       "options": [
+        "Arizona",
+        "California",
+        "Colorado",
+        "Oklahoma",
+        "Texas",
+        "Washington"
+       ],
+       "expect": {
+        "from": "facts.state"
+       }
+      },
+      {
+       "id": "zip",
+       "label": "Zip / Postal Code",
+       "widget": "text",
+       "required": true,
+       "expect": {
+        "from": "facts.zip_code"
+       }
+      },
+      {
+       "id": "relocate",
+       "label": "Willing to relocate",
+       "widget": "checkbox",
+       "expect": {
+        "from": "facts.willing_relocate"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Work Experience",
+   "sections": [
+    {
+     "heading": "Work Experience",
+     "repeat": {
+      "add": "Add Experience",
+      "save": "Save",
+      "summary": "job_title",
+      "noun": "Work Experience",
+      "required": true
+     },
+     "fields": [
+      {
+       "id": "job_title",
+       "label": "Job title",
+       "widget": "text",
+       "required": true,
+       "expect": {
+        "from": "work_experiences.0.job_title"
+       }
+      },
+      {
+       "id": "company",
+       "label": "Company",
+       "widget": "text",
+       "required": true,
+       "expect": {
+        "from": "work_experiences.0.company_name"
+       }
+      },
+      {
+       "id": "from",
+       "label": "From",
+       "widget": "wd_date",
+       "parts": [
+        "Month",
+        "Year"
+       ],
+       "segment_role": "textbox",
+       "calendar_label": "Choose Date",
+       "required": true,
+       "expect": {
+        "from": "work_experiences.0.from_date",
+        "format": "month_year"
+       }
+      },
+      {
+       "id": "current",
+       "label": "I currently work here",
+       "widget": "checkbox",
+       "expect": {
+        "from": "work_experiences.0.is_current"
+       }
+      },
+      {
+       "id": "to",
+       "label": "To",
+       "widget": "wd_date",
+       "parts": [
+        "Month",
+        "Year"
+       ],
+       "segment_role": "textbox",
+       "calendar_label": "Choose Date",
+       "show_if": {
+        "field": "current",
+        "equals": false
+       },
+       "expect": {
+        "blank": true,
+        "why": "current job"
+       }
+      },
+      {
+       "id": "duties",
+       "label": "Description",
+       "widget": "textarea",
+       "expect": {
+        "free_text": true,
+        "min_chars": 40
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Questions",
+   "sections": [
+    {
+     "fields": [
+      {
+       "id": "employed_before",
+       "label": "Have you ever been employed by Pinecrest Engineering or any of its affiliates?",
+       "widget": "text",
+       "required": true,
+       "expect": {
+        "value": "No",
+        "why": "not in work_experiences"
+       }
+      },
+      {
+       "id": "salary",
+       "label": "What are your salary requirements?",
+       "widget": "text",
+       "required": true,
+       "expect": {
+        "from": "facts.desired_salary",
+        "match": "digits"
+       }
+      },
+      {
+       "id": "overtime",
+       "label": "Do you have the ability to work overtime as necessary in order to meet deadlines?",
+       "widget": "radio",
+       "required": true,
+       "options": [
+        "Yes",
+        "No"
+       ],
+       "expect": {
+        "any": true,
+        "why": "not in the profile",
+        "personal": true
+       }
+      },
+      {
+       "id": "relocate_where",
+       "label": "Are you willing to relocate? If so, where?",
+       "widget": "text",
+       "required": true,
+       "expect": {
+        "value": "No",
+        "why": "facts.willing_relocate = false",
+        "match": "prefix"
+       }
+      },
+      {
+       "id": "over_18",
+       "label": "Are you at least 18 years of age?",
+       "widget": "radio",
+       "required": true,
+       "options": [
+        "Yes",
+        "No"
+       ],
+       "expect": {
+        "from": "facts.over_18",
+        "map": {
+         "true": "Yes",
+         "false": "No"
+        }
+       }
+      },
+      {
+       "id": "work_auth",
+       "label": "Are you legally eligible to work in the United States?",
+       "widget": "radio",
+       "required": true,
+       "options": [
+        "Yes",
+        "No"
+       ],
+       "expect": {
+        "from": "facts.work_eligible_us",
+        "map": {
+         "true": "Yes",
+         "false": "No"
+        }
+       }
+      },
+      {
+       "id": "sponsorship",
+       "label": "Will you require sponsorship to work in the United States?",
+       "widget": "radio",
+       "required": true,
+       "options": [
+        "Yes",
+        "No"
+       ],
+       "expect": {
+        "from": "facts.visa_sponsorship",
+        "map": {
+         "true": "Yes",
+         "false": "No"
+        }
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Voluntary Self-Identification",
+   "sections": [
+    {
+     "fields": [
+      {
+       "id": "gender",
+       "label": "Gender",
+       "widget": "select",
+       "options": [
+        "Female",
+        "Male",
+        "Non-binary"
+       ],
+       "expect": {
+        "from": "facts.gender"
+       }
+      },
+      {
+       "id": "gender_decline",
+       "label": "I decline to say Gender",
+       "widget": "checkbox",
+       "expect": {
+        "blank": true,
+        "why": "the profile answers gender"
+       }
+      },
+      {
+       "id": "ethnic",
+       "label": "Ethnic Origin",
+       "widget": "select",
+       "options": [
+        "American Indian or Alaska Native",
+        "Asian",
+        "Black or African American",
+        "Hispanic or Latino",
+        "Native Hawaiian or Other Pacific Islander",
+        "Two or more races",
+        "White"
+       ],
+       "expect": {
+        "from": "facts.race_ethnicity"
+       }
+      },
+      {
+       "id": "ethnic_decline",
+       "label": "I decline to say Ethnic Origin",
+       "widget": "checkbox",
+       "expect": {
+        "blank": true,
+        "why": "the profile answers it"
+       }
+      },
+      {
+       "id": "veteran",
+       "label": "Are you a protected veteran?",
+       "widget": "select",
+       "options": [
+        "I am not a protected veteran",
+        "I identify as one or more of the classifications of protected veteran"
+       ],
+       "expect": {
+        "from": "facts.veteran_status"
+       }
+      },
+      {
+       "id": "veteran_decline",
+       "label": "I decline to say Are you a protected veteran?",
+       "widget": "checkbox",
+       "expect": {
+        "blank": true,
+        "why": "the profile answers it"
+       }
+      }
+     ]
+    },
+    {
+     "heading": "Voluntary Self-Identification of Disability",
+     "fields": [
+      {
+       "id": "disability",
+       "label": "Disability status",
+       "widget": "radio",
+       "options": [
+        "Yes, I have a disability, or have had one in the past",
+        "No, I do not have a disability and have not had one in the past",
+        "I do not want to answer"
+       ],
+       "expect": {
+        "from": "facts.disability_status",
+        "map": {
+         "No, I do not have a disability": "No, I do not have a disability and have not had one in the past"
+        }
+       }
+      },
+      {
+       "id": "dis_date",
+       "label": "Date",
+       "widget": "wd_date",
+       "parts": [
+        "Month",
+        "Day",
+        "Year"
+       ],
+       "segment_role": "textbox",
+       "calendar_label": "Choose Date",
+       "expect": {
+        "today": true
+       }
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

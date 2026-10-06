@@ -1,0 +1,96 @@
+{
+ "site": "phenom",
+ "style": "phenom",
+ "evidence": "Phenom-hosted careers application captured 2026-06-28 (output/.playwright-mcp/page-2026-06-28T01-03-05-717Z.yml): an 'Upload options' resume group (Dropbox / Microsoft online / Upload Resume), contact fields with the star in a separate element, native selects for Country ('Select Country') and State/Province ('Select Region'), questions as native selects whose label text ends in '*', and Next between steps. The live check (2026-09-14) passed this platform. The experience and disclosure steps follow Phenom's usual flow but were not captured: reconstructed.",
+ "company": "Beacon Blood Research",
+ "job": {
+  "title": "Data Engineer",
+  "location": "Remote, United States",
+  "description": "Beacon Blood Research funds and runs research into blood cancers. The data team supports researchers with clean, connected datasets.\n\nResponsibilities: build pipelines from research and donor systems; operate the cloud warehouse; support grants reporting.\n\nRequirements: 4+ years of data engineering; Python; SQL; Airflow; a cloud data warehouse.\n\nRemote in the US."
+ },
+ "flow": {"posting": "separate", "apply_button": "Apply Now", "challenges": []},
+ "next": "Next",
+ "submit": "Submit",
+ "confirmation": "Thank you for applying! Your application was submitted to Beacon Blood Research.",
+ "steps": [
+  {
+   "title": "My Information",
+   "sections": [
+    {
+     "fields": [
+      {"id": "resume", "label": "Resume", "widget": "file", "required": true, "trigger": "Upload Resume", "expect": {"file": "resume"}},
+      {"id": "email", "label": "Email Address", "widget": "text", "input_type": "email", "required": true, "expect": {"from": "contact.email"}},
+      {"id": "first_name", "label": "First Name", "widget": "text", "required": true, "expect": {"from": "facts.first_name"}},
+      {"id": "last_name", "label": "Last Name", "widget": "text", "required": true, "expect": {"from": "facts.last_name"}},
+      {"id": "linkedin", "label": "LinkedIn Profile", "widget": "text", "expect": {"from": "contact.linkedin", "match": "url"}},
+      {"id": "home_phone", "label": "Home Phone Number", "widget": "text", "input_type": "tel", "expect": {"blank": true, "why": "one phone in the profile"}},
+      {"id": "mobile", "label": "Mobile Phone Number", "widget": "text", "input_type": "tel", "required": true, "expect": {"from": "contact.phone", "match": "phone"}},
+      {"id": "country", "label": "Country", "widget": "select", "blank_option": "Select Country",
+       "options": ["Canada", "Mexico", "United Kingdom", "United States"], "expect": {"from": "facts.country"}},
+      {"id": "state", "label": "State/Province", "widget": "select", "blank_option": "Select Region",
+       "options": ["Alabama", "Alaska", "Arizona", "California", "Oklahoma", "Texas"], "expect": {"from": "facts.state"}},
+      {"id": "address1", "label": "Address Line 1", "widget": "text", "expect": {"from": "facts.street_address"}},
+      {"id": "address2", "label": "Address Line 2", "widget": "text", "expect": {"blank": true, "why": "one address line"}},
+      {"id": "city", "label": "City", "widget": "text", "expect": {"from": "facts.city"}},
+      {"id": "zip", "label": "ZIP / Postal Code", "widget": "text", "expect": {"from": "facts.zip_code"}}
+     ]
+    },
+    {
+     "fields": [
+      {"id": "heard", "label": "How did you hear about this Job?", "widget": "select", "required": true, "blank_option": "Please Select",
+       "options": ["LinkedIn", "Indeed", "Employee Referral", "Other"], "expect": {"from": "facts.how_did_you_hear"}},
+      {"id": "work_auth", "label": "Are you legally authorized to work in the United States?", "widget": "select", "required": true, "blank_option": "Please Select",
+       "options": ["Yes", "No"], "expect": {"from": "facts.work_eligible_us", "map": {"true": "Yes", "false": "No"}}},
+      {"id": "worked_here", "label": "Have you worked for Beacon Blood Research before?", "widget": "select", "required": true, "blank_option": "Please Select",
+       "options": ["Yes", "No"], "expect": {"value": "No", "why": "not in work_experiences"}},
+      {"id": "over_18", "label": "Are you at least 18 years old?", "widget": "select", "required": true, "blank_option": "Please Select",
+       "options": ["Yes", "No"], "expect": {"from": "facts.over_18", "map": {"true": "Yes", "false": "No"}}},
+      {"id": "sponsorship", "label": "Will you now or in the future require sponsorship?", "widget": "select", "required": true, "blank_option": "Please Select",
+       "options": ["Yes", "No"], "expect": {"from": "facts.visa_sponsorship", "map": {"true": "Yes", "false": "No"}}}
+     ]
+    }
+   ]
+  },
+  {
+   "title": "My Experience",
+   "reconstructed": true,
+   "sections": [
+    {
+     "heading": "Work Experience",
+     "fields": [
+      {"id": "job_title", "label": "Job Title", "widget": "text", "required": true, "expect": {"from": "work_experiences.0.job_title"}},
+      {"id": "company", "label": "Company", "widget": "text", "required": true, "expect": {"from": "work_experiences.0.company_name"}},
+      {"id": "from", "label": "From", "widget": "text", "placeholder": "MM/YYYY", "required": true, "expect": {"from": "work_experiences.0.from_date", "format": "month_year"}},
+      {"id": "current", "label": "I currently work here", "widget": "checkbox", "expect": {"from": "work_experiences.0.is_current"}}
+     ]
+    },
+    {
+     "heading": "Education",
+     "fields": [
+      {"id": "school", "label": "School", "widget": "text", "required": true, "expect": {"from": "education.0.school"}},
+      {"id": "degree", "label": "Degree", "widget": "select", "required": true,
+       "options": ["High School", "Associate's Degree", "Bachelor's Degree", "Master's Degree", "Doctorate"], "expect": {"from": "education.0.degree"}},
+      {"id": "major", "label": "Field of Study", "widget": "text", "expect": {"from": "education.0.major"}}
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Voluntary Disclosures",
+   "reconstructed": true,
+   "sections": [
+    {
+     "fields": [
+      {"id": "gender", "label": "Gender", "widget": "select", "blank_option": "Please Select", "options": ["Female", "Male", "I do not wish to self-identify"], "expect": {"from": "facts.gender"}},
+      {"id": "race", "label": "Race/Ethnicity", "widget": "select", "blank_option": "Please Select",
+       "options": ["Asian", "Black or African American", "Hispanic or Latino", "White", "Two or More Races", "I do not wish to self-identify"], "expect": {"from": "facts.race_ethnicity"}},
+      {"id": "veteran", "label": "Veteran Status", "widget": "select", "blank_option": "Please Select",
+       "options": ["I am not a protected veteran", "I identify as one or more of the classifications of protected veteran", "I do not wish to self-identify"],
+       "expect": {"from": "facts.veteran_status"}},
+      {"id": "terms", "label": "I certify that the information provided is true and complete.", "widget": "checkbox", "required": true, "expect": {"from": "facts.cert_accuracy"}}
+     ]
+    }
+   ]
+  }
+ ]
+}

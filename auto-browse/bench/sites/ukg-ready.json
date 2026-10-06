@@ -1,0 +1,285 @@
+{
+ "site": "ukg-ready",
+ "style": "ukg-ready",
+ "evidence": "secure*.saashr.com (UKG Ready) captured 2026-09-15 (output/.playwright-mcp/page-2026-09-15T05-03-53-111Z.yml) and agent traces 2026-06-25/26: Apply offers 'Use my resume' or 'Type it in myself' (det_autofill.engine notes it); 'Apply for Job' asks First *, Last * and Personal Email * with Back / Continue; the live check (2026-09-14) then hit 'We noticed you already have an account... Please log in to continue' (an account wall, planned challenge). The application pages behind that wall were never captured: reconstructed.",
+ "company": "Lakeside Manufacturing",
+ "star": " *",
+ "job": {
+  "title": "Data Engineer",
+  "location": "Austin, TX",
+  "description": "Lakeside Manufacturing makes industrial pumps. We need a data engineer to connect plant-floor systems to our reporting.\n\nDuties: build pipelines from MES and ERP into the warehouse; maintain dashboards' data; document data flows.\n\nRequirements: 3+ years of data engineering; SQL; Python; Airflow a plus.\n\nAustin, TX plant office."
+ },
+ "flow": {
+  "posting": "separate",
+  "apply_button": "Apply",
+  "chooser": [
+   "Use my resume",
+   "Type it in myself"
+  ],
+  "manual_choice": "Type it in myself",
+  "chooser_title": "How would you like to apply?",
+  "challenges": []
+ },
+ "next": "Continue",
+ "submit": "Submit",
+ "confirmation": "Thank you for applying. Your application has been submitted to Lakeside Manufacturing.",
+ "steps": [
+  {
+   "title": "Apply for Job",
+   "sections": [
+    {
+     "fields": [
+      {
+       "id": "first_name",
+       "label": "First",
+       "widget": "text",
+       "required": true,
+       "expect": {
+        "from": "facts.first_name"
+       }
+      },
+      {
+       "id": "last_name",
+       "label": "Last",
+       "widget": "text",
+       "required": true,
+       "expect": {
+        "from": "facts.last_name"
+       }
+      },
+      {
+       "id": "email",
+       "label": "Personal Email",
+       "widget": "text",
+       "input_type": "email",
+       "required": true,
+       "expect": {
+        "from": "contact.email"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Contact Information",
+   "reconstructed": true,
+   "sections": [
+    {
+     "fields": [
+      {
+       "id": "address1",
+       "label": "Address Line 1",
+       "widget": "text",
+       "required": true,
+       "expect": {
+        "from": "facts.street_address"
+       }
+      },
+      {
+       "id": "city",
+       "label": "City",
+       "widget": "text",
+       "required": true,
+       "expect": {
+        "from": "facts.city"
+       }
+      },
+      {
+       "id": "state",
+       "label": "State",
+       "widget": "select",
+       "required": true,
+       "options": [
+        "Arizona",
+        "California",
+        "Oklahoma",
+        "Texas"
+       ],
+       "expect": {
+        "from": "facts.state"
+       }
+      },
+      {
+       "id": "zip",
+       "label": "Zip",
+       "widget": "text",
+       "required": true,
+       "expect": {
+        "from": "facts.zip_code"
+       }
+      },
+      {
+       "id": "cell",
+       "label": "Cell Phone",
+       "widget": "text",
+       "input_type": "tel",
+       "required": true,
+       "expect": {
+        "from": "contact.phone",
+        "match": "phone"
+       }
+      },
+      {
+       "id": "home_phone",
+       "label": "Home Phone",
+       "widget": "text",
+       "input_type": "tel",
+       "expect": {
+        "blank": true,
+        "why": "one phone in the profile"
+       }
+      },
+      {
+       "id": "resume",
+       "label": "Resume",
+       "widget": "file",
+       "required": true,
+       "trigger": "Attach Resume",
+       "expect": {
+        "file": "resume"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Questions",
+   "reconstructed": true,
+   "sections": [
+    {
+     "fields": [
+      {
+       "id": "over_18",
+       "label": "Are you at least 18 years of age?",
+       "widget": "radio",
+       "required": true,
+       "options": [
+        "Yes",
+        "No"
+       ],
+       "expect": {
+        "from": "facts.over_18",
+        "map": {
+         "true": "Yes",
+         "false": "No"
+        }
+       }
+      },
+      {
+       "id": "work_auth",
+       "label": "Are you legally authorized to work in the United States?",
+       "widget": "radio",
+       "required": true,
+       "options": [
+        "Yes",
+        "No"
+       ],
+       "expect": {
+        "from": "facts.work_eligible_us",
+        "map": {
+         "true": "Yes",
+         "false": "No"
+        }
+       }
+      },
+      {
+       "id": "sponsorship",
+       "label": "Will you now or in the future require sponsorship for employment visa status?",
+       "widget": "radio",
+       "required": true,
+       "options": [
+        "Yes",
+        "No"
+       ],
+       "expect": {
+        "from": "facts.visa_sponsorship",
+        "map": {
+         "true": "Yes",
+         "false": "No"
+        }
+       }
+      },
+      {
+       "id": "start",
+       "label": "Date available to start",
+       "widget": "text",
+       "input_type": "date",
+       "expect": {
+        "from": "facts.available_start_date"
+       }
+      },
+      {
+       "id": "shift",
+       "label": "This position works first shift (7:00 AM - 3:30 PM) at the plant office. Are you able to work this schedule?",
+       "widget": "radio",
+       "required": true,
+       "options": [
+        "Yes",
+        "No"
+       ],
+       "expect": {
+        "any": true,
+        "why": "schedule preference is not in the profile",
+        "personal": true
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "EEO",
+   "reconstructed": true,
+   "sections": [
+    {
+     "fields": [
+      {
+       "id": "gender",
+       "label": "Gender",
+       "widget": "select",
+       "options": [
+        "Female",
+        "Male",
+        "Decline to Answer"
+       ],
+       "expect": {
+        "from": "facts.gender"
+       }
+      },
+      {
+       "id": "race",
+       "label": "Race/Ethnicity",
+       "widget": "select",
+       "options": [
+        "Asian",
+        "Black or African American",
+        "Hispanic or Latino",
+        "White",
+        "Two or More Races",
+        "Decline to Answer"
+       ],
+       "expect": {
+        "from": "facts.race_ethnicity"
+       }
+      },
+      {
+       "id": "veteran",
+       "label": "Veteran Status",
+       "widget": "select",
+       "options": [
+        "I am not a protected veteran",
+        "I identify as one or more of the classifications of protected veteran",
+        "Decline to Answer"
+       ],
+       "expect": {
+        "from": "facts.veteran_status"
+       }
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

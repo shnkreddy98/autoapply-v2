@@ -1,0 +1,213 @@
+{
+ "site": "workable",
+ "style": "workable",
+ "evidence": "apply.workable.com captured 2026-09-14 (output/.playwright-mcp/page-2026-09-14T19-25-50-634Z.yml): one page in three sections (Personal information, Profile, Details) with 'Clear' buttons; a telephone country-code combobox beside a phone box named '* Phone'; an Address box; unnamed text boxes for custom questions above which the question is text; Photo and Resume uploads behind 'Choose file' buttons; Education and Experience behind '+ Add'; 'Submit application'. The live check (2026-09-14) passed this platform.",
+ "company": "Quarry Labs",
+ "job": {
+  "title": "Data Engineer (Mid Level)",
+  "location": "Austin, Texas, United States",
+  "description": "Quarry Labs builds damage-prevention software for utilities. Our data engineers turn excavation tickets and GPS feeds into risk scores.\n\nResponsibilities: build pipelines in AWS; operate Kafka; model data in Snowflake.\n\nRequirements: 4+ years of data engineering; Python; SQL; streaming experience.\n\nAustin, TX or remote in the US."
+ },
+ "flow": {
+  "posting": "separate",
+  "apply_button": "Apply for this job",
+  "challenges": []
+ },
+ "submit": "Submit application",
+ "required_note": "* Required fields",
+ "confirmation": "Application submitted. Thank you for applying to Quarry Labs.",
+ "steps": [
+  {
+   "title": "Application",
+   "sections": [
+    {
+     "heading": "Personal information",
+     "fields": [
+      {
+       "id": "first_name",
+       "label": "First name",
+       "widget": "text",
+       "required": true,
+       "expect": {
+        "from": "facts.first_name"
+       }
+      },
+      {
+       "id": "last_name",
+       "label": "Last name",
+       "widget": "text",
+       "required": true,
+       "expect": {
+        "from": "facts.last_name"
+       }
+      },
+      {
+       "id": "email",
+       "label": "Email",
+       "widget": "text",
+       "input_type": "email",
+       "required": true,
+       "expect": {
+        "from": "contact.email"
+       }
+      },
+      {
+       "id": "headline",
+       "label": "Headline",
+       "widget": "text",
+       "expect": {
+        "ignore": "optional; a title-like headline is fine"
+       }
+      },
+      {
+       "id": "phone_code",
+       "label": "Telephone country code",
+       "widget": "select",
+       "blank_option": "",
+       "options": [
+        "+1 United States",
+        "+1 Canada",
+        "+44 United Kingdom",
+        "+52 Mexico"
+       ],
+       "expect": {
+        "value": "+1 United States",
+        "why": "+1, US number"
+       }
+      },
+      {
+       "id": "phone",
+       "label": "Phone",
+       "widget": "text",
+       "input_type": "tel",
+       "required": true,
+       "expect": {
+        "from": "contact.phone",
+        "match": "phone"
+       }
+      },
+      {
+       "id": "address",
+       "label": "Address",
+       "widget": "text",
+       "expect": {
+        "ignore": "free-form; any honest address"
+       }
+      },
+      {
+       "id": "photo",
+       "label": "Photo",
+       "widget": "file",
+       "trigger": "Choose file",
+       "expect": {
+        "blank": true,
+        "why": "no photo in the profile: the resume does not belong here"
+       }
+      },
+      {
+       "id": "current_location",
+       "label": "What is your current location?",
+       "widget": "text",
+       "labels": "detached",
+       "required": true,
+       "expect": {
+        "value": "Austin",
+        "match": "prefix",
+        "why": "contact.location"
+       }
+      },
+      {
+       "id": "total_years",
+       "label": "Total Years of Experience",
+       "widget": "text",
+       "required": true,
+       "expect": {
+        "from": "facts.years_of_experience",
+        "match": "digits"
+       }
+      },
+      {
+       "id": "relevant_years",
+       "label": "Relevant Years of Experience",
+       "widget": "text",
+       "required": true,
+       "expect": {
+        "from": "facts.years_of_experience",
+        "match": "digits",
+        "why": "all 7 years are data engineering"
+       }
+      }
+     ]
+    },
+    {
+     "heading": "Profile",
+     "fields": [
+      {
+       "id": "summary",
+       "label": "Summary",
+       "widget": "textarea",
+       "expect": {
+        "ignore": "optional"
+       }
+      },
+      {
+       "id": "resume",
+       "label": "Resume",
+       "widget": "file",
+       "required": true,
+       "trigger": "Choose file",
+       "expect": {
+        "file": "resume"
+       }
+      }
+     ]
+    },
+    {
+     "heading": "Details",
+     "fields": [
+      {
+       "id": "cover",
+       "label": "Cover letter",
+       "widget": "textarea",
+       "expect": {
+        "ignore": "optional"
+       }
+      },
+      {
+       "id": "notice",
+       "label": "What is your notice period?",
+       "widget": "text",
+       "required": true,
+       "expect": {
+        "one_of": [
+         "2 weeks",
+         "two weeks",
+         "14 days",
+         "2 weeks notice"
+        ],
+        "why": "facts.notice_period = 2 weeks"
+       }
+      },
+      {
+       "id": "sponsorship",
+       "label": "Do you require visa sponsorship to work in the US?",
+       "widget": "radio",
+       "required": true,
+       "options": [
+        "Yes",
+        "No"
+       ],
+       "expect": {
+        "from": "facts.visa_sponsorship",
+        "map": {
+         "true": "Yes",
+         "false": "No"
+        }
+       }
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

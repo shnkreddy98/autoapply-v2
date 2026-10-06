@@ -1,0 +1,103 @@
+{
+ "_comment": "Synthetic applicant for the apply bench. Same shape as `autoapply profile export` (agent.profile.profile_json). Nobody real: example.com addresses, a 555 phone. Site specs pull expected answers from here by path, so change a value here and the answer key follows. Picked to exercise mapping, not to be typical: EEO answers worded differently from most forms (Female vs Woman), no middle name, no sponsorship.",
+ "role": "de",
+ "contact": {
+  "email": "morgan.castillo@example.com",
+  "full_name": "Morgan Castillo",
+  "phone": "(512) 555-0142",
+  "linkedin": "https://www.linkedin.com/in/morgan-castillo-data",
+  "github": "https://github.com/mcastillo-data",
+  "location": "Austin, TX"
+ },
+ "facts": {
+  "first_name": "Morgan",
+  "middle_name": null,
+  "last_name": "Castillo",
+  "preferred_name": "Morgan",
+  "pronouns": "She/her/hers",
+  "phone_country_code": "+1",
+  "portfolio_url": "https://mcastillo.dev",
+  "street_address": "2201 Lakeshore Blvd",
+  "city": "Austin",
+  "state": "Texas",
+  "zip_code": "78741",
+  "country": "United States",
+  "date_of_birth": null,
+  "work_eligible_us": true,
+  "visa_sponsorship": false,
+  "security_clearance": false,
+  "over_18": true,
+  "available_start_date": "2026-11-02",
+  "notice_period": "2 weeks",
+  "desired_salary": "165000",
+  "employment_type": "Full-time",
+  "years_of_experience": 7,
+  "willing_relocate": false,
+  "willing_travel": true,
+  "travel_percentage": "10%",
+  "current_employee": true,
+  "ever_terminated": false,
+  "termination_explanation": null,
+  "gender": "Female",
+  "race_ethnicity": "Asian",
+  "hispanic_latino": "No",
+  "veteran_status": "I am not a protected veteran",
+  "disability_status": "No, I do not have a disability",
+  "how_did_you_hear": "LinkedIn",
+  "cert_accuracy": true,
+  "cert_dismissal": true,
+  "cert_background_check": true,
+  "cert_drug_testing": true,
+  "cert_at_will": true,
+  "cert_job_description": true,
+  "cert_privacy_notice": true,
+  "cert_data_processing": true,
+  "electronic_signature": "Morgan Castillo",
+  "signature_date": "2026-09-30"
+ },
+ "portal_login": {"email": "morgan.castillo@example.com", "password_set": false},
+ "summary": "Data engineer with 7 years building batch and streaming pipelines on AWS and Snowflake. Leads a platform team that moved a retail analytics stack from nightly jobs to near-real-time Kafka and Spark pipelines.",
+ "work_experiences": [
+  {
+   "job_title": "Senior Data Engineer",
+   "company_name": "Northwind Analytics",
+   "location": "Austin, TX",
+   "from_date": "2022-03-01",
+   "to_date": null,
+   "is_current": true,
+   "bullets": [
+    "Rebuilt the order-events pipeline on Kafka and Spark Structured Streaming, cutting dashboard latency from 24 hours to 5 minutes.",
+    "Own the Snowflake warehouse (40 TB): dbt models, cost controls and access policies.",
+    "Lead a team of four data engineers; run the on-call rotation for the data platform."
+   ]
+  },
+  {
+   "job_title": "Data Engineer",
+   "company_name": "Contoso Retail",
+   "location": "Dallas, TX",
+   "from_date": "2019-06-01",
+   "to_date": "2022-02-01",
+   "is_current": false,
+   "bullets": [
+    "Built Airflow DAGs loading 30 source systems into Redshift.",
+    "Wrote the Python data-quality framework the analytics team still uses."
+   ]
+  }
+ ],
+ "education": [
+  {
+   "school": "University of Texas at Austin",
+   "degree": "Bachelor's Degree",
+   "major": "Computer Science",
+   "from_date": "2015-08-01",
+   "to_date": "2019-05-01",
+   "gpa": null
+  }
+ ],
+ "skill_groups": [
+  {"category": "Languages", "skills": ["Python", "SQL", "Scala"]},
+  {"category": "Data", "skills": ["Spark", "Kafka", "Airflow", "dbt", "Snowflake", "Redshift"]},
+  {"category": "Cloud", "skills": ["AWS", "Terraform", "Docker"]}
+ ],
+ "references": []
+}

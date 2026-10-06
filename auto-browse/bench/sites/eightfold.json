@@ -1,0 +1,414 @@
+{
+ "site": "eightfold",
+ "style": "eightfold",
+ "evidence": "*.eightfold.ai/careers/apply captured 2026-09-14 (output/.playwright-mcp/page-2026-09-14T20-27-59-990Z.yml) and a cookie dialog 'Important System Message' (Accept / Reject / Manage Settings) captured 2026-08-22: one page in groups (Resume, Contact Information, Application questions, Additional Questions, Diversity Information); Yes/No radios whose names repeat the question ('Yes, Are you 18 years of age or older?'); a phone country-code combobox ('🇺🇸 (+1) United States of America'); dropdown questions as comboboxes. The live check (2026-09-14) ended GAPS on 'In which capacity, if any, are you currently, or were you most recently employed at ...?'. Brassring, the #18 ATS by volume, was swapped for Eightfold: no Brassring form was ever captured past its sign-in wall.",
+ "company": "Prairie Machinery",
+ "job": {
+  "title": "Data Engineer",
+  "location": "Austin, Texas, United States",
+  "description": "Prairie Machinery builds agricultural equipment. The connected-machines data team streams telemetry from 400,000 machines.\n\nKey Responsibilities: build streaming pipelines with Kafka and Spark; model data in Snowflake; partner with data scientists.\n\nKey Qualifications: 5+ years of data engineering; Python; SQL; Kafka; AWS.\n\nAustin, Texas (hybrid)."
+ },
+ "flow": {
+  "posting": "separate",
+  "apply_button": "Apply",
+  "challenges": [],
+  "overlay": {
+   "title": "Important System Message",
+   "text": "We use cookies to provide this site. Accept to continue, reject non-essential cookies, or manage your settings.",
+   "buttons": [
+    "Reject",
+    "Manage Settings",
+    "Accept"
+   ],
+   "keep": [
+    "Manage Settings"
+   ],
+   "dismiss": "Accept"
+  }
+ },
+ "submit": "Submit Application",
+ "required_note": "Required fields are marked with *",
+ "confirmation": "Thank you for applying! Your application has been submitted to Prairie Machinery.",
+ "steps": [
+  {
+   "title": "Application Form",
+   "sections": [
+    {
+     "heading": "Resume",
+     "fields": [
+      {
+       "id": "resume",
+       "label": "Resume",
+       "widget": "file",
+       "required": true,
+       "trigger": "Upload",
+       "expect": {
+        "file": "resume"
+       }
+      }
+     ]
+    },
+    {
+     "heading": "Contact Information",
+     "fields": [
+      {
+       "id": "first_name",
+       "label": "Legal First Name",
+       "widget": "text",
+       "required": true,
+       "expect": {
+        "from": "facts.first_name"
+       }
+      },
+      {
+       "id": "last_name",
+       "label": "Legal Last Name",
+       "widget": "text",
+       "required": true,
+       "expect": {
+        "from": "facts.last_name"
+       }
+      },
+      {
+       "id": "email",
+       "label": "Email",
+       "widget": "text",
+       "input_type": "email",
+       "required": true,
+       "expect": {
+        "from": "contact.email"
+       }
+      },
+      {
+       "id": "phone_code",
+       "label": "Country code",
+       "widget": "typeahead",
+       "named": true,
+       "placeholder": "",
+       "options": [
+        "🇨🇦 (+1) Canada",
+        "🇺🇸 (+1) United States of America",
+        "🇬🇧 (+44) United Kingdom",
+        "🇲🇽 (+52) Mexico",
+        "🇮🇳 (+91) India"
+       ],
+       "expect": {
+        "value": "🇺🇸 (+1) United States of America",
+        "why": "+1, US number"
+       }
+      },
+      {
+       "id": "phone",
+       "label": "Phone Number",
+       "widget": "text",
+       "input_type": "tel",
+       "required": true,
+       "expect": {
+        "from": "contact.phone",
+        "match": "phone"
+       }
+      }
+     ]
+    },
+    {
+     "heading": "Application questions",
+     "fields": [
+      {
+       "id": "f1",
+       "label": "Are you currently in F-1 Visa status? (An F-1 Visa is granted to foreign students attending school in the United States)",
+       "widget": "radio",
+       "required": true,
+       "option_aria": "{option}, {label}",
+       "options": [
+        "Yes",
+        "No"
+       ],
+       "expect": {
+        "value": "No",
+        "why": "work-eligible without sponsorship"
+       }
+      },
+      {
+       "id": "assistance",
+       "label": "Do you now, or will you in the future, require assistance in obtaining work status in the United States (e.g. H-1B (new or transfer), TN, E-3, O-1)?",
+       "widget": "radio",
+       "required": true,
+       "option_aria": "{option}, {label}",
+       "options": [
+        "Yes",
+        "No"
+       ],
+       "expect": {
+        "from": "facts.visa_sponsorship",
+        "map": {
+         "true": "Yes",
+         "false": "No"
+        }
+       }
+      },
+      {
+       "id": "eligible",
+       "label": "Are you legally eligible to work for Prairie Machinery and other employers in the United States on a regular or full-time basis?",
+       "widget": "radio",
+       "required": true,
+       "option_aria": "{option}, {label}",
+       "options": [
+        "Yes",
+        "No"
+       ],
+       "expect": {
+        "from": "facts.work_eligible_us",
+        "map": {
+         "true": "Yes",
+         "false": "No"
+        }
+       }
+      },
+      {
+       "id": "assistance_detail",
+       "label": "If you currently, or will in the future, require assistance in obtaining work status or maintaining your current work authorization, please explain.",
+       "widget": "text",
+       "expect": {
+        "blank": true,
+        "why": "no sponsorship needed"
+       }
+      },
+      {
+       "id": "contingent",
+       "label": "Do you currently, or have you in the past, worked for a company that has supplied contingent or contract labor to Prairie Machinery?",
+       "widget": "text",
+       "expect": {
+        "ignore": "the profile cannot say; 'No' is likely but unproven"
+       }
+      },
+      {
+       "id": "over_18",
+       "label": "Are you 18 years of age or older?",
+       "widget": "radio",
+       "required": true,
+       "option_aria": "{option}, {label}",
+       "options": [
+        "Yes",
+        "No"
+       ],
+       "expect": {
+        "from": "facts.over_18",
+        "map": {
+         "true": "Yes",
+         "false": "No"
+        }
+       }
+      },
+      {
+       "id": "certify",
+       "label": "I certify that all statements made by me on this application are true and correct to the best of my knowledge and belief.",
+       "widget": "radio",
+       "required": true,
+       "option_aria": "{option}, {label}",
+       "options": [
+        "Yes",
+        "No"
+       ],
+       "expect": {
+        "from": "facts.cert_accuracy",
+        "map": {
+         "true": "Yes",
+         "false": "No"
+        }
+       }
+      },
+      {
+       "id": "preferred_first",
+       "label": "Preferred First Name",
+       "widget": "text",
+       "expect": {
+        "from": "facts.preferred_name"
+       }
+      },
+      {
+       "id": "middle",
+       "label": "Middle Name",
+       "widget": "text",
+       "expect": {
+        "blank": true,
+        "why": "facts.middle_name is empty"
+       }
+      },
+      {
+       "id": "preferred_last",
+       "label": "Preferred Last Name",
+       "widget": "text",
+       "expect": {
+        "ignore": "optional; the legal last name is fine"
+       }
+      },
+      {
+       "id": "other_phone",
+       "label": "Other Phone no",
+       "widget": "text",
+       "expect": {
+        "blank": true,
+        "why": "one phone"
+       }
+      },
+      {
+       "id": "address1",
+       "label": "Address Line 1",
+       "widget": "text",
+       "expect": {
+        "from": "facts.street_address"
+       }
+      },
+      {
+       "id": "country",
+       "label": "Country",
+       "widget": "typeahead",
+       "named": true,
+       "placeholder": "",
+       "options": [
+        "Canada",
+        "Mexico",
+        "United Kingdom",
+        "United States"
+       ],
+       "expect": {
+        "from": "facts.country"
+       }
+      },
+      {
+       "id": "city",
+       "label": "City",
+       "widget": "text",
+       "expect": {
+        "from": "facts.city"
+       }
+      },
+      {
+       "id": "postal",
+       "label": "Postal Code",
+       "widget": "text",
+       "expect": {
+        "from": "facts.zip_code"
+       }
+      }
+     ]
+    },
+    {
+     "heading": "Additional Questions",
+     "fields": [
+      {
+       "id": "capacity",
+       "label": "In which capacity, if any, are you currently, or were you most recently employed at Prairie Machinery?",
+       "widget": "typeahead",
+       "named": true,
+       "placeholder": "",
+       "required": true,
+       "options": [
+        "I have never been employed by Prairie Machinery",
+        "Current employee",
+        "Former employee",
+        "Current or former contractor"
+       ],
+       "expect": {
+        "value": "I have never been employed by Prairie Machinery",
+        "why": "not in work_experiences"
+       }
+      },
+      {
+       "id": "related",
+       "label": "Are you related to anyone who is currently employed by Prairie Machinery?",
+       "widget": "typeahead",
+       "named": true,
+       "placeholder": "",
+       "required": true,
+       "options": [
+        "Yes",
+        "No"
+       ],
+       "expect": {
+        "any": true,
+        "why": "not in the profile",
+        "personal": true
+       }
+      },
+      {
+       "id": "related_name",
+       "label": "If you answered Yes for being related to anyone who is currently employed by Prairie Machinery, please provide their full name and relationship.",
+       "widget": "text",
+       "show_if": {
+        "field": "related",
+        "equals": "Yes"
+       },
+       "expect": {
+        "ignore": "depends on the previous answer"
+       }
+      }
+     ]
+    },
+    {
+     "heading": "Diversity Information",
+     "note": "U.S. - Invitation to Self Identify",
+     "fields": [
+      {
+       "id": "gender",
+       "label": "Gender",
+       "widget": "typeahead",
+       "named": true,
+       "placeholder": "",
+       "options": [
+        "Female",
+        "Male",
+        "I don't wish to answer"
+       ],
+       "expect": {
+        "from": "facts.gender"
+       }
+      },
+      {
+       "id": "pronouns",
+       "label": "Pronouns",
+       "widget": "typeahead",
+       "named": true,
+       "placeholder": "",
+       "options": [
+        "She/Her",
+        "He/Him",
+        "They/Them",
+        "I don't wish to answer"
+       ],
+       "expect": {
+        "from": "facts.pronouns",
+        "map": {
+         "She/her/hers": "She/Her",
+         "He/him/his": "He/Him"
+        }
+       }
+      },
+      {
+       "id": "ethnicity",
+       "label": "Ethnicity",
+       "widget": "typeahead",
+       "named": true,
+       "placeholder": "",
+       "options": [
+        "Asian (Not Hispanic or Latino)",
+        "Black or African American (Not Hispanic or Latino)",
+        "Hispanic or Latino",
+        "White (Not Hispanic or Latino)",
+        "Two or More Races (Not Hispanic or Latino)",
+        "I don't wish to answer"
+       ],
+       "expect": {
+        "from": "facts.race_ethnicity",
+        "map": {
+         "Asian": "Asian (Not Hispanic or Latino)",
+         "White": "White (Not Hispanic or Latino)"
+        }
+       }
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}
