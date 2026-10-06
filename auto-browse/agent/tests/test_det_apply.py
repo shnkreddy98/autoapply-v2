@@ -12,7 +12,7 @@ from agent import det_apply
 from cli import main as cli
 from common import repo
 from det_autofill.classify import Row
-from det_autofill.engine import RunResult
+from det_autofill.engine import PageReport, RunResult
 
 
 class FakeStorage:
@@ -159,3 +159,99 @@ def test_engine_flag_parses():
     assert (args.engine, args.mcp) == ("det", "http://x/mcp")
     assert cli.build_parser().parse_args(["apply", "abcd1234"]).engine == "agent"
     assert cli.build_parser().parse_args(["continue", "abcd1234", "--engine", "det"]).engine == "det"
+    assert cli.build_parser().parse_args(["apply", "abcd1234", "--engine", "det+agent"]).engine == "det+agent"
+    assert cli.build_parser().parse_args(["continue", "abcd1234", "--engine", "det+agent"]).engine == "det+agent"
+    with pytest.raises(SystemExit, match="only drive --engine det"):
+        cli._check_engine_model("det+agent", "jev-latest")  # the agent half needs a chat model
+
+
+# ---------------------------------------------------------------------------
+# --engine det+agent
+
+
+def _det_result(status, reason, filled=(), unresolved=()):
+    page = PageReport(number=1, url="https://ex.dev/apply", unresolved=list(unresolved),
+                      filled=[{"label": label, "key": None, "ok": ok, "how": "x", "source": "profile"}
+                              for label, ok in filled])
+    return RunResult(status=status, reason=reason, pages=[page])
+
+
+@pytest.mark.parametrize("status,reason,unresolved,takes_over", [
+    ("stuck", "required field(s) unanswered: Visa type", ["Visa type"], True),
+    ("stuck", "page rejected Next: Employment History is required", [], True),
+    ("stuck", "'Apply Now' did not open an application form", [], True),
+    ("handoff", "no sign-in button", [], True),  # Rivian: the agent signed in
+    ("handoff", "no account on this portal (the check never creates one)", [], True),
+    ("handoff", "captcha over the form (hcaptcha)", [], False),
+    ("handoff", "human check after Submit: solve it in the browser (noVNC :6080) and confirm", [], False),
+    ("handoff", "captcha-or-code: Enter the code we emailed you", [], False),
+    ("handoff", "sign-in rejected: incorrect password", [], False),
+    ("stuck", "required field(s) unanswered: Are you an LLM, AI agent, or other associated agentic tool?",
+     ["Are you an LLM, AI agent, or other associated agentic tool?"], False),  # the applicant's to answer
+    ("submitted", "confirmation page seen", [], False),
+    ("ready-to-submit", "stopped before 'Submit'", [], False),
+])
+def test_agent_takes_over_only_what_it_may(status, reason, unresolved, takes_over):
+    assert det_apply.agent_should_take_over(_det_result(status, reason, unresolved=unresolved)) is takes_over
+
+
+def test_handover_lists_what_det_filled_and_what_is_left():
+    note = det_apply.agent_handover(_det_result(
+        "stuck", "required field(s) unanswered: Visa type",
+        filled=[("Email", True), ("Phone", True), ("Discipline", False)], unresolved=["Visa type"]))
+    assert "keep these; touch one only if the page marks it invalid: Email; Phone" in note
+    assert note.split("Left for you: ")[1].split("\n")[0] == "Visa type; Discipline"
+    assert "(stuck: required field(s) unanswered: Visa type)" in note
+    assert "never guess" in note and "Captchas are a human handoff" in note
+
+
+def test_handover_becomes_the_agents_continue_task():
+    from agent.loop import apply_task
+
+    task = apply_task("https://ex.dev/j", continue_run=True, handover="HANDOVER FROM THE DETERMINISTIC FILLER: x")
+    assert task.startswith("Continue the partially completed application") and task.endswith("FILLER: x")
+    assert "HANDOVER" not in apply_task("https://ex.dev/j", continue_run=True)
+
+
+def test_det_agent_hands_the_open_page_to_the_agent(db, monkeypatch):
+    uid, _ = _user_with_role(db)
+    job_id = repo.add_job_for_user(db, uid, "https://ex.dev/j/det-agent")
+    calls = {}
+
+    async def fake_run_det(*a, **kw):
+        calls["push"] = kw["push"]
+        return _det_result("stuck", "required field(s) unanswered: Visa type",
+                           filled=[("Email", True)], unresolved=["Visa type"])
+
+    def fake_agent(conn, u, j, url, model, autosubmit, continue_run=False, handover=None):
+        calls["agent"] = (continue_run, autosubmit, handover)
+        return True
+
+    monkeypatch.setattr(det_apply, "run_det", fake_run_det)
+    monkeypatch.setattr(cli, "_storage", lambda: FakeStorage())
+    monkeypatch.setattr(cli, "_run_apply_agent", fake_agent)
+
+    assert cli._run_apply_det(db, uid, job_id, "https://ex.dev/j", "m", True, agent_fallback=True) is True
+    continue_run, autosubmit, handover = calls["agent"]
+    assert continue_run and autosubmit and "Left for you: Visa type" in handover
+    assert calls["push"] is False  # no "apply paused" alert while the agent carries on
+    det_row = repo.list_applications(db, uid, job_id)[0]
+    assert det_row["status"] == "failed" and det_row["outcome"].startswith("det stopped, agent took over")
+
+
+def test_det_agent_leaves_a_captcha_to_the_person(db, monkeypatch):
+    uid, _ = _user_with_role(db)
+    job_id = repo.add_job_for_user(db, uid, "https://ex.dev/j/det-captcha")
+    pushed = []
+
+    async def fake_run_det(*a, **kw):
+        return _det_result("handoff", "captcha over the form (hcaptcha)")
+
+    monkeypatch.setattr(det_apply, "run_det", fake_run_det)
+    monkeypatch.setattr(det_apply, "push_handoff", lambda *a: pushed.append(a))
+    monkeypatch.setattr(cli, "_storage", lambda: FakeStorage())
+    monkeypatch.setattr(cli, "_run_apply_agent", lambda *a, **kw: pytest.fail("the agent must not take a captcha"))
+    monkeypatch.setattr(cli, "_confirm_submitted", lambda: None)
+
+    assert cli._run_apply_det(db, uid, job_id, "https://ex.dev/j", "m", False, agent_fallback=True) is True
+    assert len(pushed) == 1  # the person still gets the alert

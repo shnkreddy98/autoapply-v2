@@ -212,7 +212,7 @@ _GOAL_REVIEW = "GOAL: fill every field across every step and reach the final rev
 _GOAL_AUTOSUBMIT = "GOAL: fill every field across every step, upload the resume along the way, and click the final Submit to complete the application."
 
 _RULE_REVIEW = "- Work through every page/step. Do NOT click the final Submit — stop before it and return a short plain-text summary of what you filled and anything you couldn't."
-_RULE_AUTOSUBMIT = "- Work through every page/step. At the final review/submit step, check the form is complete, click the final Submit, and wait for the page to confirm the application was received. Return a short plain-text summary of what you filled, whether the confirmation appeared, and anything you couldn't do. If the Submit fails or no confirmation appears, say so explicitly. Your reply MUST end with a final line that is exactly `SUBMITTED: yes` (you saw a confirmation page/message) or `SUBMITTED: no` (you did not) — never claim yes without seeing the confirmation, and put nothing after that line."
+_RULE_AUTOSUBMIT = "- Work through every page/step. At the final review/submit step, check the form is complete, click the final Submit, and wait for the page to confirm the application was received. Return a short plain-text summary of what you filled, whether the confirmation appeared, and anything you couldn't do. If the Submit fails or no confirmation appears, say so explicitly. After clicking the final Submit, read the page again (fetch_aria) and find the confirmation for THIS submission before you write the verdict. If the portal says this job was already applied to, do not apply again. Your reply MUST end with a final line that is exactly `SUBMITTED: yes` (you read a confirmation page/message after clicking Submit), `SUBMITTED: already` (the portal says this job was already applied to) or `SUBMITTED: no` (anything else) — never claim yes without having read the confirmation, and put nothing after that line."
 
 _CONTINUE_BLOCK = (
     "\n\nCONTINUING A PREVIOUS RUN: an earlier run already filled part of this "
@@ -1142,20 +1142,24 @@ SCRATCH_ROOT = os.getenv("SCRATCH_ROOT", str(HERE / "output" / "resume"))
 RESUME_CONTAINER_ROOT = os.getenv("RESUME_CONTAINER_ROOT", "/resume")
 
 
-def apply_task(job_url: str, autosubmit: bool = False, continue_run: bool = False) -> str:
-    """The user turn that starts a run (the current page is appended once loaded)."""
+def apply_task(
+    job_url: str, autosubmit: bool = False, continue_run: bool = False, handover: str | None = None
+) -> str:
+    """The user turn that starts a run (the current page is appended once loaded).
+    `handover`: det+agent's brief from the deterministic filler (det_apply.agent_handover)."""
     submit_clause = (
         "and click the final Submit to complete the application."
         if autosubmit
         else "and STOP before the final submit so the user can review."
     )
     if continue_run:
-        return (
+        task = (
             f"Continue the partially completed application for this job: {job_url}\n\n"
             "A previous run already filled part of the form; the browser is still on "
             "it. Verify what is filled, complete the rest (including the resume "
             f"upload if missing), {submit_clause}"
         )
+        return f"{task}\n\n{handover}" if handover else task
     return (
         f"Apply for this job: {job_url}\n\n"
         "Fill the application using the applicant profile, upload the resume, "
@@ -1207,9 +1211,11 @@ async def main(
     run_id: str | None = None,
     autosubmit: bool = False,
     continue_run: bool = False,
+    handover: str | None = None,
 ) -> str:
     # Caller-supplied run_id lets the CLI link the applications row to this run's
-    # trace/log files even if the run crashes.
+    # trace/log files even if the run crashes. `handover` (det+agent) implies
+    # continue_run: the agent picks up the page det left open.
     run_id = run_id or new_run_id()
     setup_logging(run_id)
     trace = Trace(run_id)
@@ -1247,7 +1253,8 @@ async def main(
             gmail_grant["refresh_token"], run_start_epoch
         )
         log.info("gmail 2FA tool enabled (%s)", gmail_grant.get("gmail_address"))
-    task = apply_task(job_url, autosubmit, continue_run)
+    continue_run = continue_run or bool(handover)
+    task = apply_task(job_url, autosubmit, continue_run, handover)
 
     client = create_openrouter_client()
     usage = _new_usage()

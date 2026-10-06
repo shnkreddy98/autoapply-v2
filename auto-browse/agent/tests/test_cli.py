@@ -368,6 +368,14 @@ def test_apply_marker_mapping():
         == "unconfirmed"
     )
     assert (
+        cli._apply_marker({"apply_status": "finished", "apply_outcome": "skipped"})
+        == "skipped"
+    )
+    assert (
+        cli._apply_marker({"apply_status": "finished", "apply_outcome": "already applied"})
+        == "applied-before"
+    )
+    assert (
         cli._apply_marker({"apply_status": "finished", "apply_outcome": None})
         == "handed-off"
     )
@@ -515,6 +523,7 @@ def test_autosubmit_outcome_parsing():
     f = cli._autosubmit_outcome
     assert f("all done.\nSUBMITTED: yes") == "submitted"
     assert f("no confirmation appeared.\nSUBMITTED: no") == "not submitted"
+    assert f("the portal says you already applied.\nSUBMITTED: already") == "already applied"
     assert f("submitted: YES") == "submitted"  # case-insensitive
     # last verdict wins over earlier mentions of the format
     assert f("I must end with SUBMITTED: yes or no.\n...\nSUBMITTED: no") == (
@@ -534,6 +543,7 @@ def test_build_system_prompt_autosubmit():
     assert "Do NOT click the final Submit" not in auto
     assert "click the final Submit" in auto
     assert "SUBMITTED: yes" in auto  # verdict line demanded of autosubmit runs
+    assert "SUBMITTED: already" in auto and "read the page again" in auto
     assert "SUBMITTED: yes" not in review
     # shared scaffolding intact in both variants
     for prompt in (review, auto):
@@ -602,6 +612,26 @@ def test_select_ready_jobs_filters(db):
     assert {r["job_id"] for r in picked_all} == {ready, half, old}
 
 
+def test_jobs_skip_keeps_the_job_out_of_batch_apply(db, monkeypatch, capsys):
+    """A job the user decided against (a student co-op) was picked up by every
+    `apply --today` again; `jobs skip` records that decision."""
+    import contextlib
+    from types import SimpleNamespace
+
+    uid = _mk_user(db)
+    keep = _mk_ready_job(db, uid, "https://ex.dev/j/keep")
+    skip = _mk_ready_job(db, uid, "https://ex.dev/j/skip")
+    monkeypatch.setattr(cli, "_connect", lambda: contextlib.nullcontext(db))
+
+    assert cli.cmd_jobs_skip(SimpleNamespace(jobs=[str(skip)], user=None)) == 0
+    assert "skipped" in capsys.readouterr().out
+    assert [r["job_id"] for r in cli.select_ready_jobs(db, uid, None)] == [keep]
+    app = repo.list_applications(db, uid, skip)[0]
+    assert (app["status"], app["outcome"]) == ("finished", "skipped")
+    # still in the pipeline, unlike `jobs rm`
+    assert skip in {r["job_id"] for r in repo.list_jobs_for_user(db, uid, "jd_ready")}
+
+
 def test_cmd_apply_today_runs_each_ready_job(db, monkeypatch):
     import contextlib
     from types import SimpleNamespace
@@ -666,9 +696,9 @@ def test_cmd_continue_guards_and_run(db, monkeypatch):
     seen = {}
 
     async def fake_main(
-        user_id, url, model, run_id=None, autosubmit=False, continue_run=False
+        user_id, url, model, run_id=None, autosubmit=False, continue_run=False, handover=None
     ):
-        seen.update(url=url, autosubmit=autosubmit, continue_run=continue_run)
+        seen.update(url=url, autosubmit=autosubmit, continue_run=continue_run, handover=handover)
         return "filled the rest and clicked submit.\nSUBMITTED: yes"
 
     monkeypatch.setattr(loop_mod, "main", fake_main)
@@ -677,6 +707,7 @@ def test_cmd_continue_guards_and_run(db, monkeypatch):
         "url": "https://ex.dev/j/1",
         "autosubmit": True,
         "continue_run": True,
+        "handover": None,  # only det+agent briefs the agent
     }
     # a new attempt row was recorded; outcome came from the SUBMITTED verdict
     apps = repo.list_applications(db, uid, job_id)

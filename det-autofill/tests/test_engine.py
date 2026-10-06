@@ -749,3 +749,59 @@ def test_the_resolver_sees_a_dropdowns_choices(tmp_path):
     sent = json.loads(model.seen[0][1]["content"].split("Fields:\n", 1)[1])
     assert sent[0]["options"] == ["Yes, without accommodations", "Yes, with accommodations", "No"]
     assert value == "Yes, without accommodations" and submitted == "1", result.reason
+
+
+def _run_submit_page(body):
+    """A one-field form whose Submit runs `body`'s script; returns (result, sent flag)."""
+    from browser import chromium_executable
+
+    html = f"""<form id="f" onsubmit="return false"><label for="email">Email*</label>
+      <input type="email" id="email" required><button type="button" id="go">Submit Application</button></form>
+      <div id="after"></div>{body}"""
+
+    async def go():
+        p = await pw.async_playwright().start()
+        try:
+            browser = await p.chromium.launch(headless=True, executable_path=chromium_executable())
+        except Exception as exc:
+            await p.stop()
+            pytest.skip(f"chromium unavailable: {exc}")
+        try:
+            page = await browser.new_page()
+            await page.set_content(html)
+            result = await engine.run(PlaywrightDriver(page), AnswerStore(from_export(DOC)), autosubmit=True)
+            return result, await page.evaluate("() => document.body.dataset.sent || null")
+        finally:
+            await browser.close()
+            await p.stop()
+
+    return asyncio.run(go())
+
+
+CHALLENGE = ('<iframe title="Widget containing checkbox for hCaptcha security challenge" src="about:blank" '
+             'style="width:300px;height:80px;border:0"></iframe>')
+
+
+def test_a_human_check_after_submit_is_not_a_submission():
+    """Hyperbolic (Ashby, 2026-10-05): Submit raised a human check while the page
+    already read like a confirmation; the run was recorded as submitted."""
+    result, _ = _run_submit_page(f"""<script>document.getElementById('go').onclick = () => {{
+        document.getElementById('f').hidden = true;
+        document.getElementById('after').innerHTML = '<h2>Thank you for your application</h2>' + {CHALLENGE!r}; }};</script>""")
+    assert result.status == "handoff" and result.reason.startswith("human check after Submit"), result.reason
+
+
+def test_recaptchas_invisible_badge_does_not_block_a_confirmation():
+    badge = ('<div class="grecaptcha-badge"><iframe title="reCAPTCHA" src="about:blank" '
+             'style="width:256px;height:60px"></iframe></div>')
+    result, _ = _run_submit_page(f"""{badge}<script>document.getElementById('go').onclick = () => {{
+        document.getElementById('f').hidden = true;
+        document.getElementById('after').innerHTML = '<h2>Thank you for applying</h2>'; }};</script>""")
+    assert (result.status, result.reason) == ("submitted", "confirmation page seen"), result.reason
+
+
+def test_a_challenge_on_the_form_stops_det_before_submit():
+    result, sent = _run_submit_page(f"""{CHALLENGE}<script>document.getElementById('go').onclick = () => {{
+        document.body.dataset.sent = 1; }};</script>""")
+    assert result.status == "handoff" and result.reason.startswith("human check before Submit")
+    assert sent is None

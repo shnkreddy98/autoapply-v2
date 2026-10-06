@@ -24,6 +24,31 @@ USAGE_PATH = Path(os.getenv("USAGE_PATH", OUTPUT / "usage.jsonl"))
 
 LOGGER_NAME = "auto_browse.agent"
 
+# Values that must never reach disk. The portal password sits in the agent's profile
+# text and comes back in tool results (the MCP echoes the code that typed it), so on
+# 2026-10-05 72 trace / log / form files under output/ held it in plain text.
+_SECRETS: set[str] = set()
+REDACTED = "[redacted]"
+
+
+def register_secret(value: str | None) -> None:
+    """Scrub `value` from every trace event, log line and record written after this."""
+    if value and len(value) >= 4:
+        _SECRETS.add(value)
+
+
+def scrub(text: str) -> str:
+    """`text` with registered secrets replaced, as typed and as JSON-escaped."""
+    for secret in _SECRETS:
+        for form in {secret, json.dumps(secret, ensure_ascii=False)[1:-1]}:
+            text = text.replace(form, REDACTED)
+    return text
+
+
+class _ScrubbingFormatter(logging.Formatter):
+    def format(self, record: logging.LogRecord) -> str:
+        return scrub(super().format(record))
+
 
 def new_run_id() -> str:
     return f"{datetime.now(timezone.utc):%Y%m%dT%H%M%SZ}-{uuid4().hex[:6]}"
@@ -51,7 +76,7 @@ def setup_logging(run_id: str) -> logging.Logger:
     log.handlers.clear()
     log.propagate = False
 
-    fmt = logging.Formatter(
+    fmt = _ScrubbingFormatter(
         "%(asctime)s %(levelname)s [%(run_id)s] %(message)s", datefmt="%H:%M:%S"
     )
     run_filter = _RunIdFilter(run_id)
@@ -92,14 +117,14 @@ class Trace:
             **fields,
         }
         with self.path.open("a", encoding="utf-8") as f:
-            f.write(json.dumps(record, ensure_ascii=False, default=str) + "\n")
+            f.write(scrub(json.dumps(record, ensure_ascii=False, default=str)) + "\n")
 
 
 def append_usage(record: dict[str, Any]) -> None:
     """Append one run's usage record to output/usage.jsonl (all runs accumulate)."""
     USAGE_PATH.parent.mkdir(parents=True, exist_ok=True)
     with USAGE_PATH.open("a", encoding="utf-8") as f:
-        f.write(json.dumps(record, ensure_ascii=False, default=str) + "\n")
+        f.write(scrub(json.dumps(record, ensure_ascii=False, default=str)) + "\n")
 
 
 def write_form_record(run_id: str, record: dict[str, Any]) -> Path:
@@ -108,6 +133,6 @@ def write_form_record(run_id: str, record: dict[str, Any]) -> Path:
     FORMS_DIR.mkdir(parents=True, exist_ok=True)
     path = FORMS_DIR / f"{run_id}.json"
     path.write_text(
-        json.dumps(record, ensure_ascii=False, indent=2, default=str), encoding="utf-8"
+        scrub(json.dumps(record, ensure_ascii=False, indent=2, default=str)), encoding="utf-8"
     )
     return path
