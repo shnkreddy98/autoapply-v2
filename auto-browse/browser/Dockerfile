@@ -14,6 +14,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
+# Chrome's own prompts are browser UI, out of Playwright's reach: "Save password?"
+# opened on every portal sign-in, and Chrome's address autofill could put stale values
+# into fields before det reads them. Managed policies switch them off. Chrome for
+# Testing reads this directory (found in its binary), not /etc/opt/chrome.
+COPY chrome-policies.json /etc/opt/chrome_for_testing/policies/managed/autoapply.json
+
 # 8931 = Playwright MCP (HTTP), 6080 = noVNC web viewer
 EXPOSE 8931 6080
 
