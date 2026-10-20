@@ -549,6 +549,7 @@ def test_build_system_prompt_autosubmit():
     for prompt in (review, auto):
         assert "APPLICANT PROFILE" in prompt
         assert "fetch_aria" in prompt
+        assert "`SAW: " in prompt  # the note that replaces old page text (_trim_history)
 
 
 def test_system_prompt_spells_out_hcaptcha_accessibility_path():

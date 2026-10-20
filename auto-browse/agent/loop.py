@@ -206,7 +206,8 @@ MUST DOs:
 """
 
 _PROMPT_TAIL = """
-- State your next step in one short sentence before each tool call."""
+- State your next step in one short sentence before each tool call.
+- After a tool result, start your reply with one line `SAW: <what it showed that you will need later>` (step/page you are on, fields now filled, errors shown) before that sentence. Only the latest page texts are kept; older ones are replaced by your SAW line, so it must carry anything you still need from them."""
 
 _GOAL_REVIEW = "GOAL: fill every field across every step and reach the final review/submit step. Upload the resume along the way. Do NOT click the final Submit."
 _GOAL_AUTOSUBMIT = "GOAL: fill every field across every step, upload the resume along the way, and click the final Submit to complete the application."
@@ -457,6 +458,17 @@ MAX_COMPLETION_TOKENS = int(os.getenv("MAX_COMPLETION_TOKENS", "4096"))
 # minimal context (system prompt + profile + current page) and retry, up to N times
 # before failing the run.
 MAX_CONTEXT_RESETS = int(os.getenv("MAX_CONTEXT_RESETS", "2"))
+
+# Every call re-sends the whole history, and page text is only useful while it is
+# current (refs go stale on the next action). Untrimmed, a 141-call Workday run
+# (2026-10-07) grew its prompt from 8k to 82k tokens, 6.2M re-sent in all. So only
+# the newest N page-sized tool results stay verbatim; each older one becomes the
+# SAW line the model wrote in the call that read it, so no extra LLM call is made.
+HISTORY_KEEP_SNAPSHOTS = int(os.getenv("HISTORY_KEEP_SNAPSHOTS", "2"))
+_STUB_MIN_CHARS = 300  # short results (a fill_form ack, a small fetch_aria) cost little
+_STUB_PREFIX = "[older page text dropped to save context"
+_SAW_RE = re.compile(r"^[\W_]*SAW\**:\**\s*(.+)$", re.M | re.I)  # also "- **SAW:**"
+_SAW_MAX_CHARS = 240
 
 # LLM call resilience.
 LLM_MAX_RETRIES = int(os.getenv("LLM_MAX_RETRIES", "6"))
@@ -882,6 +894,38 @@ async def _current_page_text(session: ClientSession) -> str:
         return f"(snapshot unavailable: {type(exc).__name__})"
 
 
+def _saw_note(content: str | None) -> str | None:
+    """The model's one-line SAW note on the tool results it just read, if it wrote one."""
+    m = _SAW_RE.search(content or "")
+    return m.group(1).strip()[:_SAW_MAX_CHARS] if m else None
+
+
+def _trim_history(
+    messages: list[dict[str, Any]], keep: int, notes: dict[str, str], unread: set[str]
+) -> None:
+    """Stub every page-sized tool result older than the newest `keep` with its SAW note.
+
+    The tool message itself stays, because each assistant tool_call needs its tool reply
+    (OpenAI rejects the request otherwise). Results in `unread` (the turn that just ran)
+    are never stubbed, however many there are: the model has not seen them yet, so there
+    is no note to put in their place. Dicts are replaced, not edited: agent_loop's
+    base_messages is a shallow copy that assumes no message dict changes in place."""
+    big = [
+        i
+        for i, m in enumerate(messages)
+        if m.get("role") == "tool"
+        and len(m.get("content") or "") > _STUB_MIN_CHARS
+        and not m["content"].startswith(_STUB_PREFIX)
+    ]
+    for i in big[: len(big) - keep] if keep > 0 else big:
+        call_id = messages[i].get("tool_call_id")
+        if call_id in unread:
+            continue
+        note = notes.get(call_id)
+        stub = f"{_STUB_PREFIX} — you noted: {note}]" if note else f"{_STUB_PREFIX}]"
+        messages[i] = {**messages[i], "content": stub}
+
+
 async def agent_loop(
     model: str,
     original_task: str,
@@ -927,6 +971,10 @@ async def agent_loop(
     # Shallow copy is safe: the message dicts are never mutated in place.
     base_messages = list(messages)
     context_resets = 0
+    # tool_call_id -> the SAW line written by the call that read that result, and the
+    # ids of the turn just executed (the next call is the one that reads them)
+    saw_notes: dict[str, str] = {}
+    unread: set[str] = set()
     # L4: honeypot markers harvested from page content seen so far. Outgoing field
     # values that echo one are refused before they reach the browser. The initial
     # page arrives via the task message (not a tool result), so harvest it here.
@@ -976,6 +1024,13 @@ async def agent_loop(
                 },
                 finished=not message.tool_calls,
             )
+
+        # This call read the previous turn's results; its SAW line stands in for them
+        # once they age out of the kept window.
+        note = _saw_note(message.content)
+        if note:
+            saw_notes.update(dict.fromkeys(unread, note))
+        unread = set()
 
         if not message.tool_calls:
             finish = response.choices[0].finish_reason
@@ -1130,6 +1185,9 @@ async def agent_loop(
                     result=tool_content,
                     ok=ok,
                 )
+
+        unread = {tc.id for tc in message.tool_calls}
+        _trim_history(messages, HISTORY_KEEP_SNAPSHOTS, saw_notes, unread)
 
     raise RuntimeError(f"Agent did not finish after {max_iterations} iterations.")
 

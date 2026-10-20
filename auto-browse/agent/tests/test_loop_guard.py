@@ -191,3 +191,116 @@ async def test_persistent_degeneration_raises(monkeypatch):
     assert (
         session.snapshot_calls == 2
     )  # two resets, then give up (-> main: success=False)
+
+
+# --------------------------------------------------------------------------- #
+# history trim: old page text -> the model's SAW note
+# --------------------------------------------------------------------------- #
+
+
+def test_saw_note_parsing():
+    assert loop._saw_note("SAW: step 2 of 3, email filled\nClick Next.") == "step 2 of 3, email filled"
+    assert loop._saw_note("Thinking.\n- **SAW:** resume uploaded") == "resume uploaded"
+    assert loop._saw_note("Click Next.") is None
+    assert loop._saw_note(None) is None
+    assert len(loop._saw_note("SAW: " + "x" * 1000)) == loop._SAW_MAX_CHARS
+
+
+def _tool(call_id, content):
+    return {"role": "tool", "tool_call_id": call_id, "content": content}
+
+
+def test_trim_history_stubs_all_but_newest_with_note():
+    big = "page text " * 50
+    messages = _seed_messages() + [
+        _tool("a", big + "A"),
+        _tool("b", "ok"),  # short: never worth stubbing
+        _tool("c", big + "C"),
+        _tool("d", big + "D"),
+    ]
+    original_a = messages[3]
+    loop._trim_history(messages, 2, {"a": "step 1, name filled"}, set())
+    assert messages[3]["content"] == f"{loop._STUB_PREFIX} — you noted: step 1, name filled]"
+    assert messages[3]["tool_call_id"] == "a"  # pairing with the tool_call kept
+    assert original_a["content"].endswith("A")  # replaced, not mutated in place
+    assert messages[4]["content"] == "ok"
+    assert messages[5]["content"].endswith("C") and messages[6]["content"].endswith("D")
+    # a second pass finds nothing new to stub
+    before = list(messages)
+    loop._trim_history(messages, 2, {}, set())
+    assert messages == before
+
+
+def test_trim_history_without_note_and_never_unread():
+    big = "page text " * 50
+    messages = _seed_messages() + [_tool(c, big) for c in ("a", "b", "c", "d")]
+    # b, c, d came back in the turn that just ran: the model has not read them
+    loop._trim_history(messages, 2, {}, {"b", "c", "d"})
+    assert messages[3]["content"] == f"{loop._STUB_PREFIX}]"
+    assert all(m["content"] == big for m in messages[4:])
+
+
+def _tool_resp(content, *call_ids):
+    calls = [
+        SimpleNamespace(
+            id=cid,
+            function=SimpleNamespace(name="browser_click", arguments="{}"),
+            model_dump=lambda exclude_none=True, cid=cid: {
+                "id": cid,
+                "type": "function",
+                "function": {"name": "browser_click", "arguments": "{}"},
+            },
+        )
+        for cid in call_ids
+    ]
+    resp = _resp(content, "tool_calls")
+    resp.choices[0].message.tool_calls = calls
+    return resp
+
+
+class CopyingCompletions(FakeCompletions):
+    """Records each request's messages as sent: the loop keeps editing the one list."""
+
+    async def create(self, **request):
+        self.requests.append([dict(m) for m in request["messages"]])
+        return self._scripted.pop(0)
+
+
+class PageSession(FakeSession):
+    def __init__(self):
+        super().__init__()
+        self.clicks = 0
+
+    async def call_tool(self, name, args):
+        self.clicks += 1
+        return SimpleNamespace(content=[TextContent(type="text", text=f"PAGE{self.clicks} " * 100)])
+
+
+async def test_agent_loop_sends_saw_note_in_place_of_old_pages(monkeypatch):
+    monkeypatch.setattr(loop, "HISTORY_KEEP_SNAPSHOTS", 2)
+    scripted = [
+        _tool_resp("Open the form.", "c1"),
+        _tool_resp("SAW: step 1 of 3, name empty\nFill the name.", "c2"),
+        _tool_resp("SAW: step 2 of 3\nClick Next.", "c3"),
+        _tool_resp("SAW: review page\nCheck it.", "c4"),
+        _resp("Done.", "stop"),
+    ]
+    client = FakeClient([])
+    client.chat.completions = CopyingCompletions(scripted)
+    result = await loop.agent_loop(
+        "fake-model", "task", _seed_messages(), PageSession(), client, loop._new_usage()
+    )
+    assert result == "Done."
+
+    def tools(sent):
+        return {m["tool_call_id"]: m["content"] for m in sent if m["role"] == "tool"}
+
+    sent = client.chat.completions.requests
+    third = tools(sent[2])  # c1, c2 are the newest two: both verbatim
+    assert "PAGE1" in third["c1"] and "PAGE2" in third["c2"]
+    fourth = tools(sent[3])
+    assert fourth["c1"] == f"{loop._STUB_PREFIX} — you noted: step 1 of 3, name empty]"
+    assert "PAGE2" in fourth["c2"] and "PAGE3" in fourth["c3"]
+    last = tools(sent[4])
+    assert last["c2"] == f"{loop._STUB_PREFIX} — you noted: step 2 of 3]"
+    assert "PAGE3" in last["c3"] and "PAGE4" in last["c4"]
