@@ -168,3 +168,37 @@ async def test_run_once_drains_backlog(db):
     with db.cursor() as cur:
         cur.execute("SELECT count(*) AS c FROM jobs WHERE status = 'jd_ready'")
         assert cur.fetchone()["c"] == 2
+
+
+BLOCKED = ('### Result\nNavigation refused\n### Modal state\n'
+           '- ["beforeunload" dialog with message ""]: can be handled by browser_handle_dialog')
+
+
+@pytest.mark.asyncio
+async def test_a_pending_dialog_is_accepted_and_navigation_retried():
+    """WellSky's Workday page left a "leave this page?" dialog; every later capture
+    came back empty until it was handled."""
+    calls = []
+
+    async def call(tool, args):
+        calls.append(tool)
+        if tool == "browser_navigate" and calls.count("browser_handle_dialog") == 0:
+            return BLOCKED
+        return "" if tool == "browser_handle_dialog" else _VALID_JD
+
+    assert await jd_capture.navigate_past_dialogs(call, "https://ex.dev/j") == _VALID_JD
+    assert calls == ["browser_navigate", "browser_handle_dialog", "browser_navigate"]
+
+
+@pytest.mark.asyncio
+async def test_a_dialog_that_stays_says_so(db):
+    job_id, _ = _seed_job_and_user(db)
+
+    async def navigate(url):
+        return BLOCKED
+
+    await jd_capture.capture_once(db, navigate, FakeStorage())
+    with db.cursor() as cur:
+        cur.execute("SELECT status, error FROM jobs WHERE job_id = %s", (job_id,))
+        row = cur.fetchone()
+    assert row["status"] == "failed" and "pending dialog" in row["error"]

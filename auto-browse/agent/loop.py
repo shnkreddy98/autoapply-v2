@@ -23,6 +23,7 @@ from typing import Any
 from dotenv import load_dotenv
 
 from agent.apply import resolve_resume
+from agent.jd_capture import navigate_past_dialogs
 from agent.profile import build_profile
 from common import db, repo
 from common import storage as storagemod
@@ -1334,9 +1335,13 @@ async def main(
                             "application page (blank or unreachable)"
                         )
                 else:
-                    page = result_text(
-                        await session.call_tool(NAVIGATE_TOOL_NAME, {"url": job_url})
-                    )
+                    async def call(tool: str, args: dict) -> str:
+                        return result_text(await session.call_tool(tool, args))
+
+                    # a form left open by the previous run (Workday) answers with
+                    # "leave this page?"; unanswered, the navigation is refused and the
+                    # run would start on the previous job's page
+                    page = await navigate_past_dialogs(call, job_url)
                 trace.event(
                     "initial_page",
                     mode="continue" if continue_run else "navigate",

@@ -15,6 +15,7 @@ import asyncio
 import contextlib
 import logging
 import os
+import re
 from datetime import datetime, timezone
 from typing import Awaitable, Callable
 
@@ -52,6 +53,24 @@ _JD_SIGNAL_WORDS = (
 )
 # Substrings that mark an un-rendered SPA shell.
 _LOADING_MARKERS = ("loading... please wait", "please wait", "just a moment")
+
+
+# The MCP refuses to navigate while it holds a dialog: a "leave this page?"
+# (beforeunload) from a half-filled Workday form, or one it only believes is still
+# open. On 2026-10-07 a capture of WellSky's posting left one behind and the next ten
+# captures all came back as "empty JD text from navigation".
+_DIALOG_RE = re.compile(r"^### Modal state\s*\n.*\bdialog\b", re.M)
+
+
+async def navigate_past_dialogs(call: Callable[[str, dict], Awaitable[str]], url: str) -> str:
+    """`browser_navigate`; when a pending dialog blocks it, accept the dialog (leave the
+    page) and navigate once more. `call(tool, args) -> text` is the MCP tool call."""
+    text = await call("browser_navigate", {"url": url})
+    if _DIALOG_RE.search(text):
+        log.warning("navigation to %s blocked by a pending dialog; accepting it", url)
+        await call("browser_handle_dialog", {"accept": True})
+        text = await call("browser_navigate", {"url": url})
+    return text
 
 
 def _clean_jd(text: str) -> str:
@@ -128,6 +147,8 @@ async def capture_once(
         except asyncio.TimeoutError:
             raise TimeoutError(f"navigation exceeded {NAV_TIMEOUT_SECONDS:.0f}s")
         jd_text = _clean_jd(raw or "")
+        if _DIALOG_RE.search(raw or ""):
+            raise ValueError("browser blocked by a pending dialog (handle it in noVNC, then retry)")
         if not jd_text:
             raise ValueError("empty JD text from navigation")
         reason = _reject_reason(jd_text)
@@ -182,10 +203,12 @@ async def proxy_navigator():
         async with ClientSession(read, write) as session:
             await session.initialize()
 
+            async def call(tool: str, args: dict) -> str:
+                result = await session.call_tool(tool, args)
+                return "\n".join(c.text for c in result.content if isinstance(c, TextContent))
+
             async def navigate(url: str) -> str:
-                result = await session.call_tool("browser_navigate", {"url": url})
-                parts = [c.text for c in result.content if isinstance(c, TextContent)]
-                return "\n".join(parts)
+                return await navigate_past_dialogs(call, url)
 
             yield navigate
 
