@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 import pytest
 
@@ -9,6 +10,15 @@ os.environ.setdefault("S3_BUCKET", "autoapply")
 # Force tests onto a throwaway DB — the `db` fixture TRUNCATEs every table, so it must
 # never point at the real jobs-db. Set unconditionally (not setdefault) for safety.
 os.environ["DB_NAME"] = os.getenv("TEST_DB_NAME", "jobs_test")
+# env.py refuses to import without a key, and every test importing agents.py goes
+# through it. CI has no dev.env, so from 2026-07-24 the ai-assist step died at
+# collection and the steps after it never ran. No test calls an LLM except the opt-in
+# RUN_LLM_E2E one, which needs dev.env's real key — so the stand-in is only set when
+# dev.env is absent (load_dotenv never overrides a variable already set). An unset
+# Actions secret arrives as "", not missing, so empty counts as absent too.
+if not (Path(__file__).resolve().parent.parent / "dev.env").exists():
+    if not os.environ.get("OPENROUTER_API_KEY"):
+        os.environ["OPENROUTER_API_KEY"] = "placeholder-tests-make-no-llm-calls"
 
 _TABLES = [
     "audit_log", "sessions", "saved_answers", "applications", "tailored_resumes", "resume_assets",
