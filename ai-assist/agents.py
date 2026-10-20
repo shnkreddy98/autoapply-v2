@@ -1,9 +1,9 @@
 import logging
 
 from agent import Agent
-from env import MODEL
+from env import MODEL, TAILOR_BULLETS
 from models import QuestionAnswer, Resume, TailoredResume
-from prompts import SYSTEM_PROMPT_ANSWER, SYSTEM_PROMPT_PARSE, SYSTEM_PROMPT_TAILOR
+from prompts import SYSTEM_PROMPT_ANSWER, SYSTEM_PROMPT_PARSE, system_prompt_tailor
 from textfmt import clean_answer
 from tools import DocumentTools, ReplaceArgs
 
@@ -34,8 +34,9 @@ class ResumeTailorAgent(Agent):
     """
     Tailors a resume .docx to a specific job description.
 
-    Makes exactly 2 surgical replacements (summary + weakest bullet) using
-    the replace tool, then returns a TailoredResume with before/after scores.
+    Makes exactly 1 + `bullets` surgical replacements (the summary + the weakest
+    bullets, TAILOR_BULLETS by default) using the replace tool, then returns a
+    TailoredResume with before/after scores.
 
     Usage:
         doc_tools = DocumentTools("path/to/resume.docx")
@@ -43,17 +44,27 @@ class ResumeTailorAgent(Agent):
         result = await agent.tailor_resume(job_description_text)
     """
 
-    def __init__(self, document_tools: DocumentTools, model: str = MODEL):
+    def __init__(
+        self, document_tools: DocumentTools, model: str = MODEL, bullets: int = TAILOR_BULLETS
+    ):
         self._replace_count = 0
+        self._max_replacements = bullets + 1
         original_replace = document_tools.replace
 
         async def tracked_replace(args):
+            # _tool_choice only gates the next request: a model that sends several
+            # replace calls in one response would otherwise run past the limit
+            if self._replace_count >= self._max_replacements:
+                return f"Refused: all {self._max_replacements} replacements are made. Output the JSON now."
             result = await original_replace(args)
-            self._replace_count += 1
+            # a search_text that missed (or matched twice) changed nothing in the file;
+            # counting it would end the run with fewer real edits than asked for
+            if result == "Successfully replaced":
+                self._replace_count += 1
             return result
 
         super().__init__(
-            system_prompt=SYSTEM_PROMPT_TAILOR,
+            system_prompt=system_prompt_tailor(bullets),
             response_format=TailoredResume,
             model=model,
             tools=[_replace_tool_schema()],
@@ -64,8 +75,8 @@ class ResumeTailorAgent(Agent):
         self.document = document_tools.document
 
     def _tool_choice(self) -> str:
-        # Stop offering the tool once 2 replacements have been made
-        return "none" if self._replace_count >= 2 else "auto"
+        # Stop offering the tool once every replacement has been made
+        return "none" if self._replace_count >= self._max_replacements else "auto"
 
     async def tailor_resume(self, job_description: str) -> TailoredResume:
         resume_text = "\n".join(
@@ -85,7 +96,9 @@ Job description ends here
 
 Analyze the resume against the job description and create a tailored version using the tools you have available.
 """
-        result = await self.run(query, max_iterations=10)
+        # one turn per replacement plus slack for a search_text that missed and the
+        # final JSON turn; 10 was the budget when there were 2 replacements
+        result = await self.run(query, max_iterations=2 * self._max_replacements + 6)
         if result.output is None:
             raise RuntimeError(f"tailoring produced no output: {result.error}")
         return result.output

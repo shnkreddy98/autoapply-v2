@@ -75,8 +75,9 @@ def resume_text(storage, asset: dict) -> str:
     """Plain text of a base resume .docx asset.
 
     Deliberately the base and not the tailored PDF: the tailored artifact is a
-    PDF (needs parsing back out) and differs from the base by two replacements,
-    so it adds no facts an answer could be grounded in.
+    PDF (needs parsing back out) and differs from the base only by a rewritten
+    summary and a few bullets (TAILOR_BULLETS), so it adds no facts an answer could
+    be grounded in.
 
     Extraction goes through `utils.docx_text`, the same walk the tailoring path
     uses. Reading `doc.paragraphs` instead drops every table, which in this resume
