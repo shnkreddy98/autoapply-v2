@@ -1,0 +1,107 @@
+name: autoapply-v2 tests
+
+# One job per package, and the package list is read from the repo (every top-level
+# dir with a pyproject.toml and a test_*.py), so a new package is tested without
+# editing this file. Separate jobs also mean one failing package never hides another:
+# from 2026-07-24 to 2026-10 the single job's ai-assist step failed at collection and
+# every step after it, auto-browse included, was skipped without anyone noticing.
+
+on:
+  pull_request:
+    paths-ignore: ["**.md", "kb/**", "open-model/**"]
+  push:
+    branches: [main]
+    paths-ignore: ["**.md", "kb/**", "open-model/**"]
+  workflow_dispatch:
+
+jobs:
+  packages:
+    runs-on: ubuntu-latest
+    outputs:
+      list: ${{ steps.find.outputs.list }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: find
+        run: |
+          list=$(for p in */pyproject.toml; do
+            d=${p%/pyproject.toml}
+            if find "$d" -path "$d/.venv" -prune -o -name 'test_*.py' -print -quit | grep -q .; then
+              echo "$d"
+            fi
+          done | jq -Rcs 'split("\n") | map(select(length > 0))')
+          echo "packages with tests: $list"
+          echo "list=$list" >> "$GITHUB_OUTPUT"
+
+  tests:
+    needs: packages
+    name: tests (${{ matrix.package }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{ fromJSON(needs.packages.outputs.list) }}
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: admin
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: jobs-db
+        ports:
+          - 25432:5432
+        options: >-
+          --health-cmd "pg_isready -U admin -d jobs-db"
+          --health-interval 3s --health-timeout 3s --health-retries 20
+      minio:
+        # Bitnami moved its public catalog to the archived `bitnamilegacy` repo in
+        # Aug 2025; `bitnami/minio:latest` no longer resolves. Pinned to a concrete
+        # archived tag (not a moving `latest`) so the pull stays reproducible.
+        image: bitnamilegacy/minio:2025.7.23
+        env:
+          MINIO_ROOT_USER: minioadmin
+          MINIO_ROOT_PASSWORD: minioadmin
+          MINIO_DEFAULT_BUCKETS: autoapply
+        ports:
+          - 9100:9000
+          - 9101:9001
+        options: >-
+          --health-cmd "mc ready local || curl -f http://localhost:9000/minio/health/live"
+          --health-interval 3s --health-timeout 3s --health-retries 30
+
+    # DB_NAME is only the admin DB here: every conftest repoints tests at jobs_test and
+    # common.testdb creates it and loads db/init.sql, which doubles as the schema check.
+    env:
+      DB_HOST: localhost
+      DB_PORT: "25432"
+      DB_NAME: jobs-db
+      DB_USER: admin
+      DB_PASSWORD: password
+      S3_ENDPOINT: http://localhost:9100
+      S3_BUCKET: autoapply
+      MINIO_ACCESS_KEY: minioadmin
+      MINIO_SECRET_KEY: minioadmin
+
+    defaults:
+      run:
+        working-directory: ${{ matrix.package }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.12"
+
+      # det-autofill's page tests skip (not fail) without a browser, so a package that
+      # depends on Playwright gets the headless shell installed first
+      - name: Install headless Chromium
+        run: |
+          if grep -q playwright pyproject.toml; then
+            uv run --dev playwright install --with-deps --only-shell chromium
+          fi
+
+      # -rs prints every skip reason, so a test silently skipping in CI shows up
+      - name: pytest
+        run: uv run --dev pytest -q -rs

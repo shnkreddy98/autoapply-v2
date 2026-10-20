@@ -310,6 +310,34 @@ def test_tailoring_summary_since(db):
     assert [r["job_id"] for r in s["rows"]] == [j_new]
 
 
+def test_status_for_one_past_day(db, monkeypatch, capsys):
+    """`--today` was the only scope, so yesterday's batch could not be listed."""
+    import contextlib
+    from datetime import date, timedelta
+    from types import SimpleNamespace
+
+    uid = _mk_user(db)
+    j_old = _mk_ready_job(db, uid, "https://ex.dev/j/three-days-ago")
+    j_new = _mk_ready_job(db, uid, "https://ex.dev/j/today")
+    repo.enqueue_tailoring(db, uid, j_old)
+    repo.enqueue_tailoring(db, uid, j_new)
+    _backdate_added(db, uid, j_old, days=3)
+    day = date.today() - timedelta(days=3)
+
+    s = cli.tailoring_summary(db, uid, cli._day_start(day), cli._day_start(day + timedelta(days=1)))
+    assert [r["job_id"] for r in s["rows"]] == [j_old]
+
+    monkeypatch.setattr(cli, "_connect", lambda: contextlib.nullcontext(db))
+    args = cli.build_parser().parse_args(["status", "--date", day.isoformat()])
+    assert cli.cmd_status(args) == 0
+    out = capsys.readouterr().out
+    assert "three-days-ago" in out and "j/today" not in out
+    with pytest.raises(SystemExit):
+        cli.build_parser().parse_args(["status", "--today", "--date", day.isoformat()])
+    with pytest.raises(SystemExit):
+        cli.build_parser().parse_args(["status", "--date", "yesterday"])
+
+
 # ---------------------------------------------------------------------------
 # retry
 
@@ -549,6 +577,7 @@ def test_build_system_prompt_autosubmit():
     for prompt in (review, auto):
         assert "APPLICANT PROFILE" in prompt
         assert "fetch_aria" in prompt
+        assert "`SAW: " in prompt  # the note that replaces old page text (_trim_history)
 
 
 def test_system_prompt_spells_out_hcaptcha_accessibility_path():

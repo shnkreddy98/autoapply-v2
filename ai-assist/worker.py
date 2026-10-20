@@ -1,7 +1,7 @@
 """Tailor worker: consume the `tailored_resumes` queue and produce tailored resumes.
 
 For each claimed row it downloads the user's base `.docx` + the job's captured JD
-from object storage, runs the (unchanged) ResumeTailorAgent, converts to PDF,
+from object storage, runs the ResumeTailorAgent, converts to PDF,
 uploads the tailored PDF, and flips the row to `ready` with the before/after scores.
 
 The tailoring step is injected (`tailor`) so the orchestration is unit-testable

@@ -95,9 +95,15 @@ hit. The full system prompt (workflow, examples, MUST DOs) lives in `SYSTEM_PROM
 in `agent/loop.py`. The applicant profile and any ATS rules are appended as separate
 system messages; today's date is injected at runtime.
 
-- **Deliberately bare.** No history pruning, no evidence gates, no repeat/upload
-  guards — a clean base to build on. (Those lived in the previous page-model proxy
-  and were dropped in the ground-up rewrite; reintroduce them here as needed.)
+- **Deliberately bare.** No evidence gates, no repeat/upload guards — a clean base
+  to build on. (Those lived in the previous page-model proxy and were dropped in the
+  ground-up rewrite; reintroduce them here as needed.)
+- **History trim.** Every model call re-sends the whole conversation, so only the
+  newest `HISTORY_KEEP_SNAPSHOTS` (default 2) page-sized tool results stay verbatim.
+  Each older one is replaced by the `SAW:` line the model wrote in the call that read
+  it — the prompt asks for one after every tool result — so trimming costs no extra
+  call. Results from the turn that just ran are never trimmed. Untrimmed, a 141-call
+  Workday run grew its prompt from 8k to 82k tokens.
 - **Human handoff.** `request_human_help` is a virtual tool handled in the loop (not
   forwarded to the proxy): it pauses the run and asks the human to act on the browser
   screen for steps the agent must not do itself — SMS/authenticator codes, codes or
@@ -120,8 +126,8 @@ system messages; today's date is injected at runtime.
 
 Agent env: `OPENROUTER_API_KEY`, `OPENROUTER_MODEL` (default
 `google/gemini-3-flash-preview`), `PROXY_MCP_URL`, `PROFILE_PATH`,
-`ATS_INSTRUCTIONS_PATH`, `MAX_ITERATIONS`, `LLM_*`, `OPENROUTER_HTTP_REFERER`,
-`OPENROUTER_APP_NAME`.
+`ATS_INSTRUCTIONS_PATH`, `MAX_ITERATIONS`, `HISTORY_KEEP_SNAPSHOTS`, `LLM_*`,
+`OPENROUTER_HTTP_REFERER`, `OPENROUTER_APP_NAME`.
 
 ## Profile & resume
 
