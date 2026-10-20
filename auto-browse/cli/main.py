@@ -10,7 +10,9 @@
                                                        # already-tailored jobs report as duplicates and are
                                                        # skipped unless --force
     autoapply retry [--all] [--user U]                 # reset today's failed JD fetches + recapture
-    autoapply status [JOB] [--today] [--user U]        # pipeline state + scores
+    autoapply status [JOB] [--today | --date D] [--user U]
+                                                       # pipeline state + scores; --date YYYY-MM-DD:
+                                                       # jobs added on that local day
     autoapply resume show JOB [--user U] [--out P] [--open]
     autoapply resume add FILE.docx --label L [--default] [--replace] [--user U]
                                                        # upload + parse a role resume (paid parse);
@@ -288,6 +290,19 @@ def _today_start() -> datetime:
     )
 
 
+def _day_start(day: date) -> datetime:
+    """Local midnight of `day`, tz-aware. The next day's start is the end bound, not
+    +24h: a DST change makes a local day 23 or 25 hours long."""
+    return datetime.combine(day, time()).astimezone()
+
+
+def _parse_day(value: str) -> date:
+    try:
+        return date.fromisoformat(value)
+    except ValueError:
+        raise argparse.ArgumentTypeError(f"expected YYYY-MM-DD, got {value!r}") from None
+
+
 def _job_label(row: dict) -> str:
     """Company first, then the title. The company is what you scan these listings
     for — you spot the employer, then hand the id to `autoapply ask` — and a title
@@ -472,11 +487,12 @@ def reenqueue_one(conn, user_id: str, job_id: str, label: str | None) -> None:
     conn.commit()
 
 
-def tailoring_summary(conn, user_id: str, since: datetime | None = None) -> dict:
-    """Counts by status plus a per-job join, scoped to one user; `since` limits
-    everything to jobs the user added on/after it (user_jobs.added_at)."""
-    added = " AND uj.added_at >= %s" if since is not None else ""
-    since_params = (since,) if since is not None else ()
+def tailoring_summary(conn, user_id: str, since: datetime | None = None,
+                      until: datetime | None = None) -> dict:
+    """Counts by status plus a per-job join, scoped to one user; `since` / `until`
+    limit everything to jobs the user added in [since, until) (user_jobs.added_at)."""
+    added = (" AND uj.added_at >= %s" if since is not None else "") + (" AND uj.added_at < %s" if until is not None else "")
+    since_params = tuple(t for t in (since, until) if t is not None)
     with conn.cursor() as cur:
         cur.execute(
             "SELECT j.status, count(*) AS n FROM jobs j "
@@ -884,6 +900,10 @@ def cmd_status(args) -> int:
                     when = a["started_at"].strftime("%Y-%m-%d %H:%M")
                     out = f"  {a['outcome']}" if a["outcome"] else ""
                     print(f"  {when}  {a['status']}{out}  (run {a['run_id'] or '-'})")
+            return 0
+        if getattr(args, "date", None):
+            since, until = _day_start(args.date), _day_start(args.date + timedelta(days=1))
+            _print_summary(tailoring_summary(conn, user_id, since, until), f" added on {args.date}")
             return 0
         _print_summary(
             tailoring_summary(conn, user_id, _today_start() if args.today else None),
@@ -1444,7 +1464,10 @@ def build_parser() -> argparse.ArgumentParser:
     status.add_argument(
         "job", nargs="?", help="job id, id prefix, or URL (full detail)"
     )
-    status.add_argument("--today", action="store_true", help="only jobs added today")
+    when = status.add_mutually_exclusive_group()
+    when.add_argument("--today", action="store_true", help="only jobs added today")
+    when.add_argument("--date", type=_parse_day, metavar="YYYY-MM-DD",
+                      help="only jobs added on this local day (e.g. yesterday's batch)")
     status.add_argument("--user", help="user id or email")
     status.set_defaults(func=cmd_status)
 
