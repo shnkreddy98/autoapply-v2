@@ -190,6 +190,42 @@ async def test_a_pending_dialog_is_accepted_and_navigation_retried():
     assert calls == ["browser_navigate", "browser_handle_dialog", "browser_navigate"]
 
 
+HINT_ONLY = "⚠ The page changed — refs are STALE.\n\n"  # what the proxy returns for a blank page
+CHOOSER = "### Result\n- 0: (current) [Jobs](https://ex.dev)\n### Modal state\n- [File chooser]: can be handled by browser_file_upload"
+
+
+@pytest.mark.asyncio
+async def test_a_leftover_file_chooser_is_cancelled_and_navigation_retried():
+    """2026-10-19: an apply run left a file chooser open and every capture read empty.
+    The navigate result hides the modal state (it carries a snapshot), so the empty
+    page sends us to browser_tabs, which shows it."""
+    calls = []
+
+    async def call(tool, args):
+        calls.append((tool, args))
+        if tool == "browser_navigate":
+            return _VALID_JD if any(t == "browser_file_upload" for t, _ in calls) else HINT_ONLY
+        return CHOOSER if tool == "browser_tabs" else ""
+
+    assert await jd_capture.navigate_past_dialogs(call, "https://ex.dev/j") == _VALID_JD
+    assert [t for t, _ in calls] == [
+        "browser_navigate", "browser_tabs", "browser_file_upload", "browser_navigate",
+    ]
+    assert ("browser_file_upload", {}) in calls  # no paths: cancel, never upload
+
+
+@pytest.mark.asyncio
+async def test_an_empty_page_without_a_modal_is_returned_as_is():
+    calls = []
+
+    async def call(tool, args):
+        calls.append(tool)
+        return HINT_ONLY if tool == "browser_navigate" else "### Result\n- 0: (current) [x](https://ex.dev)"
+
+    assert await jd_capture.navigate_past_dialogs(call, "https://ex.dev/j") == HINT_ONLY
+    assert calls == ["browser_navigate", "browser_tabs"]
+
+
 @pytest.mark.asyncio
 async def test_a_dialog_that_stays_says_so(db):
     job_id, _ = _seed_job_and_user(db)

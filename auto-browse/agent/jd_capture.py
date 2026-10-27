@@ -55,22 +55,43 @@ _JD_SIGNAL_WORDS = (
 _LOADING_MARKERS = ("loading... please wait", "please wait", "just a moment")
 
 
-# The MCP refuses to navigate while it holds a dialog: a "leave this page?"
-# (beforeunload) from a half-filled Workday form, or one it only believes is still
-# open. On 2026-10-07 a capture of WellSky's posting left one behind and the next ten
-# captures all came back as "empty JD text from navigation".
-_DIALOG_RE = re.compile(r"^### Modal state\s*\n.*\bdialog\b", re.M)
+# A modal state the MCP holds breaks every capture after it:
+# - a dialog: a "leave this page?" (beforeunload) from a half-filled Workday form, or
+#   one it only believes is still open. Navigation is refused. On 2026-10-07 a capture
+#   of WellSky's posting left one behind and the next ten captures came back as
+#   "empty JD text from navigation".
+# - a file chooser an apply run opened and never filled. Navigation still happens but
+#   every page reads empty (2026-10-19: a whole `tailor --retry-failed` batch). The
+#   proxy drops the "### Modal state" section from any result that carries a
+#   snapshot, so the empty page is the only sign; browser_tabs (no snapshot) shows it.
+_MODAL_RE = re.compile(r"^### Modal state\s*\n(?P<state>.*)", re.M)
+
+
+def _modal_state(text: str | None) -> str | None:
+    """The first modal-state line of an MCP result, lowercased, or None."""
+    m = _MODAL_RE.search(text or "")
+    return m.group("state").lower() if m else None
 
 
 async def navigate_past_dialogs(call: Callable[[str, dict], Awaitable[str]], url: str) -> str:
-    """`browser_navigate`; when a pending dialog blocks it, accept the dialog (leave the
-    page) and navigate once more. `call(tool, args) -> text` is the MCP tool call."""
+    """`browser_navigate`, clearing a modal state that spoils it: a pending dialog is
+    accepted (leave the page), a leftover file chooser is cancelled, then navigate once
+    more. `call(tool, args) -> text` is the MCP tool call."""
     text = await call("browser_navigate", {"url": url})
-    if _DIALOG_RE.search(text):
+    state = _modal_state(text)
+    if state is None and not _clean_jd(text):
+        state = _modal_state(await call("browser_tabs", {"action": "list"}))
+    if state is None:
+        return text
+    if "file chooser" in state:
+        log.warning("navigation to %s: a file chooser was left open; cancelling it", url)
+        await call("browser_file_upload", {})  # no paths = cancel the chooser
+    elif "dialog" in state:
         log.warning("navigation to %s blocked by a pending dialog; accepting it", url)
         await call("browser_handle_dialog", {"accept": True})
-        text = await call("browser_navigate", {"url": url})
-    return text
+    else:
+        return text
+    return await call("browser_navigate", {"url": url})
 
 
 def _clean_jd(text: str) -> str:
@@ -147,8 +168,10 @@ async def capture_once(
         except asyncio.TimeoutError:
             raise TimeoutError(f"navigation exceeded {NAV_TIMEOUT_SECONDS:.0f}s")
         jd_text = _clean_jd(raw or "")
-        if _DIALOG_RE.search(raw or ""):
-            raise ValueError("browser blocked by a pending dialog (handle it in noVNC, then retry)")
+        if _modal_state(raw):
+            raise ValueError(
+                "browser blocked by a pending dialog or file chooser (handle it in noVNC, then retry)"
+            )
         if not jd_text:
             raise ValueError("empty JD text from navigation")
         reason = _reject_reason(jd_text)
