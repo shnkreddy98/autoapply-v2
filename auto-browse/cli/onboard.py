@@ -4,9 +4,10 @@ A profile is two things kept apart on purpose:
 
   * facts — contact, address, work authorization, EEO, logistics. One set per user,
     asked by `autoapply profile init` and stored in users + application_profiles.
-  * role resumes — `autoapply resume add FILE.docx --label de`. Each .docx is
+  * role resumes — `autoapply resume add FILE --label de`. Each .docx is
     uploaded with a PDF rendering (the apply upload) and parsed by the LLM into a
-    ParsedResume stored on that base (resume_assets.parsed).
+    ParsedResume stored on that base (resume_assets.parsed). An .odt or .md is
+    converted to .docx first, and only the .docx is kept.
 
 The profile used for a job is the facts plus the parsed resume of the role the job
 was tailored from (`autoapply profile export --label de`). Role resumes are never
@@ -71,33 +72,73 @@ def extract_text(path: str) -> str:
     raise SystemExit(f"unsupported resume format {p.suffix!r} (need .docx or .pdf)")
 
 
-def docx_to_pdf(docx_path: str) -> str:
-    """LibreOffice headless docx -> pdf (same converter ai-assist uses for
-    tailored resumes). Returns the PDF path in a temp dir."""
+def _libreoffice_convert(src: str, fmt: str) -> str:
+    """LibreOffice headless `src` -> `fmt` (same converter ai-assist uses for
+    tailored resumes). Returns the output path in a temp dir."""
     outdir = tempfile.mkdtemp(prefix="autoapply-onboard-")
+    step = f"{Path(src).suffix.lstrip('.').lower()}->{fmt}"
     try:
         proc = subprocess.run(
             [
                 "libreoffice",
                 "--headless",
                 "--convert-to",
-                "pdf",
+                fmt,
                 "--outdir",
                 outdir,
-                str(Path(docx_path).resolve()),
+                str(Path(src).resolve()),
             ],
             capture_output=True,
             text=True,
             timeout=120,
         )
     except FileNotFoundError:
+        raise SystemExit(f"{step} needs LibreOffice on PATH — install it")
+    out = Path(outdir) / f"{Path(src).stem}.{fmt}"
+    if proc.returncode != 0 or not out.exists():
+        raise SystemExit(f"{step} conversion failed: {proc.stderr.strip()[:300]}")
+    return str(out)
+
+
+def docx_to_pdf(docx_path: str) -> str:
+    """The PDF rendering of a .docx, in a temp dir."""
+    return _libreoffice_convert(docx_path, "pdf")
+
+
+# Resume sources a role can be added from. Tailoring edits the .docx in place and the
+# apply upload is its PDF rendering, so anything else is converted to .docx first and
+# only that .docx is parsed, stored and tailored. A PDF is refused rather than
+# converted: LibreOffice opens one as a drawing, not as paragraphs that can be edited.
+CONVERT_TO_DOCX = (".odt", ".md", ".markdown")
+# Markdown syntax left at the start of a line: what a LibreOffice without Markdown
+# import produces, because it reads the file as plain text instead of failing
+# (an unknown --infilter is ignored too, so the output is the only check).
+_MARKDOWN_LEFT = re.compile(r"^(#{1,6}|[-*+])\s", re.M)
+
+
+def ensure_docx(path: str) -> str:
+    """`path` when it is a .docx; else a .docx converted from it, in a temp dir."""
+    p = Path(path)
+    if not p.is_file():
+        raise SystemExit(f"no such file: {p}")
+    suffix = p.suffix.lower()
+    if suffix == ".docx":
+        return str(p)
+    if suffix == ".pdf":
         raise SystemExit(
-            "docx->pdf needs LibreOffice on PATH — install it, or pass --pdf yourself"
+            "a PDF can't be tailored — export the resume as .docx, .odt or .md from "
+            "the program you wrote it in"
         )
-    pdf = Path(outdir) / (Path(docx_path).stem + ".pdf")
-    if proc.returncode != 0 or not pdf.exists():
-        raise SystemExit(f"docx->pdf conversion failed: {proc.stderr.strip()[:300]}")
-    return str(pdf)
+    if suffix not in CONVERT_TO_DOCX:
+        raise SystemExit(f"unsupported resume format {p.suffix!r} (need .docx, .odt or .md)")
+    docx = _libreoffice_convert(str(p), "docx")
+    if suffix != ".odt" and _MARKDOWN_LEFT.search(extract_text(docx)):
+        raise SystemExit(
+            "this LibreOffice read the Markdown as plain text (no Markdown import; "
+            "26.2 has it) — update LibreOffice or convert the file to .docx yourself"
+        )
+    print(f"converted {p.name} to .docx for storage and tailoring")
+    return docx
 
 
 # ---------------------------------------------------------------------------
@@ -654,6 +695,7 @@ def add_role_resume(
     model: str = PARSE_MODEL,
 ) -> RoleResume:
     """Upload a role's .docx plus its PDF rendering and store the parsed content.
+    `docx_path` may also be an .odt or .md, converted first (`ensure_docx`).
 
     Parsing happens before anything is uploaded, so a failed (paid) parse leaves the
     previous base untouched. The PDF is generated rather than accepted: tailoring
@@ -662,11 +704,7 @@ def add_role_resume(
     import mimetypes
 
     label = check_label(label)
-    docx = Path(docx_path)
-    if not docx.is_file():
-        raise SystemExit(f"no such file: {docx}")
-    if docx.suffix.lower() != ".docx":
-        raise SystemExit("resumes are added as .docx (tailoring edits the docx source)")
+    docx = Path(ensure_docx(docx_path))
     if repo.get_base_asset(conn, user_id, variant="docx", label=label) and not replace:
         raise SystemExit(f"a resume labelled {label!r} already exists — pass --replace to overwrite")
 
@@ -755,6 +793,9 @@ def cmd_profile_init(args) -> int:
     parsed = None
     if args.docx:
         label = check_label(args.label)
+        # converted before any prompt, so a file that can't be used fails up front
+        # instead of after the facts are saved
+        args.docx = ensure_docx(args.docx)
         print(f"extracting text from {args.docx} ...")
         text = extract_text(args.docx)
         print(f"parsing with {args.model or PARSE_MODEL} ...")
