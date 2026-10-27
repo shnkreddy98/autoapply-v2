@@ -3,6 +3,7 @@ interactive review defaults, and the DB/storage save. LLM is faked throughout.""
 
 import json
 from datetime import date
+from pathlib import Path
 
 import pytest
 
@@ -60,6 +61,89 @@ def test_extract_text_rejects_unknown_format(tmp_path):
     p.write_text("hi")
     with pytest.raises(SystemExit, match="unsupported"):
         onboard.extract_text(str(p))
+
+
+# ---------------------------------------------------------------------------
+# other formats -> .docx (tailoring edits the .docx, so that is all that is kept)
+
+
+def _needs_libreoffice():
+    import shutil
+
+    if not shutil.which("libreoffice"):
+        pytest.skip("LibreOffice not installed")
+
+
+def test_ensure_docx_passes_a_docx_through_and_refuses_the_rest(tmp_path):
+    docx_path = tmp_path / "r.docx"
+    docx_path.write_bytes(b"PK")
+    assert onboard.ensure_docx(str(docx_path)) == str(docx_path)
+    for name, match in (("r.pdf", "a PDF can't be tailored"), ("r.txt", "unsupported"),
+                        ("missing.md", "no such file")):
+        if name != "missing.md":
+            (tmp_path / name).write_bytes(b"x")
+        with pytest.raises(SystemExit, match=match):
+            onboard.ensure_docx(str(tmp_path / name))
+
+
+def test_markdown_becomes_docx_paragraphs(tmp_path):
+    """Headings and bullets come out as their own paragraphs with no Markdown
+    syntax left, so tailoring can swap one bullet's text without touching the rest."""
+    _needs_libreoffice()
+    import docx
+
+    md = tmp_path / "jane.md"
+    md.write_text(
+        "# Jane Doe\n\n## Experience\n\n### Data Engineer, Initech\n\n"
+        "- Built Airflow DAGs moving 2 TB/day.\n- Cut warehouse cost **30%**.\n"
+    )
+    try:
+        out = onboard.ensure_docx(str(md))
+    except SystemExit as exc:  # distro LibreOffice older than its Markdown import
+        if "plain text" in str(exc):
+            pytest.skip(f"this LibreOffice has no Markdown import: {exc}")
+        raise
+    assert out.endswith("jane.docx")
+    paras = [p.text for p in docx.Document(out).paragraphs if p.text.strip()]
+    assert paras[:3] == ["Jane Doe", "Experience", "Data Engineer, Initech"]
+    assert "Built Airflow DAGs moving 2 TB/day." in paras
+    assert "Cut warehouse cost 30%." in paras
+
+
+def test_odt_becomes_docx(tmp_path):
+    _needs_libreoffice()
+    import docx
+
+    src = tmp_path / "jane.docx"
+    doc = docx.Document()
+    doc.add_paragraph("Jane Doe")
+    doc.add_paragraph("Built Airflow DAGs.")
+    doc.save(str(src))
+    odt = onboard._libreoffice_convert(str(src), "odt")
+
+    out = onboard.ensure_docx(odt)
+    assert out.endswith("jane.docx") and out != str(src)
+    assert onboard.extract_text(out).splitlines() == ["Jane Doe", "Built Airflow DAGs."]
+
+
+def test_markdown_read_as_plain_text_is_refused(tmp_path, monkeypatch):
+    """A LibreOffice without Markdown import opens the file as plain text and still
+    exits 0; the leftover '#' / '-' is the only sign, and must not reach the store."""
+    import docx
+
+    def plain_text_import(src, fmt):
+        out = tmp_path / "out.docx"
+        doc = docx.Document()
+        for line in Path(src).read_text().splitlines():
+            doc.add_paragraph(line)
+        doc.save(str(out))
+        return str(out)
+
+    monkeypatch.setattr(onboard, "_libreoffice_convert", plain_text_import)
+    md = tmp_path / "jane.md"
+    md.write_text("# Jane Doe\n\n- Built pipelines\n")
+    with pytest.raises(SystemExit, match="read the Markdown as plain text"):
+        onboard.ensure_docx(str(md))
 
 
 # ---------------------------------------------------------------------------

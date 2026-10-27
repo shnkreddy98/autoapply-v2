@@ -14,8 +14,9 @@
                                                        # pipeline state + scores; --date YYYY-MM-DD:
                                                        # jobs added on that local day
     autoapply resume show JOB [--user U] [--out P] [--open]
-    autoapply resume add FILE.docx --label L [--default] [--replace] [--user U]
+    autoapply resume add FILE --label L [--default] [--replace] [--user U]
                                                        # upload + parse a role resume (paid parse);
+                                                       # FILE: .docx, or .odt/.md converted to .docx;
                                                        # warns when roles disagree on employer dates
     autoapply resume parse [LABEL ...] [--user U]      # re-parse stored role resumes (paid)
     autoapply resume default LABEL [--user U]          # role used when a job has no tailoring
@@ -1483,15 +1484,16 @@ def build_parser() -> argparse.ArgumentParser:
     show.set_defaults(func=cmd_resume_show)
     radd = resume_sub.add_parser(
         "add",
-        help="add a resume for a role (.docx), parsed into that role's profile",
+        help="add a resume for a role (.docx, .odt or .md), parsed into that role's profile",
         description="Uploads the .docx under --label with a PDF rendering (LibreOffice) "
         "for uploads, and parses it with the LLM (needs OPENROUTER_API_KEY; one paid "
         "call) into the work history, education and skills used for that role. The "
         "first role you add becomes your default. Prints any employer whose dates, or "
         "any current employer, disagrees with your other role resumes. Tailor with "
-        "`autoapply tailor --label <label>`.",
+        "`autoapply tailor --label <label>`. An .odt or .md is converted to .docx first "
+        "and only the .docx is kept, since tailoring edits it; a PDF is refused.",
     )
-    radd.add_argument("file", help="path to the resume (.docx)")
+    radd.add_argument("file", help="path to the resume (.docx, .odt or .md)")
     radd.add_argument("--label", required=True, help="role, e.g. general, swe, de, aiml")
     radd.add_argument("--replace", action="store_true", help="overwrite this role's resume")
     radd.add_argument("--default", action="store_true", help="make this the default role")
@@ -1554,11 +1556,13 @@ def build_parser() -> argparse.ArgumentParser:
         help="enter your facts (contact, address, work authorization, EEO, ...)",
         description="Asks for the facts every application wants, with autofilled "
         "defaults, and saves them for your user. Role resumes are separate: add each "
-        "with `autoapply resume add FILE.docx --label <role>`. Passing --docx here "
+        "with `autoapply resume add FILE --label <role>`. Passing --docx here "
         "does both in one go: the resume is parsed (needs OPENROUTER_API_KEY; one paid "
         "call), prefills your contact, and is stored as role --label.",
     )
-    pinit.add_argument("--docx", help="a resume to parse and store as your first role")
+    pinit.add_argument(
+        "--docx", help="a resume to parse and store as your first role (.docx, .odt or .md)"
+    )
     pinit.add_argument(
         "--label", default="general", help="role for --docx (default: general)"
     )

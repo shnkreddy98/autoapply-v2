@@ -57,7 +57,10 @@ relocation, EEO, certifications — are yours and the same for every role;
 `profile init` asks for them with autofilled defaults (Enter keeps, `-` clears,
 `--yes` accepts all). **Role resumes** are added per role: each `.docx` is stored
 with a PDF rendering and parsed by an LLM (needs `OPENROUTER_API_KEY`) into that
-role's work history, education and skills. `--docx` on `profile init` adds the
+role's work history, education and skills. An `.odt` or `.md` works too: it is
+converted to `.docx` with LibreOffice first (Markdown needs a LibreOffice with
+Markdown import, e.g. 26.2), and only the `.docx` is kept. A PDF is refused, since
+tailoring edits the document text. `--docx` on `profile init` adds the
 first role (`--label general` by default) and prefills your contact from it.
 
 Roles are never merged. Tailoring, `ask` and the apply profile all use the role a

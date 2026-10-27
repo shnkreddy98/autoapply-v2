@@ -1127,8 +1127,57 @@ def test_resume_add_rejects_non_docx(db, monkeypatch, tmp_path):
     pdf = tmp_path / "cv.pdf"
     pdf.write_bytes(b"%PDF")
     args = cli.build_parser().parse_args(["resume", "add", str(pdf), "--label", "swe"])
-    with pytest.raises(SystemExit, match="added as .docx"):
+    with pytest.raises(SystemExit, match="a PDF can't be tailored"):
         cli.cmd_resume_add(args)
+
+
+def test_resume_add_converts_markdown_and_keeps_only_the_docx(db, monkeypatch, tmp_path):
+    """.md/.odt go through LibreOffice to a .docx; that .docx is what is parsed,
+    stored and later tailored, and the source file is not uploaded."""
+    from cli import onboard
+
+    uid = _mk_user(db)
+    store = _RecordingStorage()
+    _stub_resume_pipeline(monkeypatch, tmp_path, {"cv": _SWE})
+    converted = []
+
+    def fake_convert(src, fmt):
+        out = tmp_path / "converted" / f"{Path(src).stem}.{fmt}"
+        out.parent.mkdir(exist_ok=True)
+        out.write_bytes(b"PK\x03\x04 converted")
+        converted.append((Path(src).name, fmt))
+        return str(out)
+
+    monkeypatch.setattr(onboard, "_libreoffice_convert", fake_convert)
+    monkeypatch.setattr(cli, "_connect", lambda: _KeepOpen(db))
+    monkeypatch.setattr(cli, "_storage", lambda: store)
+    md = tmp_path / "cv.md"
+    md.write_text("# Jane Doe\n\n- Built pipelines\n")
+
+    args = cli.build_parser().parse_args(["resume", "add", str(md), "--label", "swe"])
+    assert cli.cmd_resume_add(args) == 0
+
+    assert converted == [("cv.md", "docx")]
+    assert store.objs[f"users/{uid}/resumes/base/swe/docx.docx"] == b"PK\x03\x04 converted"
+    assert set(store.objs) == {
+        f"users/{uid}/resumes/base/swe/docx.docx",
+        f"users/{uid}/resumes/base/swe/pdf.pdf",
+    }
+    assert repo.fetch_profile(db, uid, "swe").summary == "Builds services."
+
+
+def test_profile_init_refuses_a_pdf_before_asking_anything(monkeypatch, tmp_path):
+    """A PDF used to be parsed, the facts saved, and only then refused as a role
+    resume — a half-finished onboarding. It now fails before the first prompt."""
+    from cli import onboard
+
+    monkeypatch.setattr(onboard, "parse_resume_llm", lambda *a, **k: pytest.fail("paid parse"))
+    monkeypatch.setattr(onboard, "interactive_review", lambda *a, **k: pytest.fail("prompted"))
+    pdf = tmp_path / "cv.pdf"
+    pdf.write_bytes(b"%PDF")
+    args = cli.build_parser().parse_args(["profile", "init", "--docx", str(pdf)])
+    with pytest.raises(SystemExit, match="a PDF can't be tailored"):
+        onboard.cmd_profile_init(args)
 
 
 @pytest.mark.parametrize("label", ["default", "Data Eng", "../x", ""])
