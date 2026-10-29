@@ -84,6 +84,8 @@ uv run autoapply tailor                            # capture JDs + tailor resume
                                                    #  + OPENROUTER_API_KEY, LibreOffice)
 uv run autoapply status [JOB]                      # pipeline state + scores
 uv run autoapply resume show JOB [--open]          # download the tailored PDF
+uv run autoapply cover JOB [--open]                # write a cover letter for the job (paid);
+                                                   # stored with it, exported next to the resume
 uv run autoapply gmail connect                     # optional: 2FA email access for apply
 uv run autoapply apply JOB [--autosubmit]          # run the apply agent
 uv run autoapply apply --all [--today]             # batch: every jd_ready job one by one

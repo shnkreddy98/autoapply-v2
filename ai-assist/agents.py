@@ -2,9 +2,9 @@ import logging
 
 from agent import Agent
 from env import MODEL, TAILOR_BULLETS, TAILOR_SKILL_LINES
-from models import QuestionAnswer, Resume, TailoredResume
-from prompts import SYSTEM_PROMPT_ANSWER, SYSTEM_PROMPT_PARSE, system_prompt_tailor
-from textfmt import clean_answer
+from models import CoverLetter, QuestionAnswer, Resume, TailoredResume
+from prompts import SYSTEM_PROMPT_ANSWER, SYSTEM_PROMPT_COVER, SYSTEM_PROMPT_PARSE, system_prompt_tailor
+from textfmt import clean_answer, strip_dashes
 from tools import DocumentTools, ReplaceArgs
 
 DEFAULT_MAX_WORDS = 100
@@ -197,3 +197,68 @@ Answer the application question in at most {max_words} words. Use no em dashes.
             raise RuntimeError(f"answering produced no output: {result.error}")
         return clean_answer(result.output.answer, max_words)
 
+
+class CoverLetterAgent(Agent):
+    """
+    Writes the body paragraphs of a cover letter for one job, grounded in the
+    candidate's resume and the job description. The salutation, sign-off and
+    contact header are added by `cover.build_docx`, not the model.
+
+    Like ApplicationQuestionAgent, the word cap and the no-em-dash rule are prompted
+    for and then enforced here, because models overrun both.
+
+    Usage:
+        paragraphs = await CoverLetterAgent().write(resume_text, jd_text)
+    """
+
+    def __init__(self, model: str = MODEL):
+        super().__init__(
+            system_prompt=SYSTEM_PROMPT_COVER,
+            response_format=CoverLetter,
+            model=model,
+            temperature=0.5,
+            max_tokens=2000,
+        )
+
+    async def write(
+        self, resume_text: str, job_description: str, max_words: int = 350
+    ) -> list[str]:
+        query = f"""Resume starts here
+---
+{resume_text}
+---
+Resume ends here
+
+Job description starts here
+---
+{job_description}
+---
+Job description ends here
+
+Write the cover letter body in at most {max_words} words. Use no em dashes.
+"""
+        result = await self.run(query, max_iterations=3)
+        if result.output is None:
+            raise RuntimeError(f"cover letter produced no output: {result.error}")
+        return cap_paragraphs(
+            [strip_dashes(" ".join(p.split())) for p in result.output.paragraphs if p.strip()],
+            max_words,
+        )
+
+
+def cap_paragraphs(paragraphs: list[str], max_words: int) -> list[str]:
+    """Keep whole paragraphs while they fit the cap; the one that overruns is cut at
+    a sentence boundary (clean_answer) and the rest dropped."""
+    kept: list[str] = []
+    used = 0
+    for p in paragraphs:
+        n = len(p.split())
+        if used + n <= max_words:
+            kept.append(p)
+            used += n
+            continue
+        room = max_words - used
+        if room >= 15:  # a stub of a few words reads as a mistake; drop it instead
+            kept.append(clean_answer(p, room))
+        break
+    return kept

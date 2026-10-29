@@ -118,3 +118,9 @@ class QuestionAnswer(BaseModel):
     answer: str = Field(
         description="First-person answer to the application question, within the stated word limit, containing no em dashes"
     )
+
+
+class CoverLetter(BaseModel):
+    paragraphs: list[str] = Field(
+        description="Body paragraphs of the cover letter in order, first person, no salutation, no sign-off, no em dashes"
+    )

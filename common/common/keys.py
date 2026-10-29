@@ -18,5 +18,12 @@ def tailored_resume_key(user_id: str, job_id: str, ext: str = "pdf") -> str:
     return f"users/{user_id}/resumes/tailored/{job_id}.{ext}"
 
 
+def cover_letter_key(user_id: str, job_id: str, ext: str) -> str:
+    """One cover letter per user x job, as `pdf` (to upload) and `txt` (to paste into a
+    form field). Overwritten by `autoapply cover` re-runs; no DB row, the key is the
+    attachment."""
+    return f"users/{user_id}/cover_letters/{job_id}.{ext}"
+
+
 def jd_key(job_id: str) -> str:
     return f"jobs/{job_id}/jd.md"

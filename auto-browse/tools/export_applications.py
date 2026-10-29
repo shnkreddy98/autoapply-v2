@@ -3,6 +3,7 @@
 Pulls the PDFs out of MinIO and lays them out one directory per role, then per company:
 
     applications/2026-07-24/swe/nike/jane_doe.pdf
+                                    /jane_doe_cover_letter.pdf  # if `autoapply cover` ran
                                     /job.txt      # url, scores, what was tailored
                                /checkr/jane_doe.pdf
                                       /job.txt
@@ -42,7 +43,7 @@ from datetime import date, datetime, time, timedelta
 from pathlib import Path
 from urllib.parse import urlparse
 
-from common import db, repo
+from common import db, keys, repo
 from common import storage as storagemod
 
 # host -> the path segment that holds the company (0-indexed, after the leading /)
@@ -184,7 +185,8 @@ def export(
     day: date | None,
     label: str | None = None,
 ) -> list[tuple[str, Path]]:
-    """Write <root>/<role>/<company>/{filename,job.txt} plus a per-role index.md.
+    """Write <root>/<role>/<company>/{filename,job.txt} plus a per-role index.md, and
+    the job's cover letter as <stem>_cover_letter.pdf when `autoapply cover` made one.
 
     Returns (role, path) per exported resume. The index is written per role, not at
     the root, so exporting one label never rewrites another label's index — you can
@@ -214,6 +216,13 @@ def export(
         asset = repo.get_resume_asset(conn, row["tailored_asset_id"])
         dest = folder / filename
         storage.get_file(asset["s3_key"], str(dest))
+        # the cover letter is keyed by user x job, not a DB row: present only for the
+        # jobs `autoapply cover` was run on
+        cover_key = keys.cover_letter_key(user_id, job_id, "pdf")
+        cover = None
+        if storage.exists(cover_key):
+            cover = folder / f"{Path(filename).stem}_cover_letter.pdf"
+            storage.get_file(cover_key, str(cover))
 
         (folder / "job.txt").write_text(
             f"company   {company}\n"
@@ -222,12 +231,14 @@ def export(
             f"url       {row['url']}\n"
             f"job_id    {job_id}\n"
             f"score     {row['resume_score']} -> {row['new_resume_score']}\n"
-            f"resume    {dest.name}\n\n"
+            f"resume    {dest.name}\n"
+            f"cover     {cover.name if cover else '-'}\n\n"
             f"{row['job_match_summary'] or ''}\n"
         )
         index_lines.setdefault(role, []).append(
             f"- **{company}** — [{row['url']}]({row['url']}) — "
             f"score {row['resume_score']}→{row['new_resume_score']} — `{company}/{filename}`"
+            + (f" + `{cover.name}`" if cover else "")
         )
         exported.append((f"{role}/{company}", dest))
 

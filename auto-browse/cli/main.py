@@ -28,6 +28,9 @@
     autoapply ask JOB "question" [--words N] [--label L] [--user U]
                                                        # answer -> stdout, count -> stderr;
                                                        # base resume follows the job's tailoring label
+    autoapply cover JOB [--words N] [--label L] [--user U] [--out P] [--open]
+                                                       # write + store a cover letter for the job (paid);
+                                                       # letter -> stdout; export copies it next to the resume
     autoapply apply [JOB ...] [--all] [--today] [--user U] [--model M] [--autosubmit]
                     [--engine agent|det|det+agent] [--mcp URL]
                                                        # --all: batch every jd_ready job one by one;
@@ -1055,6 +1058,68 @@ def cmd_ask(args) -> int:
 
 
 # ---------------------------------------------------------------------------
+# cover (cover letter per job)
+
+
+def run_cover(user_id: str, job_id: str, max_words: int, label: str | None = None) -> dict:
+    """Write and store a cover letter via ai-assist's cover_cli.py; a subprocess with
+    OPENROUTER_* stripped for the same reasons as run_answer.
+
+    Returns {"text", "word_count", "base_label", "pdf_key", "txt_key"} or {"error"}."""
+    env = {k: v for k, v in os.environ.items() if not k.startswith("OPENROUTER_")}
+    payload = {
+        "user_id": str(user_id),
+        "job_id": str(job_id),
+        "max_words": max_words,
+        "label": label,
+    }
+    proc = subprocess.run(
+        ["uv", "run", "python", "cover_cli.py"],
+        cwd=AI_ASSIST_DIR,
+        env=env,
+        input=json.dumps(payload),
+        capture_output=True,
+        text=True,
+    )
+    line = proc.stdout.strip().splitlines()[-1] if proc.stdout.strip() else ""
+    try:
+        return json.loads(line)
+    except json.JSONDecodeError:
+        return {"error": proc.stderr.strip() or f"ai-assist exited {proc.returncode}"}
+
+
+def cmd_cover(args) -> int:
+    with _connect() as conn:
+        user_id = resolve_user(conn, args.user)
+        job = resolve_job(conn, args.job)
+        if job["status"] != "jd_ready":
+            raise SystemExit(
+                f"job {_id8(job['job_id'])} is {job['status']}, not jd_ready — "
+                "the JD must be captured first: autoapply tailor"
+            )
+
+    result = run_cover(user_id, job["job_id"], args.words, getattr(args, "label", None))
+    if "error" in result:
+        print(f"cover failed: {result['error']}", file=sys.stderr)
+        return 1
+    print(result["text"])
+    path = None
+    if args.out or args.open:
+        path = args.out or str(HERE / "output" / "cover" / "cli" / f"{job['job_id']}.pdf")
+        Path(path).parent.mkdir(parents=True, exist_ok=True)
+        _storage().get_file(result["pdf_key"], path)
+    if not args.quiet:
+        print(
+            f"\n[{result['word_count']}/{args.words} words | base: {result.get('base_label', '?')}"
+            f" | stored with job {_id8(job['job_id'])}{f' | {path}' if path else ''}]",
+            file=sys.stderr,
+        )
+    if args.open and path:
+        subprocess.Popen(["xdg-open", path])
+    return 0
+
+
+# ---------------------------------------------------------------------------
 # gmail (2FA email access for the apply agent)
 
 
@@ -1548,6 +1613,38 @@ def build_parser() -> argparse.ArgumentParser:
         "-q", "--quiet", action="store_true", help="suppress the word-count line"
     )
     ask.set_defaults(func=cmd_ask)
+
+    cov = sub.add_parser(
+        "cover",
+        help="write a cover letter for a job and attach it to the job",
+        description="Writes a cover letter from the job's captured JD and your base "
+        "resume via ai-assist (needs OPENROUTER_API_KEY in ai-assist/dev.env; one "
+        "paid call), renders it to PDF and stores it with the job, replacing any "
+        "earlier letter for it. The letter goes to stdout; the word count, the base "
+        "resume used and the download path go to stderr. The base follows the job's "
+        "tailoring like `ask`. `python -m tools.export_applications` copies the PDF "
+        "next to the job's resume.",
+    )
+    cov.add_argument("job", help="job id, id prefix, or URL")
+    cov.add_argument(
+        "--words", type=int, default=350, help="word cap for the body (default 350)"
+    )
+    cov.add_argument(
+        "--label",
+        help="role resume to write from (default: the one this job was tailored "
+        "from; 'default' forces your default role)",
+    )
+    cov.add_argument("--user", help="user id or email")
+    cov.add_argument(
+        "--out", help="also download the PDF here (with --open, default output/cover/cli/<job_id>.pdf)"
+    )
+    cov.add_argument(
+        "--open", action="store_true", help="download the PDF and open it"
+    )
+    cov.add_argument(
+        "-q", "--quiet", action="store_true", help="suppress the summary line"
+    )
+    cov.set_defaults(func=cmd_cover)
 
     profile = sub.add_parser("profile", help="user onboarding + profile inspection")
     profile_sub = profile.add_subparsers(dest="profile_command", required=True)
