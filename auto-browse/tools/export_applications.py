@@ -44,6 +44,7 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 from common import db, keys, repo
+from common.termui import print  # noqa: A004 — colored on a terminal only
 from common import storage as storagemod
 
 # host -> the path segment that holds the company (0-indexed, after the leading /)

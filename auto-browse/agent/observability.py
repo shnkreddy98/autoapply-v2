@@ -10,6 +10,7 @@ Three artifacts, all under output/ (gitignored):
 import json
 import logging
 import os
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -76,13 +77,20 @@ def setup_logging(run_id: str) -> logging.Logger:
     log.handlers.clear()
     log.propagate = False
 
+    from common import termui
+
     fmt = _ScrubbingFormatter(
         "%(asctime)s %(levelname)s [%(run_id)s] %(message)s", datefmt="%H:%M:%S"
     )
     run_filter = _RunIdFilter(run_id)
 
-    console = logging.StreamHandler()
-    console.setFormatter(fmt)
+    # On a terminal the rich handler draws time and level as colored columns, so its
+    # formatter carries only the run id and message; both paths scrub.
+    console = termui.log_handler(
+        fmt=_ScrubbingFormatter("[%(run_id)s] %(message)s")
+        if termui.color_enabled(sys.stderr)
+        else fmt
+    )
     console.addFilter(run_filter)
     log.addHandler(console)
 

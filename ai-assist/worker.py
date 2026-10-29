@@ -130,7 +130,10 @@ async def real_tailor(base_docx_path: str, jd_text: str) -> TailorOutcome:
 
 
 async def _main() -> None:
-    logging.basicConfig(level=logging.INFO)
+    from common import termui
+
+    # runs under `autoapply tailor` with the terminal inherited: colored there
+    termui.setup_logging()
     from common import db
 
     storage = storagemod.from_env()

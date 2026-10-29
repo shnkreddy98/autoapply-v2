@@ -3,6 +3,7 @@ use the throwaway jobs_test DB via the shared `db` fixture; skip when infra is d
 
 import json
 import subprocess
+import sys
 import uuid
 from pathlib import Path
 
@@ -1660,3 +1661,35 @@ def test_status_words_an_empty_pipeline_like_jobs_list(db, monkeypatch, capsys):
 
     cli.cmd_status(cli.build_parser().parse_args(["status"]))
     assert capsys.readouterr().out.strip() == "no jobs"
+
+
+# ---------------------------------------------------------------------------
+# terminal output
+
+
+def test_main_reports_a_user_error_as_one_error_line(monkeypatch, capsys):
+    """Commands raise SystemExit("message"); main() prints it as `error: message`
+    (red on a terminal) and exits 1, instead of Python's bare echo."""
+    import argparse
+
+    def boom(args):
+        raise SystemExit("no job matching 'x'")
+
+    class Parser:
+        def parse_args(self):
+            return argparse.Namespace(func=boom)
+
+    monkeypatch.setattr(cli, "build_parser", Parser)
+    with pytest.raises(SystemExit) as exc:
+        cli.main()
+    assert exc.value.code == 1
+    assert capsys.readouterr().err == "error: no job matching 'x'\n"
+
+
+def test_piped_cli_output_has_no_color_codes(db, monkeypatch, capsys):
+    uid = _mk_user(db)
+    repo.add_job_for_user(db, uid, "https://ex.dev/j/plain")
+    monkeypatch.setattr(cli, "_connect", lambda: db)
+    args = cli.build_parser().parse_args(["jobs", "list"])
+    cli.cmd_jobs_list(args)
+    assert "\x1b[" not in capsys.readouterr().out

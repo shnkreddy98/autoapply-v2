@@ -28,6 +28,7 @@ from dotenv import load_dotenv
 
 import brave
 import usage
+from common.termui import print  # noqa: A004 — colored on a terminal; plain under cron
 from common import db, queue, repo
 from enqueue import enqueue_jobs
 
