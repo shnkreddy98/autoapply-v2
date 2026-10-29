@@ -1,7 +1,7 @@
 import logging
 
 from agent import Agent
-from env import MODEL, TAILOR_BULLETS
+from env import MODEL, TAILOR_BULLETS, TAILOR_SKILL_LINES
 from models import QuestionAnswer, Resume, TailoredResume
 from prompts import SYSTEM_PROMPT_ANSWER, SYSTEM_PROMPT_PARSE, system_prompt_tailor
 from textfmt import clean_answer
@@ -34,8 +34,9 @@ class ResumeTailorAgent(Agent):
     """
     Tailors a resume .docx to a specific job description.
 
-    Makes exactly 1 + `bullets` surgical replacements (the summary + the weakest
-    bullets, TAILOR_BULLETS by default) using the replace tool, then returns a
+    Makes up to 1 + `bullets` + `skills` surgical replacements (the summary, the
+    weakest bullets — TAILOR_BULLETS by default — and the Skills lines that take the
+    JD's tools — TAILOR_SKILL_LINES) using the replace tool, then returns a
     TailoredResume with before/after scores.
 
     Usage:
@@ -45,10 +46,14 @@ class ResumeTailorAgent(Agent):
     """
 
     def __init__(
-        self, document_tools: DocumentTools, model: str = MODEL, bullets: int = TAILOR_BULLETS
+        self,
+        document_tools: DocumentTools,
+        model: str = MODEL,
+        bullets: int = TAILOR_BULLETS,
+        skills: int = TAILOR_SKILL_LINES,
     ):
         self._replace_count = 0
-        self._max_replacements = bullets + 1
+        self._max_replacements = 1 + bullets + skills
         original_replace = document_tools.replace
 
         async def tracked_replace(args):
@@ -64,7 +69,7 @@ class ResumeTailorAgent(Agent):
             return result
 
         super().__init__(
-            system_prompt=system_prompt_tailor(bullets),
+            system_prompt=system_prompt_tailor(bullets, skills),
             response_format=TailoredResume,
             model=model,
             tools=[_replace_tool_schema()],
@@ -191,3 +196,4 @@ Answer the application question in at most {max_words} words. Use no em dashes.
         if result.output is None:
             raise RuntimeError(f"answering produced no output: {result.error}")
         return clean_answer(result.output.answer, max_words)
+
