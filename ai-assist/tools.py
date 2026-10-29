@@ -26,6 +26,14 @@ class DocumentTools:
             if args.search_text not in paragraph.text:
                 return False
 
+            # Inside one run (a Skills line's tool list after its bold "Languages:"
+            # label): edit that run alone. Collapsing the paragraph into its first
+            # run's style would bold the whole line.
+            for run in paragraph.runs:
+                if args.search_text in run.text:
+                    run.text = run.text.replace(args.search_text, args.replace_text)
+                    return True
+
             new_text = paragraph.text.replace(args.search_text, args.replace_text)
 
             if paragraph.runs:

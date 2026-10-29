@@ -19,3 +19,8 @@ if "openrouter.ai" in LLM_BASE_URL and not OPENROUTER_API_KEY:
 TAILOR_BULLETS = int(os.getenv("TAILOR_BULLETS", "5"))
 if TAILOR_BULLETS < 1:
     raise ValueError(f"TAILOR_BULLETS must be at least 1, got {TAILOR_BULLETS}")
+# Skills lines the tailor may update with the JD's tools, on top of the bullets. Each
+# added tool also has to show up in a rewritten bullet, so this stays small.
+TAILOR_SKILL_LINES = int(os.getenv("TAILOR_SKILL_LINES", "2"))
+if TAILOR_SKILL_LINES < 0:
+    raise ValueError(f"TAILOR_SKILL_LINES must be at least 0, got {TAILOR_SKILL_LINES}")

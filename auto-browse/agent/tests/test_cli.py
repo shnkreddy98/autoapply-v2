@@ -905,6 +905,84 @@ def test_ask_returns_1_on_ai_assist_error(db, monkeypatch, capsys):
 
 
 # ---------------------------------------------------------------------------
+# cover
+
+
+def _jd_ready_job(db, uid, url):
+    job_id = repo.add_job_for_user(db, uid, url)
+    with db.cursor() as cur:
+        cur.execute("UPDATE jobs SET status = 'jd_ready' WHERE job_id = %s", (job_id,))
+    db.commit()
+    return job_id
+
+
+def test_cover_requires_jd_ready(db, monkeypatch):
+    uid = _mk_user(db)
+    job_id = repo.add_job_for_user(db, uid, "https://ex.dev/j/cover-pending")
+    monkeypatch.setattr(cli, "_connect", lambda: db)
+    monkeypatch.setattr(cli, "run_cover", lambda *a: pytest.fail("must not reach ai-assist"))
+
+    args = cli.build_parser().parse_args(["cover", str(job_id)])
+    with pytest.raises(SystemExit, match="not jd_ready"):
+        cli.cmd_cover(args)
+
+
+def test_cover_prints_the_letter_and_downloads_with_out(db, monkeypatch, capsys, tmp_path):
+    uid = _mk_user(db)
+    job_id = _jd_ready_job(db, uid, "https://ex.dev/j/cover-ready")
+    monkeypatch.setattr(cli, "_connect", lambda: db)
+    seen = {}
+
+    def fake_cover(user_id, jid, words, label=None):
+        seen.update(words=words, label=label)
+        return {"text": "Dear Hiring Manager,\n\nI built it.", "word_count": 3,
+                "base_label": "swe", "pdf_key": "k.pdf", "txt_key": "k.txt"}
+
+    class Store:
+        def get_file(self, key, dest):
+            seen["key"] = key
+            Path(dest).write_bytes(b"%PDF")
+
+    monkeypatch.setattr(cli, "run_cover", fake_cover)
+    monkeypatch.setattr(cli, "_storage", lambda: Store())
+    out_pdf = tmp_path / "c.pdf"
+
+    args = cli.build_parser().parse_args(
+        ["cover", str(job_id), "--label", "swe", "--words", "200", "--out", str(out_pdf)]
+    )
+    assert cli.cmd_cover(args) == 0
+    out = capsys.readouterr()
+    assert out.out.strip() == "Dear Hiring Manager,\n\nI built it."  # letter alone on stdout
+    assert "base: swe" in out.err and str(out_pdf) in out.err
+    assert seen == {"words": 200, "label": "swe", "key": "k.pdf"}
+    assert out_pdf.read_bytes() == b"%PDF"
+
+
+def test_cover_returns_1_on_ai_assist_error(db, monkeypatch, capsys):
+    uid = _mk_user(db)
+    job_id = _jd_ready_job(db, uid, "https://ex.dev/j/cover-err")
+    monkeypatch.setattr(cli, "_connect", lambda: db)
+    monkeypatch.setattr(cli, "run_cover", lambda *a: {"error": "no captured JD"})
+
+    args = cli.build_parser().parse_args(["cover", str(job_id)])
+    assert cli.cmd_cover(args) == 1
+    assert "no captured JD" in capsys.readouterr().err
+
+
+def test_run_cover_reads_the_last_stdout_line(monkeypatch):
+    def fake_run(cmd, **kw):
+        assert cmd[-1] == "cover_cli.py" and "OPENROUTER_API_KEY" not in kw["env"]
+        return subprocess.CompletedProcess(
+            cmd, 0, stdout='INFO:agent:Iteration 1/3\n{"text": "Hi.", "word_count": 1}',
+            stderr="",
+        )
+
+    monkeypatch.setenv("OPENROUTER_API_KEY", "leak-me-not")
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    assert cli.run_cover("u", "j", 350)["text"] == "Hi."
+
+
+# ---------------------------------------------------------------------------
 # role-labelled base resumes
 
 
