@@ -32,7 +32,8 @@ from pathlib import Path
 
 from pydantic import BaseModel, Field, ValidationError
 
-from common import keys, repo
+from common import keys, repo, termui
+from common.termui import print  # noqa: A004 — colored on a terminal only
 
 PARSE_MODEL = os.getenv("OPENROUTER_MODEL", "google/gemini-3-flash-preview")
 
@@ -262,7 +263,7 @@ def parse_resume_llm(text: str, model: str = PARSE_MODEL, client=None) -> Parsed
 
 
 def _ask(
-    label: str, default: str | None = None, *, ask=input, yes: bool = False
+    label: str, default: str | None = None, *, ask=termui.prompt, yes: bool = False
 ) -> str | None:
     """Prompt with an autofilled default; empty answer keeps the default,
     '-' clears it. --yes accepts the default without asking."""
@@ -277,7 +278,7 @@ def _ask(
     return raw
 
 
-def _ask_bool(label: str, default: bool, *, ask=input, yes: bool = False) -> bool:
+def _ask_bool(label: str, default: bool, *, ask=termui.prompt, yes: bool = False) -> bool:
     if yes:
         return default
     shown = "Y/n" if default else "y/N"
@@ -288,7 +289,7 @@ def _ask_bool(label: str, default: bool, *, ask=input, yes: bool = False) -> boo
 
 
 def _ask_date(
-    label: str, default: date | None = None, *, ask=input, yes: bool = False
+    label: str, default: date | None = None, *, ask=termui.prompt, yes: bool = False
 ) -> date | None:
     while True:
         raw = _ask(
@@ -384,7 +385,7 @@ def load_existing_profile(conn, email: str | None) -> dict | None:
 def interactive_review(
     parsed: ParsedResume,
     *,
-    ask=input,
+    ask=termui.prompt,
     yes: bool = False,
     ask_secret=None,
     existing: dict | None = None,

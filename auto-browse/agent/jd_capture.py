@@ -237,7 +237,9 @@ async def proxy_navigator():
 
 
 async def _main() -> None:
-    logging.basicConfig(level=logging.INFO)
+    from common import termui
+
+    termui.setup_logging()
     from common import db
 
     storage = storagemod.from_env()

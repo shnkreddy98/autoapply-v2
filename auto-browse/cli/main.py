@@ -68,8 +68,10 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-from common import db, queue, repo
+from common import db, queue, repo, termui
 from common import storage as storagemod
+# colored on a terminal, the builtin when piped or captured (see common.termui)
+from common.termui import print  # noqa: A004
 
 HERE = Path(__file__).resolve().parent.parent  # auto-browse/
 AI_ASSIST_DIR = HERE.parent / "ai-assist"
@@ -1411,7 +1413,7 @@ def cmd_continue(args) -> int:
     return 0 if ok else 1
 
 
-def _confirm_submitted(ask=input) -> str | None:
+def _confirm_submitted(ask=termui.prompt) -> str | None:
     """The agent stops before the final submit; the human clicks it in the VNC
     view. Ask whether they did, so the DB knows more than 'agent finished'.
     Non-interactive (EOF): record nothing, matching the old behavior."""
@@ -1785,8 +1787,18 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main() -> None:
+    termui.setup_logging()
     args = build_parser().parse_args()
-    sys.exit(args.func(args) or 0)
+    try:
+        rc = args.func(args) or 0
+    except SystemExit as exc:
+        # `raise SystemExit("message")` is how every command reports a user error;
+        # printed here as one red `error:` line instead of Python's bare stderr echo
+        if isinstance(exc.code, str):
+            termui.error(exc.code)
+            sys.exit(1)
+        raise
+    sys.exit(rc)
 
 
 if __name__ == "__main__":
