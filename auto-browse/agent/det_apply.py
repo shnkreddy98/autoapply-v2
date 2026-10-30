@@ -43,7 +43,7 @@ from det_autofill.aria import FormField
 from agent import email_otp, notify
 from agent.apply import resolve_resume
 from agent.jev_client import is_jev, make_system_one
-from agent.profile import profile_json
+from agent.profile import fetch_job_profile, profile_json
 
 log = logging.getLogger(__name__)
 
@@ -209,8 +209,7 @@ async def run_det(
     whether the agent takes over)."""
     from agent.loop import RESUME_CONTAINER_ROOT, SCRATCH_ROOT
 
-    label = repo.base_label_for_job(conn, user_id, job_id)
-    bundle = repo.fetch_profile(conn, user_id, label=label)
+    bundle = fetch_job_profile(conn, user_id, job_id)
     doc = profile_json(bundle)
     host_resume = f"{SCRATCH_ROOT}/{run_id}/resume.pdf"
     container_resume = f"{RESUME_CONTAINER_ROOT}/{run_id}/resume.pdf"

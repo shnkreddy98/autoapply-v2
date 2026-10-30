@@ -82,7 +82,11 @@ uv run autoapply tailor                            # capture JDs + tailor resume
                                                    # (needs auto-browse containers up:
                                                    #  cd auto-browse && docker compose up -d;
                                                    #  + OPENROUTER_API_KEY, LibreOffice)
-uv run autoapply status [JOB]                      # pipeline state + scores
+uv run autoapply status [JOB]                      # pipeline state + scores + posted salary;
+                                                   # [NFY] = JD rules out sponsorship and your
+                                                   # profile needs it (skip: jobs skip JOB)
+uv run autoapply jobs scan                         # re-read captured JDs for those limits and
+                                                   # pay bands (free; capture does it for new JDs)
 uv run autoapply resume show JOB [--open]          # download the tailored PDF
 uv run autoapply cover JOB [--open]                # write a cover letter for the job (paid);
                                                    # stored with it, exported next to the resume
@@ -91,6 +95,7 @@ uv run autoapply apply JOB [--autosubmit]          # run the apply agent
 uv run autoapply apply --all [--today]             # batch: every jd_ready job one by one
                                                    # (--today = only jobs added today;
                                                    #  skips already-submitted)
+                                                   # desired salary is fitted into the JD's band
                                                    # (watch at http://localhost:6080/vnc.html;
                                                    #  pauses before final submit unless
                                                    #  --autosubmit, then it clicks Submit)

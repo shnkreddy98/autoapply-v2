@@ -151,6 +151,16 @@ CREATE TABLE jobs (
     jd_captured_at timestamptz,
     posted_at      date,
     error          text,
+    -- read out of the captured JD by common.jdscan (free, re-runnable with
+    -- `autoapply jobs scan`): what the posting says about work authorization, and
+    -- its pay band. Facts about the posting, so they live here and not per user;
+    -- whether a limit rules a user out is decided against their profile.
+    work_auth      text CHECK (work_auth IN ('no_sponsorship', 'citizen', 'clearance')),
+    work_auth_note text,
+    salary         text,
+    salary_min     integer,
+    salary_max     integer,
+    salary_period  text CHECK (salary_period IN ('year', 'hour', 'month')),
     created_at     timestamptz NOT NULL DEFAULT now(),
     updated_at     timestamptz NOT NULL DEFAULT now()
 );

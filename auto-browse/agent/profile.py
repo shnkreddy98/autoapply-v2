@@ -19,7 +19,7 @@ from typing import Any
 import psycopg
 
 from agent import observability
-from common import repo
+from common import jdscan, repo
 from common.repo import ProfileData, fetch_profile
 
 
@@ -28,13 +28,31 @@ def build_profile(
 ) -> str:
     """Fetch + render the profile for a job. The work history comes from the role the
     job was tailored from, so the form gets the same employers and titles as the
-    resume being uploaded; without a tailoring, the user's default role."""
-    label = repo.base_label_for_job(conn, user_id, job_id) if job_id else None
-    data = fetch_profile(conn, user_id, label=label)
+    resume being uploaded; without a tailoring, the user's default role. The salary
+    ask is fitted to the job's band (see fetch_job_profile)."""
+    if job_id:
+        data = fetch_job_profile(conn, user_id, job_id)
+    else:
+        data = fetch_profile(conn, user_id)
     # the portal password goes into this text for sign-in pages; keep it out of every
     # trace, log and record written from here on (they held it in plain text)
     observability.register_secret((data.login or {}).get("login_password"))
     return render_profile(data, resume_path)
+
+
+def fetch_job_profile(conn: psycopg.Connection, user_id: str, job_id: str) -> ProfileData:
+    """The profile as one job's application should see it, for both apply engines:
+    the role the job was tailored from, and desired_salary moved inside the JD's
+    posted yearly band (asking $140k against a $100k-$125k posting gives $125k)."""
+    data = fetch_profile(conn, user_id, label=repo.base_label_for_job(conn, user_id, job_id))
+    want = (data.profile or {}).get("desired_salary")
+    band = repo.get_job_salary_band(conn, job_id) if want is not None else None
+    if band:
+        fitted = jdscan.clamp_salary(
+            want, band["salary_min"], band["salary_max"], band["salary_period"]
+        )
+        data.profile = {**data.profile, "desired_salary": fitted}
+    return data
 
 
 # Facts that belong to the user row but are account plumbing, not form answers.

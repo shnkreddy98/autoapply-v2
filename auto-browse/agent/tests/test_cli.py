@@ -642,6 +642,139 @@ def test_select_ready_jobs_filters(db):
     assert {r["job_id"] for r in picked_all} == {ready, half, old}
 
 
+def _needs_sponsorship(db, user_id, value=True):
+    with db.cursor() as cur:
+        cur.execute(
+            "INSERT INTO application_profiles (user_id, visa_sponsorship) VALUES (%s, %s)",
+            (user_id, value),
+        )
+    db.commit()
+
+
+class _JdStore:
+    def __init__(self, objs):
+        self.objs = objs
+
+    def get_bytes(self, key):
+        return self.objs[key]
+
+
+def test_jobs_scan_reads_stored_jds_for_limits_and_salary(db, monkeypatch, capsys):
+    """Jobs captured before the scanner existed get their reading from `jobs scan`;
+    a rescan replaces the old reading, including clearing a limit."""
+    import contextlib
+    from types import SimpleNamespace
+
+    from common import keys
+
+    uid = _mk_user(db)
+    limited = _mk_ready_job(db, uid, "https://ex.dev/j/limited")
+    open_ = _mk_ready_job(db, uid, "https://ex.dev/j/open")
+    lost = _mk_ready_job(db, uid, "https://ex.dev/j/lost")
+    with db.cursor() as cur:
+        for j in (limited, open_, lost):
+            cur.execute("UPDATE jobs SET jd_s3_key = %s WHERE job_id = %s", (keys.jd_key(j), j))
+        cur.execute("UPDATE jobs SET work_auth = 'citizen' WHERE job_id = %s", (open_,))
+    db.commit()
+    store = _JdStore({
+        keys.jd_key(limited): b"We are unable to sponsor visas.\nSalary: $150k-170k",
+        keys.jd_key(open_): b"We do sponsor visas.",
+    })
+    monkeypatch.setattr(cli, "_connect", lambda: contextlib.nullcontext(db))
+    monkeypatch.setattr(cli, "_storage", lambda: store)
+
+    assert cli.cmd_jobs_scan(SimpleNamespace(user=None)) == 0
+    out = capsys.readouterr().out
+    assert "scanned 2 JD(s): 1 no sponsorship" in out and "salary on 1" in out
+    assert "1 JD file(s) missing" in out
+    with db.cursor() as cur:
+        cur.execute("SELECT job_id, work_auth, salary_min, salary_max FROM jobs")
+        rows = {r["job_id"]: r for r in cur.fetchall()}
+    assert (rows[limited]["work_auth"], rows[limited]["salary_max"]) == ("no_sponsorship", 170000)
+    assert rows[open_]["work_auth"] is None
+
+
+def test_status_marks_nfy_and_shows_salary(db, monkeypatch, capsys):
+    """F-1 STEM OPT: authorized to work today, needs sponsorship later. A JD that
+    rules sponsorship out is marked NFY for that profile, and only for it."""
+    import contextlib
+
+    uid = _mk_user(db)
+    _needs_sponsorship(db, uid)
+    nfy = _mk_ready_job(db, uid, "https://ex.dev/j/nfy")
+    ok = _mk_ready_job(db, uid, "https://ex.dev/j/ok")
+    for j in (nfy, ok):
+        repo.enqueue_tailoring(db, uid, j)
+    with db.cursor() as cur:
+        cur.execute(
+            "UPDATE jobs SET work_auth = 'no_sponsorship', work_auth_note = 'No Visa Sponsorship', "
+            "salary = '$100,000 - $125,000' WHERE job_id = %s",
+            (nfy,),
+        )
+    db.commit()
+    monkeypatch.setattr(cli, "_connect", lambda: contextlib.nullcontext(db))
+
+    assert cli.cmd_status(cli.build_parser().parse_args(["status"])) == 0
+    lines = capsys.readouterr().out.splitlines()
+    nfy_line = next(line for line in lines if "j/nfy" in line)
+    assert "$100,000 - $125,000" in nfy_line and "[NFY: no sponsorship]" in nfy_line
+    assert "NFY" not in next(line for line in lines if "j/ok" in line)
+    assert any("1 job(s) marked NFY" in line for line in lines)
+
+    assert cli.cmd_status(cli.build_parser().parse_args(["status", str(nfy)])) == 0
+    out = capsys.readouterr().out
+    assert "salary  $100,000 - $125,000" in out
+    assert "auth    no sponsorship  [NFY: no sponsorship]" in out
+    assert '"No Visa Sponsorship"' in out
+
+    # a profile that needs no sponsorship sees the limit, never NFY
+    with db.cursor() as cur:
+        cur.execute("UPDATE application_profiles SET visa_sponsorship = false WHERE user_id = %s", (uid,))
+    db.commit()
+    assert cli.cmd_status(cli.build_parser().parse_args(["status"])) == 0
+    assert "NFY" not in capsys.readouterr().out
+
+
+def test_nfy_jobs_stay_out_of_bulk_tailoring_and_batch_apply(db, monkeypatch, capsys):
+    """Each tailoring is a paid call: an NFY job is not backfilled, not retried, and
+    not batch-applied (which would queue one on demand). It still shows in status."""
+    import contextlib
+
+    uid = _mk_user(db)
+    _needs_sponsorship(db, uid)
+    nfy = _mk_ready_job(db, uid, "https://ex.dev/j/nfy")
+    ok = _mk_ready_job(db, uid, "https://ex.dev/j/ok")
+    with db.cursor() as cur:
+        cur.execute("UPDATE jobs SET work_auth = 'citizen' WHERE job_id = %s", (nfy,))
+    db.commit()
+
+    assert cli.backfill_tailoring(db, uid) == 1
+    assert repo.lookup_tailored(db, uid, nfy) is None
+    assert cli.count_nfy_untailored(db, uid) == 1
+    assert [r["job_id"] for r in cli.select_ready_jobs(db, uid, None)] == [ok]
+
+    monkeypatch.setattr(cli, "_connect", lambda: contextlib.nullcontext(db))
+    assert cli.cmd_status(cli.build_parser().parse_args(["status"])) == 0
+    line = next(x for x in capsys.readouterr().out.splitlines() if "j/nfy" in x)
+    assert "skipped" in line and "[NFY: citizens/green card only]" in line
+
+    # a failed NFY row (tailored before the scan) is not bulk-retried
+    repo.enqueue_tailoring(db, uid, nfy)
+    with db.cursor() as cur:
+        cur.execute("UPDATE tailored_resumes SET status = 'failed' WHERE user_id = %s", (uid,))
+    db.commit()
+    assert cli.reset_failed_tailorings(db, uid, None) == 1  # only the `ok` row
+    assert repo.lookup_tailored(db, uid, nfy)["status"] == "failed"
+
+    # a profile that needs no sponsorship gets all of it back
+    with db.cursor() as cur:
+        cur.execute("UPDATE application_profiles SET visa_sponsorship = false WHERE user_id = %s", (uid,))
+    db.commit()
+    assert cli.count_nfy_untailored(db, uid) == 0
+    assert len(cli.select_ready_jobs(db, uid, None)) == 2
+    assert cli.reset_failed_tailorings(db, uid, None) == 1
+
+
 def test_jobs_skip_keeps_the_job_out_of_batch_apply(db, monkeypatch, capsys):
     """A job the user decided against (a student co-op) was picked up by every
     `apply --today` again; `jobs skip` records that decision."""

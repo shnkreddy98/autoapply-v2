@@ -4,14 +4,19 @@
     autoapply jobs list [--status S] [--today]         # company - title, id, status
     autoapply jobs rm JOB [JOB ...] [--user U]         # drop from your pipeline; re-addable
     autoapply jobs skip JOB [JOB ...] [--user U]       # not applying: batch apply passes over it
+    autoapply jobs scan [--user U]                     # re-read captured JDs for sponsorship
+                                                       # limits + salary (free; capture does it too)
     autoapply tailor [JOB] [--label L] [--user U] [--retry-failed [--retry-since W]] [--force]
                                                        # jd-capture + drain tailor queue;
                                                        # JOB re-tailors one job; --label picks a role base;
                                                        # already-tailored jobs report as duplicates and are
-                                                       # skipped unless --force
+                                                       # skipped unless --force; NFY jobs are never
+                                                       # tailored in bulk (JOB still does one)
     autoapply retry [--all] [--user U]                 # reset today's failed JD fetches + recapture
     autoapply status [JOB] [--today | --date D] [--user U]
-                                                       # pipeline state + scores; --date YYYY-MM-DD:
+                                                       # pipeline state + scores + posted salary;
+                                                       # [NFY]: JD rules out sponsorship and your
+                                                       # profile needs it; --date YYYY-MM-DD:
                                                        # jobs added on that local day
     autoapply resume show JOB [--user U] [--out P] [--open]
     autoapply resume add FILE --label L [--default] [--replace] [--user U]
@@ -33,7 +38,10 @@
                                                        # letter -> stdout; export copies it next to the resume
     autoapply apply [JOB ...] [--all] [--today] [--user U] [--model M] [--autosubmit]
                     [--engine agent|det|det+agent] [--mcp URL]
-                                                       # --all: batch every jd_ready job one by one;
+                                                       # desired_salary is fitted into the JD's
+                                                       # posted yearly band;
+                                                       # --all: batch every jd_ready job one by one
+                                                       # (passes over NFY jobs; JOB still runs one);
                                                        # --today restricts to jobs added today;
                                                        # --engine det: deterministic filler, model
                                                        # only for fields it cannot answer;
@@ -68,7 +76,7 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-from common import db, queue, repo, termui
+from common import db, jdscan, queue, repo, termui
 from common import storage as storagemod
 # colored on a terminal, the builtin when piped or captured (see common.termui)
 from common.termui import print  # noqa: A004
@@ -289,6 +297,48 @@ def cmd_jobs_skip(args) -> int:
     return 0
 
 
+def scan_jds(conn, storage, user_id: str) -> dict:
+    """Re-read every captured JD of this user's jobs with common.jdscan and store the
+    result. Free (no model call), so it is safe to re-run after a pattern change;
+    capture already scans new JDs. Returns counts for the summary line."""
+    with conn.cursor() as cur:
+        cur.execute(
+            "SELECT j.job_id, j.jd_s3_key FROM jobs j "
+            "JOIN user_jobs uj ON uj.job_id = j.job_id AND uj.user_id = %s "
+            "WHERE j.jd_s3_key IS NOT NULL",
+            (user_id,),
+        )
+        rows = cur.fetchall()
+    counts = {"scanned": 0, "missing": 0, "salary": 0, "no_sponsorship": 0,
+              "citizen": 0, "clearance": 0}
+    for r in rows:
+        try:
+            text = storage.get_bytes(r["jd_s3_key"]).decode("utf-8", errors="replace")
+        except Exception:  # a JD lost from storage: leave the old reading alone
+            counts["missing"] += 1
+            continue
+        result = jdscan.scan(text)
+        repo.set_job_scan(conn, r["job_id"], result)
+        counts["scanned"] += 1
+        counts["salary"] += result.salary is not None
+        if result.work_auth:
+            counts[result.work_auth] += 1
+    return counts
+
+
+def cmd_jobs_scan(args) -> int:
+    with _connect() as conn:
+        user_id = resolve_user(conn, args.user)
+        c = scan_jds(conn, _storage(), user_id)
+    print(
+        f"scanned {c['scanned']} JD(s): {c['no_sponsorship']} no sponsorship, "
+        f"{c['citizen']} citizens/green card only, {c['clearance']} clearance; "
+        f"salary on {c['salary']}"
+        + (f"; {c['missing']} JD file(s) missing from storage" if c["missing"] else "")
+    )
+    return 0
+
+
 def _today_start() -> datetime:
     """Local midnight, tz-aware (job timestamps are UTC; 'today' means the user's day)."""
     return (
@@ -404,22 +454,50 @@ def repoint_pending(conn, user_id: str, label: str) -> int:
     return n
 
 
+# Job ids that are NFY (not for you) for the user bound to the one %s parameter: the
+# JD states a work-authorization limit (common.jdscan) and the user's profile says
+# they need sponsorship. SQL twin of jdscan.not_for_you, for the bulk queries that
+# keep these jobs out of paid tailoring and batch apply.
+_NFY_JOB_IDS = (
+    "(SELECT jn.job_id FROM jobs jn WHERE jn.work_auth IS NOT NULL AND EXISTS "
+    "(SELECT 1 FROM application_profiles p WHERE p.user_id = %s AND p.visa_sponsorship))"
+)
+
+
 def backfill_tailoring(conn, user_id: str, label: str | None = None) -> int:
     """Enqueue tailoring for owned jd_ready jobs this user has no row for (idempotent).
-    `label` chooses which base resume feeds the tailoring (None = default base)."""
+    `label` chooses which base resume feeds the tailoring (None = default base).
+    NFY jobs are left out: each tailoring is a paid model call, for a job the JD
+    says this user cannot take. `tailor JOB` still tailors one by name."""
     with conn.cursor() as cur:
         cur.execute(
             "SELECT j.job_id FROM jobs j "
             "JOIN user_jobs uj ON uj.job_id = j.job_id AND uj.user_id = %s "
             "WHERE j.status = 'jd_ready' AND NOT EXISTS "
-            "(SELECT 1 FROM tailored_resumes t WHERE t.job_id = j.job_id AND t.user_id = %s)",
-            (user_id, user_id),
+            "(SELECT 1 FROM tailored_resumes t WHERE t.job_id = j.job_id AND t.user_id = %s) "
+            f"AND j.job_id NOT IN {_NFY_JOB_IDS}",
+            (user_id, user_id, user_id),
         )
         job_ids = [r["job_id"] for r in cur.fetchall()]
     base = resolve_base(conn, user_id, label)  # tailoring edits the docx
     for job_id in job_ids:
         repo.enqueue_tailoring(conn, user_id, job_id, base["id"] if base else None)
     return len(job_ids)
+
+
+def count_nfy_untailored(conn, user_id: str) -> int:
+    """This user's captured NFY jobs that tailoring passed over, for the tailor
+    report: a job that silently gets no resume looks like a bug."""
+    with conn.cursor() as cur:
+        cur.execute(
+            "SELECT count(*) AS n FROM jobs j "
+            "JOIN user_jobs uj ON uj.job_id = j.job_id AND uj.user_id = %s "
+            "WHERE j.status = 'jd_ready' AND NOT EXISTS "
+            "(SELECT 1 FROM tailored_resumes t WHERE t.job_id = j.job_id AND t.user_id = %s) "
+            f"AND j.job_id IN {_NFY_JOB_IDS}",
+            (user_id, user_id, user_id),
+        )
+        return cur.fetchone()["n"]
 
 
 def already_tailored(conn, user_id: str) -> list[dict]:
@@ -430,7 +508,7 @@ def already_tailored(conn, user_id: str) -> list[dict]:
     reports them as duplicates instead."""
     with conn.cursor() as cur:
         cur.execute(
-            "SELECT j.job_id, j.url, j.company, t.updated_at "
+            "SELECT j.job_id, j.url, j.company, j.work_auth, t.updated_at "
             "FROM tailored_resumes t "
             "JOIN jobs j USING (job_id) "
             "JOIN user_jobs uj ON uj.job_id = j.job_id AND uj.user_id = t.user_id "
@@ -496,7 +574,8 @@ def reenqueue_one(conn, user_id: str, job_id: str, label: str | None) -> None:
 def tailoring_summary(conn, user_id: str, since: datetime | None = None,
                       until: datetime | None = None) -> dict:
     """Counts by status plus a per-job join, scoped to one user; `since` / `until`
-    limit everything to jobs the user added in [since, until) (user_jobs.added_at)."""
+    limit everything to jobs the user added in [since, until) (user_jobs.added_at).
+    `needs_sponsorship` is the profile answer the NFY marker is judged against."""
     added = (" AND uj.added_at >= %s" if since is not None else "") + (" AND uj.added_at < %s" if until is not None else "")
     since_params = tuple(t for t in (since, until) if t is not None)
     with conn.cursor() as cur:
@@ -514,23 +593,44 @@ def tailoring_summary(conn, user_id: str, since: datetime | None = None,
             (user_id, *since_params),
         )
         tailor_counts = {r["status"]: r["n"] for r in cur.fetchall()}
+        # Tailored jobs, plus captured NFY jobs that tailoring passed over (status
+        # "skipped"): those have no tailoring row, and without this they would
+        # vanish from the one listing meant to show them.
         cur.execute(
-            "SELECT t.job_id, t.status, t.resume_score, t.new_resume_score, "
-            "t.job_match_summary, t.error, j.title, j.company, j.url, "
-            "j.status AS job_status, "
+            "SELECT j.job_id, COALESCE(t.status, 'skipped') AS status, t.resume_score, "
+            "t.new_resume_score, t.job_match_summary, t.error, j.title, j.company, j.url, "
+            "j.status AS job_status, j.work_auth, j.work_auth_note, j.salary, "
             "j.error AS job_error, ap.status AS apply_status, ap.outcome AS apply_outcome "
-            "FROM tailored_resumes t JOIN jobs j USING (job_id) "
-            "JOIN user_jobs uj ON uj.job_id = t.job_id AND uj.user_id = t.user_id "
+            "FROM user_jobs uj JOIN jobs j ON j.job_id = uj.job_id "
+            "LEFT JOIN tailored_resumes t ON t.job_id = uj.job_id AND t.user_id = uj.user_id "
             "LEFT JOIN LATERAL ("
             "  SELECT a.status, a.outcome FROM applications a "
-            "  WHERE a.job_id = t.job_id AND a.user_id = t.user_id "
+            "  WHERE a.job_id = uj.job_id AND a.user_id = uj.user_id "
             "  ORDER BY a.started_at DESC LIMIT 1"
             ") ap ON true "
-            f"WHERE t.user_id = %s{added} ORDER BY t.created_at DESC",
-            (user_id, *since_params),
+            f"WHERE uj.user_id = %s{added} AND (t.id IS NOT NULL OR "
+            f"(j.status = 'jd_ready' AND j.job_id IN {_NFY_JOB_IDS})) "
+            "ORDER BY COALESCE(t.created_at, uj.added_at) DESC",
+            (user_id, *since_params, user_id),
         )
         rows = cur.fetchall()
-    return {"job_counts": job_counts, "tailor_counts": tailor_counts, "rows": rows}
+    return {"job_counts": job_counts, "tailor_counts": tailor_counts, "rows": rows,
+            "needs_sponsorship": repo.needs_sponsorship(conn, user_id)}
+
+
+_WORK_AUTH_WORDS = {
+    "no_sponsorship": "no sponsorship",
+    "citizen": "citizens/green card only",
+    "clearance": "security clearance",
+}
+
+
+def _nfy_marker(row: dict, needs_sponsorship: bool) -> str:
+    """"NFY: no sponsorship" when the JD rules out a candidate who needs sponsorship
+    and this user does (see jdscan.not_for_you); "" otherwise."""
+    if not jdscan.not_for_you(row.get("work_auth"), needs_sponsorship):
+        return ""
+    return f"NFY: {_WORK_AUTH_WORDS[row['work_auth']]}"
 
 
 def _print_summary(s: dict, scope: str = "") -> None:
@@ -549,7 +649,16 @@ def _print_summary(s: dict, scope: str = "") -> None:
         err = f"  error: {r['error']}" if r["error"] else ""
         mark = _apply_marker(r)
         applied = f"  [{mark}]" if mark else ""
-        print(f"{_id8(r['job_id'])}  {r['status']:<9} {name}{score}{applied}{err}")
+        nfy = _nfy_marker(r, s.get("needs_sponsorship", False))
+        nfy = f"  [{nfy}]" if nfy else ""
+        pay = f"  {r['salary']}" if r.get("salary") else ""
+        print(f"{_id8(r['job_id'])}  {r['status']:<9} {name}{score}{pay}{applied}{nfy}{err}")
+    n_nfy = sum(1 for r in s["rows"] if _nfy_marker(r, s.get("needs_sponsorship", False)))
+    if n_nfy:
+        print(
+            f"{n_nfy} job(s) marked NFY (not for you): the JD rules out sponsorship and "
+            "your profile says you need it — autoapply jobs skip JOB to pass over them"
+        )
     stuck = (
         s["job_counts"].get("jd_capturing", 0),
         s["tailor_counts"].get("tailoring", 0),
@@ -694,7 +803,11 @@ def cmd_tailor(args) -> int:
         # when explicitly asked (each redo is a paid model call).
         dupes = already_tailored(conn, user_id)
         if dupes and getattr(args, "force", False):
-            n_forced = requeue_duplicates(conn, user_id, dupes, label)
+            # --force redoes the batch, not jobs the user cannot take (paid per job)
+            needs = repo.needs_sponsorship(conn, user_id)
+            n_forced = requeue_duplicates(
+                conn, user_id, [d for d in dupes if not jdscan.not_for_you(d["work_auth"], needs)], label
+            )
             print(f"--force: re-queued {n_forced} already-tailored job(s)")
         else:
             print_duplicates(dupes)
@@ -704,6 +817,12 @@ def cmd_tailor(args) -> int:
             print(
                 f"enqueued tailoring for {n_backfilled} job(s)"
                 + (f" from {label} base" if label else "")
+            )
+        n_nfy = count_nfy_untailored(conn, user_id)
+        if n_nfy:
+            print(
+                f"skipped tailoring for {n_nfy} NFY job(s): the JD rules out sponsorship "
+                "(see: autoapply status; autoapply tailor JOB tailors one anyway)"
             )
         # Rows queued earlier by JD capture or the apply loop still sit on the
         # default base; move the un-run ones onto the requested role.
@@ -798,9 +917,10 @@ def _failed_tailoring_filter(user_id: str, label: str | None) -> tuple[str, list
     With `label`, only rows queued from that role's base match. Matching on the
     label rather than one asset id keeps a base that was replaced (`resume add
     --replace`) in scope: its older rows point at the superseded asset. Rows with
-    no base at all belong to no role, so a labelled run leaves them alone."""
-    clauses = ["t.user_id = %s", "t.status = 'failed'"]
-    params: list = [user_id]
+    no base at all belong to no role, so a labelled run leaves them alone. NFY jobs
+    are never retried in bulk (each retry is a paid call); `tailor JOB` still can."""
+    clauses = ["t.user_id = %s", "t.status = 'failed'", f"t.job_id NOT IN {_NFY_JOB_IDS}"]
+    params: list = [user_id, user_id]
     if label is not None:
         clauses.append(
             "t.base_asset_id IN (SELECT id FROM resume_assets WHERE user_id = %s "
@@ -888,6 +1008,12 @@ def cmd_status(args) -> int:
                 f"status  {job['status']}"
                 + (f"  error: {job['error']}" if job["error"] else "")
             )
+            if job["salary"]:
+                print(f"salary  {job['salary']}")
+            if job["work_auth"]:
+                nfy = _nfy_marker(job, repo.needs_sponsorship(conn, user_id))
+                print(f"auth    {_WORK_AUTH_WORDS[job['work_auth']]}" + (f"  [{nfy}]" if nfy else ""))
+                print(f"        \"{job['work_auth_note']}\"")
             if t:
                 print(
                     f"tailoring  {t['status']}"
@@ -1318,9 +1444,16 @@ def _autosubmit_outcome(final_text: str | None) -> str:
 def select_ready_jobs(conn, user_id: str, since: datetime | None) -> list[dict]:
     """Batch-apply selection: jd_ready jobs (added since `since` when given),
     minus the ones whose latest attempt ended in a confirmed submit, that the portal
-    says were applied to before, or that the user skipped (`jobs skip`)."""
+    says were applied to before, that the user skipped (`jobs skip`), or that are
+    NFY for them. An NFY job has no tailoring, so applying would also queue a paid
+    one on demand; `apply JOB` by name still runs it."""
     rows = repo.list_jobs_for_user(conn, user_id, "jd_ready", since=since)
-    return [r for r in rows if r.get("apply_outcome") not in ("submitted", "already applied", "skipped")]
+    needs = repo.needs_sponsorship(conn, user_id)
+    return [
+        r for r in rows
+        if r.get("apply_outcome") not in ("submitted", "already applied", "skipped")
+        and not jdscan.not_for_you(r.get("work_auth"), needs)
+    ]
 
 
 def _check_engine_model(engine: str, model: str) -> None:
@@ -1469,6 +1602,19 @@ def build_parser() -> argparse.ArgumentParser:
     skip.add_argument("jobs", nargs="+", help="job ids, id prefixes, or URLs")
     skip.add_argument("--user", help="user id or email (default: the only active user)")
     skip.set_defaults(func=cmd_jobs_skip)
+    scan = jobs_sub.add_parser(
+        "scan",
+        help="re-read captured JDs for sponsorship limits and salary (free)",
+        description="Reads every captured JD of your jobs for work-authorization "
+        "limits (no sponsorship, citizens / green card only, security clearance) and "
+        "the posted pay band, and stores them on the job. No model call. JD capture "
+        "already does this for new jobs; run it once for jobs captured before, or "
+        "after the patterns change. `status` marks a limited job NFY when your "
+        "profile says you need sponsorship, and apply fits desired_salary into the "
+        "band.",
+    )
+    scan.add_argument("--user", help="user id or email (default: the only active user)")
+    scan.set_defaults(func=cmd_jobs_scan)
     lst = jobs_sub.add_parser("list", help="list your jobs")
     lst.add_argument("--status", choices=_JOB_STATUSES)
     lst.add_argument("--today", action="store_true", help="only jobs added today")
@@ -1485,7 +1631,9 @@ def build_parser() -> argparse.ArgumentParser:
         "re-tailor just that job; --label picks which base resume to tailor from "
         "(see: autoapply resume add / resume bases). --retry-failed only reaches "
         "today's failures, and only the ones on --label's base, so an older backlog "
-        "is never silently re-run; --retry-since widens the window.",
+        "is never silently re-run; --retry-since widens the window. NFY jobs (the JD "
+        "rules out sponsorship and your profile needs it) are not tailored, retried "
+        "or --force'd in bulk; name one as JOB to tailor it anyway.",
     )
     tailor.add_argument(
         "job", nargs="?", help="job id, id prefix, or URL — re-tailor only this job"
@@ -1528,7 +1676,14 @@ def build_parser() -> argparse.ArgumentParser:
     retry.add_argument("--user", help="user id or email (default: the only active user)")
     retry.set_defaults(func=cmd_retry)
 
-    status = sub.add_parser("status", help="pipeline status + scores")
+    status = sub.add_parser(
+        "status",
+        help="pipeline status + scores",
+        description="One line per tailored job: status, scores, the posted salary "
+        "and the apply marker. [NFY: ...] (not for you) marks a job whose JD rules "
+        "out sponsorship, or wants citizens / green card holders / a clearance, when "
+        "your profile says you need sponsorship (profile init: visa sponsorship).",
+    )
     status.add_argument(
         "job", nargs="?", help="job id, id prefix, or URL (full detail)"
     )
@@ -1711,7 +1866,7 @@ def build_parser() -> argparse.ArgumentParser:
     apply_p.add_argument(
         "--all",
         action="store_true",
-        help="batch: apply to every jd_ready job (skips already-submitted), one by one",
+        help="batch: apply to every jd_ready job (skips already-submitted, skipped and NFY), one by one",
     )
     apply_p.add_argument(
         "--today",

@@ -125,6 +125,45 @@ def _backfill_job_text(
     conn.commit()
 
 
+_SCAN_COLUMNS = ("work_auth", "work_auth_note", "salary", "salary_min", "salary_max", "salary_period")
+
+
+def set_job_scan(conn: psycopg.Connection, job_id: str, scan: Any) -> None:
+    """Store what common.jdscan read out of the job's JD. Overwrites: the values are
+    a pure function of the JD text, so a rescan after a recapture or a pattern fix
+    must replace the old reading, including clearing a limit that no longer fires."""
+    with conn.cursor() as cur:
+        cur.execute(
+            "UPDATE jobs SET "
+            + ", ".join(f"{c} = %s" for c in _SCAN_COLUMNS)
+            + ", updated_at = now() WHERE job_id = %s",
+            (*(getattr(scan, c) for c in _SCAN_COLUMNS), job_id),
+        )
+    conn.commit()
+
+
+def needs_sponsorship(conn: psycopg.Connection, user_id: str) -> bool:
+    """application_profiles.visa_sponsorship: "need visa sponsorship (now or
+    future)?" from `profile init`. True for F-1 OPT / STEM OPT as well as H-1B:
+    authorized to work today is not enough when the JD rules out future sponsorship."""
+    with conn.cursor() as cur:
+        cur.execute(
+            "SELECT visa_sponsorship FROM application_profiles WHERE user_id = %s",
+            (user_id,),
+        )
+        row = cur.fetchone()
+    return bool(row and row["visa_sponsorship"])
+
+
+def get_job_salary_band(conn: psycopg.Connection, job_id: str) -> dict | None:
+    with conn.cursor() as cur:
+        cur.execute(
+            "SELECT salary_min, salary_max, salary_period FROM jobs WHERE job_id = %s",
+            (job_id,),
+        )
+        return cur.fetchone()
+
+
 def set_job_company(conn: psycopg.Connection, job_id: str, company: str | None) -> None:
     """Fill in `jobs.company` if it is still blank. The capture path never learns the
     employer name (it only has the URL); the tailor agent reads it out of the JD, so
