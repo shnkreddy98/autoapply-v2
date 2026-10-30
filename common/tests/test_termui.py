@@ -42,6 +42,18 @@ def test_terminal_output_is_highlighted_but_says_the_same_thing():
     assert re.sub(r"\x1b\[[0-9;]*m", "", out) == "b4b614f4  failed  https://ex.dev/j/1  score 38 -> 64\n"
 
 
+def test_status_salary_and_nfy_are_highlighted():
+    tty = _Tty()
+    line = "b4b614f4  ready     Acme - SWE  $129,300 - $194,700  [NFY: no sponsorship]"
+    termui.print(line, file=tty)
+    out = tty.getvalue()
+    assert "\x1b[32m$129,300 - $194,700" in out
+    assert "\x1b[1;31m[NFY: no sponsorship]" in out
+    import re
+
+    assert re.sub(r"\x1b\[[0-9;]*m", "", out) == line + "\n"
+
+
 def test_brackets_are_text_not_markup():
     tty = _Tty()
     termui.print("[3/100 words | base: swe]", file=tty)

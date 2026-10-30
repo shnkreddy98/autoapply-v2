@@ -50,7 +50,7 @@ def _admin_dsn() -> str:
 # Newest (table, column) in init.sql — bump on every schema change so stale test DBs
 # rebuild. A column, not just a table: changes that only add a column or drop a
 # table would otherwise leave an old schema in place and fail tests confusingly.
-_SCHEMA_SENTINEL = ("resume_assets", "parsed")
+_SCHEMA_SENTINEL = ("jobs", "salary_period")
 
 
 def ensure_test_db() -> None:

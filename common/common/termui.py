@@ -34,6 +34,10 @@ _HIGHLIGHTS = [
     r"\b(?P<bad>failed|error|refused|blocked|not yours|not jd_ready)\b",
     # "score 38 -> 64", "60 -> 80"
     r"(?P<score>\b\d+ -> \d+\b)",
+    # posted pay band on `status` rows: "$129,300 - $194,700", "$150k-170k"
+    r"(?P<money>(?:USD\s*)?\$\s?\d[\d,.]*[kK]?(?:\s?(?:-|–|—|to)\s?\$?\d[\d,.]*[kK]?)?)",
+    # `status` "[NFY: no sponsorship]": a job the JD rules this user out of
+    r"(?P<nfy>\[NFY: [^\]]*\])",
     r"(?P<url>\bhttps?://[^\s)\]]+)",
     r"(?P<heading>^\s*-- .+ --\s*$)",
     r"(?P<warn>^\s*(?:warning:|\(!\)|!) .*$)",
@@ -48,6 +52,8 @@ _THEME = {
     "aa.pending": "yellow",
     "aa.bad": "bold red",
     "aa.score": "bold cyan",
+    "aa.money": "green",
+    "aa.nfy": "bold red",
     "aa.url": "cyan underline",
     "aa.heading": "bold blue",
     "aa.warn": "yellow",

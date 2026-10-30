@@ -92,6 +92,61 @@ async def test_capture_success_enqueues_tailoring(db):
 
 
 @pytest.mark.asyncio
+async def test_capture_records_work_auth_and_salary(db):
+    """Read at capture, before tailoring: `status` marks NFY from these and apply
+    fits the salary ask into the band."""
+    job_id, _ = _seed_job_and_user(db)
+    jd = (
+        _VALID_JD
+        + "\nThe base pay range for this position is $119,300 - $145,900 per year.\n"
+        + "Will you now or in the future require visa sponsorship?\n"  # a form question
+        + "This role is not eligible for visa sponsorship.\n"
+    )
+
+    async def navigate(url):
+        return jd
+
+    await jd_capture.capture_once(db, navigate, FakeStorage())
+    with db.cursor() as cur:
+        cur.execute(
+            "SELECT work_auth, work_auth_note, salary, salary_min, salary_max, salary_period "
+            "FROM jobs WHERE job_id = %s",
+            (job_id,),
+        )
+        row = cur.fetchone()
+    assert row["work_auth"] == "no_sponsorship"
+    assert "not eligible for visa sponsorship" in row["work_auth_note"]
+    assert (row["salary_min"], row["salary_max"], row["salary_period"]) == (119300, 145900, "year")
+    assert row["salary"].startswith("$119,300 - $145,900")
+
+
+@pytest.mark.asyncio
+async def test_capture_does_not_tailor_for_an_owner_the_jd_rules_out(db):
+    """Tailoring is paid; an owner who needs sponsorship gets none for a JD that
+    rules it out. A co-owner who needs none still does."""
+    job_id, opt_user = _seed_job_and_user(db, url="https://example.com/jobs/nfy")
+    with db.cursor() as cur:
+        cur.execute(
+            "INSERT INTO users (email, full_name) VALUES ('citizen@example.com', 'C') "
+            "RETURNING user_id"
+        )
+        citizen = cur.fetchone()["user_id"]
+        cur.execute(
+            "INSERT INTO application_profiles (user_id, visa_sponsorship) VALUES (%s, true), (%s, false)",
+            (opt_user, citizen),
+        )
+    db.commit()
+    repo.add_job_for_user(db, citizen, "https://example.com/jobs/nfy")
+
+    async def navigate(url):
+        return _VALID_JD + "\nWe are unable to sponsor or take over sponsorship of an employment visa.\n"
+
+    await jd_capture.capture_once(db, navigate, FakeStorage())
+    assert repo.lookup_tailored(db, opt_user, job_id) is None
+    assert repo.lookup_tailored(db, citizen, job_id) is not None
+
+
+@pytest.mark.asyncio
 async def test_capture_enqueues_owners_only(db):
     """An active non-owner must NOT get a tailoring row for someone else's job."""
     job_id, owner = _seed_job_and_user(db)

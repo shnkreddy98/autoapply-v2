@@ -179,6 +179,35 @@ def test_build_profile_follows_the_jobs_role(db):
     assert "de summary" in out
 
 
+def test_salary_ask_is_fitted_to_the_jobs_band(db):
+    """A $140k ask against a $100k-$125k posting goes in as $125k, for both engines
+    (agent: build_profile, det: fetch_job_profile); other jobs keep the ask."""
+    from agent.profile import fetch_job_profile
+    from common import repo
+
+    user_id = _user_with_roles(db)
+    with db.cursor() as cur:
+        cur.execute(
+            "UPDATE application_profiles SET desired_salary = '140000' WHERE user_id = %s",
+            (user_id,),
+        )
+    db.commit()
+    banded = repo.add_job_for_user(db, user_id, "https://example.com/jobs/banded")
+    unbanded = repo.add_job_for_user(db, user_id, "https://example.com/jobs/unbanded")
+    with db.cursor() as cur:
+        cur.execute(
+            "UPDATE jobs SET salary_min = 100000, salary_max = 125000, salary_period = 'year' "
+            "WHERE job_id = %s",
+            (banded,),
+        )
+    db.commit()
+
+    assert fetch_job_profile(db, user_id, banded).profile["desired_salary"] == "125000"
+    assert "Desired Salary: 125000" in build_profile(db, user_id, "/r.pdf", banded)
+    assert fetch_job_profile(db, user_id, unbanded).profile["desired_salary"] == "140000"
+    assert "Desired Salary: 140000" in build_profile(db, user_id, "/r.pdf")
+
+
 def test_password_never_reaches_traces_or_logs(tmp_path, monkeypatch):
     """The MCP echoes the code that typed the password; 72 trace / log / form files
     held it in plain text before secrets were scrubbed on write."""

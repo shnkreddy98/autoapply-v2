@@ -1,8 +1,10 @@
 """JD-capture worker: turn `jd_pending` jobs into captured job descriptions.
 
 For each claimed job it navigates the URL (via the text-extracting proxy MCP),
-stores the visible-text JD to object storage, flips the job to `jd_ready`, and
-enqueues a tailoring job per active user — so resumes are tailored *ahead* of apply.
+stores the visible-text JD to object storage, records what the JD says about
+work authorization and pay (common.jdscan), flips the job to `jd_ready`, and
+enqueues a tailoring job per owner — so resumes are tailored *ahead* of apply —
+except for owners the JD rules out (NFY), whose tailoring would be a wasted paid call.
 
 The navigation + storage are injected, so the orchestration (`capture_once`) is
 unit-testable with fakes. The real navigator (`proxy_navigator`) needs the
@@ -21,7 +23,7 @@ from typing import Awaitable, Callable
 
 import psycopg
 
-from common import keys, queue, repo
+from common import jdscan, keys, queue, repo
 from common import storage as storagemod
 
 log = logging.getLogger(__name__)
@@ -121,6 +123,7 @@ def _enqueue_for_owners(
     conn: psycopg.Connection,
     job_id: str,
     base_labels: dict[str, str] | None = None,
+    work_auth: str | None = None,
 ) -> int:
     """Queue a tailoring job (user×job) for every owner of the job (user_jobs),
     attaching their current base resume asset if they have one. Owners-only: a
@@ -131,10 +134,17 @@ def _enqueue_for_owners(
     base. Without it, capture would enqueue against the default base and the row
     would already exist by the time the CLI's label-aware backfill ran, silently
     ignoring --label. A label with no uploaded base falls back to the default
-    rather than enqueuing with no source at all."""
+    rather than enqueuing with no source at all.
+
+    An owner the JD rules out (`work_auth` set, and their profile needs sponsorship:
+    NFY) gets no row: tailoring is a paid model call. `autoapply tailor JOB` still
+    tailors it on request."""
     labels = base_labels or {}
     n = 0
     for uid in repo.job_owner_ids(conn, job_id):
+        if jdscan.not_for_you(work_auth, repo.needs_sponsorship(conn, uid)):
+            log.info("not tailoring job=%s for user=%s: NFY (%s)", job_id, uid, work_auth)
+            continue
         label = labels.get(str(uid))
         base = repo.get_base_asset(
             conn, uid, variant="docx", label=label
@@ -179,6 +189,11 @@ async def capture_once(
             raise ValueError(f"not a usable JD: {reason}")
         key = keys.jd_key(job_id)
         storage.put_bytes(key, jd_text.encode("utf-8"), "text/markdown")
+        # sponsorship / citizenship limits and the pay band, read before tailoring:
+        # NFY owners get no (paid) tailoring, `status` shows the mark, and apply
+        # fits the salary ask to the band
+        scan = jdscan.scan(jd_text)
+        repo.set_job_scan(conn, job_id, scan)
         queue.mark(
             conn,
             "jobs",
@@ -187,7 +202,7 @@ async def capture_once(
             jd_s3_key=key,
             jd_captured_at=datetime.now(timezone.utc),
         )
-        count = _enqueue_for_owners(conn, job_id, base_labels)
+        count = _enqueue_for_owners(conn, job_id, base_labels, scan.work_auth)
         log.info("captured JD job=%s bytes=%d enqueued=%d", job_id, len(jd_text), count)
     except Exception as exc:  # one bad job must not kill the worker
         log.warning("JD capture failed job=%s: %s", job_id, exc)
